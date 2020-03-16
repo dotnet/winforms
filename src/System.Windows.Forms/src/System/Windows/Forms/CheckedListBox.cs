@@ -22,12 +22,10 @@ namespace System.Windows.Forms
     ///
     ///  of each item.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    LookupBindingProperties(), // ...overrides equivalent attribute in ListControl
-    SRDescription(nameof(SR.DescriptionCheckedListBox))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [LookupBindingProperties]
+    [SRDescription(nameof(SR.DescriptionCheckedListBox))]
     public class CheckedListBox : ListBox
     {
         private int idealCheckSize = 13;
@@ -101,11 +99,9 @@ namespace System.Windows.Forms
         ///  selection, and then make the user click again to check it.  However,
         ///  some may prefer checking the item as soon as it is clicked.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.CheckedListBoxCheckOnClickDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.CheckedListBoxCheckOnClickDescr))]
         public bool CheckOnClick
         {
             get
@@ -122,10 +118,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of checked indices in this CheckedListBox.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public CheckedIndexCollection CheckedIndices
         {
             get
@@ -141,10 +135,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of checked items in this CheckedListBox.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public CheckedItemCollection CheckedItems
         {
             get
@@ -177,7 +169,8 @@ namespace System.Windows.Forms
         ///  CheckedListBox DataSource.
         /// </summary>
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new object DataSource
         {
             get => base.DataSource;
@@ -188,17 +181,17 @@ namespace System.Windows.Forms
         ///  CheckedListBox DisplayMember.
         /// </summary>
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new string DisplayMember
         {
             get => base.DisplayMember;
             set => base.DisplayMember = value;
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override DrawMode DrawMode
         {
             get
@@ -210,10 +203,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override int ItemHeight
         {
             get
@@ -229,13 +221,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of items in this listbox.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        Localizable(true),
-        SRDescription(nameof(SR.ListBoxItemsDescr)),
-        Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ListBoxItemsDescr))]
+        [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         new public ObjectCollection Items
         {
             get
@@ -288,11 +278,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates if the CheckBoxes should show up as flat or 3D in appearance.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.CheckedListBoxThreeDCheckBoxesDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.CheckedListBoxThreeDCheckBoxesDescr))]
         public bool ThreeDCheckBoxes
         {
             get
@@ -320,11 +308,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </summary>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
         public bool UseCompatibleTextRendering
         {
             get => base.UseCompatibleTextRenderingInt;
@@ -348,28 +334,32 @@ namespace System.Windows.Forms
         ///  CheckedListBox ValueMember.
         /// </summary>
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new string ValueMember
         {
             get => base.ValueMember;
             set => base.ValueMember = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DataSourceChanged
         {
             add => base.DataSourceChanged += value;
             remove => base.DataSourceChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DisplayMemberChanged
         {
             add => base.DisplayMemberChanged += value;
             remove => base.DisplayMemberChanged -= value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck
         {
             add => onItemCheck += value;
@@ -377,7 +367,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click
         {
             add => base.Click += value;
@@ -385,7 +376,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick
         {
             add => base.MouseClick += value;
@@ -393,7 +385,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event DrawItemEventHandler DrawItem
         {
             add => base.DrawItem += value;
@@ -401,25 +394,25 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event MeasureItemEventHandler MeasureItem
         {
             add => base.MeasureItem += value;
             remove => base.MeasureItem -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding Padding
         {
             get => base.Padding;
             set => base.Padding = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ValueMemberChanged
         {
             add => base.ValueMemberChanged += value;
@@ -1155,7 +1148,8 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the specified checked item.
             /// </summary>
-            [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [Browsable(false)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public int this[int index]
             {
                 get
@@ -1309,7 +1303,8 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the specified checked item.
             /// </summary>
-            [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [Browsable(false)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public object this[int index]
             {
                 get

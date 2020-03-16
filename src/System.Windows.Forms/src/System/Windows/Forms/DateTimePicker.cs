@@ -19,15 +19,13 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Date/DateTime picker control
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Value)),
-    DefaultEvent(nameof(ValueChanged)),
-    DefaultBindingProperty(nameof(Value)),
-    Designer("System.Windows.Forms.Design.DateTimePickerDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionDateTimePicker))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(Value))]
+    [DefaultEvent(nameof(ValueChanged))]
+    [DefaultBindingProperty(nameof(Value))]
+    [Designer("System.Windows.Forms.Design.DateTimePickerDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionDateTimePicker))]
     public class DateTimePicker : Control
     {
         /// <summary>
@@ -63,13 +61,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the minimum date value. This field is read-only.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DateTime MinDateTime = new DateTime(1753, 1, 1);
 
         /// <summary>
         ///  Specifies the maximum date value. This field is read-only.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public static readonly DateTime MaxDateTime = new DateTime(9998, 12, 31);
 
         private DTS _style;
@@ -133,7 +133,8 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.UseTextForAccessibility, false);
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor
         {
             get
@@ -150,35 +151,40 @@ namespace System.Windows.Forms
             set => base.BackColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
             get => base.BackgroundImageLayout;
             set => base.BackgroundImageLayout = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
@@ -188,10 +194,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The current value of the CalendarForeColor property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.DateTimePickerCalendarForeColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DateTimePickerCalendarForeColorDescr))]
         public Color CalendarForeColor
         {
             get
@@ -217,12 +221,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The current value of the CalendarFont property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        AmbientValue(null),
-        SRDescription(nameof(SR.DateTimePickerCalendarFontDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [AmbientValue(null)]
+        [SRDescription(nameof(SR.DateTimePickerCalendarFontDescr))]
         public Font CalendarFont
         {
             get
@@ -267,10 +269,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The current value of the CalendarTitleBackColor property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.DateTimePickerCalendarTitleBackColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DateTimePickerCalendarTitleBackColorDescr))]
         public Color CalendarTitleBackColor
         {
             get
@@ -296,10 +296,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The current value of the CalendarTitleForeColor property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.DateTimePickerCalendarTitleForeColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DateTimePickerCalendarTitleForeColorDescr))]
         public Color CalendarTitleForeColor
         {
             get
@@ -325,10 +323,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The current value of the CalendarTrailingForeColor property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.DateTimePickerCalendarTrailingForeColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DateTimePickerCalendarTrailingForeColorDescr))]
         public Color CalendarTrailingForeColor
         {
             get
@@ -354,10 +350,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The current value of the CalendarMonthBackground property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.DateTimePickerCalendarMonthBackgroundDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DateTimePickerCalendarMonthBackgroundDescr))]
         public Color CalendarMonthBackground
         {
             get
@@ -383,12 +377,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates whether the <see cref='Value'/> property has been set.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        Bindable(true),
-        SRDescription(nameof(SR.DateTimePickerCheckedDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.DateTimePickerCheckedDescr))]
         public bool Checked
         {
             get
@@ -430,10 +422,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Click
         {
             add => base.Click += value;
@@ -483,13 +473,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the custom format.
         /// </summary>
-        [
-        DefaultValue(null),
-        Localizable(true),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.DateTimePickerCustomFormatDescr))
-        ]
+        [DefaultValue(null)]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DateTimePickerCustomFormatDescr))]
         public string CustomFormat
         {
             get
@@ -538,10 +526,8 @@ namespace System.Windows.Forms
             set => base.DoubleBuffered = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DoubleClick
         {
             add => base.DoubleClick += value;
@@ -552,12 +538,10 @@ namespace System.Windows.Forms
         ///  The current value of the dropDownAlign property.  The calendar
         ///  dropDown can be aligned to the left or right of the control.
         /// </summary>
-        [
-        DefaultValue(LeftRightAlignment.Left),
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        SRDescription(nameof(SR.DateTimePickerDropDownAlignDescr))
-        ]
+        [DefaultValue(LeftRightAlignment.Left)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.DateTimePickerDropDownAlignDescr))]
         public LeftRightAlignment DropDownAlign
         {
             get
@@ -579,7 +563,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
             get
@@ -596,7 +581,8 @@ namespace System.Windows.Forms
             set => base.ForeColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
@@ -607,11 +593,9 @@ namespace System.Windows.Forms
         ///  Returns the current value of the format property. This determines the
         ///  style of format the date is displayed in.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(nameof(SR.DateTimePickerFormatDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRDescription(nameof(SR.DateTimePickerFormatDescr))]
         public DateTimePickerFormat Format
         {
             get
@@ -637,7 +621,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
         public event EventHandler FormatChanged
         {
             add => Events.AddHandler(EVENT_FORMATCHANGED, value);
@@ -648,7 +633,8 @@ namespace System.Windows.Forms
         ///  DateTimePicker Paint.
         /// </summary>
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint
         {
             add => base.Paint += value;
@@ -687,10 +673,8 @@ namespace System.Windows.Forms
         ///  Indicates the maximum date and time
         ///  selectable in the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.DateTimePickerMaxDateDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DateTimePickerMaxDateDescr))]
         public DateTime MaxDate
         {
             get
@@ -743,10 +727,8 @@ namespace System.Windows.Forms
         ///  Indicates the minimum date and time
         ///  selectable in the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.DateTimePickerMinDateDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DateTimePickerMinDateDescr))]
         public DateTime MinDate
         {
             get
@@ -799,41 +781,33 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding Padding
         {
             get => base.Padding;
             set => base.Padding = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler PaddingChanged
         {
             add => base.PaddingChanged += value;
@@ -843,10 +817,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates the preferred height of the DateTimePicker control. This property is read-only.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int PreferredHeight
         {
             get
@@ -872,12 +844,10 @@ namespace System.Windows.Forms
         ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
         ///  the form, and control placement and text will be from right to left.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(false),
-        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))]
         public virtual bool RightToLeftLayout
         {
             get
@@ -902,11 +872,9 @@ namespace System.Windows.Forms
         ///  Indicates whether a check box is displayed to toggle the NoValueSelected property
         ///  value.
         /// </summary>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.DateTimePickerShowNoneDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DateTimePickerShowNoneDescr))]
         public bool ShowCheckBox
         {
             get => (_style & DTS.SHOWNONE) != 0;
@@ -917,11 +885,9 @@ namespace System.Windows.Forms
         ///  Indicates
         ///  whether an up-down control is used to adjust the time values.
         /// </summary>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.DateTimePickerShowUpDownDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DateTimePickerShowUpDownDescr))]
         public bool ShowUpDown
         {
             get => (_style & DTS.UPDOWN) != 0;
@@ -939,7 +905,9 @@ namespace System.Windows.Forms
         ///  a formatted Value when getting the text.  The DateTime class will throw
         ///  an exception if the string (value) being passed in is invalid.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
         {
             get => base.Text;
@@ -958,7 +926,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TextChanged
         {
             add => base.TextChanged += value;
@@ -968,12 +937,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates the DateTime value assigned to the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Bindable(true),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.DateTimePickerValueDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Bindable(true)]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.DateTimePickerValueDescr))]
         public DateTime Value
         {
             get
@@ -1030,14 +997,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the dropdown calendar is dismissed and disappears.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnCloseUpDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.DateTimePickerOnCloseUpDescr))]
         public event EventHandler CloseUp
         {
             add => onCloseUp += value;
             remove => onCloseUp -= value;
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged
         {
             add => onRightToLeftLayoutChanged += value;
@@ -1047,7 +1016,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the value for the control changes.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged
         {
             add => onValueChanged += value;
@@ -1057,7 +1027,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the drop down calendar is shown.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnDropDownDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.DateTimePickerOnDropDownDescr))]
         public event EventHandler DropDown
         {
             add => onDropDown += value;

@@ -239,9 +239,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [DefaultValue(true), Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
-        ]
+        [DefaultValue(true)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
             get => base.AutoSize;
@@ -260,19 +261,19 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoScroll
         {
             get => base.AutoScroll;
@@ -282,33 +283,27 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size AutoScrollMargin
         {
             get => base.AutoScrollMargin;
             set => base.AutoScrollMargin = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size AutoScrollMinSize
         {
             get => base.AutoScrollMinSize;
             set => base.AutoScrollMinSize = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Point AutoScrollPosition
         {
             get => base.AutoScrollPosition;
@@ -339,13 +334,12 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         /// <summary>
         /// </summary>
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.ToolStripAllowItemReorderDescr)),
-        SRCategory(nameof(SR.CatBehavior))
-        ]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ToolStripAllowItemReorderDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
         public bool AllowItemReorder
         {
             get { return GetToolStripState(STATE_ALLOWITEMREORDER); }
@@ -379,11 +373,9 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// </summary>
-        [
-        DefaultValue(true),
-        SRDescription(nameof(SR.ToolStripAllowMergeDescr)),
-        SRCategory(nameof(SR.CatBehavior))
-        ]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.ToolStripAllowMergeDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
         public bool AllowMerge
         {
             get { return GetToolStripState(STATE_ALLOWMERGE); }
@@ -413,17 +405,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Just here so we can implement ShouldSerializeBackColor
         /// </summary>
-        [
-        SRDescription(nameof(SR.ToolStripBackColorDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [SRDescription(nameof(SR.ToolStripBackColorDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public new Color BackColor
         {
             get => base.BackColor;
             set => base.BackColor = value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripOnBeginDrag))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripOnBeginDrag))]
         public event EventHandler BeginDrag
         {
             add => Events.AddHandler(EventBeginDrag, value);
@@ -463,11 +454,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(true),
-        SRDescription(nameof(SR.ToolStripCanOverflowDescr)),
-        SRCategory(nameof(SR.CatLayout))
-        ]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.ToolStripCanOverflowDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         public bool CanOverflow
         {
             get
@@ -506,10 +495,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        DefaultValue(false),
-        ]
+        [Browsable(false)]
+        [DefaultValue(false)]
         public new bool CausesValidation
         {
             get
@@ -536,14 +523,16 @@ namespace System.Windows.Forms
             get => base.Controls;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlAdded
         {
             add => base.ControlAdded += value;
             remove => base.ControlAdded -= value;
         }
 
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Cursor Cursor
         {
             get => base.Cursor;
@@ -560,14 +549,16 @@ namespace System.Windows.Forms
             remove => base.CursorChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlRemoved
         {
             add => base.ControlRemoved += value;
             remove => base.ControlRemoved -= value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripOnEndDrag))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripOnEndDrag))]
         public event EventHandler EndDrag
         {
             add => Events.AddHandler(EventEndDrag, value);
@@ -721,6 +712,7 @@ namespace System.Windows.Forms
                 toolStripDropDownDirection = value;
             }
         }
+
         /// <summary>
         ///  Just here so we can add the default value attribute
         /// </summary>
@@ -794,6 +786,7 @@ namespace System.Windows.Forms
                 dropTargetManager = value;
             }
         }
+
         /// <summary>
         ///  Just here so we can add the default value attribute
         /// </summary>
@@ -854,9 +847,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  [ToolStrip ForeColorChanged event, overriden to turn browsing off.]
         /// </summary>
-        [
-        Browsable(false)
-        ]
+        [Browsable(false)]
         public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
@@ -890,11 +881,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripGripStyleDescr)),
-        DefaultValue(ToolStripGripStyle.Visible)
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripGripStyleDescr))]
+        [DefaultValue(ToolStripGripStyle.Visible)]
         public ToolStripGripStyle GripStyle
         {
             get
@@ -917,9 +906,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false)
-        ]
+        [Browsable(false)]
         public ToolStripGripDisplayStyle GripDisplayStyle
         {
             get
@@ -932,10 +919,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The external spacing between the grip and the padding of the ToolStrip and the first item in the collection
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.ToolStripGripDisplayStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ToolStripGripDisplayStyleDescr))]
         public Padding GripMargin
         {
             get
@@ -951,9 +936,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The boundaries of the grip on the ToolStrip.  If it is invisible - returns Rectangle.Empty.
         /// </summary>
-        [
-        Browsable(false)
-        ]
+        [Browsable(false)]
         public Rectangle GripRectangle
         {
             get
@@ -962,10 +945,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new bool HasChildren
         {
             get => base.HasChildren;
@@ -1001,19 +983,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the Horizontal Scroll bar for this ScrollableControl.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public HScrollProperties HorizontalScroll
         {
             get => base.HorizontalScroll;
         }
 
-        [
-        DefaultValue(typeof(Size), "16,16"),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripImageScalingSizeDescr)),
-        ]
+        [DefaultValue(typeof(Size), "16,16")]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripImageScalingSizeDescr))]
         public Size ImageScalingSize
         {
             get
@@ -1050,12 +1029,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Image'/> displayed on a label control.
         /// </summary>
-        [
-        DefaultValue(null),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripImageListDescr)),
-        Browsable(false)
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripImageListDescr))]
+        [Browsable(false)]
         public ImageList ImageList
         {
             get
@@ -1116,7 +1093,8 @@ namespace System.Windows.Forms
         ///  moving the toolstrip from one toolstrip container
         ///  to another
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool IsCurrentlyDragging
         {
             get
@@ -1145,12 +1123,10 @@ namespace System.Windows.Forms
         ///  The displayed items collection also includes things like the OverflowButton
         ///  and the Grip.
         /// </summary>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.ToolStripItemsDescr)),
-        MergableProperty(false)
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemsDescr))]
+        [MergableProperty(false)]
         public virtual ToolStripItemCollection Items
         {
             get
@@ -1163,7 +1139,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripItemAddedDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripItemAddedDescr))]
         public event ToolStripItemEventHandler ItemAdded
         {
             add => Events.AddHandler(EventItemAdded, value);
@@ -1173,7 +1150,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is clicked.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripItemOnClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripItemOnClickDescr))]
         public event ToolStripItemClickedEventHandler ItemClicked
         {
             add => Events.AddHandler(EventItemClicked, value);
@@ -1206,12 +1184,14 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripItemRemovedDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripItemRemovedDescr))]
         public event ToolStripItemEventHandler ItemRemoved
         {
             add => Events.AddHandler(EventItemRemoved, value);
             remove => Events.RemoveHandler(EventItemRemoved, value);
         }
+
         /// <summary> handy check for painting and sizing </summary>
         [Browsable(false)]
         public bool IsDropDown
@@ -1226,6 +1206,7 @@ namespace System.Windows.Forms
                 return GetToolStripState(STATE_DISPOSINGITEMS);
             }
         }
+
         /// <summary>
         ///  The OnDrag[blah] methods that will be called if AllowItemReorder is true.
         ///
@@ -1290,11 +1271,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(null),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [DefaultValue(null)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public LayoutSettings LayoutSettings
         {
             get
@@ -1310,11 +1289,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies whether we're horizontal or vertical
         /// </summary>
-        [
-        SRDescription(nameof(SR.ToolStripLayoutStyle)),
-        SRCategory(nameof(SR.CatLayout)),
-        AmbientValue(ToolStripLayoutStyle.StackWithOverflow)
-        ]
+        [SRDescription(nameof(SR.ToolStripLayoutStyle))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [AmbientValue(ToolStripLayoutStyle.StackWithOverflow)]
         public ToolStripLayoutStyle LayoutStyle
         {
             get
@@ -1396,7 +1373,8 @@ namespace System.Windows.Forms
                 }
             }
         }
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripLayoutCompleteDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLayoutCompleteDescr))]
         public event EventHandler LayoutCompleted
         {
             add => Events.AddHandler(EventLayoutCompleted, value);
@@ -1415,7 +1393,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripLayoutStyleChangedDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLayoutStyleChangedDescr))]
         public event EventHandler LayoutStyleChanged
         {
             add => Events.AddHandler(EventLayoutStyleChanged, value);
@@ -1496,7 +1475,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public ToolStripOverflowButton OverflowButton
         {
             get
@@ -1539,7 +1519,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripPaintGripDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripPaintGripDescr))]
         public event PaintEventHandler PaintGrip
         {
             add => Events.AddHandler(EventPaintGrip, value);
@@ -1718,10 +1699,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventRendererChanged, value);
         }
 
-        [
-        SRDescription(nameof(SR.ToolStripRenderModeDescr)),
-        SRCategory(nameof(SR.CatAppearance)),
-        ]
+        [SRDescription(nameof(SR.ToolStripRenderModeDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public ToolStripRenderMode RenderMode
         {
             get
@@ -1877,11 +1856,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(ToolStripTextDirection.Horizontal),
-        SRDescription(nameof(SR.ToolStripTextDirectionDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(ToolStripTextDirection.Horizontal)]
+        [SRDescription(nameof(SR.ToolStripTextDirectionDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public virtual ToolStripTextDirection TextDirection
         {
             get
@@ -1921,9 +1898,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the Vertical Scroll bar for this ScrollableControl.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public VScrollProperties VerticalScroll
         {
             get => base.VerticalScroll;
@@ -2692,6 +2668,7 @@ namespace System.Windows.Forms
 
             return selectedItem;
         }
+
         /// <summary>
         ///  Retrieves the current value of the specified bit in the control's state.
         /// </summary>
@@ -2872,6 +2849,7 @@ namespace System.Windows.Forms
             Invalidate(item.Bounds);
             Update();
         }
+
         /// <summary>
         ///  Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Image'/> displayed on a label control
         /// </summary>
@@ -4209,6 +4187,7 @@ namespace System.Windows.Forms
         {
             return null;
         }
+
         /// <summary>
         ///  Finds the ToolStripItem contained within a specified client coordinate point
         ///  If item not found - returns null
@@ -4394,6 +4373,7 @@ namespace System.Windows.Forms
 
             item.SetBounds(new Rectangle(location, item.Size));
         }
+
         /// <summary>
         ///  This is needed so that people doing custom layout engines can change the "Parent" property of the item.
         /// </summary>
@@ -5576,6 +5556,7 @@ namespace System.Windows.Forms
             mouseHoverTimer.Enabled = false;
             currentItem = null;
         }
+
         /// <summary> cancels if and only if this item was the one that
         ///  requested the timer
         /// </summary>

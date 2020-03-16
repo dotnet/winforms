@@ -1722,13 +1722,15 @@ namespace System.Windows.Forms
             get => _isBindingList && ((IBindingList)List).IsSorted;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual PropertyDescriptor SortProperty
         {
             get => _isBindingList ? ((IBindingList)List).SortProperty : null;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual ListSortDirection SortDirection
         {
             get => _isBindingList ? ((IBindingList)List).SortDirection : ListSortDirection.Ascending;
@@ -1796,7 +1798,8 @@ namespace System.Windows.Forms
             iblv.ApplySort(sorts);
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual ListSortDescriptionCollection SortDescriptions
         {
             get => List is IBindingListView iblv ? iblv.SortDescriptions : null;

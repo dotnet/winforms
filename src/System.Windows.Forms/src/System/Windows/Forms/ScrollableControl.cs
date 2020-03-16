@@ -915,7 +915,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the scroll box has been moved by either a mouse or keyboard action.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
         public event ScrollEventHandler Scroll
         {
             add => Events.AddHandler(s_scrollEvent, value);

@@ -144,9 +144,7 @@ namespace System.Windows.Forms
             return dataGridViewCell;
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override void DetachEditingControl()
         {
             DataGridView dgv = DataGridView;

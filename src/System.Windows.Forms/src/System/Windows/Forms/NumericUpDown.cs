@@ -16,14 +16,12 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a Windows up-down control that displays numeric values.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Value)),
-    DefaultEvent(nameof(ValueChanged)),
-    DefaultBindingProperty(nameof(Value)),
-    SRDescription(nameof(SR.DescriptionNumericUpDown))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(Value))]
+    [DefaultEvent(nameof(ValueChanged))]
+    [DefaultBindingProperty(nameof(Value))]
+    [SRDescription(nameof(SR.DescriptionNumericUpDown))]
     public class NumericUpDown : UpDownBase, ISupportInitialize
     {
         private static readonly decimal DefaultValue = decimal.Zero;
@@ -94,10 +92,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the acceleration information.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public NumericUpDownAccelerationCollection Accelerations
         {
             get
@@ -113,11 +109,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the number of decimal places to display in the up-down control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DefaultValue(NumericUpDown.DefaultDecimalPlaces),
-        SRDescription(nameof(SR.NumericUpDownDecimalPlacesDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DefaultValue(NumericUpDown.DefaultDecimalPlaces)]
+        [SRDescription(nameof(SR.NumericUpDownDecimalPlacesDescr))]
         public int DecimalPlaces
         {
             get
@@ -141,11 +135,9 @@ namespace System.Windows.Forms
         ///  sets a value indicating whether the up-down control should
         ///  display the value it contains in hexadecimal format.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(NumericUpDown.DefaultHexadecimal),
-        SRDescription(nameof(SR.NumericUpDownHexadecimalDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(NumericUpDown.DefaultHexadecimal)]
+        [SRDescription(nameof(SR.NumericUpDownHexadecimalDescr))]
         public bool Hexadecimal
         {
             get
@@ -165,10 +157,8 @@ namespace System.Windows.Forms
         ///  to increment or
         ///  decrement the up-down control when the up or down buttons are clicked.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.NumericUpDownIncrementDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.NumericUpDownIncrementDescr))]
         public decimal Increment
         {
             get
@@ -197,11 +187,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the maximum value for the up-down control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.NumericUpDownMaximumDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.NumericUpDownMaximumDescr))]
         public decimal Maximum
         {
             get
@@ -226,11 +214,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the minimum allowed value for the up-down control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.NumericUpDownMinimumDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.NumericUpDownMinimumDescr))]
         public decimal Minimum
         {
             get
@@ -252,21 +238,17 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding Padding
         {
             get => base.Padding;
             set => base.Padding = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler PaddingChanged
         {
             add => base.PaddingChanged += value;
@@ -287,11 +269,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The text displayed in the control.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        Bindable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Bindable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         // We're just overriding this to make it non-browsable.
         public override string Text
         {
@@ -299,7 +280,8 @@ namespace System.Windows.Forms
             set => base.Text = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged
         {
             add => base.TextChanged += value;
@@ -310,12 +292,10 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether a thousands
         ///  separator is displayed in the up-down control when appropriate.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DefaultValue(NumericUpDown.DefaultThousandsSeparator),
-        Localizable(true),
-        SRDescription(nameof(SR.NumericUpDownThousandsSeparatorDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DefaultValue(NumericUpDown.DefaultThousandsSeparator)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.NumericUpDownThousandsSeparatorDescr))]
         public bool ThousandsSeparator
         {
             get
@@ -330,18 +310,13 @@ namespace System.Windows.Forms
             }
         }
 
-        /*
-         * The current value of the control
-         */
         /// <summary>
         ///  Gets or sets the value
         ///  assigned to the up-down control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Bindable(true),
-        SRDescription(nameof(SR.NumericUpDownValueDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.NumericUpDownValueDescr))]
         public decimal Value
         {
             get
@@ -380,7 +355,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the <see cref='Value'/> property has been changed in some way.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NumericUpDownOnValueChangedDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NumericUpDownOnValueChangedDescr))]
         public event EventHandler ValueChanged
         {
             add => onValueChanged += value;

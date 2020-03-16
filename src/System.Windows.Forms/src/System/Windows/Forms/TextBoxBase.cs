@@ -22,13 +22,11 @@ namespace System.Windows.Forms
     ///  Implements the basic functionality required by text
     ///  controls.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent(nameof(TextChanged)),
-    DefaultBindingProperty(nameof(Text)),
-    Designer("System.Windows.Forms.Design.TextBoxBaseDesigner, " + AssemblyRef.SystemDesign)
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultEvent(nameof(TextChanged))]
+    [DefaultBindingProperty(nameof(Text))]
+    [Designer("System.Windows.Forms.Design.TextBoxBaseDesigner, " + AssemblyRef.SystemDesign)]
     public abstract class TextBoxBase : Control
     {
         // The boolean properties for this control are contained in the textBoxFlags bit
@@ -120,11 +118,9 @@ namespace System.Windows.Forms
         ///  a TAB character in the control instead of moving the focus to the next control
         ///  in the tab order.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.TextBoxAcceptsTabDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.TextBoxAcceptsTabDescr))]
         public bool AcceptsTab
         {
             get
@@ -141,7 +137,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
         public event EventHandler AcceptsTabChanged
         {
             add => Events.AddHandler(EVENT_ACCEPTSTABCHANGED, value);
@@ -153,11 +150,9 @@ namespace System.Windows.Forms
         ///  Ctrl-Z, Ctrl-C, Ctrl-X, Ctrl-V, Ctrl-A, Ctrl-L, Ctrl-R, Ctrl-E, Ctrl-I, Ctrl-Y,
         ///  Ctrl-BackSpace, Ctrl-Del, Shift-Del, Shift-Ins.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.TextBoxShortcutsEnabledDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.TextBoxShortcutsEnabledDescr))]
         public virtual bool ShortcutsEnabled
         {
             get
@@ -243,14 +238,13 @@ namespace System.Windows.Forms
         ///  Note: this works differently than other Controls' AutoSize, so we're hiding
         ///  it to avoid confusion.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        Localizable(true),
-        SRDescription(nameof(SR.TextBoxAutoSizeDescr)),
-        RefreshProperties(RefreshProperties.Repaint),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.TextBoxAutoSizeDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoSize
         {
             get
@@ -306,35 +300,40 @@ namespace System.Windows.Forms
             set => base.BackColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
             get => base.BackgroundImageLayout;
             set => base.BackgroundImageLayout = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
@@ -375,7 +374,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
         public event EventHandler BorderStyleChanged
         {
             add => Events.AddHandler(EVENT_BORDERSTYLECHANGED, value);
@@ -413,12 +413,10 @@ namespace System.Windows.Forms
         ///  Gets a value
         ///  indicating whether the user can undo the previous operation in a text box control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.TextBoxCanUndoDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.TextBoxCanUndoDescr))]
         public bool CanUndo
         {
             get
@@ -493,14 +491,16 @@ namespace System.Windows.Forms
             set => base.DoubleBuffered = value;
         }
 
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
         }
 
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick
         {
             add => base.MouseClick += value;
@@ -553,11 +553,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the selected
         ///  text in the text box control remains highlighted when the control loses focus.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.TextBoxHideSelectionDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.TextBoxHideSelectionDescr))]
         public bool HideSelection
         {
             get
@@ -576,7 +574,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnHideSelectionChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.TextBoxBaseOnHideSelectionChangedDescr))]
         public event EventHandler HideSelectionChanged
         {
             add => Events.AddHandler(EVENT_HIDESELECTIONCHANGED, value);
@@ -614,14 +613,12 @@ namespace System.Windows.Forms
         ///  Gets or
         ///  sets the lines of text in an text box control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        MergableProperty(false),
-        Localizable(true),
-        SRDescription(nameof(SR.TextBoxLinesDescr)),
-        Editor("System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [MergableProperty(false)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.TextBoxLinesDescr))]
+        [Editor("System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         public string[] Lines
         {
             get
@@ -693,12 +690,10 @@ namespace System.Windows.Forms
         ///  Gets or sets the maximum number of
         ///  characters the user can type into the text box control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(32767),
-        Localizable(true),
-        SRDescription(nameof(SR.TextBoxMaxLengthDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(32767)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.TextBoxMaxLengthDescr))]
         public virtual int MaxLength
         {
             get
@@ -724,12 +719,10 @@ namespace System.Windows.Forms
         ///  Gets or sets a value that indicates that the text box control has been modified by the user since
         ///  the control was created or its contents were last set.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.TextBoxModifiedDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.TextBoxModifiedDescr))]
         public bool Modified
         {
             get
@@ -768,7 +761,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnModifiedChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.TextBoxBaseOnModifiedChangedDescr))]
         public event EventHandler ModifiedChanged
         {
             add => Events.AddHandler(EVENT_MODIFIEDCHANGED, value);
@@ -779,13 +773,11 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether this
         ///  is a multiline text box control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        Localizable(true),
-        SRDescription(nameof(SR.TextBoxMultilineDescr)),
-        RefreshProperties(RefreshProperties.All)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.TextBoxMultilineDescr))]
+        [RefreshProperties(RefreshProperties.All)]
         public virtual bool Multiline
         {
             get
@@ -820,30 +812,28 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr))]
         public event EventHandler MultilineChanged
         {
             add => Events.AddHandler(EVENT_MULTILINECHANGED, value);
             remove => Events.RemoveHandler(EVENT_MULTILINECHANGED, value);
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding Padding
         {
             get => base.Padding;
             set => base.Padding = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
         public new event EventHandler PaddingChanged
         {
             add => base.PaddingChanged += value;
@@ -867,12 +857,11 @@ namespace System.Windows.Forms
         ///  Returns the preferred
         ///  height for a single-line text box.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.TextBoxPreferredHeightDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.TextBoxPreferredHeightDescr))]
         public int PreferredHeight
         {
             get
@@ -997,12 +986,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether text in the text box is read-only.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(nameof(SR.TextBoxReadOnlyDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRDescription(nameof(SR.TextBoxReadOnlyDescr))]
         public bool ReadOnly
         {
             get
@@ -1026,7 +1013,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]
         public event EventHandler ReadOnlyChanged
         {
             add => Events.AddHandler(EVENT_READONLYCHANGED, value);
@@ -1036,12 +1024,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The currently selected text in the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.TextBoxSelectedTextDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.TextBoxSelectedTextDescr))]
         public virtual string SelectedText
         {
             get
@@ -1095,12 +1081,10 @@ namespace System.Windows.Forms
         ///  Gets or sets the number of characters selected in the text
         ///  box.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.TextBoxSelectionLengthDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.TextBoxSelectionLengthDescr))]
         public virtual int SelectionLength
         {
             get
@@ -1131,12 +1115,10 @@ namespace System.Windows.Forms
         ///  point of text selected in the text
         ///  box.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.TextBoxSelectionStartDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.TextBoxSelectionStartDescr))]
         public int SelectionStart
         {
             get
@@ -1159,10 +1141,8 @@ namespace System.Windows.Forms
         ///  Gets or sets
         ///  the current text in the text box.
         /// </summary>
-        [
-        Localizable(true),
-        Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
-        ]
+        [Localizable(true)]
+        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         public override string Text
         {
             get => base.Text;
@@ -1261,12 +1241,10 @@ namespace System.Windows.Forms
         ///  multiline text box control automatically wraps words to the beginning of the next
         ///  line when necessary.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DefaultValue(true),
-        SRDescription(nameof(SR.TextBoxWordWrapDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.TextBoxWordWrapDescr))]
         public bool WordWrap
         {
             get
@@ -1522,7 +1500,8 @@ namespace System.Windows.Forms
         ///  TextBox / RichTextBox Onpaint.
         /// </summary>
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint
         {
             add => base.Paint += value;

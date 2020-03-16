@@ -49,10 +49,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the Current Page option button is enabled.
         /// </summary>
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.PDallowCurrentPageDescr))
-        ]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.PDallowCurrentPageDescr))]
         public bool AllowCurrentPage
         {
             get { return allowCurrentPage; }
@@ -62,11 +60,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the Pages option button is enabled.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.PDallowPagesDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.PDallowPagesDescr))]
         public bool AllowSomePages
         {
             get { return allowPages; }
@@ -76,11 +72,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the Print to file check box is enabled.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.PDallowPrintToFileDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.PDallowPrintToFileDescr))]
         public bool AllowPrintToFile
         {
             get { return allowPrintToFile; }
@@ -90,11 +84,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the From... To... Page option button is enabled.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.PDallowSelectionDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.PDallowSelectionDescr))]
         public bool AllowSelection
         {
             get { return allowSelection; }
@@ -104,11 +96,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating the <see cref='PrintDocument'/> used to obtain <see cref='Drawing.Printing.PrinterSettings'/>.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.PDdocumentDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.PDdocumentDescr))]
         public PrintDocument Document
         {
             get { return printDocument; }
@@ -145,13 +135,11 @@ namespace System.Windows.Forms
         ///  Gets or sets the <see cref='Drawing.Printing.PrinterSettings'/> the
         ///  dialog box will be modifying.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DefaultValue(null),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.PDprinterSettingsDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DefaultValue(null)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.PDprinterSettingsDescr))]
         public PrinterSettings PrinterSettings
         {
             get
@@ -175,11 +163,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the Print to file check box is checked.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.PDprintToFileDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.PDprintToFileDescr))]
         public bool PrintToFile
         {
             get { return printToFile; }
@@ -189,11 +175,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the Help button is displayed.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.PDshowHelpDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.PDshowHelpDescr))]
         public bool ShowHelp
         {
             get { return showHelp; }
@@ -203,11 +187,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the Network button is displayed.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.PDshowNetworkDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.PDshowNetworkDescr))]
         public bool ShowNetwork
         {
             get { return showNetwork; }

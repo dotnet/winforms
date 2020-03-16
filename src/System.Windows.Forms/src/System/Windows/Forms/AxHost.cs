@@ -328,23 +328,26 @@ namespace System.Windows.Forms
 
         // Control overrides:
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor
         {
             get => base.BackColor;
             set => base.BackColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout
         {
             get => base.BackgroundImageLayout;
@@ -354,29 +357,33 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide ImeMode: it doesn't make sense for this control
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public ImeMode ImeMode
         {
             get => base.ImeMode;
             set => base.ImeMode = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseClick
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseDoubleClick
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Cursor Cursor
         {
             get => base.Cursor;
@@ -395,32 +402,33 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual new bool Enabled
         {
             get => base.Enabled;
             set => base.Enabled = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font
         {
             get => base.Font;
             set => base.Font = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
             get => base.ForeColor;
             set => base.ForeColor = value;
         }
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Never),
-            Localizable(true)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Localizable(true)]
         public new virtual bool RightToLeft
         {
             get
@@ -431,7 +439,8 @@ namespace System.Windows.Forms
             set => base.RightToLeft = (value) ? System.Windows.Forms.RightToLeft.Yes : System.Windows.Forms.RightToLeft.No;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override string Text
         {
             get
@@ -515,9 +524,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines if the control is in edit mode.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool EditMode
         {
             get
@@ -529,9 +538,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines if this control has an about box.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool HasAboutBox
         {
             get
@@ -562,35 +571,40 @@ namespace System.Windows.Forms
             aboutBoxDelegate?.Invoke();
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BindingContextChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
@@ -600,35 +614,40 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is enabled.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler RightToLeftChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
@@ -638,70 +657,80 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is clicked.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Click
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragDrop
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragEnter
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragOver
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DragLeave
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event GiveFeedbackEventHandler GiveFeedback
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event HelpEventHandler HelpRequested
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event PaintEventHandler Paint
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryContinueDragEventHandler QueryContinueDrag
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
@@ -711,14 +740,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is double clicked.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DoubleClick
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ImeModeChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
@@ -728,7 +759,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when a key is pressed down while the control has focus.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyDown
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
@@ -738,7 +770,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when a key is pressed while the control has focus.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyPressEventHandler KeyPress
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
@@ -748,14 +781,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when a key is released while the control has focus.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyUp
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event LayoutEventHandler Layout
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
@@ -766,7 +801,8 @@ namespace System.Windows.Forms
         ///  Occurs when the mouse pointer is over the control and a mouse button is
         ///  pressed.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseDown
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
@@ -776,7 +812,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse pointer enters the AxHost.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseEnter
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
@@ -786,7 +823,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse pointer leaves the AxHost.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseLeave
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
@@ -796,7 +834,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse pointer hovers over the contro.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseHover
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
@@ -806,7 +845,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse pointer is moved over the AxHost.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseMove
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
@@ -816,7 +856,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse pointer is over the control and a mouse button is released.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseUp
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
@@ -826,21 +867,24 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse wheel moves while the control has focus.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseWheel
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event UICuesEventHandler ChangeUICues
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
             remove { }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler StyleChanged
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
@@ -1941,11 +1985,10 @@ namespace System.Windows.Forms
         ///  If the control has been modified since it was last saved to a
         ///  persisted state, it will be asked to save itself.
         /// </summary>
-        [
-        DefaultValue(null),
-        RefreshProperties(RefreshProperties.All),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [DefaultValue(null)]
+        [RefreshProperties(RefreshProperties.All)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public State OcxState
         {
             get
@@ -2082,11 +2125,9 @@ namespace System.Windows.Forms
         ///  behaviours of ActiveX controls and should in general not be set
         ///  by the user.
         /// </summary>
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ContainerControl ContainingControl
         {
             get

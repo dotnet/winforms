@@ -83,7 +83,11 @@ namespace System.ComponentModel.Design.Serialization
             ///  is an enum represneing the "public/protected/private" scope
             ///  of a component.
             /// </summary>
-            [DesignOnly(true), TypeConverter(typeof(ModifierConverter)), DefaultValue(MemberAttributes.Private), SRDescription(nameof(SR.CodeDomDesignerLoaderPropModifiers)), Category("Design")]
+            [DesignOnly(true)]
+            [TypeConverter(typeof(ModifierConverter))]
+            [DefaultValue(MemberAttributes.Private)]
+            [SRDescription(nameof(SR.CodeDomDesignerLoaderPropModifiers))]
+            [Category("Design")]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public MemberAttributes GetModifiers(IComponent comp)
             {

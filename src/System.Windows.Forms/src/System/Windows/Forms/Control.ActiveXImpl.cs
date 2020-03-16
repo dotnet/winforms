@@ -89,7 +89,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the ambient back color for the control.
             /// </summary>
-            [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [Browsable(false)]
+            [EditorBrowsable(EditorBrowsableState.Advanced)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal Color AmbientBackColor
             {
                 get
@@ -135,7 +137,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the ambient font for the control.
             /// </summary>
-            [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [Browsable(false)]
+            [EditorBrowsable(EditorBrowsableState.Advanced)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal Font AmbientFont
             {
                 get
@@ -169,7 +173,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the ambient back color for the control.
             /// </summary>
-            [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [Browsable(false)]
+            [EditorBrowsable(EditorBrowsableState.Advanced)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal Color AmbientForeColor
             {
                 get
@@ -215,7 +221,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Determines if events should be frozen.
             /// </summary>
-            [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [Browsable(false)]
+            [EditorBrowsable(EditorBrowsableState.Advanced)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal bool EventsFrozen
             {
                 get

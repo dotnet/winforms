@@ -84,7 +84,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(nameof(SR.ControlControlsDescr))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlControlsDescr))]
         public Control[] Controls
         {
             get
@@ -98,7 +100,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of child controls.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), SRDescription(nameof(SR.ControlControlsDescr))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlControlsDescr))]
         internal ToolStripPanelRowControlCollection ControlsInternal
         {
             get

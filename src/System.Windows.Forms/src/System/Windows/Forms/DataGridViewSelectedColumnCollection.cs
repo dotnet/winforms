@@ -118,9 +118,7 @@ namespace System.Windows.Forms
             return items.Add(dataGridViewColumn);
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void Clear()
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);

@@ -85,11 +85,9 @@ namespace System.Windows.Forms
             set => base.Alignment = value;
         }
 
-        [
-        DefaultValue(Border3DStyle.Flat),
-        SRDescription(nameof(SR.ToolStripStatusLabelBorderStyleDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(Border3DStyle.Flat)]
+        [SRDescription(nameof(SR.ToolStripStatusLabelBorderStyleDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public Border3DStyle BorderStyle
         {
             get
@@ -123,11 +121,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(ToolStripStatusLabelBorderSides.None),
-        SRDescription(nameof(SR.ToolStripStatusLabelBorderSidesDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(ToolStripStatusLabelBorderSides.None)]
+        [SRDescription(nameof(SR.ToolStripStatusLabelBorderSidesDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public ToolStripStatusLabelBorderSides BorderSides
         {
             get
@@ -165,11 +161,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.ToolStripStatusLabelSpringDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ToolStripStatusLabelSpringDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public bool Spring
         {
             get { return spring; }
@@ -190,13 +184,11 @@ namespace System.Windows.Forms
         ///  Indicates the "politeness" level that a client should use
         ///  to notify the user of changes to the live region.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAccessibility)),
-        DefaultValue(AutomationLiveSetting.Off),
-        SRDescription(nameof(SR.LiveRegionAutomationLiveSettingDescr)),
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Always)
-        ]
+        [SRCategory(nameof(SR.CatAccessibility))]
+        [DefaultValue(AutomationLiveSetting.Off)]
+        [SRDescription(nameof(SR.LiveRegionAutomationLiveSettingDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public AutomationLiveSetting LiveSetting
         {
             get

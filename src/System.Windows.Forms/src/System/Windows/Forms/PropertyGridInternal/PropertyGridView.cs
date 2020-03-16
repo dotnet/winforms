@@ -207,7 +207,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             return backgroundBrush;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool CanCopy
         {
             get
@@ -228,7 +229,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool CanCut
         {
             get
@@ -237,7 +239,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool CanPaste
         {
             get
@@ -246,7 +249,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool CanUndo
         {
             get

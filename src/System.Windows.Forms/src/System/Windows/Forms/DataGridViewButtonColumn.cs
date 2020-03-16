@@ -28,10 +28,8 @@ namespace System.Windows.Forms
             DefaultCellStyle = defaultCellStyle;
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override DataGridViewCell CellTemplate
         {
             get => base.CellTemplate;
@@ -45,22 +43,18 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(true),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))
-        ]
+        [Browsable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))]
         public override DataGridViewCellStyle DefaultCellStyle
         {
             get => base.DefaultCellStyle;
             set => base.DefaultCellStyle = value;
         }
 
-        [
-            DefaultValue(FlatStyle.Standard),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_ButtonColumnFlatStyleDescr))
-        ]
+        [DefaultValue(FlatStyle.Standard)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_ButtonColumnFlatStyleDescr))]
         public FlatStyle FlatStyle
         {
             get
@@ -94,11 +88,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(null),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_ButtonColumnTextDescr))
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_ButtonColumnTextDescr))]
         public string Text
         {
             get
@@ -136,11 +128,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(false),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_ButtonColumnUseColumnTextForButtonValueDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_ButtonColumnUseColumnTextForButtonValueDescr))]
         public bool UseColumnTextForButtonValue
         {
             get

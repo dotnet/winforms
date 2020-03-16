@@ -92,9 +92,7 @@ namespace System.Windows.Forms
             Dispose(false);
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public AccessibleObject AccessibilityObject
         {
             get
@@ -115,9 +113,7 @@ namespace System.Windows.Forms
         /// </summary>
         public int ColumnIndex => OwningColumn?.Index ?? -1;
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public Rectangle ContentBounds
         {
             get
@@ -126,9 +122,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(null)
-        ]
+        [DefaultValue(null)]
         public virtual ContextMenuStrip ContextMenuStrip
         {
             get
@@ -183,9 +177,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public virtual object DefaultNewRowValue
         {
             get
@@ -194,9 +186,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public virtual bool Displayed
         {
             get
@@ -219,10 +209,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public object EditedFormattedValue
         {
             get
@@ -237,10 +225,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual Type EditType
         {
             get
@@ -261,10 +247,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced),
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public Rectangle ErrorIconBounds
         {
             get
@@ -273,9 +257,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public string ErrorText
         {
             get
@@ -309,9 +291,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public object FormattedValue
         {
             get
@@ -326,9 +306,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public virtual Type FormattedValueType
         {
             get
@@ -357,9 +335,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public virtual bool Frozen
         {
             get
@@ -515,9 +491,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public bool IsInEditMode
         {
             get
@@ -546,9 +520,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public DataGridViewRow OwningRow { get; internal set; }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public Size PreferredSize
         {
             get
@@ -565,10 +537,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual bool ReadOnly
         {
             get
@@ -640,9 +610,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public virtual bool Resizable
         {
             get
@@ -670,10 +638,8 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public int RowIndex => OwningRow?.Index ?? -1;
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual bool Selected
         {
             get
@@ -767,9 +733,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(true)
-        ]
+        [Browsable(true)]
         public DataGridViewCellStyle Style
         {
             get
@@ -808,14 +772,12 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SRCategory(nameof(SR.CatData)),
-            Localizable(false),
-            Bindable(true),
-            SRDescription(nameof(SR.ControlTagDescr)),
-            DefaultValue(null),
-            TypeConverter(typeof(StringConverter))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag
         {
             get
@@ -831,10 +793,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ToolTipText
         {
             get
@@ -869,9 +829,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public object Value
         {
             get
@@ -886,9 +844,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public virtual Type ValueType
         {
             get
@@ -934,9 +890,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public virtual bool Visible
         {
             get
@@ -956,9 +910,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual DataGridViewAdvancedBorderStyle AdjustCellBorderStyle(DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
             DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder,
             bool singleVerticalBorderAdded,
@@ -1262,9 +1214,7 @@ namespace System.Windows.Forms
             ContextMenuStripInternal = null;
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual void DetachEditingControl()
         {
             DataGridView dgv = DataGridView;
@@ -2704,9 +2654,7 @@ namespace System.Windows.Forms
             return GetValue(rowIndex);
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
         {
             DataGridView dgv = DataGridView;
@@ -2790,9 +2738,7 @@ namespace System.Windows.Forms
             return LeaveUnsharesRow(rowIndex, throughMouseClick);
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static int MeasureTextHeight(Graphics graphics, string text, Font font, int maxWidth, TextFormatFlags flags)
         {
             return DataGridViewCell.MeasureTextHeight(graphics, text, font, maxWidth, flags, out bool widthTruncated);
@@ -2902,9 +2848,7 @@ namespace System.Windows.Forms
             return TextRenderer.MeasureText(text, font, new Size(int.MaxValue, int.MaxValue), flags);
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static int MeasureTextWidth(Graphics graphics, string text, Font font, int maxHeight, TextFormatFlags flags)
         {
             if (maxHeight <= 0)
@@ -4394,9 +4338,7 @@ namespace System.Windows.Forms
                                          cellStyle.IsDataSourceNullValueDefault ? Formatter.GetDefaultDataSourceNullValue(valueType) : cellStyle.DataSourceNullValue);
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual void PositionEditingControl(
             bool setLocation,
             bool setSize,
@@ -4631,9 +4573,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            ComVisible(true)
-        ]
+        [ComVisible(true)]
         protected class DataGridViewCellAccessibleObject : AccessibleObject
         {
             private int[] runtimeId = null; // Used by UIAutomation

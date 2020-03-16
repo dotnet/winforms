@@ -30,15 +30,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the size, in pixels of the border around the button.
         /// </summary>
-        [
-        Browsable(true),
-        ApplicableToButton(),
-        NotifyParentProperty(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ButtonBorderSizeDescr)),
-        EditorBrowsable(EditorBrowsableState.Always),
-        DefaultValue(1),
-        ]
+        [Browsable(true)]
+        [ApplicableToButton]
+        [NotifyParentProperty(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ButtonBorderSizeDescr))]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DefaultValue(1)]
         public int BorderSize
         {
             get
@@ -67,15 +65,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the border around the button.
         /// </summary>
-        [
-        Browsable(true),
-        ApplicableToButton(),
-        NotifyParentProperty(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ButtonBorderColorDescr)),
-        EditorBrowsable(EditorBrowsableState.Always),
-        DefaultValue(typeof(Color), ""),
-        ]
+        [Browsable(true)]
+        [ApplicableToButton]
+        [NotifyParentProperty(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ButtonBorderColorDescr))]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DefaultValue(typeof(Color), "")]
         public Color BorderColor
         {
             get
@@ -101,14 +97,12 @@ namespace System.Windows.Forms
         ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
         ///  of the button when the button state is checked and the mouse cursor is NOT within the bounds of the control.
         /// </summary>
-        [
-        Browsable(true),
-        NotifyParentProperty(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ButtonCheckedBackColorDescr)),
-        EditorBrowsable(EditorBrowsableState.Always),
-        DefaultValue(typeof(Color), ""),
-        ]
+        [Browsable(true)]
+        [NotifyParentProperty(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ButtonCheckedBackColorDescr))]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DefaultValue(typeof(Color), "")]
         public Color CheckedBackColor
         {
             get
@@ -129,15 +123,13 @@ namespace System.Windows.Forms
         ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client area
         ///  of the button when the mouse cursor is within the bounds of the control and the left button is pressed.
         /// </summary>
-        [
-        Browsable(true),
-        ApplicableToButton(),
-        NotifyParentProperty(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ButtonMouseDownBackColorDescr)),
-        EditorBrowsable(EditorBrowsableState.Always),
-        DefaultValue(typeof(Color), ""),
-        ]
+        [Browsable(true)]
+        [ApplicableToButton]
+        [NotifyParentProperty(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ButtonMouseDownBackColorDescr))]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DefaultValue(typeof(Color), "")]
         public Color MouseDownBackColor
         {
             get
@@ -158,15 +150,13 @@ namespace System.Windows.Forms
         ///  For buttons whose FlatStyle is FlatStyle.Flat, this property specifies the color of the client
         ///  area of the button when the mouse cursor is within the bounds of the control.
         /// </summary>
-        [
-        Browsable(true),
-        ApplicableToButton(),
-        NotifyParentProperty(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ButtonMouseOverBackColorDescr)),
-        EditorBrowsable(EditorBrowsableState.Always),
-        DefaultValue(typeof(Color), ""),
-        ]
+        [Browsable(true)]
+        [ApplicableToButton]
+        [NotifyParentProperty(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ButtonMouseOverBackColorDescr))]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DefaultValue(typeof(Color), "")]
         public Color MouseOverBackColor
         {
             get

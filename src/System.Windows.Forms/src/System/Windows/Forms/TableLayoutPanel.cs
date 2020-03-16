@@ -40,11 +40,9 @@ namespace System.Windows.Forms
             get { return TableLayout.Instance; }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public TableLayoutSettings LayoutSettings
         {
             get
@@ -71,11 +69,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        Localizable(true)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Localizable(true)]
         public new BorderStyle BorderStyle
         {
             get => base.BorderStyle;
@@ -86,12 +82,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(TableLayoutPanelCellBorderStyle.None),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr)),
-        Localizable(true)
-        ]
+        [DefaultValue(TableLayoutPanelCellBorderStyle.None)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
+        [Localizable(true)]
         public TableLayoutPanelCellBorderStyle CellBorderStyle
         {
             get { return _tableLayoutSettings.CellBorderStyle; }
@@ -317,7 +311,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This returns an array representing the widths (in pixels) of the columns in the TableLayoutPanel.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public int[] GetColumnWidths()
         {
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
@@ -337,7 +332,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This returns an array representing the heights (in pixels) of the rows in the TableLayoutPanel.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public int[] GetRowHeights()
         {
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
@@ -358,7 +354,8 @@ namespace System.Windows.Forms
 
         #region PaintCode
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelOnPaintCellDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.TableLayoutPanelOnPaintCellDescr))]
         public event TableLayoutCellPaintEventHandler CellPaint
         {
             add => Events.AddHandler(EventCellPaint, value);

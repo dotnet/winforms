@@ -77,9 +77,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual DataGridViewAdvancedBorderStyle AdjustColumnHeaderBorderStyle(DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
                                                                          DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder,
                                                                          bool isFirstDisplayedColumn,

@@ -73,9 +73,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(FlatStyle.Standard)
-        ]
+        [DefaultValue(FlatStyle.Standard)]
         public FlatStyle FlatStyle
         {
             get

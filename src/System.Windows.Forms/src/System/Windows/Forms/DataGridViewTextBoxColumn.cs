@@ -21,10 +21,8 @@ namespace System.Windows.Forms
             SortMode = DataGridViewColumnSortMode.Automatic;
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override DataGridViewCell CellTemplate
         {
             get => base.CellTemplate;
@@ -38,11 +36,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(DATAGRIDVIEWTEXTBOXCOLUMN_maxInputLength),
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_TextBoxColumnMaxInputLengthDescr))
-        ]
+        [DefaultValue(DATAGRIDVIEWTEXTBOXCOLUMN_maxInputLength)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_TextBoxColumnMaxInputLengthDescr))]
         public int MaxInputLength
         {
             get
@@ -75,9 +71,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(DataGridViewColumnSortMode.Automatic)
-        ]
+        [DefaultValue(DataGridViewColumnSortMode.Automatic)]
         public new DataGridViewColumnSortMode SortMode
         {
             get => base.SortMode;

@@ -37,15 +37,13 @@ namespace System.Windows.Forms
     /// Do not add instance variables to Control absolutely necessary. Every control on a form has the overhead of
     /// all of these variables.
     /// </remarks>
-    [
-        ComVisible(true),
-        ClassInterface(ClassInterfaceType.AutoDispatch),
-        DefaultProperty(nameof(Text)),
-        DefaultEvent(nameof(Click)),
-        Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign),
-        DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
-        ToolboxItemFilter("System.Windows.Forms")
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(Text))]
+    [DefaultEvent(nameof(Click))]
+    [Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign)]
+    [DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
+    [ToolboxItemFilter("System.Windows.Forms")]
     public partial class Control :
         Component,
         Ole32.IOleControl,
@@ -486,11 +484,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The Accessibility Object for this Control
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlAccessibilityObjectDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlAccessibilityObjectDescr))]
         public AccessibleObject AccessibilityObject
         {
             get
@@ -581,12 +578,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The default action description of the control
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAccessibility)),
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))
-        ]
+        [SRCategory(nameof(SR.CatAccessibility))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))]
         public string AccessibleDefaultActionDescription
         {
             get => (string)Properties.GetObject(s_accessbileDefaultActionProperty);
@@ -596,12 +592,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The accessible description of the control
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAccessibility)),
-            DefaultValue(null),
-            Localizable(true),
-            SRDescription(nameof(SR.ControlAccessibleDescriptionDescr))
-        ]
+        [SRCategory(nameof(SR.CatAccessibility))]
+        [DefaultValue(null)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ControlAccessibleDescriptionDescr))]
         public string AccessibleDescription
         {
             get => (string)Properties.GetObject(s_accessibleDescriptionProperty);
@@ -611,12 +605,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The accessible name of the control
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAccessibility)),
-            DefaultValue(null),
-            Localizable(true),
-            SRDescription(nameof(SR.ControlAccessibleNameDescr))
-        ]
+        [SRCategory(nameof(SR.CatAccessibility))]
+        [DefaultValue(null)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ControlAccessibleNameDescr))]
         public string AccessibleName
         {
             get => (string)Properties.GetObject(s_accessibleNameProperty);
@@ -626,11 +618,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The accessible role of the control
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAccessibility)),
-            DefaultValue(AccessibleRole.Default),
-            SRDescription(nameof(SR.ControlAccessibleRoleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAccessibility))]
+        [DefaultValue(AccessibleRole.Default)]
+        [SRDescription(nameof(SR.ControlAccessibleRoleDescr))]
         public AccessibleRole AccessibleRole
         {
             get
@@ -700,11 +690,9 @@ namespace System.Windows.Forms
         ///  The AllowDrop property. If AllowDrop is set to true then
         ///  this control will allow drag and drop operations and events to be used.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            DefaultValue(false),
-            SRDescription(nameof(SR.ControlAllowDropDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ControlAllowDropDescr))]
         public virtual bool AllowDrop
         {
             get
@@ -768,13 +756,11 @@ namespace System.Windows.Forms
         ///  determines which edges of the control are anchored to the container's
         ///  edges.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatLayout)),
-            Localizable(true),
-            DefaultValue(CommonProperties.DefaultAnchor),
-            SRDescription(nameof(SR.ControlAnchorDescr)),
-            RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true)]
+        [DefaultValue(CommonProperties.DefaultAnchor)]
+        [SRDescription(nameof(SR.ControlAnchorDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public virtual AnchorStyles Anchor
         {
             get => DefaultLayout.GetAnchor(this);
@@ -786,8 +772,9 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [DefaultValue(CommonProperties.DefaultAutoSize)]
         [SRDescription(nameof(SR.ControlAutoSizeDescr))]
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual bool AutoSize
         {
             get { return CommonProperties.GetAutoSize(this); }
@@ -813,8 +800,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler AutoSizeChanged
         {
             add => Events.AddHandler(s_autoSizeChangedEvent, value);
@@ -825,11 +814,9 @@ namespace System.Windows.Forms
         ///  Controls the location of where this control is scrolled to in ScrollableControl.ScrollControlIntoView.
         ///  Default is the upper left hand corner of the control.
         /// </summary>
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            DefaultValue(typeof(Point), "0, 0")
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DefaultValue(typeof(Point), "0, 0")]
         public virtual Point AutoScrollOffset
         {
             get
@@ -854,7 +841,8 @@ namespace System.Windows.Forms
         protected AutoSizeMode GetAutoSizeMode() => CommonProperties.GetAutoSizeMode(this);
 
         // Public because this is interesting for ControlDesigners.
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual LayoutEngine LayoutEngine => DefaultLayout.Instance;
 
         /// <summary>
@@ -977,7 +965,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackColorChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged
         {
             add => Events.AddHandler(s_backColorEvent, value);
@@ -987,12 +976,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The background image of the control.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            DefaultValue(null),
-            Localizable(true),
-            SRDescription(nameof(SR.ControlBackgroundImageDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(null)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ControlBackgroundImageDescr))]
         public virtual Image BackgroundImage
         {
             get
@@ -1009,7 +996,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnBackgroundImageChangedDescr))]
         public event EventHandler BackgroundImageChanged
         {
             add => Events.AddHandler(s_backgroundImageEvent, value);
@@ -1019,12 +1007,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The BackgroundImageLayout of the control.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            DefaultValue(ImageLayout.Tile),
-            Localizable(true),
-            SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(ImageLayout.Tile)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
         public virtual ImageLayout BackgroundImageLayout
         {
             get
@@ -1066,7 +1052,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageLayoutChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnBackgroundImageLayoutChangedDescr))]
         public event EventHandler BackgroundImageLayoutChanged
         {
             add => Events.AddHandler(s_backgroundImageLayoutEvent, value);
@@ -1144,18 +1131,18 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlBindingContextDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlBindingContextDescr))]
         public virtual BindingContext BindingContext
         {
             get => BindingContextInternal;
             set => BindingContextInternal = value;
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
         public event EventHandler BindingContextChanged
         {
             add => Events.AddHandler(s_bindingContextEvent, value);
@@ -1165,24 +1152,22 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The bottom coordinate of this control.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlBottomDescr)),
-            SRCategory(nameof(SR.CatLayout))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlBottomDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         public int Bottom => _y + _height;
 
         /// <summary>
         ///  The bounds of this control. This is the window coordinates of the
         ///  control in parent client coordinates.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlBoundsDescr)),
-            SRCategory(nameof(SR.CatLayout))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlBoundsDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         public Rectangle Bounds
         {
             get => new Rectangle(_x, _y, _width, _height);
@@ -1195,12 +1180,11 @@ namespace System.Windows.Forms
         ///  Indicates whether the control can receive focus. This
         ///  property is read-only.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRCategory(nameof(SR.CatFocus)),
-            SRDescription(nameof(SR.ControlCanFocusDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.ControlCanFocusDescr))]
         public bool CanFocus
         {
             get
@@ -1226,23 +1210,21 @@ namespace System.Windows.Forms
         ///  Indicates whether the control can be selected. This property
         ///  is read-only.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRCategory(nameof(SR.CatFocus)),
-            SRDescription(nameof(SR.ControlCanSelectDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.ControlCanSelectDescr))]
         public bool CanSelect => CanSelectCore();
 
         /// <summary>
         ///  Indicates whether the control has captured the mouse.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRCategory(nameof(SR.CatFocus)),
-            SRDescription(nameof(SR.ControlCaptureDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.ControlCaptureDescr))]
         public bool Capture
         {
             get => IsHandleCreated && User32.GetCapture() == Handle;
@@ -1265,11 +1247,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates whether entering the control causes validation on the controls requiring validation.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatFocus)),
-            DefaultValue(true),
-            SRDescription(nameof(SR.ControlCausesValidationDescr))
-        ]
+        [SRCategory(nameof(SR.CatFocus))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.ControlCausesValidationDescr))]
         public bool CausesValidation
         {
             get => GetState(States.CausesValidation);
@@ -1283,7 +1263,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
         public event EventHandler CausesValidationChanged
         {
             add => Events.AddHandler(s_causesValidationEvent, value);
@@ -1340,22 +1321,20 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls)),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public static bool CheckForIllegalCrossThreadCalls { get; set; } = Debugger.IsAttached;
 
         /// <summary>
         ///  The client rect of the control.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRCategory(nameof(SR.CatLayout)),
-            SRDescription(nameof(SR.ControlClientRectangleDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ControlClientRectangleDescr))]
         public Rectangle ClientRectangle
         {
             get
@@ -1367,12 +1346,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The size of the clientRect.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatLayout)),
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlClientSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlClientSizeDescr))]
         public Size ClientSize
         {
             get => new Size(_clientWidth, _clientHeight);
@@ -1382,7 +1360,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Fired when ClientSize changes.
         /// </summary>
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnClientSizeChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnClientSizeChangedDescr))]
         public event EventHandler ClientSizeChanged
         {
             add => Events.AddHandler(s_clientSizeEvent, value);
@@ -1392,22 +1371,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the company name of this specific component.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            Description(nameof(SR.ControlCompanyNameDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Description(nameof(SR.ControlCompanyNameDescr))]
         public string CompanyName => VersionInfo.CompanyName;
 
         /// <summary>
         ///  Indicates whether the control or one of its children currently has the system
         ///  focus. This property is read-only.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlContainsFocusDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlContainsFocusDescr))]
         public bool ContainsFocus
         {
             get
@@ -1432,11 +1409,9 @@ namespace System.Windows.Forms
         ///  will be shown when the user right clicks the mouse on the control.
         ///  Note: if a context menu is also assigned, it will take precidence over this property.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            DefaultValue(null),
-            SRDescription(nameof(SR.ControlContextMenuDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.ControlContextMenuDescr))]
         public virtual ContextMenuStrip ContextMenuStrip
         {
             get => (ContextMenuStrip)Properties.GetObject(s_contextMenuStripProperty);
@@ -1465,7 +1440,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged
         {
             add => Events.AddHandler(s_contextMenuStripEvent, value);
@@ -1475,11 +1451,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of child controls.
         /// </summary>
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-            SRDescription(nameof(SR.ControlControlsDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRDescription(nameof(SR.ControlControlsDescr))]
         public ControlCollection Controls
         {
             get
@@ -1498,11 +1472,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates whether the control has been created. This property is read-only.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlCreatedDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlCreatedDescr))]
         public bool Created => (_state & States.Created) != 0;
 
         /// <summary>
@@ -1713,11 +1686,9 @@ namespace System.Windows.Forms
         ///  Retrieves the cursor that will be displayed when the mouse is over this
         ///  control.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.ControlCursorDescr)),
-            AmbientValue(null)
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ControlCursorDescr))]
+        [AmbientValue(null)]
         public virtual Cursor Cursor
         {
             get
@@ -1786,7 +1757,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
         public event EventHandler CursorChanged
         {
             add => Events.AddHandler(s_cursorEvent, value);
@@ -1796,13 +1768,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the bindings for this control.
         /// </summary>
-        [
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-            SRCategory(nameof(SR.CatData)),
-            SRDescription(nameof(SR.ControlBindingsDescr)),
-            RefreshProperties(RefreshProperties.All),
-            ParenthesizePropertyName(true)
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ControlBindingsDescr))]
+        [RefreshProperties(RefreshProperties.All)]
+        [ParenthesizePropertyName(true)]
         public ControlBindingsCollection DataBindings
         {
             get
@@ -1876,11 +1846,9 @@ namespace System.Windows.Forms
         ///  DPI value either for the primary screen or for the monitor where the top-level parent is displayed when
         ///  EnableDpiChangedMessageHandling option is on and the application is per-monitor V2 DPI-aware (rs2+)
         /// </summary>
-        [
-            Browsable(false), // don't show in property browser
-            EditorBrowsable(EditorBrowsableState.Always), // do show in the intellisense
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden) // do not serialize
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int DeviceDpi
             // deviceDpi may change in WmDpiChangedBeforeParent in PmV2 scenarios, so we can't cache statically.
             => DpiHelper.IsPerMonitorV2Awareness ? _deviceDpi : DpiHelper.DeviceDpi;
@@ -1917,11 +1885,10 @@ namespace System.Windows.Forms
         ///  However, inheriting controls may want to change this if their client
         ///  area differs from their display area.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlDisplayRectangleDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlDisplayRectangleDescr))]
         public virtual Rectangle DisplayRectangle
             => new Rectangle(0, 0, _clientWidth, _clientHeight);
 
@@ -1929,11 +1896,10 @@ namespace System.Windows.Forms
         ///  Indicates whether the control has been disposed. This
         ///  property is read-only.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlDisposedDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlDisposedDescr))]
         public bool IsDisposed => GetState(States.Disposed);
 
         /// <summary>
@@ -1955,11 +1921,10 @@ namespace System.Windows.Forms
         ///  Indicates whether the control is in the process of being disposed. This
         ///  property is read-only.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlDisposingDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlDisposingDescr))]
         public bool Disposing => GetState(States.Disposing);
 
         /// <summary>
@@ -1968,13 +1933,11 @@ namespace System.Windows.Forms
         ///  the top of the container, the control will be displayed flush at the
         ///  top of the container, extending the length of the container.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatLayout)),
-            Localizable(true),
-            RefreshProperties(RefreshProperties.Repaint),
-            DefaultValue(CommonProperties.DefaultDock),
-            SRDescription(nameof(SR.ControlDockDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [DefaultValue(CommonProperties.DefaultDock)]
+        [SRDescription(nameof(SR.ControlDockDescr))]
         public virtual DockStyle Dock
         {
             get => DefaultLayout.GetDock(this);
@@ -2002,7 +1965,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnDockChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnDockChangedDescr))]
         public event EventHandler DockChanged
         {
             add => Events.AddHandler(s_dockEvent, value);
@@ -2012,10 +1976,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This will enable or disable double buffering.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.ControlDoubleBufferedDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ControlDoubleBufferedDescr))]
         protected virtual bool DoubleBuffered
         {
             get => GetStyle(ControlStyles.OptimizedDoubleBuffer);
@@ -2082,7 +2044,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is enabled.
         /// </summary>
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnEnabledChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnEnabledChangedDescr))]
         public event EventHandler EnabledChanged
         {
             add => Events.AddHandler(s_enabledEvent, value);
@@ -2092,11 +2055,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates whether the control has focus. This property is read-only.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlFocusedDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlFocusedDescr))]
         public virtual bool Focused
             => IsHandleCreated && User32.GetFocus() == Handle;
 
@@ -2229,7 +2191,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnFontChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnFontChangedDescr))]
         public event EventHandler FontChanged
         {
             add => Events.AddHandler(s_fontEvent, value);
@@ -2397,7 +2360,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged
         {
             add => Events.AddHandler(s_foreColorEvent, value);
@@ -2511,11 +2475,10 @@ namespace System.Windows.Forms
         ///  is more efficient than checking for Controls.Count > 0, but has the
         ///  same effect.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlHasChildrenDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlHasChildrenDescr))]
         public bool HasChildren
         {
             get
@@ -2528,12 +2491,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The height of this control
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatLayout)),
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlHeightDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlHeightDescr))]
         public int Height
         {
             get => _height;
@@ -2590,11 +2552,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Whether or not this control has a handle associated with it.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlHandleCreatedDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlHandleCreatedDescr))]
         public bool IsHandleCreated => _window.Handle != IntPtr.Zero;
 
         /// <summary>
@@ -2691,11 +2652,10 @@ namespace System.Windows.Forms
         ///  CreateGraphics.  For all other method calls, you should use one of the
         ///  invoke methods.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlInvokeRequiredDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlInvokeRequiredDescr))]
         public bool InvokeRequired
         {
             get
@@ -2728,12 +2688,11 @@ namespace System.Windows.Forms
         ///  Indicates whether or not this control is an accessible control
         ///  i.e. whether it should be visible to accessibility applications.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlIsAccessibleDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlIsAccessibleDescr))]
         public bool IsAccessible
         {
             get => GetState(States.IsAccessible);
@@ -2762,13 +2721,11 @@ namespace System.Windows.Forms
         ///  Don't call this from CreateParams. Will lead to nasty problems
         ///  since we might call CreateParams here - you dig!
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatLayout)),
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.IsMirroredDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.IsMirroredDescr))]
         public bool IsMirrored
         {
             get
@@ -2807,12 +2764,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The left coordinate of this control.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatLayout)),
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlLeftDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlLeftDescr))]
         public int Left
         {
             get => _x;
@@ -2822,29 +2778,26 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The location of this control.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatLayout)),
-            Localizable(true),
-            SRDescription(nameof(SR.ControlLocationDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ControlLocationDescr))]
         public Point Location
         {
             get => new Point(_x, _y);
             set => SetBounds(value.X, value.Y, _width, _height, BoundsSpecified.Location);
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
         public event EventHandler LocationChanged
         {
             add => Events.AddHandler(s_locationEvent, value);
             remove => Events.RemoveHandler(s_locationEvent, value);
         }
 
-        [
-            SRDescription(nameof(SR.ControlMarginDescr)),
-            SRCategory(nameof(SR.CatLayout)),
-            Localizable(true)
-        ]
+        [SRDescription(nameof(SR.ControlMarginDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true)]
         public Padding Margin
         {
             get { return CommonProperties.GetMargin(this); }
@@ -2864,7 +2817,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
         public event EventHandler MarginChanged
         {
             add => Events.AddHandler(s_marginChangedEvent, value);
@@ -3033,12 +2987,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The parent of this control.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlParentDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlParentDescr))]
         public Control Parent
         {
             get => ParentInternal;
@@ -3067,21 +3019,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the product name of this specific component.
         /// </summary>
-        [
-            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.ControlProductNameDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlProductNameDescr))]
         public string ProductName => VersionInfo.ProductName;
 
         /// <summary>
         ///  Retrieves the product version of this specific component.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlProductVersionDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlProductVersionDescr))]
         public string ProductVersion => VersionInfo.ProductVersion;
 
         /// <summary>
@@ -3098,12 +3048,11 @@ namespace System.Windows.Forms
         ///  Indicates whether the control is currently recreating its handle. This
         ///  property is read-only.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlRecreatingHandleDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlRecreatingHandleDescr))]
         public bool RecreatingHandle => (_state & States.Recreate) != 0;
 
         internal virtual void AddReflectChild()
@@ -3134,12 +3083,11 @@ namespace System.Windows.Forms
         ///  The Region associated with this control.  (defines the
         ///  outline/silhouette/boundary of control)
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlRegionDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlRegionDescr))]
         public Region Region
         {
             get => (Region)Properties.GetObject(s_regionProperty);
@@ -3194,7 +3142,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Event fired when the value of Region property is changed on Control
         /// </summary>
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlRegionChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlRegionChangedDescr))]
         public event EventHandler RegionChanged
         {
             add => Events.AddHandler(s_regionChangedEvent, value);
@@ -3273,12 +3222,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The right coordinate of the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlRightDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlRightDescr))]
         public int Right => _x + _width;
 
         /// <summary>
@@ -3286,12 +3234,10 @@ namespace System.Windows.Forms
         ///  is written from RightToLeft. When this property is true,
         ///  control placement and text will be from right to left.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        AmbientValue(RightToLeft.Inherit),
-        SRDescription(nameof(SR.ControlRightToLeftDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [AmbientValue(RightToLeft.Inherit)]
+        [SRDescription(nameof(SR.ControlRightToLeftDescr))]
         public virtual RightToLeft RightToLeft
         {
             get
@@ -3343,7 +3289,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged
         {
             add => Events.AddHandler(s_rightToLeftEvent, value);
@@ -3437,18 +3384,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The size of the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ControlSizeDescr))]
         public Size Size
         {
             get => new Size(_width, _height);
             set => SetBounds(_x, _y, value.Width, value.Height, BoundsSpecified.Size);
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
         public event EventHandler SizeChanged
         {
             add => Events.AddHandler(s_sizeEvent, value);
@@ -3458,12 +3404,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The tab index of this control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        MergableProperty(false),
-        SRDescription(nameof(SR.ControlTabIndexDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [MergableProperty(false)]
+        [SRDescription(nameof(SR.ControlTabIndexDescr))]
         public int TabIndex
         {
             get => _tabIndex == -1 ? 0 : _tabIndex;
@@ -3482,7 +3426,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
         public event EventHandler TabIndexChanged
         {
             add => Events.AddHandler(s_tabIndexEvent, value);
@@ -3528,21 +3473,20 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
         public event EventHandler TabStopChanged
         {
             add => Events.AddHandler(s_tabStopEvent, value);
             remove => Events.RemoveHandler(s_tabStopEvent, value);
         }
 
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag
         {
             get => Properties.GetObject(s_userDataProperty);
@@ -3595,7 +3539,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTextChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnTextChangedDescr))]
         public event EventHandler TextChanged
         {
             add => Events.AddHandler(s_textEvent, value);
@@ -3605,12 +3550,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Top coordinate of this control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlTopDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlTopDescr))]
         public int Top
         {
             get => _y;
@@ -3622,12 +3566,11 @@ namespace System.Windows.Forms
         ///  have to be the same as the value returned from getForm since forms
         ///  can be parented to other controls.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlTopLevelControlDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlTopLevelControlDescr))]
         public Control TopLevelControl => TopLevelControlInternal;
 
         internal Control TopLevelControlInternal
@@ -3663,7 +3606,9 @@ namespace System.Windows.Forms
         ///  Indicates whether the user interface is in a state to show or hide keyboard
         ///  accelerators. This property is read-only.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected internal virtual bool ShowKeyboardCues
         {
             get
@@ -3730,7 +3675,9 @@ namespace System.Windows.Forms
         ///  Indicates whether the user interface is in a state to show or hide focus
         ///  rectangles. This property is read-only.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected internal virtual bool ShowFocusCues
         {
             get
@@ -3776,13 +3723,11 @@ namespace System.Windows.Forms
         ///  When this property in true the Cursor Property is set to WaitCursor as well as the Cursor Property
         ///  of all the child controls.
         /// </summary>
-        [
-        DefaultValue(false),
-        EditorBrowsable(EditorBrowsableState.Always),
-        Browsable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ControlUseWaitCursorDescr)),
-        ]
+        [DefaultValue(false)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ControlUseWaitCursorDescr))]
         public bool UseWaitCursor
         {
             get => GetState(States.UseWaitCursor);
@@ -3891,7 +3836,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control becomes visible.
         /// </summary>
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnVisibleChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnVisibleChangedDescr))]
         public event EventHandler VisibleChanged
         {
             add => Events.AddHandler(s_visibleEvent, value);
@@ -3956,12 +3902,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The width of this control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlWidthDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlWidthDescr))]
         public int Width
         {
             get => _width;
@@ -4001,12 +3946,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The target of Win32 window messages.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlWindowTargetDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlWindowTargetDescr))]
         public IWindowTarget WindowTarget
         {
             get => _window.WindowTarget;
@@ -4072,7 +4016,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is clicked.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ControlOnClickDescr))]
         public event EventHandler Click
         {
             add => Events.AddHandler(s_clickEvent, value);
@@ -4082,12 +4027,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when a new control is added.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        SRDescription(nameof(SR.ControlOnControlAddedDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.ControlOnControlAddedDescr))]
         public event ControlEventHandler ControlAdded
         {
             add => Events.AddHandler(s_controlAddedEvent, value);
@@ -4097,47 +4040,50 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when a control is removed.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        SRDescription(nameof(SR.ControlOnControlRemovedDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.ControlOnControlRemovedDescr))]
         public event ControlEventHandler ControlRemoved
         {
             add => Events.AddHandler(s_controlRemovedEvent, value);
             remove => Events.RemoveHandler(s_controlRemovedEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragDropDescr))]
+        [SRCategory(nameof(SR.CatDragDrop))]
+        [SRDescription(nameof(SR.ControlOnDragDropDescr))]
         public event DragEventHandler DragDrop
         {
             add => Events.AddHandler(s_dragDropEvent, value);
             remove => Events.RemoveHandler(s_dragDropEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragEnterDescr))]
+        [SRCategory(nameof(SR.CatDragDrop))]
+        [SRDescription(nameof(SR.ControlOnDragEnterDescr))]
         public event DragEventHandler DragEnter
         {
             add => Events.AddHandler(s_dragEnterEvent, value);
             remove => Events.RemoveHandler(s_dragEnterEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragOverDescr))]
+        [SRCategory(nameof(SR.CatDragDrop))]
+        [SRDescription(nameof(SR.ControlOnDragOverDescr))]
         public event DragEventHandler DragOver
         {
             add => Events.AddHandler(s_dragOverEvent, value);
             remove => Events.RemoveHandler(s_dragOverEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
+        [SRCategory(nameof(SR.CatDragDrop))]
+        [SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
         public event EventHandler DragLeave
         {
             add => Events.AddHandler(s_dragLeaveEvent, value);
             remove => Events.RemoveHandler(s_dragLeaveEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
+        [SRCategory(nameof(SR.CatDragDrop))]
+        [SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
         public event GiveFeedbackEventHandler GiveFeedback
         {
             add => Events.AddHandler(s_giveFeedbackEvent, value);
@@ -4147,7 +4093,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when a handle is created for the control.
         /// </summary>
-        [SRCategory(nameof(SR.CatPrivate)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnCreateHandleDescr))]
+        [SRCategory(nameof(SR.CatPrivate))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.ControlOnCreateHandleDescr))]
         public event EventHandler HandleCreated
         {
             add => Events.AddHandler(s_handleCreatedEvent, value);
@@ -4157,21 +4106,28 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control's handle is destroyed.
         /// </summary>
-        [SRCategory(nameof(SR.CatPrivate)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnDestroyHandleDescr))]
+        [SRCategory(nameof(SR.CatPrivate))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.ControlOnDestroyHandleDescr))]
         public event EventHandler HandleDestroyed
         {
             add => Events.AddHandler(s_handleDestroyedEvent, value);
             remove => Events.RemoveHandler(s_handleDestroyedEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnHelpDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ControlOnHelpDescr))]
         public event HelpEventHandler HelpRequested
         {
             add => Events.AddHandler(s_helpRequestedEvent, value);
             remove => Events.RemoveHandler(s_helpRequestedEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnInvalidateDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.ControlOnInvalidateDescr))]
         public event InvalidateEventHandler Invalidated
         {
             add => Events.AddHandler(s_invalidatedEvent, value);
@@ -4184,11 +4140,9 @@ namespace System.Windows.Forms
             get { return GetPreferredSize(Size.Empty); }
         }
 
-        [
-        SRDescription(nameof(SR.ControlPaddingDescr)),
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true)
-        ]
+        [SRDescription(nameof(SR.ControlPaddingDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true)]
         public Padding Padding
         {
             get { return CommonProperties.GetPadding(this, DefaultPadding); }
@@ -4216,28 +4170,32 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
         public event EventHandler PaddingChanged
         {
             add => Events.AddHandler(s_paddingChangedEvent, value);
             remove => Events.RemoveHandler(s_paddingChangedEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ControlOnPaintDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ControlOnPaintDescr))]
         public event PaintEventHandler Paint
         {
             add => Events.AddHandler(s_paintEvent, value);
             remove => Events.RemoveHandler(s_paintEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
+        [SRCategory(nameof(SR.CatDragDrop))]
+        [SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
         public event QueryContinueDragEventHandler QueryContinueDrag
         {
             add => Events.AddHandler(s_queryContinueDragEvent, value);
             remove => Events.RemoveHandler(s_queryContinueDragEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
         {
             add => Events.AddHandler(s_queryAccessibilityHelpEvent, value);
@@ -4247,7 +4205,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is double clicked.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick
         {
             add => Events.AddHandler(s_doubleClickEvent, value);
@@ -4257,7 +4216,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is entered.
         /// </summary>
-        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter
         {
             add => Events.AddHandler(s_enterEvent, value);
@@ -4267,7 +4227,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control receives focus.
         /// </summary>
-        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnGotFocusDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.ControlOnGotFocusDescr))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler GotFocus
         {
             add => Events.AddHandler(s_gotFocusEvent, value);
@@ -4277,7 +4240,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when a key is pressed down while the control has focus.
         /// </summary>
-        [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
+        [SRCategory(nameof(SR.CatKey))]
+        [SRDescription(nameof(SR.ControlOnKeyDownDescr))]
         public event KeyEventHandler KeyDown
         {
             add => Events.AddHandler(s_keyDownEvent, value);
@@ -4287,7 +4251,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when a key is pressed while the control has focus.
         /// </summary>
-        [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
+        [SRCategory(nameof(SR.CatKey))]
+        [SRDescription(nameof(SR.ControlOnKeyPressDescr))]
         public event KeyPressEventHandler KeyPress
         {
             add => Events.AddHandler(s_keyPressEvent, value);
@@ -4297,14 +4262,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when a key is released while the control has focus.
         /// </summary>
-        [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
+        [SRCategory(nameof(SR.CatKey))]
+        [SRDescription(nameof(SR.ControlOnKeyUpDescr))]
         public event KeyEventHandler KeyUp
         {
             add => Events.AddHandler(s_keyUpEvent, value);
             remove => Events.RemoveHandler(s_keyUpEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnLayoutDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ControlOnLayoutDescr))]
         public event LayoutEventHandler Layout
         {
             add => Events.AddHandler(s_layoutEvent, value);
@@ -4314,7 +4281,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is left.
         /// </summary>
-        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLeaveDescr))]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.ControlOnLeaveDescr))]
         public event EventHandler Leave
         {
             add => Events.AddHandler(s_leaveEvent, value);
@@ -4324,7 +4292,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control loses focus.
         /// </summary>
-        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLostFocusDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.ControlOnLostFocusDescr))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler LostFocus
         {
             add => Events.AddHandler(s_lostFocusEvent, value);
@@ -4334,7 +4305,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is mouse clicked.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ControlOnMouseClickDescr))]
         public event MouseEventHandler MouseClick
         {
             add => Events.AddHandler(s_mouseClickEvent, value);
@@ -4344,7 +4316,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is mouse double clicked.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseDoubleClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ControlOnMouseDoubleClickDescr))]
         public event MouseEventHandler MouseDoubleClick
         {
             add => Events.AddHandler(s_mouseDoubleClickEvent, value);
@@ -4354,7 +4327,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control loses mouse Capture.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseCaptureChangedDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ControlOnMouseCaptureChangedDescr))]
         public event EventHandler MouseCaptureChanged
         {
             add => Events.AddHandler(s_mouseCaptureChangedEvent, value);
@@ -4365,7 +4339,8 @@ namespace System.Windows.Forms
         ///  Occurs when the mouse pointer is over the control and a mouse button is
         ///  pressed.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseDownDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseDownDescr))]
         public event MouseEventHandler MouseDown
         {
             add => Events.AddHandler(s_mouseDownEvent, value);
@@ -4375,7 +4350,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse pointer enters the control.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseEnterDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseEnterDescr))]
         public event EventHandler MouseEnter
         {
             add => Events.AddHandler(s_mouseEnterEvent, value);
@@ -4385,7 +4361,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse pointer leaves the control.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseLeaveDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseLeaveDescr))]
         public event EventHandler MouseLeave
         {
             add => Events.AddHandler(s_mouseLeaveEvent, value);
@@ -4397,7 +4374,8 @@ namespace System.Windows.Forms
         ///  either when the top level window is moved between monitors or when the OS settings are changed.
         ///  This event is raised before the top level parent window receives WM_DPICHANGED message.
         /// </summary>
-        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedBeforeParentDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ControlOnDpiChangedBeforeParentDescr))]
         public event EventHandler DpiChangedBeforeParent
         {
             add => Events.AddHandler(s_dpiChangedBeforeParentEvent, value);
@@ -4409,7 +4387,8 @@ namespace System.Windows.Forms
         ///  either when the top level window is moved between monitors or when the OS settings are changed.
         ///  This message is received after the top level parent window receives WM_DPICHANGED message.
         /// </summary>
-        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedAfterParentDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ControlOnDpiChangedAfterParentDescr))]
         public event EventHandler DpiChangedAfterParent
         {
             add => Events.AddHandler(s_dpiChangedAfterParentEvent, value);
@@ -4419,7 +4398,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse pointer hovers over the control.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseHoverDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseHoverDescr))]
         public event EventHandler MouseHover
         {
             add => Events.AddHandler(s_mouseHoverEvent, value);
@@ -4429,7 +4409,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse pointer is moved over the control.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
         public event MouseEventHandler MouseMove
         {
             add => Events.AddHandler(s_mouseMoveEvent, value);
@@ -4439,7 +4420,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse pointer is over the control and a mouse button is released.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseUpDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseUpDescr))]
         public event MouseEventHandler MouseUp
         {
             add => Events.AddHandler(s_mouseUpEvent, value);
@@ -4449,7 +4431,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the mouse wheel moves while the control has focus.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseWheelDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseWheelDescr))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event MouseEventHandler MouseWheel
         {
             add => Events.AddHandler(s_mouseWheelEvent, value);
@@ -4459,7 +4444,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is moved.
         /// </summary>
-        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMoveDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ControlOnMoveDescr))]
         public event EventHandler Move
         {
             add => Events.AddHandler(s_moveEvent, value);
@@ -4469,7 +4455,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raised to preview a key down event
         /// </summary>
-        [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.PreviewKeyDownDescr))]
+        [SRCategory(nameof(SR.CatKey))]
+        [SRDescription(nameof(SR.PreviewKeyDownDescr))]
         public event PreviewKeyDownEventHandler PreviewKeyDown
         {
             add => Events.AddHandler(s_previewKeyDownEvent, value);
@@ -4479,29 +4466,33 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is resized.
         /// </summary>
-        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnResizeDescr)),
-         EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ControlOnResizeDescr))]
+         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler Resize
         {
             add => Events.AddHandler(s_resizeEvent, value);
             remove => Events.RemoveHandler(s_resizeEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
         public event UICuesEventHandler ChangeUICues
         {
             add => Events.AddHandler(s_changeUICuesEvent, value);
             remove => Events.RemoveHandler(s_changeUICuesEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
         public event EventHandler StyleChanged
         {
             add => Events.AddHandler(s_styleChangedEvent, value);
             remove => Events.RemoveHandler(s_styleChangedEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
         public event EventHandler SystemColorsChanged
         {
             add => Events.AddHandler(s_systemColorsChangedEvent, value);
@@ -4511,7 +4502,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is validating.
         /// </summary>
-        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatingDescr))]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.ControlOnValidatingDescr))]
         public event CancelEventHandler Validating
         {
             add => Events.AddHandler(s_validatingEvent, value);
@@ -4521,7 +4513,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is done validating.
         /// </summary>
-        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated
         {
             add => Events.AddHandler(s_validatedEvent, value);
@@ -4664,7 +4657,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnParentChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnParentChangedDescr))]
         public event EventHandler ParentChanged
         {
             add => Events.AddHandler(s_parentEvent, value);
@@ -4912,9 +4906,7 @@ namespace System.Windows.Forms
         ///  not be called directly. Inheriting classes should always call <c>base.CreateHandle()</c> when
         ///  overriding this method.
         /// </summary>
-        [
-        EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void CreateHandle()
         {
             IntPtr userCookie = IntPtr.Zero;
@@ -8295,10 +8287,8 @@ namespace System.Windows.Forms
         ///  or when scaling level is changed in the windows setting by the user.
         ///  This message is not sent to the top level windows.
         /// </summary>
-        [
-            Browsable(true),
-            EditorBrowsable(EditorBrowsableState.Always)
-        ]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         protected virtual void OnDpiChangedBeforeParent(EventArgs e)
         {
             ((EventHandler)Events[s_dpiChangedBeforeParentEvent])?.Invoke(this, e);
@@ -8310,10 +8300,8 @@ namespace System.Windows.Forms
         ///  or when scaling level is changed in windows setting by the user.
         ///  This message is not sent to the top level windows.
         /// </summary>
-        [
-            Browsable(true),
-            EditorBrowsable(EditorBrowsableState.Always)
-        ]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         protected virtual void OnDpiChangedAfterParent(EventArgs e)
         {
             ((EventHandler)Events[s_dpiChangedAfterParentEvent])?.Invoke(this, e);
@@ -8553,10 +8541,8 @@ namespace System.Windows.Forms
         ///  This method is an opportunity to rescale any constant sizes, glyphs or bitmaps before re-painting.
         ///  The derived class can choose to not call the base class implementation.
         /// </summary>
-        [
-            Browsable(true),
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
         {
         }

@@ -91,51 +91,44 @@ namespace System.Windows.Forms
             this.owner = owner;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AllowDrop
         {
             get => base.AllowDrop;
             set => base.AllowDrop = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoScroll
         {
             get => base.AutoScroll;
             set => base.AutoScroll = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size AutoScrollMargin
         {
             get => base.AutoScrollMargin;
             set => base.AutoScrollMargin = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size AutoScrollMinSize
         {
             get => base.AutoScrollMinSize;
             set => base.AutoScrollMinSize = value;
         }
 
-        [
-            DefaultValue(true),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
-        ]
+        [    DefaultValue(true)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
             get => base.AutoSize;
@@ -143,10 +136,8 @@ namespace System.Windows.Forms
         }
 
         ///  Override base AutoSizeChanged to we can change visibility/browsability attributes
-        [
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Always)
-        ]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
@@ -214,11 +205,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(false),
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [DefaultValue(false)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool Locked
         {
             get
@@ -280,10 +269,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRDescription(nameof(SR.ToolStripRenderModeDescr)),
-        SRCategory(nameof(SR.CatAppearance)),
-        ]
+        [SRDescription(nameof(SR.ToolStripRenderModeDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public ToolStripRenderMode RenderMode
         {
             get
@@ -296,7 +283,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripRendererChanged))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripRendererChanged))]
         public event EventHandler RendererChanged
         {
             add => Events.AddHandler(EventRendererChanged, value);
@@ -306,11 +294,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of child controls.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(nameof(SR.ToolStripPanelRowsDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRDescription(nameof(SR.ToolStripPanelRowsDescr))]
         internal ToolStripPanelRowCollection RowsInternal
         {
             get
@@ -326,11 +312,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ToolStripPanelRowsDescr)),
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ToolStripPanelRowsDescr))]
         public ToolStripPanelRow[] Rows
         {
             get
@@ -341,29 +325,26 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new int TabIndex
         {
             get => base.TabIndex;
             set => base.TabIndex = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabIndexChanged
         {
             add => base.TabIndexChanged += value;
             remove => base.TabIndexChanged -= value;
         }
 
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new bool TabStop
         {
             get => base.TabStop;
@@ -375,25 +356,25 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
         {
             get => base.Text;
             set => base.Text = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TextChanged
         {
             add => base.TextChanged += value;
@@ -1383,10 +1364,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        ListBindable(false),
-        ComVisible(false)
-        ]
+        [ListBindable(false),
+        ComVisible(false)]
         public class ToolStripPanelRowCollection : ArrangedElementCollection, IList
         {
             private readonly ToolStripPanel owner;

@@ -53,11 +53,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The ToolStripDropDown that will be displayed when this item is clicked.
         /// </summary>
-        [
-        TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.ToolStripDropDownDescr))
-        ]
+        [TypeConverter(typeof(ReferenceConverter))]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripDropDownDescr))]
         public ToolStripDropDown DropDown
         {
             get
@@ -184,10 +182,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the dropdown is closed
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAction)),
-        SRDescription(nameof(SR.ToolStripDropDownClosedDecr))
-        ]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripDropDownClosedDecr))]
         public event EventHandler DropDownClosed
         {
             add => Events.AddHandler(EventDropDownClosed, value);
@@ -207,10 +203,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAction)),
-        SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))
-        ]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))]
         public event EventHandler DropDownOpening
         {
             add => Events.AddHandler(EventDropDownShow, value);
@@ -219,10 +213,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the dropdown is opened
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAction)),
-        SRDescription(nameof(SR.ToolStripDropDownOpenedDescr))
-        ]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripDropDownOpenedDescr))]
         public event EventHandler DropDownOpened
         {
             add => Events.AddHandler(EventDropDownOpened, value);
@@ -232,11 +224,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the DropDown's items collection.
         /// </summary>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.ToolStripDropDownItemsDescr))
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripDropDownItemsDescr))]
         public ToolStripItemCollection DropDownItems
             => DropDown.Items;
 
@@ -260,7 +250,8 @@ namespace System.Windows.Forms
         public bool HasDropDown
             => dropDown != null;
 
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool Pressed
         {
             get

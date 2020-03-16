@@ -66,9 +66,7 @@ namespace System.Windows.Forms
             base.Dispose(disposing);
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public override bool Displayed
         {
             get
@@ -120,9 +118,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public override bool Frozen
         {
             get
@@ -155,10 +151,8 @@ namespace System.Windows.Forms
             get => Properties.ContainsObject(PropValueType) && Properties.GetObject(PropValueType) != null;
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool ReadOnly
         {
             get
@@ -171,9 +165,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public override bool Resizable
         {
             get
@@ -196,10 +188,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool Selected
         {
             get
@@ -232,9 +222,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public override bool Visible
         {
             get

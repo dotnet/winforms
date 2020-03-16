@@ -17,11 +17,9 @@ namespace System.Windows.Forms
     ///  Represents a collection of <see cref='DataGridViewRow'/> objects in the
     ///  <see cref='DataGridView'/> control.
     /// </summary>
-    [
-        ListBindable(false),
-        DesignerSerializer("System.Windows.Forms.Design.DataGridViewRowCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign,
-                                    "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
-    ]
+    [ListBindable(false)]
+    [DesignerSerializer("System.Windows.Forms.Design.DataGridViewRowCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign,
+                        "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
     public class DataGridViewRowCollection : ICollection, IList
     {
 #if DEBUG

@@ -62,11 +62,9 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer, true);
         }
 
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))]
         public bool UseAntiAlias
         {
             get
@@ -83,11 +81,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value If true (the default), resizing the control or changing the number of pages shown
         ///  will automatically adjust Zoom to make everything visible.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.PrintPreviewAutoZoomDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.PrintPreviewAutoZoomDescr))]
         public bool AutoZoom
         {
             get { return autoZoom; }
@@ -104,11 +100,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating the document to preview.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.PrintPreviewDocumentDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.PrintPreviewDocumentDescr))]
         public PrintDocument Document
         {
             get { return document; }
@@ -123,11 +117,9 @@ namespace System.Windows.Forms
         ///  Gets or sets the number of pages
         ///  displayed horizontally across the screen.
         /// </summary>
-        [
-        DefaultValue(1),
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.PrintPreviewColumnsDescr))
-        ]
+        [DefaultValue(1)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.PrintPreviewColumnsDescr))]
         public int Columns
         {
             get { return columns; }
@@ -161,12 +153,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The virtual coordinate of the upper left visible pixel.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlWithScrollbarsPositionDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlWithScrollbarsPositionDescr))]
         private Point Position
         {
             get { return position; }
@@ -180,11 +170,9 @@ namespace System.Windows.Forms
         ///  Gets or sets the number of pages
         ///  displayed vertically down the screen.
         /// </summary>
-        [
-        DefaultValue(1),
-        SRDescription(nameof(SR.PrintPreviewRowsDescr)),
-        SRCategory(nameof(SR.CatBehavior))
-        ]
+        [DefaultValue(1)]
+        [SRDescription(nameof(SR.PrintPreviewRowsDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
         public int Rows
         {
             get { return rows; }
@@ -205,12 +193,10 @@ namespace System.Windows.Forms
         ///  is written from RightToLeft. When this property is true,
         ///  control placement and text will be from right to left.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        AmbientValue(RightToLeft.Inherit),
-        SRDescription(nameof(SR.ControlRightToLeftDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [AmbientValue(RightToLeft.Inherit)]
+        [SRDescription(nameof(SR.ControlRightToLeftDescr))]
         public override RightToLeft RightToLeft
         {
             get => base.RightToLeft;
@@ -221,18 +207,18 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        Bindable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Bindable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
         {
             get => base.Text;
             set => base.Text = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged
         {
             add => base.TextChanged += value;
@@ -242,11 +228,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the page number of the upper left page.
         /// </summary>
-        [
-        DefaultValue(0),
-        SRDescription(nameof(SR.PrintPreviewStartPageDescr)),
-        SRCategory(nameof(SR.CatBehavior))
-        ]
+        [DefaultValue(0)]
+        [SRDescription(nameof(SR.PrintPreviewStartPageDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
         public int StartPage
         {
             get
@@ -278,7 +262,8 @@ namespace System.Windows.Forms
 
         private static readonly object EVENT_STARTPAGECHANGED = new object();
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
         public event EventHandler StartPageChanged
         {
             add => Events.AddHandler(EVENT_STARTPAGECHANGED, value);
@@ -288,12 +273,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  How big the control would be if the screen was infinitely large.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlWithScrollbarsVirtualSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlWithScrollbarsVirtualSizeDescr))]
         private Size VirtualSize
         {
             get { return virtualSize; }
@@ -307,11 +291,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating how large the pages will appear.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.PrintPreviewZoomDescr)),
-        DefaultValue(DefaultZoom)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.PrintPreviewZoomDescr))]
+        [DefaultValue(DefaultZoom)]
         public double Zoom
         {
             get { return zoom; }

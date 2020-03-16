@@ -346,7 +346,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll
         {
             get => base.AutoScroll;
@@ -364,38 +365,41 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
             get => base.BackgroundImageLayout;
             set => base.BackgroundImageLayout = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public AttributeCollection BrowsableAttributes
         {
             set
@@ -466,8 +470,9 @@ namespace System.Windows.Forms
         ///  for the currently selected objects.  Objects that
         ///  expose verbs can show commands.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        SRDescription(nameof(SR.PropertyGridCanShowCommandsDesc))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.PropertyGridCanShowCommandsDesc))]
         public virtual bool CanShowCommands
         {
             get
@@ -479,11 +484,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The text used color for category headings. The background color is determined by the LineColor property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridCategoryForeColorDesc)),
-        DefaultValue(typeof(Color), "ControlText")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridCategoryForeColorDesc))]
+        [DefaultValue(typeof(Color), "ControlText")]
         public Color CategoryForeColor
         {
             get
@@ -503,10 +506,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The background color for the hot commands region.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridCommandsBackColorDesc))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridCommandsBackColorDesc))]
         public Color CommandsBackColor
         {
             get
@@ -523,10 +524,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The forground color for the hot commands region.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridCommandsForeColorDesc))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridCommandsForeColorDesc))]
         public Color CommandsForeColor
         {
             get
@@ -543,10 +542,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The link color for the hot commands region.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridCommandsLinkColorDesc))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridCommandsLinkColorDesc))]
         public Color CommandsLinkColor
         {
             get
@@ -562,10 +559,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The active link color for the hot commands region.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridCommandsActiveLinkColorDesc))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridCommandsActiveLinkColorDesc))]
         public Color CommandsActiveLinkColor
         {
             get
@@ -581,10 +576,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The color for the hot commands region when the link is disabled.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridCommandsDisabledLinkColorDesc))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridCommandsDisabledLinkColorDesc))]
         public Color CommandsDisabledLinkColor
         {
             get
@@ -600,11 +593,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The border color for the hot commands region
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridCommandsBorderColorDesc)),
-        DefaultValue(typeof(Color), "ControlDark")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridCommandsBorderColorDesc))]
+        [DefaultValue(typeof(Color), "ControlDark")]
         public Color CommandsBorderColor
         {
             get
@@ -620,7 +611,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns true if the commands pane is currently shown.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual bool CommandsVisible
         {
             get
@@ -633,11 +625,9 @@ namespace System.Windows.Forms
         ///  Returns true if the commands pane will be shown for objects
         ///  that expose verbs.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.PropertyGridCommandsVisibleIfAvailable))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.PropertyGridCommandsVisibleIfAvailable))]
         public virtual bool CommandsVisibleIfAvailable
         {
             get
@@ -663,10 +653,9 @@ namespace System.Windows.Forms
         ///  is used useful to position the context menu when the menu is invoked
         ///  via the keyboard.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Point ContextMenuDefaultLocation
         {
             get
@@ -678,10 +667,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of child controls.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ControlCollection Controls
         {
             get => base.Controls;
@@ -695,10 +683,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected virtual Type DefaultTabType
         {
             get
@@ -725,14 +712,16 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
             get => base.ForeColor;
             set => base.ForeColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
@@ -784,11 +773,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The background color for the help region.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridHelpBackColorDesc)),
-        DefaultValue(typeof(Color), "Control")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridHelpBackColorDesc))]
+        [DefaultValue(typeof(Color), "Control")]
         public Color HelpBackColor
         {
             get
@@ -804,11 +791,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The forground color for the help region.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridHelpForeColorDesc)),
-        DefaultValue(typeof(Color), "ControlText")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridHelpForeColorDesc))]
+        [DefaultValue(typeof(Color), "ControlText")]
         public Color HelpForeColor
         {
             get
@@ -824,11 +809,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The border color for the help region
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridHelpBorderColorDesc)),
-        DefaultValue(typeof(Color), "ControlDark")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridHelpBorderColorDesc))]
+        [DefaultValue(typeof(Color), "ControlDark")]
         public Color HelpBorderColor
         {
             get
@@ -844,12 +827,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets or gets the visiblity state of the help pane.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(true),
-        Localizable(true),
-        SRDescription(nameof(SR.PropertyGridHelpVisibleDesc))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.PropertyGridHelpVisibleDesc))]
         public virtual bool HelpVisible
         {
             get
@@ -903,11 +884,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Background color for Highlighted text.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridSelectedItemWithFocusBackColorDesc)),
-        DefaultValue(typeof(Color), "Highlight")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridSelectedItemWithFocusBackColorDesc))]
+        [DefaultValue(typeof(Color), "Highlight")]
         public Color SelectedItemWithFocusBackColor
         {
             get
@@ -927,11 +906,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Foreground color for Highlighted (selected) text.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridSelectedItemWithFocusForeColorDesc)),
-        DefaultValue(typeof(Color), "HighlightText")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridSelectedItemWithFocusForeColorDesc))]
+        [DefaultValue(typeof(Color), "HighlightText")]
         public Color SelectedItemWithFocusForeColor
         {
             get
@@ -951,11 +928,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Foreground color for disabled text in the Grid View
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridDisabledItemForeColorDesc)),
-        DefaultValue(typeof(Color), "GrayText")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridDisabledItemForeColorDesc))]
+        [DefaultValue(typeof(Color), "GrayText")]
         public Color DisabledItemForeColor
         {
             get
@@ -972,11 +947,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Color for the horizontal splitter line separating property categories.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridCategorySplitterColorDesc)),
-        DefaultValue(typeof(Color), "Control")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridCategorySplitterColorDesc))]
+        [DefaultValue(typeof(Color), "Control")]
         public Color CategorySplitterColor
         {
             get
@@ -996,11 +969,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Enable/Disable use of VisualStyle glyph for PropertyGrid node expansion.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridCanShowVisualStyleGlyphsDesc)),
-        DefaultValue(true)
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridCanShowVisualStyleGlyphsDesc))]
+        [DefaultValue(true)]
         public bool CanShowVisualStyleGlyphs
         {
             get
@@ -1025,11 +996,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridLineColorDesc)),
-        DefaultValue(typeof(Color), "InactiveBorder")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridLineColorDesc))]
+        [DefaultValue(typeof(Color), "InactiveBorder")]
         public Color LineColor
         {
             get
@@ -1052,21 +1021,17 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding Padding
         {
             get => base.Padding;
             set => base.Padding = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler PaddingChanged
         {
             add => base.PaddingChanged += value;
@@ -1077,11 +1042,9 @@ namespace System.Windows.Forms
         ///  Sets or gets the current property sort type, which can be
         ///  PropertySort.Categorized or PropertySort.Alphabetical.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(PropertySort.CategorizedAlphabetical),
-        SRDescription(nameof(SR.PropertyGridPropertySortDesc))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(PropertySort.CategorizedAlphabetical)]
+        [SRDescription(nameof(SR.PropertyGridPropertySortDesc))]
         public PropertySort PropertySort
         {
             get
@@ -1133,10 +1096,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public PropertyTabCollection PropertyTabs
         {
             get
@@ -1150,12 +1112,10 @@ namespace System.Windows.Forms
         ///  objects are being browsed, this property will return the first
         ///  one in the list.  If no objects are selected, null is returned.
         /// </summary>
-        [
-        DefaultValue(null),
-        SRDescription(nameof(SR.PropertyGridSelectedObjectDesc)),
-        SRCategory(nameof(SR.CatBehavior)),
-        TypeConverter(typeof(SelectedObjectConverter))
-        ]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.PropertyGridSelectedObjectDesc))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [TypeConverter(typeof(SelectedObjectConverter))]
         public object SelectedObject
         {
             get
@@ -1179,10 +1139,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object[] SelectedObjects
         {
             set
@@ -1446,10 +1404,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public PropertyTab SelectedTab
         {
             get
@@ -1459,10 +1416,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public GridItem SelectedGridItem
         {
             get
@@ -1523,8 +1479,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
         {
             get => base.Text;
@@ -1538,11 +1494,9 @@ namespace System.Windows.Forms
             remove => base.TextChanged -= value;
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridLargeButtonsDesc)),
-        DefaultValue(false)
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridLargeButtonsDesc))]
+        [DefaultValue(false)]
         public bool LargeButtons
         {
             get
@@ -1594,11 +1548,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets or gets the visiblity state of the toolStrip.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.PropertyGridToolbarVisibleDesc))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.PropertyGridToolbarVisibleDesc))]
         public virtual bool ToolbarVisible
         {
             get
@@ -1639,11 +1591,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridViewBackColorDesc)),
-        DefaultValue(typeof(Color), "Window")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridViewBackColorDesc))]
+        [DefaultValue(typeof(Color), "Window")]
         public Color ViewBackColor
         {
             get
@@ -1657,11 +1607,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridViewForeColorDesc)),
-        DefaultValue(typeof(Color), "WindowText")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridViewForeColorDesc))]
+        [DefaultValue(typeof(Color), "WindowText")]
         public Color ViewForeColor
         {
             get
@@ -1678,11 +1626,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Border color for the property grid view.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.PropertyGridViewBorderColorDesc)),
-        DefaultValue(typeof(Color), "ControlDark")
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.PropertyGridViewBorderColorDesc))]
+        [DefaultValue(typeof(Color), "ControlDark")]
         public Color ViewBorderColor
         {
             get
@@ -1716,7 +1662,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown
         {
             add => base.KeyDown += value;
@@ -1724,7 +1671,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress
         {
             add => base.KeyPress += value;
@@ -1732,7 +1680,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp
         {
             add => base.KeyUp += value;
@@ -1740,7 +1689,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown
         {
             add => base.MouseDown += value;
@@ -1748,7 +1698,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp
         {
             add => base.MouseUp += value;
@@ -1756,7 +1707,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove
         {
             add => base.MouseMove += value;
@@ -1764,7 +1716,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter
         {
             add => base.MouseEnter += value;
@@ -1772,7 +1725,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave
         {
             add => base.MouseLeave += value;
@@ -1780,7 +1734,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary> Event that is fired when a property value is modified.</summary>
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
         public event PropertyValueChangedEventHandler PropertyValueChanged
         {
             add => Events.AddHandler(EventPropertyValueChanged, value);
@@ -1794,7 +1749,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary> Event that is fired when the current view tab is changed, such as changing from Properties to Events</summary>
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
         public event PropertyTabChangedEventHandler PropertyTabChanged
         {
             add => Events.AddHandler(EventPropertyTabChanged, value);
@@ -1802,7 +1758,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary> Event that is fired when the sort mode is changed.</summary>
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
         public event EventHandler PropertySortChanged
         {
             add => Events.AddHandler(EventPropertySortChanged, value);
@@ -1810,14 +1767,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary> Event that is fired when the selected GridItem is changed</summary>
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
         public event SelectedGridItemChangedEventHandler SelectedGridItemChanged
         {
             add => Events.AddHandler(EventSelectedGridItemChanged, value);
             remove => Events.RemoveHandler(EventSelectedGridItemChanged, value);
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedObjectsChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.PropertyGridSelectedObjectsChangedDescr))]
         public event EventHandler SelectedObjectsChanged
         {
             add => Events.AddHandler(EventSelectedObjectsChanged, value);
@@ -4652,11 +4611,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This 16x16 Bitmap is applied to the button which orders properties alphabetically.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected virtual Bitmap SortByPropertyImage
         {
             get
@@ -4668,11 +4625,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This 16x16 Bitmap is applied to the button which displays properties under the assigned categories.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected virtual Bitmap SortByCategoryImage
         {
             get
@@ -4684,11 +4639,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This 16x16 Bitmap is applied to the button which displays property page in the designer pane.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected virtual Bitmap ShowPropertyPageImage
         {
             get
@@ -4879,11 +4832,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </summary>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
         public bool UseCompatibleTextRendering
         {
             get => base.UseCompatibleTextRenderingInt;

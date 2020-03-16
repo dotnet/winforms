@@ -13,9 +13,9 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true),
-     ClassInterface(ClassInterfaceType.AutoDispatch),
-     SRDescription(nameof(SR.DescriptionStatusStrip))
+    [ComVisible(true)]
+     [ClassInterface(ClassInterfaceType.AutoDispatch)]
+     [SRDescription(nameof(SR.DescriptionStatusStrip))
     ]
     public class StatusStrip : ToolStrip
     {
@@ -46,12 +46,10 @@ namespace System.Windows.Forms
             ResumeLayout(true);
         }
 
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.ToolStripCanOverflowDescr)),
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false)
-        ]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ToolStripCanOverflowDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
         public new bool CanOverflow
         {
             get => base.CanOverflow;
@@ -188,11 +186,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.StatusStripSizingGripDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.StatusStripSizingGripDescr))]
         public bool SizingGrip
         {
             get

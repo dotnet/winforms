@@ -20,12 +20,10 @@ namespace System.Windows.Forms
     ///  Don't create an <see cref="MdiClient"/> control.
     ///  A form creates and uses the <see cref="MdiClient"/> when you set the <see cref="Form.IsMdiContainer"/> property to <see langword="true"/>.
     /// </remarks>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    ToolboxItem(false),
-    DesignTimeVisible(false)
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
     public sealed class MdiClient : Control
     {
         // kept in add order, not ZOrder. Need to return the correct
@@ -47,9 +45,7 @@ namespace System.Windows.Forms
         ///  Gets or sets the background image displayed in the <see cref="MdiClient" /> control.
         /// </summary>
         /// <value>The image to display in the background of the control.</value>
-        [
-        Localizable(true)
-        ]
+        [Localizable(true)]
         public override Image BackgroundImage
         {
             get
@@ -65,7 +61,8 @@ namespace System.Windows.Forms
             set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
             get
