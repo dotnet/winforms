@@ -16,9 +16,9 @@ internal static partial class Interop
             FORMATW = FIRST - 3,
             WMKEYDOWNW = FIRST - 4,
             USERSTRINGW = FIRST - 5,
-            DATETIMECHANGE = FIRST2 - 6,
             CLOSEUP = FIRST2,
             DROPDOWN = FIRST2 - 1,
+            DATETIMECHANGE = FIRST2 - 6
         }
     }
 }

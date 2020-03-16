@@ -19,19 +19,7 @@ namespace System.Windows.Forms
         GDI_ERROR = (unchecked((int)0xFFFFFFFF));
 
         public const int
-        HCF_HIGHCONTRASTON = 0x00000001,
-        HDN_ITEMCHANGING = ((0 - 300) - 20),
-        HDN_ITEMCHANGED = ((0 - 300) - 21),
-        HDN_ITEMCLICK = ((0 - 300) - 22),
-        HDN_ITEMDBLCLICK = ((0 - 300) - 23),
-        HDN_DIVIDERDBLCLICK = ((0 - 300) - 25),
-        HDN_BEGINTDRAG = ((0 - 300) - 10),
-        HDN_BEGINTRACK = ((0 - 300) - 26),
-        HDN_ENDDRAG = ((0 - 300) - 11),
-        HDN_ENDTRACK = ((0 - 300) - 27),
-        HDN_TRACK = ((0 - 300) - 28),
-        HDN_GETDISPINFO = ((0 - 300) - 29);
-        // HOVER_DEFAULT = Do not use this value ever! It crashes entire servers.
+        HCF_HIGHCONTRASTON = 0x00000001;
 
         public const int
         ICON_SMALL = 0,
