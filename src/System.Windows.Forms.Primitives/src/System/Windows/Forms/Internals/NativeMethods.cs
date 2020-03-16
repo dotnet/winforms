@@ -55,11 +55,7 @@ namespace System.Windows.Forms
         }
 
         public const int
-        MDIS_ALLCHILDSTYLES = 0x0001,
-        MCN_VIEWCHANGE = (0 - 750), // MCN_SELECT -4  - give state of calendar view
-        MCN_SELCHANGE = ((0 - 750) + 1),
-        MCN_GETDAYSTATE = ((0 - 750) + 3),
-        MCN_SELECT = ((0 - 750) + 4);
+        MDIS_ALLCHILDSTYLES = 0x0001;
 
         public const int
         PATCOPY = 0x00F00021,
