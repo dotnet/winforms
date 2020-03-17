@@ -5405,6 +5405,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnValidated_Invoke_CallsValidated(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Validated += handler;
+            control.OnValidated(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Validated -= handler;
+            control.OnValidated(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
         public static IEnumerable<object[]> OnValidating_TestData()
         {
             yield return new object[] { null };
@@ -5433,30 +5457,6 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.Validating -= handler;
             control.OnValidating(eventArgs);
-            Assert.Equal(1, callCount);
-        }
-
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnValidated_Invoke_CallsValidated(EventArgs eventArgs)
-        {
-            using var control = new SubControl();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            control.Validated += handler;
-            control.OnValidated(eventArgs);
-            Assert.Equal(1, callCount);
-
-            // Remove handler.
-            control.Validated -= handler;
-            control.OnValidated(eventArgs);
             Assert.Equal(1, callCount);
         }
 

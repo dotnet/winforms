@@ -146,11 +146,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_ActiveContanerControl_Set_GetReturnsExpected()
         {
-            var control = new ContainerControl();
-            var child = new Control();
+            using var control = new ContainerControl();
+            using var child = new Control();
             var grandchild = new Control();
             control.Controls.Add(child);
             child.Controls.Add(grandchild);
@@ -171,35 +171,37 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.ActiveControl);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_ActiveContanerControl_SetInvalid_ThrowsArgumentException()
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             Assert.Throws<ArgumentException>("value", () => control.ActiveControl = control);
             Assert.Throws<ArgumentException>("value", () => control.ActiveControl = new Control());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
-        public void AutoScaleDimensions_Set_GetReturnsExpected(Size value)
+        public void ContainerControl_AutoScaleDimensions_Set_GetReturnsExpected(Size value)
         {
-            var control = new ContainerControl
+            using var control = new ContainerControl
             {
                 AutoScaleDimensions = value
             };
             Assert.Equal(value, control.AutoScaleDimensions);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoScaleDimensions = value;
             Assert.Equal(value, control.AutoScaleDimensions);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
-        public void AutoScaleDimensions_SetWithChildren_GetReturnsExpected(Size value)
+        public void ContainerControl_AutoScaleDimensions_SetWithChildren_GetReturnsExpected(Size value)
         {
-            var child = new Control();
-            var control = new ContainerControl();
+            using var child = new Control();
+            using var control = new ContainerControl();
             control.Controls.Add(child);
 
             control.AutoScaleDimensions = value;
@@ -210,41 +212,43 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.AutoScaleDimensions);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
-        public void AutoScaleDimensions_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
+        public void ContainerControl_AutoScaleDimensions_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.AutoScaleDimensions = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
-        public void AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
+        public void ContainerControl_AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
         {
-            var control = new ContainerControl
+            using var control = new ContainerControl
             {
                 AutoScaleMode = value
             };
             Assert.Equal(value, control.AutoScaleMode);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoScaleMode = value;
             Assert.Equal(value, control.AutoScaleMode);
+            Assert.False(control.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> AutoScaleMode_SetDifferent_TestData()
+        public static IEnumerable<object[]> AutoScaleMode_SetWithCustomOldValue_TestData()
         {
             yield return new object[] { AutoScaleMode.None, SizeF.Empty };
             yield return new object[] { AutoScaleMode.Dpi, new SizeF(96, 96) };
             yield return new object[] { AutoScaleMode.Inherit, SizeF.Empty };
         }
 
-        [Theory]
-        [MemberData(nameof(AutoScaleMode_SetDifferent_TestData))]
-        public void AutoScaleMode_SetDifferent_ResetsAutoScaleDimensions(AutoScaleMode value, SizeF expectedAutoScaleDimensions)
+        [WinFormsTheory]
+        [MemberData(nameof(AutoScaleMode_SetWithCustomOldValue_TestData))]
+        public void ContainerControl_AutoScaleMode_SetWithCustomOldValue_ResetsAutoScaleDimensions(AutoScaleMode value, SizeF expectedAutoScaleDimensions)
         {
-            var control = new ContainerControl
+            using var control = new ContainerControl
             {
                 AutoScaleDimensions = new SizeF(1, 2),
                 AutoScaleMode = AutoScaleMode.Font
@@ -254,13 +258,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.AutoScaleMode);
             Assert.Equal(expectedAutoScaleDimensions, control.AutoScaleDimensions);
             Assert.Equal(expectedAutoScaleDimensions, control.CurrentAutoScaleDimensions);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.AutoScaleMode = value;
+            Assert.Equal(value, control.AutoScaleMode);
+            Assert.Equal(expectedAutoScaleDimensions, control.AutoScaleDimensions);
+            Assert.Equal(expectedAutoScaleDimensions, control.CurrentAutoScaleDimensions);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoScaleMode))]
-        public void AutoScaleMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoScaleMode value)
+        public void ContainerControl_AutoScaleMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoScaleMode value)
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoScaleMode = value);
         }
 
@@ -332,29 +344,32 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoValidate = value);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_BindingContext_Set_GetReturnsExpected()
         {
             var value = new BindingContext();
-            var control = new ContainerControl
+            using var control = new ContainerControl
             {
                 BindingContext = value
             };
             Assert.Same(value, control.BindingContext);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BindingContext = value;
             Assert.Same(value, control.BindingContext);
+            Assert.False(control.IsHandleCreated);
 
             // Set null.
             control.BindingContext = null;
             Assert.NotNull(control.BindingContext);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_BindingContext_SetWithHandler_CallsBindingContextChanged()
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -391,7 +406,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
-        public void Font_Set_GetReturnsExpected(Font value)
+        public void ContainerControl_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubContainerControl
             {
@@ -410,7 +425,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
-        public void Font_SetWithAutoScaleModeFont_GetReturnsExpected(Font value)
+        public void ContainerControl_Font_SetWithAutoScaleModeFont_GetReturnsExpected(Font value)
         {
             using var control = new SubContainerControl
             {
@@ -525,23 +540,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void ContainerControl_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubContainerControl();
+            Assert.False(control.GetTopLevel());
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void PerformAutoScale_InvokeWithoutChildren_Success(AutoScaleMode autoScaleMode)
         {
-            var control = new SubContainerControl
+            using var control = new SubContainerControl
             {
                 AutoScaleMode = autoScaleMode
             };
             control.PerformAutoScale();
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void PerformAutoScale_InvokeWithChildren_Success(AutoScaleMode autoScaleMode)
         {
-            var child = new Control();
-            var control = new SubContainerControl
+            using var child = new Control();
+            using var control = new SubContainerControl
             {
                 AutoScaleMode = autoScaleMode
             };
@@ -549,10 +571,10 @@ namespace System.Windows.Forms.Tests
             control.PerformAutoScale();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_CreateContanerControl_Invoke_CallsBindingContextChanged()
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -587,11 +609,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_Dispose_Invoke_ResetsActiveControl()
         {
-            var control = new ContainerControl();
-            var child = new Control();
+            using var control = new ContainerControl();
+            using var child = new Control();
             control.Controls.Add(child);
             control.ActiveControl = child;
 
@@ -645,11 +667,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, bindingContextChangedCallCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -669,11 +691,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnFontChanged_InvokeWithAutoScaleModeFont_CallsFontChanged(EventArgs eventArgs)
         {
-            var control = new SubContainerControl
+            using var control = new SubContainerControl
             {
                 AutoScaleMode = AutoScaleMode.Font
             };
@@ -698,11 +720,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
         public void ContainerControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             int callCount = 0;
             LayoutEventHandler handler = (sender, e) =>
             {
@@ -722,11 +744,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -746,10 +768,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_UpdateDefaultButton_Invoke_Nop()
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             control.UpdateDefaultButton();
             control.UpdateDefaultButton();
         }
@@ -1378,6 +1400,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnAutoValidateChanged(EventArgs e) => base.OnAutoValidateChanged(e);
 

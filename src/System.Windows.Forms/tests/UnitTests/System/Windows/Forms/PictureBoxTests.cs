@@ -1884,6 +1884,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void PictureBox_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubPictureBox();
+            Assert.False(control.GetTopLevel());
+        }
+
         [Theory]
         [InlineData("NoSuchImage")]
         [InlineData("  ")]
@@ -2860,6 +2867,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnEnabledChanged(EventArgs e) => base.OnEnabledChanged(e);
 

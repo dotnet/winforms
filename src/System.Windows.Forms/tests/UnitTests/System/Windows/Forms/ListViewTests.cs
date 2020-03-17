@@ -3826,6 +3826,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void ListView_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubListView();
+            Assert.False(control.GetTopLevel());
+        }
+
         private class SubListView : ListView
         {
             public new bool CanEnableIme => base.CanEnableIme;
@@ -3883,6 +3890,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
         }

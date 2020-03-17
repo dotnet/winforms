@@ -307,11 +307,13 @@ namespace System.Windows.Forms.Tests
             {
                 BackgroundImage = value
             };
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImage = value;
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -323,10 +325,12 @@ namespace System.Windows.Forms.Tests
                 BackgroundImageLayout = value
             };
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImageLayout = value;
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -516,11 +520,13 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]

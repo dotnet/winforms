@@ -449,12 +449,12 @@ namespace System.Windows.Forms.Tests
             {
                 BackgroundImage = value
             };
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImage = value;
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -4783,6 +4783,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void TextBoxBase_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTextBox();
+            Assert.False(control.GetTopLevel());
+        }
+
         public static IEnumerable<object[]> IsInputKey_TestData()
         {
             foreach (bool multiline in new bool[] { true, false })
@@ -7381,6 +7388,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
 

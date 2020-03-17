@@ -1110,6 +1110,14 @@ namespace System.Windows.Forms.Tests
             // Call again to test caching.
             Assert.Equal(expected, control.GetStyle(flag));
         }
+
+        [WinFormsFact]
+        public void DomainUpDown_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubDomainUpDown();
+            Assert.False(control.GetTopLevel());
+        }
+
         [WinFormsTheory]
         [InlineData("cow", 0, 3)]
         [InlineData("cow", 4, 3)]
@@ -1470,6 +1478,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnChanged(object source, EventArgs e) => base.OnChanged(source, e);
 

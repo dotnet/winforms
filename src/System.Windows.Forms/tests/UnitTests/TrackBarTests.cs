@@ -224,14 +224,16 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TrackBar_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            using var control = new SubTrackBar
-            {
-                AutoSize = value
-            };
+            using var control = new SubTrackBar();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
@@ -240,6 +242,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
@@ -248,6 +251,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.Equal(!value, control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -257,13 +261,17 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubTrackBar
             {
-                Orientation = Orientation.Vertical,
-                AutoSize = value
+                Orientation = Orientation.Vertical
             };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.Equal(value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
@@ -272,6 +280,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.Equal(value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
@@ -280,6 +289,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.Equal(!value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -295,12 +305,15 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
 
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -312,6 +325,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -323,6 +337,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.Equal(!value, control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -344,12 +359,15 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
 
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
             Assert.Equal(new Size(s_dimension, s_dimension), control.Size);
             Assert.Equal(value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -361,6 +379,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(s_dimension, s_dimension), control.Size);
             Assert.Equal(value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -372,6 +391,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(s_dimension, s_dimension), control.Size);
             Assert.Equal(!value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -2283,6 +2303,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void TrackBar_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTrackBar();
+            Assert.False(control.GetTopLevel());
+        }
+
         [WinFormsTheory]
         [InlineData(Keys.Alt, false)]
         [InlineData(Keys.Alt | Keys.PageUp, false)]
@@ -3247,6 +3274,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
 

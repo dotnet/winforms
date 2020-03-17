@@ -754,6 +754,50 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>(null, () => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
         }
 
+        [WinFormsFact]
+        public void WebBrowserBase_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, false)]
+        [InlineData(ControlStyles.UserPaint, false)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, true)]
+        [InlineData(ControlStyles.Selectable, true)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, false)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void WebBrowserBase_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [WinFormsFact]
+        public void WebBrowserBase_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
+            Assert.False(control.GetTopLevel());
+        }
+
         [WinFormsTheory]
         [InlineData(Keys.A)]
         public void WebBrowserBase_ProcessDialogKey_InvokeWithoutParent_ReturnsFalse(Keys keyData)
@@ -891,6 +935,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new bool ProcessDialogKey(Keys keyData) => base.ProcessDialogKey(keyData);
 

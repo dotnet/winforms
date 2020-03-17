@@ -178,6 +178,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void DateTimePicker_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubDateTimePicker();
+            Assert.False(control.GetTopLevel());
+        }
+
         public class SubDateTimePicker : DateTimePicker
         {
             public new bool CanEnableIme => base.CanEnableIme;
@@ -235,6 +242,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
         }
     }
 }

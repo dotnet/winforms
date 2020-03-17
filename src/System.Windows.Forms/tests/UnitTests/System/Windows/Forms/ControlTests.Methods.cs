@@ -2052,7 +2052,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubControl();
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
 
-            // Call again to tets caching.
+            // Call again to test caching.
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
         }
 
@@ -2844,7 +2844,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Control_GetTopLevel_Invoke_ReturnsFalse()
+        public void Control_GetTopLevel_Invoke_ReturnsExpected()
         {
             using var control = new SubControl();
             Assert.False(control.GetTopLevel());

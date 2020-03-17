@@ -648,7 +648,7 @@ namespace System.Windows.Forms.Tests
             control.BackgroundImageChanged += handler;
 
             // Set different.
-            var image1 = new Bitmap(10, 10);
+            using var image1 = new Bitmap(10, 10);
             control.BackgroundImage = image1;
             Assert.Same(image1, control.BackgroundImage);
             Assert.Equal(1, callCount);
@@ -659,7 +659,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var image2 = new Bitmap(10, 10);
+            using var image2 = new Bitmap(10, 10);
             control.BackgroundImage = image2;
             Assert.Same(image2, control.BackgroundImage);
             Assert.Equal(2, callCount);
@@ -3940,6 +3940,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void TabControl_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTabControl();
+            Assert.False(control.GetTopLevel());
+        }
+
+        [WinFormsFact]
         public void TabControl_GetToolTipText_Invoke_ReturnsExpectd()
         {
             using var control = new SubTabControl();
@@ -5732,6 +5739,8 @@ namespace System.Windows.Forms.Tests
             public new object[] GetItems(Type baseType) => base.GetItems(baseType);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new string GetToolTipText(object item) => base.GetToolTipText(item);
 

@@ -175,6 +175,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void Label_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubLabel();
+            Assert.False(control.GetTopLevel());
+        }
+
         public class SubLabel : Label
         {
             public new bool CanEnableIme => base.CanEnableIme;
@@ -240,6 +247,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
         }
     }
 }
