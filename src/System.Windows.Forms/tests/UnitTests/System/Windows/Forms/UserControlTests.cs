@@ -178,21 +178,25 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void UserControl_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            using var control = new UserControl
-            {
-                AutoSize = value
-            };
+            using var control = new UserControl();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.AutoSize = !value;
             Assert.Equal(!value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -916,6 +920,13 @@ namespace System.Windows.Forms.Tests
 
             // Call again to test caching.
             Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [WinFormsFact]
+        public void UserControl_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubUserControl();
+            Assert.False(control.GetTopLevel());
         }
 
         [WinFormsFact]
@@ -1852,6 +1863,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnCreateControl() => base.OnCreateControl();
 

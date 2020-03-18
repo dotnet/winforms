@@ -485,13 +485,12 @@ namespace System.Windows.Forms.Tests
             {
                 BackgroundImage = value
             };
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImage = value;
-            Assert.Equal(value, control.BackgroundImage);
-            Assert.False(control.IsHandleCreated);
+            Assert.Same(value, control.BackgroundImage);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -4853,6 +4852,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void ListBox_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubListBox();
+            Assert.False(control.GetTopLevel());
+        }
+
         public static IEnumerable<object[]> FindString_TestData()
         {
             foreach (int startIndex in new int[] { -2, -1, 0, 1 })
@@ -5940,6 +5946,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnChangeUICues(UICuesEventArgs e) => base.OnChangeUICues(e);
 

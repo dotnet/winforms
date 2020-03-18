@@ -309,6 +309,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void FlowLayoutPanel_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubFlowLayoutPanel();
+            Assert.False(control.GetTopLevel());
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void FlowLayoutPanel_SetFlowBreak_Invoke_GetFlowBreakReturnsExpected(bool value)
@@ -495,6 +502,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
         }
     }
 }

@@ -408,6 +408,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void CheckBox_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubCheckBox();
+            Assert.False(control.GetTopLevel());
+        }
+
         // the zero here may be an issue with cultural variance
         [Fact]
         public void CheckBox_ToStringTest()
@@ -483,6 +490,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnClick(EventArgs e) => base.OnClick(e);
         }

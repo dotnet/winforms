@@ -409,21 +409,25 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripContentPanel_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            using var control = new ToolStripContentPanel
-            {
-                AutoSize = value
-            };
+            using var control = new ToolStripContentPanel();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.AutoSize = !value;
             Assert.Equal(!value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -1698,6 +1702,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void ToolStripContentPanel_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubToolStripContentPanel();
+            Assert.False(control.GetTopLevel());
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripContentPanel_Visible_Set_GetReturnsExpected(bool value)
@@ -2075,6 +2086,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
 

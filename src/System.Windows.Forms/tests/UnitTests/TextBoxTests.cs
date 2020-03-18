@@ -477,6 +477,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void TextBox_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTextBox();
+            Assert.False(control.GetTopLevel());
+        }
+
         private class SubTextBox : TextBox
         {
             public int TextCount;
@@ -546,6 +553,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public override bool Focused => IsFocused;
             public override int TextLength => TextCount;

@@ -155,21 +155,25 @@ namespace System.Windows.Forms.Design.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            using var control = new SubComponentEditorPage
-            {
-                AutoSize = value
-            };
+            using var control = new SubComponentEditorPage();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.AutoSize = !value;
             Assert.Equal(!value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -705,6 +709,13 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void ComponentEditorPage_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubComponentEditorPage();
+            Assert.False(control.GetTopLevel());
+        }
+
         [WinFormsTheory]
         [InlineData(true, false)]
         [InlineData(false, true)]
@@ -979,6 +990,8 @@ namespace System.Windows.Forms.Design.Tests
             public new IComponent GetSelectedComponent() => base.GetSelectedComponent();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new bool IsFirstActivate() => base.IsFirstActivate();
 

@@ -1379,28 +1379,50 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
-        public void ScrollableControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
+        [WinFormsFact]
+        public void ScrollableControl_GetTopLevel_Invoke_ReturnsExpected()
         {
             using var control = new SubScrollableControl();
+            Assert.False(control.GetTopLevel());
+        }
+
+        public static IEnumerable<object[]> OnLayout_TestData()
+        {
+            yield return new object[] { true, null, 1 };
+            yield return new object[] { true, new LayoutEventArgs(null, null), 1 };
+            yield return new object[] { true, new LayoutEventArgs(new Control(), "affectedProperty"), 2 };
+
+            yield return new object[] { false, null, 1 };
+            yield return new object[] { false, new LayoutEventArgs(null, null), 1 };
+            yield return new object[] { false, new LayoutEventArgs(new Control(), "affectedProperty"), 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnLayout_TestData))]
+        public void ScrollableControl_OnLayout_Invoke_CallsLayout(bool autoScroll, LayoutEventArgs eventArgs, int expectedCallCount)
+        {
+            using var control = new SubScrollableControl
+            {
+                AutoScroll = autoScroll
+            };
             int callCount = 0;
             LayoutEventHandler handler = (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
                 callCount++;
             };
 
             // Call with handler.
             control.Layout += handler;
             control.OnLayout(eventArgs);
-            Assert.Equal(1, callCount);
+            Assert.Equal(expectedCallCount, callCount);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.Layout -= handler;
             control.OnLayout(eventArgs);
-            Assert.Equal(1, callCount);
+            Assert.Equal(expectedCallCount, callCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1907,7 +1929,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(OnScroll_TestData))]
-        public void ScrollableControl_OnScroll_Invoke_CallsHandler(ScrollEventArgs eventArgs)
+        public void ScrollableControl_OnScroll_Invoke_CallsScroll(ScrollEventArgs eventArgs)
         {
             using var control = new SubScrollableControl();
             int callCount = 0;
@@ -1933,7 +1955,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(OnScroll_TestData))]
-        public void ScrollableControl_OnScroll_InvokeWithHandle_CallsHandler(ScrollEventArgs eventArgs)
+        public void ScrollableControl_OnScroll_InvokeWithHandle_CallsScroll(ScrollEventArgs eventArgs)
         {
             using var control = new SubScrollableControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -2461,6 +2483,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 

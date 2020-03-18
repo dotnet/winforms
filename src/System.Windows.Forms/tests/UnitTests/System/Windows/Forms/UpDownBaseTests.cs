@@ -423,21 +423,25 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void UpDownBase_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            using var control = new SubUpDownBase
-            {
-                AutoSize = value
-            };
+            using var control = new SubUpDownBase();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.AutoSize = !value;
             Assert.Equal(!value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -857,7 +861,7 @@ namespace System.Windows.Forms.Tests
             control.ContextMenuStripChanged += handler;
 
             // Set different.
-            var menu1 = new ContextMenuStrip();
+            using var menu1 = new ContextMenuStrip();
             control.ContextMenuStrip = menu1;
             Assert.Same(menu1, control.ContextMenuStrip);
             Assert.Equal(1, callCount);
@@ -1650,6 +1654,13 @@ namespace System.Windows.Forms.Tests
 
             // Call again to test caching.
             Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [WinFormsFact]
+        public void UpDownBase_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubUpDownBase();
+            Assert.False(control.GetTopLevel());
         }
 
         public static IEnumerable<object[]> OnChanged_TestData()
@@ -3051,6 +3062,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnChanged(object source, EventArgs e) => base.OnChanged(source, e);
 

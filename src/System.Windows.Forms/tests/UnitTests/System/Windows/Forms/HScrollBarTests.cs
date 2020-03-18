@@ -239,6 +239,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void HScrollBar_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubHScrollBar();
+            Assert.False(control.GetTopLevel());
+        }
+
         private class SubHScrollBar : HScrollBar
         {
             public new bool CanEnableIme => base.CanEnableIme;
@@ -296,6 +303,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
         }
     }
 }

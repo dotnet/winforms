@@ -2591,6 +2591,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void ListControl_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubListControl();
+            Assert.False(control.GetTopLevel());
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ListControl_OnBindingContextChanged_Invoke_CallsBindingContextChanged(EventArgs eventArgs)
@@ -2960,6 +2967,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
 

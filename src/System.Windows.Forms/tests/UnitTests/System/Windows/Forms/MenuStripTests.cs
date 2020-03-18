@@ -543,6 +543,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void MenuStrip_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubMenuStrip();
+            Assert.False(control.GetTopLevel());
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MenuStrip_OnMenuActivate_Invoke_CallsMenuActivate(EventArgs eventArgs)
@@ -926,6 +933,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnMenuActivate(EventArgs e) => base.OnMenuActivate(e);
 
