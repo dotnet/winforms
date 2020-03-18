@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project for creating a class library that targets .NET Core Windows Forms (WinForms)",
   "groupIdentity": "Microsoft.Common.WinForms.Library",
-  "precedence": "3000",
-  "identity": "Microsoft.Common.WinForms.Library.CSharp.3.0",
+  "precedence": "4000",
+  "identity": "Microsoft.Common.WinForms.Library.CSharp.3.1",
   "shortName": "winformslib",
   "tags": {
     "language": "C#",
@@ -31,10 +31,14 @@
         {
           "choice": "netcoreapp3.0",
           "description": "Target netcoreapp3.0"
+        },
+        {
+          "choice": "netcoreapp3.1",
+          "description": "Target netcoreapp3.1"
         }
       ],
-      "replaces": "netcoreapp3.0",
-      "defaultValue": "netcoreapp3.0"
+      "replaces": "netcoreapp3.1",
+      "defaultValue": "netcoreapp3.1"
     },
     "langVersion": {
       "type": "parameter",
