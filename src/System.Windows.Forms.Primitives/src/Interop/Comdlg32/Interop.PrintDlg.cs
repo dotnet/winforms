@@ -9,10 +9,10 @@ internal partial class Interop
 {
     internal partial class Comdlg32
     {
-        [DllImport(ExternDll.Comdlg32, ExactSpelling = true, SetLastError = true, CharSet = CharSet.Unicode)]
+        [DllImport(Libraries.Comdlg32, ExactSpelling = true, SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern BOOL PrintDlgW(ref PRINTDLGW_32 lppd);
 
-        [DllImport(ExternDll.Comdlg32, ExactSpelling = true, SetLastError = true, CharSet = CharSet.Unicode)]
+        [DllImport(Libraries.Comdlg32, ExactSpelling = true, SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern BOOL PrintDlgW(ref PRINTDLGW_64 lppd);
 
         public static BOOL PrintDlg(ref PRINTDLGW lppd)
