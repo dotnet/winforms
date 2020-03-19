@@ -90,101 +90,109 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListViewInsertionMark_AppearsAfterItem_GetInsertMark_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
-            {
-                Application.EnableVisualStyles();
-
-                using var control = new ListView();
-                ListViewInsertionMark insertionMark = control.InsertionMark;
-
-                // Set same.
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-                control.InsertionMark.AppearsAfterItem = false;
-                var insertMark = new ComCtl32.LVINSERTMARK
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(
+                () =>
                 {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(-1, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                    Application.EnableVisualStyles();
 
-                // Set true.
-                control.InsertionMark.AppearsAfterItem = true;
-                insertMark = new ComCtl32.LVINSERTMARK
-                {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000001, (uint)insertMark.dwFlags);
-                Assert.Equal(0, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                    using var control = new ListView();
+                    ListViewInsertionMark insertionMark = control.InsertionMark;
 
-                // Set false.
-                control.InsertionMark.AppearsAfterItem = false;
-                insertMark = new ComCtl32.LVINSERTMARK
-                {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(0, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-            }).Dispose();
+                    // Set same.
+                    Assert.NotEqual(IntPtr.Zero, control.Handle);
+                    control.InsertionMark.AppearsAfterItem = false;
+                    var insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(-1, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+
+                    // Set true.
+                    control.InsertionMark.AppearsAfterItem = true;
+                    insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000001, (uint)insertMark.dwFlags);
+                    Assert.Equal(0, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+
+                    // Set false.
+                    control.InsertionMark.AppearsAfterItem = false;
+                    insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(0, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
         public unsafe void ListViewInsertionMark_AppearsAfterItem_GetInsertMarkWithColor_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
-            {
-                Application.EnableVisualStyles();
-
-                using var control = new ListView();
-                ListViewInsertionMark insertionMark = control.InsertionMark;
-                control.InsertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
-
-                // Set same.
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-                control.InsertionMark.AppearsAfterItem = false;
-                var insertMark = new ComCtl32.LVINSERTMARK
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(
+                () =>
                 {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(-1, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                    Application.EnableVisualStyles();
 
-                // Set true.
-                control.InsertionMark.AppearsAfterItem = true;
-                insertMark = new ComCtl32.LVINSERTMARK
-                {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000001, (uint)insertMark.dwFlags);
-                Assert.Equal(0, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                    using var control = new ListView();
+                    ListViewInsertionMark insertionMark = control.InsertionMark;
+                    control.InsertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
 
-                // Set false.
-                control.InsertionMark.AppearsAfterItem = false;
-                insertMark = new ComCtl32.LVINSERTMARK
-                {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(0, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-            }).Dispose();
+                    // Set same.
+                    Assert.NotEqual(IntPtr.Zero, control.Handle);
+                    control.InsertionMark.AppearsAfterItem = false;
+                    var insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(-1, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+
+                    // Set true.
+                    control.InsertionMark.AppearsAfterItem = true;
+                    insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000001, (uint)insertMark.dwFlags);
+                    Assert.Equal(0, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+
+                    // Set false.
+                    control.InsertionMark.AppearsAfterItem = false;
+                    insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(0, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -366,38 +374,42 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListViewInsertionMark_Color_GetInsertMarkColor_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
-            {
-                Application.EnableVisualStyles();
-
-                using var control = new ListView();
-                ListViewInsertionMark insertionMark = control.InsertionMark;
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-
-                // Set same.
-                control.InsertionMark.Color = Color.Empty;
-                var insertMark = new ComCtl32.LVINSERTMARK
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(
+                () =>
                 {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(-1, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                    Application.EnableVisualStyles();
 
-                // Set different.
-                control.InsertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
-                insertMark = new ComCtl32.LVINSERTMARK
-                {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(-1, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-            }).Dispose();
+                    using var control = new ListView();
+                    ListViewInsertionMark insertionMark = control.InsertionMark;
+                    Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+                    // Set same.
+                    control.InsertionMark.Color = Color.Empty;
+                    var insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(-1, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+
+                    // Set different.
+                    control.InsertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
+                    insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(-1, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -462,52 +474,57 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListViewInsertionMark_Index_GetInsertMark_Success(int indexParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((indexString) =>
-            {
-                int index = int.Parse(indexString);
-                Application.EnableVisualStyles();
-
-                using var control = new ListView();
-                ListViewInsertionMark insertionMark = control.InsertionMark;
-
-                // Set same.
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-                control.InsertionMark.Index = 0;
-                var insertMark = new ComCtl32.LVINSERTMARK
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(
+                (indexString) =>
                 {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(-1, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                    int index = int.Parse(indexString);
+                    Application.EnableVisualStyles();
 
-                // Set negative one.
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-                control.InsertionMark.Index = -1;
-                insertMark = new ComCtl32.LVINSERTMARK
-                {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(-1, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                    using var control = new ListView();
+                    ListViewInsertionMark insertionMark = control.InsertionMark;
 
-                // Set different.
-                control.InsertionMark.Index = index;
-                insertMark = new ComCtl32.LVINSERTMARK
-                {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(index, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-            }, indexParam.ToString()).Dispose();
+                    // Set same.
+                    Assert.NotEqual(IntPtr.Zero, control.Handle);
+                    control.InsertionMark.Index = 0;
+                    var insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(-1, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+
+                    // Set negative one.
+                    Assert.NotEqual(IntPtr.Zero, control.Handle);
+                    control.InsertionMark.Index = -1;
+                    insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(-1, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+
+                    // Set different.
+                    control.InsertionMark.Index = index;
+                    insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(index, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                },
+                indexParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -516,53 +533,58 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListViewInsertionMark_Index_GetInsertMarkWithColor_Success(int indexParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((indexString) =>
-            {
-                int index = int.Parse(indexString);
-                Application.EnableVisualStyles();
-
-                using var control = new ListView();
-                ListViewInsertionMark insertionMark = control.InsertionMark;
-                insertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
-
-                // Set same.
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-                control.InsertionMark.Index = 0;
-                var insertMark = new ComCtl32.LVINSERTMARK
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(
+                (indexString) =>
                 {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(-1, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                    int index = int.Parse(indexString);
+                    Application.EnableVisualStyles();
 
-                // Set negative one.
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-                control.InsertionMark.Index = -1;
-                insertMark = new ComCtl32.LVINSERTMARK
-                {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(-1, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                    using var control = new ListView();
+                    ListViewInsertionMark insertionMark = control.InsertionMark;
+                    insertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
 
-                // Set different.
-                control.InsertionMark.Index = index;
-                insertMark = new ComCtl32.LVINSERTMARK
-                {
-                    cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
-                };
-                Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
-                Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
-                Assert.Equal(index, insertMark.iItem);
-                Assert.Equal(0u, insertMark.dwReserved);
-                Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-            }, indexParam.ToString()).Dispose();
+                    // Set same.
+                    Assert.NotEqual(IntPtr.Zero, control.Handle);
+                    control.InsertionMark.Index = 0;
+                    var insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(-1, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+
+                    // Set negative one.
+                    Assert.NotEqual(IntPtr.Zero, control.Handle);
+                    control.InsertionMark.Index = -1;
+                    insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(-1, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+
+                    // Set different.
+                    control.InsertionMark.Index = index;
+                    insertMark = new ComCtl32.LVINSERTMARK
+                    {
+                        cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARK, IntPtr.Zero, ref insertMark));
+                    Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+                    Assert.Equal(index, insertMark.iItem);
+                    Assert.Equal(0u, insertMark.dwReserved);
+                    Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
+                },
+                indexParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]

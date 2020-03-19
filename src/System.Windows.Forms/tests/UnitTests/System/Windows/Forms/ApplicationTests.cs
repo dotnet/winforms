@@ -14,12 +14,16 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
         {
-            RemoteExecutor.Invoke(() =>
-            {
-                Application.EnableVisualStyles();
-                Assert.True(Application.UseVisualStyles);
-                Assert.True(Application.RenderWithVisualStyles);
-            }).Dispose();
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(
+                () =>
+                {
+                    Application.EnableVisualStyles();
+                    Assert.True(Application.UseVisualStyles);
+                    Assert.True(Application.RenderWithVisualStyles);
+                });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -27,15 +31,19 @@ namespace System.Windows.Forms.Tests
         {
             // This is not a recommended scenario per https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.application.enablevisualstyles
             // EnableVisualStyles should be executed before any control-related code is.
-            RemoteExecutor.Invoke(() =>
-            {
-                Assert.False(Application.UseVisualStyles);
-                Assert.False(Application.RenderWithVisualStyles);
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(
+                () =>
+                {
+                    Assert.False(Application.UseVisualStyles);
+                    Assert.False(Application.RenderWithVisualStyles);
 
-                Application.EnableVisualStyles();
-                Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
-                Assert.True(Application.RenderWithVisualStyles);
-            }).Dispose();
+                    Application.EnableVisualStyles();
+                    Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
+                    Assert.True(Application.RenderWithVisualStyles);
+                });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [Fact]

@@ -724,54 +724,61 @@ namespace System.Windows.Forms.Tests
         public void GroupBox_FlatStyle_SetWithHandleWithVisualStyles_GetReturnsExpected(FlatStyle valueParam, bool containerControlParam, bool ownerDrawParam, bool userMouseParam, int expectedInvalidatedCallCountParam, int expectedCreatedCallCountParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((valueString, boolStrings, intStrings) =>
-            {
-                FlatStyle value = (FlatStyle)Enum.Parse(typeof(FlatStyle), valueString);
-                string[] bools = boolStrings.Split(',');
-                bool containerControl = bool.Parse(bools[0]);
-                bool ownerDraw = bool.Parse(bools[1]);
-                bool userMouse = bool.Parse(bools[2]);
-                string[] ints = intStrings.Split(',');
-                int expectedInvalidatedCallCount = int.Parse(ints[0]);
-                int expectedCreatedCallCount = int.Parse(ints[1]);
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(
+                (valueString, boolStrings, intStrings) =>
+                {
+                    FlatStyle value = (FlatStyle)Enum.Parse(typeof(FlatStyle), valueString);
+                    string[] bools = boolStrings.Split(',');
+                    bool containerControl = bool.Parse(bools[0]);
+                    bool ownerDraw = bool.Parse(bools[1]);
+                    bool userMouse = bool.Parse(bools[2]);
+                    string[] ints = intStrings.Split(',');
+                    int expectedInvalidatedCallCount = int.Parse(ints[0]);
+                    int expectedCreatedCallCount = int.Parse(ints[1]);
 
-                Application.EnableVisualStyles();
+                    Application.EnableVisualStyles();
 
-                using var control = new SubGroupBox();
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-                int invalidatedCallCount = 0;
-                control.Invalidated += (sender, e) => invalidatedCallCount++;
-                int styleChangedCallCount = 0;
-                control.StyleChanged += (sender, e) => styleChangedCallCount++;
-                int createdCallCount = 0;
-                control.HandleCreated += (sender, e) => createdCallCount++;
-                control.SetStyle(ControlStyles.ContainerControl, false);
+                    using var control = new SubGroupBox();
+                    Assert.NotEqual(IntPtr.Zero, control.Handle);
+                    int invalidatedCallCount = 0;
+                    control.Invalidated += (sender, e) => invalidatedCallCount++;
+                    int styleChangedCallCount = 0;
+                    control.StyleChanged += (sender, e) => styleChangedCallCount++;
+                    int createdCallCount = 0;
+                    control.HandleCreated += (sender, e) => createdCallCount++;
+                    control.SetStyle(ControlStyles.ContainerControl, false);
 
-                control.FlatStyle = value;
-                Assert.Equal(value, control.FlatStyle);
-                Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
-                Assert.Equal(containerControl && ownerDraw, control.GetStyle(ControlStyles.UserMouse));
-                Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
-                Assert.Equal(0, styleChangedCallCount);
-                Assert.Equal(expectedCreatedCallCount, createdCallCount);
+                    control.FlatStyle = value;
+                    Assert.Equal(value, control.FlatStyle);
+                    Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
+                    Assert.Equal(containerControl && ownerDraw, control.GetStyle(ControlStyles.UserMouse));
+                    Assert.True(control.IsHandleCreated);
+                    Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+                    Assert.Equal(0, styleChangedCallCount);
+                    Assert.Equal(expectedCreatedCallCount, createdCallCount);
 
-                // Set same.
-                control.FlatStyle = value;
-                Assert.Equal(value, control.FlatStyle);
-                Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
-                Assert.Equal(containerControl && ownerDraw, control.GetStyle(ControlStyles.UserMouse));
-                Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
-                Assert.Equal(0, styleChangedCallCount);
-                Assert.Equal(expectedCreatedCallCount, createdCallCount);
-            }, valueParam.ToString(), $"{containerControlParam},{ownerDrawParam},{userMouseParam}", $"{expectedInvalidatedCallCountParam},{expectedCreatedCallCountParam}").Dispose();
+                    // Set same.
+                    control.FlatStyle = value;
+                    Assert.Equal(value, control.FlatStyle);
+                    Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
+                    Assert.Equal(containerControl && ownerDraw, control.GetStyle(ControlStyles.UserMouse));
+                    Assert.True(control.IsHandleCreated);
+                    Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+                    Assert.Equal(0, styleChangedCallCount);
+                    Assert.Equal(expectedCreatedCallCount, createdCallCount);
+                },
+                valueParam.ToString(),
+                $"{containerControlParam},{ownerDrawParam},{userMouseParam}",
+                $"{expectedInvalidatedCallCountParam},{expectedCreatedCallCountParam}");
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -852,58 +859,66 @@ namespace System.Windows.Forms.Tests
         public void GroupBox_FlatStyle_SetWithCustomOldValueWithHandleWithVisualStyles_GetReturnsExpected(FlatStyle oldValueParam, FlatStyle valueParam, bool containerControlParam, bool ownerDrawParam, bool userMouseParam, int expectedInvalidatedCallCountParam, int expectedCreatedCallCountParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((oldValueString, valueString, boolStrings, intStrings) =>
-            {
-                FlatStyle oldValue = (FlatStyle)Enum.Parse(typeof(FlatStyle), oldValueString);
-                FlatStyle value = (FlatStyle)Enum.Parse(typeof(FlatStyle), valueString);
-                string[] bools = boolStrings.Split(',');
-                bool containerControl = bool.Parse(bools[0]);
-                bool ownerDraw = bool.Parse(bools[1]);
-                bool userMouse = bool.Parse(bools[2]);
-                string[] ints = intStrings.Split(',');
-                int expectedInvalidatedCallCount = int.Parse(ints[0]);
-                int expectedCreatedCallCount = int.Parse(ints[1]);
-
-                Application.EnableVisualStyles();
-
-                using var control = new SubGroupBox
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(
+                (oldValueString, valueString, boolStrings, intStrings) =>
                 {
-                    FlatStyle = oldValue
-                };
-                Assert.NotEqual(IntPtr.Zero, control.Handle);
-                int invalidatedCallCount = 0;
-                control.Invalidated += (sender, e) => invalidatedCallCount++;
-                int styleChangedCallCount = 0;
-                control.StyleChanged += (sender, e) => styleChangedCallCount++;
-                int createdCallCount = 0;
-                control.HandleCreated += (sender, e) => createdCallCount++;
-                control.SetStyle(ControlStyles.ContainerControl, false);
+                    FlatStyle oldValue = (FlatStyle)Enum.Parse(typeof(FlatStyle), oldValueString);
+                    FlatStyle value = (FlatStyle)Enum.Parse(typeof(FlatStyle), valueString);
+                    string[] bools = boolStrings.Split(',');
+                    bool containerControl = bool.Parse(bools[0]);
+                    bool ownerDraw = bool.Parse(bools[1]);
+                    bool userMouse = bool.Parse(bools[2]);
+                    string[] ints = intStrings.Split(',');
+                    int expectedInvalidatedCallCount = int.Parse(ints[0]);
+                    int expectedCreatedCallCount = int.Parse(ints[1]);
 
-                control.FlatStyle = value;
-                Assert.Equal(value, control.FlatStyle);
-                Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
-                Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
-                Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
-                Assert.Equal(0, styleChangedCallCount);
-                Assert.Equal(expectedCreatedCallCount, createdCallCount);
+                    Application.EnableVisualStyles();
 
-                // Set same.
-                control.FlatStyle = value;
-                Assert.Equal(value, control.FlatStyle);
-                Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
-                Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
-                Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
-                Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
-                Assert.Equal(0, styleChangedCallCount);
-                Assert.Equal(expectedCreatedCallCount, createdCallCount);
-            }, oldValueParam.ToString(), valueParam.ToString(), $"{containerControlParam},{ownerDrawParam},{userMouseParam}", $"{expectedInvalidatedCallCountParam},{expectedCreatedCallCountParam}").Dispose();
+                    using var control = new SubGroupBox
+                    {
+                        FlatStyle = oldValue
+                    };
+                    Assert.NotEqual(IntPtr.Zero, control.Handle);
+                    int invalidatedCallCount = 0;
+                    control.Invalidated += (sender, e) => invalidatedCallCount++;
+                    int styleChangedCallCount = 0;
+                    control.StyleChanged += (sender, e) => styleChangedCallCount++;
+                    int createdCallCount = 0;
+                    control.HandleCreated += (sender, e) => createdCallCount++;
+                    control.SetStyle(ControlStyles.ContainerControl, false);
+
+                    control.FlatStyle = value;
+                    Assert.Equal(value, control.FlatStyle);
+                    Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
+                    Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
+                    Assert.True(control.IsHandleCreated);
+                    Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+                    Assert.Equal(0, styleChangedCallCount);
+                    Assert.Equal(expectedCreatedCallCount, createdCallCount);
+
+                    // Set same.
+                    control.FlatStyle = value;
+                    Assert.Equal(value, control.FlatStyle);
+                    Assert.Equal(containerControl, control.GetStyle(ControlStyles.ContainerControl));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.SupportsTransparentBackColor));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.UserPaint));
+                    Assert.Equal(ownerDraw, control.GetStyle(ControlStyles.ResizeRedraw));
+                    Assert.Equal(userMouse, control.GetStyle(ControlStyles.UserMouse));
+                    Assert.True(control.IsHandleCreated);
+                    Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+                    Assert.Equal(0, styleChangedCallCount);
+                    Assert.Equal(expectedCreatedCallCount, createdCallCount);
+                },
+                oldValueParam.ToString(),
+                valueParam.ToString(),
+                $"{containerControlParam},{ownerDrawParam},{userMouseParam}",
+                $"{expectedInvalidatedCallCountParam},{expectedCreatedCallCountParam}");
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -1816,11 +1831,11 @@ namespace System.Windows.Forms.Tests
                         {
                             foreach (string text in new string[] { null, string.Empty, "text" })
                             {
-                                yield return new object [] { new Size(100, 200), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
-                                yield return new object [] { new Size(10, 10), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
-                                yield return new object [] { new Size(9, 10), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
-                                yield return new object [] { new Size(10, 9), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
-                                yield return new object [] { new Size(9, 9), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
+                                yield return new object[] { new Size(100, 200), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
+                                yield return new object[] { new Size(10, 10), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
+                                yield return new object[] { new Size(9, 10), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
+                                yield return new object[] { new Size(10, 9), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
+                                yield return new object[] { new Size(9, 9), enabled, useCompatibleTextRendering, rightToLeft, foreColor, text };
                             }
                         }
                     }

@@ -1545,71 +1545,75 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListView_Handle_GetWithGroups_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
-            {
-                foreach (object[] data in Handle_GetWithGroups_TestData())
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(
+                () =>
                 {
-                    bool showGroups = (bool)data[0];
-                    string header = (string)data[1];
-                    HorizontalAlignment headerAlignment = (HorizontalAlignment)data[2];
-                    string footer = (string)data[3];
-                    HorizontalAlignment footerAlignment = (HorizontalAlignment)data[4];
-                    string expectedHeaderText = (string)data[5];
-                    string expectedFooterText = (string)data[6];
-                    int expectedAlign = (int)data[7];
-
-                    Application.EnableVisualStyles();
-
-                    using var listView = new ListView
+                    foreach (object[] data in Handle_GetWithGroups_TestData())
                     {
-                        ShowGroups = showGroups
-                    };
-                    var group1 = new ListViewGroup();
-                    var group2 = new ListViewGroup
-                    {
-                        Header = header,
-                        HeaderAlignment = headerAlignment,
-                        Footer = footer,
-                        FooterAlignment = footerAlignment
-                    };
-                    listView.Groups.Add(group1);
-                    listView.Groups.Add(group2);
+                        bool showGroups = (bool)data[0];
+                        string header = (string)data[1];
+                        HorizontalAlignment headerAlignment = (HorizontalAlignment)data[2];
+                        string footer = (string)data[3];
+                        HorizontalAlignment footerAlignment = (HorizontalAlignment)data[4];
+                        string expectedHeaderText = (string)data[5];
+                        string expectedFooterText = (string)data[6];
+                        int expectedAlign = (int)data[7];
 
-                    Assert.Equal((IntPtr)2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
-                    char* headerBuffer = stackalloc char[256];
-                    char* footerBuffer = stackalloc char[256];
-                    var lvgroup1 = new ComCtl32.LVGROUPW
-                    {
-                        cbSize = (uint)sizeof(ComCtl32.LVGROUPW),
-                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.FOOTER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
-                        pszHeader = headerBuffer,
-                        cchHeader = 256,
-                        pszFooter = footerBuffer,
-                        cchFooter = 256,
-                    };
-                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup1));
-                    Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
-                    Assert.Empty(new string(lvgroup1.pszFooter));
-                    Assert.True(lvgroup1.iGroupId >= 0);
-                    Assert.Equal(0x00000001, (int)lvgroup1.uAlign);
+                        Application.EnableVisualStyles();
 
-                    var lvgroup2 = new ComCtl32.LVGROUPW
-                    {
-                        cbSize = (uint)sizeof(ComCtl32.LVGROUPW),
-                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.FOOTER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
-                        pszHeader = headerBuffer,
-                        cchHeader = 256,
-                        pszFooter = footerBuffer,
-                        cchFooter = 256,
-                    };
-                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)1, ref lvgroup2));
-                    Assert.Equal(expectedHeaderText, new string(lvgroup2.pszHeader));
-                    Assert.Equal(expectedFooterText, new string(lvgroup2.pszFooter));
-                    Assert.True(lvgroup2.iGroupId > 0);
-                    Assert.Equal(expectedAlign, (int)lvgroup2.uAlign);
-                    Assert.True(lvgroup2.iGroupId > lvgroup1.iGroupId);
-                }
-            }).Dispose();
+                        using var listView = new ListView
+                        {
+                            ShowGroups = showGroups
+                        };
+                        var group1 = new ListViewGroup();
+                        var group2 = new ListViewGroup
+                        {
+                            Header = header,
+                            HeaderAlignment = headerAlignment,
+                            Footer = footer,
+                            FooterAlignment = footerAlignment
+                        };
+                        listView.Groups.Add(group1);
+                        listView.Groups.Add(group2);
+
+                        Assert.Equal((IntPtr)2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                        char* headerBuffer = stackalloc char[256];
+                        char* footerBuffer = stackalloc char[256];
+                        var lvgroup1 = new ComCtl32.LVGROUPW
+                        {
+                            cbSize = (uint)sizeof(ComCtl32.LVGROUPW),
+                            mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.FOOTER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                            pszHeader = headerBuffer,
+                            cchHeader = 256,
+                            pszFooter = footerBuffer,
+                            cchFooter = 256,
+                        };
+                        Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup1));
+                        Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
+                        Assert.Empty(new string(lvgroup1.pszFooter));
+                        Assert.True(lvgroup1.iGroupId >= 0);
+                        Assert.Equal(0x00000001, (int)lvgroup1.uAlign);
+
+                        var lvgroup2 = new ComCtl32.LVGROUPW
+                        {
+                            cbSize = (uint)sizeof(ComCtl32.LVGROUPW),
+                            mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.FOOTER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                            pszHeader = headerBuffer,
+                            cchHeader = 256,
+                            pszFooter = footerBuffer,
+                            cchFooter = 256,
+                        };
+                        Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)1, ref lvgroup2));
+                        Assert.Equal(expectedHeaderText, new string(lvgroup2.pszHeader));
+                        Assert.Equal(expectedFooterText, new string(lvgroup2.pszFooter));
+                        Assert.True(lvgroup2.iGroupId > 0);
+                        Assert.Equal(expectedAlign, (int)lvgroup2.uAlign);
+                        Assert.True(lvgroup2.iGroupId > lvgroup1.iGroupId);
+                    }
+                });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
