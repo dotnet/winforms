@@ -46,9 +46,6 @@ namespace System.Windows.Forms
         public static extern IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, byte[] lpvBits);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool InvalidateRgn(HandleRef hWnd, HandleRef hrgn, bool erase);
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool MessageBeep(int type);
 
         // Theming/Visual Styles

@@ -6287,9 +6287,10 @@ namespace System.Windows.Forms
                         // It's safe to invoke InvalidateRgn from a separate thread.
                         using (new MultithreadSafeCallScope())
                         {
-                            SafeNativeMethods.InvalidateRgn(new HandleRef(this, Handle),
-                                                            new HandleRef(region, regionHandle),
-                                                            !GetStyle(ControlStyles.Opaque));
+                            User32.InvalidateRgn(
+                                this,
+                                new HandleRef(region, regionHandle),
+                                (!GetStyle(ControlStyles.Opaque)).ToBOOL());
                         }
                     }
                 }
