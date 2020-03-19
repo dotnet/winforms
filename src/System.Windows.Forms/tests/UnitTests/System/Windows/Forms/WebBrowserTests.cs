@@ -380,7 +380,7 @@ namespace System.Windows.Forms.Tests
             int canGoForwardChangedCallCount = 0;
             control.CanGoForwardChanged += (sender, e) => canGoForwardChangedCallCount++;
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file1 = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file1.Path));
             Assert.True(await source.Task);
@@ -415,7 +415,7 @@ namespace System.Windows.Forms.Tests
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file1 = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file1.Path));
             Assert.True(await source.Task);
@@ -448,7 +448,6 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData("<title>NewDocument</title>", "NewDocument")]
-        [InlineData("<title>New\ud83c\udf09Document</title>", "New\u00F0\u0178\u0152\u2030Document")]
         [InlineData("<title></title>", "")]
         public async Task WebBrowser_Document_GetWithDocument_ReturnsExpected(string titleHtml, string expectedTitle)
         {
@@ -529,7 +528,7 @@ namespace System.Windows.Forms.Tests
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file.Path));
             Assert.True(await source.Task);
@@ -574,7 +573,7 @@ namespace System.Windows.Forms.Tests
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var value = new MemoryStream(Encoding.UTF8.GetBytes(Html));
             await Task.Run(() => control.DocumentStream = value);
             Assert.True(await source.Task);
@@ -646,7 +645,7 @@ namespace System.Windows.Forms.Tests
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file.Path));
             Assert.True(await source.Task);
@@ -733,7 +732,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             var source = new TaskCompletionSource<bool>();
             int navigatingCallCount = 0;
             control.Navigating += (sender, e) =>
@@ -873,7 +872,6 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData("<title>NewDocument</title>", "NewDocument")]
-        [InlineData("<title>New\ud83c\udf09Document</title>", "New\u00F0\u0178\u0152\u2030Document")]
         [InlineData("<title></title>", "")]
         [InlineData("", "")]
         public async Task WebBrowser_DocumentTitle_GetWithDocument_ReturnsExpected(string titleHtml, string expected)
@@ -952,12 +950,12 @@ namespace System.Windows.Forms.Tests
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file.Path));
             Assert.True(await source.Task);
 
-            Assert.Contains("HTML Document", control.DocumentType);
+            Assert.Contains("HTML", control.DocumentType);
             Assert.DoesNotContain('\0', control.DocumentType);
         }
 
@@ -1019,7 +1017,7 @@ namespace System.Windows.Forms.Tests
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file.Path));
             Assert.True(await source.Task);
@@ -1128,7 +1126,7 @@ namespace System.Windows.Forms.Tests
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file.Path));
             Assert.True(await source.Task);
@@ -1615,7 +1613,7 @@ namespace System.Windows.Forms.Tests
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file.Path));
             Assert.True(await source.Task);
@@ -1862,7 +1860,7 @@ namespace System.Windows.Forms.Tests
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file.Path));
             Assert.True(await source.Task);
@@ -1928,7 +1926,7 @@ namespace System.Windows.Forms.Tests
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file.Path));
             Assert.True(await source.Task);
@@ -1968,7 +1966,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             var source = new TaskCompletionSource<bool>();
             int navigatingCallCount = 0;
@@ -2063,7 +2061,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
@@ -2898,7 +2896,7 @@ namespace System.Windows.Forms.Tests
                 canGoForwardChangedCallCount++;
             };
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file1 = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file1.Path));
             Assert.True(await source.Task);
@@ -3015,7 +3013,7 @@ namespace System.Windows.Forms.Tests
                 canGoForwardChangedCallCount++;
             };
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file1 = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file1.Path));
             Assert.True(await source.Task);
@@ -3186,7 +3184,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             var source = new TaskCompletionSource<bool>();
             int navigatingCallCount = 0;
@@ -3275,7 +3273,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
@@ -3298,7 +3296,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             var source = new TaskCompletionSource<bool>();
             int navigatingCallCount = 0;
@@ -3393,7 +3391,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             var source = new TaskCompletionSource<bool>();
             control.DocumentCompleted += (sender, e) => source.SetResult(true);
@@ -3428,7 +3426,7 @@ namespace System.Windows.Forms.Tests
             int canGoForwardChangedCallCount = 0;
             control.CanGoForwardChanged += (sender, e) => canGoForwardChangedCallCount++;
 
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file1 = CreateTempFile(Html);
             await Task.Run(() => control.Navigate(file1.Path));
             Assert.True(await source.Task);
@@ -3948,7 +3946,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             var source = new TaskCompletionSource<bool>();
             void oldHandler(object sender, WebBrowserDocumentCompletedEventArgs e) => source.SetResult(true);
@@ -4006,7 +4004,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             var source = new TaskCompletionSource<bool>();
             void oldHandler(object sender, WebBrowserDocumentCompletedEventArgs e) => source.SetResult(true);
@@ -4095,7 +4093,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             var source = new TaskCompletionSource<bool>();
             void oldHandler(object sender, WebBrowserDocumentCompletedEventArgs e) => source.SetResult(true);
@@ -4155,7 +4153,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            const string Html = "<html><head><title>New\ud83c\udf09Document</title></head></html>";
+            const string Html = "<html><head><title>NewDocument</title></head></html>";
             using var file = CreateTempFile(Html);
             var source = new TaskCompletionSource<bool>();
             void oldHandler(object sender, WebBrowserDocumentCompletedEventArgs e) => source.SetResult(true);
