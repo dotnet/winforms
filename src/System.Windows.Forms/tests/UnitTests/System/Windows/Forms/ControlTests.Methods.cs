@@ -5413,7 +5413,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ProcessKeyEventArgs_TestData()
         {
-            foreach (bool handled in new bool[] { true })
+            foreach (bool handled in new bool[] { true, false })
             {
                 yield return new object[] { (int)User32.WM.CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
                 yield return new object[] { (int)User32.WM.CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };

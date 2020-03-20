@@ -1451,6 +1451,11 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             // it's likely here that the create params could have changed
             // the border size/etc.
             CommonProperties.xClearPreferredSizeCache(this);
