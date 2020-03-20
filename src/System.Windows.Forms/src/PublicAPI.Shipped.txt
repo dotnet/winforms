@@ -2867,8 +2867,6 @@ System.Windows.Forms.FileDialog.AutoUpgradeEnabled.get -> bool
 System.Windows.Forms.FileDialog.AutoUpgradeEnabled.set -> void
 System.Windows.Forms.FileDialog.CheckPathExists.get -> bool
 System.Windows.Forms.FileDialog.CheckPathExists.set -> void
-System.Windows.Forms.FileDialog.ClientGuid.get -> System.Guid?
-System.Windows.Forms.FileDialog.ClientGuid.set -> void
 System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDialogCustomPlacesCollection
 System.Windows.Forms.FileDialog.DefaultExt.get -> string
 System.Windows.Forms.FileDialog.DefaultExt.set -> void
@@ -13128,3 +13126,7 @@ virtual System.Windows.Forms.WebBrowser.StatusText.get -> string
 System.Windows.Forms.DataGridView.ProcessControlShiftF10Keys(System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 override System.Windows.Forms.MonthCalendar.OnGotFocus(System.EventArgs e) -> void
+System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown owner) -> void
+System.Windows.Forms.VisualStyles.EdgeEffects.Flat = 16384 -> System.Windows.Forms.VisualStyles.EdgeEffects
+System.Windows.Forms.VisualStyles.EdgeEffects.Soft = 4096 -> System.Windows.Forms.VisualStyles.EdgeEffects
+const System.Windows.Forms.TabControl.TabBaseReLayoutMessageName = "_TabBaseReLayout" -> string
