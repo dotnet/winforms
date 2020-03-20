@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -19,7 +20,7 @@ namespace System.Windows.Forms
         ///  Collection of controls...
         /// </summary>
         [ListBindable(false), ComVisible(false)]
-        public class ControlCollection : ArrangedElementCollection, IList, ICloneable
+        public class ControlCollection : ArrangedElementCollection, IList, IList<Control>, ICloneable
         {
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
@@ -184,6 +185,9 @@ namespace System.Windows.Forms
                 }
             }
 
+            // Base class throws the same on non-generic IList.Insert
+            void IList<Control>.Insert(int index, Control value) => throw new NotSupportedException();
+
             object ICloneable.Clone()
             {
                 // Use CreateControlInstance so we get the same type of ControlCollection, but whack the
@@ -272,7 +276,11 @@ namespace System.Windows.Forms
                 return foundControls;
             }
 
-            public override IEnumerator GetEnumerator()
+            public override IEnumerator GetEnumerator() => GetEnumeratorCore();
+
+            IEnumerator<Control> IEnumerable<Control>.GetEnumerator() => GetEnumeratorCore();
+
+            private IEnumerator<Control> GetEnumeratorCore()
             {
                 return new ControlCollectionEnumerator(this);
             }
@@ -360,6 +368,14 @@ namespace System.Windows.Forms
                 }
             }
 
+            bool ICollection<Control>.Remove(Control value)
+            {
+                var wasContained = Contains(value);
+                Remove(value);
+                var isContained = Contains(value);
+                return wasContained && !isContained;
+            }
+
             void IList.Remove(object control)
             {
                 if (control is Control)
@@ -405,6 +421,14 @@ namespace System.Windows.Forms
                     return control;
                 }
             }
+
+            Control IList<Control>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotSupportedException(); // same behavior as base class
+            }
+
+            void ICollection<Control>.CopyTo(Control[] array, int index) => base.CopyTo(array, index);
 
             /// <summary>
             ///  Retrieves the child control with the specified key.
@@ -529,7 +553,7 @@ namespace System.Windows.Forms
             // This is the same as WinformsUtils.ArraySubsetEnumerator
             // however since we're no longer an array, we've gotta employ a
             // special version of this.
-            private class ControlCollectionEnumerator : IEnumerator
+            private class ControlCollectionEnumerator : IEnumerator<Control>
             {
                 private readonly ControlCollection controls;
                 private int current;
@@ -541,6 +565,8 @@ namespace System.Windows.Forms
                     originalCount = controls.Count;
                     current = -1;
                 }
+
+                void IDisposable.Dispose() { }
 
                 public bool MoveNext()
                 {
@@ -571,7 +597,7 @@ namespace System.Windows.Forms
                     current = -1;
                 }
 
-                public object Current
+                public Control Current
                 {
                     get
                     {
@@ -585,6 +611,8 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
+                object IEnumerator.Current => Current;
             }
         }
     }

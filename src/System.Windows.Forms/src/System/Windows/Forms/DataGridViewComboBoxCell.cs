@@ -5,10 +5,12 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -2596,7 +2598,7 @@ namespace System.Windows.Forms
             ///  A collection that stores objects.
         /// </summary>
         [ListBindable(false)]
-        public class ObjectCollection : IList
+        public class ObjectCollection : IList, IList<object>
         {
             private readonly DataGridViewComboBoxCell owner;
             private ArrayList items;
@@ -2724,6 +2726,8 @@ namespace System.Windows.Forms
                 return Add(item);
             }
 
+            void ICollection<object>.Add(object item) => Add(item);
+
             public void AddRange(params object[] items)
             {
                 //this.owner.CheckNoSharedCell();
@@ -2847,9 +2851,13 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns an enumerator for the DataGridViewComboBoxCell Items collection.
             /// </summary>
-            public IEnumerator GetEnumerator()
+            public IEnumerator GetEnumerator() => GetEnumeratorCore();
+
+            IEnumerator<object> IEnumerable<object>.GetEnumerator() => GetEnumeratorCore();
+
+            private IEnumerator<object> GetEnumeratorCore()
             {
-                return InnerArray.GetEnumerator();
+                return InnerArray.Cast<object>().GetEnumerator();
             }
 
             public int IndexOf(object value)
@@ -2902,12 +2910,22 @@ namespace System.Windows.Forms
             /// </summary>
             public void Remove(object value)
             {
-                int index = InnerArray.IndexOf(value);
+                TryRemove(value);
+            }
 
-                if (index != -1)
-                {
-                    RemoveAt(index);
-                }
+            bool ICollection<object>.Remove(object value)
+            {
+                return TryRemove(value);
+            }
+
+            private bool TryRemove(object value)
+            {
+                int index = InnerArray.IndexOf(value);
+                if (index < 0)
+                    return false;
+
+                RemoveAt(index);
+                return true;
             }
 
             /// <summary>

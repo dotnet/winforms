@@ -7,11 +7,13 @@
 //#define DEBUG_PAINT
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -1366,7 +1368,7 @@ namespace System.Windows.Forms
 
         [ListBindable(false),
         ComVisible(false)]
-        public class ToolStripPanelRowCollection : ArrangedElementCollection, IList
+        public class ToolStripPanelRowCollection : ArrangedElementCollection, IList, IList<ToolStripPanelRow>
         {
             private readonly ToolStripPanel owner;
             public ToolStripPanelRowCollection(ToolStripPanel owner)
@@ -1492,6 +1494,7 @@ namespace System.Windows.Forms
             void IList.RemoveAt(int index) { RemoveAt(index); }
             void IList.Remove(object value) { Remove(value as ToolStripPanelRow); }
             int IList.Add(object value) { return Add(value as ToolStripPanelRow); }
+            void ICollection<ToolStripPanelRow>.Add(ToolStripPanelRow value) => Add(value);
             int IList.IndexOf(object value) { return IndexOf(value as ToolStripPanelRow); }
             void IList.Insert(int index, object value) { Insert(index, value as ToolStripPanelRow); }
 
@@ -1499,6 +1502,12 @@ namespace System.Windows.Forms
             {
                 get { return InnerList[index]; }
                 set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
+            }
+
+            ToolStripPanelRow IList<ToolStripPanelRow>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove);
             }
 
             public int IndexOf(ToolStripPanelRow value)
@@ -1544,10 +1553,18 @@ namespace System.Windows.Forms
 
             }
 
-            public void Remove(ToolStripPanelRow value)
+            public void Remove(ToolStripPanelRow value) => TryRemove(value);
+
+            bool ICollection<ToolStripPanelRow>.Remove(ToolStripPanelRow value) => TryRemove(value);
+
+            private bool TryRemove(ToolStripPanelRow value)
             {
+                if (!InnerList.Contains(value))
+                    return false;
+
                 InnerList.Remove(value);
                 OnAfterRemove(value);
+                return true;
             }
 
             public void RemoveAt(int index)
@@ -1564,6 +1581,11 @@ namespace System.Windows.Forms
             public void CopyTo(ToolStripPanelRow[] array, int index)
             {
                 InnerList.CopyTo(array, index);
+            }
+
+            IEnumerator<ToolStripPanelRow> IEnumerable<ToolStripPanelRow>.GetEnumerator()
+            {
+                return InnerList.Cast<ToolStripPanelRow>().GetEnumerator();
             }
         }
 

@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -385,6 +386,11 @@ namespace System.Windows.Forms
                 }
                 return (remainder >= minValAfterShift && remainder <= maxValAfterShift);
             }
+        }
+
+        public static IEnumerator<T> GetArrayEnumerator<T>(T[] array)
+        {
+            return ((IEnumerable<T>)array).GetEnumerator();
         }
     }
 }

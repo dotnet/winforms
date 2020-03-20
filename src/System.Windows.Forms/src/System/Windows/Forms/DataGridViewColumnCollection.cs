@@ -5,10 +5,12 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 
 namespace System.Windows.Forms
 {
@@ -17,7 +19,7 @@ namespace System.Windows.Forms
     ///  <see cref='DataGridView'/> control.
     /// </summary>
     [ListBindable(false)]
-    public class DataGridViewColumnCollection : BaseCollection, IList
+    public class DataGridViewColumnCollection : BaseCollection, IList, IList<DataGridViewColumn>
     {
         private CollectionChangeEventHandler onCollectionChanged;
         private readonly ArrayList items = new ArrayList();
@@ -46,9 +48,20 @@ namespace System.Windows.Forms
             set { throw new NotSupportedException(); }
         }
 
+        DataGridViewColumn IList<DataGridViewColumn>.this[int index]
+        {
+            get { return this[index]; }
+            set { throw new NotSupportedException(); }
+        }
+
         int IList.Add(object value)
         {
             return Add((DataGridViewColumn)value);
+        }
+
+        void ICollection<DataGridViewColumn>.Add(DataGridViewColumn value)
+        {
+            Add(value);
         }
 
         void IList.Clear()
@@ -74,6 +87,14 @@ namespace System.Windows.Forms
         void IList.Remove(object value)
         {
             Remove((DataGridViewColumn)value);
+        }
+
+        bool ICollection<DataGridViewColumn>.Remove(DataGridViewColumn value)
+        {
+            var wasContained = Contains(value);
+            Remove(value);
+            var isContained = Contains(value);
+            return wasContained && !isContained;
         }
 
         void IList.RemoveAt(int index)
@@ -117,6 +138,11 @@ namespace System.Windows.Forms
         IEnumerator IEnumerable.GetEnumerator()
         {
             return items.GetEnumerator();
+        }
+
+        IEnumerator<DataGridViewColumn> IEnumerable<DataGridViewColumn>.GetEnumerator()
+        {
+            return items.Cast<DataGridViewColumn>().GetEnumerator();
         }
 
         public DataGridViewColumnCollection(DataGridView dataGridView)

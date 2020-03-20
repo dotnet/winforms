@@ -5,13 +5,15 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace System.Windows.Forms
 {
     internal class ListViewGroupItemCollection : ListView.ListViewItemCollection.IInnerList
     {
         private readonly ListViewGroup _group;
-        private ArrayList _items;
+        private List<ListViewItem> _items;
 
         public ListViewGroupItemCollection(ListViewGroup group)
         {
@@ -20,7 +22,7 @@ namespace System.Windows.Forms
 
         public int Count => Items.Count;
 
-        private ArrayList Items => _items ?? (_items = new ArrayList());
+        private List<ListViewItem> Items => _items ?? (_items = new List<ListViewItem>());
 
         public bool OwnerIsVirtualListView => _group.ListView != null && _group.ListView.VirtualMode;
 
@@ -83,9 +85,9 @@ namespace System.Windows.Forms
 
         public bool Contains(ListViewItem item) => Items.Contains(item);
 
-        public void CopyTo(Array dest, int index) => Items.CopyTo(dest, index);
+        public void CopyTo(Array dest, int index) => ((ICollection)Items).CopyTo(dest, index);
 
-        public IEnumerator GetEnumerator() => Items.GetEnumerator();
+        public IEnumerator<ListViewItem> GetEnumerator() => Items.GetEnumerator();
 
         public int IndexOf(ListViewItem item) => Items.IndexOf(item);
 

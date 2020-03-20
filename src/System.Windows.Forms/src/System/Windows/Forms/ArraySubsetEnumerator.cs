@@ -5,17 +5,18 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
-    internal class ArraySubsetEnumerator : IEnumerator
+    internal class ArraySubsetEnumerator<T> : IEnumerator<T>
     {
-        private readonly object[] _array;
+        private readonly T[] _array;
         private readonly int _total;
         private int _current;
 
-        public ArraySubsetEnumerator(object[] array, int count)
+        public ArraySubsetEnumerator(T[] array, int count)
         {
             Debug.Assert(count == 0 || array != null, "if array is null, count should be 0");
             Debug.Assert(array == null || count <= array.Length, "Trying to enumerate more than the array contains");
@@ -23,6 +24,8 @@ namespace System.Windows.Forms
             _total = count;
             _current = -1;
         }
+
+        void IDisposable.Dispose() { }
 
         public bool MoveNext()
         {
@@ -37,6 +40,8 @@ namespace System.Windows.Forms
 
         public void Reset() => _current = -1;
 
-        public object Current => _current == -1 ? null : _array[_current];
+        public T Current => _current == -1 ? default : _array[_current];
+
+        object IEnumerator.Current => Current;
     }
 }

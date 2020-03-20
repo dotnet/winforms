@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
@@ -6559,7 +6560,7 @@ namespace System.Windows.Forms
         //end subhag
 
         [ListBindable(false)]
-        public class CheckedIndexCollection : IList
+        public class CheckedIndexCollection : IList, IList<int>
         {
             private readonly ListView owner;
 
@@ -6646,6 +6647,12 @@ namespace System.Windows.Forms
                     // Should never get to this point.
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
+            }
+
+            int IList<int>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotSupportedException();
             }
 
             object IList.this[int index]
@@ -6741,7 +6748,17 @@ namespace System.Windows.Forms
                 }
             }
 
+            void ICollection<int>.Add(int value)
+            {
+                throw new NotSupportedException();
+            }
+
             int IList.Add(object value)
+            {
+                throw new NotSupportedException();
+            }
+
+            void ICollection<int>.Clear()
             {
                 throw new NotSupportedException();
             }
@@ -6751,7 +6768,17 @@ namespace System.Windows.Forms
                 throw new NotSupportedException();
             }
 
+            void IList<int>.Insert(int index, int value)
+            {
+                throw new NotSupportedException();
+            }
+
             void IList.Insert(int index, object value)
+            {
+                throw new NotSupportedException();
+            }
+
+            bool ICollection<int>.Remove(int value)
             {
                 throw new NotSupportedException();
             }
@@ -6761,9 +6788,19 @@ namespace System.Windows.Forms
                 throw new NotSupportedException();
             }
 
+            void IList<int>.RemoveAt(int index)
+            {
+                throw new NotSupportedException();
+            }
+
             void IList.RemoveAt(int index)
             {
                 throw new NotSupportedException();
+            }
+
+            void ICollection<int>.CopyTo(int[] dest, int index)
+            {
+                ((ICollection)this).CopyTo(dest, index);
             }
 
             void ICollection.CopyTo(Array dest, int index)
@@ -6774,22 +6811,24 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            public IEnumerator GetEnumerator() => GetEnumeratorCore();
+            IEnumerator<int> IEnumerable<int>.GetEnumerator() => GetEnumeratorCore();
+            internal IEnumerator<int> GetEnumeratorCore()
             {
                 int[] indices = IndicesArray;
                 if (indices != null)
                 {
-                    return indices.GetEnumerator();
+                    return WindowsFormsUtils.GetArrayEnumerator(indices);
                 }
                 else
                 {
-                    return Array.Empty<int>().GetEnumerator();
+                    return Enumerable.Empty<int>().GetEnumerator();
                 }
             }
         }
 
         [ListBindable(false)]
-        public class CheckedListViewItemCollection : IList
+        public class CheckedListViewItemCollection : IList, IList<ListViewItem>
         {
             private readonly ListView owner;
 
@@ -6853,6 +6892,12 @@ namespace System.Windows.Forms
                     int itemIndex = owner.CheckedIndices[index];
                     return owner.Items[itemIndex];
                 }
+            }
+
+            ListViewItem IList<ListViewItem>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotSupportedException();
             }
 
             object IList.this[int index]
@@ -7070,7 +7115,17 @@ namespace System.Windows.Forms
                 throw new NotSupportedException();
             }
 
+            void ICollection<ListViewItem>.Add(ListViewItem value)
+            {
+                throw new NotSupportedException();
+            }
+
             void IList.Clear()
+            {
+                throw new NotSupportedException();
+            }
+
+            void ICollection<ListViewItem>.Clear()
             {
                 throw new NotSupportedException();
             }
@@ -7080,12 +7135,27 @@ namespace System.Windows.Forms
                 throw new NotSupportedException();
             }
 
+            void IList<ListViewItem>.Insert(int index, ListViewItem value)
+            {
+                throw new NotSupportedException();
+            }
+
             void IList.Remove(object value)
             {
                 throw new NotSupportedException();
             }
 
+            bool ICollection<ListViewItem>.Remove(ListViewItem item)
+            {
+                throw new NotSupportedException();
+            }
+
             void IList.RemoveAt(int index)
+            {
+                throw new NotSupportedException();
+            }
+
+            void IList<ListViewItem>.RemoveAt(int index)
             {
                 throw new NotSupportedException();
             }
@@ -7103,7 +7173,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            void ICollection<ListViewItem>.CopyTo(ListViewItem[] dest, int index) => CopyTo(dest, index);
+
+            public IEnumerator GetEnumerator() => GetEnumeratorCore();
+            IEnumerator<ListViewItem> IEnumerable<ListViewItem>.GetEnumerator() => GetEnumeratorCore();
+            private IEnumerator<ListViewItem> GetEnumeratorCore()
             {
                 if (owner.VirtualMode)
                 {
@@ -7113,17 +7187,17 @@ namespace System.Windows.Forms
                 ListViewItem[] items = ItemArray;
                 if (items != null)
                 {
-                    return items.GetEnumerator();
+                    return WindowsFormsUtils.GetArrayEnumerator(items);
                 }
                 else
                 {
-                    return Array.Empty<ListViewItem>().GetEnumerator();
+                    return Enumerable.Empty<ListViewItem>().GetEnumerator();
                 }
             }
         }
 
         [ListBindable(false)]
-        public class SelectedIndexCollection : IList
+        public class SelectedIndexCollection : IList, IList<int>
         {
             private readonly ListView owner;
 
@@ -7227,6 +7301,12 @@ namespace System.Windows.Forms
                 }
             }
 
+            int IList<int>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotSupportedException();
+            }
+
             object IList.this[int index]
             {
                 get
@@ -7325,12 +7405,22 @@ namespace System.Windows.Forms
                 }
             }
 
+            void ICollection<int>.Add(int value)
+            {
+                Add(value);
+            }
+
             void IList.Clear()
             {
                 Clear();
             }
 
             void IList.Insert(int index, object value)
+            {
+                throw new NotSupportedException();
+            }
+
+            void IList<int>.Insert(int index, int value)
             {
                 throw new NotSupportedException();
             }
@@ -7347,7 +7437,19 @@ namespace System.Windows.Forms
                 }
             }
 
+            bool ICollection<int>.Remove(int itemIndex)
+            {
+                var result = Contains(itemIndex);
+                Remove(itemIndex);
+                return result;
+            }
+
             void IList.RemoveAt(int index)
+            {
+                throw new NotSupportedException();
+            }
+
+            void IList<int>.RemoveAt(int index)
             {
                 throw new NotSupportedException();
             }
@@ -7401,16 +7503,22 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            void ICollection<int>.CopyTo(int[] dest, int index) => CopyTo(dest, index);
+
+            public IEnumerator GetEnumerator() => GetEnumeratorCore();
+
+            IEnumerator<int> IEnumerable<int>.GetEnumerator() => GetEnumeratorCore();
+
+            private IEnumerator<int> GetEnumeratorCore()
             {
                 int[] indices = IndicesArray;
                 if (indices != null)
                 {
-                    return indices.GetEnumerator();
+                    return WindowsFormsUtils.GetArrayEnumerator(indices);
                 }
                 else
                 {
-                    return Array.Empty<int>().GetEnumerator();
+                    return Enumerable.Empty<int>().GetEnumerator();
                 }
             }
 
@@ -7439,7 +7547,7 @@ namespace System.Windows.Forms
         }
 
         [ListBindable(false)]
-        public class SelectedListViewItemCollection : IList
+        public class SelectedListViewItemCollection : IList, IList<ListViewItem>
         {
             private readonly ListView owner;
 
@@ -7599,6 +7707,16 @@ namespace System.Windows.Forms
                 }
             }
 
+            ListViewItem IList<ListViewItem>.this[int index]
+            {
+                get => this[index];
+                set
+                {
+                    // SelectedListViewItemCollection is read-only
+                    throw new NotSupportedException();
+                }
+            }
+
             object IList.this[int index]
             {
                 get
@@ -7655,7 +7773,19 @@ namespace System.Windows.Forms
                 throw new NotSupportedException();
             }
 
+            void ICollection<ListViewItem>.Add(ListViewItem value)
+            {
+                // SelectedListViewItemCollection is read-only
+                throw new NotSupportedException();
+            }
+
             void IList.Insert(int index, object value)
+            {
+                // SelectedListViewItemCollection is read-only
+                throw new NotSupportedException();
+            }
+
+            void IList<ListViewItem>.Insert(int index, ListViewItem value)
             {
                 // SelectedListViewItemCollection is read-only
                 throw new NotSupportedException();
@@ -7675,7 +7805,19 @@ namespace System.Windows.Forms
                 throw new NotSupportedException();
             }
 
+            bool ICollection<ListViewItem>.Remove(ListViewItem item)
+            {
+                // SelectedListViewItemCollection is read-only
+                throw new NotSupportedException();
+            }
+
             void IList.RemoveAt(int index)
+            {
+                // SelectedListViewItemCollection is read-only
+                throw new NotSupportedException();
+            }
+
+            void IList<ListViewItem>.RemoveAt(int index)
             {
                 // SelectedListViewItemCollection is read-only
                 throw new NotSupportedException();
@@ -7751,7 +7893,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            void ICollection<ListViewItem>.CopyTo(ListViewItem[] dest, int index) => CopyTo(dest, index);
+
+            public IEnumerator GetEnumerator() => GetEnumeratorCore();
+
+            IEnumerator<ListViewItem> IEnumerable<ListViewItem>.GetEnumerator() => GetEnumeratorCore();
+
+            private IEnumerator<ListViewItem> GetEnumeratorCore()
             {
                 if (owner.VirtualMode)
                 {
@@ -7761,11 +7909,11 @@ namespace System.Windows.Forms
                 ListViewItem[] items = SelectedItemArray;
                 if (items != null)
                 {
-                    return items.GetEnumerator();
+                    return WindowsFormsUtils.GetArrayEnumerator(items);
                 }
                 else
                 {
-                    return Array.Empty<ListViewItem>().GetEnumerator();
+                    return Enumerable.Empty<ListViewItem>().GetEnumerator();
                 }
             }
 
@@ -7846,7 +7994,7 @@ namespace System.Windows.Forms
         }
 
         [ListBindable(false)]
-        public class ColumnHeaderCollection : IList
+        public class ColumnHeaderCollection : IList, IList<ColumnHeader>
         {
             private readonly ListView owner;
 
@@ -7882,6 +8030,12 @@ namespace System.Windows.Forms
                 {
                     throw new NotSupportedException();
                 }
+            }
+
+            ColumnHeader IList<ColumnHeader>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotSupportedException();
             }
 
             /// <summary>
@@ -8153,6 +8307,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            void ICollection<ColumnHeader>.Add(ColumnHeader value) => Add(value);
+
             /// <summary>
             ///  Removes all columns from the list view.
             /// </summary>
@@ -8214,6 +8370,14 @@ namespace System.Windows.Forms
             }
 
             void ICollection.CopyTo(Array dest, int index)
+            {
+                if (Count > 0)
+                {
+                    System.Array.Copy(owner.columnHeaders, 0, dest, index, Count);
+                }
+            }
+
+            void ICollection<ColumnHeader>.CopyTo(ColumnHeader[] dest, int index)
             {
                 if (Count > 0)
                 {
@@ -8420,6 +8584,17 @@ namespace System.Windows.Forms
                 }
             }
 
+            bool ICollection<ColumnHeader>.Remove(ColumnHeader item)
+            {
+                if (item is null)
+                    return false;
+
+                var wasContained = Contains(item);
+                Remove(item);
+                var isContained = Contains(item);
+                return wasContained && !isContained;
+            }
+
             void IList.Remove(object value)
             {
                 if (value is ColumnHeader)
@@ -8428,15 +8603,19 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            public IEnumerator GetEnumerator() => GetEnumeratorCore();
+
+            IEnumerator<ColumnHeader> IEnumerable<ColumnHeader>.GetEnumerator() => GetEnumeratorCore();
+
+            private IEnumerator<ColumnHeader> GetEnumeratorCore()
             {
                 if (owner.columnHeaders != null)
                 {
-                    return owner.columnHeaders.GetEnumerator();
+                    return WindowsFormsUtils.GetArrayEnumerator(owner.columnHeaders);
                 }
                 else
                 {
-                    return Array.Empty<ColumnHeader>().GetEnumerator();
+                    return Enumerable.Empty<ColumnHeader>().GetEnumerator();
                 }
             }
         }
@@ -8445,7 +8624,7 @@ namespace System.Windows.Forms
         ///  Represents the collection of items in a ListView or ListViewGroup
         /// </summary>
         [ListBindable(false)]
-        public class ListViewItemCollection : IList
+        public class ListViewItemCollection : IList, IList<ListViewItem>
         {
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
@@ -8463,7 +8642,7 @@ namespace System.Windows.Forms
                 void Clear();
                 bool Contains(ListViewItem item);
                 void CopyTo(Array dest, int index);
-                IEnumerator GetEnumerator();
+                IEnumerator<ListViewItem> GetEnumerator();
                 int IndexOf(ListViewItem item);
                 ListViewItem Insert(int index, ListViewItem item);
                 void Remove(ListViewItem item);
@@ -8655,6 +8834,8 @@ namespace System.Windows.Forms
                 return value;
             }
 
+            void ICollection<ListViewItem>.Add(ListViewItem item) => Add(item);
+
             // <-- NEW ADD OVERLOADS IN WHIDBEY
 
             /// <summary>
@@ -8761,6 +8942,8 @@ namespace System.Windows.Forms
                 InnerList.CopyTo(dest, index);
             }
 
+            void ICollection<ListViewItem>.CopyTo(ListViewItem[] array, int arrayIndex) => CopyTo(array, arrayIndex);
+
             /// <summary>
             ///  Searches for Controls by their Name property, builds up an array
             ///  of all the controls that match.
@@ -8812,7 +8995,11 @@ namespace System.Windows.Forms
                 return foundItems;
             }
 
-            public IEnumerator GetEnumerator()
+            public IEnumerator GetEnumerator() => GetEnumeratorCore();
+
+            IEnumerator<ListViewItem> IEnumerable<ListViewItem>.GetEnumerator() => GetEnumeratorCore();
+
+            private IEnumerator<ListViewItem> GetEnumeratorCore()
             {
                 if (InnerList.OwnerIsVirtualListView && !InnerList.OwnerIsDesignMode)
                 {
@@ -8887,6 +9074,8 @@ namespace System.Windows.Forms
             {
                 return (index >= 0) && (index < Count);
             }
+
+            void IList<ListViewItem>.Insert(int index, ListViewItem item) => Insert(index, item);
 
             public ListViewItem Insert(int index, ListViewItem item)
             {
@@ -8988,6 +9177,17 @@ namespace System.Windows.Forms
                 }
 
                 Remove((ListViewItem)item);
+            }
+
+            bool ICollection<ListViewItem>.Remove(ListViewItem item)
+            {
+                if (item is null)
+                    return false;
+
+                var wasContained = Contains(item);
+                Remove(item);
+                var isContained = Contains(item);
+                return wasContained && !isContained;
             }
         }
 
@@ -9444,12 +9644,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            public IEnumerator<ListViewItem> GetEnumerator()
             {
                 ListViewItem[] items = new ListViewItem[owner.itemCount];
                 CopyTo(items, 0);
 
-                return items.GetEnumerator();
+                return WindowsFormsUtils.GetArrayEnumerator(items);
             }
         }
 

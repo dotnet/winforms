@@ -6,6 +6,8 @@
 
 using System.ComponentModel;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace System.Windows.Forms
 {
@@ -13,7 +15,7 @@ namespace System.Windows.Forms
     ///  Represents a collection of data bindings on a control.
     /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
-    public class BindingsCollection : BaseCollection
+    public class BindingsCollection : BaseCollection, IReadOnlyList<Binding>
     {
         private ArrayList _list;
         private CollectionChangeEventHandler _onCollectionChanging;
@@ -121,5 +123,13 @@ namespace System.Windows.Forms
         protected virtual void RemoveCore(Binding dataBinding) => List.Remove(dataBinding);
 
         internal protected bool ShouldSerializeMyAll() => Count > 0;
+
+        IEnumerator<Binding> IEnumerable<Binding>.GetEnumerator()
+        {
+            if (_list is null)
+                return Enumerable.Empty<Binding>().GetEnumerator();
+            else
+                return _list.Cast<Binding>().GetEnumerator();
+        }
     }
 }

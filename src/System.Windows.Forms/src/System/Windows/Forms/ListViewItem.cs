@@ -5,12 +5,14 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using static Interop;
@@ -1556,7 +1558,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public class ListViewSubItemCollection : IList
+        public class ListViewSubItemCollection : IList, IList<ListViewSubItem>
         {
             private readonly ListViewItem _owner;
 
@@ -1742,6 +1744,8 @@ namespace System.Windows.Forms
                 return IndexOf(Add(itemValue));
             }
 
+            void ICollection<ListViewSubItem>.Add(ListViewSubItem item) => Add(item);
+
             public void Clear()
             {
                 int oldCount = _owner.SubItemCount;
@@ -1920,13 +1924,18 @@ namespace System.Windows.Forms
                 Insert(index, (ListViewSubItem)item);
             }
 
-            public void Remove(ListViewSubItem item)
+            public void Remove(ListViewSubItem item) => TryRemove(item);
+
+            bool ICollection<ListViewSubItem>.Remove(ListViewSubItem item) => TryRemove(item);
+
+            private bool TryRemove(ListViewSubItem item)
             {
                 int index = IndexOf(item);
-                if (index != -1)
-                {
-                    RemoveAt(index);
-                }
+                if (index < 0)
+                    return false;
+
+                RemoveAt(index);
+                return true;
             }
 
             void IList.Remove(object item)
@@ -1971,6 +1980,11 @@ namespace System.Windows.Forms
                 }
             }
 
+            void ICollection<ListViewSubItem>.CopyTo(ListViewSubItem[] dest, int index)
+            {
+                ((ICollection)this).CopyTo(dest, index);
+            }
+
             void ICollection.CopyTo(Array dest, int index)
             {
                 if (Count > 0)
@@ -1979,15 +1993,19 @@ namespace System.Windows.Forms
                 }
             }
 
-            public IEnumerator GetEnumerator()
+            public IEnumerator GetEnumerator() => GetEnumeratorCore();
+
+            IEnumerator<ListViewSubItem> IEnumerable<ListViewSubItem>.GetEnumerator() => GetEnumeratorCore();
+
+            private IEnumerator<ListViewSubItem> GetEnumeratorCore()
             {
                 if (_owner.subItems != null)
                 {
-                    return new ArraySubsetEnumerator(_owner.subItems, _owner.SubItemCount);
+                    return new ArraySubsetEnumerator<ListViewSubItem>(_owner.subItems, _owner.SubItemCount);
                 }
                 else
                 {
-                    return Array.Empty<ListViewSubItem>().GetEnumerator();
+                    return Enumerable.Empty<ListViewSubItem>().GetEnumerator();
                 }
             }
         }

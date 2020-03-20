@@ -7,6 +7,7 @@
 //#define DEBUG_PAINT
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -2166,7 +2167,7 @@ namespace System.Windows.Forms
         ///  is responsible for parenting and unparenting the controls (ToolStripPanelRows do NOT derive from
         ///  Control and thus are NOT hwnd backed).
         /// </summary>
-        internal class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IEnumerable
+        internal class ToolStripPanelRowControlCollection : ArrangedElementCollection, IList, IList<Control>
         {
             private readonly ToolStripPanelRow owner;
             private ArrangedElementCollection cellCollection;
@@ -2188,6 +2189,12 @@ namespace System.Windows.Forms
                 {
                     return GetControl(index);
                 }
+            }
+
+            Control IList<Control>.this[int index]
+            {
+                get => this[index];
+                set => throw new NotSupportedException();
             }
 
             public ArrangedElementCollection Cells
@@ -2294,7 +2301,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override IEnumerator GetEnumerator() { return new ToolStripPanelCellToControlEnumerator(InnerList); }
+            public override IEnumerator GetEnumerator() => GetEnumeratorCore();
+
+            IEnumerator<Control> IEnumerable<Control>.GetEnumerator() => GetEnumeratorCore();
+
+            private IEnumerator<Control> GetEnumeratorCore()
+            {
+                return new ToolStripPanelCellToControlEnumerator(InnerList);
+            }
 
             private Control GetControl(int index)
             {
@@ -2334,6 +2348,8 @@ namespace System.Windows.Forms
             void IList.Remove(object value) { Remove(value as Control); }
 
             int IList.Add(object value) { return Add(value as Control); }
+
+            void ICollection<Control>.Add(Control value) => Add(value);
 
             int IList.IndexOf(object value) { return IndexOf(value as Control); }
 
@@ -2418,10 +2434,18 @@ namespace System.Windows.Forms
             }
 
             [EditorBrowsable(EditorBrowsableState.Never)]
-            public void Remove(Control value)
+            public void Remove(Control value) => TryRemove(value);
+
+            bool ICollection<Control>.Remove(Control value) => TryRemove(value);
+
+            private bool TryRemove(Control value)
             {
                 int index = IndexOfControl(value);
+                if (index < 0)
+                    return false;
+
                 RemoveAt(index);
+                return true;
             }
 
             [EditorBrowsable(EditorBrowsableState.Never)]
@@ -2463,7 +2487,7 @@ namespace System.Windows.Forms
             ///  We want to pretend like we're only holding controls... so everywhere we've returned controls.
             ///  but the problem is if you do a foreach, you'll get the cells not the controls.  So we've got
             ///  to sort of write a wrapper class around the ArrayList enumerator.
-            private class ToolStripPanelCellToControlEnumerator : IEnumerator, ICloneable
+            private class ToolStripPanelCellToControlEnumerator : IEnumerator<Control>, ICloneable
             {
                 private readonly IEnumerator arrayListEnumerator;
 
@@ -2471,6 +2495,8 @@ namespace System.Windows.Forms
                 {
                     arrayListEnumerator = ((IEnumerable)list).GetEnumerator();
                 }
+
+                void IDisposable.Dispose() { }
 
                 public virtual object Current
                 {
@@ -2481,6 +2507,8 @@ namespace System.Windows.Forms
                         return cell?.Control;
                     }
                 }
+
+                Control IEnumerator<Control>.Current => (Control)Current;
 
                 public object Clone()
                 {

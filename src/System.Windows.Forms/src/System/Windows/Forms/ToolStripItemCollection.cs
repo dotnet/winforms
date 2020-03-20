@@ -5,9 +5,11 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
+using System.Linq;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -19,7 +21,7 @@ namespace System.Windows.Forms
     Editor("System.Windows.Forms.Design.ToolStripCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
     [ListBindable(false),
     ]
-    public class ToolStripItemCollection : ArrangedElementCollection, IList
+    public class ToolStripItemCollection : ArrangedElementCollection, IList, IList<ToolStripItem>
     {
         private readonly ToolStrip owner;
         private readonly bool itemsCollection;
@@ -321,6 +323,7 @@ namespace System.Windows.Forms
         bool IList.Contains(object value) { return InnerList.Contains(value); }
         void IList.RemoveAt(int index) { RemoveAt(index); }
         void IList.Remove(object value) { Remove(value as ToolStripItem); }
+        void ICollection<ToolStripItem>.Add(ToolStripItem value) => Add(value);
         int IList.Add(object value) { return Add(value as ToolStripItem); }
         int IList.IndexOf(object value) { return IndexOf(value as ToolStripItem); }
         void IList.Insert(int index, object value) { Insert(index, value as ToolStripItem); }
@@ -330,6 +333,13 @@ namespace System.Windows.Forms
             get { return InnerList[index]; }
             set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
         }
+
+        ToolStripItem IList<ToolStripItem>.this[int index]
+        {
+            get => this[index];
+            set => throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove);
+        }
+
         public void Insert(int index, ToolStripItem value)
         {
             CheckCanAddOrInsertItem(value);
@@ -433,14 +443,22 @@ namespace System.Windows.Forms
             }
         }
 
-        public void Remove(ToolStripItem value)
+        public void Remove(ToolStripItem value) => TryRemove(value);
+
+        bool ICollection<ToolStripItem>.Remove(ToolStripItem value) => TryRemove(value);
+
+        private bool TryRemove(ToolStripItem value)
         {
             if (IsReadOnly)
             {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
+
+            // BUG: collection does not check if item is actually contained
+            var result = Contains(value);
             InnerList.Remove(value);
             OnAfterRemove(value);
+            return result;
         }
 
         public void RemoveAt(int index)
@@ -537,6 +555,11 @@ namespace System.Windows.Forms
                     }
                 }
             }
+        }
+
+        IEnumerator<ToolStripItem> IEnumerable<ToolStripItem>.GetEnumerator()
+        {
+            return InnerList.Cast<ToolStripItem>().GetEnumerator();
         }
     }
 }

@@ -1,12 +1,14 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 
 namespace System.Windows.Forms
 {
@@ -14,7 +16,7 @@ namespace System.Windows.Forms
     ///  A collection of listview groups.
     /// </summary>
     [ListBindable(false)]
-    public class ListViewGroupCollection : IList
+    public class ListViewGroupCollection : IList, IList<ListViewGroup>
     {
         private readonly ListView _listView;
 
@@ -34,6 +36,8 @@ namespace System.Windows.Forms
         bool IList.IsFixedSize => false;
 
         bool IList.IsReadOnly => false;
+
+        bool ICollection<ListViewGroup>.IsReadOnly => false;
 
         private ArrayList List => _list ?? (_list = new ArrayList());
 
@@ -160,6 +164,8 @@ namespace System.Windows.Forms
             return Add(group);
         }
 
+        void ICollection<ListViewGroup>.Add(ListViewGroup value) => Add(value);
+
         public void AddRange(ListViewGroup[] groups)
         {
             if (groups == null)
@@ -233,9 +239,13 @@ namespace System.Windows.Forms
             return Contains(group);
         }
 
+        void ICollection<ListViewGroup>.CopyTo(ListViewGroup[] array, int index) => CopyTo(array, index);
+
         public void CopyTo(Array array, int index) => List.CopyTo(array, index);
 
         public IEnumerator GetEnumerator() => List.GetEnumerator();
+
+        IEnumerator<ListViewGroup> IEnumerable<ListViewGroup>.GetEnumerator() => List.Cast<ListViewGroup>().GetEnumerator();
 
         public int IndexOf(ListViewGroup value) => List.IndexOf(value);
 
@@ -292,8 +302,13 @@ namespace System.Windows.Forms
             }
         }
 
-        public void Remove(ListViewGroup group)
+        public void Remove(ListViewGroup group) => TryRemove(group);
+
+        bool ICollection<ListViewGroup>.Remove(ListViewGroup group) => TryRemove(group);
+
+        private bool TryRemove(ListViewGroup group)
         {
+            // BUG: collection does not check if item is actually contained
             group.ListView = null;
             List.Remove(group);
 
@@ -301,6 +316,8 @@ namespace System.Windows.Forms
             {
                 _listView.RemoveGroupFromListView(group);
             }
+
+            return true;
         }
 
         void IList.Remove(object value)

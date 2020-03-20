@@ -5,8 +5,10 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 
 namespace System.Windows.Forms
 {
@@ -15,7 +17,7 @@ namespace System.Windows.Forms
     ///  control.
     /// </summary>
     [ListBindable(false)]
-    public class DataGridViewCellCollection : BaseCollection, IList
+    public class DataGridViewCellCollection : BaseCollection, IList, IList<DataGridViewCell>
     {
         CollectionChangeEventHandler onCollectionChanged;
         readonly ArrayList items = new ArrayList();
@@ -25,6 +27,8 @@ namespace System.Windows.Forms
         {
             return Add((DataGridViewCell)value);
         }
+
+        void ICollection<DataGridViewCell>.Add(DataGridViewCell dataGridViewCell) => Add(dataGridViewCell);
 
         void IList.Clear()
         {
@@ -95,6 +99,11 @@ namespace System.Windows.Forms
         IEnumerator IEnumerable.GetEnumerator()
         {
             return items.GetEnumerator();
+        }
+
+        IEnumerator<DataGridViewCell> IEnumerable<DataGridViewCell>.GetEnumerator()
+        {
+            return items.Cast<DataGridViewCell>().GetEnumerator();
         }
 
         public DataGridViewCellCollection(DataGridViewRow dataGridViewRow)
@@ -373,6 +382,14 @@ namespace System.Windows.Forms
             {
                 RemoveAt(cellIndex);
             }
+        }
+
+        bool ICollection<DataGridViewCell>.Remove(DataGridViewCell cell)
+        {
+            var wasContained = Contains(cell);
+            Remove(cell);
+            var isContained = Contains(cell);
+            return wasContained && !isContained;
         }
 
         public virtual void RemoveAt(int index)

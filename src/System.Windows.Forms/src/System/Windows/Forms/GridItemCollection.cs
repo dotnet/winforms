@@ -5,13 +5,14 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  A read-only collection of GridItem objects
     /// </summary>
-    public class GridItemCollection : ICollection
+    public class GridItemCollection : ICollection, IReadOnlyList<GridItem>
     {
         public static GridItemCollection Empty = new GridItemCollection(Array.Empty<GridItem>());
 
@@ -64,5 +65,7 @@ namespace System.Windows.Forms
         ///  Creates and retrieves a new enumerator for this collection.
         /// </summary>
         public IEnumerator GetEnumerator() => _entries.GetEnumerator();
+
+        IEnumerator<GridItem> IEnumerable<GridItem>.GetEnumerator() => WindowsFormsUtils.GetArrayEnumerator(_entries);
     }
 }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -114,6 +114,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Assertions", "xUnit2017:Do not use Contains() to check if a value exists in a collection", Justification = "We are testing the Contains method itself")]
         public void DataGridViewSelectedColumnCollection_Contains_InvokeNotEmpty_ReturnsExpected()
         {
             using var control = new DataGridView
@@ -146,6 +147,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Contains_TestData))]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Assertions", "xUnit2017:Do not use Contains() to check if a value exists in a collection", Justification = "We are testing the Contains method itself")]
         public void DataGridViewSelectedColumnCollection_Contains_InvokeEmpty_ReturnsFalse(DataGridViewColumn dataGridViewColumn)
         {
             using var control = new DataGridView();

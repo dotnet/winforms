@@ -5,11 +5,13 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
@@ -48,7 +50,7 @@ namespace System.Windows.Forms
 
         bool textLayoutValid = false;
         bool receivedDoubleClick = false;
-        readonly ArrayList links = new ArrayList(2);
+        readonly List<Link> links = new List<Link>(2);
 
         Link focusLink = null;
         LinkCollection linkCollection = null;
@@ -2047,7 +2049,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public class LinkCollection : IList
+        public class LinkCollection : IList, IList<Link>
         {
             private readonly LinkLabel owner;
             private bool linksAdded = false;   //whether we should serialize the linkCollection
@@ -2264,6 +2266,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            void ICollection<Link>.Add(Link value) => Add(value);
+
             int IList.Add(object value)
             {
                 if (value is Link)
@@ -2286,6 +2290,12 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(SR.LinkLabelBadLink, "value");
                 }
+            }
+
+            void IList<Link>.Insert(int index, Link item)
+            {
+                if (item != null)
+                    Add(item);
             }
 
             public bool Contains(Link link)
@@ -2395,10 +2405,16 @@ namespace System.Windows.Forms
 
             void ICollection.CopyTo(Array dest, int index)
             {
-                owner.links.CopyTo(dest, index);
+                ((IList)owner.links).CopyTo(dest, index);
             }
 
-            public IEnumerator GetEnumerator()
+            void ICollection<Link>.CopyTo(Link[] array, int arrayIndex) => owner.links.CopyTo(array, arrayIndex);
+
+            public IEnumerator GetEnumerator() => GetEnumeratorCore();
+
+            IEnumerator<Link> IEnumerable<Link>.GetEnumerator() => GetEnumeratorCore();
+
+            private IEnumerator<Link> GetEnumeratorCore()
             {
                 if (owner.links != null)
                 {
@@ -2406,7 +2422,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return Array.Empty<Link>().GetEnumerator();
+                    return Enumerable.Empty<Link>().GetEnumerator();
                 }
             }
 
@@ -2437,6 +2453,17 @@ namespace System.Windows.Forms
                 {
                     owner.FocusLink = (Link)owner.links[0];
                 }
+            }
+
+            bool ICollection<Link>.Remove(Link value)
+            {
+                if (value is null || value.Owner != owner)
+                    return false;
+
+                Debug.Assert(owner.links.Contains(value));
+
+                owner.links.Remove(value);
+                return true;
             }
 
             public void RemoveAt(int index)
@@ -2631,7 +2658,7 @@ namespace System.Windows.Forms
             internal Region VisualRegion { get; set; }
         }
 
-        private class LinkComparer : IComparer
+        private class LinkComparer : IComparer, IComparer<Link>
         {
             int IComparer.Compare(object link1, object link2)
             {
@@ -2639,6 +2666,16 @@ namespace System.Windows.Forms
 
                 int pos1 = ((Link)link1).Start;
                 int pos2 = ((Link)link2).Start;
+
+                return pos1 - pos2;
+            }
+
+            int IComparer<Link>.Compare(Link link1, Link link2)
+            {
+                Debug.Assert(link1 != null && link2 != null, "Null objects sent for comparison");
+
+                int pos1 = link1.Start;
+                int pos2 = link2.Start;
 
                 return pos1 - pos2;
             }
