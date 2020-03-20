@@ -955,7 +955,7 @@ namespace System.Windows.Forms.Tests
             await Task.Run(() => control.Navigate(file.Path));
             Assert.True(await source.Task);
 
-            Assert.Contains("HTML", control.DocumentType);
+            Assert.NotEmpty(control.DocumentType);
             Assert.DoesNotContain('\0', control.DocumentType);
         }
 
