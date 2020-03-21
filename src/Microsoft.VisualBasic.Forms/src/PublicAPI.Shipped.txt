@@ -240,22 +240,22 @@ Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsData(format As String) -
 Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsFileDropList() -> Boolean
 Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsImage() -> Boolean
 Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsText() -> Boolean
-Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsText(format As TextDataFormat) -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsText(format As System.Windows.Forms.TextDataFormat) -> Boolean
 Microsoft.VisualBasic.MyServices.ClipboardProxy.GetAudioStream() -> System.IO.Stream
 Microsoft.VisualBasic.MyServices.ClipboardProxy.GetData(format As String) -> Object
-Microsoft.VisualBasic.MyServices.ClipboardProxy.GetDataObject() -> IDataObject
+Microsoft.VisualBasic.MyServices.ClipboardProxy.GetDataObject() -> System.Windows.Forms.IDataObject
 Microsoft.VisualBasic.MyServices.ClipboardProxy.GetFileDropList() -> System.Collections.Specialized.StringCollection
 Microsoft.VisualBasic.MyServices.ClipboardProxy.GetImage() -> System.Drawing.Image
 Microsoft.VisualBasic.MyServices.ClipboardProxy.GetText() -> String
-Microsoft.VisualBasic.MyServices.ClipboardProxy.GetText(format As TextDataFormat) -> String
+Microsoft.VisualBasic.MyServices.ClipboardProxy.GetText(format As System.Windows.Forms.TextDataFormat) -> String
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetAudio(audioBytes As Byte()) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetAudio(audioStream As System.IO.Stream) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetData(format As String, data As Object) -> Void
-Microsoft.VisualBasic.MyServices.ClipboardProxy.SetDataObject(data As DataObject) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetDataObject(data As System.Windows.Forms.DataObject) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetFileDropList(filePaths As System.Collections.Specialized.StringCollection) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetImage(image As System.Drawing.Image) -> Void
 Microsoft.VisualBasic.MyServices.ClipboardProxy.SetText(text As String) -> Void
-Microsoft.VisualBasic.MyServices.ClipboardProxy.SetText(text As String, format As TextDataFormat) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetText(text As String, format As System.Windows.Forms.TextDataFormat) -> Void
 Microsoft.VisualBasic.MyServices.FileSystemProxy
 Microsoft.VisualBasic.MyServices.FileSystemProxy.CombinePath(baseDirectory As String, relativePath As String) -> String
 Microsoft.VisualBasic.MyServices.FileSystemProxy.CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String) -> Void
