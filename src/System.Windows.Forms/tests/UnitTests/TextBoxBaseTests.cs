@@ -4978,33 +4978,33 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(s_preferredHeight, control.Height);
         }
 
-//        [WinFormsTheory]
-//        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-//        public void TextBoxBase_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
-//        {
-//            using var control = new SubTextBox();
-//            int callCount = 0;
-//            EventHandler handler = (sender, e) =>
-//            {
-//                Assert.Same(control, sender);
-//                Assert.Same(eventArgs, e);
-//                callCount++;
-//            };
-//
-//            // Call with handler.
-//            control.HandleCreated += handler;
-//            control.OnHandleCreated(eventArgs);
-//            Assert.Equal(1, callCount);
-//            Assert.Equal(s_preferredHeight, control.Height);
-//            Assert.False(control.IsHandleCreated);
-//
-//            // Remove handler.
-//            control.HandleCreated -= handler;
-//            control.OnHandleCreated(eventArgs);
-//            Assert.Equal(1, callCount);
-//            Assert.Equal(s_preferredHeight, control.Height);
-//            Assert.False(control.IsHandleCreated);
-//        }
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void TextBoxBase_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
+        {
+            using var control = new SubTextBox();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.HandleCreated += handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(s_preferredHeight, control.Height);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.HandleCreated -= handler;
+            control.OnHandleCreated(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(s_preferredHeight, control.Height);
+            Assert.False(control.IsHandleCreated);
+        }
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
@@ -5406,11 +5406,13 @@ namespace System.Windows.Forms.Tests
             control.TextChanged += handler;
             control.OnTextChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.TextChanged -= handler;
             control.OnTextChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]

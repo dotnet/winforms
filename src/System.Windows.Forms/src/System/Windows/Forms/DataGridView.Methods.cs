@@ -63,7 +63,6 @@ namespace System.Windows.Forms
 
         internal void AddNewRow(bool createdByEditing)
         {
-            Debug.Assert(Columns.Count > 0);
             Debug.Assert(newRowIndex == -1);
 
             Rows.AddInternal(true /*newRow*/, null /*values*/);
@@ -10454,9 +10453,6 @@ namespace System.Windows.Forms
 
         public virtual void NotifyCurrentCellDirty(bool dirty)
         {
-            Debug.Assert(ptCurrentCell.X >= 0 && ptCurrentCell.X < Columns.Count);
-            Debug.Assert(ptCurrentCell.Y >= 0 && ptCurrentCell.Y < Rows.Count);
-
             if (dataGridViewState1[DATAGRIDVIEWSTATE1_ignoringEditingChanges] == false)
             {
                 // autosizing has no effect since edited value hasn't been committed
@@ -14619,12 +14615,10 @@ namespace System.Windows.Forms
             if (RowHeadersVisible && ShowEditingIcon)
             {
                 // Force the pencil to appear in the row header
-                Debug.Assert(ptCurrentCell.Y >= 0);
                 InvalidateCellPrivate(-1, ptCurrentCell.Y);
             }
             if (IsCurrentCellDirty && newRowIndex == ptCurrentCell.Y)
             {
-                Debug.Assert(newRowIndex != -1);
                 Debug.Assert(AllowUserToAddRowsInternal);
                 // First time the 'new' row gets edited.
                 // It becomes a regular row and a new 'new' row is appened.

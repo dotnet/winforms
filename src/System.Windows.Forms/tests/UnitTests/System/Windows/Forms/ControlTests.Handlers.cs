@@ -2101,11 +2101,13 @@ namespace System.Windows.Forms.Tests
             control.GotFocus += handler;
             control.OnGotFocus(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
 
-           // Remove handler.
-           control.GotFocus -= handler;
-           control.OnGotFocus(eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.GotFocus -= handler;
+            control.OnGotFocus(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
