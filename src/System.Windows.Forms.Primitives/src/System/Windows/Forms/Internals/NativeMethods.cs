@@ -21,10 +21,6 @@ namespace System.Windows.Forms
         public const int
         HCF_HIGHCONTRASTON = 0x00000001;
 
-        public const int
-        ICON_SMALL = 0,
-        ICON_BIG = 1;
-
         public const int LANG_NEUTRAL = 0x00,
                          LOCALE_IFIRSTDAYOFWEEK = 0x0000100C;   /* first day of week specifier */
 
