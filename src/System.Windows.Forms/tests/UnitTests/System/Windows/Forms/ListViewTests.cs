@@ -1523,21 +1523,21 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool showGroups in new bool[] { true, false })
             {
-                yield return new object[] { showGroups, null, HorizontalAlignment.Left, null, HorizontalAlignment.Right, string.Empty, string.Empty, 0x00000001 };
-                yield return new object[] { showGroups, null, HorizontalAlignment.Center, null, HorizontalAlignment.Center, string.Empty, string.Empty, 0x00000002 };
-                yield return new object[] { showGroups, null, HorizontalAlignment.Right, null, HorizontalAlignment.Left, string.Empty, string.Empty, 0x00000004 };
+                yield return new object[] { showGroups, null, HorizontalAlignment.Left, null, HorizontalAlignment.Right, string.Empty, string.Empty, 0x00000021 };
+                yield return new object[] { showGroups, null, HorizontalAlignment.Center, null, HorizontalAlignment.Center, string.Empty, string.Empty, 0x00000012 };
+                yield return new object[] { showGroups, null, HorizontalAlignment.Right, null, HorizontalAlignment.Left, string.Empty, string.Empty, 0x0000000C };
 
-                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Left, string.Empty, HorizontalAlignment.Right, string.Empty, 0x00000001 };
-                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Center, string.Empty, HorizontalAlignment.Center, string.Empty, 0x00000002 };
-                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Right, string.Empty, HorizontalAlignment.Left, string.Empty, 0x00000004 };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Left, string.Empty, HorizontalAlignment.Right, string.Empty, string.Empty, 0x00000021 };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Center, string.Empty, HorizontalAlignment.Center, string.Empty, string.Empty, 0x00000012 };
+                yield return new object[] { showGroups, string.Empty, HorizontalAlignment.Right, string.Empty, HorizontalAlignment.Left, string.Empty, string.Empty, 0x0000000C };
 
-                yield return new object[] { showGroups, "header", HorizontalAlignment.Left, "footer", HorizontalAlignment.Right, "header", "footer", 00000021 };
+                yield return new object[] { showGroups, "header", HorizontalAlignment.Left, "footer", HorizontalAlignment.Right, "header", "footer", 0x00000021 };
                 yield return new object[] { showGroups, "header", HorizontalAlignment.Center, "footer", HorizontalAlignment.Center, "header", "footer", 0x00000012 };
-                yield return new object[] { showGroups, "header", HorizontalAlignment.Right, "footer", HorizontalAlignment.Left, "header", "footer", 0x00000012 };
+                yield return new object[] { showGroups, "header", HorizontalAlignment.Right, "footer", HorizontalAlignment.Left, "header", "footer", 0x0000000C };
 
-                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Left, "fo\0oter", HorizontalAlignment.Right, "he", "fo", 00000021 };
+                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Left, "fo\0oter", HorizontalAlignment.Right, "he", "fo", 0x00000021 };
                 yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Center, "fo\0oter", HorizontalAlignment.Center, "he", "fo", 0x00000012 };
-                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Right, "fo\0oter", HorizontalAlignment.Left, "he", "fo", 0x00000012 };
+                yield return new object[] { showGroups, "he\0der", HorizontalAlignment.Right, "fo\0oter", HorizontalAlignment.Left, "he", "fo", 0x0000000C };
             }
         }
 
@@ -1545,7 +1545,7 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListView_Handle_GetWithGroups_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 foreach (object[] data in Handle_GetWithGroups_TestData())
                 {
@@ -1578,10 +1578,10 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal((IntPtr)2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
                     char* headerBuffer = stackalloc char[256];
                     char* footerBuffer = stackalloc char[256];
-                    var lvgroup1 = new ComCtl32.LVGROUPW
+                    var lvgroup1 = new LVGROUPW
                     {
-                        cbSize = (uint)sizeof(ComCtl32.LVGROUPW),
-                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.FOOTER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                        cbSize = (uint)sizeof(LVGROUPW),
+                        mask = LVGF.HEADER | LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
                         pszHeader = headerBuffer,
                         cchHeader = 256,
                         pszFooter = footerBuffer,
@@ -1591,12 +1591,12 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
                     Assert.Empty(new string(lvgroup1.pszFooter));
                     Assert.True(lvgroup1.iGroupId >= 0);
-                    Assert.Equal(0x00000001, (int)lvgroup1.uAlign);
+                    Assert.Equal(0x00000009, (int)lvgroup1.uAlign);
 
-                    var lvgroup2 = new ComCtl32.LVGROUPW
+                    var lvgroup2 = new LVGROUPW
                     {
-                        cbSize = (uint)sizeof(ComCtl32.LVGROUPW),
-                        mask = ComCtl32.LVGF.HEADER | ComCtl32.LVGF.FOOTER | ComCtl32.LVGF.GROUPID | ComCtl32.LVGF.ALIGN,
+                        cbSize = (uint)sizeof(LVGROUPW),
+                        mask = LVGF.HEADER | LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
                         pszHeader = headerBuffer,
                         cchHeader = 256,
                         pszFooter = footerBuffer,
@@ -1609,7 +1609,10 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal(expectedAlign, (int)lvgroup2.uAlign);
                     Assert.True(lvgroup2.iGroupId > lvgroup1.iGroupId);
                 }
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]

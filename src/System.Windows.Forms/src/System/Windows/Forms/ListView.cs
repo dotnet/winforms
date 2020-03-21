@@ -5421,22 +5421,19 @@ namespace System.Windows.Forms
             fixed (char* pHeader = header)
             fixed (char* pFooter = footer)
             {
-                if (!string.IsNullOrEmpty(footer))
+                lvgroup.cchFooter = footer.Length;
+                lvgroup.pszFooter = pFooter;
+                switch (group.FooterAlignment)
                 {
-                    lvgroup.cchFooter = footer.Length;
-                    lvgroup.pszFooter = pFooter;
-                    switch (group.FooterAlignment)
-                    {
-                        case HorizontalAlignment.Left:
-                            lvgroup.uAlign |= LVGA.FOOTER_LEFT;
-                            break;
-                        case HorizontalAlignment.Right:
-                            lvgroup.uAlign |= LVGA.FOOTER_RIGHT;
-                            break;
-                        case HorizontalAlignment.Center:
-                            lvgroup.uAlign |= LVGA.FOOTER_CENTER;
-                            break;
-                    }
+                    case HorizontalAlignment.Left:
+                        lvgroup.uAlign |= LVGA.FOOTER_LEFT;
+                        break;
+                    case HorizontalAlignment.Right:
+                        lvgroup.uAlign |= LVGA.FOOTER_RIGHT;
+                        break;
+                    case HorizontalAlignment.Center:
+                        lvgroup.uAlign |= LVGA.FOOTER_CENTER;
+                        break;
                 }
 
                 lvgroup.pszHeader = pHeader;
