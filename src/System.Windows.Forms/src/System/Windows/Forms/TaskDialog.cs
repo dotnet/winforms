@@ -456,10 +456,6 @@ namespace System.Windows.Forms
         /// </exception>
         public static unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner, TaskDialogPage page)
         {
-            if (hwndOwner == IntPtr.Zero)
-            {
-                throw new ArgumentNullException(nameof(hwndOwner));
-            }
             if (page == null)
             {
                 throw new ArgumentNullException(nameof(page));
