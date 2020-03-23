@@ -11,7 +11,6 @@ namespace System.Windows.Forms
         private class WindowSubclassHandler : Forms.WindowSubclassHandler
         {
             private readonly TaskDialog _taskDialog;
-            private bool _processedShowWindowMessage;
 
             public WindowSubclassHandler(TaskDialog taskDialog)
                 : base(taskDialog?.Handle ?? throw new ArgumentNullException(nameof(taskDialog)))
@@ -23,19 +22,6 @@ namespace System.Windows.Forms
             {
                 switch ((User32.WM)m.Msg)
                 {
-                    case User32.WM.WINDOWPOSCHANGED:
-                        base.WndProc(ref m);
-
-                        ref User32.WINDOWPOS windowPos = ref *(User32.WINDOWPOS*)m.LParam;
-
-                        if ((windowPos.flags & User32.SWP.SHOWWINDOW) == User32.SWP.SHOWWINDOW &&
-                            !_processedShowWindowMessage)
-                        {
-                            _processedShowWindowMessage = true;
-                        }
-
-                        break;
-
                     case ContinueButtonClickHandlingMessage:
                         // We received the message which we posted earlier when
                         // handling a TDN_BUTTON_CLICKED notification, so we should
