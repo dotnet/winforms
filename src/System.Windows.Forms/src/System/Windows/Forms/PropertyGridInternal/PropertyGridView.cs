@@ -7285,7 +7285,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal void SetListBoxItemFocus()
             {
                 var selectedItem = _owningGridViewListBox.SelectedItem;
-                if (_itemAccessibleObjects[selectedItem] is AccessibleObject itemAccessibleObject)
+                if (selectedItem != null && _itemAccessibleObjects[selectedItem] is AccessibleObject itemAccessibleObject)
                 {
                     itemAccessibleObject.SetFocus();
                 }
