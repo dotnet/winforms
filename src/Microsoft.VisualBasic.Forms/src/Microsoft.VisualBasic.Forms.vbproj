@@ -12,6 +12,7 @@
     <LangVersion>15.0</LangVersion>
     <VBRuntime>None</VBRuntime>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>
