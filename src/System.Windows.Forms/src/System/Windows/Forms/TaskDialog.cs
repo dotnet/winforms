@@ -1250,7 +1250,7 @@ namespace System.Windows.Forms
                 _isInNavigate = false;
             }
 
-            TaskDialogPage previousPage = _currentPage;
+            TaskDialogPage previousPage = _currentPage!;
             _currentPage = page;
             try
             {
