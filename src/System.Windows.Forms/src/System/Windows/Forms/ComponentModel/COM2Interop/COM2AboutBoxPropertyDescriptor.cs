@@ -27,13 +27,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves the type of the component this PropertyDescriptor is bound to.
         /// </summary>
-        public override Type ComponentType
-        {
-            get
-            {
-                return typeof(UnsafeNativeMethods.IDispatch);
-            }
-        }
+        public override Type ComponentType => typeof(Oleaut32.IDispatch);
 
         /// <summary>
         ///  Retrieves the type converter for this property.
@@ -157,9 +151,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 object component = context.Instance;
 
-                if (Marshal.IsComObject(component) && component is UnsafeNativeMethods.IDispatch)
+                if (Marshal.IsComObject(component) && component is Oleaut32.IDispatch pDisp)
                 {
-                    UnsafeNativeMethods.IDispatch pDisp = (UnsafeNativeMethods.IDispatch)component;
                     var pExcepInfo = new Ole32.EXCEPINFO();
                     var dispParams = new Ole32.DISPPARAMS();
                     Guid g = Guid.Empty;

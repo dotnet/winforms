@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="new">The last control that caused this context menu strip to be displayed.</target>
+        <target state="translated">Das letzte Steuerelement, das die Anzeige dieser Kontextmenüleiste verursacht hat.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -4226,17 +4226,17 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="DefaultDomainUpDownAccessibleName">
         <source>DomainUpDown</source>
-        <target state="new">DomainUpDown</target>
+        <target state="translated">DomainUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
-        <target state="new">NumericUpDown</target>
+        <target state="translated">NumericUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultUpDownButtonsAccessibleName">
         <source>UpDown</source>
-        <target state="new">UpDown</target>
+        <target state="translated">AufAb</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -4536,7 +4536,7 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="DomainUpDownWrapDescr">
         <source>Indicates whether values wrap around at either end of the item list.</source>
-        <target state="translated">Zeigt an, ob die Werte an einem Ende der Elementenliste umgebrochen werden.</target>
+        <target state="translated">Zeigt an, ob die Werte an einem Ende der Elementenliste umbrochen werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropRegFailed">
@@ -4596,7 +4596,7 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="ErrorProviderDefaultAccessibleName">
         <source>Error provider</source>
-        <target state="new">Error provider</target>
+        <target state="translated">Anbieterfehler</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
@@ -4954,7 +4954,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FlowPanelWrapContentsDescr">
         <source>Indicates whether contents are wrapped or clipped at the control boundary.</source>
-        <target state="translated">Gibt an, ob der Inhalt an der Steuerelementgrenze umgebrochen oder abgeschnitten wird.</target>
+        <target state="translated">Gibt an, ob der Inhalt an der Steuerelementgrenze umbrochen oder abgeschnitten wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="FnDallowScriptChangeDescr">
@@ -6828,12 +6828,12 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="new">The shortcut key associated with the menu item. </target>
+        <target state="translated">Die dem Menüelement zugeordnete Tastenkombination. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
+        <target state="translated">Gibt an, ob die Tastenkombination für das Menüelement in dem Element angezeigt wird. </target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -6858,7 +6858,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MonthCalendarBodyAccessibleName">
         <source>Calendar body</source>
-        <target state="new">Calendar body</target>
+        <target state="translated">Kalendertext</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -6913,7 +6913,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MonthCalendarNextButtonAccessibleName">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Weiter</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
@@ -6928,7 +6928,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Zurück</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7008,7 +7008,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="MonthCalendarTodayButtonAccessibleName">
         <source>Today: {0}</source>
-        <target state="new">Today: {0}</target>
+        <target state="translated">Heute: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -7909,6 +7909,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="ProfessionalColorsToolStripPanelGradientEndDescr">
         <source>End color of the gradient used in the ToolStripPanel.</source>
         <target state="translated">Die im ToolStripPanel verwendete Endfarbe des Farbverlaufs.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="translated">ProgressBar</target>
         <note />
       </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
@@ -8841,91 +8846,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Fehler beim Abrufen des Marshallers für IID {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="StatusBarAddFailed">
-        <source>Adding the panel to the native status bar control has not succeeded.</source>
-        <target state="translated">Fehler beim Hinzufügen des Bereichs zum nativen Statusleisten-Steuerelement.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarBadStatusBarPanel">
-        <source>Parameter must be of type StatusBarPanel.</source>
-        <target state="translated">Der Parameter muss den Typ StatusBarPanel haben.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarDrawItem">
-        <source>Occurs whenever a panel in the StatusBar needs to be painted.</source>
-        <target state="translated">Tritt ein, wenn ein Bereich in der StatusBar gezeichnet werden muss.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarOnPanelClickDescr">
-        <source>Occurs when a panel within the status bar is clicked.</source>
-        <target state="translated">Tritt ein, wenn auf einen Bereich in der Statusleiste geklickt wird</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelAlignmentDescr">
-        <source>The alignment of the panel's text.</source>
-        <target state="translated">Die Ausrichtung des Bereichtexts.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelAutoSizeDescr">
-        <source>Determines how a panel will resize when the parent changes size.</source>
-        <target state="translated">Bestimmt, wie die Bereichsgröße geändert wird, wenn sich die Größe des übergeordneten Bereichs ändert.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelBorderStyleDescr">
-        <source>Determines what type of border a panel has.</source>
-        <target state="translated">Bestimmt den Rahmentyp eines Bereichs.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelIconDescr">
-        <source>Determines what icon is displayed in the panel.</source>
-        <target state="translated">Bestimmt, welches Symbol im Bereich angezeigt wird.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelMinWidthDescr">
-        <source>The minimum width of the panel.</source>
-        <target state="translated">Die minimale Breite des Bereichs.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelNameDescr">
-        <source>The name of the panel.</source>
-        <target state="translated">Der Name des Bereichs.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelStyleDescr">
-        <source>The style of the panel.</source>
-        <target state="translated">Der Bereichsstil.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelTextDescr">
-        <source>The text displayed in the panel.</source>
-        <target state="translated">Der in dem Bereich angezeigte Text.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelToolTipTextDescr">
-        <source>The panel's ToolTip text.</source>
-        <target state="translated">Der QuickInfo-Text für den Bereich.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelWidthDescr">
-        <source>The width of the panel.</source>
-        <target state="translated">Die Bereichsbreite.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelsDescr">
-        <source>The panels in the status bar.</source>
-        <target state="translated">Die Bereiche in der Statusleiste.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarShowPanelsDescr">
-        <source>Determines if a status bar displays panels, or if it displays a single line of text.</source>
-        <target state="translated">Bestimmt, ob eine Statusleiste Bereiche oder eine einzelne Textzeile anzeigt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarSizingGripDescr">
-        <source>Determines whether a status bar has a sizing grip.</source>
-        <target state="translated">Bestimmt, ob eine Statusleiste einen Größenziehpunkt hat.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="StatusStripPanelBorderSidesDescr">
         <source>Specifies the sides of the panel that should display borders.</source>
         <target state="translated">Gibt die Seiten des Bereichs an, die Rahmen anzeigen sollen.</target>
@@ -8944,6 +8864,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="SystemInformationFeatureNotSupported">
         <source>Feature not supported with this operating system.</source>
         <target state="translated">Das Feature wird bei diesem Betriebssystem nicht unterstützt.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="translated">Der Parameter muss den Typ "TabPage" aufweisen.</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
@@ -9123,7 +9048,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="TableLayoutSettingsConverterNoName">
         <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
-        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <target state="translated">TableLayoutSettings kann nicht in eine Zeichenfolge konvertiert werden: Es wurde keine Zeichenfolgeneigenschaft "Name" für ein Steuerelement gefunden.</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
@@ -9448,7 +9373,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
-        <target state="translated">Zeigt an, ob Zeilen automatisch für mehrzeilige Bearbeitungssteuerelemente umgebrochen werden.</target>
+        <target state="translated">Zeigt an, ob Zeilen automatisch für mehrzeilige Bearbeitungssteuerelemente umbrochen werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
@@ -11033,7 +10958,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="Win32SetParentFailed">
         <source>Failed to set Win32 parent window of the Control.</source>
-        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <target state="translated">Fehler beim Festlegen des übergeordneten Win32-Fensters des Steuerelements.</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">

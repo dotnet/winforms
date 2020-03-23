@@ -2243,6 +2243,8 @@ namespace System.Windows.Forms
                 return patternId.Equals(UiaCore.UIA.LegacyIAccessiblePatternId);
             }
 
+            internal override bool IsReadOnly => owner.ReadOnly;
+
             internal override object GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)

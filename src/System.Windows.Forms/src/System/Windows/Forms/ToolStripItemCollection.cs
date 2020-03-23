@@ -16,8 +16,8 @@ namespace System.Windows.Forms
     ///  Summary description for ToolStripItemCollection.
     /// </summary>
     [
-    Editor("System.Windows.Forms.Design.ToolStripCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-    ListBindable(false),
+    Editor("System.Windows.Forms.Design.ToolStripCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+    [ListBindable(false),
     ]
     public class ToolStripItemCollection : ArrangedElementCollection, IList
     {

@@ -20,12 +20,10 @@ namespace System.Windows.Forms
     ///  Don't create an <see cref="MdiClient"/> control.
     ///  A form creates and uses the <see cref="MdiClient"/> when you set the <see cref="Form.IsMdiContainer"/> property to <see langword="true"/>.
     /// </remarks>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    ToolboxItem(false),
-    DesignTimeVisible(false)
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
     public sealed class MdiClient : Control
     {
         // kept in add order, not ZOrder. Need to return the correct
@@ -47,9 +45,7 @@ namespace System.Windows.Forms
         ///  Gets or sets the background image displayed in the <see cref="MdiClient" /> control.
         /// </summary>
         /// <value>The image to display in the background of the control.</value>
-        [
-        Localizable(true)
-        ]
+        [Localizable(true)]
         public override Image BackgroundImage
         {
             get
@@ -62,14 +58,11 @@ namespace System.Windows.Forms
 
                 return result;
             }
-
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
             get
@@ -86,10 +79,7 @@ namespace System.Windows.Forms
                 }
                 return base.BackgroundImageLayout;
             }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            set => base.BackgroundImageLayout = value;
         }
 
         /// <summary>
@@ -167,16 +157,16 @@ namespace System.Windows.Forms
             switch (value)
             {
                 case MdiLayout.Cascade:
-                    SendMessage(WindowMessages.WM_MDICASCADE, 0, 0);
+                    User32.SendMessageW(this, User32.WM.MDICASCADE);
                     break;
                 case MdiLayout.TileVertical:
-                    SendMessage(WindowMessages.WM_MDITILE, NativeMethods.MDITILE_VERTICAL, 0);
+                    User32.SendMessageW(this, User32.WM.MDITILE, (IntPtr)User32.MDITILE.VERTICAL);
                     break;
                 case MdiLayout.TileHorizontal:
-                    SendMessage(WindowMessages.WM_MDITILE, NativeMethods.MDITILE_HORIZONTAL, 0);
+                    User32.SendMessageW(this, User32.WM.MDITILE, (IntPtr)User32.MDITILE.HORIZONTAL);
                     break;
                 case MdiLayout.ArrangeIcons:
-                    SendMessage(WindowMessages.WM_MDIICONARRANGE, 0, 0);
+                    User32.SendMessageW(this, User32.WM.MDIICONARRANGE);
                     break;
             }
         }
@@ -330,7 +320,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
 
-                    if (UnsafeNativeMethods.SetWindowRgn(new HandleRef(this, Handle), new HandleRef(null, rgn1), true) == 0)
+                    if (User32.SetWindowRgn(this, rgn1, BOOL.TRUE) == 0)
                     {
                         throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
                     }
@@ -378,16 +368,16 @@ namespace System.Windows.Forms
         /// <param name="m">The Windows <see cref="Message" /> to process.</param>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_CREATE:
+                case User32.WM.CREATE:
                     if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                     {
                         SetWindowRgn();
                     }
                     break;
 
-                case WindowMessages.WM_SETFOCUS:
+                case User32.WM.SETFOCUS:
                     InvokeGotFocus(ParentInternal, EventArgs.Empty);
                     Form childForm = null;
                     if (ParentInternal is Form)
@@ -409,7 +399,7 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     InvokeGotFocus(this, EventArgs.Empty);
                     return;
-                case WindowMessages.WM_KILLFOCUS:
+                case User32.WM.KILLFOCUS:
                     InvokeLostFocus(ParentInternal, EventArgs.Empty);
                     break;
             }

@@ -287,10 +287,10 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_NCHITTEST:
-                        m.Result = (IntPtr)(NativeMethods.HTTRANSPARENT);
+                    case User32.WM.NCHITTEST:
+                        m.Result = (IntPtr)User32.HT.TRANSPARENT;
                         break;
                     default:
                         base.WndProc(ref m);

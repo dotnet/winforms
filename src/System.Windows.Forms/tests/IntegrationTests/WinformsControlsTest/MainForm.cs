@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.IntegrationTests.Common;
 using WindowsFormsApp1;
@@ -17,6 +16,9 @@ namespace WinformsControlsTest
         {
             this.BringToForeground();
             InitializeComponent();
+
+            // force the panel to show all buttons
+            flowLayoutPanelUITypeEditors.PerformLayout();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -98,6 +100,12 @@ namespace WinformsControlsTest
         private void ShowExceptionDialogButton_Click(object sender, EventArgs e)
         {
             new ThreadExceptionDialog(new Exception("Really long exception description string, because we want to see if it properly wraps around or is truncated.")).ShowDialog();
+        }
+
+        private void ShowPrintDialogButton_Click(object sender, EventArgs e)
+        {
+            PrintDialog pdlg = new PrintDialog();
+            pdlg.ShowDialog();
         }
 
         private void FontNameEditor_Click(object sender, EventArgs e)

@@ -195,12 +195,10 @@ namespace System.Windows.Forms
         ///  Specifies a value that determines the IME (Input Method Editor) status of the
         ///  object when that object is selected.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        AmbientValue(ImeMode.Inherit),
-        SRDescription(nameof(SR.ControlIMEModeDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [AmbientValue(ImeMode.Inherit)]
+        [SRDescription(nameof(SR.ControlIMEModeDescr))]
         public ImeMode ImeMode
         {
             get
@@ -304,7 +302,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [WinCategory("Behavior"), SRDescription(nameof(SR.ControlOnImeModeChangedDescr))]
+        [WinCategory("Behavior")]
+        [SRDescription(nameof(SR.ControlOnImeModeChangedDescr))]
         public event EventHandler ImeModeChanged
         {
             add => Events.AddHandler(s_imeModeChangedEvent, value);

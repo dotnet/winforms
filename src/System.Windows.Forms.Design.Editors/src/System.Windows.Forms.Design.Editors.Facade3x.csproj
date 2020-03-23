@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>System.Windows.Forms.Design.Editors</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
+  
+</Project>

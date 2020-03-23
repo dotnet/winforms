@@ -812,6 +812,8 @@ namespace System.Windows.Forms.Tests
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
+            public new Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) => base.GetScaledBounds(bounds, factor, specified);
+
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new bool GetTopLevel() => base.GetTopLevel();
@@ -967,6 +969,8 @@ namespace System.Windows.Forms.Tests
             public new void OnRegionChanged(EventArgs e) => base.OnRegionChanged(e);
 
             public new void OnResize(EventArgs e) => base.OnResize(e);
+
+            public new void OnRightToLeftChanged(EventArgs e) => base.OnRightToLeftChanged(e);
 
             public new void OnSizeChanged(EventArgs e) => base.OnSizeChanged(e);
 

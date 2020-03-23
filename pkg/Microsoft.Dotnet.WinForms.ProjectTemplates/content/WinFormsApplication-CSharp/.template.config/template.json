@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project for creating a .NET Core Windows Forms (WinForms) Application",
   "groupIdentity": "Microsoft.Common.WinForms",
-  "precedence": "3000",
-  "identity": "Microsoft.Common.WinForms",
+  "precedence": "5000",
+  "identity": "Microsoft.Common.WinForms.CSharp.5.0",
   "shortName": "winforms",
   "tags": {
     "language": "C#",
@@ -28,6 +28,14 @@
       "description": "The target framework for the project.",
       "datatype": "choice",
       "choices": [
+        {
+          "choice": "netcoreapp3.0",
+          "description": "Target netcoreapp3.0"
+        },
+        {
+          "choice": "netcoreapp3.1",
+          "description": "Target netcoreapp3.1"
+        },
         {
           "choice": "netcoreapp5.0",
           "description": "Target netcoreapp5.0"

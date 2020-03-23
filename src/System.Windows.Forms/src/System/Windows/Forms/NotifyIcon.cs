@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -16,13 +17,11 @@ namespace System.Windows.Forms
     ///  Specifies a component that creates
     ///  an icon in the Windows System Tray. This class cannot be inherited.
     /// </summary>
-    [
-    DefaultProperty(nameof(Text)),
-    DefaultEvent(nameof(MouseDoubleClick)),
-    Designer("System.Windows.Forms.Design.NotifyIconDesigner, " + AssemblyRef.SystemDesign),
-    ToolboxItemFilter("System.Windows.Forms"),
-    SRDescription(nameof(SR.DescriptionNotifyIcon))
-    ]
+    [DefaultProperty(nameof(Text))]
+    [DefaultEvent(nameof(MouseDoubleClick))]
+    [Designer("System.Windows.Forms.Design.NotifyIconDesigner, " + AssemblyRef.SystemDesign)]
+    [ToolboxItemFilter("System.Windows.Forms")]
+    [SRDescription(nameof(SR.DescriptionNotifyIcon))]
     public sealed class NotifyIcon : Component
     {
         private static readonly object EVENT_MOUSEDOWN = new object();
@@ -36,7 +35,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_BALLOONTIPCLICKED = new object();
         private static readonly object EVENT_BALLOONTIPCLOSED = new object();
 
-        private const int WM_TRAYMOUSEMESSAGE = WindowMessages.WM_USER + 1024;
+        private const int WM_TRAYMOUSEMESSAGE = (int)User32.WM.USER + 1024;
         private static readonly User32.WM WM_TASKBARCREATED = User32.RegisterWindowMessageW("TaskbarCreated");
 
         private readonly object syncObj = new object();
@@ -86,13 +85,11 @@ namespace System.Windows.Forms
         ///  Gets or sets the BalloonTip text displayed when
         ///  the mouse hovers over a system tray icon.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.NotifyIconBalloonTipTextDescr)),
-        Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.NotifyIconBalloonTipTextDescr))]
+        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         public string BalloonTipText
         {
             get
@@ -112,11 +109,9 @@ namespace System.Windows.Forms
         ///  Gets or sets the BalloonTip icon displayed when
         ///  the mouse hovers over a system tray icon.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(ToolTipIcon.None),
-        SRDescription(nameof(SR.NotifyIconBalloonTipIconDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(ToolTipIcon.None)]
+        [SRDescription(nameof(SR.NotifyIconBalloonTipIconDescr))]
         public ToolTipIcon BalloonTipIcon
         {
             get
@@ -141,12 +136,10 @@ namespace System.Windows.Forms
         ///  Gets or sets the BalloonTip title displayed when
         ///  the mouse hovers over a system tray icon.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.NotifyIconBalloonTipTitleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.NotifyIconBalloonTipTitleDescr))]
         public string BalloonTipTitle
         {
             get
@@ -165,7 +158,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  [This event is raised on the NIN_BALLOONUSERCLICK message.]
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipClickedDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NotifyIconOnBalloonTipClickedDescr))]
         public event EventHandler BalloonTipClicked
         {
             add => Events.AddHandler(EVENT_BALLOONTIPCLICKED, value);
@@ -176,7 +170,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  [This event is raised on the NIN_BALLOONTIMEOUT message.]
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipClosedDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NotifyIconOnBalloonTipClosedDescr))]
         public event EventHandler BalloonTipClosed
         {
             add => Events.AddHandler(EVENT_BALLOONTIPCLOSED, value);
@@ -187,18 +182,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  [This event is raised on the NIN_BALLOONSHOW or NIN_BALLOONHIDE message.]
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipShownDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NotifyIconOnBalloonTipShownDescr))]
         public event EventHandler BalloonTipShown
         {
             add => Events.AddHandler(EVENT_BALLOONTIPSHOWN, value);
             remove => Events.RemoveHandler(EVENT_BALLOONTIPSHOWN, value);
         }
 
-        [
-        DefaultValue(null),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.NotifyIconMenuDescr))
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.NotifyIconMenuDescr))]
         public ContextMenuStrip ContextMenuStrip
         {
             get
@@ -216,12 +210,10 @@ namespace System.Windows.Forms
         ///  Gets or sets the current
         ///  icon.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(null),
-        SRDescription(nameof(SR.NotifyIconIconDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.NotifyIconIconDescr))]
         public Icon Icon
         {
             get
@@ -242,13 +234,11 @@ namespace System.Windows.Forms
         ///  Gets or sets the ToolTip text displayed when
         ///  the mouse hovers over a system tray icon.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(""),
-        SRDescription(nameof(SR.NotifyIconTextDescr)),
-        Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.NotifyIconTextDescr))]
+        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         public string Text
         {
             get
@@ -280,12 +270,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the icon is visible in the Windows System Tray.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DefaultValue(false),
-        SRDescription(nameof(SR.NotifyIconVisDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.NotifyIconVisDescr))]
         public bool Visible
         {
             get
@@ -302,14 +290,12 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag
         {
             get
@@ -325,7 +311,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the user clicks the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ControlOnClickDescr))]
         public event EventHandler Click
         {
             add => Events.AddHandler(EVENT_CLICK, value);
@@ -335,7 +322,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the user double-clicks the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick
         {
             add => Events.AddHandler(EVENT_DOUBLECLICK, value);
@@ -345,7 +333,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the user clicks the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconMouseClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NotifyIconMouseClickDescr))]
         public event MouseEventHandler MouseClick
         {
             add => Events.AddHandler(EVENT_MOUSECLICK, value);
@@ -355,7 +344,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the user mouse double clicks the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconMouseDoubleClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.NotifyIconMouseDoubleClickDescr))]
         public event MouseEventHandler MouseDoubleClick
         {
             add => Events.AddHandler(EVENT_MOUSEDOUBLECLICK, value);
@@ -366,7 +356,8 @@ namespace System.Windows.Forms
         ///  Occurs when the
         ///  user presses a mouse button while the pointer is over the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseDownDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseDownDescr))]
         public event MouseEventHandler MouseDown
         {
             add => Events.AddHandler(EVENT_MOUSEDOWN, value);
@@ -377,7 +368,8 @@ namespace System.Windows.Forms
         ///  Occurs
         ///  when the user moves the mouse pointer over the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
         public event MouseEventHandler MouseMove
         {
             add => Events.AddHandler(EVENT_MOUSEMOVE, value);
@@ -389,7 +381,8 @@ namespace System.Windows.Forms
         ///  user releases the mouse button while the pointer
         ///  is over the icon in the system tray.
         /// </summary>
-        [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseUpDescr))]
+        [SRCategory(nameof(SR.CatMouse))]
+        [SRDescription(nameof(SR.ControlOnMouseUpDescr))]
         public event MouseEventHandler MouseUp
         {
             add => Events.AddHandler(EVENT_MOUSEUP, value);
@@ -596,26 +589,26 @@ namespace System.Windows.Forms
                 }
                 data.hWnd = window.Handle;
                 data.uID = id;
-                data.uFlags = NativeMethods.NIF_INFO;
+                data.uFlags = NIF.INFO;
                 data.uTimeoutOrVersion = timeout;
                 data.szInfoTitle = tipTitle;
                 data.szInfo = tipText;
                 switch (tipIcon)
                 {
                     case ToolTipIcon.Info:
-                        data.dwInfoFlags = NativeMethods.NIIF_INFO;
+                        data.dwInfoFlags = NIIF.INFO;
                         break;
                     case ToolTipIcon.Warning:
-                        data.dwInfoFlags = NativeMethods.NIIF_WARNING;
+                        data.dwInfoFlags = NIIF.WARNING;
                         break;
                     case ToolTipIcon.Error:
-                        data.dwInfoFlags = NativeMethods.NIIF_ERROR;
+                        data.dwInfoFlags = NIIF.ERROR;
                         break;
                     case ToolTipIcon.None:
-                        data.dwInfoFlags = NativeMethods.NIIF_NONE;
+                        data.dwInfoFlags = NIIF.NONE;
                         break;
                 }
-                UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_MODIFY, data);
+                UnsafeNativeMethods.Shell_NotifyIcon(NIM.MODIFY, data);
             }
         }
 
@@ -631,7 +624,7 @@ namespace System.Windows.Forms
                 // Summary: the current window must be made the foreground window
                 // before calling TrackPopupMenuEx, and a task switch must be
                 // forced after the call.
-                UnsafeNativeMethods.SetForegroundWindow(new HandleRef(window, window.Handle));
+                User32.SetForegroundWindow(window);
 
                 // this will set the context menu strip to be toplevel
                 // and will allow us to overlap the system tray
@@ -658,7 +651,7 @@ namespace System.Windows.Forms
                 NativeMethods.NOTIFYICONDATA data = new NativeMethods.NOTIFYICONDATA
                 {
                     uCallbackMessage = WM_TRAYMOUSEMESSAGE,
-                    uFlags = NativeMethods.NIF_MESSAGE
+                    uFlags = NIF.MESSAGE
                 };
                 if (showIconInTray)
                 {
@@ -673,27 +666,27 @@ namespace System.Windows.Forms
                 data.szTip = null;
                 if (icon != null)
                 {
-                    data.uFlags |= NativeMethods.NIF_ICON;
+                    data.uFlags |= NIF.ICON;
                     data.hIcon = icon.Handle;
                 }
-                data.uFlags |= NativeMethods.NIF_TIP;
+                data.uFlags |= NIF.TIP;
                 data.szTip = text;
 
                 if (showIconInTray && icon != null)
                 {
                     if (!added)
                     {
-                        UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_ADD, data);
+                        UnsafeNativeMethods.Shell_NotifyIcon(NIM.ADD, data);
                         added = true;
                     }
                     else
                     {
-                        UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_MODIFY, data);
+                        UnsafeNativeMethods.Shell_NotifyIcon(NIM.MODIFY, data);
                     }
                 }
                 else if (added)
                 {
-                    UnsafeNativeMethods.Shell_NotifyIcon(NativeMethods.NIM_DELETE, data);
+                    UnsafeNativeMethods.Shell_NotifyIcon(NIM.DELETE, data);
                     added = false;
                 }
             }
@@ -744,60 +737,60 @@ namespace System.Windows.Forms
 
         private void WndProc(ref Message msg)
         {
-            switch (msg.Msg)
+            switch ((User32.WM)msg.Msg)
             {
-                case WM_TRAYMOUSEMESSAGE:
+                case (User32.WM)WM_TRAYMOUSEMESSAGE:
                     switch ((int)msg.LParam)
                     {
-                        case WindowMessages.WM_LBUTTONDBLCLK:
+                        case (int)User32.WM.LBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Left, 2);
                             break;
-                        case WindowMessages.WM_LBUTTONDOWN:
+                        case (int)User32.WM.LBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Left, 1);
                             break;
-                        case WindowMessages.WM_LBUTTONUP:
+                        case (int)User32.WM.LBUTTONUP:
                             WmMouseUp(ref msg, MouseButtons.Left);
                             break;
-                        case WindowMessages.WM_MBUTTONDBLCLK:
+                        case (int)User32.WM.MBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Middle, 2);
                             break;
-                        case WindowMessages.WM_MBUTTONDOWN:
+                        case (int)User32.WM.MBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Middle, 1);
                             break;
-                        case WindowMessages.WM_MBUTTONUP:
+                        case (int)User32.WM.MBUTTONUP:
                             WmMouseUp(ref msg, MouseButtons.Middle);
                             break;
-                        case WindowMessages.WM_MOUSEMOVE:
+                        case (int)User32.WM.MOUSEMOVE:
                             WmMouseMove(ref msg);
                             break;
-                        case WindowMessages.WM_RBUTTONDBLCLK:
+                        case (int)User32.WM.RBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Right, 2);
                             break;
-                        case WindowMessages.WM_RBUTTONDOWN:
+                        case (int)User32.WM.RBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Right, 1);
                             break;
-                        case WindowMessages.WM_RBUTTONUP:
+                        case (int)User32.WM.RBUTTONUP:
                             if (contextMenuStrip != null)
                             {
                                 ShowContextMenu();
                             }
                             WmMouseUp(ref msg, MouseButtons.Right);
                             break;
-                        case NativeMethods.NIN_BALLOONSHOW:
+                        case (int)NIN.BALLOONSHOW:
                             OnBalloonTipShown();
                             break;
-                        case NativeMethods.NIN_BALLOONHIDE:
+                        case (int)NIN.BALLOONHIDE:
                             OnBalloonTipClosed();
                             break;
-                        case NativeMethods.NIN_BALLOONTIMEOUT:
+                        case (int)NIN.BALLOONTIMEOUT:
                             OnBalloonTipClosed();
                             break;
-                        case NativeMethods.NIN_BALLOONUSERCLICK:
+                        case (int)NIN.BALLOONUSERCLICK:
                             OnBalloonTipClicked();
                             break;
                     }
                     break;
-                case WindowMessages.WM_COMMAND:
+                case User32.WM.COMMAND:
                     if (IntPtr.Zero == msg.LParam)
                     {
                         if (Command.DispatchID((int)msg.WParam & 0xFFFF))
@@ -811,12 +804,12 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_DESTROY:
+                case User32.WM.DESTROY:
                     // Remove the icon from the taskbar
                     UpdateIcon(false);
                     break;
 
-                case WindowMessages.WM_INITMENUPOPUP:
+                case User32.WM.INITMENUPOPUP:
                 default:
                     if (msg.Msg == (int)WM_TASKBARCREATED)
                     {

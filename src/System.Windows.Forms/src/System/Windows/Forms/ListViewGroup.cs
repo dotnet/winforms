@@ -22,6 +22,8 @@ namespace System.Windows.Forms
     {
         private string _header;
         private HorizontalAlignment _headerAlignment = HorizontalAlignment.Left;
+        private string _footer;
+        private HorizontalAlignment _footerAlignment = HorizontalAlignment.Left;
 
         private ListView.ListViewItemCollection _items;
 
@@ -79,11 +81,13 @@ namespace System.Windows.Forms
             get => _header ?? string.Empty;
             set
             {
-                if (_header != value)
+                if (_header == value)
                 {
-                    _header = value;
-                    UpdateListView();
+                    return;
                 }
+
+                _header = value;
+                UpdateListView();
             }
         }
 
@@ -102,11 +106,57 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
 
-                if (_headerAlignment != value)
+                if (_headerAlignment == value)
                 {
-                    _headerAlignment = value;
-                    UpdateListView();
+                    return;
                 }
+
+                _headerAlignment = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  The text displayed in the group footer.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        public string Footer
+        {
+            get => _footer ?? string.Empty;
+            set
+            {
+                if (_footer == value)
+                {
+                    return;
+                }
+
+                _footer = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  The alignment of the group footer.
+        /// </summary>
+        [DefaultValue(HorizontalAlignment.Left)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public HorizontalAlignment FooterAlignment
+        {
+            get => _footerAlignment;
+            set
+            {
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
+                }
+
+                if (_footerAlignment == value)
+                {
+                    return;
+                }
+
+                _footerAlignment = value;
+                UpdateListView();
             }
         }
 
@@ -153,6 +203,14 @@ namespace System.Windows.Forms
                 {
                     HeaderAlignment = (HorizontalAlignment)entry.Value;
                 }
+                else if (entry.Name == "Footer")
+                {
+                    Footer = (string)entry.Value;
+                }
+                else if (entry.Name == "FooterAlignment")
+                {
+                    FooterAlignment = (HorizontalAlignment)entry.Value;
+                }
                 else if (entry.Name == "Tag")
                 {
                     Tag = entry.Value;
@@ -191,6 +249,8 @@ namespace System.Windows.Forms
         {
             info.AddValue(nameof(Header), Header);
             info.AddValue(nameof(HeaderAlignment), HeaderAlignment);
+            info.AddValue(nameof(Footer), Footer);
+            info.AddValue(nameof(FooterAlignment), FooterAlignment);
             info.AddValue(nameof(Tag), Tag);
             if (!string.IsNullOrEmpty(Name))
             {

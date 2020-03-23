@@ -303,10 +303,7 @@ namespace System.Windows.Forms
                     }
                     return stockName;
                 }
-                set
-                {
-                    base.Name = value;
-                }
+                set => base.Name = value;
             }
 
             public override AccessibleRole Role

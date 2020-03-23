@@ -49,11 +49,6 @@ namespace System.Windows.Forms
         private const string EverettThreadAffinityValue = "EnableSystemEventsThreadAffinityCompatibility";
 
         /// <summary>
-        ///  In case Application.exit gets called recursively
-        /// </summary>
-        private static bool s_exiting;
-
-        /// <summary>
         ///  Events the user can hook into
         /// </summary>
         private static readonly object EVENT_APPLICATIONEXIT = new object();
@@ -65,6 +60,9 @@ namespace System.Windows.Forms
         // Defines a new callback delegate type
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public delegate bool MessageLoopCallback();
+
+        // Used to avoid recursive exit
+        private static bool s_exiting;
 
         /// <summary>
         ///  This class is static, there is no need to ever create it.
@@ -288,26 +286,8 @@ namespace System.Windows.Forms
             {
                 if (s_executablePath == null)
                 {
-                    Assembly asm = Assembly.GetEntryAssembly();
-                    if (asm == null)
-                    {
-                        StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
-                        s_executablePath = Path.GetFullPath(sb.ToString());
-                    }
-                    else
-                    {
-                        string cb = asm.CodeBase;
-                        Uri codeBase = new Uri(cb);
-                        if (codeBase.IsFile)
-                        {
-                            s_executablePath = codeBase.LocalPath + Uri.UnescapeDataString(codeBase.Fragment);
-                            ;
-                        }
-                        else
-                        {
-                            s_executablePath = codeBase.ToString();
-                        }
-                    }
+                    StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
+                    s_executablePath = Path.GetFullPath(sb.ToString());
                 }
 
                 return s_executablePath;
@@ -642,7 +622,7 @@ namespace System.Windows.Forms
             User32.EnumChildWindows(handle, Application.SendThemeChangedRecursive);
 
             // Then do myself.
-            UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), Interop.WindowMessages.WM_THEMECHANGED, 0, 0);
+            User32.SendMessageW(handle, User32.WM.THEMECHANGED);
 
             return BOOL.TRUE;
         }
@@ -859,36 +839,28 @@ namespace System.Windows.Forms
             => ThreadContext.FromCurrent().EndModalMessageLoop(null);
 
         /// <summary>
-        ///  Overload of Exit that does not care about e.Cancel.
+        ///  Overload of <see cref="Exit(CancelEventArgs)"/> that does not care about e.Cancel.
         /// </summary>
         public static void Exit() => Exit(null);
 
         /// <summary>
-        ///  Informs all message pumps that they are to terminate and
-        ///  then closes all application windows after the messages have been processed.
-        ///  e.Cancel indicates whether any of the open forms cancelled the exit call.
+        ///  Informs all message pumps that they are to terminate and then closes all
+        ///  application windows after the messages have been processed. e.Cancel indicates
+        ///  whether any of the open forms cancelled the exit call.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static void Exit(CancelEventArgs e)
         {
-            bool cancelExit = ExitInternal();
-            if (e != null)
-            {
-                e.Cancel = cancelExit;
-            }
-        }
-
-        /// <summary>
-        ///  Private version of Exit which does not do any security checks.
-        /// </summary>
-        private static bool ExitInternal()
-        {
-            bool cancelExit = false;
             lock (s_internalSyncObject)
             {
                 if (s_exiting)
                 {
-                    return false;
+                    // Recursive call to Exit
+                    if (e != null)
+                    {
+                        e.Cancel = false;
+                    }
+                    return;
                 }
                 s_exiting = true;
 
@@ -897,25 +869,30 @@ namespace System.Windows.Forms
                     // Raise the FormClosing and FormClosed events for each open form
                     if (s_forms != null)
                     {
-                        foreach (Form f in OpenForms)
+                        foreach (Form f in s_forms)
                         {
                             if (f.RaiseFormClosingOnAppExit())
                             {
-                                cancelExit = true;
-                                break; // quit the loop as soon as one form refuses to close
+                                // A form refused to close
+                                if (e != null)
+                                {
+                                    e.Cancel = true;
+                                }
+                                return;
                             }
+                        }
+
+                        while (s_forms.Count > 0)
+                        {
+                            // OnFormClosed removes the form from the FormCollection
+                            s_forms[0].RaiseFormClosedOnAppExit();
                         }
                     }
-                    if (!cancelExit)
+
+                    ThreadContext.ExitApplication();
+                    if (e != null)
                     {
-                        if (s_forms != null)
-                        {
-                            while (OpenForms.Count > 0)
-                            {
-                                OpenForms[0].RaiseFormClosedOnAppExit(); // OnFormClosed removes the form from the FormCollection
-                            }
-                        }
-                        ThreadContext.ExitApplication();
+                        e.Cancel = false;
                     }
                 }
                 finally
@@ -923,12 +900,10 @@ namespace System.Windows.Forms
                     s_exiting = false;
                 }
             }
-            return cancelExit;
         }
 
         /// <summary>
-        ///  Exits the message loop on the
-        ///  current thread and closes all windows on the thread.
+        ///  Exits the message loop on the current thread and closes all windows on the thread.
         /// </summary>
         public static void ExitThread()
         {
@@ -1065,11 +1040,13 @@ namespace System.Windows.Forms
             }
         }
 
+        internal static void ParkHandle(HandleRef handle) => ParkHandle(handle, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT);
+
         /// <summary>
         ///  "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
         /// </summary>
-        internal static void ParkHandle(HandleRef handle, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
+        internal static void ParkHandle(HandleRef handle, IntPtr dpiAwarenessContext)
         {
             Debug.Assert(User32.IsWindow(handle).IsTrue(), "Handle being parked is not a valid window handle");
             Debug.Assert(((int)User32.GetWindowLong(handle, User32.GWL.STYLE) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
@@ -1081,12 +1058,14 @@ namespace System.Windows.Forms
             }
         }
 
+        internal static void ParkHandle(CreateParams cp) => ParkHandle(cp, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT);
+
         /// <summary>
         ///  Park control handle on a parkingwindow that has matching DpiAwareness.
         /// </summary>
         /// <param name="cp"> create params for control handle</param>
         /// <param name="dpiAwarenessContext"> dpi awareness</param>
-        internal static void ParkHandle(CreateParams cp, DpiAwarenessContext dpiAwarenessContext = DpiAwarenessContext.DPI_AWARENESS_CONTEXT_UNSPECIFIED)
+        internal static void ParkHandle(CreateParams cp, IntPtr dpiAwarenessContext)
         {
             ThreadContext cxt = ThreadContext.FromCurrent();
             if (cxt != null)
@@ -1111,7 +1090,7 @@ namespace System.Windows.Forms
         ///  "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
         /// </summary>
-        internal static void UnparkHandle(HandleRef handle, DpiAwarenessContext context)
+        internal static void UnparkHandle(HandleRef handle, IntPtr context)
         {
             ThreadContext cxt = GetContextForHandle(handle);
             if (cxt != null)
@@ -1155,7 +1134,7 @@ namespace System.Windows.Forms
                 {
                     // HRef exe case
                     hrefExeCase = true;
-                    ExitInternal();
+                    Exit();
                     if (AppDomain.CurrentDomain.GetData("APP_LAUNCH_URL") is string launchUrl)
                     {
                         Process.Start(process.MainModule.FileName, launchUrl);
@@ -1187,7 +1166,7 @@ namespace System.Windows.Forms
                 {
                     currentStartInfo.Arguments = sb.ToString();
                 }
-                ExitInternal();
+                Exit();
                 Process.Start(currentStartInfo);
             }
         }

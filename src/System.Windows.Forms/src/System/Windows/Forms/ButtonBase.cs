@@ -18,11 +18,9 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements the basic functionality required by a button control.
     /// </summary>
-    [
-        ComVisible(true),
-        ClassInterface(ClassInterfaceType.AutoDispatch),
-        Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
     public abstract class ButtonBase : Control
     {
         private FlatStyle flatStyle = System.Windows.Forms.FlatStyle.Standard;
@@ -80,13 +78,11 @@ namespace System.Windows.Forms
         ///  This property controls the activation handling of bleedover for the text that
         ///  extends beyond the width of the button.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            DefaultValue(false),
-            Browsable(true),
-            EditorBrowsable(EditorBrowsableState.Always),
-            SRDescription(nameof(SR.ButtonAutoEllipsisDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [SRDescription(nameof(SR.ButtonAutoEllipsisDescr))]
         public bool AutoEllipsis
         {
             get
@@ -114,14 +110,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates whether the control is automatically resized to fit its contents
         /// </summary>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 base.AutoSize = value;
@@ -133,8 +127,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
@@ -145,16 +141,11 @@ namespace System.Windows.Forms
         ///  The background color of this control. This is an ambient property and
         ///  will always return a non-null value.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.ControlBackColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ControlBackColorDescr))]
         public override Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set
             {
                 if (DesignMode)
@@ -276,12 +267,10 @@ namespace System.Windows.Forms
         ///  sets
         ///  the flat style appearance of the button control.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            DefaultValue(FlatStyle.Standard),
-            Localizable(true),
-            SRDescription(nameof(SR.ButtonFlatStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(FlatStyle.Standard)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ButtonFlatStyleDescr))]
         public FlatStyle FlatStyle
         {
             get
@@ -301,12 +290,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(true),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.ButtonFlatAppearance)),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
-        ]
+        [Browsable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ButtonFlatAppearance))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public FlatButtonAppearance FlatAppearance
         {
             get
@@ -324,11 +311,9 @@ namespace System.Windows.Forms
         ///  Gets or sets the image
         ///  that is displayed on a button control.
         /// </summary>
-        [
-            SRDescription(nameof(SR.ButtonImageDescr)),
-            Localizable(true),
-            SRCategory(nameof(SR.CatAppearance))
-        ]
+        [SRDescription(nameof(SR.ButtonImageDescr))]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
         public Image Image
         {
             get
@@ -378,12 +363,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the alignment of the image on the button control.
         /// </summary>
-        [
-            DefaultValue(ContentAlignment.MiddleCenter),
-            Localizable(true),
-            SRDescription(nameof(SR.ButtonImageAlignDescr)),
-            SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(ContentAlignment.MiddleCenter)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ButtonImageAlignDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public ContentAlignment ImageAlign
         {
             get
@@ -409,15 +392,13 @@ namespace System.Windows.Forms
         ///  Gets or sets the image list index value of the image
         ///  displayed on the button control.
         /// </summary>
-        [
-            TypeConverter(typeof(ImageIndexConverter)),
-            Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-            Localizable(true),
-            DefaultValue(-1),
-            RefreshProperties(RefreshProperties.Repaint),
-            SRDescription(nameof(SR.ButtonImageIndexDescr)),
-            SRCategory(nameof(SR.CatAppearance))
-        ]
+        [TypeConverter(typeof(ImageIndexConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Localizable(true)]
+        [DefaultValue(-1)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRDescription(nameof(SR.ButtonImageIndexDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public int ImageIndex
         {
             get
@@ -453,15 +434,13 @@ namespace System.Windows.Forms
         ///  Gets or sets the image list index key of the image
         ///  displayed on the button control.  Note - setting this unsets the ImageIndex
         /// </summary>
-        [
-            TypeConverter(typeof(ImageKeyConverter)),
-            Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-            Localizable(true),
-            DefaultValue(""),
-            RefreshProperties(RefreshProperties.Repaint),
-            SRDescription(nameof(SR.ButtonImageIndexDescr)),
-            SRCategory(nameof(SR.CatAppearance))
-        ]
+        [TypeConverter(typeof(ImageKeyConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Localizable(true)]
+        [DefaultValue("")]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRDescription(nameof(SR.ButtonImageIndexDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string ImageKey
         {
             get
@@ -488,12 +467,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Drawing.Image'/> displayed on a button control.
         /// </summary>
-        [
-            DefaultValue(null),
-            SRDescription(nameof(SR.ButtonImageListDescr)),
-            RefreshProperties(RefreshProperties.Repaint),
-            SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.ButtonImageListDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatAppearance))]
         public ImageList ImageList
         {
             get
@@ -538,20 +515,16 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode
         {
-            get
-            {
-                return base.ImeMode;
-            }
-            set
-            {
-                base.ImeMode = value;
-            }
+            get => base.ImeMode;
+            set => base.ImeMode = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged
         {
             add => base.ImeModeChanged += value;
@@ -659,31 +632,21 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-            SettingsBindable(true)
-        ]
+        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+            SettingsBindable(true)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         /// <summary>
         ///  Gets or sets the alignment of the text on the button control.
         /// </summary>
-        [
-            DefaultValue(ContentAlignment.MiddleCenter),
-            Localizable(true),
-            SRDescription(nameof(SR.ButtonTextAlignDescr)),
-            SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(ContentAlignment.MiddleCenter)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ButtonTextAlignDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public virtual ContentAlignment TextAlign
         {
             get
@@ -739,11 +702,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether an ampersand (&amp;) included in the text of
         ///  the control.
         /// </summary>
-        [
-            SRDescription(nameof(SR.ButtonUseMnemonicDescr)),
-            DefaultValue(true),
-            SRCategory(nameof(SR.CatAppearance))
-        ]
+        [SRDescription(nameof(SR.ButtonUseMnemonicDescr))]
+        [DefaultValue(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
         public bool UseMnemonic
         {
             get
@@ -1231,21 +1192,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </summary>
-        [
-            DefaultValue(false),
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
         public bool UseCompatibleTextRendering
         {
-            get
-            {
-                return base.UseCompatibleTextRenderingInt;
-            }
-            set
-            {
-                base.UseCompatibleTextRenderingInt = value;
-            }
+            get => base.UseCompatibleTextRenderingInt;
+            set => base.UseCompatibleTextRenderingInt = value;
         }
 
         /// <summary>
@@ -1261,10 +1214,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.ButtonUseVisualStyleBackColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ButtonUseVisualStyleBackColorDescr))]
         public bool UseVisualStyleBackColor
         {
             get
@@ -1325,9 +1276,9 @@ namespace System.Windows.Forms
                         // even though we are ownerdraw.
                         break;
 
-                    case WindowMessages.WM_KILLFOCUS:
-                    case WindowMessages.WM_CANCELMODE:
-                    case WindowMessages.WM_CAPTURECHANGED:
+                    case (int)User32.WM.KILLFOCUS:
+                    case (int)User32.WM.CANCELMODE:
+                    case (int)User32.WM.CAPTURECHANGED:
                         if (!GetFlag(FlagInButtonUp) && GetFlag(FlagMousePressed))
                         {
                             SetFlag(FlagMousePressed, false);
@@ -1341,9 +1292,9 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                         break;
 
-                    case WindowMessages.WM_LBUTTONUP:
-                    case WindowMessages.WM_MBUTTONUP:
-                    case WindowMessages.WM_RBUTTONUP:
+                    case (int)User32.WM.LBUTTONUP:
+                    case (int)User32.WM.MBUTTONUP:
+                    case (int)User32.WM.RBUTTONUP:
                         try
                         {
                             SetFlag(FlagInButtonUp, true);
@@ -1362,9 +1313,9 @@ namespace System.Windows.Forms
             }
             else
             {
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
+                    case User32.WM.REFLECT | User32.WM.COMMAND:
                         if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);

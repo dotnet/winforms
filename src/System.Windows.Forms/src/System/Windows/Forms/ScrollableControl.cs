@@ -915,7 +915,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the scroll box has been moved by either a mouse or keyboard action.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
         public event ScrollEventHandler Scroll
         {
             add => Events.AddHandler(s_scrollEvent, value);
@@ -1437,15 +1438,15 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_VSCROLL:
+                case User32.WM.VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case WindowMessages.WM_HSCROLL:
+                case User32.WM.HSCROLL:
                     WmHScroll(ref m);
                     break;
-                case WindowMessages.WM_SETTINGCHANGE:
+                case User32.WM.SETTINGCHANGE:
                     WmSettingChange(ref m);
                     break;
                 default:

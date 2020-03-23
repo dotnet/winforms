@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     [DesignerSerializer("System.Windows.Forms.Design.ToolStripMenuItemCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
-    public class ToolStripMenuItem : ToolStripDropDownItem
+    public partial class ToolStripMenuItem : ToolStripDropDownItem
     {
         private static readonly MenuTimer menuTimer = new MenuTimer();
 
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
             return new ToolStripDropDownMenu(this, true);
         }
 
-        internal override ToolStripItemInternalLayout CreateInternalLayout()
+        private protected override ToolStripItemInternalLayout CreateInternalLayout()
         {
             return new ToolStripMenuItemInternalLayout(this);
         }
@@ -250,22 +250,17 @@ namespace System.Windows.Forms
                     return base.Enabled;
                 }
             }
-            set
-            {
-                base.Enabled = value;
-            }
+            set => base.Enabled = value;
         }
 
         /// <summary>
             ///  Gets or sets a value indicating whether the item is checked.
             /// </summary>
-        [
-        Bindable(true),
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatAppearance)),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.CheckBoxCheckedDescr))
-        ]
+        [Bindable(true)]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.CheckBoxCheckedDescr))]
         public bool Checked
         {
             get
@@ -381,11 +376,9 @@ namespace System.Windows.Forms
             return b;
         }
 
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ToolStripButtonCheckOnClickDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripButtonCheckOnClickDescr))]
         public bool CheckOnClick
         {
             get
@@ -402,13 +395,11 @@ namespace System.Windows.Forms
         ///  Gets
         ///  or sets a value indicating whether the check box is checked.
         /// </summary>
-        [
-        Bindable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(CheckState.Unchecked),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.CheckBoxCheckStateDescr))
-        ]
+        [Bindable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(CheckState.Unchecked)]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.CheckBoxCheckStateDescr))]
         public CheckState CheckState
         {
             get
@@ -461,32 +452,23 @@ namespace System.Windows.Forms
         ///  Specifies whether or not the item is glued to the ToolStrip or overflow or
         ///  can float between the two.
         /// </summary>
-        [
-        DefaultValue(ToolStripItemOverflow.Never),
-        SRDescription(nameof(SR.ToolStripItemOverflowDescr)),
-        SRCategory(nameof(SR.CatLayout))
+        [DefaultValue(ToolStripItemOverflow.Never)]
+        [SRDescription(nameof(SR.ToolStripItemOverflowDescr))]
+        [SRCategory(nameof(SR.CatLayout))
          ]
         public new ToolStripItemOverflow Overflow
         {
-            get
-            {
-                return base.Overflow;
-            }
-            set
-            {
-                base.Overflow = value;
-            }
+            get => base.Overflow;
+            set => base.Overflow = value;
         }
 
         /// <summary>
-            ///  Gets or sets the shortcut keys associated with the menu
+        ///  Gets or sets the shortcut keys associated with the menu
         ///  item.
-            /// </summary>
-        [
-        Localizable(true),
-        DefaultValue(Keys.None),
-        SRDescription(nameof(SR.MenuItemShortCutDescr))
-        ]
+        /// </summary>
+        [Localizable(true)]
+        [DefaultValue(Keys.None)]
+        [SRDescription(nameof(SR.MenuItemShortCutDescr))]
         public Keys ShortcutKeys
         {
             get
@@ -537,12 +519,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRDescription(nameof(SR.ToolStripMenuItemShortcutKeyDisplayStringDescr)),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(null),
-        Localizable(true)
-        ]
+        [SRDescription(nameof(SR.ToolStripMenuItemShortcutKeyDisplayStringDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(null)]
+        [Localizable(true)]
         public string ShortcutKeyDisplayString
         {
             get
@@ -573,11 +553,9 @@ namespace System.Windows.Forms
         ///  with the menu item are displayed next to the menu item
         ///  caption.
             /// </summary>
-        [
-        DefaultValue(true),
-        Localizable(true),
-        SRDescription(nameof(SR.MenuItemShowShortCutDescr))
-        ]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.MenuItemShowShortCutDescr))]
         public bool ShowShortcutKeys
         {
             get
@@ -705,10 +683,7 @@ namespace System.Windows.Forms
 
         internal override int DeviceDpi
         {
-            get
-            {
-                return base.DeviceDpi;
-            }
+            get => base.DeviceDpi;
 
             // This gets called via ToolStripItem.RescaleConstantsForDpi.
             // It's practically calling Initialize on DpiChanging with the new Dpi value.
@@ -1059,7 +1034,7 @@ namespace System.Windows.Forms
             // If we are in a submenu pop down the submenu.
             if (ParentInternal != null && ParentInternal.MenuAutoExpand && Selected)
             {
-                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "received mouse enter - calling drop down");
+                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "received mouse enter - calling drop down");
 
                 Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnMouseEnter] MenuTimer.Cancel / MenuTimer.Start called");
 
@@ -1521,158 +1496,6 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[MenuTimer.OnTick] calling OnMenuAutoExpand");
                 CurrentItem.OnMenuAutoExpand();
             }
-        }
-    }
-
-    internal class ToolStripMenuItemInternalLayout : ToolStripItemInternalLayout
-    {
-        private readonly ToolStripMenuItem ownerItem;
-
-        public ToolStripMenuItemInternalLayout(ToolStripMenuItem ownerItem) : base(ownerItem)
-        {
-            this.ownerItem = ownerItem;
-        }
-
-        public bool ShowCheckMargin
-        {
-            get
-            {
-                if (ownerItem.Owner is ToolStripDropDownMenu menu)
-                {
-                    return menu.ShowCheckMargin;
-                }
-                return false;
-            }
-        }
-        public bool ShowImageMargin
-        {
-            get
-            {
-                if (ownerItem.Owner is ToolStripDropDownMenu menu)
-                {
-                    return menu.ShowImageMargin;
-                }
-                return false;
-            }
-        }
-
-        public bool PaintCheck
-        {
-            get
-            {
-                return ShowCheckMargin || ShowImageMargin;
-            }
-        }
-
-        public bool PaintImage
-        {
-            get
-            {
-                return ShowImageMargin;
-            }
-        }
-        public Rectangle ArrowRectangle
-        {
-            get
-            {
-                if (UseMenuLayout)
-                {
-                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
-                    {
-                        // since menuItem.Padding isnt taken into consideration, we've got to recalc the centering of
-                        // the arrow rect per item
-                        Rectangle arrowRect = menu.ArrowRectangle;
-                        arrowRect.Y = LayoutUtils.VAlign(arrowRect.Size, ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
-                        return arrowRect;
-                    }
-                }
-                return Rectangle.Empty;
-            }
-        }
-        public Rectangle CheckRectangle
-        {
-            get
-            {
-                if (UseMenuLayout)
-                {
-                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
-                    {
-                        Rectangle checkRectangle = menu.CheckRectangle;
-                        if (ownerItem.CheckedImage != null)
-                        {
-                            int imageHeight = ownerItem.CheckedImage.Height;
-                            // make sure we're vertically centered
-                            checkRectangle.Y += (checkRectangle.Height - imageHeight) / 2;
-                            checkRectangle.Height = imageHeight;
-                            return checkRectangle;
-                        }
-                    }
-                }
-                return Rectangle.Empty;
-            }
-        }
-        public override Rectangle ImageRectangle
-        {
-            get
-            {
-                if (UseMenuLayout)
-                {
-                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
-                    {
-                        // since menuItem.Padding isnt taken into consideration, we've got to recalc the centering of
-                        // the image rect per item
-                        Rectangle imageRect = menu.ImageRectangle;
-                        if (ownerItem.ImageScaling == ToolStripItemImageScaling.SizeToFit)
-                        {
-                            imageRect.Size = menu.ImageScalingSize;
-                        }
-                        else
-                        {
-                            //If we don't have an image, use the CheckedImage
-                            Image image = ownerItem.Image ?? ownerItem.CheckedImage;
-                            imageRect.Size = image.Size;
-                        }
-                        imageRect.Y = LayoutUtils.VAlign(imageRect.Size, ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
-                        return imageRect;
-                    }
-                }
-                return base.ImageRectangle;
-            }
-        }
-
-        public override Rectangle TextRectangle
-        {
-            get
-            {
-                if (UseMenuLayout)
-                {
-                    if (ownerItem.Owner is ToolStripDropDownMenu menu)
-                    {
-                        return menu.TextRectangle;
-                    }
-                }
-                return base.TextRectangle;
-            }
-        }
-
-        public bool UseMenuLayout
-        {
-            get
-            {
-                return ownerItem.Owner is ToolStripDropDownMenu;
-            }
-        }
-
-        public override Size GetPreferredSize(Size constrainingSize)
-        {
-            if (UseMenuLayout)
-            {
-                if (ownerItem.Owner is ToolStripDropDownMenu menu)
-                {
-                    return menu.MaxItemSize;
-                }
-            }
-            return base.GetPreferredSize(constrainingSize);
         }
     }
 }

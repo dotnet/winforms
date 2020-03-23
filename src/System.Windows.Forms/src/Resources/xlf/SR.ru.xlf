@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="new">The last control that caused this context menu strip to be displayed.</target>
+        <target state="translated">Последний элемент управления, вызвавший отображение полосы данного контекстного меню.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -4226,17 +4226,17 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DefaultDomainUpDownAccessibleName">
         <source>DomainUpDown</source>
-        <target state="new">DomainUpDown</target>
+        <target state="translated">DomainUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
-        <target state="new">NumericUpDown</target>
+        <target state="translated">NumericUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultUpDownButtonsAccessibleName">
         <source>UpDown</source>
-        <target state="new">UpDown</target>
+        <target state="translated">Счетчик</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -4596,7 +4596,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="ErrorProviderDefaultAccessibleName">
         <source>Error provider</source>
-        <target state="new">Error provider</target>
+        <target state="translated">Поставщик ошибок</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
@@ -4789,7 +4789,7 @@ If you click Continue, the application will ignore this error and attempt to con
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
         <source>&amp;Details</source>
-        <target state="translated">&amp;Таблица</target>
+        <target state="translated">&amp;Подробности</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgWarningText">
@@ -6829,12 +6829,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="new">The shortcut key associated with the menu item. </target>
+        <target state="translated">Указывает клавиши быстрого доступа к данному меню.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
+        <target state="translated">Определяет, будут ли отображаться клавиши быстрого доступа для данного элемента меню.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -6859,7 +6859,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarBodyAccessibleName">
         <source>Calendar body</source>
-        <target state="new">Calendar body</target>
+        <target state="translated">Тело календаря</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -6914,7 +6914,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarNextButtonAccessibleName">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Далее</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
@@ -6929,7 +6929,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">Назад</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7009,7 +7009,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarTodayButtonAccessibleName">
         <source>Today: {0}</source>
-        <target state="new">Today: {0}</target>
+        <target state="translated">Сегодня: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -7910,6 +7910,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ProfessionalColorsToolStripPanelGradientEndDescr">
         <source>End color of the gradient used in the ToolStripPanel.</source>
         <target state="translated">Последний цвет градиента, используемый в ToolStripPanel.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="translated">ProgressBar</target>
         <note />
       </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
@@ -8842,91 +8847,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Не удалось получить упаковщик ("маршалер") для IID {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="StatusBarAddFailed">
-        <source>Adding the panel to the native status bar control has not succeeded.</source>
-        <target state="translated">Добавление панели к исходной строке состояния не удалось.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarBadStatusBarPanel">
-        <source>Parameter must be of type StatusBarPanel.</source>
-        <target state="translated">Параметр должен быть типа StatusBarPanel.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarDrawItem">
-        <source>Occurs whenever a panel in the StatusBar needs to be painted.</source>
-        <target state="translated">Происходит при необходимости прорисовать панель в StatusBar.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarOnPanelClickDescr">
-        <source>Occurs when a panel within the status bar is clicked.</source>
-        <target state="translated">Возникает при щелчке панели в строке состояния.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelAlignmentDescr">
-        <source>The alignment of the panel's text.</source>
-        <target state="translated">Выравнивание текста панели.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelAutoSizeDescr">
-        <source>Determines how a panel will resize when the parent changes size.</source>
-        <target state="translated">Определяет принцип изменения размера панели при изменении размера родительского окна.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelBorderStyleDescr">
-        <source>Determines what type of border a panel has.</source>
-        <target state="translated">Задает тип границы панели.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelIconDescr">
-        <source>Determines what icon is displayed in the panel.</source>
-        <target state="translated">Задает значок, отображаемый на данной панели.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelMinWidthDescr">
-        <source>The minimum width of the panel.</source>
-        <target state="translated">Минимальная ширина данной панели.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelNameDescr">
-        <source>The name of the panel.</source>
-        <target state="translated">Имя этой панели.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelStyleDescr">
-        <source>The style of the panel.</source>
-        <target state="translated">Стиль данной панели.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelTextDescr">
-        <source>The text displayed in the panel.</source>
-        <target state="translated">Заголовок на панели.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelToolTipTextDescr">
-        <source>The panel's ToolTip text.</source>
-        <target state="translated">Текст подсказки для данной панели.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelWidthDescr">
-        <source>The width of the panel.</source>
-        <target state="translated">Ширина данной панели.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelsDescr">
-        <source>The panels in the status bar.</source>
-        <target state="translated">Панели в строке состояния.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarShowPanelsDescr">
-        <source>Determines if a status bar displays panels, or if it displays a single line of text.</source>
-        <target state="translated">Указывает, отображать в строке состояния панели или только одну строку текста.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarSizingGripDescr">
-        <source>Determines whether a status bar has a sizing grip.</source>
-        <target state="translated">Определяет, содержит ли строка состояния захват для изменения размера окна.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="StatusStripPanelBorderSidesDescr">
         <source>Specifies the sides of the panel that should display borders.</source>
         <target state="translated">Задает стороны панели, на которых должны отображаться границы.</target>
@@ -8945,6 +8865,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="SystemInformationFeatureNotSupported">
         <source>Feature not supported with this operating system.</source>
         <target state="translated">Функция не поддерживается в данной ОС.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="translated">Параметр должен иметь тип TabPage.</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
@@ -9124,7 +9049,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TableLayoutSettingsConverterNoName">
         <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
-        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <target state="translated">Не удается преобразовать TableLayoutSettings в строку: не удалось найти свойство строки "Name" для элемента управления.</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
@@ -11034,7 +10959,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32SetParentFailed">
         <source>Failed to set Win32 parent window of the Control.</source>
-        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <target state="translated">Не удалось задать родительское окно Win32 для элемента управления.</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">

@@ -63,7 +63,6 @@ namespace System.Windows.Forms
 
         internal void AddNewRow(bool createdByEditing)
         {
-            Debug.Assert(Columns.Count > 0);
             Debug.Assert(newRowIndex == -1);
 
             Rows.AddInternal(true /*newRow*/, null /*values*/);
@@ -77,9 +76,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual DataGridViewAdvancedBorderStyle AdjustColumnHeaderBorderStyle(DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
                                                                          DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder,
                                                                          bool isFirstDisplayedColumn,
@@ -1832,7 +1829,6 @@ namespace System.Windows.Forms
                 autoSizeColumnCriteriaInternal == (DataGridViewAutoSizeColumnCriteriaInternal.Header | DataGridViewAutoSizeColumnCriteriaInternal.AllRows) ||
                 autoSizeColumnCriteriaInternal == (DataGridViewAutoSizeColumnCriteriaInternal.Header | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows));
             Debug.Assert(columnIndex >= 0 && columnIndex < Columns.Count);
-            Debug.Assert(autoSizeColumnCriteriaInternal != DataGridViewAutoSizeColumnCriteriaInternal.Header || ColumnHeadersVisible);
 
             if (!IsHandleCreated)
             {
@@ -10457,9 +10453,6 @@ namespace System.Windows.Forms
 
         public virtual void NotifyCurrentCellDirty(bool dirty)
         {
-            Debug.Assert(ptCurrentCell.X >= 0 && ptCurrentCell.X < Columns.Count);
-            Debug.Assert(ptCurrentCell.Y >= 0 && ptCurrentCell.Y < Rows.Count);
-
             if (dataGridViewState1[DATAGRIDVIEWSTATE1_ignoringEditingChanges] == false)
             {
                 // autosizing has no effect since edited value hasn't been committed
@@ -14622,12 +14615,10 @@ namespace System.Windows.Forms
             if (RowHeadersVisible && ShowEditingIcon)
             {
                 // Force the pencil to appear in the row header
-                Debug.Assert(ptCurrentCell.Y >= 0);
                 InvalidateCellPrivate(-1, ptCurrentCell.Y);
             }
             if (IsCurrentCellDirty && newRowIndex == ptCurrentCell.Y)
             {
-                Debug.Assert(newRowIndex != -1);
                 Debug.Assert(AllowUserToAddRowsInternal);
                 // First time the 'new' row gets edited.
                 // It becomes a regular row and a new 'new' row is appened.
@@ -21654,7 +21645,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            if (m.Msg == WindowMessages.WM_SYSKEYDOWN || m.Msg == WindowMessages.WM_KEYDOWN)
+            if (m.Msg == (int)User32.WM.SYSKEYDOWN || m.Msg == (int)User32.WM.KEYDOWN)
             {
                 if (ptCurrentCell.X != -1)
                 {
@@ -21688,7 +21679,7 @@ namespace System.Windows.Forms
                                     // Forward the key message to the editing control if any
                                     if (editingControl != null)
                                     {
-                                        editingControl.SendMessage(m.Msg, m.WParam, m.LParam);
+                                        User32.SendMessageW(editingControl, (User32.WM)m.Msg, m.WParam, m.LParam);
                                         dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] = true;
                                         return true;
                                     }
@@ -21699,12 +21690,12 @@ namespace System.Windows.Forms
                 }
             }
             else if (dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] &&
-                     (m.Msg == WindowMessages.WM_SYSCHAR || m.Msg == WindowMessages.WM_CHAR || m.Msg == WindowMessages.WM_IME_CHAR))
+                     (m.Msg == (int)User32.WM.SYSCHAR || m.Msg == (int)User32.WM.CHAR || m.Msg == (int)User32.WM.IME_CHAR))
             {
                 dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] = false;
                 if (editingControl != null)
                 {
-                    editingControl.SendMessage(m.Msg, m.WParam, m.LParam);
+                    User32.SendMessageW(editingControl, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return true;
                 }
             }
@@ -21721,7 +21712,7 @@ namespace System.Windows.Forms
             // 2. Other special keys do not exist in WM_CHAR message, and character code of WM_CHAR may have overlapped
             // w/ some of the key code. (Like character code of lowcase "q" is 0x71, it's overlapped w/ Keys.F2). This
             // may introduce problem when handling them.
-            if (m.Msg == WindowMessages.WM_CHAR)
+            if (m.Msg == (int)User32.WM.CHAR)
             {
                 switch (ke.KeyCode)
                 {
@@ -21763,7 +21754,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (editingControl != null && (m.Msg == WindowMessages.WM_KEYDOWN || m.Msg == WindowMessages.WM_SYSKEYDOWN))
+            if (editingControl != null && (m.Msg == (int)User32.WM.KEYDOWN || m.Msg == (int)User32.WM.SYSKEYDOWN))
             {
                 dataGridViewState2[DATAGRIDVIEWSTATE2_currentCellWantsInputKey] = ((IDataGridViewEditingControl)editingControl).EditingControlWantsInputKey(ke.KeyData, dataGridViewWantsInputKey);
             }
@@ -21775,7 +21766,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewWantsInputKey)
             {
-                if (m.Msg == WindowMessages.WM_KEYDOWN || m.Msg == WindowMessages.WM_SYSKEYDOWN)
+                if (m.Msg == (int)User32.WM.KEYDOWN || m.Msg == (int)User32.WM.SYSKEYDOWN)
                 {
                     if (ProcessDataGridViewKey(ke))
                     {
@@ -25615,7 +25606,8 @@ namespace System.Windows.Forms
                 for (int r = 0; r < rects.Length; r++)
                 {
                     scroll = rects[r];
-                    SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle),
+                    User32.ScrollWindow(
+                        this,
                         change,
                         0,
                         ref scroll,
@@ -25726,7 +25718,7 @@ namespace System.Windows.Forms
             UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
 
             RECT scrollArea = rowsRect;
-            SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle), 0, deltaY, ref scrollArea, ref scrollArea);
+            User32.ScrollWindow(this, 0, deltaY, ref scrollArea, ref scrollArea);
             if (invalidateTopOfRowHeaders)
             {
                 rowsRect.X = layout.Inside.X;
@@ -29084,12 +29076,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmGetDlgCode(ref Message m)
         {
-            m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTCHARS);
+            m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTARROWS | (int)User32.DLGC.WANTCHARS);
 
             Keys modifierKeys = ModifierKeys;
             if (GetTabKeyEffective((modifierKeys & Keys.Shift) == Keys.Shift, (modifierKeys & Keys.Control) == Keys.Control))
             {
-                m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTTAB);
+                m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTTAB);
             }
         }
 
@@ -29129,13 +29121,13 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_GETDLGCODE:
+                case User32.WM.GETDLGCODE:
                     WmGetDlgCode(ref m);
                     return;
-                case WindowMessages.WM_LBUTTONDBLCLK:
-                case WindowMessages.WM_LBUTTONDOWN:
+                case User32.WM.LBUTTONDBLCLK:
+                case User32.WM.LBUTTONDOWN:
                     // If the OnEnter procedure is called, it's because of a mouse down event, and not a TAB key.
                     dataGridViewOper[DATAGRIDVIEWOPER_inMouseDown] = true;
                     try
@@ -29147,7 +29139,7 @@ namespace System.Windows.Forms
                         dataGridViewOper[DATAGRIDVIEWOPER_inMouseDown] = false;
                     }
                     return;
-                case WindowMessages.WM_NOTIFY:
+                case User32.WM.NOTIFY:
                     if (WmNotify(ref m))
                     {
                         // we are done - skip default handling
@@ -29155,12 +29147,12 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_IME_STARTCOMPOSITION:
-                case WindowMessages.WM_IME_COMPOSITION:
+                case User32.WM.IME_STARTCOMPOSITION:
+                case User32.WM.IME_COMPOSITION:
                     if (editingControl != null)
                     {
                         // Make sure that the first character is forwarded to the editing control.
-                        editingControl.SendMessage(m.Msg, m.WParam, m.LParam);
+                        User32.SendMessageW(editingControl, (User32.WM)m.Msg, m.WParam, m.LParam);
                     }
                     break;
             }

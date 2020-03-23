@@ -438,7 +438,7 @@ namespace System.Windows.Forms
             var dispParams = new Ole32.DISPPARAMS();
             try
             {
-                if (NativeHtmlElement is UnsafeNativeMethods.IDispatch scriptObject)
+                if (NativeHtmlElement is Oleaut32.IDispatch scriptObject)
                 {
                     Guid g = Guid.Empty;
                     string[] names = new string[] { methodName };

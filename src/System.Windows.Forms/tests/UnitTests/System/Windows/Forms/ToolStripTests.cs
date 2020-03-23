@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -892,46 +893,135 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            using var control = new ToolStrip
-            {
-                AutoSize = value
-            };
+            using var control = new ToolStrip();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.AutoSize = !value;
             Assert.Equal(!value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void ToolStrip_AutoSize_SetInToolStripPanel_GetReturnsExpected(bool value)
+        [InlineData(true, 0, 2, 2)]
+        [InlineData(false, 2, 2, 3)]
+        public void ToolStrip_AutoSize_SetWithParent_GetReturnsExpected(bool value, int expectedLayoutCallCount1, int expectedLayoutCallCount2, int expectedLayoutCallCount3)
+        {
+            using var parent = new Control();
+            using var control = new ToolStrip
+            {
+                Parent = parent
+            };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(control, e.AffectedControl);
+                if (e.AffectedProperty != "AutoSize")
+                {
+                    Assert.Equal("Bounds", e.AffectedProperty);
+                }
+                parentLayoutCallCount++;
+            }
+            parent.Layout += parentHandler;
+
+            try
+            {
+                control.AutoSize = value;
+                Assert.Equal(value, control.AutoSize);
+                Assert.Equal(expectedLayoutCallCount1, layoutCallCount);
+                Assert.Equal(expectedLayoutCallCount1, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set same.
+                control.AutoSize = value;
+                Assert.Equal(value, control.AutoSize);
+                Assert.Equal(expectedLayoutCallCount1, layoutCallCount);
+                Assert.Equal(expectedLayoutCallCount1, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set different.
+                control.AutoSize = !value;
+                Assert.Equal(!value, control.AutoSize);
+                Assert.Equal(expectedLayoutCallCount2, layoutCallCount);
+                Assert.Equal(expectedLayoutCallCount3, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0)]
+        [InlineData(false, 1)]
+        public void ToolStrip_AutoSize_SetWithToolStripPanelParent_GetReturnsExpected(bool value, int expectedLayoutCallCount)
         {
             using var parent = new ToolStripPanel();
             using var control = new ToolStrip
             {
-                Parent = parent,
-                AutoSize = value
+                Parent = parent
             };
-            Assert.Equal(value, control.AutoSize);
-            Assert.False(control.IsHandleCreated);
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+            int parentLayoutCallCount = 0;
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(parent, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("AutoSize", e.AffectedProperty);
+                parentLayoutCallCount++;
+            }
+            parent.Layout += parentHandler;
 
-            // Set same.
-            control.AutoSize = value;
-            Assert.Equal(value, control.AutoSize);
-            Assert.False(control.IsHandleCreated);
+            try
+            {
+                control.AutoSize = value;
+                Assert.Equal(value, control.AutoSize);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(expectedLayoutCallCount, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(parent.IsHandleCreated);
 
-            // Set different.
-            control.AutoSize = !value;
-            Assert.Equal(!value, control.AutoSize);
-            Assert.False(control.IsHandleCreated);
+                // Set same.
+                control.AutoSize = value;
+                Assert.Equal(value, control.AutoSize);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(expectedLayoutCallCount, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(parent.IsHandleCreated);
+
+                // Set different.
+                control.AutoSize = !value;
+                Assert.Equal(!value, control.AutoSize);
+                Assert.Equal(0, layoutCallCount);
+                Assert.Equal(expectedLayoutCallCount + 1, parentLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+                Assert.False(parent.IsHandleCreated);
+            }
+            finally
+            {
+                parent.Layout -= parentHandler;
+            }
         }
 
         [WinFormsFact]
@@ -994,6 +1084,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.BackColor);
             Assert.False(control.IsHandleCreated);
         }
+
         [WinFormsFact]
         public void ToolStrip_BindingContext_GetWithParent_ReturnsExpected()
         {
@@ -1242,6 +1333,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.CausesValidation);
             Assert.Equal(2, callCount);
         }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
         public void ToolStrip_Cursor_Set_GetReturnsExpected(Cursor value)
@@ -1368,6 +1460,170 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_Font_SetWithHandler_CallsFontChanged()
+        {
+            using var control = new ToolStrip();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.FontChanged += handler;
+
+            // Set different.
+            using var font1 = new Font("Arial", 8.25f);
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            using var font2 = SystemFonts.DialogFont;
+            control.Font = font2;
+            Assert.Same(font2, control.Font);
+            Assert.Equal(2, callCount);
+
+            // Set null.
+            control.Font = null;
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(3, callCount);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Equal(3, callCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_Font_SetWithItemsWithHandler_CallsFontChanged()
+        {
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
+            using var control = new ToolStrip();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.FontChanged += handler;
+
+            // Set different.
+            using var font1 = new Font("Arial", 8.25f);
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Same(font1, item1.Font);
+            Assert.Same(font1, item2.Font);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Same(font1, item1.Font);
+            Assert.Same(font1, item2.Font);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            using var font2 = SystemFonts.DialogFont;
+            control.Font = font2;
+            Assert.Same(font2, control.Font);
+            Assert.Same(font2, item1.Font);
+            Assert.Same(font2, item2.Font);
+            Assert.Equal(2, callCount);
+
+            // Set null.
+            control.Font = null;
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, item1.Font);
+            Assert.Equal(Control.DefaultFont, item2.Font);
+            Assert.Equal(3, callCount);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Same(font1, item1.Font);
+            Assert.Same(font1, item2.Font);
+            Assert.Equal(3, callCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_Font_SetWithItemsWithFontWithHandler_CallsFontChanged()
+        {
+            using var childFont1 = new Font("Arial", 1);
+            using var childFont2 = new Font("Arial", 1);
+            using var child1 = new SubToolStripItem
+            {
+                Font = childFont1
+            };
+            using var child2 = new SubToolStripItem
+            {
+                Font = childFont2
+            };
+            using var control = new ToolStrip();
+            control.Items.Add(child1);
+            control.Items.Add(child2);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.FontChanged += handler;
+
+            // Set different.
+            using var font1 = new Font("Arial", 8.25f);
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Same(childFont1, child1.Font);
+            Assert.Same(childFont2, child2.Font);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Same(childFont1, child1.Font);
+            Assert.Same(childFont2, child2.Font);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            using var font2 = SystemFonts.DialogFont;
+            control.Font = font2;
+            Assert.Same(font2, control.Font);
+            Assert.Same(childFont1, child1.Font);
+            Assert.Same(childFont2, child2.Font);
+            Assert.Equal(2, callCount);
+
+            // Set null.
+            control.Font = null;
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Same(childFont1, child1.Font);
+            Assert.Same(childFont2, child2.Font);
+            Assert.Equal(3, callCount);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Same(childFont1, child1.Font);
+            Assert.Same(childFont2, child2.Font);
+            Assert.Equal(3, callCount);
         }
 
         public static IEnumerable<object[]> DefaultDropDownDirection_Get_TestData()
@@ -2426,9 +2682,46 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(ToolStripGripStyle.Hidden, 1)]
-        [InlineData(ToolStripGripStyle.Visible, 0)]
-        public void ToolStrip_GripStyle_Set_GetReturnsExpected(ToolStripGripStyle value, int expectedLayoutCallCount)
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        public void ToolStrip_GripMargin_Set_GetReturnsExpected(Padding value)
+        {
+            using var control = new ToolStrip();
+            control.GripMargin = value;
+            Assert.Equal(value, control.GripMargin);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.GripMargin = value;
+            Assert.Equal(value, control.GripMargin);
+            Assert.False(control.IsHandleCreated);
+
+            ToolStripItem grip = Assert.IsAssignableFrom<ToolStripItem>(Assert.Single(control.DisplayedItems));
+            Assert.Equal(value, grip.Margin);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        public void ToolStrip_GripMargin_SetWithGrip_GetReturnsExpected(Padding value)
+        {
+            using var control = new ToolStrip();
+            ToolStripItem grip = Assert.IsAssignableFrom<ToolStripItem>(Assert.Single(control.DisplayedItems));
+
+            control.GripMargin = value;
+            Assert.Equal(value, control.GripMargin);
+            Assert.Equal(value, grip.Margin);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.GripMargin = value;
+            Assert.Equal(value, control.GripMargin);
+            Assert.Equal(value, grip.Margin);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(ToolStripGripStyle.Hidden, 1, 0)]
+        [InlineData(ToolStripGripStyle.Visible, 0, 1)]
+        public void ToolStrip_GripStyle_Set_GetReturnsExpected(ToolStripGripStyle value, int expectedLayoutCallCount, int expectedCount)
         {
             using var control = new ToolStrip();
             int layoutCallCount = 0;
@@ -2448,6 +2741,39 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.GripStyle = value;
             Assert.Equal(value, control.GripStyle);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            Assert.Equal(expectedCount, control.DisplayedItems.Count);
+            Assert.True(control.DisplayedItems.Cast<ToolStripItem>().All(i => i.Visible));
+        }
+
+        [WinFormsTheory]
+        [InlineData(ToolStripGripStyle.Hidden, 1)]
+        [InlineData(ToolStripGripStyle.Visible, 0)]
+        public void ToolStrip_GripStyle_SetWithGrip_GetReturnsExpected(ToolStripGripStyle value, int expectedLayoutCallCount)
+        {
+            using var control = new ToolStrip();
+            ToolStripItem grip = Assert.IsAssignableFrom<ToolStripItem>(Assert.Single(control.DisplayedItems));
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("GripStyle", e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            control.GripStyle = value;
+            Assert.Equal(value, control.GripStyle);
+            Assert.Equal(value == ToolStripGripStyle.Visible, grip.Visible);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.GripStyle = value;
+            Assert.Equal(value, control.GripStyle);
+            Assert.Equal(value == ToolStripGripStyle.Visible, grip.Visible);
             Assert.Equal(expectedLayoutCallCount, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
@@ -2490,6 +2816,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedLayoutCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripGripStyle))]
+        public void ToolStrip_GripStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripGripStyle value)
+        {
+            using var control = new ToolStrip();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.GripStyle = value);
         }
 
         public static IEnumerable<object[]> LayoutStyle_Set_TestData()
@@ -3068,6 +3402,131 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<NotSupportedException>(() => control.RenderMode = ToolStripRenderMode.Custom);
         }
 
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, RightToLeft.Yes, 1)]
+        [InlineData(RightToLeft.No, RightToLeft.No, 0)]
+        [InlineData(RightToLeft.Inherit, RightToLeft.No, 0)]
+        public void ToolStrip_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected, int expectedLayoutCallCount)
+        {
+            using var control = new ToolStrip();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("RightToLeft", e.AffectedProperty);
+                layoutCallCount++;
+            };
+
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.Equal(expectedLayoutCallCount, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        public void ToolStrip_RightToLeft_SetWithChildren_GetReturnsExpected(RightToLeft value, RightToLeft expected)
+        {
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
+            using var control = new ToolStrip();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.Equal(expected, item1.RightToLeft);
+            Assert.Equal(expected, item2.RightToLeft);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.Equal(expected, item1.RightToLeft);
+            Assert.Equal(expected, item2.RightToLeft);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        public void ToolStrip_RightToLeft_SetWithChildrenWithRightToLeft_GetReturnsExpected(RightToLeft value, RightToLeft expected)
+        {
+            using var item1 = new SubToolStripItem
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            using var item2 = new SubToolStripItem
+            {
+                RightToLeft = RightToLeft.No
+            };
+            using var control = new ToolStrip();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, item1.RightToLeft);
+            Assert.Equal(RightToLeft.No, item2.RightToLeft);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.RightToLeft = value;
+            Assert.Equal(expected, control.RightToLeft);
+            Assert.Equal(RightToLeft.Yes, item1.RightToLeft);
+            Assert.Equal(RightToLeft.No, item2.RightToLeft);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
+        {
+            using var control = new ToolStrip();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.RightToLeftChanged += handler;
+
+            // Set different.
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            control.RightToLeft = RightToLeft.Inherit;
+            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.RightToLeft = RightToLeft.Yes;
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(2, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        public void ToolStrip_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
+        {
+            using var control = new ToolStrip();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
+        }
+
         [WinFormsFact]
         public void ToolStrip_ShowToolTipItems_GetDefaultShowItemToolTips_ReturnsExpected()
         {
@@ -3215,21 +3674,24 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_TabStop_Set_GetReturnsExpected(bool value)
         {
-            using var control = new ToolStrip
+            using var control = new SubToolStrip
             {
                 TabStop = value
             };
             Assert.Equal(value, control.TabStop);
+            Assert.Equal(value, control.GetStyle(ControlStyles.Selectable));
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.Equal(value, control.GetStyle(ControlStyles.Selectable));
             Assert.False(control.IsHandleCreated);
 
             // Set different.
-            control.TabStop = value;
-            Assert.Equal(value, control.TabStop);
+            control.TabStop = !value;
+            Assert.Equal(!value, control.TabStop);
+            Assert.Equal(!value, control.GetStyle(ControlStyles.Selectable));
             Assert.False(control.IsHandleCreated);
         }
 
@@ -3237,7 +3699,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStrip_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
-            using var control = new ToolStrip();
+            using var control = new SubToolStrip();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -3248,6 +3710,7 @@ namespace System.Windows.Forms.Tests
 
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.Equal(value, control.GetStyle(ControlStyles.Selectable));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -3256,14 +3719,16 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.TabStop = value;
             Assert.Equal(value, control.TabStop);
+            Assert.Equal(value, control.GetStyle(ControlStyles.Selectable));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
             // Set different.
-            control.TabStop = value;
-            Assert.Equal(value, control.TabStop);
+            control.TabStop = !value;
+            Assert.Equal(!value, control.TabStop);
+            Assert.Equal(!value, control.GetStyle(ControlStyles.Selectable));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -3589,6 +4054,175 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.TextDirection = value);
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStrip_Visible_Set_GetReturnsExpected(bool value)
+        {
+            using var control = new ToolStrip
+            {
+                Visible = value
+            };
+            Assert.Equal(value, control.Visible);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Visible = value;
+            Assert.Equal(value, control.Visible);
+            Assert.False(control.IsHandleCreated);
+
+            // Set different.
+            control.Visible = !value;
+            Assert.Equal(!value, control.Visible);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Visible_SetWithHandle_TestData()
+        {
+            foreach (bool userPaint in new bool[] { true, false })
+            {
+                yield return new object[] { userPaint, true, 0 };
+                yield return new object[] { userPaint, false, 1 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Visible_SetWithHandle_TestData))]
+        public void ToolStrip_Visible_SetWithHandle_GetReturnsExpected(bool userPaint, bool value, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubToolStrip();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.Visible = value;
+            Assert.Equal(value, control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Visible = value;
+            Assert.Equal(value, control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            control.Visible = !value;
+            Assert.Equal(!value, control.Visible);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_Visible_SetWithHandler_CallsVisibleChanged()
+        {
+            using var control = new ToolStrip
+            {
+                Visible = true
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.VisibleChanged += handler;
+
+            // Set different.
+            control.Visible = false;
+            Assert.False(control.Visible);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Visible = false;
+            Assert.False(control.Visible);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            control.Visible = true;
+            Assert.True(control.Visible);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.VisibleChanged -= handler;
+            control.Visible = false;
+            Assert.False(control.Visible);
+            Assert.Equal(2, callCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_CreateAccessibilityInstance_Invoke_ReturnsExpected()
+        {
+            using var control = new SubToolStrip();
+            ToolStrip.ToolStripAccessibleObject instance = Assert.IsType<ToolStrip.ToolStripAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleRole.ToolBar, instance.Role);
+            Assert.NotSame(control.CreateAccessibilityInstance(), instance);
+            Assert.NotSame(control.AccessibilityObject, instance);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_CreateAccessibilityInstance_InvokeWithCustomRole_ReturnsExpected()
+        {
+            using var control = new SubToolStrip
+            {
+                AccessibleRole = AccessibleRole.HelpBalloon
+            };
+            ToolStrip.ToolStripAccessibleObject instance = Assert.IsType<ToolStrip.ToolStripAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.NotNull(instance);
+            Assert.Same(control, instance.Owner);
+            Assert.Equal(AccessibleRole.HelpBalloon, instance.Role);
+            Assert.NotSame(control.CreateAccessibilityInstance(), instance);
+            Assert.NotSame(control.AccessibilityObject, instance);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_CreateControlsInstance_Invoke_ReturnsExpected()
+        {
+            using var control = new SubToolStrip();
+            Control.ControlCollection controls = Assert.IsAssignableFrom<Control.ControlCollection>(control.CreateControlsInstance());
+            Assert.Empty(controls);
+            Assert.Same(control, controls.Owner);
+            Assert.True(controls.IsReadOnly);
+            Assert.NotSame(controls, control.CreateControlsInstance());
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_CreateControlsInstance_InvokeDesignMode_ReturnsExpected()
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var control = new SubToolStrip
+            {
+                Site = mockSite.Object
+            };
+            Control.ControlCollection controls = Assert.IsAssignableFrom<Control.ControlCollection>(control.CreateControlsInstance());
+            Assert.Empty(controls);
+            Assert.Same(control, controls.Owner);
+            Assert.False(controls.IsReadOnly);
+            Assert.NotSame(controls, control.CreateControlsInstance());
+        }
+
         public static IEnumerable<object[]> CreateDefaultItem_Button_TestData()
         {
             EventHandler onClick = (sender, e) => { };
@@ -3676,6 +4310,7 @@ namespace System.Windows.Forms.Tests
             var toolStrip = new SubToolStrip();
             Assert.Null(toolStrip.CreateLayoutSettings(layoutStyle));
         }
+
         [WinFormsFact]
         public void ToolStrip_Dispose_Invoke_Success()
         {
@@ -3689,6 +4324,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Empty(control.DataBindings);
                 Assert.False(control.IsHandleCreated);
                 Assert.True(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
             };
@@ -3703,6 +4339,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Empty(control.DataBindings);
                 Assert.True(control.IsDisposed);
                 Assert.False(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.Equal(1, callCount);
                 Assert.False(control.IsHandleCreated);
 
@@ -3714,6 +4351,60 @@ namespace System.Windows.Forms.Tests
                 Assert.Empty(control.DataBindings);
                 Assert.True(control.IsDisposed);
                 Assert.False(control.Disposing);
+                Assert.True(control.Visible);
+                Assert.Equal(2, callCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_Dispose_InvokeNotVisible_Success()
+        {
+            using var control = new ToolStrip
+            {
+                Visible = false
+            };
+            int callCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.False(control.IsHandleCreated);
+                Assert.True(control.Disposing);
+                Assert.False(control.Visible);
+                Assert.Equal(callCount > 0, control.IsDisposed);
+                callCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.False(control.Visible);
+                Assert.Equal(1, callCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Dispose multiple times.
+                control.Dispose();
+                Assert.Null(control.Parent);
+                Assert.Empty(control.Controls);
+                Assert.Empty(control.Items);
+                Assert.Empty(control.DataBindings);
+                Assert.True(control.IsDisposed);
+                Assert.False(control.Disposing);
+                Assert.False(control.Visible);
                 Assert.Equal(2, callCount);
                 Assert.False(control.IsHandleCreated);
             }
@@ -3745,6 +4436,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Empty(control.DataBindings);
                 Assert.False(control.IsHandleCreated);
                 Assert.True(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
             };
@@ -3767,6 +4459,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, itemRemovedCallCount);
                 Assert.True(control.IsDisposed);
                 Assert.False(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.True(item1.IsDisposed);
                 Assert.True(item2.IsDisposed);
                 Assert.Equal(1, callCount);
@@ -3786,6 +4479,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, itemRemovedCallCount);
                 Assert.True(control.IsDisposed);
                 Assert.False(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.True(item1.IsDisposed);
                 Assert.True(item2.IsDisposed);
                 Assert.Equal(2, callCount);
@@ -3812,6 +4506,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Empty(control.DataBindings);
                 Assert.False(control.IsHandleCreated);
                 Assert.True(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
             };
@@ -3826,6 +4521,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Empty(control.DataBindings);
                 Assert.True(control.IsDisposed);
                 Assert.False(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.Equal(1, callCount);
                 Assert.False(control.IsHandleCreated);
 
@@ -3837,6 +4533,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Empty(control.DataBindings);
                 Assert.True(control.IsDisposed);
                 Assert.False(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.Equal(2, callCount);
                 Assert.False(control.IsHandleCreated);
             }
@@ -3905,6 +4602,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Empty(control.DataBindings);
                 Assert.False(control.IsHandleCreated);
                 Assert.True(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
             };
@@ -3927,6 +4625,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, itemRemovedCallCount);
                 Assert.True(control.IsDisposed);
                 Assert.False(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.True(item1.IsDisposed);
                 Assert.True(item2.IsDisposed);
                 Assert.Equal(1, callCount);
@@ -3946,8 +4645,10 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, itemRemovedCallCount);
                 Assert.True(control.IsDisposed);
                 Assert.False(control.Disposing);
+                Assert.True(control.Visible);
                 Assert.True(item1.IsDisposed);
                 Assert.True(item2.IsDisposed);
+                Assert.True(control.Visible);
                 Assert.Equal(2, callCount);
                 Assert.Equal(1, item1CallCount);
                 Assert.Equal(1, item2CallCount);
@@ -4095,6 +4796,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void ToolStrip_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubToolStrip();
+            Assert.False(control.GetTopLevel());
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ToolStrip_OnBeginDrag_Invoke_CallsBeginDrag(EventArgs eventArgs)
@@ -4119,6 +4827,46 @@ namespace System.Windows.Forms.Tests
             control.OnBeginDrag(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnBeginDrag_InvokeWithHandle_CallsBeginDrag(EventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.BeginDrag += handler;
+            control.OnBeginDrag(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.BeginDrag -= handler;
+            control.OnBeginDrag(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         public static IEnumerable<object[]> ControlEventArgs_TestData()
@@ -4178,17 +4926,9 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void ToolStrip_OnBeginDrag_InvokeWithHandle_CallsBeginDrag(EventArgs eventArgs)
+        public void ToolStrip_OnDockChanged_Invoke_CallsDockChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            control.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            control.HandleCreated += (sender, e) => createdCallCount++;
-
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -4198,22 +4938,14 @@ namespace System.Windows.Forms.Tests
             };
 
             // Call with handler.
-            control.BeginDrag += handler;
-            control.OnBeginDrag(eventArgs);
+            control.DockChanged += handler;
+            control.OnDockChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
 
             // Remove handler.
-            control.BeginDrag -= handler;
-            control.OnBeginDrag(eventArgs);
+            control.DockChanged -= handler;
+            control.OnDockChanged(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsTheory]
@@ -4278,6 +5010,474 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.FontChanged += handler;
+            control.OnFontChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(Control.DefaultFont.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.OnFontChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(Control.DefaultFont.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnFontChanged_InvokeWithChildren_CallsFontChanged(EventArgs eventArgs)
+        {
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
+            using var control = new SubToolStrip();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.FontChanged += handler;
+            control.OnFontChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.OnFontChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnFontChanged_InvokeWithChildrenWithFont_CallsFontChanged(EventArgs eventArgs)
+        {
+            using var childFont1 = new Font("Arial", 1);
+            using var childFont2 = new Font("Arial", 2);
+            using var item1 = new SubToolStripItem
+            {
+                Font = childFont1
+            };
+            using var item2 = new SubToolStripItem
+            {
+                Font = childFont2
+            };
+            using var control = new SubToolStrip();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.FontChanged += handler;
+            control.OnFontChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.OnFontChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ToolStrip_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            int layoutCompletedCallCount = 0;
+            control.LayoutCompleted += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                layoutCompletedCallCount++;
+            };
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCompletedCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCompletedCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ToolStrip_OnLayout_InvokeWithOverflowButton_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            Assert.NotNull(control.OverflowButton);
+            int layoutCompletedCallCount = 0;
+            control.LayoutCompleted += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                layoutCompletedCallCount++;
+            };
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCompletedCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCompletedCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithDropDown_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            control.OverflowButton.DropDown = new ToolStripDropDown();
+            int layoutCompletedCallCount = 0;
+            control.LayoutCompleted += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                layoutCompletedCallCount++;
+            };
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCompletedCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCompletedCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ToolStrip_OnLayout_InvokeWithItems_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
+            using var control = new SubToolStrip();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            int itemLayoutCallCount1 = 0;
+            item1.Layout += (sender, e) =>
+            {
+                Assert.Same(item1, sender);
+                itemLayoutCallCount1++;
+            };
+            int itemLayoutCallCount2 = 0;
+            item2.Layout += (sender, e) =>
+            {
+                Assert.Same(item2, sender);
+                itemLayoutCallCount2++;
+            };
+            int layoutCompletedCallCount = 0;
+            control.LayoutCompleted += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                layoutCompletedCallCount++;
+            };
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, itemLayoutCallCount1);
+            Assert.Equal(2, itemLayoutCallCount2);
+            Assert.Equal(2, layoutCompletedCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(2, callCount);
+            Assert.Equal(3, itemLayoutCallCount1);
+            Assert.Equal(3, itemLayoutCallCount2);
+            Assert.Equal(3, layoutCompletedCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ToolStrip_OnLayout_InvokeWithHandle_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCompletedCallCount = 0;
+            control.LayoutCompleted += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                layoutCompletedCallCount++;
+            };
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCompletedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCompletedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithHandle_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            Assert.NotNull(control.OverflowButton);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCompletedCallCount = 0;
+            control.LayoutCompleted += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                layoutCompletedCallCount++;
+            };
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCompletedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCompletedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithDropDownWithHandle_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            control.OverflowButton.DropDown = new ToolStripDropDown();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCompletedCallCount = 0;
+            control.LayoutCompleted += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                layoutCompletedCallCount++;
+            };
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCompletedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCompletedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        public void ToolStrip_OnLayout_InvokeWithItemsWithHandle_CallsLayout(LayoutEventArgs eventArgs)
+        {
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
+            using var control = new SubToolStrip();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int itemLayoutCallCount1 = 0;
+            item1.Layout += (sender, e) =>
+            {
+                Assert.Same(item1, sender);
+                itemLayoutCallCount1++;
+            };
+            int itemLayoutCallCount2 = 0;
+            item2.Layout += (sender, e) =>
+            {
+                Assert.Same(item2, sender);
+                itemLayoutCallCount2++;
+            };
+            int layoutCompletedCallCount = 0;
+            control.LayoutCompleted += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                layoutCompletedCallCount++;
+            };
+            int callCount = 0;
+            LayoutEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(2, callCount);
+            Assert.Equal(2, itemLayoutCallCount1);
+            Assert.Equal(2, itemLayoutCallCount2);
+            Assert.Equal(2, layoutCompletedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(2, callCount);
+            Assert.Equal(3, itemLayoutCallCount1);
+            Assert.Equal(3, itemLayoutCallCount2);
+            Assert.Equal(3, layoutCompletedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(3, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -4379,6 +5579,364 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ToolStrip_OnPaint_NullE_ThrowsNullReferenceException()
+        {
+            using var control = new SubToolStrip();
+            Assert.Throws<NullReferenceException>(() => control.OnPaint(null));
+        }
+
+        public static IEnumerable<object[]> OnPaintBackground_TestData()
+        {
+            foreach (bool hScroll in new bool[] { true, false })
+            {
+                foreach (bool vScroll in new bool[] { true, false })
+                {
+                    foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb), new Bitmap(10, 10, PixelFormat.Format32bppArgb) })
+                    {
+                        foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
+                        {
+                            yield return new object[] { hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout };
+                            yield return new object[] { hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout };
+                            yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout };
+                            yield return new object[] { hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout };
+                            yield return new object[] { hScroll, vScroll, false, Color.Empty, backgroundImage, backgroundImageLayout };
+                            yield return new object[] { hScroll, vScroll, false, Color.Red, backgroundImage, backgroundImageLayout };
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPaintBackground_TestData))]
+        public void ToolStrip_OnPaintBackground_Invoke_Success(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
+        {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+
+            using var control = new SubToolStrip
+            {
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackColor);
+            control.BackColor = backColor;
+            control.BackgroundImage = backgroundImage;
+            control.BackgroundImageLayout = backgroundImageLayout;
+            int callCount = 0;
+            PaintEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Paint += handler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.Paint -= handler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnPaintBackground_WithParent_TestData()
+        {
+            var control = new Control
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            var tabPage = new TabPage
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            foreach (Control parent in new Control[] { control, tabPage })
+            {
+                foreach (bool hScroll in new bool[] { true, false })
+                {
+                    foreach (bool vScroll in new bool[] { true, false })
+                    {
+                        foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb) })
+                        {
+                            foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
+                            {
+                                int expected = backgroundImage != null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center) && (hScroll || vScroll) ? 0 : 1;
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                                yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                                yield return new object[] { parent, hScroll, vScroll, false, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                            }
+                        }
+
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPaintBackground_WithParent_TestData))]
+        public void ToolStrip_OnPaintBackground_InvokeWithParent_CallsPaint(Control parent, bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
+        {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+
+            using var control = new SubToolStrip
+            {
+                Bounds = new Rectangle(0, 0, 30, 25),
+                Parent = parent,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackColor);
+            control.BackColor = backColor;
+            control.BackgroundImage = backgroundImage;
+            control.BackgroundImageLayout = backgroundImageLayout;
+            int callCount = 0;
+            PaintEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int parentCallCount = 0;
+            PaintEventHandler parentHandler = (sender, e) =>
+            {
+                Assert.Same(parent, sender);
+                Assert.NotSame(graphics, e.Graphics);
+                parentCallCount++;
+            };
+
+            // Call with handler.
+            control.Paint += handler;
+            parent.Paint += parentHandler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.Equal(expectedPaintCallCount + 1, parentCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.Paint -= handler;
+            parent.Paint -= parentHandler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.Equal(expectedPaintCallCount + 1, parentCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPaintBackground_TestData))]
+        public void ToolStrip_OnPaintBackground_InvokeWithHandle_Success(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
+        {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+
+            using var control = new SubToolStrip
+            {
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackColor);
+            control.BackColor = backColor;
+            control.BackgroundImage = backgroundImage;
+            control.BackgroundImageLayout = backgroundImageLayout;
+            int callCount = 0;
+            PaintEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.Paint += handler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Paint -= handler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> OnPaintBackground_WithParentWithHandle_TestData()
+        {
+            foreach (bool hScroll in new bool[] { true, false })
+            {
+                foreach (bool vScroll in new bool[] { true, false })
+                {
+                    foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb) })
+                    {
+                        foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
+                        {
+                            yield return new object[] { hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                            yield return new object[] { hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                            yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, 1 };
+                            yield return new object[] { hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout, 1 };
+                            yield return new object[] { hScroll, vScroll, false, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                            yield return new object[] { hScroll, vScroll, false, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                        }
+                    }
+
+                    yield return new object[] { hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                    yield return new object[] { hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                    yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
+                    yield return new object[] { hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
+                    yield return new object[] { hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                    yield return new object[] { hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+
+                    yield return new object[] { hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                    yield return new object[] { hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                    yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                    yield return new object[] { hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                    yield return new object[] { hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                    yield return new object[] { hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPaintBackground_WithParentWithHandle_TestData))]
+        public void ToolStrip_OnPaintBackground_InvokeWithParentWithHandle_CallsPaint(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
+        {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+
+            using var parent = new Control
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            using var control = new SubToolStrip
+            {
+                Bounds = new Rectangle(0, 0, 30, 25),
+                Parent = parent,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackColor);
+            control.BackColor = backColor;
+            control.BackgroundImage = backgroundImage;
+            control.BackgroundImageLayout = backgroundImageLayout;
+            int callCount = 0;
+            PaintEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int parentCallCount = 0;
+            PaintEventHandler parentHandler = (sender, e) =>
+            {
+                Assert.Same(parent, sender);
+                Assert.NotSame(graphics, e.Graphics);
+                Assert.Equal(new Rectangle(0, 0, 30, 25), e.ClipRectangle);
+                parentCallCount++;
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.Paint += handler;
+            parent.Paint += parentHandler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.Equal(expectedPaintCallCount + 1, parentCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Paint -= handler;
+            parent.Paint -= parentHandler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.Equal(expectedPaintCallCount + 1, parentCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_OnPaintBackground_NullEventArgs_ThrowsNullReferenceException()
+        {
+            using var control = new SubToolStrip();
+            Assert.Throws<NullReferenceException>(() => control.OnPaintBackground(null));
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_OnPaintGrip_Invoke_CallsPaintGrip()
+        {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+
+            using var control = new SubToolStrip();
+            int callCount = 0;
+            PaintEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.PaintGrip += handler;
+            control.OnPaintGrip(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.PaintGrip -= handler;
+            control.OnPaintGrip(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
         public void ToolStrip_OnPaintGrip_InvokeWithHandle_CallsPaintGrip()
         {
             using var image = new Bitmap(10, 10);
@@ -4429,15 +5987,44 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.WM.LBUTTONDOWN)]
-        [InlineData((int)User32.WM.LBUTTONDBLCLK)]
-        [InlineData((int)User32.WM.MBUTTONDOWN)]
-        [InlineData((int)User32.WM.MBUTTONDBLCLK)]
-        [InlineData((int)User32.WM.RBUTTONDOWN)]
-        [InlineData((int)User32.WM.RBUTTONDBLCLK)]
-        [InlineData((int)User32.WM.XBUTTONDOWN)]
-        [InlineData((int)User32.WM.XBUTTONDBLCLK)]
-        public void ToolStrip_WndProc_InvokeMouseDownWithHandle_Success(int msg)
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("RightToLeft", e.AffectedProperty);
+                layoutCallCount++;
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(4, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnRightToLeftChanged_InvokeWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var control = new SubToolStrip();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -4447,20 +6034,854 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                if (e.AffectedProperty == "RightToLeft")
+                {
+                    Assert.Same(control, sender);
+                    Assert.Same(control, e.AffectedControl);
+                    Assert.Equal("RightToLeft", e.AffectedProperty);
+                    layoutCallCount++;
+                }
+            };
+
             int callCount = 0;
-            control.MouseDown += (sender, e) => callCount++;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(3, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(1, createdCallCount);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(4, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(6, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(2, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnRightToLeftChanged_InvokeWithChildren_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem
+            {
+                RightToLeft = RightToLeft.Inherit
+            };
+            using var control = new SubToolStrip();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+
+            int callCount = 0;
+            int item1CallCount = 0;
+            int item2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            item1.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(item1, sender);
+                Assert.Same(eventArgs, e);
+                item1CallCount++;
+            };
+            item2.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(item2, sender);
+                Assert.Same(eventArgs, e);
+                item2CallCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, item1CallCount);
+            Assert.Equal(1, item2CallCount);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, item1CallCount);
+            Assert.Equal(2, item2CallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnRightToLeftChanged_InvokeWithItemsWithRightToLeft_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var item1 = new SubToolStripItem
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            using var item2 = new SubToolStripItem
+            {
+                RightToLeft = RightToLeft.No
+            };
+            using var control = new SubToolStrip();
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+
+            int callCount = 0;
+            int item1CallCount = 0;
+            int item2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            item1.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(item1, sender);
+                Assert.Same(eventArgs, e);
+                item1CallCount++;
+            };
+            item2.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(item2, sender);
+                Assert.Same(eventArgs, e);
+                item2CallCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, item1CallCount);
+            Assert.Equal(0, item2CallCount);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, item1CallCount);
+            Assert.Equal(0, item2CallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnRightToLeftChanged_InvokeWithOverflowButton_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+
+            int callCount = 0;
+            int overflowButtonCallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            control.OverflowButton.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(control.OverflowButton, sender);
+                Assert.Same(eventArgs, e);
+                overflowButtonCallCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, overflowButtonCallCount);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, overflowButtonCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnRightToLeftChanged_InvokeWithGrip_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            ToolStripItem grip = Assert.IsAssignableFrom<ToolStripItem>(Assert.Single(control.DisplayedItems));
+
+            int callCount = 0;
+            int gripCallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            grip.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(grip, sender);
+                Assert.Same(eventArgs, e);
+                gripCallCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, gripCallCount);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, gripCallCount);
+        }
+
+        public static IEnumerable<object[]> OnScroll_TestData()
+        {
+            foreach (ScrollEventType eventType in Enum.GetValues(typeof(ScrollEventType)))
+            {
+                foreach (ScrollOrientation orientation in Enum.GetValues(typeof(ScrollOrientation)))
+                {
+                    yield return new object[] { new ScrollEventArgs(eventType, 1, 1, orientation) };
+                    yield return new object[] { new ScrollEventArgs(eventType, 1, 2, orientation) };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnScroll_TestData))]
+        public void ToolStrip_OnScroll_Invoke_CallsHandler(ScrollEventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+            int callCount = 0;
+            ScrollEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Scroll += handler;
+            control.OnScroll(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.Scroll -= handler;
+            control.OnScroll(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnScroll_WithHandle_TestData()
+        {
+            foreach (ScrollEventType eventType in Enum.GetValues(typeof(ScrollEventType)))
+            {
+                foreach (ScrollOrientation orientation in Enum.GetValues(typeof(ScrollOrientation)))
+                {
+                    int expected = eventType != ScrollEventType.ThumbTrack ? 1 : 0;
+                    yield return new object[] { new ScrollEventArgs(eventType, 1, 1, orientation), 0 };
+                    yield return new object[] { new ScrollEventArgs(eventType, 1, 2, orientation), expected };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnScroll_WithHandle_TestData))]
+        public void ToolStrip_OnScroll_InvokeWithHandle_CallsHandler(ScrollEventArgs eventArgs, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubToolStrip();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+            int callCount = 0;
+            ScrollEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Scroll += handler;
+            control.OnScroll(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Scroll -= handler;
+            control.OnScroll(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> OnScroll_WithItems_TestData()
+        {
+            foreach (ScrollEventType scrollEventType in Enum.GetValues(typeof(ScrollEventType)))
+            {
+                if (scrollEventType == ScrollEventType.ThumbTrack)
+                {
+                    break;
+                }
+
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 200), new Point(7, 101), new Point(0, 100) };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 200, 100), new Point(7, -99), new Point(0, -100) };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 100), new Point(7, 1), new Point(0, 0) };
+            }
+
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 100, 200), new Point(7, 1), new Point(0, 0) };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 200, 100), new Point(7, 1), new Point(0, 0) };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 0, 0), new Point(7, 1), new Point(0, 0) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnScroll_WithItems_TestData))]
+        public void ToolStrip_OnScroll_InvokeWithItems_Success(ScrollEventArgs eventArgs, Point expectedItem1Location, Point expectedItem2Location)
+        {
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
+            using var control = new SubToolStrip
+            {
+                Size = new Size(400, 500)
+            };
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            Rectangle oldBounds1 = item1.Bounds;
+            Rectangle oldBounds2 = item2.Bounds;
+            control.OnScroll(eventArgs);
+            Assert.Equal(new Rectangle(expectedItem1Location, oldBounds1.Size), item1.Bounds);
+            Assert.Equal(new Rectangle(expectedItem2Location, oldBounds2.Size), item2.Bounds);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnScroll_WithItemsWithHandle_TestData()
+        {
+            foreach (ScrollEventType scrollEventType in Enum.GetValues(typeof(ScrollEventType)))
+            {
+                if (scrollEventType == ScrollEventType.ThumbTrack)
+                {
+                    break;
+                }
+
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 200), new Point(7, 101), new Point(0, 100), 1 };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 200, 100), new Point(7, -99), new Point(0, -100), 1 };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 100), new Point(7, 1), new Point(0, 0), 0 };
+            }
+
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 100, 200), new Point(7, 1), new Point(0, 0), 0 };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 200, 100), new Point(7, 1), new Point(0, 0), 0 };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 0, 0), new Point(7, 1), new Point(0, 0), 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnScroll_WithItemsWithHandle_TestData))]
+        public void ToolStrip_OnScroll_InvokeWithItemsWithHandle_Success(ScrollEventArgs eventArgs, Point expectedItem1Location, Point expectedItem2Location, int expectedInvalidatedCallCount)
+        {
+            using var item1 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
+            using var control = new SubToolStrip
+            {
+                Size = new Size(400, 500)
+            };
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            Rectangle oldBounds1 = item1.Bounds;
+            Rectangle oldBounds2 = item2.Bounds;
+            control.OnScroll(eventArgs);
+            Assert.Equal(new Rectangle(expectedItem1Location, oldBounds1.Size), item1.Bounds);
+            Assert.Equal(new Rectangle(expectedItem2Location, oldBounds2.Size), item2.Bounds);
+            Assert.Equal(0, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_OnScroll_NullE_ThrowsNullReferenceException()
+        {
+            using var control = new SubToolStrip();
+            Assert.Throws<NullReferenceException>(() => control.OnScroll(null));
+        }
+
+        public static IEnumerable<object[]> OnTabStopChanged_TestData()
+        {
+            foreach (bool tabStop in new bool[] { true, false })
+            {
+                yield return new object[] { tabStop, null };
+                yield return new object[] { tabStop, new EventArgs() };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnTabStopChanged_TestData))]
+        public void ToolStrip_OnTabStopChanged_Invoke_CallsTabStopChanged(bool tabStop, EventArgs eventArgs)
+        {
+            using var control = new SubToolStrip
+            {
+                TabStop = tabStop
+            };
+            control.SetStyle(ControlStyles.Selectable, !tabStop);
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.TabStopChanged += handler;
+            control.OnTabStopChanged(eventArgs);
+            Assert.Equal(tabStop, control.GetStyle(ControlStyles.Selectable));
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.TabStopChanged -= handler;
+            control.OnTabStopChanged(eventArgs);
+            Assert.Equal(tabStop, control.GetStyle(ControlStyles.Selectable));
+            Assert.Equal(1, callCount);
+        }
+
+        public static IEnumerable<object[]> OnVisibleChanged_TestData()
+        {
+            foreach (bool visible in new bool[] { true, false })
+            {
+                yield return new object[] { visible, null };
+                yield return new object[] { visible, new EventArgs() };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void ToolStrip_OnVisibleChanged_Invoke_CallsVisibleChanged(bool visible, EventArgs eventArgs)
+        {
+            using var control = new SubToolStrip
+            {
+                Visible = visible
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.VisibleChanged += handler;
+            control.OnVisibleChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.VisibleChanged -= handler;
+            control.OnVisibleChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_OnVisibleChanged_InvokeInDisposing_DoesNotCallVisibleChanged()
+        {
+            using var control = new SubToolStrip();
+            int callCount = 0;
+            control.VisibleChanged += (sender, e) => callCount++;
+
+            int disposedCallCount = 0;
+            void handler(object sender, EventArgs e)
+            {
+                control.OnVisibleChanged(EventArgs.Empty);
+                Assert.Equal(1, callCount);
+                disposedCallCount++;
+            };
+            control.Disposed += handler;
+
+            try
+            {
+                control.Dispose();
+                Assert.Equal(1, disposedCallCount);
+            }
+            finally
+            {
+                control.Disposed -= handler;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ToolStrip_OnVisibleChanged_InvokeDisposed_CallsVisibleChanged(EventArgs eventArgs)
+        {
+            using var control = new SubToolStrip();
+            control.Dispose();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.VisibleChanged += handler;
+            control.OnVisibleChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.VisibleChanged -= handler;
+            control.OnVisibleChanged(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A)]
+        public void ToolStrip_ProcessCmdKey_InvokeWithoutParent_ReturnsFalse(Keys keyData)
+        {
+            using var control = new SubToolStrip();
+            var m = new Message();
+            Assert.False(control.ProcessCmdKey(ref m, keyData));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A)]
+        [InlineData(Keys.Space)]
+        [InlineData(Keys.Control)]
+        [InlineData(Keys.Tab)]
+        [InlineData(Keys.Control & Keys.Tab)]
+        public void ToolStrip_ProcessCmdKey_InvokeWithParent_ReturnsFalse(Keys keyData)
+        {
+            using var parent = new Control();
+            using var control = new SubToolStrip
+            {
+                Parent = parent
+            };
+            var msg = new Message();
+            Assert.False(control.ProcessCmdKey(ref msg, keyData));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(Keys.A, true)]
+        [InlineData(Keys.A, false)]
+        [InlineData(Keys.Space, true)]
+        [InlineData(Keys.Space, false)]
+        [InlineData(Keys.Control, true)]
+        [InlineData(Keys.Control, false)]
+        [InlineData(Keys.Tab, true)]
+        [InlineData(Keys.Tab, false)]
+        [InlineData(Keys.Control & Keys.Tab, true)]
+        [InlineData(Keys.Control & Keys.Tab, false)]
+        public void ToolStrip_ProcessCmdKey_InvokeWithCustomParent_ReturnsExpected(Keys keyData, bool result)
+        {
+            using var control = new SubToolStrip();
+            var msg = new Message
+            {
+                Msg = 1
+            };
+            int callCount = 0;
+            bool action(Message actualMsg, Keys actualKeyData)
+            {
+                Assert.Equal(1, actualMsg.Msg);
+                Assert.Equal(keyData, actualKeyData);
+                callCount++;
+                return result;
+            }
+            using var parent = new CustomProcessControl
+            {
+                ProcessCmdKeyAction = action
+            };
+            control.Parent = parent;
+
+            Assert.Equal(result, control.ProcessCmdKey(ref msg, keyData));
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(1, 2)]
+        [InlineData(0, 0)]
+        [InlineData(-1, -2)]
+        public void ToolStrip_RescaleConstantsForDpi_Invoke_Nop(int deviceDpiOld, int deviceDpiNew)
+        {
+            using var control = new SubToolStrip();
+            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> SetItemLocation_TestData()
+        {
+            yield return new object[] { new Point(1, 0), 1 };
+            yield return new object[] { new Point(0, 2), 1 };
+            yield return new object[] { new Point(1, 2), 1 };
+            yield return new object[] { new Point(0, 0), 0 };
+            yield return new object[] { new Point(0, 0), 0 };
+            yield return new object[] { new Point(0, 0), 0 };
+            yield return new object[] { new Point(0, 0), 0 };
+            yield return new object[] { new Point(0, 0), 0 };
+            yield return new object[] { new Point(0, 0), 0 };
+            yield return new object[] { new Point(1, 2), 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetItemLocation_TestData))]
+        public void ToolStrip_SetItemLocation_Invoke_GetReturnsExpected(Point location, int expectedLocationChangedCallCount)
+        {
+            using var control = new SubToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = control
+            };
+            int controlLayoutCallCount = 0;
+            void controlHandler(object sender, LayoutEventArgs e) => controlLayoutCallCount++;
+            control.Layout += controlHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(EventArgs.Empty, e);
+                locationChangedCallCount++;
+            };
+
+            try
+            {
+                Rectangle oldBounds = item.Bounds;
+                control.SetItemLocation(item, location);
+                Assert.Equal(new Rectangle(location, oldBounds.Size), item.Bounds);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(0, controlLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+
+                // Set same.
+                control.SetItemLocation(item, location);
+                Assert.Equal(new Rectangle(location, oldBounds.Size), item.Bounds);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(0, controlLayoutCallCount);
+                Assert.False(control.IsHandleCreated);
+            }
+            finally
+            {
+                control.Layout -= controlHandler;
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetItemLocation_TestData))]
+        public void ToolStrip_SetItemLocation_InvokeWithHandle_GetReturnsExpected(Point location, int expectedLocationChangedCallCount)
+        {
+            using var control = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = control
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int controlLayoutCallCount = 0;
+            void controlHandler(object sender, LayoutEventArgs e) => controlLayoutCallCount++;
+            control.Layout += controlHandler;
+            int locationChangedCallCount = 0;
+            item.LocationChanged += (sender, e) =>
+            {
+                Assert.Same(item, sender);
+                Assert.Same(EventArgs.Empty, e);
+                locationChangedCallCount++;
+            };
+
+            try
+            {
+                Rectangle oldBounds = item.Bounds;
+                control.SetItemLocation(item, location);
+                Assert.Equal(new Rectangle(location, oldBounds.Size), item.Bounds);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(0, controlLayoutCallCount);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                // Set same.
+                control.SetItemLocation(item, location);
+                Assert.Equal(new Rectangle(location, oldBounds.Size), item.Bounds);
+                Assert.Equal(expectedLocationChangedCallCount, locationChangedCallCount);
+                Assert.Equal(0, controlLayoutCallCount);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+            finally
+            {
+                control.Layout -= controlHandler;
+            }
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_SetItemLocation_NullItem_ThrowsArgumentNullException()
+        {
+            using var control = new SubToolStrip();
+            Assert.Throws<ArgumentNullException>("item", () => control.SetItemLocation(null, Point.Empty));
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_SetItemLocation_ItemHasNoOwner_ThrowsNotSupportedException()
+        {
+            using var control = new SubToolStrip();
+            using var item = new SubToolStripItem();
+            Assert.Throws<NotSupportedException>(() => control.SetItemLocation(item, Point.Empty));
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_SetItemLocation_ItemHasDifferentOwner_ThrowsNotSupportedException()
+        {
+            using var control = new SubToolStrip();
+            using var otherControl = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = otherControl
+            };
+            Assert.Throws<NotSupportedException>(() => control.SetItemLocation(item, Point.Empty));
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_SetItemLocation_ItemHasSameParent_ThrowsNotSupportedException()
+        {
+            using var control = new SubToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = control
+            };
+            Assert.Throws<NotSupportedException>(() => control.SetItemLocation(item, Point.Empty));
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_SetItemLocation_ItemHasDifferentParent_ThrowsNotSupportedException()
+        {
+            using var control = new SubToolStrip();
+            using var otherControl = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = otherControl
+            };
+            Assert.Throws<NotSupportedException>(() => control.SetItemLocation(item, Point.Empty));
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_WndProc_InvokeMouseActivate_Success()
+        {
+            using var control = new SubToolStrip();
             var m = new Message
             {
-                Msg = msg,
-                LParam = IntPtr.Zero,
-                WParam = PARAM.FromLowHigh(0, 1),
+                Msg = (int)User32.WM.MOUSEACTIVATE,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
-            Assert.Equal(0, callCount);
-            Assert.True(control.Capture);
-            Assert.False(control.Focused);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_WndProc_InvokeMouseActivateWithHandle_Success()
+        {
+            using var control = new SubToolStrip();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.MOUSEACTIVATE,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStrip_WndProc_InvokeMouseHoverWithHandle_Success()
+        {
+            using var control = new SubToolStrip();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseHover += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.MOUSEHOVER,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -4474,8 +6895,26 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        private class CustomProcessControl : Control
+        {
+            public Func<Message, Keys, bool> ProcessCmdKeyAction { get; set; }
+
+            protected override bool ProcessCmdKey(ref Message msg, Keys keyData) => ProcessCmdKeyAction(msg, keyData);
+
+            public Func<char, bool> ProcessDialogCharAction { get; set; }
+
+            protected override bool ProcessDialogChar(char charCode) => ProcessDialogCharAction(charCode);
+        }
+
         private class SubToolStripItem : ToolStripItem
         {
+            public event LayoutEventHandler Layout;
+
+            protected internal override void OnLayout(LayoutEventArgs e)
+            {
+                Layout?.Invoke(this, e);
+                base.OnLayout(e);
+            }
         }
 
         private class SubToolStrip : ToolStrip
@@ -4572,6 +7011,10 @@ namespace System.Windows.Forms.Tests
                 set => base.VScroll = value;
             }
 
+            public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
+
+            public new ControlCollection CreateControlsInstance() => base.CreateControlsInstance();
+
             public new ToolStripItem CreateDefaultItem(string text, Image image, EventHandler onClick) => base.CreateDefaultItem(text, image, onClick);
 
             public new LayoutSettings CreateLayoutSettings(ToolStripLayoutStyle layoutStyle) => base.CreateLayoutSettings(layoutStyle);
@@ -4584,13 +7027,33 @@ namespace System.Windows.Forms.Tests
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
+            public new bool GetTopLevel() => base.GetTopLevel();
+
+            public new bool IsInputChar(char charCode) => base.IsInputChar(charCode);
+
+            public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
+
             public new void OnBeginDrag(EventArgs e) => base.OnBeginDrag(e);
 
             public new void OnControlAdded(ControlEventArgs e) => base.OnControlAdded(e);
 
             public new void OnControlRemoved(ControlEventArgs e) => base.OnControlRemoved(e);
 
+            public new void OnDockChanged(EventArgs e) => base.OnDockChanged(e);
+
+            public new void OnEnabledChanged(EventArgs e) => base.OnEnabledChanged(e);
+
             public new void OnEndDrag(EventArgs e) => base.OnEndDrag(e);
+
+            public new void OnFontChanged(EventArgs e) => base.OnFontChanged(e);
+
+            public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
+
+            public new void OnHandleDestroyed(EventArgs e) => base.OnHandleDestroyed(e);
+
+            public new void OnInvalidated(InvalidateEventArgs e) => base.OnInvalidated(e);
+
+            public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 
             public new void OnLayoutCompleted(EventArgs e) => base.OnLayoutCompleted(e);
 
@@ -4600,9 +7063,47 @@ namespace System.Windows.Forms.Tests
 
             public new void OnLostFocus(EventArgs e) => base.OnLostFocus(e);
 
+            public new void OnMouseCaptureChanged(EventArgs e) => base.OnMouseCaptureChanged(e);
+
+            public new void OnMouseDown(MouseEventArgs mea) => base.OnMouseDown(mea);
+
+            public new void OnMouseLeave(EventArgs e) => base.OnMouseLeave(e);
+
+            public new void OnMouseMove(MouseEventArgs mea) => base.OnMouseMove(mea);
+
+            public new void OnMouseUp(MouseEventArgs mea) => base.OnMouseUp(mea);
+
+            public new void OnPaint(PaintEventArgs e) => base.OnPaint(e);
+
+            public new void OnPaintBackground(PaintEventArgs e) => base.OnPaintBackground(e);
+
             public new void OnPaintGrip(PaintEventArgs e) => base.OnPaintGrip(e);
 
+            public new void OnRightToLeftChanged(EventArgs e) => base.OnRightToLeftChanged(e);
+
+            public new void OnScroll(ScrollEventArgs se) => base.OnScroll(se);
+
+            public new void OnTabStopChanged(EventArgs e) => base.OnTabStopChanged(e);
+
+            public new void OnVisibleChanged(EventArgs e) => base.OnVisibleChanged(e);
+
+            public new bool ProcessCmdKey(ref Message m, Keys keyData) => base.ProcessCmdKey(ref m, keyData);
+
+            public new bool ProcessDialogKey(Keys keyData) => base.ProcessDialogKey(keyData);
+
+            public new void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) => base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+
+            public new void Select(bool directed, bool forward) => base.Select(directed, forward);
+
+            public new void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) => base.SetBoundsCore(x, y, width, height, specified);
+
+            public new void SetDisplayedItems() => base.SetDisplayedItems();
+
+            public new void SetItemLocation(ToolStripItem item, Point location) => base.SetItemLocation(item, location);
+
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+
+            public new void SetVisibleCore(bool visible) => base.SetVisibleCore(visible);
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
         }

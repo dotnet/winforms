@@ -18,9 +18,8 @@ namespace System.Windows.Forms.Design
     /// <summary>
     ///  Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
     /// </summary>
-    [ComVisible(true),
-     ClassInterface(ClassInterfaceType.AutoDispatch)
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ToolboxItem(false)]
     public class ComponentEditorForm : Form
     {
@@ -137,20 +136,17 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Hide the property
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
@@ -851,7 +847,7 @@ namespace System.Windows.Forms.Design
 
             protected unsafe override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY)
+                if (m.Msg == (int)(User32.WM.REFLECT | User32.WM.NOTIFY))
                 {
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
                     if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)

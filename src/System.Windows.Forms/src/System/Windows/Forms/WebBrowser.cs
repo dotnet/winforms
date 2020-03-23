@@ -19,12 +19,13 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This is a wrapper over the native WebBrowser control implemented in shdocvw.dll.
     /// </summary>
-    [ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Url)), DefaultEvent(nameof(DocumentCompleted)),
-    Docking(DockingBehavior.AutoDock),
-    SRDescription(nameof(SR.DescriptionWebBrowser)),
-    Designer("System.Windows.Forms.Design.WebBrowserDesigner, " + AssemblyRef.SystemDesign)]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(Url))]
+    [DefaultEvent(nameof(DocumentCompleted))]
+    [Docking(DockingBehavior.AutoDock)]
+    [SRDescription(nameof(SR.DescriptionWebBrowser))]
+    [Designer("System.Windows.Forms.Design.WebBrowserDesigner, " + AssemblyRef.SystemDesign)]
     public class WebBrowser : WebBrowserBase
     {
         private static bool createdInIE;
@@ -76,8 +77,9 @@ namespace System.Windows.Forms
         ///  it has been loaded.  NOTE: it will always be able to navigate before being loaded.
         ///  "Loaded" here means setting Url, DocumentText, or DocumentStream.
         /// </summary>
-        [SRDescription(nameof(SR.WebBrowserAllowNavigationDescr)),
-        SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
+        [SRDescription(nameof(SR.WebBrowserAllowNavigationDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
         public bool AllowNavigation
         {
             get
@@ -101,8 +103,9 @@ namespace System.Windows.Forms
         ///  Windows Forms drag/drop i.e. the DragDrop event does not fire.  It does
         ///  control whether you can drag new documents into the browser control.
         /// </summary>
-        [SRDescription(nameof(SR.WebBrowserAllowWebBrowserDropDescr)),
-        SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
+        [SRDescription(nameof(SR.WebBrowserAllowWebBrowserDropDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
         public bool AllowWebBrowserDrop
         {
             get
@@ -125,8 +128,9 @@ namespace System.Windows.Forms
         ///  Specifies whether the browser control shows script errors in dialogs or not.
         ///  Maps to IWebBrowser2:Silent.
         /// </summary>
-        [SRDescription(nameof(SR.WebBrowserScriptErrorsSuppressedDescr)),
-        SRCategory(nameof(SR.CatBehavior)), DefaultValue(false)]
+        [SRDescription(nameof(SR.WebBrowserScriptErrorsSuppressedDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
         public bool ScriptErrorsSuppressed
         {
             get
@@ -146,8 +150,9 @@ namespace System.Windows.Forms
         ///  Specifies whether the browser control Shortcuts are enabled.
         ///  Maps to IDocHostUIHandler:TranslateAccelerator event.
         /// </summary>
-        [SRDescription(nameof(SR.WebBrowserWebBrowserShortcutsEnabledDescr)),
-        SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
+        [SRDescription(nameof(SR.WebBrowserWebBrowserShortcutsEnabledDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
         public bool WebBrowserShortcutsEnabled
         {
             get
@@ -165,7 +170,8 @@ namespace System.Windows.Forms
         ///  Defaults to false.  After that it's value is kept up to date by hooking the
         ///  DWebBrowserEvents2:CommandStateChange.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool CanGoBack
         {
             get
@@ -199,7 +205,8 @@ namespace System.Windows.Forms
         ///  Defaults to false.  After that it's value is kept up to date by hooking the
         ///  DWebBrowserEvents2:CommandStateChange.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool CanGoForward
         {
             get
@@ -232,7 +239,8 @@ namespace System.Windows.Forms
         ///  The HtmlDocument for page hosted in the html page.  If no page is loaded, it returns null.
         ///  Maps to IWebBrowser2:Document.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public HtmlDocument Document
         {
             get
@@ -271,7 +279,8 @@ namespace System.Windows.Forms
         ///  Get/sets the stream for the html document.
         ///  Uses the IPersisteStreamInit interface on the HtmlDocument to set/retrieve the html stream.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Stream DocumentStream
         {
             get
@@ -317,19 +326,21 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets/sets the text of the contained html page.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string DocumentText
         {
             get
             {
-                Stream stream = DocumentStream;
+                using Stream stream = DocumentStream;
                 if (stream == null)
                 {
-                    return "";
+                    return string.Empty;
                 }
-                StreamReader reader = new StreamReader(stream);
+
+                using var reader = new StreamReader(stream);
                 stream.Position = 0;
-                return reader.ReadToEnd();
+                return reader.ReadToEnd().TrimEnd('\0');
             }
             set
             {
@@ -352,7 +363,8 @@ namespace System.Windows.Forms
         ///  The title of the html page currently loaded. If none are loaded, returns empty string.
         ///  Maps to IWebBrowser2:LocationName.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string DocumentTitle
         {
             get
@@ -385,7 +397,8 @@ namespace System.Windows.Forms
         ///  A string containing the MIME type of the document hosted in the browser control.
         ///  If none are loaded, returns empty string.  Maps to IHTMLDocument2:mimeType.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string DocumentType
         {
             get
@@ -413,7 +426,8 @@ namespace System.Windows.Forms
         ///  Initially set to WebBrowserEncryptionLevel.Insecure.
         ///  After that it's kept up to date by hooking the DWebBrowserEvents2:SetSecureLockIcon.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public WebBrowserEncryptionLevel EncryptionLevel
         {
             get
@@ -429,7 +443,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  True if the browser is engaged in navigation or download.  Maps to IWebBrowser2:Busy.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsBusy
         {
             get
@@ -448,7 +463,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the offline state of the browser control. Maps to IWebBrowser2:Offline.
         /// </summary>
-        [SRDescription(nameof(SR.WebBrowserIsOfflineDescr)), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.WebBrowserIsOfflineDescr))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsOffline
         {
             get
@@ -464,8 +481,9 @@ namespace System.Windows.Forms
         ///  context menu does not lead to a clean OM.  Maps to sinking the
         ///  IDocHostUIHandler:ShowContextMenu
         /// </summary>
-        [SRDescription(nameof(SR.WebBrowserIsWebBrowserContextMenuEnabledDescr)),
-        SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
+        [SRDescription(nameof(SR.WebBrowserIsWebBrowserContextMenuEnabledDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
         public bool IsWebBrowserContextMenuEnabled
         {
             get
@@ -484,7 +502,8 @@ namespace System.Windows.Forms
         ///  will be accessible in script as the "window.external" object via IDispatch
         ///  COM interop. Maps to an implementation of the IDocUIHandler.GetExternal event.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object ObjectForScripting
         {
             get
@@ -495,36 +514,30 @@ namespace System.Windows.Forms
             {
                 if (value != null)
                 {
-                    Type t = value.GetType();
-#if Marshal_IsTypeVisibleFromCom
-                    if (!Marshal.IsTypeVisibleFromCom(t))
+                    if (!Marshal.IsTypeVisibleFromCom(value.GetType()))
                     {
-                        throw new ArgumentException(SR.WebBrowserObjectForScriptingComVisibleOnly);
+                        throw new ArgumentException(SR.WebBrowserObjectForScriptingComVisibleOnly, nameof(value));
                     }
-#endif
                 }
+
                 objectForScripting = value;
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatLayout))]
-        [SRDescription(nameof(SR.ControlOnPaddingChangedDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
         public new event EventHandler PaddingChanged
         {
             add => base.PaddingChanged += value;
@@ -535,7 +548,8 @@ namespace System.Windows.Forms
         ///  Gets the ReadyState of the browser control. (ex.. document loading vs. load complete).
         ///  Maps to IWebBrowser2:ReadyState.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public WebBrowserReadyState ReadyState
         {
             get
@@ -557,7 +571,8 @@ namespace System.Windows.Forms
         ///  initially an empty string.  After that the value is kept up to date via the
         ///  DWebBrowserEvents2:StatusTextChange event.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual string StatusText
         {
             get
@@ -576,13 +591,11 @@ namespace System.Windows.Forms
         ///  Note this means that setting the Url property &amp; then reading it immediately may not
         ///  return the result that you just set (since the get always returns the url you are currently at).
         /// </summary>
-        [
-            SRDescription(nameof(SR.WebBrowserUrlDescr)),
-            Bindable(true),
-            SRCategory(nameof(SR.CatBehavior)),
-            TypeConverter(typeof(WebBrowserUriTypeConverter)),
-            DefaultValue(null)
-        ]
+        [SRDescription(nameof(SR.WebBrowserUrlDescr))]
+        [Bindable(true)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [TypeConverter(typeof(WebBrowserUriTypeConverter))]
+        [DefaultValue(null)]
         public Uri Url
         {
             get
@@ -616,7 +629,8 @@ namespace System.Windows.Forms
         ///  Returns the version property of IE.
         ///  Determined by reading the file version of mshtml.dll in the %system% directory.
         /// </summary>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Version Version
         {
             get
@@ -644,12 +658,8 @@ namespace System.Windows.Forms
             {
                 AxIWebBrowser2.GoBack();
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
                 retVal = false;
             }
             return retVal;
@@ -668,12 +678,8 @@ namespace System.Windows.Forms
             {
                 AxIWebBrowser2.GoForward();
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
                 retVal = false;
             }
             return retVal;
@@ -783,7 +789,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void Print()
         {
-            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINT, Ole32.OLECMDEXECOPT.DONTPROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            try
+            {
+                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINT, Ole32.OLECMDEXECOPT.DONTPROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            }
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
+            {
+            }
         }
 
         /// <summary>
@@ -804,12 +816,8 @@ namespace System.Windows.Forms
                     AxIWebBrowser2.Refresh();
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
             }
         }
 
@@ -834,20 +842,17 @@ namespace System.Windows.Forms
                     AxIWebBrowser2.Refresh2(ref level);
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
             }
         }
 
         /// <summary>
         ///  Enables/disables the webbrowser's scrollbars.
         /// </summary>
-        [SRDescription(nameof(SR.WebBrowserScrollBarsEnabledDescr)),
-        SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
+        [SRDescription(nameof(SR.WebBrowserScrollBarsEnabledDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
         public bool ScrollBarsEnabled
         {
             get
@@ -870,7 +875,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowPageSetupDialog()
         {
-            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PAGESETUP, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            try
+            {
+                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PAGESETUP, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            }
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
+            {
+            }
         }
 
         /// <summary>
@@ -879,7 +890,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowPrintDialog()
         {
-            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINT, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            try
+            {
+                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINT, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            }
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
+            {
+            }
         }
 
         /// <summary>
@@ -887,7 +904,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowPrintPreviewDialog()
         {
-            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINTPREVIEW, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            try
+            {
+                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PRINTPREVIEW, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            }
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
+            {
+            }
         }
 
         /// <summary>
@@ -896,7 +919,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowPropertiesDialog()
         {
-            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PROPERTIES, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            try
+            {
+                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.PROPERTIES, Ole32.OLECMDEXECOPT.PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            }
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
+            {
+            }
         }
 
         /// <summary>
@@ -905,7 +934,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void ShowSaveAsDialog()
         {
-            AxIWebBrowser2.ExecWB(Ole32.OLECMDID.SAVEAS, Ole32.OLECMDEXECOPT.DODEFAULT, IntPtr.Zero, IntPtr.Zero);
+            try
+            {
+                AxIWebBrowser2.ExecWB(Ole32.OLECMDID.SAVEAS, Ole32.OLECMDEXECOPT.DODEFAULT, IntPtr.Zero, IntPtr.Zero);
+            }
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
+            {
+            }
         }
 
         /// <summary>
@@ -917,12 +952,8 @@ namespace System.Windows.Forms
             {
                 AxIWebBrowser2.Stop();
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
-                {
-                    throw;
-                }
             }
         }
 
@@ -1023,7 +1054,8 @@ namespace System.Windows.Forms
         ///  Can be used to keep a status bar populated with uptodate text.
         ///  Maps to DWebBrowserEvents2:StatusTextChange.
         /// </summary>
-        [Browsable(false), SRCategory(nameof(SR.CatPropertyChanged))]
+        [Browsable(false)]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.WebBrowserStatusTextChangedDescr))]
         public event EventHandler StatusTextChanged;
 
@@ -1406,9 +1438,9 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_CONTEXTMENU:
+                case User32.WM.CONTEXTMENU:
                     int x = PARAM.SignedLOWORD(m.LParam);
                     int y = PARAM.SignedHIWORD(m.LParam);
 

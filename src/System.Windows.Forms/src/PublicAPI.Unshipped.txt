@@ -1,26 +1,16 @@
-System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown owner) -> void
+System.Windows.Forms.ListViewGroup.Footer.get -> string
+System.Windows.Forms.ListViewGroup.Footer.set -> void
+System.Windows.Forms.ListViewGroup.FooterAlignment.get -> System.Windows.Forms.HorizontalAlignment
+System.Windows.Forms.ListViewGroup.FooterAlignment.set -> void
+System.Windows.Forms.FileDialog.ClientGuid.get -> System.Guid?
+System.Windows.Forms.FileDialog.ClientGuid.set -> void
 System.Windows.Forms.TaskDialog
 System.Windows.Forms.TaskDialog.Close() -> void
-System.Windows.Forms.TaskDialog.Closed -> System.EventHandler
-System.Windows.Forms.TaskDialog.Closing -> System.EventHandler<System.Windows.Forms.TaskDialogClosingEventArgs>
 System.Windows.Forms.TaskDialog.Handle.get -> System.IntPtr
-System.Windows.Forms.TaskDialog.OnClosed(System.EventArgs e) -> void
-System.Windows.Forms.TaskDialog.OnClosing(System.Windows.Forms.TaskDialogClosingEventArgs e) -> void
-System.Windows.Forms.TaskDialog.OnOpened(System.EventArgs e) -> void
-System.Windows.Forms.TaskDialog.OnShown(System.EventArgs e) -> void
-System.Windows.Forms.TaskDialog.Opened -> System.EventHandler
-System.Windows.Forms.TaskDialog.Page.get -> System.Windows.Forms.TaskDialogPage
-System.Windows.Forms.TaskDialog.Page.set -> void
 System.Windows.Forms.TaskDialog.SetToForeground.get -> bool
 System.Windows.Forms.TaskDialog.SetToForeground.set -> void
-System.Windows.Forms.TaskDialog.ShowDialog() -> System.Windows.Forms.TaskDialogButton
-System.Windows.Forms.TaskDialog.ShowDialog(System.IntPtr hwndOwner) -> System.Windows.Forms.TaskDialogButton
-System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.TaskDialogButton
-System.Windows.Forms.TaskDialog.Shown -> System.EventHandler
 System.Windows.Forms.TaskDialog.StartupLocation.get -> System.Windows.Forms.TaskDialogStartupLocation
 System.Windows.Forms.TaskDialog.StartupLocation.set -> void
-System.Windows.Forms.TaskDialog.TaskDialog() -> void
-System.Windows.Forms.TaskDialog.TaskDialog(System.Windows.Forms.TaskDialogPage page) -> void
 System.Windows.Forms.TaskDialogButton
 System.Windows.Forms.TaskDialogButton.AllowCloseDialog.get -> bool
 System.Windows.Forms.TaskDialogButton.AllowCloseDialog.set -> void
@@ -48,8 +38,6 @@ System.Windows.Forms.TaskDialogCheckBox.TaskDialogCheckBox() -> void
 System.Windows.Forms.TaskDialogCheckBox.TaskDialogCheckBox(string text) -> void
 System.Windows.Forms.TaskDialogCheckBox.Text.get -> string
 System.Windows.Forms.TaskDialogCheckBox.Text.set -> void
-System.Windows.Forms.TaskDialogClosingEventArgs
-System.Windows.Forms.TaskDialogClosingEventArgs.CloseButton.get -> System.Windows.Forms.TaskDialogButton
 System.Windows.Forms.TaskDialogCommandLinkButton
 System.Windows.Forms.TaskDialogCommandLinkButton.DescriptionText.get -> string
 System.Windows.Forms.TaskDialogCommandLinkButton.DescriptionText.set -> void
@@ -112,6 +100,7 @@ System.Windows.Forms.TaskDialogPage.Icon.get -> System.Windows.Forms.TaskDialogI
 System.Windows.Forms.TaskDialogPage.Icon.set -> void
 System.Windows.Forms.TaskDialogPage.MainInstruction.get -> string
 System.Windows.Forms.TaskDialogPage.MainInstruction.set -> void
+System.Windows.Forms.TaskDialogPage.Navigate(System.Windows.Forms.TaskDialogPage page) -> void
 System.Windows.Forms.TaskDialogPage.OnCreated(System.EventArgs e) -> void
 System.Windows.Forms.TaskDialogPage.OnDestroyed(System.EventArgs e) -> void
 System.Windows.Forms.TaskDialogPage.OnHelpRequest(System.EventArgs e) -> void
@@ -164,9 +153,6 @@ System.Windows.Forms.TaskDialogRadioButtonCollection.TaskDialogRadioButtonCollec
 System.Windows.Forms.TaskDialogStartupLocation
 System.Windows.Forms.TaskDialogStartupLocation.CenterParent = 1 -> System.Windows.Forms.TaskDialogStartupLocation
 System.Windows.Forms.TaskDialogStartupLocation.CenterScreen = 0 -> System.Windows.Forms.TaskDialogStartupLocation
-System.Windows.Forms.VisualStyles.EdgeEffects.Flat = 16384 -> System.Windows.Forms.VisualStyles.EdgeEffects
-System.Windows.Forms.VisualStyles.EdgeEffects.Soft = 4096 -> System.Windows.Forms.VisualStyles.EdgeEffects
-const System.Windows.Forms.TabControl.TabBaseReLayoutMessageName = "_TabBaseReLayout" -> string
 override System.Windows.Forms.TaskDialogButton.Equals(object obj) -> bool
 override System.Windows.Forms.TaskDialogButton.GetHashCode() -> int
 override System.Windows.Forms.TaskDialogButton.ToString() -> string
@@ -182,9 +168,9 @@ override System.Windows.Forms.TaskDialogRadioButtonCollection.ClearItems() -> vo
 override System.Windows.Forms.TaskDialogRadioButtonCollection.InsertItem(int index, System.Windows.Forms.TaskDialogRadioButton item) -> void
 override System.Windows.Forms.TaskDialogRadioButtonCollection.RemoveItem(int index) -> void
 override System.Windows.Forms.TaskDialogRadioButtonCollection.SetItem(int index, System.Windows.Forms.TaskDialogRadioButton item) -> void
-static System.Windows.Forms.TaskDialog.ShowDialog(System.IntPtr hwndOwner, string text, string mainInstruction = null, string caption = null, System.Collections.Generic.IEnumerable<System.Windows.Forms.TaskDialogButton> buttons = null, System.Windows.Forms.TaskDialogIcon icon = null, System.Windows.Forms.TaskDialogButton defaultButton = null) -> System.Windows.Forms.TaskDialogButton
-static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.IWin32Window owner, string text, string mainInstruction = null, string caption = null, System.Collections.Generic.IEnumerable<System.Windows.Forms.TaskDialogButton> buttons = null, System.Windows.Forms.TaskDialogIcon icon = null, System.Windows.Forms.TaskDialogButton defaultButton = null) -> System.Windows.Forms.TaskDialogButton
-static System.Windows.Forms.TaskDialog.ShowDialog(string text, string mainInstruction = null, string caption = null, System.Collections.Generic.IEnumerable<System.Windows.Forms.TaskDialogButton> buttons = null, System.Windows.Forms.TaskDialogIcon icon = null, System.Windows.Forms.TaskDialogButton defaultButton = null) -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialog.ShowDialog(System.IntPtr hwndOwner, System.Windows.Forms.TaskDialogPage page) -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.IWin32Window owner, System.Windows.Forms.TaskDialogPage page) -> System.Windows.Forms.TaskDialogButton
+static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.TaskDialogPage page) -> System.Windows.Forms.TaskDialogButton
 static System.Windows.Forms.TaskDialogButton.Abort.get -> System.Windows.Forms.TaskDialogButton
 static System.Windows.Forms.TaskDialogButton.Cancel.get -> System.Windows.Forms.TaskDialogButton
 static System.Windows.Forms.TaskDialogButton.Close.get -> System.Windows.Forms.TaskDialogButton

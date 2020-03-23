@@ -68,8 +68,8 @@ namespace System.Windows.Forms
         ///  Hide AutoSize: it doesn't make sense for this control
         /// </summary>
         [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
             get => base.AutoSize;

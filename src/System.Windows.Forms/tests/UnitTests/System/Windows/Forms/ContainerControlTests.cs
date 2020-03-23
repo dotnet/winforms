@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -145,11 +146,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_ActiveContanerControl_Set_GetReturnsExpected()
         {
-            var control = new ContainerControl();
-            var child = new Control();
+            using var control = new ContainerControl();
+            using var child = new Control();
             var grandchild = new Control();
             control.Controls.Add(child);
             child.Controls.Add(grandchild);
@@ -170,35 +171,37 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.ActiveControl);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_ActiveContanerControl_SetInvalid_ThrowsArgumentException()
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             Assert.Throws<ArgumentException>("value", () => control.ActiveControl = control);
             Assert.Throws<ArgumentException>("value", () => control.ActiveControl = new Control());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
-        public void AutoScaleDimensions_Set_GetReturnsExpected(Size value)
+        public void ContainerControl_AutoScaleDimensions_Set_GetReturnsExpected(Size value)
         {
-            var control = new ContainerControl
+            using var control = new ContainerControl
             {
                 AutoScaleDimensions = value
             };
             Assert.Equal(value, control.AutoScaleDimensions);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoScaleDimensions = value;
             Assert.Equal(value, control.AutoScaleDimensions);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
-        public void AutoScaleDimensions_SetWithChildren_GetReturnsExpected(Size value)
+        public void ContainerControl_AutoScaleDimensions_SetWithChildren_GetReturnsExpected(Size value)
         {
-            var child = new Control();
-            var control = new ContainerControl();
+            using var child = new Control();
+            using var control = new ContainerControl();
             control.Controls.Add(child);
 
             control.AutoScaleDimensions = value;
@@ -209,41 +212,43 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.AutoScaleDimensions);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
-        public void AutoScaleDimensions_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
+        public void ContainerControl_AutoScaleDimensions_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.AutoScaleDimensions = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
-        public void AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
+        public void ContainerControl_AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
         {
-            var control = new ContainerControl
+            using var control = new ContainerControl
             {
                 AutoScaleMode = value
             };
             Assert.Equal(value, control.AutoScaleMode);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoScaleMode = value;
             Assert.Equal(value, control.AutoScaleMode);
+            Assert.False(control.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> AutoScaleMode_SetDifferent_TestData()
+        public static IEnumerable<object[]> AutoScaleMode_SetWithCustomOldValue_TestData()
         {
             yield return new object[] { AutoScaleMode.None, SizeF.Empty };
             yield return new object[] { AutoScaleMode.Dpi, new SizeF(96, 96) };
             yield return new object[] { AutoScaleMode.Inherit, SizeF.Empty };
         }
 
-        [Theory]
-        [MemberData(nameof(AutoScaleMode_SetDifferent_TestData))]
-        public void AutoScaleMode_SetDifferent_ResetsAutoScaleDimensions(AutoScaleMode value, SizeF expectedAutoScaleDimensions)
+        [WinFormsTheory]
+        [MemberData(nameof(AutoScaleMode_SetWithCustomOldValue_TestData))]
+        public void ContainerControl_AutoScaleMode_SetWithCustomOldValue_ResetsAutoScaleDimensions(AutoScaleMode value, SizeF expectedAutoScaleDimensions)
         {
-            var control = new ContainerControl
+            using var control = new ContainerControl
             {
                 AutoScaleDimensions = new SizeF(1, 2),
                 AutoScaleMode = AutoScaleMode.Font
@@ -253,13 +258,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.AutoScaleMode);
             Assert.Equal(expectedAutoScaleDimensions, control.AutoScaleDimensions);
             Assert.Equal(expectedAutoScaleDimensions, control.CurrentAutoScaleDimensions);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.AutoScaleMode = value;
+            Assert.Equal(value, control.AutoScaleMode);
+            Assert.Equal(expectedAutoScaleDimensions, control.AutoScaleDimensions);
+            Assert.Equal(expectedAutoScaleDimensions, control.CurrentAutoScaleDimensions);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoScaleMode))]
-        public void AutoScaleMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoScaleMode value)
+        public void ContainerControl_AutoScaleMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoScaleMode value)
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoScaleMode = value);
         }
 
@@ -271,33 +284,27 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { AutoValidate.Inherit, AutoValidate.EnablePreventFocusChange };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AutoValidate_Set_TestData))]
-        public void AutoValidate_Set_GetReturnsExpected(AutoValidate value, AutoValidate expected)
+        public void UserControl_AutoValidate_Set_GetReturnsExpected(AutoValidate value, AutoValidate expected)
         {
-            var control = new ContainerControl
+            using var control = new ContainerControl
             {
                 AutoValidate = value
             };
             Assert.Equal(expected, control.AutoValidate);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoValidate = value;
             Assert.Equal(expected, control.AutoValidate);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoValidate))]
-        public void AutoValidate_SetInvalid_ThrowsInvalidEnumArgumentException(AutoValidate value)
-        {
-            var control = new ContainerControl();
-            Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoValidate = value);
-        }
-
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_AutoValidate_SetWithHandler_CallsAutoValidateChanged()
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -329,29 +336,40 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoValidate))]
+        public void ContainerControl_AutoValidate_SetInvalidValue_ThrowsInvalidEnumArgumentException(AutoValidate value)
+        {
+            using var control = new ContainerControl();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoValidate = value);
+        }
+
+        [WinFormsFact]
         public void ContainerControl_BindingContext_Set_GetReturnsExpected()
         {
             var value = new BindingContext();
-            var control = new ContainerControl
+            using var control = new ContainerControl
             {
                 BindingContext = value
             };
             Assert.Same(value, control.BindingContext);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BindingContext = value;
             Assert.Same(value, control.BindingContext);
+            Assert.False(control.IsHandleCreated);
 
             // Set null.
             control.BindingContext = null;
             Assert.NotNull(control.BindingContext);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_BindingContext_SetWithHandler_CallsBindingContextChanged()
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -388,7 +406,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
-        public void Font_Set_GetReturnsExpected(Font value)
+        public void ContainerControl_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubContainerControl
             {
@@ -407,7 +425,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
-        public void Font_SetWithAutoScaleModeFont_GetReturnsExpected(Font value)
+        public void ContainerControl_Font_SetWithAutoScaleModeFont_GetReturnsExpected(Font value)
         {
             using var control = new SubContainerControl
             {
@@ -478,6 +496,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(0, true)]
+        [InlineData(SubContainerControl.ScrollStateAutoScrolling, false)]
+        [InlineData(SubContainerControl.ScrollStateFullDrag, false)]
+        [InlineData(SubContainerControl.ScrollStateHScrollVisible, false)]
+        [InlineData(SubContainerControl.ScrollStateUserHasScrolled, false)]
+        [InlineData(SubContainerControl.ScrollStateVScrollVisible, false)]
+        [InlineData(int.MaxValue, false)]
+        [InlineData((-1), false)]
+        public void ContainerControl_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
+        {
+            using var control = new SubContainerControl();
+            Assert.Equal(expected, control.GetScrollState(bit));
+        }
+
+        [WinFormsTheory]
         [InlineData(ControlStyles.ContainerControl, true)]
         [InlineData(ControlStyles.UserPaint, true)]
         [InlineData(ControlStyles.Opaque, false)]
@@ -507,23 +540,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void ContainerControl_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubContainerControl();
+            Assert.False(control.GetTopLevel());
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void PerformAutoScale_InvokeWithoutChildren_Success(AutoScaleMode autoScaleMode)
         {
-            var control = new SubContainerControl
+            using var control = new SubContainerControl
             {
                 AutoScaleMode = autoScaleMode
             };
             control.PerformAutoScale();
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void PerformAutoScale_InvokeWithChildren_Success(AutoScaleMode autoScaleMode)
         {
-            var child = new Control();
-            var control = new SubContainerControl
+            using var child = new Control();
+            using var control = new SubContainerControl
             {
                 AutoScaleMode = autoScaleMode
             };
@@ -531,10 +571,10 @@ namespace System.Windows.Forms.Tests
             control.PerformAutoScale();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_CreateContanerControl_Invoke_CallsBindingContextChanged()
         {
-            var control = new ContainerControl();
+            using var control = new ContainerControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -569,11 +609,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_Dispose_Invoke_ResetsActiveControl()
         {
-            var control = new ContainerControl();
-            var child = new Control();
+            using var control = new ContainerControl();
+            using var child = new Control();
             control.Controls.Add(child);
             control.ActiveControl = child;
 
@@ -581,11 +621,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.ActiveControl);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnAutoValidateChanged_Invoke_CallsAutoValidateChanged(EventArgs eventArgs)
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -605,11 +645,33 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsFact]
+        public void UserControl_OnCreateControl_Invoke_Nop()
+        {
+            using var control = new SubContainerControl();
+            int bindingContextChangedCallCount = 0;
+            control.BindingContextChanged += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                bindingContextChangedCallCount++;
+            };
+            control.OnCreateControl();
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.Equal(1, bindingContextChangedCallCount);
+
+            control.OnCreateControl();
+            Assert.False(control.Created);
+            Assert.False(control.IsHandleCreated);
+            Assert.Equal(2, bindingContextChangedCallCount);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -629,11 +691,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnFontChanged_InvokeWithAutoScaleModeFont_CallsFontChanged(EventArgs eventArgs)
         {
-            var control = new SubContainerControl
+            using var control = new SubContainerControl
             {
                 AutoScaleMode = AutoScaleMode.Font
             };
@@ -658,11 +720,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
         public void ContainerControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             int callCount = 0;
             LayoutEventHandler handler = (sender, e) =>
             {
@@ -682,11 +744,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -706,16 +768,567 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContainerControl_UpdateDefaultButton_Invoke_Nop()
         {
-            var control = new SubContainerControl();
+            using var control = new SubContainerControl();
             control.UpdateDefaultButton();
             control.UpdateDefaultButton();
         }
 
+        [WinFormsFact]
+        public void ContainerControl_ValidateChildren_InvokeWithoutChildren_ReturnsTrue()
+        {
+            using var control = new ContainerControl();
+            Assert.True(control.ValidateChildren());
+        }
+
+        public static IEnumerable<object[]> ValidateChildren_TestData()
+        {
+            yield return new object[] { true, 0 };
+            yield return new object[] { false, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ValidateChildren_TestData))]
+        public void ContainerControl_ValidateChildren_InvokeWithChildren_ReturnsExpected(bool cancel, int expectedCallCount)
+        {
+            using var control = new ContainerControl();
+            using var child1 = new Control();
+            using var grandchild1 = new Control();
+            child1.Controls.Add(grandchild1);
+            using var child2 = new ContainerControl();
+            using var grandchild2 = new Control();
+            child2.Controls.Add(grandchild2);
+            using var child3 = new TabControl();
+            using var grandchild3 = new TabPage();
+            child3.Controls.Add(grandchild3);
+            using var child4 = new SubControl();
+            child4.SetStyle(ControlStyles.Selectable, false);
+            using var child5 = new SubControl
+            {
+                Enabled = false
+            };
+            using var child6 = new SubControl
+            {
+                Visible = false
+            };
+            using var child7 = new SubControl
+            {
+                TabStop = false
+            };
+            using var child8 = new SubControl
+            {
+                CausesValidation = false
+            };
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            control.Controls.Add(child3);
+            control.Controls.Add(child4);
+            control.Controls.Add(child5);
+            control.Controls.Add(child6);
+            control.Controls.Add(child7);
+            control.Controls.Add(child8);
+
+            int validatingCallCount = 0;
+            control.Validating += (sender, e) => validatingCallCount++;
+            int validatedCallCount = 0;
+            control.Validated += (sender, e) => validatedCallCount++;
+
+            int child1ValidatingCallCount = 0;
+            child1.Validating += (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.False(e.Cancel);
+                child1ValidatingCallCount++;
+                e.Cancel = cancel;
+            };
+            int child1ValidatedCallCount = 0;
+            child1.Validated += (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child1ValidatedCallCount++;
+            };
+            int grandchild1ValidatingCallCount = 0;
+            grandchild1.Validating += (sender, e) =>
+            {
+                Assert.Same(grandchild1, sender);
+                Assert.False(e.Cancel);
+                grandchild1ValidatingCallCount++;
+            };
+            int grandchild1ValidatedCallCount = 0;
+            grandchild1.Validated += (sender, e) => grandchild1ValidatedCallCount++;
+            int child2ValidatingCallCount = 0;
+            child2.Validating += (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.False(e.Cancel);
+                child2ValidatingCallCount++;
+            };
+            int child2ValidatedCallCount = 0;
+            child2.Validated += (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child2ValidatedCallCount++;
+            };
+            int grandchild2ValidatingCallCount = 0;
+            grandchild2.Validating += (sender, e) =>
+            {
+                Assert.Same(grandchild2, sender);
+                Assert.False(e.Cancel);
+                grandchild2ValidatingCallCount++;
+            };
+            int grandchild2ValidatedCallCount = 0;
+            grandchild2.Validated += (sender, e) =>
+            {
+                Assert.Same(grandchild2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                grandchild2ValidatedCallCount++;
+            };
+            int child3ValidatingCallCount = 0;
+            child3.Validating += (sender, e) =>
+            {
+                Assert.Same(child3, sender);
+                Assert.False(e.Cancel);
+                child3ValidatingCallCount++;
+            };
+            int child3ValidatedCallCount = 0;
+            child3.Validated += (sender, e) =>
+            {
+                Assert.Same(child3, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child3ValidatedCallCount++;
+            };
+            int grandchild3ValidatingCallCount = 0;
+            grandchild3.Validating += (sender, e) => grandchild3ValidatingCallCount++;
+            int grandchild3ValidatedCallCount = 0;
+            grandchild3.Validated += (sender, e) => grandchild3ValidatedCallCount++;
+            int child4ValidatingCallCount = 0;
+            child4.Validating += (sender, e) => child4ValidatingCallCount++;
+            int child4ValidatedCallCount = 0;
+            child4.Validated += (sender, e) => child4ValidatedCallCount++;
+            int child5ValidatingCallCount = 0;
+            child5.Validating += (sender, e) =>
+            {
+                Assert.Same(child5, sender);
+                Assert.False(e.Cancel);
+                child5ValidatingCallCount++;
+            };
+            int child5ValidatedCallCount = 0;
+            child5.Validated += (sender, e) =>
+            {
+                Assert.Same(child5, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child5ValidatedCallCount++;
+            };
+            int child6ValidatingCallCount = 0;
+            child6.Validating += (sender, e) =>
+            {
+                Assert.Same(child6, sender);
+                Assert.False(e.Cancel);
+                child6ValidatingCallCount++;
+            };
+            int child6ValidatedCallCount = 0;
+            child6.Validated += (sender, e) =>
+            {
+                Assert.Same(child6, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child6ValidatedCallCount++;
+            };
+            int child7ValidatingCallCount = 0;
+            child7.Validating += (sender, e) =>
+            {
+                Assert.Same(child7, sender);
+                Assert.False(e.Cancel);
+                child7ValidatingCallCount++;
+            };
+            int child7ValidatedCallCount = 0;
+            child7.Validated += (sender, e) =>
+            {
+                Assert.Same(child7, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child7ValidatedCallCount++;
+            };
+            int child8ValidatingCallCount = 0;
+            child8.Validating += (sender, e) => child8ValidatingCallCount++;
+            int child8ValidatedCallCount = 0;
+            child8.Validated += (sender, e) => child8ValidatedCallCount++;
+
+            Assert.Equal(!cancel, control.ValidateChildren());
+            Assert.Equal(0, validatingCallCount);
+            Assert.Equal(0, validatedCallCount);
+            Assert.Equal(1, child1ValidatingCallCount);
+            Assert.Equal(expectedCallCount, child1ValidatedCallCount);
+            Assert.Equal(0, grandchild1ValidatingCallCount);
+            Assert.Equal(0, grandchild1ValidatedCallCount);
+            Assert.Equal(1, child2ValidatingCallCount);
+            Assert.Equal(1, child2ValidatedCallCount);
+            Assert.Equal(1, grandchild2ValidatingCallCount);
+            Assert.Equal(1, grandchild2ValidatedCallCount);
+            Assert.Equal(1, child3ValidatingCallCount);
+            Assert.Equal(1, child3ValidatedCallCount);
+            Assert.Equal(0, grandchild3ValidatingCallCount);
+            Assert.Equal(0, grandchild3ValidatedCallCount);
+            Assert.Equal(0, child4ValidatingCallCount);
+            Assert.Equal(0, child4ValidatedCallCount);
+            Assert.Equal(1, child5ValidatingCallCount);
+            Assert.Equal(1, child5ValidatedCallCount);
+            Assert.Equal(1, child6ValidatingCallCount);
+            Assert.Equal(1, child6ValidatedCallCount);
+            Assert.Equal(1, child7ValidatingCallCount);
+            Assert.Equal(1, child7ValidatedCallCount);
+            Assert.Equal(0, child8ValidatingCallCount);
+            Assert.Equal(0, child8ValidatedCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ValidationConstraints))]
+        public void ContainerControl_ValidateChildren_InvokeValidationConstraintsWithoutChildren_ReturnsTrue(ValidationConstraints validationConstraints)
+        {
+            using var control = new ContainerControl();
+            Assert.True(control.ValidateChildren(validationConstraints));
+        }
+
+        public static IEnumerable<object[]> ValidateChildren_ValidationConstraints_TestData()
+        {
+            yield return new object[] { ValidationConstraints.ImmediateChildren, true, 0, 0, 0, 1, 1, 1, 1 };
+            yield return new object[] { ValidationConstraints.ImmediateChildren, false, 1, 0, 0, 1, 1, 1, 1 };
+
+            yield return new object[] { ValidationConstraints.Selectable, true, 0, 1, 0, 0, 1, 1, 1 };
+            yield return new object[] { ValidationConstraints.Selectable, false, 1, 1, 0, 0, 1, 1, 1 };
+
+            yield return new object[] { ValidationConstraints.Enabled, true, 0, 1, 1, 1, 0, 1, 1 };
+            yield return new object[] { ValidationConstraints.Enabled, false, 1, 1, 1, 1, 0, 1, 1 };
+
+            yield return new object[] { ValidationConstraints.Visible, true, 0, 1, 0, 1, 1, 0, 1 };
+            yield return new object[] { ValidationConstraints.Visible, false, 1, 1, 0, 1, 1, 0, 1 };
+
+            yield return new object[] { ValidationConstraints.TabStop, true, 0, 1, 0, 1, 1, 1, 0 };
+            yield return new object[] { ValidationConstraints.TabStop, false, 1, 1, 0, 1, 1, 1, 0 };
+
+            yield return new object[] { ValidationConstraints.None, true, 0, 1, 1, 1, 1, 1, 1 };
+            yield return new object[] { ValidationConstraints.None, false, 1, 1, 1, 1, 1, 1, 1 };
+
+            yield return new object[] { ValidationConstraints.ImmediateChildren | ValidationConstraints.Selectable | ValidationConstraints.Enabled | ValidationConstraints.Visible | ValidationConstraints.TabStop, true, 0, 0, 0, 0, 0, 0, 0 };
+            yield return new object[] { ValidationConstraints.ImmediateChildren | ValidationConstraints.Selectable | ValidationConstraints.Enabled | ValidationConstraints.Visible | ValidationConstraints.TabStop, false, 1, 0, 0, 0, 0, 0, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ValidateChildren_ValidationConstraints_TestData))]
+        public void ContainerControl_ValidateChildren_InvokeValidationConstraintsWithChildren_ReturnsExpected(ValidationConstraints validationConstraints, bool cancel, int expectedChild1CallCount, int expectedGrandchild2CallCount, int expectedGrandchild3CallCount, int expectedChild4CallCount, int expectedChild5CallCount, int expectedChild6CallCount, int expectedChild7CallCount)
+        {
+            using var control = new ContainerControl();
+            using var child1 = new Control();
+            using var grandchild1 = new Control();
+            child1.Controls.Add(grandchild1);
+            using var child2 = new ContainerControl();
+            using var grandchild2 = new Control();
+            child2.Controls.Add(grandchild2);
+            using var child3 = new TabControl();
+            using var grandchild3 = new TabPage();
+            child3.Controls.Add(grandchild3);
+            using var child4 = new SubControl();
+            child4.SetStyle(ControlStyles.Selectable, false);
+            using var child5 = new SubControl
+            {
+                Enabled = false
+            };
+            using var child6 = new SubControl
+            {
+                Visible = false
+            };
+            using var child7 = new SubControl
+            {
+                TabStop = false
+            };
+            using var child8 = new SubControl
+            {
+                CausesValidation = false
+            };
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            control.Controls.Add(child3);
+            control.Controls.Add(child4);
+            control.Controls.Add(child5);
+            control.Controls.Add(child6);
+            control.Controls.Add(child7);
+            control.Controls.Add(child8);
+
+            int validatingCallCount = 0;
+            control.Validating += (sender, e) => validatingCallCount++;
+            int validatedCallCount = 0;
+            control.Validated += (sender, e) => validatedCallCount++;
+
+            int child1ValidatingCallCount = 0;
+            child1.Validating += (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.False(e.Cancel);
+                child1ValidatingCallCount++;
+                e.Cancel = cancel;
+            };
+            int child1ValidatedCallCount = 0;
+            child1.Validated += (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child1ValidatedCallCount++;
+            };
+            int grandchild1ValidatingCallCount = 0;
+            grandchild1.Validating += (sender, e) =>
+            {
+                Assert.Same(grandchild1, sender);
+                Assert.False(e.Cancel);
+                grandchild1ValidatingCallCount++;
+            };
+            int grandchild1ValidatedCallCount = 0;
+            grandchild1.Validated += (sender, e) => grandchild1ValidatedCallCount++;
+            int child2ValidatingCallCount = 0;
+            child2.Validating += (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.False(e.Cancel);
+                child2ValidatingCallCount++;
+            };
+            int child2ValidatedCallCount = 0;
+            child2.Validated += (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child2ValidatedCallCount++;
+            };
+            int grandchild2ValidatingCallCount = 0;
+            grandchild2.Validating += (sender, e) =>
+            {
+                Assert.Same(grandchild2, sender);
+                Assert.False(e.Cancel);
+                grandchild2ValidatingCallCount++;
+            };
+            int grandchild2ValidatedCallCount = 0;
+            grandchild2.Validated += (sender, e) =>
+            {
+                Assert.Same(grandchild2, sender);
+                Assert.Same(EventArgs.Empty, e);
+                grandchild2ValidatedCallCount++;
+            };
+            int child3ValidatingCallCount = 0;
+            child3.Validating += (sender, e) =>
+            {
+                Assert.Same(child3, sender);
+                Assert.False(e.Cancel);
+                child3ValidatingCallCount++;
+            };
+            int child3ValidatedCallCount = 0;
+            child3.Validated += (sender, e) =>
+            {
+                Assert.Same(child3, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child3ValidatedCallCount++;
+            };
+            int grandchild3ValidatingCallCount = 0;
+            grandchild3.Validating += (sender, e) => grandchild3ValidatingCallCount++;
+            int grandchild3ValidatedCallCount = 0;
+            grandchild3.Validated += (sender, e) => grandchild3ValidatedCallCount++;
+            int child4ValidatingCallCount = 0;
+            child4.Validating += (sender, e) => child4ValidatingCallCount++;
+            int child4ValidatedCallCount = 0;
+            child4.Validated += (sender, e) => child4ValidatedCallCount++;
+            int child5ValidatingCallCount = 0;
+            child5.Validating += (sender, e) =>
+            {
+                Assert.Same(child5, sender);
+                Assert.False(e.Cancel);
+                child5ValidatingCallCount++;
+            };
+            int child5ValidatedCallCount = 0;
+            child5.Validated += (sender, e) =>
+            {
+                Assert.Same(child5, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child5ValidatedCallCount++;
+            };
+            int child6ValidatingCallCount = 0;
+            child6.Validating += (sender, e) =>
+            {
+                Assert.Same(child6, sender);
+                Assert.False(e.Cancel);
+                child6ValidatingCallCount++;
+            };
+            int child6ValidatedCallCount = 0;
+            child6.Validated += (sender, e) =>
+            {
+                Assert.Same(child6, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child6ValidatedCallCount++;
+            };
+            int child7ValidatingCallCount = 0;
+            child7.Validating += (sender, e) =>
+            {
+                Assert.Same(child7, sender);
+                Assert.False(e.Cancel);
+                child7ValidatingCallCount++;
+            };
+            int child7ValidatedCallCount = 0;
+            child7.Validated += (sender, e) =>
+            {
+                Assert.Same(child7, sender);
+                Assert.Same(EventArgs.Empty, e);
+                child7ValidatedCallCount++;
+            };
+            int child8ValidatingCallCount = 0;
+            child8.Validating += (sender, e) => child8ValidatingCallCount++;
+            int child8ValidatedCallCount = 0;
+            child8.Validated += (sender, e) => child8ValidatedCallCount++;
+
+            Assert.Equal(!cancel, control.ValidateChildren(validationConstraints));
+            Assert.Equal(0, validatingCallCount);
+            Assert.Equal(0, validatedCallCount);
+            Assert.Equal(1, child1ValidatingCallCount);
+            Assert.Equal(expectedChild1CallCount, child1ValidatedCallCount);
+            Assert.Equal(0, grandchild1ValidatingCallCount);
+            Assert.Equal(0, grandchild1ValidatedCallCount);
+            Assert.Equal(1, child2ValidatingCallCount);
+            Assert.Equal(1, child2ValidatedCallCount);
+            Assert.Equal(expectedGrandchild2CallCount, grandchild2ValidatingCallCount);
+            Assert.Equal(expectedGrandchild2CallCount, grandchild2ValidatedCallCount);
+            Assert.Equal(1, child3ValidatingCallCount);
+            Assert.Equal(1, child3ValidatedCallCount);
+            Assert.Equal(expectedGrandchild3CallCount, grandchild3ValidatingCallCount);
+            Assert.Equal(expectedGrandchild3CallCount, grandchild3ValidatedCallCount);
+            Assert.Equal(expectedChild4CallCount, child4ValidatingCallCount);
+            Assert.Equal(expectedChild4CallCount, child4ValidatedCallCount);
+            Assert.Equal(expectedChild5CallCount, child5ValidatingCallCount);
+            Assert.Equal(expectedChild5CallCount, child5ValidatedCallCount);
+            Assert.Equal(expectedChild6CallCount, child6ValidatingCallCount);
+            Assert.Equal(expectedChild6CallCount, child6ValidatedCallCount);
+            Assert.Equal(expectedChild7CallCount, child7ValidatingCallCount);
+            Assert.Equal(expectedChild7CallCount, child7ValidatedCallCount);
+            Assert.Equal(0, child8ValidatingCallCount);
+            Assert.Equal(0, child8ValidatedCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData((ValidationConstraints)(-1))]
+        [InlineData((ValidationConstraints)(0x20))]
+        public void ContainerControl_ValidateChildren_InvalidValidationConstraints_ThrowsInvalidEnumArgumentException(ValidationConstraints validationConstraints)
+        {
+            using var control = new ContainerControl();
+            Assert.Throws<InvalidEnumArgumentException>("validationConstraints", () => control.ValidateChildren(validationConstraints));
+        }
+
+        [WinFormsFact]
+        public void ContainerControl_WndProc_InvokeMouseHoverWithHandle_Success()
+        {
+            using var control = new SubContainerControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int callCount = 0;
+            control.MouseHover += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            var m = new Message
+            {
+                Msg = (int)User32.WM.MOUSEHOVER,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ContainerControl_WndProc_InvokeSetFocusWithHandle_Success()
+        {
+            using var child1 = new Control();
+            using var child2 = new Control();
+            using var control = new SubContainerControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Null(control.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ContainerControl_WndProc_InvokeSetFocusWithActiveControlWithHandle_Success()
+        {
+            using var child1 = new Control();
+            using var child2 = new Control();
+            using var control = new SubContainerControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+            control.ActiveControl = child2;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFOCUS,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal((IntPtr)250, m.Result);
+            Assert.Same(child2, control.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        private class SubControl : Control
+        {
+            public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+        }
+
         public class SubContainerControl : ContainerControl
         {
+            public new const int ScrollStateAutoScrolling = ContainerControl.ScrollStateAutoScrolling;
+
+            public new const int ScrollStateHScrollVisible = ContainerControl.ScrollStateHScrollVisible;
+
+            public new const int ScrollStateVScrollVisible = ContainerControl.ScrollStateVScrollVisible;
+
+            public new const int ScrollStateUserHasScrolled = ContainerControl.ScrollStateUserHasScrolled;
+
+            public new const int ScrollStateFullDrag = ContainerControl.ScrollStateFullDrag;
+
             public new SizeF AutoScaleFactor => base.AutoScaleFactor;
 
             public new bool CanEnableIme => base.CanEnableIme;
@@ -784,17 +1397,25 @@ namespace System.Windows.Forms.Tests
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
+            public new bool GetScrollState(int bit) => base.GetScrollState(bit);
+
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
-            public new void UpdateDefaultButton() => base.UpdateDefaultButton();
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnAutoValidateChanged(EventArgs e) => base.OnAutoValidateChanged(e);
+
+            public new void OnCreateControl() => base.OnCreateControl();
 
             public new void OnFontChanged(EventArgs e) => base.OnFontChanged(e);
 
             public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 
             public new void OnParentChanged(EventArgs e) => base.OnParentChanged(e);
+
+            public new void UpdateDefaultButton() => base.UpdateDefaultButton();
+
+            public new void WndProc(ref Message m) => base.WndProc(ref m);
         }
     }
 }

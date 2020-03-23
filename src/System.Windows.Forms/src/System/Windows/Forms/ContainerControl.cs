@@ -286,7 +286,7 @@ namespace System.Windows.Forms
         public Control ActiveControl
         {
             get => _activeControl;
-            set=> SetActiveControl(value);
+            set => SetActiveControl(value);
         }
 
         protected override CreateParams CreateParams
@@ -1755,7 +1755,8 @@ namespace System.Windows.Forms
         ///  equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
         ///  for details of exactly which child controls will be validated.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual bool ValidateChildren() => ValidateChildren(ValidationConstraints.Selectable);
 
         /// <summary>
@@ -1961,9 +1962,9 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_SETFOCUS:
+                case User32.WM.SETFOCUS:
                     WmSetFocus(ref m);
                     break;
                 default:

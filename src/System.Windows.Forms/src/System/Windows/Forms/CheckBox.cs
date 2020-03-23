@@ -18,15 +18,13 @@ namespace System.Windows.Forms
     ///  Represents a Windows
     ///  check box.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Checked)),
-    DefaultEvent(nameof(CheckedChanged)),
-    DefaultBindingProperty(nameof(CheckState)),
-    ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionCheckBox))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(Checked))]
+    [DefaultEvent(nameof(CheckedChanged))]
+    [DefaultBindingProperty(nameof(CheckState))]
+    [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionCheckBox))]
     public class CheckBox : ButtonBase
     {
         private static readonly object EVENT_CHECKEDCHANGED = new object();
@@ -87,12 +85,10 @@ namespace System.Windows.Forms
         ///  or sets the value that determines the appearance of a
         ///  check box control.
         /// </summary>
-        [
-        DefaultValue(Appearance.Normal),
-        Localizable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.CheckBoxAppearanceDescr))
-        ]
+        [DefaultValue(Appearance.Normal)]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.CheckBoxAppearanceDescr))]
         public Appearance Appearance
         {
             get
@@ -127,7 +123,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
         public event EventHandler AppearanceChanged
         {
             add => Events.AddHandler(EVENT_APPEARANCECHANGED, value);
@@ -139,11 +136,9 @@ namespace System.Windows.Forms
         ///  value and the check box's appearance are automatically
         ///  changed when it is clicked.
         /// </summary>
-        [
-        DefaultValue(true),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.CheckBoxAutoCheckDescr))
-        ]
+        [DefaultValue(true)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.CheckBoxAutoCheckDescr))]
         public bool AutoCheck
         {
             get
@@ -162,13 +157,11 @@ namespace System.Windows.Forms
         ///  the horizontal and vertical alignment of a check box on a check box
         ///  control.
         /// </summary>
-        [
-        Bindable(true),
-        Localizable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(ContentAlignment.MiddleLeft),
-        SRDescription(nameof(SR.CheckBoxCheckAlignDescr))
-        ]
+        [Bindable(true)]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(ContentAlignment.MiddleLeft)]
+        [SRDescription(nameof(SR.CheckBoxCheckAlignDescr))]
         public ContentAlignment CheckAlign
         {
             get
@@ -204,14 +197,12 @@ namespace System.Windows.Forms
         ///  check box
         ///  is checked.
         /// </summary>
-        [
-        Bindable(true),
-        SettingsBindable(true),
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatAppearance)),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.CheckBoxCheckedDescr))
-        ]
+        [Bindable(true),
+        SettingsBindable(true)]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.CheckBoxCheckedDescr))]
         public bool Checked
         {
             get
@@ -232,13 +223,11 @@ namespace System.Windows.Forms
         ///  Gets
         ///  or sets a value indicating whether the check box is checked.
         /// </summary>
-        [
-        Bindable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(CheckState.Unchecked),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.CheckBoxCheckStateDescr))
-        ]
+        [Bindable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(CheckState.Unchecked)]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.CheckBoxCheckStateDescr))]
         public CheckState CheckState
         {
             get
@@ -275,7 +264,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick
         {
             add => base.DoubleClick += value;
@@ -283,7 +273,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
@@ -420,31 +411,21 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating the alignment of the
         ///  text on the checkbox control.
         /// </summary>
-        [
-        Localizable(true),
-        DefaultValue(ContentAlignment.MiddleLeft)
-        ]
+        [Localizable(true)]
+        [DefaultValue(ContentAlignment.MiddleLeft)]
         public override ContentAlignment TextAlign
         {
-            get
-            {
-                return base.TextAlign;
-            }
-            set
-            {
-                base.TextAlign = value;
-            }
+            get => base.TextAlign;
+            set => base.TextAlign = value;
         }
 
         /// <summary>
         ///  Gets or sets a value indicating
         ///  whether the check box will allow three check states rather than two.
         /// </summary>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.CheckBoxThreeStateDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.CheckBoxThreeStateDescr))]
         public bool ThreeState
         {
             get

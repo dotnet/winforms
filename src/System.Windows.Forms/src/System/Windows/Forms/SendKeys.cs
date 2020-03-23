@@ -1060,7 +1060,7 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_CANCELJOURNAL)
+                if (m.Msg == (int)User32.WM.CANCELJOURNAL)
                 {
                     try
                     {

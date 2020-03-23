@@ -13,9 +13,9 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true),
-     ClassInterface(ClassInterfaceType.AutoDispatch),
-     SRDescription(nameof(SR.DescriptionStatusStrip))
+    [ComVisible(true)]
+     [ClassInterface(ClassInterfaceType.AutoDispatch)]
+     [SRDescription(nameof(SR.DescriptionStatusStrip))
     ]
     public class StatusStrip : ToolStrip
     {
@@ -46,22 +46,14 @@ namespace System.Windows.Forms
             ResumeLayout(true);
         }
 
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.ToolStripCanOverflowDescr)),
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false)
-        ]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ToolStripCanOverflowDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
         public new bool CanOverflow
         {
-            get
-            {
-                return base.CanOverflow;
-            }
-            set
-            {
-                base.CanOverflow = value;
-            }
+            get => base.CanOverflow;
+            set => base.CanOverflow = value;
         }
 
         protected override bool DefaultShowItemToolTips
@@ -116,34 +108,22 @@ namespace System.Windows.Forms
         [DefaultValue(DockStyle.Bottom)]
         public override DockStyle Dock
         {
-            get
-            {
-                return base.Dock;
-            }
-            set
-            {
-                base.Dock = value;
-            }
+            get => base.Dock;
+            set => base.Dock = value;
         }
 
         [DefaultValue(ToolStripGripStyle.Hidden)]
         public new ToolStripGripStyle GripStyle
         {
-            get
-            {
-                return base.GripStyle;
-            }
-            set
-            {
-                base.GripStyle = value;
-            }
+            get => base.GripStyle;
+            set => base.GripStyle = value;
         }
 
         [DefaultValue(ToolStripLayoutStyle.Table)]
         public new ToolStripLayoutStyle LayoutStyle
         {
-            get { return base.LayoutStyle; }
-            set { base.LayoutStyle = value; }
+            get => base.LayoutStyle;
+            set => base.LayoutStyle = value;
         }
 
         // we do some custom stuff with padding to accomodate size grip.
@@ -151,14 +131,8 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public new Padding Padding
         {
-            get
-            {
-                return base.Padding;
-            }
-            set
-            {
-                base.Padding = value;
-            }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
         [Browsable(false)]
@@ -185,14 +159,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         public new bool ShowItemToolTips
         {
-            get
-            {
-                return base.ShowItemToolTips;
-            }
-            set
-            {
-                base.ShowItemToolTips = value;
-            }
+            get => base.ShowItemToolTips;
+            set => base.ShowItemToolTips = value;
         }
 
         // return whether we should paint the sizing grip.
@@ -218,11 +186,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.StatusStripSizingGripDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.StatusStripSizingGripDescr))]
         public bool SizingGrip
         {
             get
@@ -270,14 +236,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ToolStripStretchDescr))]
         public new bool Stretch
         {
-            get
-            {
-                return base.Stretch;
-            }
-            set
-            {
-                base.Stretch = value;
-            }
+            get => base.Stretch;
+            set => base.Stretch = value;
         }
 
         private TableLayoutSettings TableLayoutSettings
@@ -605,7 +565,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if ((m.Msg == WindowMessages.WM_NCHITTEST) && SizingGrip)
+            if ((m.Msg == (int)User32.WM.NCHITTEST) && SizingGrip)
             {
                 // if we're within the grip bounds tell windows
                 // that we're the bottom right of the window.
@@ -645,7 +605,7 @@ namespace System.Windows.Forms
                         {
                             if ((deltaRightEdge + deltaBottomEdge) < 2)
                             {
-                                m.Result = (IntPtr)NativeMethods.HTBOTTOMRIGHT;
+                                m.Result = (IntPtr)User32.HT.BOTTOMRIGHT;
                                 return;
                             }
                         }
@@ -674,14 +634,14 @@ namespace System.Windows.Forms
             }
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_NCHITTEST)
+                if (m.Msg == (int)User32.WM.NCHITTEST)
                 {
                     int x = PARAM.LOWORD(m.LParam);
                     int y = PARAM.HIWORD(m.LParam);
 
                     if (ClientRectangle.Contains(PointToClient(new Point(x, y))))
                     {
-                        m.Result = (IntPtr)NativeMethods.HTBOTTOMLEFT;
+                        m.Result = (IntPtr)User32.HT.BOTTOMLEFT;
                         return;
                     }
                 }

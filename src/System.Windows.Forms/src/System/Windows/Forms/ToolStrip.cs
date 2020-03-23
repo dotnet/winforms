@@ -239,15 +239,13 @@ namespace System.Windows.Forms
             }
         }
 
-        [DefaultValue(true), Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
-        ]
+        [DefaultValue(true)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 if (IsInToolStripPanel && base.AutoSize && !value)
@@ -263,88 +261,58 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoScroll
         {
-            get
-            {
-                return base.AutoScroll;
-            }
+            get => base.AutoScroll;
             set
             {
                 throw new NotSupportedException(SR.ToolStripDoesntSupportAutoScroll);
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size AutoScrollMargin
         {
-            get
-            {
-                return base.AutoScrollMargin;
-            }
-            set
-            {
-                base.AutoScrollMargin = value;
-            }
+            get => base.AutoScrollMargin;
+            set => base.AutoScrollMargin = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size AutoScrollMinSize
         {
-            get
-            {
-                return base.AutoScrollMinSize;
-            }
-            set
-            {
-                base.AutoScrollMinSize = value;
-            }
+            get => base.AutoScrollMinSize;
+            set => base.AutoScrollMinSize = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Point AutoScrollPosition
         {
-            get
-            {
-                return base.AutoScrollPosition;
-            }
-            set
-            {
-                base.AutoScrollPosition = value;
-            }
+            get => base.AutoScrollPosition;
+            set => base.AutoScrollPosition = value;
         }
 
         public override bool AllowDrop
         {
-            get
-            {
-                return base.AllowDrop;
-            }
+            get => base.AllowDrop;
             set
             {
                 if (value && AllowItemReorder)
@@ -366,13 +334,12 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         /// <summary>
         /// </summary>
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.ToolStripAllowItemReorderDescr)),
-        SRCategory(nameof(SR.CatBehavior))
-        ]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ToolStripAllowItemReorderDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
         public bool AllowItemReorder
         {
             get { return GetToolStripState(STATE_ALLOWITEMREORDER); }
@@ -406,11 +373,9 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// </summary>
-        [
-        DefaultValue(true),
-        SRDescription(nameof(SR.ToolStripAllowMergeDescr)),
-        SRCategory(nameof(SR.CatBehavior))
-        ]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.ToolStripAllowMergeDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
         public bool AllowMerge
         {
             get { return GetToolStripState(STATE_ALLOWMERGE); }
@@ -425,10 +390,7 @@ namespace System.Windows.Forms
 
         public override AnchorStyles Anchor
         {
-            get
-            {
-                return base.Anchor;
-            }
+            get => base.Anchor;
             set
             {
                 // the base calls SetDock, which causes an OnDockChanged to be called
@@ -443,23 +405,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Just here so we can implement ShouldSerializeBackColor
         /// </summary>
-        [
-        SRDescription(nameof(SR.ToolStripBackColorDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [SRDescription(nameof(SR.ToolStripBackColorDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public new Color BackColor
         {
-            get
-            {
-                return base.BackColor;
-            }
-            set
-            {
-                base.BackColor = value;
-            }
+            get => base.BackColor;
+            set => base.BackColor = value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripOnBeginDrag))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripOnBeginDrag))]
         public event EventHandler BeginDrag
         {
             add => Events.AddHandler(EventBeginDrag, value);
@@ -499,11 +454,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(true),
-        SRDescription(nameof(SR.ToolStripCanOverflowDescr)),
-        SRCategory(nameof(SR.CatLayout))
-        ]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.ToolStripCanOverflowDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
         public bool CanOverflow
         {
             get
@@ -542,10 +495,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        DefaultValue(false),
-        ]
+        [Browsable(false)]
+        [DefaultValue(false)]
         public new bool CausesValidation
         {
             get
@@ -555,10 +506,7 @@ namespace System.Windows.Forms
                 // their controls.
                 return base.CausesValidation;
             }
-            set
-            {
-                base.CausesValidation = value;
-            }
+            set => base.CausesValidation = value;
         }
 
         [Browsable(false)]
@@ -572,21 +520,23 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ControlCollection Controls
         {
-            get { return base.Controls; }
+            get => base.Controls;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlAdded
         {
             add => base.ControlAdded += value;
             remove => base.ControlAdded -= value;
         }
 
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Cursor Cursor
         {
-            get { return base.Cursor; }
-            set { base.Cursor = value; }
+            get => base.Cursor;
+            set => base.Cursor = value;
         }
 
         /// <summary>
@@ -599,14 +549,16 @@ namespace System.Windows.Forms
             remove => base.CursorChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlRemoved
         {
             add => base.ControlRemoved += value;
             remove => base.ControlRemoved -= value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripOnEndDrag))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripOnEndDrag))]
         public event EventHandler EndDrag
         {
             add => Events.AddHandler(EventEndDrag, value);
@@ -630,10 +582,7 @@ namespace System.Windows.Forms
                 }
                 return defaultFont;
             }
-            set
-            {
-                base.Font = value;
-            }
+            set => base.Font = value;
         }
 
         /// <summary>
@@ -763,16 +712,14 @@ namespace System.Windows.Forms
                 toolStripDropDownDirection = value;
             }
         }
+
         /// <summary>
         ///  Just here so we can add the default value attribute
         /// </summary>
         [DefaultValue(DockStyle.Top)]
         public override DockStyle Dock
         {
-            get
-            {
-                return base.Dock;
-            }
+            get => base.Dock;
             set
             {
                 if (value != Dock)
@@ -839,6 +786,7 @@ namespace System.Windows.Forms
                 dropTargetManager = value;
             }
         }
+
         /// <summary>
         ///  Just here so we can add the default value attribute
         /// </summary>
@@ -855,11 +803,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Retreives the current display rectangle. The display rectangle
+        ///  Retreives the current display rectangle. The display rectangle
         ///  is the virtual display area that is used to layout components.
         ///  The position and dimensions of the Form's display rectangle
         ///  change during autoScroll.
-            /// </summary>
+        /// </summary>
         public override Rectangle DisplayRectangle
         {
             get
@@ -892,22 +840,14 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public new Color ForeColor
         {
-            get
-            {
-                return base.ForeColor;
-            }
-            set
-            {
-                base.ForeColor = value;
-            }
+            get => base.ForeColor;
+            set => base.ForeColor = value;
         }
 
         /// <summary>
         ///  [ToolStrip ForeColorChanged event, overriden to turn browsing off.]
         /// </summary>
-        [
-        Browsable(false)
-        ]
+        [Browsable(false)]
         public new event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
@@ -941,11 +881,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripGripStyleDescr)),
-        DefaultValue(ToolStripGripStyle.Visible)
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripGripStyleDescr))]
+        [DefaultValue(ToolStripGripStyle.Visible)]
         public ToolStripGripStyle GripStyle
         {
             get
@@ -968,9 +906,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false)
-        ]
+        [Browsable(false)]
         public ToolStripGripDisplayStyle GripDisplayStyle
         {
             get
@@ -983,10 +919,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The external spacing between the grip and the padding of the ToolStrip and the first item in the collection
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.ToolStripGripDisplayStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.ToolStripGripDisplayStyleDescr))]
         public Padding GripMargin
         {
             get
@@ -1002,9 +936,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The boundaries of the grip on the ToolStrip.  If it is invisible - returns Rectangle.Empty.
         /// </summary>
-        [
-        Browsable(false)
-        ]
+        [Browsable(false)]
         public Rectangle GripRectangle
         {
             get
@@ -1013,16 +945,12 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new bool HasChildren
         {
-            get
-            {
-                return base.HasChildren;
-            }
+            get => base.HasChildren;
         }
 
         internal bool HasVisibleItems
@@ -1055,22 +983,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the Horizontal Scroll bar for this ScrollableControl.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public HScrollProperties HorizontalScroll
         {
-            get
-            {
-                return base.HorizontalScroll;
-            }
+            get => base.HorizontalScroll;
         }
 
-        [
-        DefaultValue(typeof(Size), "16,16"),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripImageScalingSizeDescr)),
-        ]
+        [DefaultValue(typeof(Size), "16,16")]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripImageScalingSizeDescr))]
         public Size ImageScalingSize
         {
             get
@@ -1107,12 +1029,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Image'/> displayed on a label control.
         /// </summary>
-        [
-        DefaultValue(null),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripImageListDescr)),
-        Browsable(false)
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripImageListDescr))]
+        [Browsable(false)]
         public ImageList ImageList
         {
             get
@@ -1173,7 +1093,8 @@ namespace System.Windows.Forms
         ///  moving the toolstrip from one toolstrip container
         ///  to another
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool IsCurrentlyDragging
         {
             get
@@ -1202,12 +1123,10 @@ namespace System.Windows.Forms
         ///  The displayed items collection also includes things like the OverflowButton
         ///  and the Grip.
         /// </summary>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.ToolStripItemsDescr)),
-        MergableProperty(false)
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripItemsDescr))]
+        [MergableProperty(false)]
         public virtual ToolStripItemCollection Items
         {
             get
@@ -1220,7 +1139,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripItemAddedDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripItemAddedDescr))]
         public event ToolStripItemEventHandler ItemAdded
         {
             add => Events.AddHandler(EventItemAdded, value);
@@ -1230,7 +1150,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control is clicked.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripItemOnClickDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripItemOnClickDescr))]
         public event ToolStripItemClickedEventHandler ItemClicked
         {
             add => Events.AddHandler(EventItemClicked, value);
@@ -1263,12 +1184,14 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripItemRemovedDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripItemRemovedDescr))]
         public event ToolStripItemEventHandler ItemRemoved
         {
             add => Events.AddHandler(EventItemRemoved, value);
             remove => Events.RemoveHandler(EventItemRemoved, value);
         }
+
         /// <summary> handy check for painting and sizing </summary>
         [Browsable(false)]
         public bool IsDropDown
@@ -1283,6 +1206,7 @@ namespace System.Windows.Forms
                 return GetToolStripState(STATE_DISPOSINGITEMS);
             }
         }
+
         /// <summary>
         ///  The OnDrag[blah] methods that will be called if AllowItemReorder is true.
         ///
@@ -1347,11 +1271,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(null),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [DefaultValue(null)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public LayoutSettings LayoutSettings
         {
             get
@@ -1367,11 +1289,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies whether we're horizontal or vertical
         /// </summary>
-        [
-        SRDescription(nameof(SR.ToolStripLayoutStyle)),
-        SRCategory(nameof(SR.CatLayout)),
-        AmbientValue(ToolStripLayoutStyle.StackWithOverflow)
-        ]
+        [SRDescription(nameof(SR.ToolStripLayoutStyle))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [AmbientValue(ToolStripLayoutStyle.StackWithOverflow)]
         public ToolStripLayoutStyle LayoutStyle
         {
             get
@@ -1453,7 +1373,8 @@ namespace System.Windows.Forms
                 }
             }
         }
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripLayoutCompleteDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLayoutCompleteDescr))]
         public event EventHandler LayoutCompleted
         {
             add => Events.AddHandler(EventLayoutCompleted, value);
@@ -1472,7 +1393,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripLayoutStyleChangedDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLayoutStyleChangedDescr))]
         public event EventHandler LayoutStyleChanged
         {
             add => Events.AddHandler(EventLayoutStyleChanged, value);
@@ -1553,7 +1475,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public ToolStripOverflowButton OverflowButton
         {
             get
@@ -1596,7 +1519,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripPaintGripDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripPaintGripDescr))]
         public event PaintEventHandler PaintGrip
         {
             add => Events.AddHandler(EventPaintGrip, value);
@@ -1775,10 +1699,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EventRendererChanged, value);
         }
 
-        [
-        SRDescription(nameof(SR.ToolStripRenderModeDescr)),
-        SRCategory(nameof(SR.CatAppearance)),
-        ]
+        [SRDescription(nameof(SR.ToolStripRenderModeDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public ToolStripRenderMode RenderMode
         {
             get
@@ -1793,11 +1715,11 @@ namespace System.Windows.Forms
                 }
                 // check the type of the currently set renderer.
                 // types are cached as this may be called frequently.
-                if (currentRendererType == ToolStripManager.ProfessionalRendererType)
+                if (currentRendererType == ToolStripManager.s_professionalRendererType)
                 {
                     return ToolStripRenderMode.Professional;
                 }
-                if (currentRendererType == ToolStripManager.SystemRendererType)
+                if (currentRendererType == ToolStripManager.s_systemRendererType)
                 {
                     return ToolStripRenderMode.System;
                 }
@@ -1934,11 +1856,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(ToolStripTextDirection.Horizontal),
-        SRDescription(nameof(SR.ToolStripTextDirectionDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(ToolStripTextDirection.Horizontal)]
+        [SRDescription(nameof(SR.ToolStripTextDirectionDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public virtual ToolStripTextDirection TextDirection
         {
             get
@@ -1978,15 +1898,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the Vertical Scroll bar for this ScrollableControl.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public VScrollProperties VerticalScroll
         {
-            get
-            {
-                return base.VerticalScroll;
-            }
+            get => base.VerticalScroll;
         }
 
         void ISupportToolStripPanel.BeginDrag()
@@ -2752,6 +2668,7 @@ namespace System.Windows.Forms
 
             return selectedItem;
         }
+
         /// <summary>
         ///  Retrieves the current value of the specified bit in the control's state.
         /// </summary>
@@ -2786,12 +2703,12 @@ namespace System.Windows.Forms
                 }
                 try
                 {
-                    Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "firing mouse leave on " + lastMouseActiveItem.ToString());
+                    Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "firing mouse leave on " + lastMouseActiveItem.ToString());
                     lastMouseActiveItem.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseLeave);
                 }
                 finally
                 {
-                    Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "setting last active item to null");
+                    Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "setting last active item to null");
                     lastMouseActiveItem = null;
                 }
             }
@@ -2932,6 +2849,7 @@ namespace System.Windows.Forms
             Invalidate(item.Bounds);
             Update();
         }
+
         /// <summary>
         ///  Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Image'/> displayed on a label control
         /// </summary>
@@ -3013,8 +2931,11 @@ namespace System.Windows.Forms
                 try
                 {
                     //send the actual wm_print message
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_PRINT, (IntPtr)imageHdc,
-                        (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
+                    User32.SendMessageW(
+                        this,
+                        User32.WM.PRINT,
+                        (IntPtr)imageHdc,
+                        (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
                     // Now BLT the result to the destination bitmap.
                     Gdi32.BitBlt(
@@ -3531,6 +3452,7 @@ namespace System.Windows.Forms
         }
 
 #if DEBUG
+#pragma warning disable RS0016 // Add public types and members to the declared API
         protected override void OnInvalidated(InvalidateEventArgs e)
         {
             base.OnInvalidated(e);
@@ -3558,6 +3480,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(!(ParentInternal is PropertyGrid), "Invalidate called on: " + name + new StackTrace().ToString());
             }
         }
+#pragma warning restore RS0016 // Add public types and members to the declared API
 #endif
 
         protected override void OnHandleCreated(EventArgs e)
@@ -3735,7 +3658,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs mea)
         {
-            Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "OnMouseMove called");
+            Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "OnMouseMove called");
 
             ToolStripItem item = GetItemAt(mea.X, mea.Y);
 
@@ -3747,10 +3670,10 @@ namespace System.Windows.Forms
                 // control's WM_MOUSEMOVE. Waiting until this event gives us
                 // the actual coordinates.
 
-                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Item to get mouse move: {0}", (item == null) ? "null" : item.ToString()));
+                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Item to get mouse move: {0}", (item == null) ? "null" : item.ToString()));
                 if (item != lastMouseActiveItem)
                 {
-                    Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "This is a new item - last item to get was {0}", (lastMouseActiveItem == null) ? "null" : lastMouseActiveItem.ToString()));
+                    Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "This is a new item - last item to get was {0}", (lastMouseActiveItem == null) ? "null" : lastMouseActiveItem.ToString()));
 
                     // notify the item that we've moved on
                     HandleMouseLeave();
@@ -3760,7 +3683,7 @@ namespace System.Windows.Forms
 
                     if (lastMouseActiveItem != null)
                     {
-                        Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}", (lastMouseActiveItem == null) ? "null" : lastMouseActiveItem.ToString()));
+                        Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}", (lastMouseActiveItem == null) ? "null" : lastMouseActiveItem.ToString()));
                         item.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseEnter);
                     }
                     //
@@ -3777,7 +3700,7 @@ namespace System.Windows.Forms
             }
             if (item != null)
             {
-                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (item == null) ? "null" : item.ToString()));
+                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (item == null) ? "null" : item.ToString()));
 
                 // Fire mouse move on the item
                 // Transpose this to "client coordinates" of the ToolStripItem.
@@ -3787,7 +3710,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (this == null) ? "null" : ToString()));
+                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (this == null) ? "null" : ToString()));
 
                 base.OnMouseMove(mea);
             }
@@ -4264,6 +4187,7 @@ namespace System.Windows.Forms
         {
             return null;
         }
+
         /// <summary>
         ///  Finds the ToolStripItem contained within a specified client coordinate point
         ///  If item not found - returns null
@@ -4449,6 +4373,7 @@ namespace System.Windows.Forms
 
             item.SetBounds(new Rectangle(location, item.Size));
         }
+
         /// <summary>
         ///  This is needed so that people doing custom layout engines can change the "Parent" property of the item.
         /// </summary>
@@ -4494,18 +4419,18 @@ namespace System.Windows.Forms
             // which could accidentally change selection.
             if (mouseEnterWhenShown == InvalidMouseEnter)
             {
-                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] MouseEnter already reset.");
+                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] MouseEnter already reset.");
                 return true;
             }
 
             Point mousePosition = WindowsFormsUtils.LastCursorPoint;
             if (mouseEnterWhenShown != mousePosition)
             {
-                Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] Mouse position has changed - call Select().");
+                Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] Mouse position has changed - call Select().");
                 mouseEnterWhenShown = InvalidMouseEnter;
                 return true;
             }
-            Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] Mouse hasnt actually moved yet.");
+            Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] Mouse hasnt actually moved yet.");
 
             return false;
         }
@@ -4969,11 +4894,11 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == WindowMessages.WM_SETFOCUS)
+            if (m.Msg == (int)User32.WM.SETFOCUS)
             {
                 SnapFocus(m.WParam);
             }
-            if (m.Msg == WindowMessages.WM_MOUSEACTIVATE)
+            if (m.Msg == (int)User32.WM.MOUSEACTIVATE)
             {
                 // we want to prevent taking focus if someone clicks on the toolstrip dropdown
                 // itself.  the mouse message will still go through, but focus wont be taken.
@@ -5025,7 +4950,7 @@ namespace System.Windows.Forms
 
             base.WndProc(ref m);
 
-            if (m.Msg == WindowMessages.WM_NCDESTROY)
+            if (m.Msg == (int)User32.WM.NCDESTROY)
             {
                 // Destroy the owner window, if we created one.  We
                 // cannot do this in OnHandleDestroyed, because at
@@ -5475,14 +5400,14 @@ namespace System.Windows.Forms
                 }
                 // if the app has changed activation, restore focus
 
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case WindowMessages.WM_LBUTTONDOWN:
-                    case WindowMessages.WM_RBUTTONDOWN:
-                    case WindowMessages.WM_MBUTTONDOWN:
-                    case WindowMessages.WM_NCLBUTTONDOWN:
-                    case WindowMessages.WM_NCRBUTTONDOWN:
-                    case WindowMessages.WM_NCMBUTTONDOWN:
+                    case User32.WM.LBUTTONDOWN:
+                    case User32.WM.RBUTTONDOWN:
+                    case User32.WM.MBUTTONDOWN:
+                    case User32.WM.NCLBUTTONDOWN:
+                    case User32.WM.NCRBUTTONDOWN:
+                    case User32.WM.NCMBUTTONDOWN:
                         if (ownerToolStrip.ContainsFocus)
                         {
                             // if we've clicked on something that's not a child of the toolstrip and we
@@ -5631,6 +5556,7 @@ namespace System.Windows.Forms
             mouseHoverTimer.Enabled = false;
             currentItem = null;
         }
+
         /// <summary> cancels if and only if this item was the one that
         ///  requested the timer
         /// </summary>

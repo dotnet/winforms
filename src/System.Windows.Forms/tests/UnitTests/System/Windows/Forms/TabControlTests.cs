@@ -648,7 +648,7 @@ namespace System.Windows.Forms.Tests
             control.BackgroundImageChanged += handler;
 
             // Set different.
-            var image1 = new Bitmap(10, 10);
+            using var image1 = new Bitmap(10, 10);
             control.BackgroundImage = image1;
             Assert.Same(image1, control.BackgroundImage);
             Assert.Equal(1, callCount);
@@ -659,7 +659,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var image2 = new Bitmap(10, 10);
+            using var image2 = new Bitmap(10, 10);
             control.BackgroundImage = image2;
             Assert.Same(image2, control.BackgroundImage);
             Assert.Equal(2, callCount);
@@ -2527,16 +2527,16 @@ namespace System.Windows.Forms.Tests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
-        public void TabControl_SelectedTab_GetWithInvalidIndexNotGotPages_ThrowsNullReferenceException(int value)
+        public void TabControl_SelectedTab_GetWithInvalidIndexNotGotPages_ReturnsNull(int value)
         {
             using var control = new TabControl
             {
                 SelectedIndex = value
             };
-            Assert.Throws<NullReferenceException>(() => control.SelectedTab);
+            Assert.Null(control.SelectedTab);
 
             Assert.Empty(control.TabPages);
-            Assert.Throws<NullReferenceException>(() => control.SelectedTab);
+            Assert.Null(control.SelectedTab);
         }
 
         public static IEnumerable<object[]> SelectedTab_Set_TestData()
@@ -3940,6 +3940,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void TabControl_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTabControl();
+            Assert.False(control.GetTopLevel());
+        }
+
+        [WinFormsFact]
         public void TabControl_GetToolTipText_Invoke_ReturnsExpectd()
         {
             using var control = new SubTabControl();
@@ -3951,17 +3958,17 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabControl_GetToolTipText_NullItem_ThrowsNullReferenceException()
+        public void TabControl_GetToolTipText_NullItem_ThrowsArgumentNullException()
         {
             using var control = new SubTabControl();
-            Assert.Throws<NullReferenceException>(() => control.GetToolTipText(null));
+            Assert.Throws<ArgumentNullException>("item", () => control.GetToolTipText(null));
         }
 
         [WinFormsFact]
-        public void TabControl_GetToolTipText_ItemNotTabPage_ThrowsInvalidCastException()
+        public void TabControl_GetToolTipText_ItemNotTabPage_ThrowsArgumentException()
         {
             using var control = new SubTabControl();
-            Assert.Throws<InvalidCastException>(() => control.GetToolTipText(new object()));
+            Assert.Throws<ArgumentException>("item", () => control.GetToolTipText(new object()));
         }
 
         public static IEnumerable<object[]> IsInputKey_TestData()
@@ -5732,6 +5739,8 @@ namespace System.Windows.Forms.Tests
             public new object[] GetItems(Type baseType) => base.GetItems(baseType);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new string GetToolTipText(object item) => base.GetToolTipText(item);
 

@@ -344,9 +344,6 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\ErrorControl.ico">
       <LogicalName>System.Windows.Forms.ErrorControl</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\StatusBar.ico">
-      <LogicalName>System.Windows.Forms.StatusBar</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\TabControl.ico">
       <LogicalName>System.Windows.Forms.TabControl</LogicalName>
     </EmbeddedResource>
@@ -556,6 +553,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripMenuItem.ico">
       <LogicalName>System.Windows.Forms.ToolStripMenuItem</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripDropDownMenu.ico">
+      <LogicalName>System.Windows.Forms.ToolStripDropDownMenu</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\ToolStripDropDownButton.ico">
       <LogicalName>System.Windows.Forms.ToolStripDropDownButton</LogicalName>

@@ -4,19 +4,24 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
+    using Size = System.Drawing.Size;
+    using Point = System.Drawing.Point;
+
     public class AxHostTests : IClassFixture<ThreadExceptionFixture>
     {
-        [StaTheory]
+        [WinFormsTheory]
         [InlineData("00000000-0000-0000-0000-000000000000")]
         public void AxHost_Ctor_String(string clsid)
         {
@@ -110,7 +115,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [InlineData("00000000-0000-0000-0000-000000000000", 0)]
         public void AxHost_Ctor_String_Int(string clsid, int flags)
         {
@@ -204,14 +209,14 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_Ctor_NullClsid_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("g", () => new SubAxHost(null));
             Assert.Throws<ArgumentNullException>("g", () => new SubAxHost(null, 0));
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [InlineData("")]
         [InlineData("clsid")]
         public void AxHost_Ctor_EmptyClsid_ThrowsFormatException(string clsid)
@@ -239,11 +244,51 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [StaTheory]
+        [WinFormsFact]
+        public void AxHost_CreateParams_GetWithSite_ReturnsExpected()
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            {
+                Site = mockSite.Object
+            };
+
+            CreateParams createParams = control.CreateParams;
+            Assert.Null(createParams.Caption);
+            Assert.Null(createParams.ClassName);
+            Assert.Equal(0x8, createParams.ClassStyle);
+            Assert.Equal(0, createParams.ExStyle);
+            Assert.Equal(23, createParams.Height);
+            Assert.Equal(IntPtr.Zero, createParams.Parent);
+            Assert.Null(createParams.Param);
+            Assert.Equal(0x56010000, createParams.Style);
+            Assert.Equal(75, createParams.Width);
+            Assert.Equal(0, createParams.X);
+            Assert.Equal(0, createParams.Y);
+            Assert.Same(createParams, control.CreateParams);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
         public void AxHost_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 BackColor = value
             };
@@ -254,45 +299,49 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.BackColor);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void AxHost_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 BackgroundImage = value
             };
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImage = value;
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void AxHost_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 BackgroundImageLayout = value
             };
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImageLayout = value;
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void AxHost_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public static void AxHost_ContainingControl_GetWithContainerControlGrandparent_ReturnsExpected()
         {
             var grandparent = new ContainerControl();
@@ -300,7 +349,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = grandparent
             };
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 Parent = parent
             };
@@ -314,11 +363,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(grandparent, control.ContainingControl);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public static void AxHost_ContainingControl_GetWithContainerControlParent_ReturnsExpected()
         {
             var parent = new ContainerControl();
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 Parent = parent
             };
@@ -332,11 +381,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(parent, control.ContainingControl);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public static void AxHost_ContainingControl_GetWithNonContainerControlParent_ReturnsExpected()
         {
             var parent = new Control();
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 Parent = parent
             };
@@ -364,11 +413,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ContainerControl() };
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [MemberData(nameof(ContainingControl_Set_TestData))]
         public void AxHost_ContainingControl_Set_GetReturnsExpected(ContainerControl value)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 ContainingControl = value
             };
@@ -379,11 +428,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, control.ContainingControl);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
         public void AxHost_Cursor_Set_GetReturnsExpected(Cursor value)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 Cursor = value
             };
@@ -394,11 +443,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value ?? Cursors.Default, control.Cursor);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
         public void AxHost_Cursor_SetWithHandle_GetReturnsExpected(Cursor value)
         {
-            var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             control.Cursor = value;
@@ -409,13 +458,13 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value ?? Cursors.Default, control.Cursor);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
         public void AxHost_Cursor_SetWithChildren_GetReturnsExpected(Cursor value)
         {
             var child1 = new Control();
             var child2 = new Control();
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             control.Controls.Add(child1);
             control.Controls.Add(child2);
 
@@ -431,7 +480,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value ?? Cursors.Default, child2.Cursor);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
         public void AxHost_Cursor_SetWithChildrenWithCursor_GetReturnsExpected(Cursor value)
         {
@@ -445,7 +494,7 @@ namespace System.Windows.Forms.Tests
             {
                 Cursor = cursor2
             };
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             control.Controls.Add(child1);
             control.Controls.Add(child2);
 
@@ -461,28 +510,30 @@ namespace System.Windows.Forms.Tests
             Assert.Same(cursor2, child2.Cursor);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void AxHost_Font_Set_GetReturnsExpected(Font value)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 Font = value
             };
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.Font = value;
             Assert.Equal(value ?? Control.DefaultFont, control.Font);
             Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
         public void AxHost_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 ForeColor = value
             };
@@ -493,11 +544,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.ForeColor);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void AxHost_ImeMode_Set_GetReturnsExpected(ImeMode value)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 ImeMode = value
             };
@@ -508,19 +559,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.ImeMode);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void AxHost_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void AxHost_Enabled_Set_GetReturnsExpected(bool value)
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000")
             {
                 Enabled = value
             };
@@ -533,6 +584,289 @@ namespace System.Windows.Forms.Tests
             // Set different.
             control.Enabled = !value;
             Assert.Equal(!value, control.Enabled);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void AxHost_Site_SetDesignMode_CreatesOcx(bool otherDesignMode)
+        {
+            var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite1
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            {
+                Site = mockSite1.Object
+            };
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.False(control.IsHandleCreated);
+            object ocx = control.GetOcx();
+            Assert.NotNull(ocx);
+            Assert.Same(ocx, control.GetOcx());
+
+            // Set same.
+            control.Site = mockSite1.Object;
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.False(control.IsHandleCreated);
+            Assert.Same(ocx, control.GetOcx());
+
+            // Set another.
+            var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite2
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.DesignMode)
+                .Returns(otherDesignMode);
+            control.Site = mockSite2.Object;
+            Assert.Same(mockSite2.Object, control.Site);
+            Assert.False(control.IsHandleCreated);
+            Assert.Same(ocx, control.GetOcx());
+
+            // Set null.
+            control.Site = null;
+            Assert.Null(control.Site);
+            Assert.False(control.IsHandleCreated);
+            Assert.Same(ocx, control.GetOcx());
+        }
+
+        [WinFormsFact]
+        public void AxHost_Site_SetNonDesignModeThenDesignMode_CreatesOcx()
+        {
+            var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite1
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.DesignMode)
+                .Returns(false);
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            {
+                Site = mockSite1.Object
+            };
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.False(control.IsHandleCreated);
+            Assert.Null(control.GetOcx());
+
+            // Set same.
+            control.Site = mockSite1.Object;
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.False(control.IsHandleCreated);
+            Assert.Null(control.GetOcx());
+
+            // Set another.
+            var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite2
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            control.Site = mockSite2.Object;
+            Assert.Same(mockSite2.Object, control.Site);
+            Assert.False(control.IsHandleCreated);
+            object ocx = control.GetOcx();
+            Assert.NotNull(ocx);
+            Assert.Same(ocx, control.GetOcx());
+
+            // Set null.
+            control.Site = null;
+            Assert.Null(control.Site);
+            Assert.False(control.IsHandleCreated);
+            Assert.Same(ocx, control.GetOcx());
+        }
+
+        [WinFormsFact]
+        public void AxHost_Site_SetNonDesignModeThenNonDesignMode_DoesNotCreateOcx()
+        {
+            var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite1
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.DesignMode)
+                .Returns(false);
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            {
+                Site = mockSite1.Object
+            };
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.False(control.IsHandleCreated);
+            Assert.Null(control.GetOcx());
+
+            // Set same.
+            control.Site = mockSite1.Object;
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.False(control.IsHandleCreated);
+            Assert.Null(control.GetOcx());
+
+            // Set another.
+            var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite2
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.DesignMode)
+                .Returns(false);
+            control.Site = mockSite2.Object;
+            Assert.Same(mockSite2.Object, control.Site);
+            Assert.False(control.IsHandleCreated);
+            Assert.Null(control.GetOcx());
+
+            // Set null.
+            control.Site = null;
+            Assert.Null(control.Site);
+            Assert.False(control.IsHandleCreated);
+            Assert.Null(control.GetOcx());
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, true, 1, 1)]
+        [InlineData(true, false, 1, 1)]
+        [InlineData(false, true, 0, 1)]
+        [InlineData(false, false, 0, 0)]
+        public void AxHost_Site_SetWithHandle_CreatesOcx(bool designMode1, bool designMode2, int expectedCreatedCallCount1, int expectedCreatedCallCount2)
+        {
+            var mockSite1 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite1
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite1
+                .Setup(s => s.DesignMode)
+                .Returns(designMode1);
+            mockSite1
+                .Setup(s => s.Name)
+                .Returns("Name");
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            ((Control)control).StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            object ocx = control.GetOcx();
+            Assert.NotNull(ocx);
+
+            control.Site = mockSite1.Object;
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount1, createdCallCount);
+            Assert.Same(ocx, control.GetOcx());
+
+            // Set same.
+            control.Site = mockSite1.Object;
+            Assert.Same(mockSite1.Object, control.Site);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount1, createdCallCount);
+            Assert.Same(ocx, control.GetOcx());
+
+            // Set another.
+            var mockSite2 = new Mock<ISite>(MockBehavior.Strict);
+            mockSite2
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite2
+                .Setup(s => s.DesignMode)
+                .Returns(designMode2);
+            mockSite2
+                .Setup(s => s.Name)
+                .Returns("Name");
+            control.Site = mockSite2.Object;
+            Assert.Same(mockSite2.Object, control.Site);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount2, createdCallCount);
+            Assert.Same(ocx, control.GetOcx());
+
+            // Set null.
+            control.Site = null;
+            Assert.Null(control.Site);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(expectedCreatedCallCount2, createdCallCount);
+            Assert.Same(ocx, control.GetOcx());
         }
 
         [WinFormsTheory]
@@ -556,7 +890,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void AxHost_Text_SetWithHandle_GetReturnsExpected(string value)
         {
-            var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -581,288 +915,351 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_BackColorChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.BackColorChanged += handler);
             control.BackColorChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_BackgroundImageChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.BackgroundImageChanged += handler);
             control.BackgroundImageChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_BackgroundImageLayoutChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.BackgroundImageLayoutChanged += handler);
             control.BackgroundImageLayoutChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_BindingContextChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.BindingContextChanged += handler);
             control.BindingContextChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
+        public void AxHost_ChangeUICues_AddRemove_ThrowsNotSupportedException()
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            UICuesEventHandler handler = (sender, e) => { };
+            Assert.Throws<NotSupportedException>(() => control.ChangeUICues += handler);
+            control.ChangeUICues -= handler;
+        }
+
+        [WinFormsFact]
         public void AxHost_Click_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.Click += handler);
             control.Click -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_CursorChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.CursorChanged += handler);
             control.CursorChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_DoubleClick_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.DoubleClick += handler);
             control.DoubleClick -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_DragDrop_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             DragEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.DragDrop += handler);
             control.DragDrop -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_DragEnter_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             DragEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.DragEnter += handler);
             control.DragEnter -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
+        public void AxHost_DragLeave_AddRemove_ThrowsNotSupportedException()
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            EventHandler handler = (sender, e) => { };
+            Assert.Throws<NotSupportedException>(() => control.DragLeave += handler);
+            control.DragLeave -= handler;
+        }
+
+        [WinFormsFact]
+        public void AxHost_DragOver_AddRemove_ThrowsNotSupportedException()
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            DragEventHandler handler = (sender, e) => { };
+            Assert.Throws<NotSupportedException>(() => control.DragOver += handler);
+            control.DragOver -= handler;
+        }
+
+        [WinFormsFact]
         public void AxHost_EnabledChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.EnabledChanged += handler);
             control.EnabledChanged -= handler;
         }
 
-        [StaFact]
-        public void AxHostFontChanged_AddRemove_ThrowsNotSupportedException()
+        [WinFormsFact]
+        public void AxHost_FontChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.FontChanged += handler);
             control.FontChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_ForeColorChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.ForeColorChanged += handler);
             control.ForeColorChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_GiveFeedback_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             GiveFeedbackEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.GiveFeedback += handler);
             control.GiveFeedback -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_HelpRequested_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             HelpEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.HelpRequested += handler);
             control.HelpRequested -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_ImeModeChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.ImeModeChanged += handler);
             control.ImeModeChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_KeyDown_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             KeyEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.KeyDown += handler);
             control.KeyDown -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_KeyPress_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             KeyPressEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.KeyPress += handler);
             control.KeyPress -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_KeyUp_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             KeyEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.KeyUp += handler);
             control.KeyUp -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_Layout_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             LayoutEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.Layout += handler);
             control.Layout -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_MouseClick_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.MouseClick += handler);
             control.MouseClick -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_MouseDoubleClick_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.MouseDoubleClick += handler);
             control.MouseDoubleClick -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_MouseDown_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             MouseEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.MouseDown += handler);
             control.MouseDown -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_MouseEnter_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.MouseEnter += handler);
             control.MouseEnter -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_MouseHover_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.MouseHover += handler);
             control.MouseHover -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_MouseLeave_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.MouseLeave += handler);
             control.MouseLeave -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
+        public void AxHost_MouseMove_AddRemove_ThrowsNotSupportedException()
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            MouseEventHandler handler = (sender, e) => { };
+            Assert.Throws<NotSupportedException>(() => control.MouseMove += handler);
+            control.MouseMove -= handler;
+        }
+
+        [WinFormsFact]
+        public void AxHost_MouseUp_AddRemove_ThrowsNotSupportedException()
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            MouseEventHandler handler = (sender, e) => { };
+            Assert.Throws<NotSupportedException>(() => control.MouseUp += handler);
+            control.MouseUp -= handler;
+        }
+
+        [WinFormsFact]
+        public void AxHost_MouseWheel_AddRemove_ThrowsNotSupportedException()
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            MouseEventHandler handler = (sender, e) => { };
+            Assert.Throws<NotSupportedException>(() => control.MouseWheel += handler);
+            control.MouseWheel -= handler;
+        }
+
+        [WinFormsFact]
         public void AxHost_Paint_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             PaintEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.Paint += handler);
             control.Paint -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_QueryAccessibilityHelp__AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             QueryAccessibilityHelpEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.QueryAccessibilityHelp += handler);
             control.QueryAccessibilityHelp -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_QueryContinueDrag__AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             QueryContinueDragEventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.QueryContinueDrag += handler);
             control.QueryContinueDrag -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_RightToLeftChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.RightToLeftChanged += handler);
             control.RightToLeftChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
+        public void AxHost_StyleChanged_AddRemove_ThrowsNotSupportedException()
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            EventHandler handler = (sender, e) => { };
+            Assert.Throws<NotSupportedException>(() => control.StyleChanged += handler);
+            control.StyleChanged -= handler;
+        }
+
+        [WinFormsFact]
         public void AxHost_TextChanged_AddRemove_ThrowsNotSupportedException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             EventHandler handler = (sender, e) => { };
             Assert.Throws<NotSupportedException>(() => control.TextChanged += handler);
             control.TextChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_AttachInterfaces_Invoke_Nop()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             control.AttachInterfaces();
             control.AttachInterfaces();
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_BeginInit_Invoke_Nop()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             control.BeginInit();
             control.BeginInit();
             Assert.False(control.Created);
@@ -881,7 +1278,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { -7 };
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithHandle_Success(int verb)
         {
@@ -890,12 +1287,12 @@ namespace System.Windows.Forms.Tests
             control.DoVerb(verb);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithHandleWithParent_Success(int verb)
         {
             using var parent = new Control();
-            var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
             {
                 Parent = parent
             };
@@ -905,12 +1302,12 @@ namespace System.Windows.Forms.Tests
             Assert.True(parent.IsHandleCreated);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithHandleWithParentWithoutHandle_Success(int verb)
         {
             using var parent = new Control();
-            var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.Parent = parent;
             Assert.False(parent.IsHandleCreated);
@@ -918,7 +1315,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(parent.IsHandleCreated);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [MemberData(nameof(DoVerb_TestData))]
         public void AxHost_DoVerb_InvokeWithoutHandle_ThrowsNullReferenceException(int verb)
         {
@@ -926,20 +1323,20 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<NullReferenceException>(() => control.DoVerb(verb));
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_EndInit_Invoke_Nop()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             control.EndInit();
             control.EndInit();
             Assert.False(control.Created);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_EndInit_InvokeWithParent_CreatesControl()
         {
             var parent = new Control();
-            var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
             {
                 Parent = parent
             };
@@ -955,10 +1352,10 @@ namespace System.Windows.Forms.Tests
         {
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_CreateControl_ValidClsid_Success()
         {
-            var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
             control.CreateControl();
             Assert.True(control.Created);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -967,35 +1364,35 @@ namespace System.Windows.Forms.Tests
             Assert.True(ocx is IWebBrowser2);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_CreateControl_InvalidClsid_ThrowsCOMException()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             Assert.Throws<COMException>(() => control.CreateControl());
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_CreateSink_Invoke_Nop()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             control.CreateSink();
             control.CreateSink();
             Assert.False(control.Created);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_DetachSink_Invoke_Nop()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             control.DetachSink();
             control.DetachSink();
             Assert.False(control.Created);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void AxHost_GetOcx_NotCreated_ReturnsNull()
         {
-            var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
             Assert.Null(control.GetOcx());
         }
 
@@ -1325,6 +1722,605 @@ namespace System.Windows.Forms.Tests
             Assert.Null(SubAxHost.GetPictureFromIPicture(null));
         }
 
+        [WinFormsFact]
+        public void AxHost_InvokeEditMode_Invoke_Sucess()
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            control.InvokeEditMode();
+            Assert.Null(control.GetOcx());
+
+            // Call again.
+            control.InvokeEditMode();
+            Assert.Null(control.GetOcx());
+        }
+
+        public static IEnumerable<object[]> InvokeEditMode_Site_TestData()
+        {
+            yield return new object[] { true, null, 2 };
+            yield return new object[] { true, new object(), 2 };
+
+            yield return new object[] { false, null, 1 };
+            yield return new object[] { false, new object(), 1 };
+            yield return new object[] { false, new Mock<ISelectionService>(MockBehavior.Strict).Object, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(InvokeEditMode_Site_TestData))]
+        public void AxHost_InvokeEditMode_InvokeWithSite_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(designMode);
+            mockSite
+                .Setup(s => s.GetService(typeof(ISelectionService)))
+                .Returns(selectionService)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            {
+                Site = mockSite.Object
+            };
+            control.InvokeEditMode();
+            Assert.False(control.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
+
+            // Call again.
+            control.InvokeEditMode();
+            Assert.False(control.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
+        }
+
+        public static IEnumerable<object[]> InvokeEditMode_SiteWithParent_TestData()
+        {
+            yield return new object[] { true, null, 3 };
+            yield return new object[] { true, new object(), 3 };
+
+            yield return new object[] { false, null, 1 };
+            yield return new object[] { false, new object(), 1 };
+            yield return new object[] { false, new Mock<ISelectionService>(MockBehavior.Strict).Object, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(InvokeEditMode_SiteWithParent_TestData))]
+        public void AxHost_InvokeEditMode_InvokeWithSiteWithParent_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        {
+            using var parent = new Control();
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(designMode);
+            mockSite
+                .Setup(s => s.GetService(typeof(ISelectionService)))
+                .Returns(selectionService)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.GetService(typeof(IExtenderListService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDictionaryService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            {
+                Parent = parent,
+                Site = mockSite.Object
+            };
+            control.InvokeEditMode();
+            Assert.True(control.IsHandleCreated);
+            Assert.True(parent.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
+
+            // Call again.
+            control.InvokeEditMode();
+            Assert.True(control.IsHandleCreated);
+            Assert.True(parent.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedNoSelectionStyleProperty_Sucess(bool componentSelected)
+        {
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
+            mockSelectionService
+                .Setup(s => s.GetComponentSelected(control))
+                .Returns(componentSelected)
+                .Verifiable();
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.GetService(typeof(ISelectionService)))
+                .Returns(mockSelectionService.Object)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.GetService(typeof(IExtenderListService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDictionaryService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            control.Site = mockSite.Object;
+            control.InvokeEditMode();
+            Assert.False(control.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
+            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
+
+            // Call again.
+            control.InvokeEditMode();
+            Assert.False(control.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
+            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedInvalidSelectionStyleProperty_Sucess(bool componentSelected)
+        {
+            using var control = new InvalidSelectionStyleAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
+            mockSelectionService
+                .Setup(s => s.GetComponentSelected(control))
+                .Returns(componentSelected)
+                .Verifiable();
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.GetService(typeof(ISelectionService)))
+                .Returns(mockSelectionService.Object)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.GetService(typeof(IExtenderListService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDictionaryService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            control.Site = mockSite.Object;
+            control.InvokeEditMode();
+            Assert.Null(control.SelectionStyle);
+            Assert.False(control.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
+            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
+
+            // Call again.
+            control.InvokeEditMode();
+            Assert.Null(control.SelectionStyle);
+            Assert.False(control.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
+            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStyleProperty_Sucess(bool componentSelected)
+        {
+            using var control = new ValidSelectionStyleAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
+            mockSelectionService
+                .Setup(s => s.GetComponentSelected(control))
+                .Returns(componentSelected)
+                .Verifiable();
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.GetService(typeof(ISelectionService)))
+                .Returns(mockSelectionService.Object)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.GetService(typeof(IExtenderListService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDictionaryService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            control.Site = mockSite.Object;
+
+            control.InvokeEditMode();
+            Assert.Equal(0, control.SelectionStyle);
+            Assert.False(control.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
+            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
+
+            // Call again.
+            control.InvokeEditMode();
+            Assert.Equal(0, control.SelectionStyle);
+            Assert.False(control.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
+            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(InvokeEditMode_Site_TestData))]
+        public void AxHost_InvokeEditMode_InvokeWithSiteWithHandle_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(designMode);
+            mockSite
+                .Setup(s => s.GetService(typeof(ISelectionService)))
+                .Returns(selectionService)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.GetService(typeof(IExtenderListService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDictionaryService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            {
+                Site = mockSite.Object
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            ((Control)control).StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.InvokeEditMode();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
+
+            // Call again.
+            control.InvokeEditMode();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(InvokeEditMode_SiteWithParent_TestData))]
+        public void AxHost_InvokeEditMode_InvokeWithSiteWithParentWithHandle_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        {
+            using var parent = new Control();
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(designMode);
+            mockSite
+                .Setup(s => s.GetService(typeof(ISelectionService)))
+                .Returns(selectionService)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.GetService(typeof(IExtenderListService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDictionaryService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            using var control = new SubAxHost("8856f961-340a-11d0-a96b-00c04fd705a2")
+            {
+                Parent = parent,
+                Site = mockSite.Object
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            ((Control)control).StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.InvokeEditMode();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(parent.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
+
+            // Call again.
+            control.InvokeEditMode();
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            Assert.True(parent.IsHandleCreated);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(expectedCallCount));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 2)]
+        [InlineData(false, 0)]
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStylePropertyWithHandle_Sucess(bool componentSelected, int expectedSelectionStyle)
+        {
+            using var control = new ValidSelectionStyleAxHost("8856f961-340a-11d0-a96b-00c04fd705a2");
+            var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
+            mockSelectionService
+                .Setup(s => s.GetComponentSelected(control))
+                .Returns(componentSelected)
+                .Verifiable();
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IComponentChangeService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.GetService(typeof(ISelectionService)))
+                .Returns(mockSelectionService.Object)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.GetService(typeof(IExtenderListService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(IDictionaryService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
+                .Returns(null);
+            mockSite
+                .Setup(s => s.Name)
+                .Returns("Name");
+            control.Site = mockSite.Object;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            ((Control)control).StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.InvokeEditMode();
+            Assert.Equal(expectedSelectionStyle, control.SelectionStyle);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
+            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
+
+            // Call again.
+            control.InvokeEditMode();
+            Assert.Equal(expectedSelectionStyle, control.SelectionStyle);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+            mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
+            mockSelectionService.Verify(s => s.GetComponentSelected(control), Times.Once());
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void AxHost_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Enter += handler;
+            control.OnEnter(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Enter -= handler;
+            control.OnEnter(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        public void AxHost_OnLeave_Invoke_CallsLeave(KeyEventArgs eventArgs)
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Leave += handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Leave -= handler;
+            control.OnLeave(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void AxHost_OnMouseCaptureChanged_Invoke_CallsMouseCaptureChanged(EventArgs eventArgs)
+        {
+            using var control = new SubAxHost("00000000-0000-0000-0000-000000000000");
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.MouseCaptureChanged += handler;
+            control.OnMouseCaptureChanged(eventArgs);
+            Assert.Equal(1, callCount);
+
+           // Remove handler.
+           control.MouseCaptureChanged -= handler;
+           control.OnMouseCaptureChanged(eventArgs);
+           Assert.Equal(1, callCount);
+        }
+
+        private class InvalidSelectionStyleAxHost : AxHost
+        {
+            public InvalidSelectionStyleAxHost(string clsid) : base(clsid)
+            {
+            }
+
+            public InvalidSelectionStyleAxHost(string clsid, int flags) : base(clsid, flags)
+            {
+            }
+
+            public string SelectionStyle { get; set; }
+        }
+
+        private class ValidSelectionStyleAxHost : AxHost
+        {
+            public ValidSelectionStyleAxHost(string clsid) : base(clsid)
+            {
+            }
+
+            public ValidSelectionStyleAxHost(string clsid, int flags) : base(clsid, flags)
+            {
+            }
+
+            public int SelectionStyle { get; set; }
+        }
+
         private class SubAxHost : AxHost
         {
             public SubAxHost(string clsid) : base(clsid)
@@ -1406,6 +2402,12 @@ namespace System.Windows.Forms.Tests
             public new static object GetIPictureFromPicture(Image image) => AxHost.GetIPictureFromPicture(image);
 
             public new static Image GetPictureFromIPicture(object picture) => AxHost.GetPictureFromIPicture(picture);
+
+            public new void OnEnter(EventArgs e) => base.OnEnter(e);
+
+            public new void OnLeave(EventArgs e) => base.OnLeave(e);
+
+            public new void OnMouseCaptureChanged(EventArgs e) => base.OnMouseCaptureChanged(e);
         }
 
         /// <remarks>

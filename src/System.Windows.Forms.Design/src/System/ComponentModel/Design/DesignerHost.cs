@@ -1325,7 +1325,6 @@ namespace System.ComponentModel.Design
         bool IDesignerLoaderHost2.CanReloadWithErrors
         {
             get => _canReloadWithErrors;
-
             set => _canReloadWithErrors = value;
         }
 

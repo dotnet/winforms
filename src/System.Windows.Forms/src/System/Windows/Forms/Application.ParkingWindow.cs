@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             // In .NET 2.0 we now aggressively tear down the parking window
             //   when the last control has been removed off of it.
 
-            private const int WM_CHECKDESTROY = Interop.WindowMessages.WM_USER + 0x01;
+            private const int WM_CHECKDESTROY = (int)User32.WM.USER + 0x01;
 
             private int _childCount = 0;
 
@@ -149,14 +149,14 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == WindowMessages.WM_SHOWWINDOW)
+                if (m.Msg == (int)User32.WM.SHOWWINDOW)
                     return;
 
                 base.WndProc(ref m);
                 switch (m.Msg)
                 {
-                    case WindowMessages.WM_PARENTNOTIFY:
-                        if (PARAM.LOWORD(m.WParam) == WindowMessages.WM_DESTROY)
+                    case (int)User32.WM.PARENTNOTIFY:
+                        if (PARAM.LOWORD(m.WParam) == (int)User32.WM.DESTROY)
                         {
                             User32.PostMessageW(this, (User32.WM)WM_CHECKDESTROY);
                         }

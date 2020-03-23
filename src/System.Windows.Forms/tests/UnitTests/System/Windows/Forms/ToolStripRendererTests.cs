@@ -26,9 +26,9 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripRenderer_CreateDisabledImage_NullImage_ThrowsNullReferenceException()
+        public void ToolStripRenderer_CreateDisabledImage_NullImage_ThrowsArgumentNullException()
         {
-            Assert.Throws<NullReferenceException>(() => ToolStripRenderer.CreateDisabledImage(null));
+            Assert.Throws<ArgumentNullException>("normalImage", () => ToolStripRenderer.CreateDisabledImage(null));
         }
 
         public static IEnumerable<object[]> ToolStripArrowRenderEventArgs_TestData()
@@ -74,10 +74,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripRenderer_DrawArrow_NullE_ThrowsNullReferenceException()
+        public void ToolStripRenderer_DrawArrow_NullE_ThrowsArgumentNullException()
         {
             var renderer = new SubToolStripRenderer();
-            Assert.Throws<NullReferenceException>(() => renderer.DrawArrow(null));
+            Assert.Throws<ArgumentNullException>("e", () => renderer.DrawArrow(null));
         }
 
         [WinFormsFact]
@@ -248,10 +248,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripRenderer_DrawItemCheck_NullE_ThrowsNullReferenceException()
+        public void ToolStripRenderer_DrawItemCheck_NullE_ThrowsArgumentNullException()
         {
             var renderer = new SubToolStripRenderer();
-            Assert.Throws<NullReferenceException>(() => renderer.DrawItemCheck(null));
+            Assert.Throws<ArgumentNullException>("e", () => renderer.DrawItemCheck(null));
         }
 
         [WinFormsFact]
@@ -291,10 +291,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripRenderer_DrawItemImage_NullE_ThrowsNullReferenceException()
+        public void ToolStripRenderer_DrawItemImage_NullE_ThrowsArgumentNullException()
         {
             var renderer = new SubToolStripRenderer();
-            Assert.Throws<NullReferenceException>(() => renderer.DrawItemImage(null));
+            Assert.Throws<ArgumentNullException>("e", () => renderer.DrawItemImage(null));
         }
 
         [WinFormsFact]
@@ -376,10 +376,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripRenderer_DrawItemText_NullE_ThrowsNullReferenceException()
+        public void ToolStripRenderer_DrawItemText_NullE_ThrowsArgumentNullException()
         {
             var renderer = new SubToolStripRenderer();
-            Assert.Throws<NullReferenceException>(() => renderer.DrawItemText(null));
+            Assert.Throws<ArgumentNullException>("e", () => renderer.DrawItemText(null));
         }
 
         [WinFormsFact]
@@ -562,10 +562,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void DrawStatusStripSizingGrip_NullE_ThrowsNullReferenceException()
+        public void DrawStatusStripSizingGrip_NullE_ThrowsArgumentNullException()
         {
             var renderer = new SubToolStripRenderer();
-            Assert.Throws<NullReferenceException>(() => renderer.DrawStatusStripSizingGrip(null));
+            Assert.Throws<ArgumentNullException>("e", () => renderer.DrawStatusStripSizingGrip(null));
         }
 
         [WinFormsFact]
@@ -802,10 +802,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripRenderer_OnRenderArrow_NullE_ThrowsNullReferenceException()
+        public void ToolStripRenderer_OnRenderArrow_NullE_ThrowsArgumentNullException()
         {
             var renderer = new SubToolStripRenderer();
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderArrow(null));
+            Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderArrow(null));
         }
 
         [WinFormsFact]
@@ -885,10 +885,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripRenderer_OnRenderItemCheck_NullE_ThrowsNullReferenceException()
+        public void ToolStripRenderer_OnRenderItemCheck_NullE_ThrowsArgumentNullException()
         {
             var renderer = new SubToolStripRenderer();
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderItemCheck(null));
+            Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderItemCheck(null));
         }
 
         [WinFormsFact]
@@ -915,10 +915,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripRenderer_OnRenderItemImage_NullE_ThrowsNullReferenceException()
+        public void ToolStripRenderer_OnRenderItemImage_NullE_ThrowsArgumentNullException()
         {
             var renderer = new SubToolStripRenderer();
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderItemImage(null));
+            Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderItemImage(null));
         }
 
         [WinFormsFact]
@@ -957,10 +957,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripRenderer_OnRenderItemText_NullE_ThrowsNullReferenceException()
+        public void ToolStripRenderer_OnRenderItemText_NullE_ThrowsArgumentNullException()
         {
             var renderer = new SubToolStripRenderer();
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderItemText(null));
+            Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderItemText(null));
         }
 
         [WinFormsFact]
@@ -1043,10 +1043,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripRenderer_OnRenderStatusStripSizingGrip_NullE_ThrowsNullReferenceException()
+        public void ToolStripRenderer_OnRenderStatusStripSizingGrip_NullE_ThrowsArgumentNullException()
         {
             var renderer = new SubToolStripRenderer();
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderStatusStripSizingGrip(null));
+            Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderStatusStripSizingGrip(null));
         }
 
         [WinFormsFact]

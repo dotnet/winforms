@@ -1178,6 +1178,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void TableLayoutPanel_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTableLayoutPanel();
+            Assert.False(control.GetTopLevel());
+        }
+
         public static IEnumerable<object[]> OnCellPaint_TestData()
         {
             yield return new object[] { null };
@@ -2130,6 +2137,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnCellPaint(TableLayoutCellPaintEventArgs e) => base.OnCellPaint(e);
 

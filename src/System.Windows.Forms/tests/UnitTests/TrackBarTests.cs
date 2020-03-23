@@ -224,14 +224,16 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TrackBar_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            using var control = new SubTrackBar
-            {
-                AutoSize = value
-            };
+            using var control = new SubTrackBar();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
@@ -240,6 +242,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
@@ -248,6 +251,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.Equal(!value, control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -257,13 +261,17 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubTrackBar
             {
-                Orientation = Orientation.Vertical,
-                AutoSize = value
+                Orientation = Orientation.Vertical
             };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.Equal(value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
@@ -272,6 +280,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.Equal(value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
@@ -280,6 +289,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.Equal(!value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -295,12 +305,15 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
 
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -312,6 +325,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -323,6 +337,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(104, s_dimension), control.Size);
             Assert.False(control.GetStyle(ControlStyles.FixedWidth));
             Assert.Equal(!value, control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -344,12 +359,15 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
 
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
             Assert.Equal(new Size(s_dimension, s_dimension), control.Size);
             Assert.Equal(value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -361,6 +379,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(s_dimension, s_dimension), control.Size);
             Assert.Equal(value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -372,6 +391,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(s_dimension, s_dimension), control.Size);
             Assert.Equal(!value, control.GetStyle(ControlStyles.FixedWidth));
             Assert.False(control.GetStyle(ControlStyles.FixedHeight));
+            Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -776,15 +796,35 @@ namespace System.Windows.Forms.Tests
             Assert.Equal((IntPtr)11, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETRANGEMIN, IntPtr.Zero, IntPtr.Zero));
         }
 
-        [WinFormsFact]
-        public void TrackBar_Handle_GetWithValue_Success()
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Inherit, true, 5)]
+        [InlineData(RightToLeft.No, true, 5)]
+        [InlineData(RightToLeft.Yes, true, 5)]
+        [InlineData(RightToLeft.Inherit, false, 5)]
+        [InlineData(RightToLeft.No, false, 5)]
+        [InlineData(RightToLeft.Yes, false, 5)]
+        public void TrackBar_Handle_GetWithValue_Success(RightToLeft rightToLeft, bool rightToLeftLayout, int expected)
         {
             using var control = new TrackBar
             {
+                Value = 5,
+                RightToLeft = rightToLeft,
+                RightToLeftLayout = rightToLeftLayout
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
+        }
+
+        [WinFormsFact]
+        public void TrackBar_Handle_GetWithValueVertical_Success()
+        {
+            using var control = new TrackBar
+            {
+                Orientation = Orientation.Vertical,
                 Value = 5
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TBM.GETPOS));
         }
 
         [WinFormsFact]
@@ -2114,6 +2154,41 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void TrackBar_Value_SetWithHandler_CallsValueChanged()
+        {
+            using var control = new TrackBar();
+            int callCount = 0;
+            EventHandler valueChangedHandler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.ValueChanged += valueChangedHandler;
+
+            // Set different.
+            control.Value = 1;
+            Assert.Equal(1, control.Value);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Value = 1;
+            Assert.Equal(1, control.Value);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            control.Value = 2;
+            Assert.Equal(2, control.Value);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.ValueChanged -= valueChangedHandler;
+            control.Value = 1;
+            Assert.Equal(1, control.Value);
+            Assert.Equal(2, callCount);
+        }
+
         [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(11)]
@@ -2226,6 +2301,13 @@ namespace System.Windows.Forms.Tests
 
             // Call again to test caching.
             Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [WinFormsFact]
+        public void TrackBar_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTrackBar();
+            Assert.False(control.GetTopLevel());
         }
 
         [WinFormsTheory]
@@ -3069,31 +3151,31 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_Scroll_TestData()
         {
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, IntPtr.Zero };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.HSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, IntPtr.Zero };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.HSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
 
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, IntPtr.Zero };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
-            yield return new object[] { (int)User32.WM.REFLECT + (int)User32.WM.VSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, IntPtr.Zero };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(-1, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(0, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(1, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(2, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(3, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(4, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(5, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(6, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(7, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(8, int.MaxValue) };
+            yield return new object[] { User32.WM.REFLECT | User32.WM.VSCROLL, PARAM.FromLowHigh(9, int.MaxValue) };
         }
 
         [WinFormsTheory]
@@ -3192,6 +3274,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new bool IsInputKey(Keys keyData) => base.IsInputKey(keyData);
 

@@ -57,11 +57,9 @@ namespace System.Windows.Forms
             get { return (IsLink || DesignMode); }
         }
 
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ToolStripLabelIsLinkDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripLabelIsLinkDescr))]
         public bool IsLink
         {
             get
@@ -78,10 +76,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripLabelActiveLinkColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLabelActiveLinkColorDescr))]
         public Color ActiveLinkColor
         {
             get
@@ -127,11 +123,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(LinkBehavior.SystemDefault),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ToolStripLabelLinkBehaviorDescr))
-        ]
+        [DefaultValue(LinkBehavior.SystemDefault)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripLabelLinkBehaviorDescr))]
         public LinkBehavior LinkBehavior
         {
             get
@@ -154,10 +148,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripLabelLinkColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLabelLinkColorDescr))]
         public Color LinkColor
         {
             get
@@ -181,11 +173,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripLabelLinkVisitedDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLabelLinkVisitedDescr))]
         public bool LinkVisited
         {
             get
@@ -202,10 +192,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripLabelVisitedLinkColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLabelVisitedLinkColorDescr))]
         public Color VisitedLinkColor
         {
             get
@@ -319,7 +307,7 @@ namespace System.Windows.Forms
         ///  Creates an instance of the object that defines how image and text
         ///  gets laid out in the ToolStripItem
         /// </summary>
-        internal override ToolStripItemInternalLayout CreateInternalLayout()
+        private protected override ToolStripItemInternalLayout CreateInternalLayout()
         {
             return new ToolStripLabelLayout(this);
         }
@@ -463,10 +451,7 @@ namespace System.Windows.Forms
 
             public override AccessibleStates State
             {
-                get
-                {
-                    return base.State | AccessibleStates.ReadOnly;
-                }
+                get => base.State | AccessibleStates.ReadOnly;
             }
         }
         /// <summary>

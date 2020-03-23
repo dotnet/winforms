@@ -9,6 +9,8 @@ using System.Drawing;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -696,46 +698,68 @@ namespace System.Windows.Forms.Tests
             Assert.Same(createParams, control.CreateParams);
         }
 
-        public static IEnumerable<object[]> BackColor_TestData()
+        public static IEnumerable<object[]> BackColor_Set_TestData()
         {
             yield return new object[] { Color.Empty, SystemColors.Window };
             yield return new object[] { Color.Red, Color.Red };
         }
 
-        [Theory]
-        [MemberData(nameof(BackColor_TestData))]
-        public void BackColor_Set_GetReturnsExpected(Color value, Color expected)
+        [WinFormsTheory]
+        [MemberData(nameof(BackColor_Set_TestData))]
+        public void TreeView_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var control = new TreeView
+            using var control = new TreeView
             {
                 BackColor = value
             };
             Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackColor = value;
             Assert.Equal(expected, control.BackColor);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
-        [MemberData(nameof(BackColor_TestData))]
-        public void BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
+        public static IEnumerable<object[]> BackColor_SetWithHandle_TestData()
         {
-            var control = new TreeView();
+            yield return new object[] { Color.Empty, SystemColors.Window, 0 };
+            yield return new object[] { Color.Red, Color.Red, 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(BackColor_SetWithHandle_TestData))]
+        public void TreeView_BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
+        {
+            using var control = new TreeView();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.BackColor = value;
             Assert.Equal(expected, control.BackColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             control.BackColor = value;
             Assert.Equal(expected, control.BackColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void BackColor_SetWithHandler_CallsBackColorChanged()
         {
-            var control = new TreeView();
+            using var control = new TreeView();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -767,25 +791,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
-        public void BackgroundImage_Set_GetReturnsExpected(Image value)
+        public void TreeView_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
-            var control = new TreeView
+            using var control = new TreeView
             {
                 BackgroundImage = value
             };
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImage = value;
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
-        public void BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
+        [WinFormsFact]
+        public void TreeView_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
         {
-            var control = new TreeView();
+            using var control = new TreeView();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -796,7 +822,7 @@ namespace System.Windows.Forms.Tests
             control.BackgroundImageChanged += handler;
 
             // Set different.
-            var image1 = new Bitmap(10, 10);
+            using var image1 = new Bitmap(10, 10);
             control.BackgroundImage = image1;
             Assert.Same(image1, control.BackgroundImage);
             Assert.Equal(1, callCount);
@@ -807,7 +833,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var image2 = new Bitmap(10, 10);
+            using var image2 = new Bitmap(10, 10);
             control.BackgroundImage = image2;
             Assert.Same(image2, control.BackgroundImage);
             Assert.Equal(2, callCount);
@@ -824,25 +850,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
-        public void BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
+        public void TreeView_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
-            var control = new TreeView
+            using var control = new TreeView
             {
                 BackgroundImageLayout = value
             };
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImageLayout = value;
             Assert.Equal(value, control.BackgroundImageLayout);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
-        public void BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
+        [WinFormsFact]
+        public void TreeView_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
         {
-            var control = new TreeView();
+            using var control = new TreeView();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1644,6 +1672,60 @@ namespace System.Windows.Forms.Tests
             Assert.True(treeView.FullRowSelect);
             Assert.Equal(2, styleChangedCallCount);
             Assert.Equal(2, invalidatedCallCount);
+        }
+
+        [WinFormsFact]
+        public void TreeView_Handle_GetVersion_ReturnsExpected()
+        {
+            using var control = new TreeView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
+        }
+
+        public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()
+        {
+            yield return new object[] { IntPtr.Zero, 1 };
+            yield return new object[] { (IntPtr)4, 1 };
+            yield return new object[] { (IntPtr)5, 0 };
+            yield return new object[] { (IntPtr)6, 0 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Handle_CustomGetVersion_TestData))]
+        public void TreeView_Handle_CustomGetVersion_Success(IntPtr getVersionResult, int expectedSetVersionCallCount)
+        {
+            using var control = new CustomGetVersionTreeView
+            {
+                GetVersionResult = getVersionResult
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(expectedSetVersionCallCount, control.SetVersionCallCount);
+        }
+
+        private class CustomGetVersionTreeView : TreeView
+        {
+            public IntPtr GetVersionResult { get; set; }
+            public int SetVersionCallCount { get; set; }
+
+            protected override void WndProc(ref Message m)
+            {
+                if (m.Msg == (int)CCM.GETVERSION)
+                {
+                    Assert.Equal(IntPtr.Zero, m.WParam);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    m.Result = GetVersionResult;
+                    return;
+                }
+                else if (m.Msg == (int)CCM.SETVERSION)
+                {
+                    Assert.Equal((IntPtr)5, m.WParam);
+                    Assert.Equal(IntPtr.Zero, m.LParam);
+                    SetVersionCallCount++;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         [Theory]
@@ -4973,6 +5055,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.GetStyle(flag));
         }
 
+        [WinFormsFact]
+        public void TreeView_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTreeView();
+            Assert.False(control.GetTopLevel());
+        }
+
         public static IEnumerable<object[]> HitTest_Empty_TestData()
         {
             yield return new object[] { new Point(int.MinValue, int.MinValue), TreeViewHitTestLocations.AboveClientArea | TreeViewHitTestLocations.LeftOfClientArea };
@@ -6558,6 +6647,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnAfterCheck(TreeViewEventArgs e) => base.OnAfterCheck(e);
 

@@ -253,7 +253,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red, Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_Set_TestData))]
         public void MonthCalendar_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
@@ -276,7 +276,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red, Color.Red, 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_SetWithHandle_TestData))]
         public void MonthCalendar_BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
         {
@@ -305,7 +305,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_BackColor_SetWithHandler_CallsBackColorChanged()
         {
             using var control = new MonthCalendar();
@@ -340,7 +340,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void MonthCalendar_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
@@ -348,14 +348,16 @@ namespace System.Windows.Forms.Tests
             {
                 BackgroundImage = value
             };
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.BackgroundImage = value;
-            Assert.Equal(value, control.BackgroundImage);
+            Assert.Same(value, control.BackgroundImage);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_BackgroundImage_SetWithHandler_CallsBackgroundImageChanged()
         {
             using var control = new MonthCalendar();
@@ -369,7 +371,7 @@ namespace System.Windows.Forms.Tests
             control.BackgroundImageChanged += handler;
 
             // Set different.
-            var image1 = new Bitmap(10, 10);
+            using var image1 = new Bitmap(10, 10);
             control.BackgroundImage = image1;
             Assert.Same(image1, control.BackgroundImage);
             Assert.Equal(1, callCount);
@@ -380,7 +382,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var image2 = new Bitmap(10, 10);
+            using var image2 = new Bitmap(10, 10);
             control.BackgroundImage = image2;
             Assert.Same(image2, control.BackgroundImage);
             Assert.Equal(2, callCount);
@@ -397,7 +399,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void MonthCalendar_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
@@ -416,7 +418,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MonthCalendar_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
         {
             using var control = new MonthCalendar();
@@ -2668,7 +2670,7 @@ namespace System.Windows.Forms.Tests
         public void MonthCalendar_TitleBackColor_SetEmpty_ThrowsArgumentException()
         {
             using var calendar = new MonthCalendar();
-            Assert.Throws<ArgumentException>(null, () => calendar.TitleBackColor = Color.Empty);
+            Assert.Throws<ArgumentException>("value", () => calendar.TitleBackColor = Color.Empty);
         }
 
         public static IEnumerable<object[]> TitleForeColor_Set_TestData()
@@ -2727,7 +2729,7 @@ namespace System.Windows.Forms.Tests
         public void MonthCalendar_TitleForeColor_SetEmpty_ThrowsArgumentException()
         {
             using var calendar = new MonthCalendar();
-            Assert.Throws<ArgumentException>(null, () => calendar.TitleForeColor = Color.Empty);
+            Assert.Throws<ArgumentException>("value", () => calendar.TitleForeColor = Color.Empty);
         }
 
         [Fact]
@@ -2881,7 +2883,7 @@ namespace System.Windows.Forms.Tests
         public void MonthCalendar_TrailingForeColor_SetEmpty_ThrowsArgumentException()
         {
             using var calendar = new MonthCalendar();
-            Assert.Throws<ArgumentException>(null, () => calendar.TrailingForeColor = Color.Empty);
+            Assert.Throws<ArgumentException>("value", () => calendar.TrailingForeColor = Color.Empty);
         }
 
         [Fact]
@@ -3213,6 +3215,50 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Created);
             Assert.True(control.IsHandleCreated);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        [WinFormsFact]
+        public void MonthCalendar_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubMonthCalendar();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
+        [WinFormsTheory]
+        [InlineData(ControlStyles.ContainerControl, false)]
+        [InlineData(ControlStyles.UserPaint, false)]
+        [InlineData(ControlStyles.Opaque, false)]
+        [InlineData(ControlStyles.ResizeRedraw, false)]
+        [InlineData(ControlStyles.FixedWidth, false)]
+        [InlineData(ControlStyles.FixedHeight, false)]
+        [InlineData(ControlStyles.StandardClick, false)]
+        [InlineData(ControlStyles.Selectable, true)]
+        [InlineData(ControlStyles.UserMouse, false)]
+        [InlineData(ControlStyles.SupportsTransparentBackColor, false)]
+        [InlineData(ControlStyles.StandardDoubleClick, true)]
+        [InlineData(ControlStyles.AllPaintingInWmPaint, true)]
+        [InlineData(ControlStyles.CacheText, false)]
+        [InlineData(ControlStyles.EnableNotifyMessage, false)]
+        [InlineData(ControlStyles.DoubleBuffer, false)]
+        [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
+        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData((ControlStyles)0, true)]
+        [InlineData((ControlStyles)int.MaxValue, false)]
+        [InlineData((ControlStyles)(-1), false)]
+        public void MonthCalendar_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
+        {
+            using var control = new SubMonthCalendar();
+            Assert.Equal(expected, control.GetStyle(flag));
+
+            // Call again to test caching.
+            Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [WinFormsFact]
+        public void MonthCalendar_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubMonthCalendar();
+            Assert.False(control.GetTopLevel());
         }
 
         [Theory]
@@ -4073,7 +4119,11 @@ namespace System.Windows.Forms.Tests
 
             public new void CreateHandle() => base.CreateHandle();
 
+            public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnBackColorChanged(EventArgs e) => base.OnBackColorChanged(e);
 

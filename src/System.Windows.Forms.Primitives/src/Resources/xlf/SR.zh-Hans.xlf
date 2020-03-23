@@ -1,30 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en" target-language="zh-Hans" original="../SR.resx">
+  <file datatype="xml" source-language="en" target-language="zh-HANS" original="../SR.resx">
     <body>
       <trans-unit id="COM2UnhandledVT">
         <source>Unhandled VT: {0}.</source>
-        <target state="new">Unhandled VT: {0}.</target>
+        <target state="translated">未处理的 VT: {0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertDoubleToDate">
         <source>Double cannot be converted to a date.</source>
-        <target state="new">Double cannot be converted to a date.</target>
+        <target state="translated">无法将 double 转换为 date。</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertIntToFloat">
         <source>Integer cannot be converted to a float.</source>
-        <target state="new">Integer cannot be converted to a float.</target>
+        <target state="translated">无法将 integer 转换为 float。</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
-        <target state="new">One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</target>
+        <target state="translated">在 IDictionary 参数中有一个或多个无效项。请验证所有值均与对象的属性匹配。</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
-        <target state="new">Parse of Text("{0}") expected text in the format "{1}" did not succeed.</target>
+        <target state="translated">未能分析 Text("{0}")，文本格式应为“{1}”。</target>
         <note />
       </trans-unit>
     </body>

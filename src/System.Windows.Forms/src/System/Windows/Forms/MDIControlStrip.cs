@@ -96,12 +96,11 @@ namespace System.Windows.Forms
 
         private Image GetTargetWindowIcon()
         {
-            Image systemIcon = null;
-            IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), WindowMessages.WM_GETICON, NativeMethods.ICON_SMALL, 0);
-            Icon icon = (hIcon != IntPtr.Zero) ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
+            IntPtr hIcon = User32.SendMessageW(new HandleRef(this, GetSafeHandle(target)), User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            Icon icon = hIcon != IntPtr.Zero ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
             Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
-            systemIcon = smallIcon.ToBitmap();
+            Image systemIcon = smallIcon.ToBitmap();
             smallIcon.Dispose();
 
             return systemIcon;

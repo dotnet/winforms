@@ -29,7 +29,7 @@ namespace System.Windows.Forms
 
             public ControlCollection(Control owner)
             {
-                Owner = owner;
+                Owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
             /// <summary>

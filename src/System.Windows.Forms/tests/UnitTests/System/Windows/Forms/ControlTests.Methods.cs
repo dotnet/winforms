@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -2051,7 +2052,7 @@ namespace System.Windows.Forms.Tests
             using var control = new SubControl();
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
 
-            // Call again to tets caching.
+            // Call again to test caching.
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
         }
 
@@ -2383,6 +2384,435 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        public static IEnumerable<object[]> GetScaledBounds_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, Rectangle.Empty };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 0) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 6, 12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 12) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, -6, -12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, -12) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_TestData))]
+        public void Control_GetScaledBounds_Invoke_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_WithStyles_TestData()
+        {
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 4, 4) };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.X, Rectangle.Empty };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.Y, Rectangle.Empty };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.Width, new Rectangle(0, 0, 4, 0) };
+            yield return new object[] { Rectangle.Empty, new Size(0, 0), BoundsSpecified.Height, new Rectangle(0, 0, 0, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 4, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 4, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 2, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 2, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_WithStyles_TestData))]
+        public void Control_GetScaledBounds_InvokeWithStyles_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new BorderedControl();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_TestData))]
+        public void Control_GetScaledBounds_InvokeWithSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(false);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_InvalidDesignModeSite_TestData()
+        {
+            foreach (object[] testData in GetScaledBounds_TestData())
+            {
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], null };
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], new object() };
+
+                var mockNullDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+                mockNullDesignerHost
+                    .Setup(s => s.RootComponent)
+                    .Returns((IComponent)null);
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], mockNullDesignerHost.Object };
+
+                var mockUnknownDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+                mockUnknownDesignerHost
+                    .Setup(s => s.RootComponent)
+                    .Returns(new Control());
+                yield return new object[] { testData[0], testData[1], testData[2], testData[3], mockUnknownDesignerHost.Object };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_InvalidDesignModeSite_TestData))]
+        public void Control_GetScaledBounds_InvokeWithInvalidDesignModeSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected, object designerHost)
+        {
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(designerHost)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(2));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_NoScaleLocation_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(1, 2, 0, 0) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 0) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(1, 2, 6, 12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 12) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(1, 2, -6, -12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, -12) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_NoScaleLocation_TestData))]
+        public void Control_GetScaledBounds_InvokeWithValidDesignModeSite_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            mockSite
+                .Setup(s => s.GetService(typeof(AmbientProperties)))
+                .Returns(new AmbientProperties());
+            mockSite
+                .Setup(s => s.GetService(typeof(IDesignerHost)))
+                .Returns(mockDesignerHost.Object)
+                .Verifiable();
+            mockSite
+                .Setup(s => s.DesignMode)
+                .Returns(true);
+            mockSite
+                .Setup(s => s.Container)
+                .Returns((IContainer)null);
+            using var control = new SubControl
+            {
+                Site = mockSite.Object
+            };
+            mockDesignerHost
+                .Setup(h => h.RootComponent)
+                .Returns(control)
+                .Verifiable();
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
+            mockDesignerHost.Verify(h => h.RootComponent, Times.Once());
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(2));
+            mockDesignerHost.Verify(h => h.RootComponent, Times.Exactly(2));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_NoScaleLocation_TestData))]
+        public void Control_GetScaledBounds_InvokeTopLevel_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetTopLevel(true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.True(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_FixedWidth_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 3, 0) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 0) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 3, 12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 12) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, 3, -12) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, -12) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedWidth_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedWidth_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.FixedWidth, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_FixedHeight_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 0, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, -6, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedHeight_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedHeight_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.FixedHeight, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetScaledBounds_FixedWidthAndHeight_TestData()
+        {
+            foreach (BoundsSpecified specified in Enum.GetValues(typeof(BoundsSpecified)))
+            {
+                yield return new object[] { Rectangle.Empty, new Size(0, 0), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(1, 1), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(2, 3), specified, Rectangle.Empty };
+                yield return new object[] { Rectangle.Empty, new Size(-2, -3), specified, Rectangle.Empty };
+            }
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.All, new Rectangle(0, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.X, new Rectangle(0, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Y, new Rectangle(1, 0, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(0, 0), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.All, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.X, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Y, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(1, 1), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.All, new Rectangle(2, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.X, new Rectangle(2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Y, new Rectangle(1, 6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(2, 3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.All, new Rectangle(-2, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.X, new Rectangle(-2, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Y, new Rectangle(1, -6, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Width, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), new Size(-2, -3), BoundsSpecified.Height, new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedWidthAndHeight_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedWidthAndHeight_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new SubControl();
+            control.SetStyle(ControlStyles.FixedWidth, true);
+            control.SetStyle(ControlStyles.FixedHeight, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetScaledBounds_FixedWidthAndHeight_TestData))]
+        public void Control_GetScaledBounds_InvokeFixedWidthAndHeightWithStyles_ReturnsExpected(Rectangle bounds, SizeF factor, BoundsSpecified specified, Rectangle expected)
+        {
+            using var control = new BorderedControl();
+            control.SetStyle(ControlStyles.FixedWidth, true);
+            control.SetStyle(ControlStyles.FixedHeight, true);
+
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            Assert.Equal(expected, control.GetScaledBounds(bounds, factor, specified));
+            Assert.False(control.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [InlineData(ControlStyles.ContainerControl, false)]
         [InlineData(ControlStyles.UserPaint, true)]
@@ -2414,7 +2844,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Control_GetTopLevel_Invoke_ReturnsFalse()
+        public void Control_GetTopLevel_Invoke_ReturnsExpected()
         {
             using var control = new SubControl();
             Assert.False(control.GetTopLevel());
@@ -4983,7 +5413,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ProcessKeyEventArgs_TestData()
         {
-            foreach (bool handled in new bool[] { true })
+            foreach (bool handled in new bool[] { true, false })
             {
                 yield return new object[] { (int)User32.WM.CHAR, '2', handled, 1, 0, 0, (IntPtr)50 };
                 yield return new object[] { (int)User32.WM.CHAR, '1', handled, 1, 0, 0, (IntPtr)49 };
@@ -9462,7 +9892,11 @@ namespace System.Windows.Forms.Tests
                 }
             }
 
+            public new Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) => base.GetScaledBounds(bounds, factor, specified);
+
             public new void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) => base.SetBoundsCore(x, y, width, height, specified);            public new void SetClientSizeCore(int width, int height) => base.SetClientSizeCore(width, height);
+
+            public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new Size SizeFromClientSize(Size clientSize) => base.SizeFromClientSize(clientSize);
 
@@ -11681,6 +12115,167 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, parentCreatedCallCount);
         }
 
+        public static IEnumerable<object[]> WndProc_ContextMenuWithoutContextMenuStrip_TestData()
+        {
+            yield return new object[] { new Size(10, 20), (IntPtr)(-1) };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(0, 0) };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(1, 2) };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(-1, -2) };
+
+            yield return new object[] { Size.Empty, (IntPtr)(-1) };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(0, 0) };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(1, 2) };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(-1, -2) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_ContextMenuWithoutContextMenuStrip_TestData))]
+        public void Control_WndProc_InvokeContextMenuWithoutContextMenuStripWithoutHandle_Success(Size size, IntPtr lParam)
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl
+                {
+                    Size = size
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.CONTEXTMENU,
+                    LParam = lParam,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        public static IEnumerable<object[]> WndProc_ContextMenuWithContextMenuStripWithoutHandle_TestData()
+        {
+            using var control = new Control();
+            Point p = control.PointToScreen(new Point(5, 5));
+
+            yield return new object[] { new Size(10, 20), (IntPtr)(-1), (IntPtr)250, true };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(0, 0), IntPtr.Zero, true };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(1, 2), IntPtr.Zero, true };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(p.X, p.Y), (IntPtr)250, true };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(-1, -2), IntPtr.Zero, true };
+
+            yield return new object[] { Size.Empty, (IntPtr)(-1), IntPtr.Zero, false };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(0, 0), IntPtr.Zero, true };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(1, 2), IntPtr.Zero, true };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(p.X, p.Y), IntPtr.Zero, true };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, true };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_ContextMenuWithContextMenuStripWithoutHandle_TestData))]
+        public void Control_WndProc_InvokeContextMenuWithContextMenuStripWithoutHandle_Success(Size size, IntPtr lParam, IntPtr expectedResult, bool expectedHandleCreated)
+        {
+            using (new NoAssertContext())
+            {
+                using var menu = new ContextMenuStrip();
+                using var control = new SubControl
+                {
+                    ContextMenuStrip = menu,
+                    Size = size
+                };
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.CONTEXTMENU,
+                    LParam = lParam,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(expectedResult, m.Result);
+                Assert.False(menu.Visible);
+                Assert.Equal(expectedResult == (IntPtr)250, menu.SourceControl == control);
+                Assert.Equal(expectedHandleCreated, control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_ContextMenuWithoutContextMenuStrip_TestData))]
+        public void Control_WndProc_InvokeContextMenuWithoutContextMenuStripWithHandle_Success(Size size, IntPtr lParam)
+        {
+            using var control = new SubControl
+            {
+                Size = size
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.CONTEXTMENU,
+                LParam = lParam,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> WndProc_ContextMenuWithContextMenuStripWithHandle_TestData()
+        {
+            using var control = new Control();
+            Point p = control.PointToScreen(new Point(5, 5));
+
+            yield return new object[] { new Size(10, 20), (IntPtr)(-1), (IntPtr)250 };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(0, 0), IntPtr.Zero };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(1, 2), IntPtr.Zero };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(p.X, p.Y), (IntPtr)250 };
+            yield return new object[] { new Size(10, 20), PARAM.FromLowHigh(-1, -2), IntPtr.Zero };
+
+            yield return new object[] { Size.Empty, (IntPtr)(-1), IntPtr.Zero };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(0, 0), IntPtr.Zero };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(1, 2), IntPtr.Zero };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(p.X, p.Y), IntPtr.Zero };
+            yield return new object[] { Size.Empty, PARAM.FromLowHigh(-1, -2), IntPtr.Zero };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(WndProc_ContextMenuWithContextMenuStripWithHandle_TestData))]
+        public void Control_WndProc_InvokeContextMenuWithContextMenuStripWithHandle_Success(Size size, IntPtr lParam, IntPtr expectedResult)
+        {
+            using var menu = new ContextMenuStrip();
+            using var control = new SubControl
+            {
+                ContextMenuStrip = menu,
+                Size = size
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.CONTEXTMENU,
+                LParam = lParam,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(expectedResult, m.Result);
+            Assert.False(menu.Visible);
+            Assert.Equal(expectedResult == (IntPtr)250, menu.SourceControl == control);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
         [WinFormsFact]
         public void Control_WndProc_InvokeDpiChangedAfterParentWithoutHandle_Success()
         {
@@ -11975,6 +12570,48 @@ namespace System.Windows.Forms.Tests
             {
                 graphics.ReleaseHdc();
             }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeGetDlgCodeWithoutHandle_ReturnsExpected()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.GETDLGCODE,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeGetDlgCodeWithHandle_ReturnsExpected()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.GETDLGCODE,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]
@@ -12966,6 +13603,48 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(IntPtr.Zero, m.Result);
             Assert.Equal(1, callCount);
             Assert.Same(control, parent.ActiveControl);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFontWithoutHandle_ReturnsExpected()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.SETFONT,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeSetFontWithHandle_ReturnsExpected()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            var m = new Message
+            {
+                Msg = (int)User32.WM.SETFONT,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);

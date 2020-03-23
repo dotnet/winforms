@@ -22,17 +22,15 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a window or dialog box that makes up an application's user interface.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    ToolboxItemFilter("System.Windows.Forms.Control.TopLevel"),
-    ToolboxItem(false),
-    DesignTimeVisible(false),
-    Designer("System.Windows.Forms.Design.FormDocumentDesigner, " + AssemblyRef.SystemDesign, typeof(IRootDesigner)),
-    DesignerCategory("Form"),
-    DefaultEvent(nameof(Load)),
-    InitializationEvent(nameof(Load)),
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [ToolboxItemFilter("System.Windows.Forms.Control.TopLevel")]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
+    [Designer("System.Windows.Forms.Design.FormDocumentDesigner, " + AssemblyRef.SystemDesign, typeof(IRootDesigner))]
+    [DefaultEvent(nameof(Load))]
+    [InitializationEvent(nameof(Load))]
+    [DesignerCategory("Form")]
     public partial class Form : ContainerControl
     {
 #if DEBUG
@@ -207,10 +205,8 @@ namespace System.Windows.Forms
         ///  Indicates the <see cref='Button'/> control on the form that is clicked when
         ///  the user presses the ENTER key.
         /// </summary>
-        [
-        DefaultValue(null),
-        SRDescription(nameof(SR.FormAcceptButtonDescr))
-        ]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.FormAcceptButtonDescr))]
         public IButtonControl AcceptButton
         {
             get
@@ -306,11 +302,9 @@ namespace System.Windows.Forms
         ///  Gets the currently active multiple document interface (MDI) child window.
         ///  Note: Don't use this property internally, use ActiveMdiChildInternal instead (see comments below).
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormActiveMDIChildDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormActiveMDIChildDescr))]
         public Form ActiveMdiChild
         {
             get
@@ -329,7 +323,7 @@ namespace System.Windows.Forms
                     // If this.MdiClient != null it means this.IsMdiContainer == true.
                     if (ctlClient != null && ctlClient.IsHandleCreated)
                     {
-                        IntPtr hwnd = ctlClient.SendMessage(WindowMessages.WM_MDIGETACTIVE, 0, 0);
+                        IntPtr hwnd = User32.SendMessageW(ctlClient, User32.WM.MDIGETACTIVE);
                         mdiChild = Control.FromHandle(hwnd) as Form;
                     }
                 }
@@ -377,11 +371,9 @@ namespace System.Windows.Forms
         ///  a value indicating whether the opacity of the form can be
         ///  adjusted.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlAllowTransparencyDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlAllowTransparencyDescr))]
         public bool AllowTransparency
         {
             get
@@ -419,14 +411,12 @@ namespace System.Windows.Forms
         ///  to fit the height of the font used on the form and scale
         ///  its controls.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.FormAutoScaleDescr)),
-        Obsolete("This property has been deprecated. Use the AutoScaleMode property instead.  http://go.microsoft.com/fwlink/?linkid=14202"),
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.FormAutoScaleDescr)),
+        Obsolete("This property has been deprecated. Use the AutoScaleMode property instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool AutoScale
         {
             get
@@ -471,11 +461,10 @@ namespace System.Windows.Forms
         /// </summary>
         //
         // Virtual so subclasses like PrintPreviewDialog can prevent changes.
-        [
-        Localizable(true),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Localizable(true)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual Size AutoScaleBaseSize
         {
             get
@@ -505,12 +494,10 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the form implements
         ///  autoscrolling.
         /// </summary>
-        [
-        Localizable(true)
-        ]
+        [Localizable(true)]
         public override bool AutoScroll
         {
-            get { return base.AutoScroll; }
+            get => base.AutoScroll;
 
             set
             {
@@ -524,8 +511,9 @@ namespace System.Windows.Forms
 
         // Forms implement their own AutoSize in OnLayout so we shadow this property
         // just in case someone parents a Form to a container control.
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
             get { return formStateEx[FormStateExAutoSize] != 0; }
@@ -547,8 +535,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
@@ -558,13 +548,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
-        [
-        SRDescription(nameof(SR.ControlAutoSizeModeDescr)),
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(true),
-        DefaultValue(AutoSizeMode.GrowOnly),
-        Localizable(true)
-        ]
+        [SRDescription(nameof(SR.ControlAutoSizeModeDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(true)]
+        [DefaultValue(AutoSizeMode.GrowOnly)]
+        [Localizable(true)]
         public AutoSizeMode AutoSizeMode
         {
             get
@@ -601,26 +589,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates whether controls in this container will be automatically validated when the focus changes.
         /// </summary>
-        [
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Always),
-        ]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public override AutoValidate AutoValidate
         {
-            get
-            {
-                return base.AutoValidate;
-            }
-            set
-            {
-                base.AutoValidate = value;
-            }
+            get => base.AutoValidate;
+            set => base.AutoValidate = value;
         }
 
-        [
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Always),
-        ]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler AutoValidateChanged
         {
             add => base.AutoValidateChanged += value;
@@ -645,11 +623,7 @@ namespace System.Windows.Forms
 
                 return DefaultBackColor;
             }
-
-            set
-            {
-                base.BackColor = value;
-            }
+            set => base.BackColor = value;
         }
 
         private bool CalledClosing
@@ -763,10 +737,8 @@ namespace System.Windows.Forms
         ///  sets the button control that will be clicked when the
         ///  user presses the ESC key.
         /// </summary>
-        [
-        DefaultValue(null),
-        SRDescription(nameof(SR.FormCancelButtonDescr))
-        ]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.FormCancelButtonDescr))]
         public IButtonControl CancelButton
         {
             get
@@ -787,20 +759,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the size of the client area of the form.
         /// </summary>
-        [
-        Localizable(true),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
-        ]
+        [Localizable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         new public Size ClientSize
         {
-            get
-            {
-                return base.ClientSize;
-            }
-            set
-            {
-                base.ClientSize = value;
-            }
+            get => base.ClientSize;
+            set => base.ClientSize = value;
         }
 
         /// <summary>
@@ -979,12 +943,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the size and location of the form on the Windows desktop.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormDesktopBoundsDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormDesktopBoundsDescr))]
         public Rectangle DesktopBounds
         {
             get
@@ -1005,12 +967,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the location of the form on the Windows desktop.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormDesktopLocationDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormDesktopLocationDescr))]
         public Point DesktopLocation
         {
             get
@@ -1031,12 +991,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the dialog result for the form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormDialogResultDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormDialogResultDescr))]
         public DialogResult DialogResult
         {
             get
@@ -1060,11 +1018,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether a
         ///  help button should be displayed in the caption box of the form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FormHelpButtonDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FormHelpButtonDescr))]
         public bool HelpButton
         {
             get
@@ -1086,12 +1042,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Always),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.FormHelpButtonClickedDescr))
-        ]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormHelpButtonClickedDescr))]
         public event CancelEventHandler HelpButtonClicked
         {
             add => Events.AddHandler(EVENT_HELPBUTTONCLICKED, value);
@@ -1171,12 +1125,10 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether the form is a multiple document
         ///  interface (MDI) child form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormIsMDIChildDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormIsMDIChildDescr))]
         public bool IsMdiChild
         {
             get
@@ -1210,11 +1162,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the form is a container for multiple document interface
         ///  (MDI) child forms.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FormIsMDIContainerDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FormIsMDIContainerDescr))]
         public bool IsMdiContainer
         {
             get
@@ -1261,10 +1211,8 @@ namespace System.Windows.Forms
         ///  indicating whether the form will receive key events
         ///  before the event is passed to the control that has focus.
         /// </summary>
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.FormKeyPreviewDescr))
-        ]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FormKeyPreviewDescr))]
         public bool KeyPreview
         {
             get
@@ -1290,14 +1238,8 @@ namespace System.Windows.Forms
         [SettingsBindable(true)]
         public new Point Location
         {
-            get
-            {
-                return base.Location;
-            }
-            set
-            {
-                base.Location = value;
-            }
+            get => base.Location;
+            set => base.Location = value;
         }
 
         /// <summary>
@@ -1322,7 +1264,8 @@ namespace System.Windows.Forms
 
         private static readonly object EVENT_MAXIMIZEDBOUNDSCHANGED = new object();
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMaximizedBoundsChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.FormOnMaximizedBoundsChangedDescr))]
         public event EventHandler MaximizedBoundsChanged
         {
             add => Events.AddHandler(EVENT_MAXIMIZEDBOUNDSCHANGED, value);
@@ -1333,13 +1276,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the maximum size the form can be resized to.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        SRDescription(nameof(SR.FormMaximumSizeDescr)),
-        RefreshProperties(RefreshProperties.Repaint),
-        DefaultValue(typeof(Size), "0, 0")
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.FormMaximumSizeDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [DefaultValue(typeof(Size), "0, 0")]
         public override Size MaximumSize
         {
             get
@@ -1390,19 +1331,19 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMaximumSizeChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.FormOnMaximumSizeChangedDescr))]
         public event EventHandler MaximumSizeChanged
         {
             add => Events.AddHandler(EVENT_MAXIMUMSIZECHANGED, value);
 
             remove => Events.RemoveHandler(EVENT_MAXIMUMSIZECHANGED, value);
         }
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.FormMenuStripDescr)),
-        TypeConverter(typeof(ReferenceConverter))
-        ]
+
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.FormMenuStripDescr))]
+        [TypeConverter(typeof(ReferenceConverter))]
         public MenuStrip MainMenuStrip
         {
             get
@@ -1422,20 +1363,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide Margin/MarginChanged
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new Padding Margin
         {
-            get { return base.Margin; }
-            set
-            {
-                base.Margin = value;
-            }
+            get => base.Margin;
+            set => base.Margin = value;
         }
 
         /// <summary>
         ///  Hide Margin/MarginChanged
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MarginChanged
         {
             add => base.MarginChanged += value;
@@ -1516,7 +1456,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMinimumSizeChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.FormOnMinimumSizeChangedDescr))]
         public event EventHandler MinimumSizeChanged
         {
             add => Events.AddHandler(EVENT_MINIMUMSIZECHANGED, value);
@@ -1528,11 +1469,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the maximize button is
         ///  displayed in the caption bar of the form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FormMaximizeBoxDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FormMaximizeBoxDescr))]
         public bool MaximizeBox
         {
             get
@@ -1558,12 +1497,10 @@ namespace System.Windows.Forms
         ///  multiple document interface (MDI) child forms that are parented to this
         ///  form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormMDIChildrenDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormMDIChildrenDescr))]
         public Form[] MdiChildren
         {
             get
@@ -1596,12 +1533,10 @@ namespace System.Windows.Forms
         ///  Indicates the current multiple document
         ///  interface (MDI) parent form of this form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormMDIParentDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormMDIParentDescr))]
         public Form MdiParent
         {
             get
@@ -1699,11 +1634,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the minimize button is displayed in the caption bar of the form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FormMinimizeBoxDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FormMinimizeBoxDescr))]
         public bool MinimizeBox
         {
             get
@@ -1728,12 +1661,10 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether this form is
         ///  displayed modally.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormModalDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormModalDescr))]
         public bool Modal
         {
             get
@@ -1818,12 +1749,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets an array of <see cref='Form'/> objects that represent all forms that are owned by this form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormOwnedFormsDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormOwnedFormsDescr))]
         public Form[] OwnedForms
         {
             get
@@ -1844,12 +1773,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the form that owns this form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormOwnerDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormOwnerDescr))]
         public Form Owner
         {
             get
@@ -1901,10 +1828,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the restored bounds of the Form.
         /// </summary>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public Rectangle RestoreBounds
         {
             get
@@ -1929,12 +1854,10 @@ namespace System.Windows.Forms
         ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
         ///  the form, and control placement and text will be from right to left.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(false),
-        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))]
         public virtual bool RightToLeftLayout
         {
             get
@@ -1957,10 +1880,7 @@ namespace System.Windows.Forms
 
         internal override Control ParentInternal
         {
-            get
-            {
-                return base.ParentInternal;
-            }
+            get => base.ParentInternal;
             set
             {
                 if (value != null)
@@ -2060,30 +1980,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the size of the form.
         /// </summary>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Localizable(false)
-        ]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Localizable(false)]
         new public Size Size
         {
-            get
-            {
-                return base.Size;
-            }
-            set
-            {
-                base.Size = value;
-            }
+            get => base.Size;
+            set => base.Size = value;
         }
 
         /// <summary>
         ///  Gets or sets the style of size grip to display in the lower-left corner of the form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        DefaultValue(SizeGripStyle.Auto),
-        SRDescription(nameof(SR.FormSizeGripStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [DefaultValue(SizeGripStyle.Auto)]
+        [SRDescription(nameof(SR.FormSizeGripStyleDescr))]
         public SizeGripStyle SizeGripStyle
         {
             get
@@ -2112,12 +2022,10 @@ namespace System.Windows.Forms
         ///  Gets or sets the
         ///  starting position of the form at run time.
         /// </summary>
-        [
-        Localizable(true),
-        SRCategory(nameof(SR.CatLayout)),
-        DefaultValue(FormStartPosition.WindowsDefaultLocation),
-        SRDescription(nameof(SR.FormStartPositionDescr))
-        ]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(FormStartPosition.WindowsDefaultLocation)]
+        [SRDescription(nameof(SR.FormStartPositionDescr))]
         public FormStartPosition StartPosition
         {
             get
@@ -2135,24 +2043,17 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public int TabIndex
         {
-            get
-            {
-                return base.TabIndex;
-            }
-            set
-            {
-                base.TabIndex = value;
-            }
+            get => base.TabIndex;
+            set => base.TabIndex = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabIndexChanged
         {
             add => base.TabIndexChanged += value;
@@ -2174,7 +2075,8 @@ namespace System.Windows.Forms
             set => base.TabStop = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabStopChanged
         {
             add => base.TabStopChanged += value;
@@ -2210,21 +2112,17 @@ namespace System.Windows.Forms
         [SettingsBindable(true)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         /// <summary>
         ///  Gets or sets a value indicating whether to display the form as a top-level
         ///  window.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool TopLevel
         {
             get
@@ -2268,10 +2166,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the color that will represent transparent areas of the form.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        SRDescription(nameof(SR.FormTransparencyKeyDescr))
-        ]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [SRDescription(nameof(SR.FormTransparencyKeyDescr))]
         public Color TransparencyKey
         {
             get
@@ -2368,7 +2264,7 @@ namespace System.Windows.Forms
                 //
                 if (0 == formState[FormStateSWCalled])
                 {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_SHOWWINDOW, value ? 1 : 0, 0);
+                    User32.SendMessageW(this, User32.WM.SHOWWINDOW, PARAM.FromBool(value));
                 }
             }
             else
@@ -2512,7 +2408,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the form is activated in code or by the user.
         /// </summary>
-        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.FormOnActivateDescr))]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.FormOnActivateDescr))]
         public event EventHandler Activated
         {
             add => Events.AddHandler(EVENT_ACTIVATED, value);
@@ -2522,12 +2419,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the form is closing.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.FormOnClosingDescr)),
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormOnClosingDescr))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public event CancelEventHandler Closing
         {
             add => Events.AddHandler(EVENT_CLOSING, value);
@@ -2537,12 +2432,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the form is closed.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.FormOnClosedDescr)),
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormOnClosedDescr))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler Closed
         {
             add => Events.AddHandler(EVENT_CLOSED, value);
@@ -2552,7 +2445,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the form loses focus and is not the active form.
         /// </summary>
-        [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.FormOnDeactivateDescr))]
+        [SRCategory(nameof(SR.CatFocus))]
+        [SRDescription(nameof(SR.FormOnDeactivateDescr))]
         public event EventHandler Deactivate
         {
             add => Events.AddHandler(EVENT_DEACTIVATE, value);
@@ -2562,7 +2456,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the form is closing.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnFormClosingDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormOnFormClosingDescr))]
         public event FormClosingEventHandler FormClosing
         {
             add => Events.AddHandler(EVENT_FORMCLOSING, value);
@@ -2572,7 +2467,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the form is closed.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnFormClosedDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormOnFormClosedDescr))]
         public event FormClosedEventHandler FormClosed
         {
             add => Events.AddHandler(EVENT_FORMCLOSED, value);
@@ -2582,7 +2478,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs before the form becomes visible.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnLoadDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormOnLoadDescr))]
         public event EventHandler Load
         {
             add => Events.AddHandler(EVENT_LOAD, value);
@@ -2593,7 +2490,8 @@ namespace System.Windows.Forms
         ///  Occurs when a Multiple Document Interface (MDI) child form is activated or closed
         ///  within an MDI application.
         /// </summary>
-        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.FormOnMDIChildActivateDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.FormOnMDIChildActivateDescr))]
         public event EventHandler MdiChildActivate
         {
             add => Events.AddHandler(EVENT_MDI_CHILD_ACTIVATE, value);
@@ -2603,11 +2501,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the menu of a form loses focus.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.FormOnMenuCompleteDescr)),
-        Browsable(false)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormOnMenuCompleteDescr))]
+        [Browsable(false)]
         public event EventHandler MenuComplete
         {
             add => Events.AddHandler(EVENT_MENUCOMPLETE, value);
@@ -2617,11 +2513,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the menu of a form receives focus.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.FormOnMenuStartDescr)),
-        Browsable(false)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormOnMenuStartDescr))]
+        [Browsable(false)]
         public event EventHandler MenuStart
         {
             add => Events.AddHandler(EVENT_MENUSTART, value);
@@ -2631,7 +2525,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs after the input language of the form has changed.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnInputLangChangeDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormOnInputLangChangeDescr))]
         public event InputLanguageChangedEventHandler InputLanguageChanged
         {
             add => Events.AddHandler(EVENT_INPUTLANGCHANGE, value);
@@ -2642,14 +2537,16 @@ namespace System.Windows.Forms
         ///  Occurs when the the user attempts to change the input language for the
         ///  form.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnInputLangChangeRequestDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormOnInputLangChangeRequestDescr))]
         public event InputLanguageChangingEventHandler InputLanguageChanging
         {
             add => Events.AddHandler(EVENT_INPUTLANGCHANGEREQUEST, value);
             remove => Events.RemoveHandler(EVENT_INPUTLANGCHANGEREQUEST, value);
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged
         {
             add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
@@ -2659,7 +2556,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs whenever the form is first shown.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnShownDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.FormOnShownDescr))]
         public event EventHandler Shown
         {
             add => Events.AddHandler(EVENT_SHOWN, value);
@@ -2679,7 +2577,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    UnsafeNativeMethods.SetForegroundWindow(new HandleRef(this, Handle));
+                    User32.SetForegroundWindow(this);
                 }
             }
         }
@@ -3120,7 +3018,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 closeReason = CloseReason.UserClosing;
-                SendMessage(WindowMessages.WM_CLOSE, 0, 0);
+                User32.SendMessageW(this, User32.WM.CLOSE);
             }
             else
             {
@@ -3270,7 +3168,7 @@ namespace System.Windows.Forms
                     Icon icon = Icon;
                     if (icon != null && TaskbarOwner.Handle != IntPtr.Zero)
                     {
-                        UnsafeNativeMethods.SendMessage(TaskbarOwner, WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
+                        User32.SendMessageW(TaskbarOwner, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, icon.Handle);
                     }
                 }
 
@@ -3341,22 +3239,19 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Calls the default window proc for the form. If
-        ///  a
-        ///  subclass overrides this function,
+        ///  a subclass overrides this function,
         ///  it must call the base implementation.
         /// </summary>
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void DefWndProc(ref Message m)
         {
             if (ctlClient != null && ctlClient.IsHandleCreated && ctlClient.ParentInternal == this)
             {
-                m.Result = UnsafeNativeMethods.DefFrameProc(m.HWnd, ctlClient.Handle, m.Msg, m.WParam, m.LParam);
+                m.Result = User32.DefFrameProcW(m.HWnd, ctlClient.Handle, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
             else if (0 != formStateEx[FormStateExUseMdiChildProc])
             {
-                m.Result = UnsafeNativeMethods.DefMDIChildProc(m.HWnd, m.Msg, m.WParam, m.LParam);
+                m.Result = User32.DefMDIChildProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
             else
             {
@@ -4353,8 +4248,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Raises the DpiChanged event.
         /// </summary>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         protected virtual void OnDpiChanged(DpiChangedEventArgs e)
         {
             if (e.DeviceDpiNew != e.DeviceDpiOld)
@@ -4402,7 +4298,8 @@ namespace System.Windows.Forms
         ///  Occurs when the DPI resolution of the screen this top level window is displayed on changes,
         ///  either when the top level window is moved between monitors or when the OS settings are changed.
         /// </summary>
-        [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.FormOnDpiChangedDescr))]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.FormOnDpiChangedDescr))]
         public event DpiChangedEventHandler DpiChanged
         {
             add => Events.AddHandler(EVENT_DPI_CHANGED, value);
@@ -4425,7 +4322,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Allows derived form to handle WM_GETDPISCALEDSIZE message.
         /// </summary>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual bool OnGetDpiScaledSize(int deviceDpiOld, int deviceDpiNew, ref Size desiredSize)
         {
             return false; // scale linearly
@@ -4852,7 +4750,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the form enters the sizing modal loop
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.FormOnResizeBeginDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.FormOnResizeBeginDescr))]
         public event EventHandler ResizeBegin
         {
             add => Events.AddHandler(EVENT_RESIZEBEGIN, value);
@@ -4862,7 +4761,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the control exits the sizing modal loop.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.FormOnResizeEndDescr))]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.FormOnResizeEndDescr))]
         public event EventHandler ResizeEnd
         {
             add => Events.AddHandler(EVENT_RESIZEEND, value);
@@ -5332,7 +5232,7 @@ namespace System.Windows.Forms
             IntPtr hWndCapture = User32.GetCapture();
             if (hWndCapture != IntPtr.Zero)
             {
-                UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), WindowMessages.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
+                User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE);
                 User32.ReleaseCapture();
             }
             IntPtr hWndActive = User32.GetActiveWindow();
@@ -5954,15 +5854,15 @@ namespace System.Windows.Forms
 
                     if (smallIcon != null)
                     {
-                        SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, smallIcon.Handle);
+                        User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, smallIcon.Handle);
                     }
 
-                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, icon.Handle);
                 }
                 else
                 {
-                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_SMALL, 0);
-                    SendMessage(WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, 0);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
                 }
 
                 if (redrawFrame)
@@ -6071,7 +5971,8 @@ namespace System.Windows.Forms
         ///  equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
         ///  for details of exactly which child controls will be validated.
         /// </summary>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public override bool ValidateChildren()
         {
             return base.ValidateChildren();
@@ -6081,7 +5982,8 @@ namespace System.Windows.Forms
         ///  Validates all the child controls in the container. Exactly which controls are
         ///  validated and which controls are skipped is determined by <paramref name="validationConstraints"/>.
         /// </summary>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public override bool ValidateChildren(ValidationConstraints validationConstraints)
         {
             return base.ValidateChildren(validationConstraints);
@@ -6121,20 +6023,20 @@ namespace System.Windows.Forms
         private void WmCreate(ref Message m)
         {
             base.WndProc(ref m);
-            NativeMethods.STARTUPINFO_I si = new NativeMethods.STARTUPINFO_I();
-            UnsafeNativeMethods.GetStartupInfo(si);
+            var si = new Kernel32.STARTUPINFOW();
+            Kernel32.GetStartupInfoW(ref si);
 
             // If we've been created from explorer, it may
             // force us to show up normal.  Force our current window state to
             // the specified state, unless it's _specified_ max or min
-            if (TopLevel && (si.dwFlags & NativeMethods.STARTF_USESHOWWINDOW) != 0)
+            if (TopLevel && (si.dwFlags & Kernel32.STARTF.USESHOWWINDOW) != 0)
             {
-                switch (si.wShowWindow)
+                switch ((User32.SW)si.wShowWindow)
                 {
-                    case (short)User32.SW.MAXIMIZE:
+                    case User32.SW.MAXIMIZE:
                         WindowState = FormWindowState.Maximized;
                         break;
-                    case (short)User32.SW.MINIMIZE:
+                    case User32.SW.MINIMIZE:
                         WindowState = FormWindowState.Minimized;
                         break;
                 }
@@ -6149,8 +6051,7 @@ namespace System.Windows.Forms
             FormClosingEventArgs e = new FormClosingEventArgs(CloseReason, false);
 
             // Pass 1 (WM_CLOSE & WM_QUERYENDSESSION)... Closing
-            //
-            if (m.Msg != WindowMessages.WM_ENDSESSION)
+            if (m.Msg != (int)User32.WM.ENDSESSION)
             {
                 if (Modal)
                 {
@@ -6224,7 +6125,7 @@ namespace System.Windows.Forms
                     OnFormClosing(e);
                 }
 
-                if (m.Msg == WindowMessages.WM_QUERYENDSESSION)
+                if (m.Msg == (int)User32.WM.QUERYENDSESSION)
                 {
                     m.Result = (IntPtr)(e.Cancel ? 0 : 1);
                 }
@@ -6246,8 +6147,7 @@ namespace System.Windows.Forms
 
             // Pass 2 (WM_CLOSE & WM_ENDSESSION)... Fire closed
             // event on all mdi children and ourselves
-            //
-            if (m.Msg != WindowMessages.WM_QUERYENDSESSION)
+            if (m.Msg != (int)User32.WM.QUERYENDSESSION)
             {
                 FormClosedEventArgs fc;
                 if (!e.Cancel)
@@ -6484,7 +6384,7 @@ namespace System.Windows.Forms
                     pt.Y >= (clientSize.Height - SizeGripSize) &&
                     clientSize.Height >= SizeGripSize)
                 {
-                    m.Result = IsMirrored ? (IntPtr)NativeMethods.HTBOTTOMLEFT : (IntPtr)NativeMethods.HTBOTTOMRIGHT;
+                    m.Result = (IntPtr)(IsMirrored ? User32.HT.BOTTOMLEFT : User32.HT.BOTTOMRIGHT);
                     return;
                 }
             }
@@ -6497,10 +6397,10 @@ namespace System.Windows.Forms
             if (AutoSizeMode == AutoSizeMode.GrowAndShrink)
             {
                 int result = unchecked((int)(long)m.Result);
-                if (result >= NativeMethods.HTLEFT &&
-                    result <= NativeMethods.HTBOTTOMRIGHT)
+                if (result >= (int)User32.HT.LEFT &&
+                    result <= (int)User32.HT.BOTTOMRIGHT)
                 {
-                    m.Result = (IntPtr)NativeMethods.HTBORDER;
+                    m.Result = (IntPtr)User32.HT.BORDER;
                 }
             }
         }
@@ -6602,24 +6502,24 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_NCACTIVATE:
+                case User32.WM.NCACTIVATE:
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_NCLBUTTONDOWN:
-                case WindowMessages.WM_NCRBUTTONDOWN:
-                case WindowMessages.WM_NCMBUTTONDOWN:
-                case WindowMessages.WM_NCXBUTTONDOWN:
+                case User32.WM.NCLBUTTONDOWN:
+                case User32.WM.NCRBUTTONDOWN:
+                case User32.WM.NCMBUTTONDOWN:
+                case User32.WM.NCXBUTTONDOWN:
                     WmNcButtonDown(ref m);
                     break;
-                case WindowMessages.WM_ACTIVATE:
+                case User32.WM.ACTIVATE:
                     WmActivate(ref m);
                     break;
-                case WindowMessages.WM_MDIACTIVATE:
+                case User32.WM.MDIACTIVATE:
                     WmMdiActivate(ref m);
                     break;
-                case WindowMessages.WM_CLOSE:
+                case User32.WM.CLOSE:
                     if (CloseReason == CloseReason.None)
                     {
                         CloseReason = CloseReason.TaskManagerClosing;
@@ -6627,57 +6527,57 @@ namespace System.Windows.Forms
                     WmClose(ref m);
                     break;
 
-                case WindowMessages.WM_QUERYENDSESSION:
-                case WindowMessages.WM_ENDSESSION:
+                case User32.WM.QUERYENDSESSION:
+                case User32.WM.ENDSESSION:
                     CloseReason = CloseReason.WindowsShutDown;
                     WmClose(ref m);
                     break;
-                case WindowMessages.WM_ENTERSIZEMOVE:
+                case User32.WM.ENTERSIZEMOVE:
                     WmEnterSizeMove(ref m);
                     DefWndProc(ref m);
                     break;
-                case WindowMessages.WM_EXITSIZEMOVE:
+                case User32.WM.EXITSIZEMOVE:
                     WmExitSizeMove(ref m);
                     DefWndProc(ref m);
                     break;
-                case WindowMessages.WM_CREATE:
+                case User32.WM.CREATE:
                     WmCreate(ref m);
                     break;
-                case WindowMessages.WM_ERASEBKGND:
+                case User32.WM.ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
 
-                case WindowMessages.WM_NCDESTROY:
+                case User32.WM.NCDESTROY:
                     WmNCDestroy(ref m);
                     break;
-                case WindowMessages.WM_NCHITTEST:
+                case User32.WM.NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case WindowMessages.WM_SHOWWINDOW:
+                case User32.WM.SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
-                case WindowMessages.WM_SIZE:
+                case User32.WM.SIZE:
                     WmSize(ref m);
                     break;
-                case WindowMessages.WM_SYSCOMMAND:
+                case User32.WM.SYSCOMMAND:
                     WmSysCommand(ref m);
                     break;
-                case WindowMessages.WM_GETMINMAXINFO:
+                case User32.WM.GETMINMAXINFO:
                     WmGetMinMaxInfo(ref m);
                     break;
-                case WindowMessages.WM_WINDOWPOSCHANGED:
+                case User32.WM.WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
-                //case WindowMessages.WM_WINDOWPOSCHANGING:
+                //case User32.WM.WINDOWPOSCHANGING:
                 //    WmWindowPosChanging(ref m);
                 //    break;
-                case WindowMessages.WM_ENTERMENULOOP:
+                case User32.WM.ENTERMENULOOP:
                     WmEnterMenuLoop(ref m);
                     break;
-                case WindowMessages.WM_EXITMENULOOP:
+                case User32.WM.EXITMENULOOP:
                     WmExitMenuLoop(ref m);
                     break;
-                case WindowMessages.WM_CAPTURECHANGED:
+                case User32.WM.CAPTURECHANGED:
                     base.WndProc(ref m);
 
                     // This is a work-around for the Win32 scroll bar; it doesn't release
@@ -6689,11 +6589,11 @@ namespace System.Windows.Forms
                         Capture = false;
                     }
                     break;
-                case WindowMessages.WM_GETDPISCALEDSIZE:
+                case User32.WM.GETDPISCALEDSIZE:
                     Debug.Assert(PARAM.SignedLOWORD(m.WParam) == PARAM.SignedHIWORD(m.WParam), "Non-square pixels!");
                     WmGetDpiScaledSize(ref m);
                     break;
-                case WindowMessages.WM_DPICHANGED:
+                case User32.WM.DPICHANGED:
                     WmDpiChanged(ref m);
                     break;
                 default:

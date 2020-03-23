@@ -20,15 +20,13 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a standard Windows label.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Text)),
-    DefaultBindingProperty(nameof(Text)),
-    Designer("System.Windows.Forms.Design.LabelDesigner, " + AssemblyRef.SystemDesign),
-    ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionLabel))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(Text))]
+    [DefaultBindingProperty(nameof(Text))]
+    [Designer("System.Windows.Forms.Design.LabelDesigner, " + AssemblyRef.SystemDesign)]
+    [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionLabel))]
     // If not for FormatControl, we could inherit from ButtonBase and get foreground images for free.
     public class Label : Control, IAutomationLiveRegion
     {
@@ -107,22 +105,17 @@ namespace System.Windows.Forms
         ///  Indicates whether the control is automatically resized
         ///  to fit its contents.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        DefaultValue(false),
-        RefreshProperties(RefreshProperties.All),
-        Localizable(true),
-        SRDescription(nameof(SR.LabelAutoSizeDescr)),
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(false)]
+        [RefreshProperties(RefreshProperties.All)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.LabelAutoSizeDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 if (AutoSize != value)
@@ -133,8 +126,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
@@ -145,13 +140,11 @@ namespace System.Windows.Forms
         ///  This property controls the activation handling of bleedover for the text that
         ///  extends beyond the width of the label.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Always),
-        SRDescription(nameof(SR.LabelAutoEllipsisDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [SRDescription(nameof(SR.LabelAutoEllipsisDescr))]
         public bool AutoEllipsis
         {
             get
@@ -188,25 +181,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the image rendered on the background of the control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.LabelBackgroundImageDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.LabelBackgroundImageDescr))]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
@@ -216,22 +203,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the image layout for the background of the control.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
@@ -378,11 +359,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            DefaultValue(FlatStyle.Standard),
-            SRDescription(nameof(SR.ButtonFlatStyleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(FlatStyle.Standard)]
+        [SRDescription(nameof(SR.ButtonFlatStyleDescr))]
         public FlatStyle FlatStyle
         {
             get
@@ -428,11 +407,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the image that is displayed on a <see cref='Label'/>.
         /// </summary>
-        [
-        Localizable(true),
-        SRDescription(nameof(SR.ButtonImageDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ButtonImageDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public Image Image
         {
             get
@@ -473,15 +450,13 @@ namespace System.Windows.Forms
         ///  Gets or sets the index value of the images displayed on the
         ///  <see cref='Label'/>.
         /// </summary>
-        [
-        TypeConverter(typeof(ImageIndexConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        DefaultValue(-1),
-        Localizable(true),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(nameof(SR.ButtonImageIndexDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [TypeConverter(typeof(ImageIndexConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [DefaultValue(-1)]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRDescription(nameof(SR.ButtonImageIndexDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public int ImageIndex
         {
             get
@@ -523,15 +498,13 @@ namespace System.Windows.Forms
         ///   from the image list to display on
         ///  <see cref='Label'/>.
         /// </summary>
-        [
-        TypeConverter(typeof(ImageKeyConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        DefaultValue(""),
-        Localizable(true),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(nameof(SR.ButtonImageIndexDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [TypeConverter(typeof(ImageKeyConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [DefaultValue("")]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRDescription(nameof(SR.ButtonImageIndexDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string ImageKey
         {
             get
@@ -577,12 +550,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the images displayed in a <see cref='Label'/>.
         /// </summary>
-        [
-        DefaultValue(null),
-        SRDescription(nameof(SR.ButtonImageListDescr)),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.ButtonImageListDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatAppearance))]
         public ImageList ImageList
         {
             get
@@ -630,12 +601,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the alignment of the image on the <see cref='Label'/>.
         /// </summary>
-        [
-        DefaultValue(ContentAlignment.MiddleCenter),
-        Localizable(true),
-        SRDescription(nameof(SR.ButtonImageAlignDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(ContentAlignment.MiddleCenter)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ButtonImageAlignDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public ContentAlignment ImageAlign
         {
             get
@@ -666,13 +635,11 @@ namespace System.Windows.Forms
         ///  Indicates the "politeness" level that a client should use
         ///  to notify the user of changes to the live region.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAccessibility)),
-        DefaultValue(AutomationLiveSetting.Off),
-        SRDescription(nameof(SR.LiveRegionAutomationLiveSettingDescr)),
-        Browsable(true),
-        EditorBrowsable(EditorBrowsableState.Always)
-        ]
+        [SRCategory(nameof(SR.CatAccessibility))]
+        [DefaultValue(AutomationLiveSetting.Off)]
+        [SRDescription(nameof(SR.LiveRegionAutomationLiveSettingDescr))]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public AutomationLiveSetting LiveSetting
         {
             get
@@ -689,20 +656,16 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode
         {
-            get
-            {
-                return base.ImeMode;
-            }
-            set
-            {
-                base.ImeMode = value;
-            }
+            get => base.ImeMode;
+            set => base.ImeMode = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged
         {
             add => base.ImeModeChanged += value;
@@ -710,7 +673,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp
         {
             add => base.KeyUp += value;
@@ -718,7 +682,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown
         {
             add => base.KeyDown += value;
@@ -726,7 +691,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress
         {
             add => base.KeyPress += value;
@@ -757,12 +723,11 @@ namespace System.Windows.Forms
         ///  Gets the height of the control (in pixels), assuming a
         ///  single line of text is displayed.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.LabelPreferredHeightDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.LabelPreferredHeightDescr))]
         public virtual int PreferredHeight
         {
             get { return PreferredSize.Height; }
@@ -772,12 +737,11 @@ namespace System.Windows.Forms
         ///  Gets the width of the control (in pixels), assuming a single line
         ///  of text is displayed.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.LabelPreferredWidthDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.LabelPreferredWidthDescr))]
         public virtual int PreferredWidth
         {
             get { return PreferredSize.Width; }
@@ -811,20 +775,17 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the user can tab to the
         ///  <see cref='Label'/>.
         /// </summary>
-        [DefaultValue(false), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [DefaultValue(false)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged
         {
             add => base.TabStopChanged += value;
@@ -835,12 +796,10 @@ namespace System.Windows.Forms
         ///  Gets or sets the
         ///  horizontal alignment of the text in the control.
         /// </summary>
-        [
-        SRDescription(nameof(SR.LabelTextAlignDescr)),
-        Localizable(true),
-        DefaultValue(ContentAlignment.TopLeft),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [SRDescription(nameof(SR.LabelTextAlignDescr))]
+        [Localizable(true)]
+        [DefaultValue(ContentAlignment.TopLeft)]
+        [SRCategory(nameof(SR.CatAppearance))]
         public virtual ContentAlignment TextAlign
         {
             get
@@ -878,23 +837,16 @@ namespace System.Windows.Forms
         ///  Gets or sets the text in the Label. Since we can have multiline support
         ///  this property just overides the base to pluck in the Multiline editor.
         /// </summary>
-        [
-        Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        SettingsBindable(true)
-        ]
+        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+        SettingsBindable(true)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged
         {
             add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
@@ -905,11 +857,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </summary>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
         public bool UseCompatibleTextRendering
         {
             get
@@ -949,11 +899,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether an ampersand (&amp;) included in the text of
         ///  the control.
         /// </summary>
-        [
-        SRDescription(nameof(SR.LabelUseMnemonicDescr)),
-        DefaultValue(true),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [SRDescription(nameof(SR.LabelUseMnemonicDescr))]
+        [DefaultValue(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
         public bool UseMnemonic
         {
             get
@@ -1678,15 +1626,15 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_NCHITTEST:
+                case User32.WM.NCHITTEST:
                     // label returns HT_TRANSPARENT for everything, so all messages get
                     // routed to the parent.  Change this so we can tell what's going on.
                     //
                     Rectangle rectInScreen = RectangleToScreen(new Rectangle(0, 0, Width, Height));
                     Point pt = new Point(unchecked((int)(long)m.LParam));
-                    m.Result = (IntPtr)((rectInScreen.Contains(pt) ? NativeMethods.HTCLIENT : NativeMethods.HTNOWHERE));
+                    m.Result = (IntPtr)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
                     break;
 
                 default:
@@ -1745,13 +1693,12 @@ namespace System.Windows.Forms
         public override ImageList ImageList
         {
             get { return owner?.ImageList; }
-
-            set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
+            set{ Debug.Assert(false, "Setting the image list in this class is not supported"); }
         }
 
         public override string Key
         {
-            get { return base.Key; }
+            get => base.Key;
             set
             {
                 base.Key = value;
@@ -1761,7 +1708,7 @@ namespace System.Windows.Forms
 
         public override int Index
         {
-            get { return base.Index; }
+            get => base.Index;
             set
             {
                 base.Index = value;

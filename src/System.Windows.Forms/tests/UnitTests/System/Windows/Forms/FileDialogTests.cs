@@ -43,6 +43,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(dialog.Tag);
             Assert.Empty(dialog.Title);
             Assert.True(dialog.ValidateNames);
+            Assert.Null(dialog.ClientGuid);
         }
 
         [Fact]
@@ -76,6 +77,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(dialog.Tag);
             Assert.Empty(dialog.Title);
             Assert.True(dialog.ValidateNames);
+            Assert.Null(dialog.ClientGuid);
         }
 
         [Fact]
@@ -172,6 +174,22 @@ namespace System.Windows.Forms.Tests
             dialog.CheckPathExists = !value;
             Assert.Equal(!value, dialog.CheckPathExists);
             Assert.Equal(expectedOptionsAfter, dialog.Options);
+        }
+
+        [Theory]
+        [InlineData("00000000-0000-0000-0000-000000000000")]
+        [InlineData("1d5a0215-fa19-4e3b-8ab9-06da88c28ae7")]
+        public void FileDialog_ClientGuid_Set_GetReturnsExpected(Guid value)
+        {
+            var dialog = new SubFileDialog
+            {
+                ClientGuid = value
+            };
+            Assert.Equal(value, dialog.ClientGuid);
+
+            // Set same.
+            dialog.ClientGuid = value;
+            Assert.Equal(value, dialog.ClientGuid);
         }
 
         [Theory]
@@ -470,6 +488,7 @@ namespace System.Windows.Forms.Tests
                 AutoUpgradeEnabled = false,
                 CheckFileExists = true,
                 CheckPathExists = false,
+                ClientGuid = new Guid("ad6e2857-4659-4791-aa59-efffa61d4594"),
                 DefaultExt = "DefaultExt",
                 DereferenceLinks = false,
                 FileName = "FileName",
@@ -512,6 +531,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("Tag", dialog.Tag);
             Assert.Empty(dialog.Title);
             Assert.True(dialog.ValidateNames);
+            Assert.Null(dialog.ClientGuid);
         }
 
         [Theory]

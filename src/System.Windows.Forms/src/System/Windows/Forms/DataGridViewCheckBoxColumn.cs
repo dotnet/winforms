@@ -37,16 +37,11 @@ namespace System.Windows.Forms
             DefaultCellStyle = defaultCellStyle;
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override DataGridViewCell CellTemplate
         {
-            get
-            {
-                return base.CellTemplate;
-            }
+            get => base.CellTemplate;
             set
             {
                 if (value != null && !(value is DataGridViewCheckBoxCell))
@@ -65,29 +60,19 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(true),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))
-        ]
+        [Browsable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))]
         public override DataGridViewCellStyle DefaultCellStyle
         {
-            get
-            {
-                return base.DefaultCellStyle;
-            }
-            set
-            {
-                base.DefaultCellStyle = value;
-            }
+            get => base.DefaultCellStyle;
+            set => base.DefaultCellStyle = value;
         }
 
-        [
-            DefaultValue(null),
-            SRCategory(nameof(SR.CatData)),
-            SRDescription(nameof(SR.DataGridView_CheckBoxColumnFalseValueDescr)),
-            TypeConverter(typeof(StringConverter))
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.DataGridView_CheckBoxColumnFalseValueDescr))]
+        [TypeConverter(typeof(StringConverter))]
         public object FalseValue
         {
             get
@@ -121,11 +106,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(FlatStyle.Standard),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_CheckBoxColumnFlatStyleDescr))
-        ]
+        [DefaultValue(FlatStyle.Standard)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_CheckBoxColumnFlatStyleDescr))]
         public FlatStyle FlatStyle
         {
             get
@@ -159,12 +142,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(null),
-            SRCategory(nameof(SR.CatData)),
-            SRDescription(nameof(SR.DataGridView_CheckBoxColumnIndeterminateValueDescr)),
-            TypeConverter(typeof(StringConverter))
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.DataGridView_CheckBoxColumnIndeterminateValueDescr))]
+        [TypeConverter(typeof(StringConverter))]
         public object IndeterminateValue
         {
             get
@@ -198,11 +179,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(false),
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_CheckBoxColumnThreeStateDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_CheckBoxColumnThreeStateDescr))]
         public bool ThreeState
         {
             get
@@ -249,12 +228,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(null),
-            SRCategory(nameof(SR.CatData)),
-            SRDescription(nameof(SR.DataGridView_CheckBoxColumnTrueValueDescr)),
-            TypeConverter(typeof(StringConverter))
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.DataGridView_CheckBoxColumnTrueValueDescr))]
+        [TypeConverter(typeof(StringConverter))]
         public object TrueValue
         {
             get

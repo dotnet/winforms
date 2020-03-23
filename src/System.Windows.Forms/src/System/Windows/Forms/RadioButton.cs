@@ -18,16 +18,14 @@ namespace System.Windows.Forms
     ///  standard
     ///  Windows radio button (option button).
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Checked)),
-    DefaultEvent(nameof(CheckedChanged)),
-    DefaultBindingProperty(nameof(Checked)),
-    ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
-    Designer("System.Windows.Forms.Design.RadioButtonDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionRadioButton))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(Checked))]
+    [DefaultEvent(nameof(CheckedChanged))]
+    [DefaultBindingProperty(nameof(Checked))]
+    [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
+    [Designer("System.Windows.Forms.Design.RadioButtonDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionRadioButton))]
     public class RadioButton : ButtonBase
     {
         private static readonly object EVENT_CHECKEDCHANGED = new object();
@@ -71,11 +69,9 @@ namespace System.Windows.Forms
         ///  value and the appearance of
         ///  the control automatically change when the control is clicked.
         /// </summary>
-        [
-        DefaultValue(true),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.RadioButtonAutoCheckDescr))
-        ]
+        [DefaultValue(true)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.RadioButtonAutoCheckDescr))]
         public bool AutoCheck
         {
             get
@@ -98,12 +94,10 @@ namespace System.Windows.Forms
         ///  button
         ///  control is drawn.
         /// </summary>
-        [
-        DefaultValue(Appearance.Normal),
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        SRDescription(nameof(SR.RadioButtonAppearanceDescr))
-        ]
+        [DefaultValue(Appearance.Normal)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.RadioButtonAppearanceDescr))]
         public Appearance Appearance
         {
             get
@@ -141,7 +135,8 @@ namespace System.Windows.Forms
 
         private static readonly object EVENT_APPEARANCECHANGED = new object();
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnAppearanceChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.RadioButtonOnAppearanceChangedDescr))]
         public event EventHandler AppearanceChanged
         {
             add => Events.AddHandler(EVENT_APPEARANCECHANGED, value);
@@ -154,12 +149,10 @@ namespace System.Windows.Forms
         ///  sets the location of the check box portion of the
         ///  radio button control.
         /// </summary>
-        [
-        Localizable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(ContentAlignment.MiddleLeft),
-        SRDescription(nameof(SR.RadioButtonCheckAlignDescr))
-        ]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(ContentAlignment.MiddleLeft)]
+        [SRDescription(nameof(SR.RadioButtonCheckAlignDescr))]
         public ContentAlignment CheckAlign
         {
             get
@@ -189,13 +182,11 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the
         ///  control is checked or not.
         /// </summary>
-        [
-        Bindable(true),
-        SettingsBindable(true),
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.RadioButtonCheckedDescr))
-        ]
+        [Bindable(true),
+        SettingsBindable(true)]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.RadioButtonCheckedDescr))]
         public bool Checked
         {
             get
@@ -223,7 +214,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick
         {
             add => base.DoubleClick += value;
@@ -231,7 +223,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
@@ -356,34 +349,20 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         new public bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         /// <summary>
         ///  Gets or sets the value indicating whether the user can give the focus to this
         ///  control using the TAB key.
         /// </summary>
-        [
-        Localizable(true),
-        DefaultValue(ContentAlignment.MiddleLeft)
-        ]
+        [Localizable(true)]
+        [DefaultValue(ContentAlignment.MiddleLeft)]
         public override ContentAlignment TextAlign
         {
-            get
-            {
-                return base.TextAlign;
-            }
-            set
-            {
-                base.TextAlign = value;
-            }
+            get => base.TextAlign;
+            set => base.TextAlign = value;
         }
 
         /// <summary>

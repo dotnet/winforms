@@ -80,7 +80,10 @@ namespace System.ComponentModel.Design.Serialization
             ///  is a boolean that, if true, causes a field member to be generated for
             ///  the object.
             /// </summary>
-            [DesignOnly(true), DefaultValue(true), SRDescription(nameof(SR.CodeDomDesignerLoaderPropGenerateMember)), Category("Design")]
+            [DesignOnly(true)]
+            [DefaultValue(true)]
+            [SRDescription(nameof(SR.CodeDomDesignerLoaderPropGenerateMember))]
+            [Category("Design")]
             [HelpKeyword("Designer_GenerateMember")]
             public bool GetGenerateMember(IComponent comp)
             {
@@ -112,7 +115,11 @@ namespace System.ComponentModel.Design.Serialization
             ///  is an enum represneing the "public/protected/private" scope
             ///  of a component.
             /// </summary>
-            [DesignOnly(true), TypeConverter(typeof(ModifierConverter)), DefaultValue(MemberAttributes.Private), SRDescription(nameof(SR.CodeDomDesignerLoaderPropModifiers)), Category("Design")]
+            [DesignOnly(true)]
+            [TypeConverter(typeof(ModifierConverter))]
+            [DefaultValue(MemberAttributes.Private)]
+            [SRDescription(nameof(SR.CodeDomDesignerLoaderPropModifiers))]
+            [Category("Design")]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             [HelpKeyword("Designer_Modifiers")]
             public MemberAttributes GetModifiers(IComponent comp)

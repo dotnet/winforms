@@ -10,9 +10,9 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr GetDlgItem(IntPtr hWnd, int nIDDlgItem);
+        public static extern IntPtr GetDlgItem(IntPtr hWnd, DialogItemID nIDDlgItem);
 
-        public static IntPtr GetDlgItem(IHandle hWnd, int nIDDlgItem)
+        public static IntPtr GetDlgItem(IHandle hWnd, DialogItemID nIDDlgItem)
         {
             IntPtr result = GetDlgItem(hWnd.Handle, nIDDlgItem);
             GC.KeepAlive(hWnd);

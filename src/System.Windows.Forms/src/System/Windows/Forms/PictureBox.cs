@@ -832,7 +832,8 @@ namespace System.Windows.Forms
 
         private static readonly object EVENT_SIZEMODECHANGED = new object();
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
         public event EventHandler SizeModeChanged
         {
             add => Events.AddHandler(EVENT_SIZEMODECHANGED, value);
@@ -873,7 +874,8 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Bindable(false)]
         public override string Text
         {
             get => base.Text;

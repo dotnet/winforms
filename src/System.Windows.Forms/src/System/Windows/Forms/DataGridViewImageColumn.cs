@@ -41,16 +41,11 @@ namespace System.Windows.Forms
             DefaultCellStyle = defaultCellStyle;
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override DataGridViewCell CellTemplate
         {
-            get
-            {
-                return base.CellTemplate;
-            }
+            get => base.CellTemplate;
             set
             {
                 if (value != null && !(value is DataGridViewImageCell))
@@ -61,29 +56,19 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(true),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))
-        ]
+        [Browsable(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))]
         public override DataGridViewCellStyle DefaultCellStyle
         {
-            get
-            {
-                return base.DefaultCellStyle;
-            }
-            set
-            {
-                base.DefaultCellStyle = value;
-            }
+            get => base.DefaultCellStyle;
+            set => base.DefaultCellStyle = value;
         }
 
-        [
-            Browsable(true),
-            DefaultValue(""),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridViewImageColumn_DescriptionDescr))
-        ]
+        [Browsable(true)]
+        [DefaultValue("")]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridViewImageColumn_DescriptionDescr))]
         public string Description
         {
             get
@@ -117,10 +102,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Icon Icon
         {
             get
@@ -137,11 +120,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(null),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridViewImageColumn_ImageDescr))
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridViewImageColumn_ImageDescr))]
         public Image Image
         {
             get
@@ -166,11 +147,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(DataGridViewImageCellLayout.Normal),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridViewImageColumn_ImageLayoutDescr))
-        ]
+        [DefaultValue(DataGridViewImageCellLayout.Normal)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridViewImageColumn_ImageLayoutDescr))]
         public DataGridViewImageCellLayout ImageLayout
         {
             get
@@ -209,10 +188,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool ValuesAreIcons
         {
             get

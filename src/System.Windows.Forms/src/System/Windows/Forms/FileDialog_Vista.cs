@@ -11,6 +11,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -69,6 +70,13 @@ namespace System.Windows.Forms
 
         private void OnBeforeVistaDialog(FileDialogNative.IFileDialog dialog)
         {
+            if (ClientGuid is { } clientGuid)
+            {
+                // IFileDialog::SetClientGuid should be called immediately after creation of the dialog object.
+                // https://docs.microsoft.com/en-us/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
+                dialog.SetClientGuid(clientGuid);
+            }
+
             dialog.SetDefaultExtension(DefaultExt);
             dialog.SetFileName(FileName);
 
@@ -93,18 +101,18 @@ namespace System.Windows.Forms
             _customPlaces.Apply(dialog);
         }
 
-        private FileDialogNative.FOS GetOptions()
+        private FOS GetOptions()
         {
-            const FileDialogNative.FOS BlittableOptions =
-                FileDialogNative.FOS.FOS_OVERWRITEPROMPT
-              | FileDialogNative.FOS.FOS_NOCHANGEDIR
-              | FileDialogNative.FOS.FOS_NOVALIDATE
-              | FileDialogNative.FOS.FOS_ALLOWMULTISELECT
-              | FileDialogNative.FOS.FOS_PATHMUSTEXIST
-              | FileDialogNative.FOS.FOS_FILEMUSTEXIST
-              | FileDialogNative.FOS.FOS_CREATEPROMPT
-              | FileDialogNative.FOS.FOS_NODEREFERENCELINKS
-            ;
+            const FOS BlittableOptions =
+                FOS.OVERWRITEPROMPT
+              | FOS.NOCHANGEDIR
+              | FOS.NOVALIDATE
+              | FOS.ALLOWMULTISELECT
+              | FOS.PATHMUSTEXIST
+              | FOS.FILEMUSTEXIST
+              | FOS.CREATEPROMPT
+              | FOS.NODEREFERENCELINKS;
+
             const int UnexpectedOptions =
                 (int)(Comdlg32.OFN.SHOWHELP // If ShowHelp is true, we don't use the Vista Dialog
                 | Comdlg32.OFN.ENABLEHOOK // These shouldn't be set in options (only set in the flags for the legacy dialog)
@@ -113,10 +121,10 @@ namespace System.Windows.Forms
 
             Debug.Assert((UnexpectedOptions & _options) == 0, "Unexpected FileDialog options");
 
-            FileDialogNative.FOS ret = (FileDialogNative.FOS)_options & BlittableOptions;
+            FOS ret = (FOS)_options & BlittableOptions;
 
             // Force no mini mode for the SaveFileDialog
-            ret |= FileDialogNative.FOS.FOS_DEFAULTNOMINIMODE;
+            ret |= FOS.DEFAULTNOMINIMODE;
 
             // Make sure that the Open dialog allows the user to specify
             // non-file system locations. This flag will cause the dialog to copy the resource
@@ -125,7 +133,7 @@ namespace System.Windows.Forms
             // An example of a non-file system location is a URL (http://), or a file stored on
             // a digital camera that is not mapped to a drive letter.
             // This reproduces the behavior of the "classic" Open and Save dialogs.
-            ret |= FileDialogNative.FOS.FOS_FORCEFILESYSTEM;
+            ret |= FOS.FORCEFILESYSTEM;
 
             return ret;
         }
@@ -218,18 +226,18 @@ namespace System.Windows.Forms
             {
             }
 
-            public void OnShareViolation(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psi, out FileDialogNative.FDE_SHAREVIOLATION_RESPONSE pResponse)
+            public void OnShareViolation(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psi, out FDESVR pResponse)
             {
-                pResponse = FileDialogNative.FDE_SHAREVIOLATION_RESPONSE.FDESVR_DEFAULT;
+                pResponse = FDESVR.DEFAULT;
             }
 
             public void OnTypeChange(FileDialogNative.IFileDialog pfd)
             {
             }
 
-            public void OnOverwrite(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psi, out FileDialogNative.FDE_OVERWRITE_RESPONSE pResponse)
+            public void OnOverwrite(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psi, out FDEOR pResponse)
             {
-                pResponse = FileDialogNative.FDE_OVERWRITE_RESPONSE.FDEOR_DEFAULT;
+                pResponse = FDEOR.DEFAULT;
             }
         }
 
@@ -272,7 +280,7 @@ namespace System.Windows.Forms
 
         private protected static string GetFilePathFromShellItem(FileDialogNative.IShellItem item)
         {
-            item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_DESKTOPABSOLUTEPARSING, out string filename);
+            item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string filename);
             return filename;
         }
 

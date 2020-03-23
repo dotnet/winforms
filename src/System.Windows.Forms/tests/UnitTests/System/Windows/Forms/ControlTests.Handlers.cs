@@ -2101,11 +2101,13 @@ namespace System.Windows.Forms.Tests
             control.GotFocus += handler;
             control.OnGotFocus(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
 
-           // Remove handler.
-           control.GotFocus -= handler;
-           control.OnGotFocus(eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.GotFocus -= handler;
+            control.OnGotFocus(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -3804,6 +3806,7 @@ namespace System.Windows.Forms.Tests
             control.OnPaint(eventArgs);
             Assert.Equal(1, callCount);
         }
+
         public static IEnumerable<object[]> OnPaintBackground_TestData()
         {
             foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb), new Bitmap(10, 10, PixelFormat.Format32bppArgb) })
@@ -4761,7 +4764,6 @@ namespace System.Windows.Forms.Tests
         public void Control_OnResize_Invoke_CallsResize(EventArgs eventArgs)
         {
             using var control = new SubControl();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -4769,20 +4771,28 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                layoutCallCount++;
+            };
 
             // Call with handler.
             control.Resize += handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(1, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.Resize -= handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(2, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> OnResize_WithHandle_TestData()
@@ -4806,6 +4816,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
             };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("Bounds", e.AffectedProperty);
+                layoutCallCount++;
+            };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -4818,6 +4836,7 @@ namespace System.Windows.Forms.Tests
             control.Resize += handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -4827,10 +4846,212 @@ namespace System.Windows.Forms.Tests
             control.Resize -= handler;
             control.OnResize(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCallCount);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnRightToLeftChanged_InvokeWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(1, createdCallCount);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(2, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_OnRightToLeftChanged_InvokeInDisposing_DoesNotCallRightToLeftChanged()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+
+            int callCount = 0;
+            control.RightToLeftChanged += (sender, e) => callCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int disposedCallCount = 0;
+            control.Disposed += (sender, e) =>
+            {
+                control.OnRightToLeftChanged(EventArgs.Empty);
+                Assert.Equal(0, callCount);
+                Assert.Equal(0, createdCallCount);
+                disposedCallCount++;
+            };
+
+            control.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnRightToLeftChanged_InvokeWithChildren_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var child1 = new Control();
+            using var child2 = new Control
+            {
+                RightToLeft = RightToLeft.Inherit
+            };
+            using var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            child1.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(eventArgs, e);
+                child1CallCount++;
+            };
+            child2.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(eventArgs, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, child1CallCount);
+            Assert.Equal(1, child2CallCount);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, child1CallCount);
+            Assert.Equal(2, child2CallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnRightToLeftChanged_InvokeWithChildrenWithRightToLeft_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var child1 = new Control
+            {
+                RightToLeft = RightToLeft.Yes
+            };
+            using var child2 = new Control
+            {
+                RightToLeft = RightToLeft.No
+            };
+            using var control = new SubControl();
+            control.Controls.Add(child1);
+            control.Controls.Add(child2);
+
+            int callCount = 0;
+            int child1CallCount = 0;
+            int child2CallCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            child1.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(child1, sender);
+                Assert.Same(eventArgs, e);
+                child1CallCount++;
+            };
+            child2.RightToLeftChanged += (sender, e) =>
+            {
+                Assert.Same(child2, sender);
+                Assert.Same(eventArgs, e);
+                child2CallCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, child1CallCount);
+            Assert.Equal(0, child2CallCount);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(0, child1CallCount);
+            Assert.Equal(0, child2CallCount);
         }
 
         [WinFormsTheory]
@@ -5186,6 +5407,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void Control_OnValidated_Invoke_CallsValidated(EventArgs eventArgs)
+        {
+            using var control = new SubControl();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Validated += handler;
+            control.OnValidated(eventArgs);
+            Assert.Equal(1, callCount);
+
+            // Remove handler.
+            control.Validated -= handler;
+            control.OnValidated(eventArgs);
+            Assert.Equal(1, callCount);
+        }
+
         public static IEnumerable<object[]> OnValidating_TestData()
         {
             yield return new object[] { null };
@@ -5214,30 +5459,6 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.Validating -= handler;
             control.OnValidating(eventArgs);
-            Assert.Equal(1, callCount);
-        }
-
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
-        public void Control_OnValidated_Invoke_CallsValidated(EventArgs eventArgs)
-        {
-            using var control = new SubControl();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            // Call with handler.
-            control.Validated += handler;
-            control.OnValidated(eventArgs);
-            Assert.Equal(1, callCount);
-
-            // Remove handler.
-            control.Validated -= handler;
-            control.OnValidated(eventArgs);
             Assert.Equal(1, callCount);
         }
 

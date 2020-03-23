@@ -18,11 +18,9 @@ namespace System.Windows.Forms
     ///  on
     ///  the system.
     /// </summary>
-    [
-    DefaultEvent(nameof(Apply)),
-    DefaultProperty(nameof(Font)),
-    SRDescription(nameof(SR.DescriptionFontDialog))
-    ]
+    [DefaultEvent(nameof(Apply))]
+    [DefaultProperty(nameof(Font))]
+    [SRDescription(nameof(SR.DescriptionFontDialog))]
     public class FontDialog : CommonDialog
     {
         protected static readonly object EventApply = new object();
@@ -51,11 +49,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the dialog box allows graphics device interface
         ///  (GDI) font simulations.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FnDallowSimulationsDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FnDallowSimulationsDescr))]
         public bool AllowSimulations
         {
             get => !GetOption(Comdlg32.CF.NOSIMULATIONS);
@@ -65,11 +61,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box allows vector font selections.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FnDallowVectorFontsDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FnDallowVectorFontsDescr))]
         public bool AllowVectorFonts
         {
             get => !GetOption(Comdlg32.CF.NOVECTORFONTS);
@@ -81,11 +75,9 @@ namespace System.Windows.Forms
         ///  the dialog box displays both vertical and horizontal fonts or only
         ///  horizontal fonts.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FnDallowVerticalFontsDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FnDallowVerticalFontsDescr))]
         public bool AllowVerticalFonts
         {
             get => !GetOption(Comdlg32.CF.NOVERTFONTS);
@@ -98,11 +90,9 @@ namespace System.Windows.Forms
         ///  in the Script combo box to display a character set other than the one
         ///  currently displayed.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FnDallowScriptChangeDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FnDallowScriptChangeDescr))]
         public bool AllowScriptChange
         {
             get => !GetOption(Comdlg32.CF.SELECTSCRIPT);
@@ -112,11 +102,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating the selected font color.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.FnDcolorDescr)),
-        DefaultValue(typeof(Color), "Black")
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.FnDcolorDescr))]
+        [DefaultValue(typeof(Color), "Black")]
         public Color Color
         {
             get
@@ -148,11 +136,9 @@ namespace System.Windows.Forms
         ///  Gets or sets
         ///  a value indicating whether the dialog box allows only the selection of fixed-pitch fonts.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FnDfixedPitchOnlyDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FnDfixedPitchOnlyDescr))]
         public bool FixedPitchOnly
         {
             get => GetOption(Comdlg32.CF.FIXEDPITCHONLY);
@@ -162,10 +148,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating the selected font.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.FnDfontDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.FnDfontDescr))]
         public Font Font
         {
             get
@@ -199,11 +183,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the dialog box specifies an error condition if the
         ///  user attempts to select a font or style that does not exist.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FnDfontMustExistDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FnDfontMustExistDescr))]
         public bool FontMustExist
         {
             get => GetOption(Comdlg32.CF.FORCEFONTEXIST);
@@ -217,11 +199,9 @@ namespace System.Windows.Forms
         ///  Gets or sets the maximum
         ///  point size a user can select.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DefaultValue(defaultMaxSize),
-        SRDescription(nameof(SR.FnDmaxSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DefaultValue(defaultMaxSize)]
+        [SRDescription(nameof(SR.FnDmaxSizeDescr))]
         public int MaxSize
         {
             get
@@ -246,11 +226,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating the minimum point size a user can select.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DefaultValue(defaultMinSize),
-        SRDescription(nameof(SR.FnDminSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DefaultValue(defaultMinSize)]
+        [SRDescription(nameof(SR.FnDminSizeDescr))]
         public int MinSize
         {
             get
@@ -282,11 +260,9 @@ namespace System.Windows.Forms
         ///  value indicating whether the dialog box allows selection of fonts for all non-OEM and Symbol character
         ///  sets, as well as the ----n National Standards Institute (ANSI) character set.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FnDscriptsOnlyDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FnDscriptsOnlyDescr))]
         public bool ScriptsOnly
         {
             get => GetOption(Comdlg32.CF.SCRIPTSONLY);
@@ -296,11 +272,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box contains an Apply button.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FnDshowApplyDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FnDshowApplyDescr))]
         public bool ShowApply
         {
             get => GetOption(Comdlg32.CF.APPLY);
@@ -310,11 +284,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box displays the color choice.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FnDshowColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FnDshowColorDescr))]
         public bool ShowColor
         {
             get
@@ -331,11 +303,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the dialog box contains controls that allow the
         ///  user to specify strikethrough, underline, and text color options.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FnDshowEffectsDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FnDshowEffectsDescr))]
         public bool ShowEffects
         {
             get => GetOption(Comdlg32.CF.EFFECTS);
@@ -345,11 +315,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box displays a Help button.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FnDshowHelpDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FnDshowHelpDescr))]
         public bool ShowHelp
         {
             get => GetOption(Comdlg32.CF.SHOWHELP);
@@ -381,18 +349,18 @@ namespace System.Windows.Forms
         /// </summary>
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            switch (msg)
+            switch ((User32.WM)msg)
             {
-                case WindowMessages.WM_COMMAND:
+                case User32.WM.COMMAND:
                     if ((int)wparam == 0x402)
                     {
                         var logFont = new User32.LOGFONTW();
                         User32.SendMessageW(hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, IntPtr.Zero, ref logFont);
                         UpdateFont(ref logFont);
-                        int index = (int)UnsafeNativeMethods.SendDlgItemMessage(hWnd, 0x473, (int)User32.CB.GETCURSEL, IntPtr.Zero, IntPtr.Zero);
+                        int index = (int)User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL);
                         if (index != User32.CB_ERR)
                         {
-                            UpdateColor((int)UnsafeNativeMethods.SendDlgItemMessage(hWnd, 0x473, (int)User32.CB.GETITEMDATA, (IntPtr)index, IntPtr.Zero));
+                            UpdateColor((int)User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETITEMDATA, (IntPtr)index));
                         }
                         if (NativeWindow.WndProcShouldBeDebuggable)
                         {
@@ -411,12 +379,12 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case WindowMessages.WM_INITDIALOG:
+                case User32.WM.INITDIALOG:
                     if (!showColor)
                     {
-                        IntPtr hWndCtl = User32.GetDlgItem(hWnd, NativeMethods.cmb4);
+                        IntPtr hWndCtl = User32.GetDlgItem(hWnd, User32.DialogItemID.cmb4);
                         User32.ShowWindow(hWndCtl, User32.SW.HIDE);
-                        hWndCtl = User32.GetDlgItem(hWnd, NativeMethods.stc4);
+                        hWndCtl = User32.GetDlgItem(hWnd, User32.DialogItemID.stc4);
                         User32.ShowWindow(hWndCtl, User32.SW.HIDE);
                     }
                     break;

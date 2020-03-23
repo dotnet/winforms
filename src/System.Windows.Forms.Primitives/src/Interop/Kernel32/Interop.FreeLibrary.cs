@@ -10,6 +10,6 @@ internal partial class Interop
     internal partial class Kernel32
     {
         [DllImport(Libraries.Kernel32, ExactSpelling = true, SetLastError = true)]
-        public static extern bool FreeLibrary(IntPtr hModule);
+        public static extern BOOL FreeLibrary(IntPtr hModule);
     }
 }

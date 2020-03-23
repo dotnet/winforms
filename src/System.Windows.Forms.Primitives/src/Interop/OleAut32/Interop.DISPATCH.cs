@@ -9,7 +9,7 @@ internal partial class Interop
     internal static partial class Oleaut32
     {
         [Flags]
-        public enum DISPATCH : uint
+        public enum DISPATCH : ushort
         {
             METHOD = 0x1,
             PROPERTYGET = 0x2,

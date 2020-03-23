@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ko" original="../FormatControl.resx">
+    <body>
+      <trans-unit id="dateTimeFormatsListBox.AccessibleDescription">
+        <source>Type:</source>
+        <target state="translated">유형:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="decimalPlacesUpDown.AccessibleDescription">
+        <source>Decimal places</source>
+        <target state="translated">소수 자릿수</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="formatGroupBox.Text">
+        <source>Format</source>
+        <target state="translated">형식</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="formatTypeLabel.Text">
+        <source>&amp;Format type:</source>
+        <target state="translated">서식 유형(&amp;F):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="formatTypeListBox.AccessibleDescription">
+        <source>Format type:</source>
+        <target state="translated">형식 유형:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="nullValueLabel.Text">
+        <source>&amp;Null value</source>
+        <target state="translated">Null 값(&amp;N)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="nullValueTextBox.AccessibleDescription">
+        <source>Null value</source>
+        <target state="translated">Null 값</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sampleGroupBox.Text">
+        <source>Sample</source>
+        <target state="translated">보기</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sampleLabel.Text">
+        <source>sample</source>
+        <target state="translated">샘플</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="secondRowLabel.Text">
+        <source>&amp;Decimal places</source>
+        <target state="translated">소수 자릿수(&amp;D)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="thirdRowLabel.Text">
+        <source>Note: Custom format strings are not guaranteed  to successfully complete a round trip between the data source and the bound control. In order to ensure that a custom-formatted value successfully displays in the control and is persisted to the data base, handle the parse or format event for the binding.</source>
+        <target state="translated">참고: 사용자 지정 형식 문자열은 데이터 소스와 바인딩 컨트롤 사이에서 성공적인 라운드트립이 보장되지 않습니다. 형식이 사용자 지정된 값이 성공적으로 컨트롤에 표시되고 데이터베이스에 저장되도록 하려면 해당 바인딩에 대한 구문 분석 또는 형식 이벤트를 처리하십시오.</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

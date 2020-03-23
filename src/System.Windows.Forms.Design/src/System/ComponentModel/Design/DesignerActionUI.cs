@@ -1060,9 +1060,9 @@ namespace System.ComponentModel.Design
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_ACTIVATE:
+                case User32.WM.ACTIVATE:
                     WmActivate(ref m);
                     return;
             }

@@ -74,10 +74,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> HookProc_TestData()
         {
-            yield return new object[] { WindowMessages.WM_INITDIALOG };
-            yield return new object[] { WindowMessages.WM_SETFOCUS };
+            yield return new object[] { User32.WM.INITDIALOG };
+            yield return new object[] { User32.WM.SETFOCUS };
 
-            const int CDM_SETDEFAULTFOCUS = WindowMessages.WM_USER + 0x51;
+            const int CDM_SETDEFAULTFOCUS = (int)User32.WM.USER + 0x51;
             yield return new object[] { CDM_SETDEFAULTFOCUS };
 
             yield return new object[] { 0 };

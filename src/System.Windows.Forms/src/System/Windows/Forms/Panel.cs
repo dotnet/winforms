@@ -196,7 +196,8 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Bindable(false)]
         public override string Text
         {
             get => base.Text;

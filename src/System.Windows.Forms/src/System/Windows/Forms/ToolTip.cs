@@ -209,23 +209,23 @@ namespace System.Windows.Forms
                 cp.ClassName = WindowClasses.TOOLTIPS_CLASS;
                 if (_showAlways)
                 {
-                    cp.Style = NativeMethods.TTS_ALWAYSTIP;
+                    cp.Style = (int)TTS.ALWAYSTIP;
                 }
                 if (_isBalloon)
                 {
-                    cp.Style |= NativeMethods.TTS_BALLOON;
+                    cp.Style |= (int)TTS.BALLOON;
                 }
                 if (!_stripAmpersands)
                 {
-                    cp.Style |= NativeMethods.TTS_NOPREFIX;
+                    cp.Style |= (int)TTS.NOPREFIX;
                 }
                 if (!_useAnimation)
                 {
-                    cp.Style |= NativeMethods.TTS_NOANIMATE;
+                    cp.Style |= (int)TTS.NOANIMATE;
                 }
                 if (!_useFading)
                 {
-                    cp.Style |= NativeMethods.TTS_NOFADE;
+                    cp.Style |= (int)TTS.NOFADE;
                 }
                 cp.ExStyle = 0;
                 cp.Caption = null;
@@ -419,8 +419,8 @@ namespace System.Windows.Forms
         [Localizable(false)]
         [Bindable(true)]
         [Description(nameof(SR.ControlTagDescr))]
-        [DefaultValue(null),
-        TypeConverter(typeof(StringConverter))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag { get; set; }
 
         /// <summary>
@@ -670,11 +670,6 @@ namespace System.Windows.Forms
             if (associatedControl is ListView listView)
             {
                 listView.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            if (associatedControl is StatusBar statusBar)
-            {
-                statusBar.SetToolTip(this);
             }
 
             // Label now has its own Tooltip for AutoEllipsis.
@@ -1034,10 +1029,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the <see cref="ToolTip"/> text associated with the specified control.
         /// </summary>
-        [DefaultValue(""),
-        Localizable(true)]
-        [Description(nameof(SR.ToolTipToolTipDescr)),
-        Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [DefaultValue("")]
+        [Localizable(true)]
+        [Description(nameof(SR.ToolTipToolTipDescr))]
+        [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         public string GetToolTip(Control control)
         {
             if (control == null)
@@ -2302,7 +2297,7 @@ namespace System.Windows.Forms
         {
             switch (msg.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
+                case (int)(User32.WM.REFLECT | User32.WM.NOTIFY):
                     User32.NMHDR nmhdr = (User32.NMHDR)msg.GetLParam(typeof(User32.NMHDR));
                     if (nmhdr.code == (int)TTN.SHOW && !_trackPosition)
                     {
@@ -2315,33 +2310,33 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case WindowMessages.WM_WINDOWPOSCHANGING:
+                case (int)User32.WM.WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref msg);
                     break;
 
-                case WindowMessages.WM_WINDOWPOSCHANGED:
+                case (int)User32.WM.WINDOWPOSCHANGED:
                     if (!WmWindowPosChanged() && _window != null)
                     {
                         _window.DefWndProc(ref msg);
                     }
                     break;
 
-                case WindowMessages.WM_MOUSEACTIVATE:
+                case (int)User32.WM.MOUSEACTIVATE:
                     WmMouseActivate(ref msg);
                     break;
 
-                case WindowMessages.WM_MOVE:
+                case (int)User32.WM.MOVE:
                     WmMove();
                     break;
 
-                case (int)(User32.WM)TTM.WINDOWFROMPOINT:
+                case (int)TTM.WINDOWFROMPOINT:
                     WmWindowFromPoint(ref msg);
                     break;
 
-                case WindowMessages.WM_PRINTCLIENT:
-                    goto case WindowMessages.WM_PAINT;
+                case (int)User32.WM.PRINTCLIENT:
+                    goto case (int)User32.WM.PAINT;
 
-                case WindowMessages.WM_PAINT:
+                case (int)User32.WM.PAINT:
                     if (OwnerDraw && !_isBalloon && !_trackPosition)
                     {
                         var ps = new User32.PAINTSTRUCT();
@@ -2361,7 +2356,7 @@ namespace System.Windows.Forms
                                 Font font;
                                 try
                                 {
-                                    font = Font.FromHfont(UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), WindowMessages.WM_GETFONT, 0, 0));
+                                    font = Font.FromHfont(User32.SendMessageW(this, User32.WM.GETFONT));
                                 }
                                 catch (ArgumentException)
                                 {

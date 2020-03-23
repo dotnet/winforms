@@ -22,10 +22,8 @@ namespace System.Windows.Forms
         {
         }
 
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_LinkColumnActiveLinkColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_LinkColumnActiveLinkColorDescr))]
         public Color ActiveLinkColor
         {
             get
@@ -69,16 +67,11 @@ namespace System.Windows.Forms
             return !ActiveLinkColor.Equals(LinkUtilities.IEActiveLinkColor);
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override DataGridViewCell CellTemplate
         {
-            get
-            {
-                return base.CellTemplate;
-            }
+            get => base.CellTemplate;
             set
             {
                 if (value != null && !(value is DataGridViewLinkCell))
@@ -89,11 +82,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(LinkBehavior.SystemDefault),
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_LinkColumnLinkBehaviorDescr))
-        ]
+        [DefaultValue(LinkBehavior.SystemDefault)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_LinkColumnLinkBehaviorDescr))]
         public LinkBehavior LinkBehavior
         {
             get
@@ -127,10 +118,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_LinkColumnLinkColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_LinkColumnLinkColorDescr))]
         public Color LinkColor
         {
             get
@@ -174,11 +163,9 @@ namespace System.Windows.Forms
             return !LinkColor.Equals(LinkUtilities.IELinkColor);
         }
 
-        [
-            DefaultValue(null),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_LinkColumnTextDescr))
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_LinkColumnTextDescr))]
         public string Text
         {
             get
@@ -216,11 +203,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(true),
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_LinkColumnTrackVisitedStateDescr))
-        ]
+        [DefaultValue(true)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_LinkColumnTrackVisitedStateDescr))]
         public bool TrackVisitedState
         {
             get
@@ -254,11 +239,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            DefaultValue(false),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_LinkColumnUseColumnTextForLinkValueDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_LinkColumnUseColumnTextForLinkValueDescr))]
         public bool UseColumnTextForLinkValue
         {
             get
@@ -292,10 +275,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_LinkColumnVisitedLinkColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_LinkColumnVisitedLinkColorDescr))]
         public Color VisitedLinkColor
         {
             get

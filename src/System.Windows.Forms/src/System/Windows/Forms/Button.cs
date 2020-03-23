@@ -18,11 +18,10 @@ namespace System.Windows.Forms
     ///  Represents a
     ///  Windows button.
     /// </summary>
-    [ComVisible(true),
-     ClassInterface(ClassInterfaceType.AutoDispatch),
-     SRDescription(nameof(SR.DescriptionButton)),
-     Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [SRDescription(nameof(SR.DescriptionButton))]
+    [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
     public class Button : ButtonBase, IButtonControl
     {
         /// <summary>
@@ -54,13 +53,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Allows the control to optionally shrink when AutoSize is true.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(true),
-        DefaultValue(AutoSizeMode.GrowOnly),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlAutoSizeModeDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(true)]
+        [DefaultValue(AutoSizeMode.GrowOnly)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ControlAutoSizeModeDescr))]
         public AutoSizeMode AutoSizeMode
         {
             get
@@ -167,11 +164,9 @@ namespace System.Windows.Forms
         ///  parent form when the button
         ///  is clicked.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(DialogResult.None),
-        SRDescription(nameof(SR.ButtonDialogResultDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(DialogResult.None)]
+        [SRDescription(nameof(SR.ButtonDialogResultDescr))]
         public virtual DialogResult DialogResult
         {
             get
@@ -206,7 +201,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick
         {
             add => base.DoubleClick += value;
@@ -214,7 +210,8 @@ namespace System.Windows.Forms
         }
 
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
@@ -370,9 +367,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
+                case User32.WM.REFLECT | User32.WM.COMMAND:
                     if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED)
                     {
                         Debug.Assert(!GetStyle(ControlStyles.UserPaint), "Shouldn't get BN_CLICKED when UserPaint");
@@ -382,7 +379,7 @@ namespace System.Windows.Forms
                         }
                     }
                     break;
-                case WindowMessages.WM_ERASEBKGND:
+                case User32.WM.ERASEBKGND:
                     DefWndProc(ref m);
                     break;
                 default:

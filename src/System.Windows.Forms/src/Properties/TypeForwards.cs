@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.FileDialogCustomPlace))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.FileDialogCustomPlacesCollection))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.HighDpiMode))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Message))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Padding))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.PaddingConverter))]

@@ -322,21 +322,25 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TabPage_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            using var control = new TabPage
-            {
-                AutoSize = value
-            };
+            using var control = new TabPage();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.AutoSize = !value;
             Assert.Equal(!value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -383,19 +387,22 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
         public void TabPage_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
         {
-            using var control = new SubTabPage
-            {
-                AutoSizeMode = value
-            };
+            using var control = new SubTabPage();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSizeMode = value;
             Assert.Equal(AutoSizeMode.GrowOnly, control.AutoSizeMode);
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
             Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, layoutCallCount);
 
             // Set same.
             control.AutoSizeMode = value;
             Assert.Equal(AutoSizeMode.GrowOnly, control.AutoSizeMode);
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
             Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, layoutCallCount);
         }
 
         [WinFormsTheory]
@@ -3707,6 +3714,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void TabPage_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubTabPage();
+            Assert.False(control.GetTopLevel());
+        }
+
+        [WinFormsFact]
         public void TabPage_GetTabPageOfComponent_InvokeTabPageInHierachy_ReturnsExpected()
         {
             using var grandparent = new TabPage();
@@ -4894,6 +4908,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetScrollState(int bit) => base.GetScrollState(bit);
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) => base.SetBoundsCore(x, y, width, height, specified);
 

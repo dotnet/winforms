@@ -44,7 +44,8 @@ namespace System.Windows.Forms
         ///  Create a strongly typed accessor for the class
         /// </summary>
         /// <value></value>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ProgressBar ProgressBar
         {
             get
@@ -53,38 +54,22 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         /// <summary>
@@ -118,23 +103,19 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(100),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ProgressBarMarqueeAnimationSpeed))
-        ]
+        [DefaultValue(100)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ProgressBarMarqueeAnimationSpeed))]
         public int MarqueeAnimationSpeed
         {
             get { return ProgressBar.MarqueeAnimationSpeed; }
             set { ProgressBar.MarqueeAnimationSpeed = value; }
         }
 
-        [
-       DefaultValue(100),
-       SRCategory(nameof(SR.CatBehavior)),
-       RefreshProperties(RefreshProperties.Repaint),
-       SRDescription(nameof(SR.ProgressBarMaximumDescr))
-       ]
+        [DefaultValue(100)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRDescription(nameof(SR.ProgressBarMaximumDescr))]
         public int Maximum
         {
             get
@@ -146,12 +127,11 @@ namespace System.Windows.Forms
                 ProgressBar.Maximum = value;
             }
         }
-        [
-        DefaultValue(0),
-        SRCategory(nameof(SR.CatBehavior)),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(nameof(SR.ProgressBarMinimumDescr))
-        ]
+
+        [DefaultValue(0)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRDescription(nameof(SR.ProgressBarMinimumDescr))]
         public int Minimum
         {
             get
@@ -169,12 +149,10 @@ namespace System.Windows.Forms
         ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
         ///  the form, and control placement and text will be from right to left.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(false),
-        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))]
         public virtual bool RightToLeftLayout
         {
             get
@@ -192,11 +170,9 @@ namespace System.Windows.Forms
         ///  Wrap some commonly used properties
         /// </summary>
         /// <value></value>
-        [
-        DefaultValue(10),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ProgressBarStepDescr))
-        ]
+        [DefaultValue(10)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ProgressBarStepDescr))]
         public int Step
         {
             get
@@ -213,11 +189,9 @@ namespace System.Windows.Forms
         ///  Wrap some commonly used properties
         /// </summary>
         /// <value></value>
-        [
-        DefaultValue(ProgressBarStyle.Blocks),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ProgressBarStyleDescr))
-        ]
+        [DefaultValue(ProgressBarStyle.Blocks)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ProgressBarStyleDescr))]
         public ProgressBarStyle Style
         {
             get
@@ -233,11 +207,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide the property.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text
         {
             get
@@ -254,12 +226,10 @@ namespace System.Windows.Forms
         ///  Wrap some commonly used properties
         /// </summary>
         /// <value></value>
-        [
-        DefaultValue(0),
-        SRCategory(nameof(SR.CatBehavior)),
-        Bindable(true),
-        SRDescription(nameof(SR.ProgressBarValueDescr))
-        ]
+        [DefaultValue(0)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ProgressBarValueDescr))]
         public int Value
         {
             get
@@ -317,10 +287,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide the event.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyDown
         {
             add => base.KeyDown += value;
@@ -330,10 +298,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide the event.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyPressEventHandler KeyPress
         {
             add => base.KeyPress += value;
@@ -343,10 +309,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide the event.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyUp
         {
             add => base.KeyUp += value;
@@ -355,10 +319,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide the event.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler LocationChanged
         {
             add => base.LocationChanged += value;
@@ -368,17 +330,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide the event.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler OwnerChanged
         {
             add => base.OwnerChanged += value;
             remove => base.OwnerChanged -= value;
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged
         {
             add => Events.AddHandler(EventRightToLeftLayoutChanged, value);
@@ -388,10 +349,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide the event.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged
         {
             add => base.TextChanged += value;
@@ -401,10 +360,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide the event.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Validated
         {
             add => base.Validated += value;
@@ -414,10 +371,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Hide the event.
         /// </summary>
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event CancelEventHandler Validating
         {
             add => base.Validating += value;

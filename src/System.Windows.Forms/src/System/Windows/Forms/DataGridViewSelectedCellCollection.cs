@@ -137,9 +137,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-            EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void Clear()
         {
             throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);

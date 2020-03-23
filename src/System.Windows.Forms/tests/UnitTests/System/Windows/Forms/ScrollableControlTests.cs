@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -1379,34 +1380,56 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ScrollableControl_OnScroll_Invoke_CallsHandler()
+        public void ScrollableControl_GetTopLevel_Invoke_ReturnsExpected()
         {
             using var control = new SubScrollableControl();
-            var eventArgs = new ScrollEventArgs(ScrollEventType.First, 0);
+            Assert.False(control.GetTopLevel());
+        }
+
+        public static IEnumerable<object[]> OnLayout_TestData()
+        {
+            yield return new object[] { true, null, 1 };
+            yield return new object[] { true, new LayoutEventArgs(null, null), 1 };
+            yield return new object[] { true, new LayoutEventArgs(new Control(), "affectedProperty"), 2 };
+
+            yield return new object[] { false, null, 1 };
+            yield return new object[] { false, new LayoutEventArgs(null, null), 1 };
+            yield return new object[] { false, new LayoutEventArgs(new Control(), "affectedProperty"), 1 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnLayout_TestData))]
+        public void ScrollableControl_OnLayout_Invoke_CallsLayout(bool autoScroll, LayoutEventArgs eventArgs, int expectedCallCount)
+        {
+            using var control = new SubScrollableControl
+            {
+                AutoScroll = autoScroll
+            };
             int callCount = 0;
-            ScrollEventHandler handler = (sender, e) =>
+            LayoutEventHandler handler = (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Same(eventArgs, e);
                 callCount++;
             };
 
             // Call with handler.
-            control.Scroll += handler;
-            control.OnScroll(eventArgs);
-            Assert.Equal(1, callCount);
+            control.Layout += handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(expectedCallCount, callCount);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
-            control.Scroll -= handler;
-            control.OnScroll(eventArgs);
-            Assert.Equal(1, callCount);
+            control.Layout -= handler;
+            control.OnLayout(eventArgs);
+            Assert.Equal(expectedCallCount, callCount);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ScrollableControl_OnPaddingChanged_Invoke_CallsHandler()
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ScrollableControl_OnPaddingChanged_Invoke_CallsPaddingChanged(EventArgs eventArgs)
         {
             using var control = new SubScrollableControl();
-            var eventArgs = new EventArgs();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1419,20 +1442,105 @@ namespace System.Windows.Forms.Tests
             control.PaddingChanged += handler;
             control.OnPaddingChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.PaddingChanged -= handler;
             control.OnPaddingChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnPaddingChanged_WithHandle_TestData()
+        {
+            foreach (bool resizeRedraw in new bool[] { true, false })
+            {
+                yield return new object[] { resizeRedraw, null };
+                yield return new object[] { resizeRedraw, new EventArgs() };
+            }
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
-        public void ScrollableControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
+        [MemberData(nameof(OnPaddingChanged_WithHandle_TestData))]
+        public void ScrollableControl_OnPaddingChanged_InvokeWithHandle_CallsPaddingChanged(bool resizeRedraw, EventArgs eventArgs)
         {
             using var control = new SubScrollableControl();
+            control.SetStyle(ControlStyles.ResizeRedraw, resizeRedraw);
             int callCount = 0;
-            LayoutEventHandler handler = (sender, e) =>
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.PaddingChanged += handler;
+            control.OnPaddingChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.PaddingChanged -= handler;
+            control.OnPaddingChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> OnPaintBackground_TestData()
+        {
+            foreach (bool hScroll in new bool[] { true, false })
+            {
+                foreach (bool vScroll in new bool[] { true, false })
+                {
+                    foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb), new Bitmap(10, 10, PixelFormat.Format32bppArgb) })
+                    {
+                        foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
+                        {
+                            yield return new object[] { hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout };
+                            yield return new object[] { hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout };
+                            yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout };
+                            yield return new object[] { hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout };
+                            yield return new object[] { hScroll, vScroll, false, Color.Empty, backgroundImage, backgroundImageLayout };
+                            yield return new object[] { hScroll, vScroll, false, Color.Red, backgroundImage, backgroundImageLayout };
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPaintBackground_TestData))]
+        public void ScrollableControl_OnPaintBackground_Invoke_Success(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
+        {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+
+            using var control = new SubScrollableControl
+            {
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackColor);
+            control.BackColor = backColor;
+            control.BackgroundImage = backgroundImage;
+            control.BackgroundImageLayout = backgroundImageLayout;
+            int callCount = 0;
+            PaintEventHandler handler = (sender, e) =>
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
@@ -1440,14 +1548,448 @@ namespace System.Windows.Forms.Tests
             };
 
             // Call with handler.
-            control.Layout += handler;
-            control.OnLayout(eventArgs);
-            Assert.Equal(1, callCount);
+            control.Paint += handler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
-            control.Layout -= handler;
-            control.OnLayout(eventArgs);
+            control.Paint -= handler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> OnPaintBackground_WithParent_TestData()
+        {
+            var control = new Control
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            var tabPage = new TabPage
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            foreach (Control parent in new Control[] { control, tabPage })
+            {
+                foreach (bool hScroll in new bool[] { true, false })
+                {
+                    foreach (bool vScroll in new bool[] { true, false })
+                    {
+                        foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb) })
+                        {
+                            foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
+                            {
+                                int expected = backgroundImage != null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center) && (hScroll || vScroll) ? 0 : 1;
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                                yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                                yield return new object[] { parent, hScroll, vScroll, false, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                            }
+                        }
+
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPaintBackground_WithParent_TestData))]
+        public void ScrollableControl_OnPaintBackground_InvokeWithParent_CallsPaint(Control parent, bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
+        {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+
+            using var control = new SubScrollableControl
+            {
+                Bounds = new Rectangle(1, 2, 10, 20),
+                Parent = parent,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackColor);
+            control.BackColor = backColor;
+            control.BackgroundImage = backgroundImage;
+            control.BackgroundImageLayout = backgroundImageLayout;
+            int callCount = 0;
+            PaintEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int parentCallCount = 0;
+            PaintEventHandler parentHandler = (sender, e) =>
+            {
+                Assert.Same(parent, sender);
+                Assert.NotSame(graphics, e.Graphics);
+                Assert.Equal(new Rectangle(1, 2, 0, 0), e.ClipRectangle);
+                parentCallCount++;
+            };
+
+            // Call with handler.
+            control.Paint += handler;
+            parent.Paint += parentHandler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.Equal(expectedPaintCallCount, parentCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.Paint -= handler;
+            parent.Paint -= parentHandler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.Equal(expectedPaintCallCount, parentCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPaintBackground_TestData))]
+        public void ScrollableControl_OnPaintBackground_InvokeWithHandle_Success(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout)
+        {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+
+            using var control = new SubScrollableControl
+            {
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackColor);
+            control.BackColor = backColor;
+            control.BackgroundImage = backgroundImage;
+            control.BackgroundImageLayout = backgroundImageLayout;
+            int callCount = 0;
+            PaintEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.Paint += handler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Paint -= handler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> OnPaintBackground_WithParentWithHandle_TestData()
+        {
+            foreach (bool hScroll in new bool[] { true, false })
+            {
+                foreach (bool vScroll in new bool[] { true, false })
+                {
+                    foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb) })
+                    {
+                        foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
+                        {
+                            int expected = backgroundImage != null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center) && (!hScroll && vScroll) ? 0 : 1;
+                            yield return new object[] { hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                            yield return new object[] { hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                            yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                            yield return new object[] { hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                            yield return new object[] { hScroll, vScroll, false, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                            yield return new object[] { hScroll, vScroll, false, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                        }
+                    }
+
+                    yield return new object[] { hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                    yield return new object[] { hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                    yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
+                    yield return new object[] { hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
+                    yield return new object[] { hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                    yield return new object[] { hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+
+                    yield return new object[] { hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                    yield return new object[] { hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                    yield return new object[] { hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                    yield return new object[] { hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                    yield return new object[] { hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                    yield return new object[] { hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnPaintBackground_WithParentWithHandle_TestData))]
+        public void ScrollableControl_OnPaintBackground_InvokeWithParentWithHandle_CallsPaint(bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
+        {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var eventArgs = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
+
+            using var parent = new Control
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            using var control = new SubScrollableControl
+            {
+                Bounds = new Rectangle(1, 2, 10, 20),
+                Parent = parent,
+                HScroll = hScroll,
+                VScroll = vScroll
+            };
+            control.SetStyle(ControlStyles.SupportsTransparentBackColor, supportsTransparentBackColor);
+            control.BackColor = backColor;
+            control.BackgroundImage = backgroundImage;
+            control.BackgroundImageLayout = backgroundImageLayout;
+            int callCount = 0;
+            PaintEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+            int parentCallCount = 0;
+            PaintEventHandler parentHandler = (sender, e) =>
+            {
+                Assert.Same(parent, sender);
+                Assert.NotSame(graphics, e.Graphics);
+                Assert.Equal(new Rectangle(1, 2, 10, 20), e.ClipRectangle);
+                parentCallCount++;
+            };
+            Assert.NotEqual(IntPtr.Zero, parent.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Call with handler.
+            control.Paint += handler;
+            parent.Paint += parentHandler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.Equal(expectedPaintCallCount, parentCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Paint -= handler;
+            parent.Paint -= parentHandler;
+            control.OnPaintBackground(eventArgs);
+            Assert.Equal(0, callCount);
+            Assert.Equal(expectedPaintCallCount, parentCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_OnPaintBackground_NullEventArgs_ThrowsNullReferenceException()
+        {
+            using var control = new SubScrollableControl();
+            Assert.Throws<NullReferenceException>(() => control.OnPaintBackground(null));
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ScrollableControl_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var control = new SubScrollableControl();
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(control, e.AffectedControl);
+                Assert.Equal("RightToLeft", e.AffectedProperty);
+                layoutCallCount++;
+            };
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
             Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        public void ScrollableControl_OnRightToLeftChanged_InvokeWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
+        {
+            using var control = new SubScrollableControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) =>
+            {
+                if (e.AffectedProperty == "RightToLeft")
+                {
+                    Assert.Same(control, sender);
+                    Assert.Same(control, e.AffectedControl);
+                    Assert.Equal("RightToLeft", e.AffectedProperty);
+                    layoutCallCount++;
+                }
+            };
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.RightToLeftChanged += handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(1, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(1, createdCallCount);
+
+            // Remove handler.
+            control.RightToLeftChanged -= handler;
+            control.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.Equal(2, layoutCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(2, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> OnScroll_TestData()
+        {
+            yield return new object[] { null };
+
+            foreach (ScrollEventType eventType in Enum.GetValues(typeof(ScrollEventType)))
+            {
+                foreach (ScrollOrientation orientation in Enum.GetValues(typeof(ScrollOrientation)))
+                {
+                    yield return new object[] { new ScrollEventArgs(eventType, 1, 1, orientation) };
+                    yield return new object[] { new ScrollEventArgs(eventType, 1, 2, orientation) };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnScroll_TestData))]
+        public void ScrollableControl_OnScroll_Invoke_CallsScroll(ScrollEventArgs eventArgs)
+        {
+            using var control = new SubScrollableControl();
+            int callCount = 0;
+            ScrollEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Scroll += handler;
+            control.OnScroll(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            control.Scroll -= handler;
+            control.OnScroll(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnScroll_TestData))]
+        public void ScrollableControl_OnScroll_InvokeWithHandle_CallsScroll(ScrollEventArgs eventArgs)
+        {
+            using var control = new SubScrollableControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+            int callCount = 0;
+            ScrollEventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(eventArgs, e);
+                callCount++;
+            };
+
+            // Call with handler.
+            control.Scroll += handler;
+            control.OnScroll(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Remove handler.
+            control.Scroll -= handler;
+            control.OnScroll(eventArgs);
+            Assert.Equal(1, callCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
 #pragma warning disable 0618
@@ -1942,11 +2484,17 @@ namespace System.Windows.Forms.Tests
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
+            public new bool GetTopLevel() => base.GetTopLevel();
+
             public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 
-            public new void OnScroll(ScrollEventArgs se) => base.OnScroll(se);
-
             public new void OnPaddingChanged(EventArgs e) => base.OnPaddingChanged(e);
+
+            public new void OnPaintBackground(PaintEventArgs e) => base.OnPaintBackground(e);
+
+            public new void OnRightToLeftChanged(EventArgs e) => base.OnRightToLeftChanged(e);
+
+            public new void OnScroll(ScrollEventArgs se) => base.OnScroll(se);
 
             public new void SetDisplayRectLocation(int x, int y) => base.SetDisplayRectLocation(x, y);
 

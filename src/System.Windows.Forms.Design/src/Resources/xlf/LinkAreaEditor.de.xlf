@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="de" original="../LinkAreaEditor.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>LinkArea Editor</source>
+        <target state="translated">LinkArea-Editor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="cancelButton.Text">
+        <source>Cancel</source>
+        <target state="translated">Abbrechen</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="caption.Text">
+        <source>Select a &amp;range of text to make your link:</source>
+        <target state="translated">&amp;Textbereich zum Erstellen des Links auswählen:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="okButton.Text">
+        <source>OK</source>
+        <target state="translated">OK</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sampleEdit.Text">
+        <source>textBox1</source>
+        <target state="translated">textBox1</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

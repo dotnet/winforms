@@ -21,14 +21,12 @@ namespace System.Windows.Forms
     ///  With this control the user need be aware of docking, z-order of the controls. The controls get parented when thry are
     ///  dropped on the SpitContainer.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent(nameof(SplitterMoved)),
-    Docking(DockingBehavior.AutoDock),
-    Designer("System.Windows.Forms.Design.SplitContainerDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionSplitContainer))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultEvent(nameof(SplitterMoved))]
+    [Docking(DockingBehavior.AutoDock)]
+    [Designer("System.Windows.Forms.Design.SplitContainerDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionSplitContainer))]
     public class SplitContainer : ContainerControl, ISupportInitialize
     {
         //
@@ -158,13 +156,12 @@ namespace System.Windows.Forms
         ///  The autoScroll on SplitContainer is shown.
         ///  Here we dont set the base value ... but set autoscroll for panels.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FormAutoScrollDescr)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true)]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FormAutoScrollDescr))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll
         {
             get
@@ -172,146 +169,94 @@ namespace System.Windows.Forms
                 //Always return false ... as Splitcontainer doesnt support AutoScroll
                 return false;
             }
-
-            set
-            {
-                base.AutoScroll = value;
-            }
+            set => base.AutoScroll = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DefaultValue(typeof(Point), "0, 0")
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DefaultValue(typeof(Point), "0, 0")]
         public override Point AutoScrollOffset
         {
-            get
-            {
-                return base.AutoScrollOffset;
-            }
-            set
-            {
-                base.AutoScrollOffset = value;
-            }
+            get => base.AutoScrollOffset;
+            set => base.AutoScrollOffset = value;
         }
 
         /// <summary>
         ///  Override AutoScrollMinSize to make it hidden from the user in the designer
         /// </summary>
-        [
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public new Size AutoScrollMinSize
         {
-            get
-            {
-                return base.AutoScrollMinSize;
-            }
-            set
-            {
-                base.AutoScrollMinSize = value;
-            }
+            get => base.AutoScrollMinSize;
+            set => base.AutoScrollMinSize = value;
         }
 
         /// <summary>
         ///  Override AutoScrollMargin to make it hidden from the user in the designer
         /// </summary>
-        [
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Browsable(false)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
         public new Size AutoScrollMargin
         {
-            get
-            {
-                return base.AutoScrollMargin;
-            }
-            set
-            {
-                base.AutoScrollMargin = value;
-            }
+            get => base.AutoScrollMargin;
+            set => base.AutoScrollMargin = value;
         }
 
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FormAutoScrollPositionDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FormAutoScrollPositionDescr))]
         public new Point AutoScrollPosition
         {
-            get
-            {
-                return base.AutoScrollPosition;
-            }
-
-            set
-            {
-                base.AutoScrollPosition = value;
-            }
+            get => base.AutoScrollPosition;
+            set => base.AutoScrollPosition = value;
         }
 
         /// <summary>
         ///  Hide AutoSize, as it can mean more than one thing and might confuse users
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
         }
 
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
         /// <summary>
         ///  The binding manager for the container control.
         /// </summary>
-        [
-        Browsable(false),
-        SRDescription(nameof(SR.ContainerControlBindingContextDescr))
-        ]
+        [Browsable(false)]
+        [SRDescription(nameof(SR.ContainerControlBindingContextDescr))]
         public override BindingContext BindingContext
         {
             get
@@ -380,19 +325,18 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ControlCollection Controls
         {
-            get
-            {
-                return base.Controls;
-            }
+            get => base.Controls;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlAdded
         {
             add => base.ControlAdded += value;
             remove => base.ControlAdded -= value;
         }
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlRemoved
         {
             add => base.ControlRemoved += value;
@@ -406,10 +350,7 @@ namespace System.Windows.Forms
         /// </summary>
         public new DockStyle Dock
         {
-            get
-            {
-                return base.Dock;
-            }
+            get => base.Dock;
             set
             {
                 base.Dock = value;
@@ -441,11 +382,9 @@ namespace System.Windows.Forms
         ///  Indicates what type of border the Splitter control has.  This value
         ///  comes from the System.Windows.Forms.BorderStyle enumeration.
         /// </summary>
-        [
-        DefaultValue(FixedPanel.None),
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.SplitContainerFixedPanelDescr))
-        ]
+        [DefaultValue(FixedPanel.None)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.SplitContainerFixedPanelDescr))]
         public FixedPanel FixedPanel
         {
             get
@@ -488,12 +427,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This property determines whether the the splitter can move.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        DefaultValue(false),
-        Localizable(true),
-        SRDescription(nameof(SR.SplitContainerIsSplitterFixedDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(false)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.SplitContainerIsSplitterFixedDescr))]
 
         public bool IsSplitterFixed
         {
@@ -535,12 +472,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This Property sets or gets if the splitter is vertical or horizontal.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(Orientation.Vertical),
-        Localizable(true),
-        SRDescription(nameof(SR.SplitContainerOrientationDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(Orientation.Vertical)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.SplitContainerOrientationDescr))]
         public Orientation Orientation
         {
             get { return orientation; }
@@ -582,7 +517,7 @@ namespace System.Windows.Forms
                         User32.GetWindowRect(this, ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                         {
-                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
+                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (IntPtr)User32.HT.CLIENT);
                         }
                     }
                 }
@@ -603,12 +538,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The Left or Top panel in the SplitContainer.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.SplitContainerPanel1Descr)),
-        Localizable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.SplitContainerPanel1Descr))]
+        [Localizable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public SplitterPanel Panel1
         {
             get
@@ -635,21 +568,17 @@ namespace System.Windows.Forms
             UpdateSplitter();
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler PaddingChanged
         {
             add => base.PaddingChanged += value;
@@ -659,11 +588,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collapses or restores panel1
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.SplitContainerPanel1CollapsedDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.SplitContainerPanel1CollapsedDescr))]
         public bool Panel1Collapsed
         {
             get
@@ -686,11 +613,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collapses or restores panel2
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.SplitContainerPanel2CollapsedDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.SplitContainerPanel2CollapsedDescr))]
         public bool Panel2Collapsed
         {
             get
@@ -713,13 +638,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This property determines the minimum distance of pixels of the splitter from the left or the top edge of Panel1.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        DefaultValue(25),
-        Localizable(true),
-        SRDescription(nameof(SR.SplitContainerPanel1MinSizeDescr)),
-        RefreshProperties(RefreshProperties.All)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(25)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.SplitContainerPanel1MinSizeDescr))]
+        [RefreshProperties(RefreshProperties.All)]
         public int Panel1MinSize
         {
             get
@@ -739,12 +662,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This is the Right or Bottom panel in the SplitContainer.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.SplitContainerPanel2Descr)),
-        Localizable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.SplitContainerPanel2Descr))]
+        [Localizable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public SplitterPanel Panel2
         {
             get
@@ -756,13 +677,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This property determines the minimum distance of pixels of the splitter from the right or the bottom edge of Panel2
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        DefaultValue(25),
-        Localizable(true),
-        SRDescription(nameof(SR.SplitContainerPanel2MinSizeDescr)),
-        RefreshProperties(RefreshProperties.All)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(25)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.SplitContainerPanel2MinSizeDescr))]
+        [RefreshProperties(RefreshProperties.All)]
         public int Panel2MinSize
         {
             get
@@ -782,13 +701,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This property determines pixel distance of the splitter from the left or top edge.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        SettingsBindable(true),
-        SRDescription(nameof(SR.SplitContainerSplitterDistanceDescr)),
-        DefaultValue(50)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true),
+        SettingsBindable(true)]
+        [SRDescription(nameof(SR.SplitContainerSplitterDistanceDescr))]
+        [DefaultValue(50)]
         public int SplitterDistance
         {
             get
@@ -888,12 +805,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This determines the number of pixels the splitter moves in increments.This is defaulted to 1.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        DefaultValue(1),
-        Localizable(true),
-        SRDescription(nameof(SR.SplitContainerSplitterIncrementDescr))
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(1)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.SplitContainerSplitterIncrementDescr))]
         public int SplitterIncrement
         {
             get
@@ -914,11 +829,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This property determines the rectangle bounds of the splitter.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.SplitContainerSplitterRectangleDescr)),
-        Browsable(false)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.SplitContainerSplitterRectangleDescr))]
+        [Browsable(false)]
         public Rectangle SplitterRectangle
         {
             get
@@ -933,12 +846,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This property determines the thickness of the splitter.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.SplitContainerSplitterWidthDescr)),
-        Localizable(true),
-        DefaultValue(4)
-        ]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.SplitContainerSplitterWidthDescr))]
+        [Localizable(true)]
+        [DefaultValue(4)]
         public int SplitterWidth
         {
             get
@@ -989,17 +900,13 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Bindable(false)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1054,35 +961,40 @@ namespace System.Windows.Forms
         //Start EVENT HANDLERS                                                        //
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
         public event SplitterCancelEventHandler SplitterMoving
         {
             add => Events.AddHandler(EVENT_MOVING, value);
             remove => Events.RemoveHandler(EVENT_MOVING, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
         public event SplitterEventHandler SplitterMoved
         {
             add => Events.AddHandler(EVENT_MOVED, value);
             remove => Events.RemoveHandler(EVENT_MOVED, value);
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged
         {
             add => base.TextChanged += value;
@@ -2416,17 +2328,9 @@ namespace System.Windows.Forms
         {
             // Accessing through the Handle property has side effects that break this
             // logic. You must use InternalHandle.
-            //
-            if (m.WParam == InternalHandle && ((int)m.LParam & 0x0000FFFF) == NativeMethods.HTCLIENT)
+            if (m.WParam == InternalHandle && ((int)m.LParam & 0x0000FFFF) == (int)User32.HT.CLIENT)
             {
-                if (OverrideCursor != null)
-                {
-                    Cursor.Current = OverrideCursor;
-                }
-                else
-                {
-                    Cursor.Current = Cursor;
-                }
+                Cursor.Current = OverrideCursor ?? Cursor;
             }
             else
             {
@@ -2575,16 +2479,16 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message msg)
         {
-            switch (msg.Msg)
+            switch ((User32.WM)msg.Msg)
             {
-                case WindowMessages.WM_SETCURSOR:
+                case User32.WM.SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
-                case WindowMessages.WM_SETFOCUS:
+                case User32.WM.SETFOCUS:
                     splitterFocused = true;
                     base.WndProc(ref msg);
                     break;
-                case WindowMessages.WM_KILLFOCUS:
+                case User32.WM.KILLFOCUS:
                     splitterFocused = false;
                     base.WndProc(ref msg);
                     break;
@@ -2619,10 +2523,10 @@ namespace System.Windows.Forms
             /// </summary>
             bool IMessageFilter.PreFilterMessage(ref Message m)
             {
-                if (m.Msg >= WindowMessages.WM_KEYFIRST && m.Msg <= WindowMessages.WM_KEYLAST)
+                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <=(int) User32.WM.KEYLAST)
                 {
-                    if ((m.Msg == WindowMessages.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)
-                        || (m.Msg == WindowMessages.WM_SYSKEYDOWN))
+                    if ((m.Msg == (int)User32.WM.KEYDOWN && (int)m.WParam == (int)Keys.Escape)
+                        || (m.Msg == (int)User32.WM.SYSKEYDOWN))
                     {
                         //Notify that splitMOVE was reverted ..
                         //this is used in ONKEYUP!!

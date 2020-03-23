@@ -48,7 +48,7 @@ namespace System.Windows.Forms
             TextRectangle = textRectangle;
             DefaultTextColor = textColor;
             TextFont = textFont;
-            TextFormat = ToolStripItemInternalLayout.ContentAlignToTextFormat(textAlign, item.RightToLeft == RightToLeft.Yes);
+            TextFormat = ToolStripItem.ToolStripItemInternalLayout.ContentAlignToTextFormat(textAlign, item.RightToLeft == RightToLeft.Yes);
             TextFormat = (item.ShowKeyboardCues) ? TextFormat : TextFormat | TextFormatFlags.HidePrefix;
             TextDirection = item.TextDirection;
         }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -21,577 +22,577 @@ namespace System.Windows.Forms
             string text;
             switch (msg)
             {
-                case WindowMessages.WM_NULL:
+                case (int)WM.NULL:
                     text = "WM_NULL";
                     break;
-                case WindowMessages.WM_CREATE:
+                case (int)WM.CREATE:
                     text = "WM_CREATE";
                     break;
-                case WindowMessages.WM_DESTROY:
+                case (int)WM.DESTROY:
                     text = "WM_DESTROY";
                     break;
-                case WindowMessages.WM_MOVE:
+                case (int)WM.MOVE:
                     text = "WM_MOVE";
                     break;
-                case WindowMessages.WM_SIZE:
+                case (int)WM.SIZE:
                     text = "WM_SIZE";
                     break;
-                case WindowMessages.WM_ACTIVATE:
+                case (int)WM.ACTIVATE:
                     text = "WM_ACTIVATE";
                     break;
-                case WindowMessages.WM_SETFOCUS:
+                case (int)WM.SETFOCUS:
                     text = "WM_SETFOCUS";
                     break;
-                case WindowMessages.WM_KILLFOCUS:
+                case (int)WM.KILLFOCUS:
                     text = "WM_KILLFOCUS";
                     break;
-                case WindowMessages.WM_ENABLE:
+                case (int)WM.ENABLE:
                     text = "WM_ENABLE";
                     break;
-                case WindowMessages.WM_SETREDRAW:
+                case (int)WM.SETREDRAW:
                     text = "WM_SETREDRAW";
                     break;
-                case WindowMessages.WM_SETTEXT:
+                case (int)WM.SETTEXT:
                     text = "WM_SETTEXT";
                     break;
-                case WindowMessages.WM_GETTEXT:
+                case (int)WM.GETTEXT:
                     text = "WM_GETTEXT";
                     break;
-                case WindowMessages.WM_GETTEXTLENGTH:
+                case (int)WM.GETTEXTLENGTH:
                     text = "WM_GETTEXTLENGTH";
                     break;
-                case WindowMessages.WM_PAINT:
+                case (int)WM.PAINT:
                     text = "WM_PAINT";
                     break;
-                case WindowMessages.WM_CLOSE:
+                case (int)WM.CLOSE:
                     text = "WM_CLOSE";
                     break;
-                case WindowMessages.WM_QUERYENDSESSION:
+                case (int)WM.QUERYENDSESSION:
                     text = "WM_QUERYENDSESSION";
                     break;
-                case WindowMessages.WM_QUIT:
+                case (int)WM.QUIT:
                     text = "WM_QUIT";
                     break;
-                case WindowMessages.WM_QUERYOPEN:
+                case (int)WM.QUERYOPEN:
                     text = "WM_QUERYOPEN";
                     break;
-                case WindowMessages.WM_ERASEBKGND:
+                case (int)WM.ERASEBKGND:
                     text = "WM_ERASEBKGND";
                     break;
-                case WindowMessages.WM_SYSCOLORCHANGE:
+                case (int)WM.SYSCOLORCHANGE:
                     text = "WM_SYSCOLORCHANGE";
                     break;
-                case WindowMessages.WM_ENDSESSION:
+                case (int)WM.ENDSESSION:
                     text = "WM_ENDSESSION";
                     break;
-                case WindowMessages.WM_SHOWWINDOW:
+                case (int)WM.SHOWWINDOW:
                     text = "WM_SHOWWINDOW";
                     break;
-                case WindowMessages.WM_WININICHANGE:
+                case (int)WM.WININICHANGE:
                     text = "WM_WININICHANGE";
                     break;
-                case WindowMessages.WM_DEVMODECHANGE:
+                case (int)WM.DEVMODECHANGE:
                     text = "WM_DEVMODECHANGE";
                     break;
-                case WindowMessages.WM_ACTIVATEAPP:
+                case (int)WM.ACTIVATEAPP:
                     text = "WM_ACTIVATEAPP";
                     break;
-                case WindowMessages.WM_FONTCHANGE:
+                case (int)WM.FONTCHANGE:
                     text = "WM_FONTCHANGE";
                     break;
-                case WindowMessages.WM_TIMECHANGE:
+                case (int)WM.TIMECHANGE:
                     text = "WM_TIMECHANGE";
                     break;
-                case WindowMessages.WM_CANCELMODE:
+                case (int)WM.CANCELMODE:
                     text = "WM_CANCELMODE";
                     break;
-                case WindowMessages.WM_SETCURSOR:
+                case (int)WM.SETCURSOR:
                     text = "WM_SETCURSOR";
                     break;
-                case WindowMessages.WM_MOUSEACTIVATE:
+                case (int)WM.MOUSEACTIVATE:
                     text = "WM_MOUSEACTIVATE";
                     break;
-                case WindowMessages.WM_CHILDACTIVATE:
+                case (int)WM.CHILDACTIVATE:
                     text = "WM_CHILDACTIVATE";
                     break;
-                case WindowMessages.WM_QUEUESYNC:
+                case (int)WM.QUEUESYNC:
                     text = "WM_QUEUESYNC";
                     break;
-                case WindowMessages.WM_GETMINMAXINFO:
+                case (int)WM.GETMINMAXINFO:
                     text = "WM_GETMINMAXINFO";
                     break;
-                case WindowMessages.WM_PAINTICON:
+                case (int)WM.PAINTICON:
                     text = "WM_PAINTICON";
                     break;
-                case WindowMessages.WM_ICONERASEBKGND:
+                case (int)WM.ICONERASEBKGND:
                     text = "WM_ICONERASEBKGND";
                     break;
-                case WindowMessages.WM_NEXTDLGCTL:
+                case (int)WM.NEXTDLGCTL:
                     text = "WM_NEXTDLGCTL";
                     break;
-                case WindowMessages.WM_SPOOLERSTATUS:
+                case (int)WM.SPOOLERSTATUS:
                     text = "WM_SPOOLERSTATUS";
                     break;
-                case WindowMessages.WM_DRAWITEM:
+                case (int)WM.DRAWITEM:
                     text = "WM_DRAWITEM";
                     break;
-                case WindowMessages.WM_MEASUREITEM:
+                case (int)WM.MEASUREITEM:
                     text = "WM_MEASUREITEM";
                     break;
-                case WindowMessages.WM_DELETEITEM:
+                case (int)WM.DELETEITEM:
                     text = "WM_DELETEITEM";
                     break;
-                case WindowMessages.WM_VKEYTOITEM:
+                case (int)WM.VKEYTOITEM:
                     text = "WM_VKEYTOITEM";
                     break;
-                case WindowMessages.WM_CHARTOITEM:
+                case (int)WM.CHARTOITEM:
                     text = "WM_CHARTOITEM";
                     break;
-                case WindowMessages.WM_SETFONT:
+                case (int)WM.SETFONT:
                     text = "WM_SETFONT";
                     break;
-                case WindowMessages.WM_GETFONT:
+                case (int)WM.GETFONT:
                     text = "WM_GETFONT";
                     break;
-                case WindowMessages.WM_SETHOTKEY:
+                case (int)WM.SETHOTKEY:
                     text = "WM_SETHOTKEY";
                     break;
-                case WindowMessages.WM_GETHOTKEY:
+                case (int)WM.GETHOTKEY:
                     text = "WM_GETHOTKEY";
                     break;
-                case WindowMessages.WM_QUERYDRAGICON:
+                case (int)WM.QUERYDRAGICON:
                     text = "WM_QUERYDRAGICON";
                     break;
-                case WindowMessages.WM_COMPAREITEM:
+                case (int)WM.COMPAREITEM:
                     text = "WM_COMPAREITEM";
                     break;
-                case WindowMessages.WM_GETOBJECT:
+                case (int)WM.GETOBJECT:
                     text = "WM_GETOBJECT";
                     break;
-                case WindowMessages.WM_COMPACTING:
+                case (int)WM.COMPACTING:
                     text = "WM_COMPACTING";
                     break;
-                case WindowMessages.WM_COMMNOTIFY:
+                case (int)WM.COMMNOTIFY:
                     text = "WM_COMMNOTIFY";
                     break;
-                case WindowMessages.WM_WINDOWPOSCHANGING:
+                case (int)WM.WINDOWPOSCHANGING:
                     text = "WM_WINDOWPOSCHANGING";
                     break;
-                case WindowMessages.WM_WINDOWPOSCHANGED:
+                case (int)WM.WINDOWPOSCHANGED:
                     text = "WM_WINDOWPOSCHANGED";
                     break;
-                case WindowMessages.WM_POWER:
+                case (int)WM.POWER:
                     text = "WM_POWER";
                     break;
-                case WindowMessages.WM_COPYDATA:
+                case (int)WM.COPYDATA:
                     text = "WM_COPYDATA";
                     break;
-                case WindowMessages.WM_CANCELJOURNAL:
+                case (int)WM.CANCELJOURNAL:
                     text = "WM_CANCELJOURNAL";
                     break;
-                case WindowMessages.WM_NOTIFY:
+                case (int)WM.NOTIFY:
                     text = "WM_NOTIFY";
                     break;
-                case WindowMessages.WM_INPUTLANGCHANGEREQUEST:
+                case (int)WM.INPUTLANGCHANGEREQUEST:
                     text = "WM_INPUTLANGCHANGEREQUEST";
                     break;
-                case WindowMessages.WM_INPUTLANGCHANGE:
+                case (int)WM.INPUTLANGCHANGE:
                     text = "WM_INPUTLANGCHANGE";
                     break;
-                case WindowMessages.WM_TCARD:
+                case (int)WM.TCARD:
                     text = "WM_TCARD";
                     break;
-                case WindowMessages.WM_HELP:
+                case (int)WM.HELP:
                     text = "WM_HELP";
                     break;
-                case WindowMessages.WM_USERCHANGED:
+                case (int)WM.USERCHANGED:
                     text = "WM_USERCHANGED";
                     break;
-                case WindowMessages.WM_NOTIFYFORMAT:
+                case (int)WM.NOTIFYFORMAT:
                     text = "WM_NOTIFYFORMAT";
                     break;
-                case WindowMessages.WM_CONTEXTMENU:
+                case (int)WM.CONTEXTMENU:
                     text = "WM_CONTEXTMENU";
                     break;
-                case WindowMessages.WM_STYLECHANGING:
+                case (int)WM.STYLECHANGING:
                     text = "WM_STYLECHANGING";
                     break;
-                case WindowMessages.WM_STYLECHANGED:
+                case (int)WM.STYLECHANGED:
                     text = "WM_STYLECHANGED";
                     break;
-                case WindowMessages.WM_DISPLAYCHANGE:
+                case (int)WM.DISPLAYCHANGE:
                     text = "WM_DISPLAYCHANGE";
                     break;
-                case WindowMessages.WM_GETICON:
+                case (int)WM.GETICON:
                     text = "WM_GETICON";
                     break;
-                case WindowMessages.WM_SETICON:
+                case (int)WM.SETICON:
                     text = "WM_SETICON";
                     break;
-                case WindowMessages.WM_NCCREATE:
+                case (int)WM.NCCREATE:
                     text = "WM_NCCREATE";
                     break;
-                case WindowMessages.WM_NCDESTROY:
+                case (int)WM.NCDESTROY:
                     text = "WM_NCDESTROY";
                     break;
-                case WindowMessages.WM_NCCALCSIZE:
+                case (int)WM.NCCALCSIZE:
                     text = "WM_NCCALCSIZE";
                     break;
-                case WindowMessages.WM_NCHITTEST:
+                case (int)WM.NCHITTEST:
                     text = "WM_NCHITTEST";
                     break;
-                case WindowMessages.WM_NCPAINT:
+                case (int)WM.NCPAINT:
                     text = "WM_NCPAINT";
                     break;
-                case WindowMessages.WM_NCACTIVATE:
+                case (int)WM.NCACTIVATE:
                     text = "WM_NCACTIVATE";
                     break;
-                case WindowMessages.WM_GETDLGCODE:
+                case (int)WM.GETDLGCODE:
                     text = "WM_GETDLGCODE";
                     break;
-                case WindowMessages.WM_NCMOUSEMOVE:
+                case (int)WM.NCMOUSEMOVE:
                     text = "WM_NCMOUSEMOVE";
                     break;
-                case WindowMessages.WM_NCLBUTTONDOWN:
+                case (int)WM.NCLBUTTONDOWN:
                     text = "WM_NCLBUTTONDOWN";
                     break;
-                case WindowMessages.WM_NCLBUTTONUP:
+                case (int)WM.NCLBUTTONUP:
                     text = "WM_NCLBUTTONUP";
                     break;
-                case WindowMessages.WM_NCLBUTTONDBLCLK:
+                case (int)WM.NCLBUTTONDBLCLK:
                     text = "WM_NCLBUTTONDBLCLK";
                     break;
-                case WindowMessages.WM_NCRBUTTONDOWN:
+                case (int)WM.NCRBUTTONDOWN:
                     text = "WM_NCRBUTTONDOWN";
                     break;
-                case WindowMessages.WM_NCRBUTTONUP:
+                case (int)WM.NCRBUTTONUP:
                     text = "WM_NCRBUTTONUP";
                     break;
-                case WindowMessages.WM_NCRBUTTONDBLCLK:
+                case (int)WM.NCRBUTTONDBLCLK:
                     text = "WM_NCRBUTTONDBLCLK";
                     break;
-                case WindowMessages.WM_NCMBUTTONDOWN:
+                case (int)WM.NCMBUTTONDOWN:
                     text = "WM_NCMBUTTONDOWN";
                     break;
-                case WindowMessages.WM_NCMBUTTONUP:
+                case (int)WM.NCMBUTTONUP:
                     text = "WM_NCMBUTTONUP";
                     break;
-                case WindowMessages.WM_NCMBUTTONDBLCLK:
+                case (int)WM.NCMBUTTONDBLCLK:
                     text = "WM_NCMBUTTONDBLCLK";
                     break;
-                case WindowMessages.WM_KEYDOWN:
+                case (int)WM.KEYDOWN:
                     text = "WM_KEYDOWN";
                     break;
-                case WindowMessages.WM_KEYUP:
+                case (int)WM.KEYUP:
                     text = "WM_KEYUP";
                     break;
-                case WindowMessages.WM_CHAR:
+                case (int)WM.CHAR:
                     text = "WM_CHAR";
                     break;
-                case WindowMessages.WM_DEADCHAR:
+                case (int)WM.DEADCHAR:
                     text = "WM_DEADCHAR";
                     break;
-                case WindowMessages.WM_SYSKEYDOWN:
+                case (int)WM.SYSKEYDOWN:
                     text = "WM_SYSKEYDOWN";
                     break;
-                case WindowMessages.WM_SYSKEYUP:
+                case (int)WM.SYSKEYUP:
                     text = "WM_SYSKEYUP";
                     break;
-                case WindowMessages.WM_SYSCHAR:
+                case (int)WM.SYSCHAR:
                     text = "WM_SYSCHAR";
                     break;
-                case WindowMessages.WM_SYSDEADCHAR:
+                case (int)WM.SYSDEADCHAR:
                     text = "WM_SYSDEADCHAR";
                     break;
-                case WindowMessages.WM_KEYLAST:
+                case (int)WM.KEYLAST:
                     text = "WM_KEYLAST";
                     break;
-                case WindowMessages.WM_IME_STARTCOMPOSITION:
+                case (int)WM.IME_STARTCOMPOSITION:
                     text = "WM_IME_STARTCOMPOSITION";
                     break;
-                case WindowMessages.WM_IME_ENDCOMPOSITION:
+                case (int)WM.IME_ENDCOMPOSITION:
                     text = "WM_IME_ENDCOMPOSITION";
                     break;
-                case WindowMessages.WM_IME_COMPOSITION:
+                case (int)WM.IME_COMPOSITION:
                     text = "WM_IME_COMPOSITION";
                     break;
-                case WindowMessages.WM_INITDIALOG:
+                case (int)WM.INITDIALOG:
                     text = "WM_INITDIALOG";
                     break;
-                case WindowMessages.WM_COMMAND:
+                case (int)WM.COMMAND:
                     text = "WM_COMMAND";
                     break;
-                case WindowMessages.WM_SYSCOMMAND:
+                case (int)WM.SYSCOMMAND:
                     text = "WM_SYSCOMMAND";
                     break;
-                case WindowMessages.WM_TIMER:
+                case (int)WM.TIMER:
                     text = "WM_TIMER";
                     break;
-                case WindowMessages.WM_HSCROLL:
+                case (int)WM.HSCROLL:
                     text = "WM_HSCROLL";
                     break;
-                case WindowMessages.WM_VSCROLL:
+                case (int)WM.VSCROLL:
                     text = "WM_VSCROLL";
                     break;
-                case WindowMessages.WM_INITMENU:
+                case (int)WM.INITMENU:
                     text = "WM_INITMENU";
                     break;
-                case WindowMessages.WM_INITMENUPOPUP:
+                case (int)WM.INITMENUPOPUP:
                     text = "WM_INITMENUPOPUP";
                     break;
-                case WindowMessages.WM_MENUSELECT:
+                case (int)WM.MENUSELECT:
                     text = "WM_MENUSELECT";
                     break;
-                case WindowMessages.WM_MENUCHAR:
+                case (int)WM.MENUCHAR:
                     text = "WM_MENUCHAR";
                     break;
-                case WindowMessages.WM_ENTERIDLE:
+                case (int)WM.ENTERIDLE:
                     text = "WM_ENTERIDLE";
                     break;
-                case WindowMessages.WM_CTLCOLORMSGBOX:
+                case (int)WM.CTLCOLORMSGBOX:
                     text = "WM_CTLCOLORMSGBOX";
                     break;
-                case WindowMessages.WM_CTLCOLOREDIT:
+                case (int)WM.CTLCOLOREDIT:
                     text = "WM_CTLCOLOREDIT";
                     break;
-                case WindowMessages.WM_CTLCOLORLISTBOX:
+                case (int)WM.CTLCOLORLISTBOX:
                     text = "WM_CTLCOLORLISTBOX";
                     break;
-                case WindowMessages.WM_CTLCOLORBTN:
+                case (int)WM.CTLCOLORBTN:
                     text = "WM_CTLCOLORBTN";
                     break;
-                case WindowMessages.WM_CTLCOLORDLG:
+                case (int)WM.CTLCOLORDLG:
                     text = "WM_CTLCOLORDLG";
                     break;
-                case WindowMessages.WM_CTLCOLORSCROLLBAR:
+                case (int)WM.CTLCOLORSCROLLBAR:
                     text = "WM_CTLCOLORSCROLLBAR";
                     break;
-                case WindowMessages.WM_CTLCOLORSTATIC:
+                case (int)WM.CTLCOLORSTATIC:
                     text = "WM_CTLCOLORSTATIC";
                     break;
-                case WindowMessages.WM_MOUSEMOVE:
+                case (int)WM.MOUSEMOVE:
                     text = "WM_MOUSEMOVE";
                     break;
-                case WindowMessages.WM_LBUTTONDOWN:
+                case (int)WM.LBUTTONDOWN:
                     text = "WM_LBUTTONDOWN";
                     break;
-                case WindowMessages.WM_LBUTTONUP:
+                case (int)WM.LBUTTONUP:
                     text = "WM_LBUTTONUP";
                     break;
-                case WindowMessages.WM_LBUTTONDBLCLK:
+                case (int)WM.LBUTTONDBLCLK:
                     text = "WM_LBUTTONDBLCLK";
                     break;
-                case WindowMessages.WM_RBUTTONDOWN:
+                case (int)WM.RBUTTONDOWN:
                     text = "WM_RBUTTONDOWN";
                     break;
-                case WindowMessages.WM_RBUTTONUP:
+                case (int)WM.RBUTTONUP:
                     text = "WM_RBUTTONUP";
                     break;
-                case WindowMessages.WM_RBUTTONDBLCLK:
+                case (int)WM.RBUTTONDBLCLK:
                     text = "WM_RBUTTONDBLCLK";
                     break;
-                case WindowMessages.WM_MBUTTONDOWN:
+                case (int)WM.MBUTTONDOWN:
                     text = "WM_MBUTTONDOWN";
                     break;
-                case WindowMessages.WM_MBUTTONUP:
+                case (int)WM.MBUTTONUP:
                     text = "WM_MBUTTONUP";
                     break;
-                case WindowMessages.WM_MBUTTONDBLCLK:
+                case (int)WM.MBUTTONDBLCLK:
                     text = "WM_MBUTTONDBLCLK";
                     break;
-                case WindowMessages.WM_MOUSEWHEEL:
+                case (int)WM.MOUSEWHEEL:
                     text = "WM_MOUSEWHEEL";
                     break;
-                case WindowMessages.WM_PARENTNOTIFY:
+                case (int)WM.PARENTNOTIFY:
                     text = "WM_PARENTNOTIFY";
                     break;
-                case WindowMessages.WM_ENTERMENULOOP:
+                case (int)WM.ENTERMENULOOP:
                     text = "WM_ENTERMENULOOP";
                     break;
-                case WindowMessages.WM_EXITMENULOOP:
+                case (int)WM.EXITMENULOOP:
                     text = "WM_EXITMENULOOP";
                     break;
-                case WindowMessages.WM_NEXTMENU:
+                case (int)WM.NEXTMENU:
                     text = "WM_NEXTMENU";
                     break;
-                case WindowMessages.WM_SIZING:
+                case (int)WM.SIZING:
                     text = "WM_SIZING";
                     break;
-                case WindowMessages.WM_CAPTURECHANGED:
+                case (int)WM.CAPTURECHANGED:
                     text = "WM_CAPTURECHANGED";
                     break;
-                case WindowMessages.WM_MOVING:
+                case (int)WM.MOVING:
                     text = "WM_MOVING";
                     break;
-                case WindowMessages.WM_POWERBROADCAST:
+                case (int)WM.POWERBROADCAST:
                     text = "WM_POWERBROADCAST";
                     break;
-                case WindowMessages.WM_DEVICECHANGE:
+                case (int)WM.DEVICECHANGE:
                     text = "WM_DEVICECHANGE";
                     break;
-                case WindowMessages.WM_IME_SETCONTEXT:
+                case (int)WM.IME_SETCONTEXT:
                     text = "WM_IME_SETCONTEXT";
                     break;
-                case WindowMessages.WM_IME_NOTIFY:
+                case (int)WM.IME_NOTIFY:
                     text = "WM_IME_NOTIFY";
                     break;
-                case WindowMessages.WM_IME_CONTROL:
+                case (int)WM.IME_CONTROL:
                     text = "WM_IME_CONTROL";
                     break;
-                case WindowMessages.WM_IME_COMPOSITIONFULL:
+                case (int)WM.IME_COMPOSITIONFULL:
                     text = "WM_IME_COMPOSITIONFULL";
                     break;
-                case WindowMessages.WM_IME_SELECT:
+                case (int)WM.IME_SELECT:
                     text = "WM_IME_SELECT";
                     break;
-                case WindowMessages.WM_IME_CHAR:
+                case (int)WM.IME_CHAR:
                     text = "WM_IME_CHAR";
                     break;
-                case WindowMessages.WM_IME_KEYDOWN:
+                case (int)WM.IME_KEYDOWN:
                     text = "WM_IME_KEYDOWN";
                     break;
-                case WindowMessages.WM_IME_KEYUP:
+                case (int)WM.IME_KEYUP:
                     text = "WM_IME_KEYUP";
                     break;
-                case WindowMessages.WM_MDICREATE:
+                case (int)WM.MDICREATE:
                     text = "WM_MDICREATE";
                     break;
-                case WindowMessages.WM_MDIDESTROY:
+                case (int)WM.MDIDESTROY:
                     text = "WM_MDIDESTROY";
                     break;
-                case WindowMessages.WM_MDIACTIVATE:
+                case (int)WM.MDIACTIVATE:
                     text = "WM_MDIACTIVATE";
                     break;
-                case WindowMessages.WM_MDIRESTORE:
+                case (int)WM.MDIRESTORE:
                     text = "WM_MDIRESTORE";
                     break;
-                case WindowMessages.WM_MDINEXT:
+                case (int)WM.MDINEXT:
                     text = "WM_MDINEXT";
                     break;
-                case WindowMessages.WM_MDIMAXIMIZE:
+                case (int)WM.MDIMAXIMIZE:
                     text = "WM_MDIMAXIMIZE";
                     break;
-                case WindowMessages.WM_MDITILE:
+                case (int)WM.MDITILE:
                     text = "WM_MDITILE";
                     break;
-                case WindowMessages.WM_MDICASCADE:
+                case (int)WM.MDICASCADE:
                     text = "WM_MDICASCADE";
                     break;
-                case WindowMessages.WM_MDIICONARRANGE:
+                case (int)WM.MDIICONARRANGE:
                     text = "WM_MDIICONARRANGE";
                     break;
-                case WindowMessages.WM_MDIGETACTIVE:
+                case (int)WM.MDIGETACTIVE:
                     text = "WM_MDIGETACTIVE";
                     break;
-                case WindowMessages.WM_MDISETMENU:
+                case (int)WM.MDISETMENU:
                     text = "WM_MDISETMENU";
                     break;
-                case WindowMessages.WM_ENTERSIZEMOVE:
+                case (int)WM.ENTERSIZEMOVE:
                     text = "WM_ENTERSIZEMOVE";
                     break;
-                case WindowMessages.WM_EXITSIZEMOVE:
+                case (int)WM.EXITSIZEMOVE:
                     text = "WM_EXITSIZEMOVE";
                     break;
-                case WindowMessages.WM_DROPFILES:
+                case (int)WM.DROPFILES:
                     text = "WM_DROPFILES";
                     break;
-                case WindowMessages.WM_MDIREFRESHMENU:
+                case (int)WM.MDIREFRESHMENU:
                     text = "WM_MDIREFRESHMENU";
                     break;
-                case WindowMessages.WM_MOUSEHOVER:
+                case (int)WM.MOUSEHOVER:
                     text = "WM_MOUSEHOVER";
                     break;
-                case WindowMessages.WM_MOUSELEAVE:
+                case (int)WM.MOUSELEAVE:
                     text = "WM_MOUSELEAVE";
                     break;
-                case WindowMessages.WM_CUT:
+                case (int)WM.CUT:
                     text = "WM_CUT";
                     break;
-                case WindowMessages.WM_COPY:
+                case (int)WM.COPY:
                     text = "WM_COPY";
                     break;
-                case WindowMessages.WM_PASTE:
+                case (int)WM.PASTE:
                     text = "WM_PASTE";
                     break;
-                case WindowMessages.WM_CLEAR:
+                case (int)WM.CLEAR:
                     text = "WM_CLEAR";
                     break;
-                case WindowMessages.WM_UNDO:
+                case (int)WM.UNDO:
                     text = "WM_UNDO";
                     break;
-                case WindowMessages.WM_RENDERFORMAT:
+                case (int)WM.RENDERFORMAT:
                     text = "WM_RENDERFORMAT";
                     break;
-                case WindowMessages.WM_RENDERALLFORMATS:
+                case (int)WM.RENDERALLFORMATS:
                     text = "WM_RENDERALLFORMATS";
                     break;
-                case WindowMessages.WM_DESTROYCLIPBOARD:
+                case (int)WM.DESTROYCLIPBOARD:
                     text = "WM_DESTROYCLIPBOARD";
                     break;
-                case WindowMessages.WM_DRAWCLIPBOARD:
+                case (int)WM.DRAWCLIPBOARD:
                     text = "WM_DRAWCLIPBOARD";
                     break;
-                case WindowMessages.WM_PAINTCLIPBOARD:
+                case (int)WM.PAINTCLIPBOARD:
                     text = "WM_PAINTCLIPBOARD";
                     break;
-                case WindowMessages.WM_VSCROLLCLIPBOARD:
+                case (int)WM.VSCROLLCLIPBOARD:
                     text = "WM_VSCROLLCLIPBOARD";
                     break;
-                case WindowMessages.WM_SIZECLIPBOARD:
+                case (int)WM.SIZECLIPBOARD:
                     text = "WM_SIZECLIPBOARD";
                     break;
-                case WindowMessages.WM_ASKCBFORMATNAME:
+                case (int)WM.ASKCBFORMATNAME:
                     text = "WM_ASKCBFORMATNAME";
                     break;
-                case WindowMessages.WM_CHANGECBCHAIN:
+                case (int)WM.CHANGECBCHAIN:
                     text = "WM_CHANGECBCHAIN";
                     break;
-                case WindowMessages.WM_HSCROLLCLIPBOARD:
+                case (int)WM.HSCROLLCLIPBOARD:
                     text = "WM_HSCROLLCLIPBOARD";
                     break;
-                case WindowMessages.WM_QUERYNEWPALETTE:
+                case (int)WM.QUERYNEWPALETTE:
                     text = "WM_QUERYNEWPALETTE";
                     break;
-                case WindowMessages.WM_PALETTEISCHANGING:
+                case (int)WM.PALETTEISCHANGING:
                     text = "WM_PALETTEISCHANGING";
                     break;
-                case WindowMessages.WM_PALETTECHANGED:
+                case (int)WM.PALETTECHANGED:
                     text = "WM_PALETTECHANGED";
                     break;
-                case WindowMessages.WM_HOTKEY:
+                case (int)WM.HOTKEY:
                     text = "WM_HOTKEY";
                     break;
-                case WindowMessages.WM_PRINT:
+                case (int)WM.PRINT:
                     text = "WM_PRINT";
                     break;
-                case WindowMessages.WM_PRINTCLIENT:
+                case (int)WM.PRINTCLIENT:
                     text = "WM_PRINTCLIENT";
                     break;
-                case WindowMessages.WM_HANDHELDFIRST:
+                case (int)WM.HANDHELDFIRST:
                     text = "WM_HANDHELDFIRST";
                     break;
-                case WindowMessages.WM_HANDHELDLAST:
+                case (int)WM.HANDHELDLAST:
                     text = "WM_HANDHELDLAST";
                     break;
-                case WindowMessages.WM_AFXFIRST:
+                case (int)WM.AFXFIRST:
                     text = "WM_AFXFIRST";
                     break;
-                case WindowMessages.WM_AFXLAST:
+                case (int)WM.AFXLAST:
                     text = "WM_AFXLAST";
                     break;
-                case WindowMessages.WM_PENWINFIRST:
+                case (int)WM.PENWINFIRST:
                     text = "WM_PENWINFIRST";
                     break;
-                case WindowMessages.WM_PENWINLAST:
+                case (int)WM.PENWINLAST:
                     text = "WM_PENWINLAST";
                     break;
-                case WindowMessages.WM_APP:
+                case (int)WM.APP:
                     text = "WM_APP";
                     break;
-                case WindowMessages.WM_USER:
+                case (int)WM.USER:
                     text = "WM_USER";
                     break;
-                case WindowMessages.WM_CTLCOLOR:
+                case (int)WM.CTLCOLOR:
                     text = "WM_CTLCOLOR";
                     break;
 
@@ -828,9 +829,9 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if (text == null && ((msg & WindowMessages.WM_REFLECT) == WindowMessages.WM_REFLECT))
+            if (text == null && ((msg & (int)WM.REFLECT) == (int)WM.REFLECT))
             {
-                string subtext = MsgToString(msg - WindowMessages.WM_REFLECT) ?? "???";
+                string subtext = MsgToString(msg - (int)WM.REFLECT) ?? "???";
 
                 text = "WM_REFLECT + " + subtext;
             }
@@ -858,7 +859,7 @@ namespace System.Windows.Forms
             string id = Parenthesize(MsgToString(msg));
 
             string lDescription = string.Empty;
-            if (msg == WindowMessages.WM_PARENTNOTIFY)
+            if (msg == (int)WM.PARENTNOTIFY)
             {
                 lDescription = Parenthesize(MsgToString(PARAM.LOWORD(wparam)));
             }

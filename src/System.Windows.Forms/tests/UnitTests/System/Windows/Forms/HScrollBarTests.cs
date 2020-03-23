@@ -142,25 +142,27 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
         public void HScrollBar_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
-            var control = new SubHScrollBar
+            using var control = new HScrollBar
             {
                 RightToLeft = value
             };
             Assert.Equal(expected, control.RightToLeft);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.RightToLeft = value;
             Assert.Equal(expected, control.RightToLeft);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void HScrollBar_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
         {
-            var control = new SubHScrollBar();
+            using var control = new HScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -192,11 +194,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void HScrollBar_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
-            var control = new SubHScrollBar();
+            using var control = new HScrollBar();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
 
@@ -235,6 +237,13 @@ namespace System.Windows.Forms.Tests
 
             // Call again to test caching.
             Assert.Equal(expected, control.GetStyle(flag));
+        }
+
+        [WinFormsFact]
+        public void HScrollBar_GetTopLevel_Invoke_ReturnsExpected()
+        {
+            using var control = new SubHScrollBar();
+            Assert.False(control.GetTopLevel());
         }
 
         private class SubHScrollBar : HScrollBar
@@ -294,6 +303,8 @@ namespace System.Windows.Forms.Tests
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
+
+            public new bool GetTopLevel() => base.GetTopLevel();
         }
     }
 }

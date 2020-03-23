@@ -2,6 +2,6 @@
 <Project>
   <Import Project="..\..\Directory.Build.props" />
   <PropertyGroup>
-    <StrongNameKeyId>ECMA</StrongNameKeyId>
+	<StrongNameKeyId>Microsoft</StrongNameKeyId>
   </PropertyGroup>
 </Project>

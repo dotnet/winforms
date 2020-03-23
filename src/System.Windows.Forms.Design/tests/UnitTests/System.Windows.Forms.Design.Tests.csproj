@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\telescope_01.wmf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
     <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
     <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
@@ -21,6 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Resources\telescope_01.wmf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Resources\16x16.bmp">
       <LogicalName>System.Drawing.Design.Tests.16x16.bmp</LogicalName>
     </EmbeddedResource>
@@ -31,4 +41,5 @@
       <LogicalName>System.Drawing.Design.Tests.16x24.bmp</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+
 </Project>

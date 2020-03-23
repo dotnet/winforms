@@ -5,6 +5,7 @@
 #nullable disable
 
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -24,7 +25,7 @@ namespace System.Windows.Forms
 
             protected override RECT CalculateBoundingRectangle()
             {
-                _calendarAccessibleObject.GetCalendarPartRectangle(_calendarIndex, ComCtl32.MCGIP.CALENDARBODY, 0, 0, out RECT calendarPartRectangle);
+                _calendarAccessibleObject.GetCalendarPartRectangle(_calendarIndex, MCGIP.CALENDARBODY, 0, 0, out RECT calendarPartRectangle);
                 return calendarPartRectangle;
             }
 
@@ -45,13 +46,13 @@ namespace System.Windows.Forms
 
                 };
 
-            public CalendarChildAccessibleObject GetFromPoint(ComCtl32.MCHITTESTINFO hitTestInfo)
+            public CalendarChildAccessibleObject GetFromPoint(MCHITTESTINFO hitTestInfo)
             {
-                switch ((ComCtl32.MCHT)hitTestInfo.uHit)
+                switch ((MCHT)hitTestInfo.uHit)
                 {
-                    case ComCtl32.MCHT.CALENDARDAY:
-                    case ComCtl32.MCHT.CALENDARWEEKNUM:
-                    case ComCtl32.MCHT.CALENDARDATE:
+                    case MCHT.CALENDARDAY:
+                    case MCHT.CALENDARWEEKNUM:
+                    case MCHT.CALENDARDATE:
                         AccessibleObject rowAccessibleObject = _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, this, hitTestInfo.iRow);
                         return _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, rowAccessibleObject, hitTestInfo.iCol);
                 }

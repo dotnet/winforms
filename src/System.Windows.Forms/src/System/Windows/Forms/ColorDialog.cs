@@ -39,11 +39,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the user can use the dialog box
         ///  to define custom colors.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            DefaultValue(true),
-            SRDescription(nameof(SR.CDallowFullOpenDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.CDallowFullOpenDescr))]
         public virtual bool AllowFullOpen
         {
             get
@@ -61,11 +59,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the dialog box displays all available colors in
         ///  the set of basic colors.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            DefaultValue(false),
-            SRDescription(nameof(SR.CDanyColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.CDanyColorDescr))]
         public virtual bool AnyColor
         {
             get
@@ -82,10 +78,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the color selected by the user.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatData)),
-            SRDescription(nameof(SR.CDcolorDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.CDcolorDescr))]
         public Color Color
         {
             get
@@ -109,11 +103,9 @@ namespace System.Windows.Forms
         ///  Gets or sets the set of
         ///  custom colors shown in the dialog box.
         /// </summary>
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SRDescription(nameof(SR.CDcustomColorsDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.CDcustomColorsDescr))]
         public int[] CustomColors
         {
             get { return (int[])customColors.Clone(); }
@@ -136,11 +128,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the controls used to create custom
         ///  colors are visible when the dialog box is opened
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatAppearance)),
-            DefaultValue(false),
-            SRDescription(nameof(SR.CDfullOpenDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.CDfullOpenDescr))]
         public virtual bool FullOpen
         {
             get
@@ -174,11 +164,9 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether a Help button appears
         ///  in the color dialog box.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            DefaultValue(false),
-            SRDescription(nameof(SR.CDshowHelpDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.CDshowHelpDescr))]
         public virtual bool ShowHelp
         {
             get
@@ -197,11 +185,9 @@ namespace System.Windows.Forms
         ///  whether the dialog
         ///  box will restrict users to selecting solid colors only.
         /// </summary>
-        [
-            SRCategory(nameof(SR.CatBehavior)),
-            DefaultValue(false),
-            SRDescription(nameof(SR.CDsolidColorOnlyDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.CDsolidColorOnlyDescr))]
         public virtual bool SolidColorOnly
         {
             get

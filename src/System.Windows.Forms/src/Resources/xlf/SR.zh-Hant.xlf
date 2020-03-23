@@ -1219,7 +1219,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
         <source>The last control that caused this context menu strip to be displayed.</source>
-        <target state="new">The last control that caused this context menu strip to be displayed.</target>
+        <target state="translated">造成顯示此內容功能表區域的最後控制項。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlAccessibileObjectInvalid">
@@ -4226,17 +4226,17 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DefaultDomainUpDownAccessibleName">
         <source>DomainUpDown</source>
-        <target state="new">DomainUpDown</target>
+        <target state="translated">DomainUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
-        <target state="new">NumericUpDown</target>
+        <target state="translated">NumericUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DefaultUpDownButtonsAccessibleName">
         <source>UpDown</source>
-        <target state="new">UpDown</target>
+        <target state="translated">上下按鈕</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -4596,7 +4596,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="ErrorProviderDefaultAccessibleName">
         <source>Error provider</source>
-        <target state="new">Error provider</target>
+        <target state="translated">錯誤提供者</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
@@ -6828,12 +6828,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
-        <target state="new">The shortcut key associated with the menu item. </target>
+        <target state="translated">與功能表項目相關的快速鍵。</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
-        <target state="new">Indicates whether the shorcut key for the menu item is displayed on the item. </target>
+        <target state="translated">表示是否將功能表項目的快速鍵顯示在該項目上。</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -6858,7 +6858,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarBodyAccessibleName">
         <source>Calendar body</source>
-        <target state="new">Calendar body</target>
+        <target state="translated">行事曆主體</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -6913,7 +6913,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarNextButtonAccessibleName">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">下一頁</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
@@ -6928,7 +6928,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
         <source>Previous</source>
-        <target state="new">Previous</target>
+        <target state="translated">上一頁</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7008,7 +7008,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarTodayButtonAccessibleName">
         <source>Today: {0}</source>
-        <target state="new">Today: {0}</target>
+        <target state="translated">今天: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -7909,6 +7909,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ProfessionalColorsToolStripPanelGradientEndDescr">
         <source>End color of the gradient used in the ToolStripPanel.</source>
         <target state="translated">ToolStripPanel 中所使用漸層的結束色彩。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="translated">ProgressBar</target>
         <note />
       </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
@@ -8841,91 +8846,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">無法取得 IID {0} 的封送處理器。</target>
         <note />
       </trans-unit>
-      <trans-unit id="StatusBarAddFailed">
-        <source>Adding the panel to the native status bar control has not succeeded.</source>
-        <target state="translated">在原生狀態列控制項中加入面板失敗。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarBadStatusBarPanel">
-        <source>Parameter must be of type StatusBarPanel.</source>
-        <target state="translated">參數必須屬於 StatusBarPanel 類型。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarDrawItem">
-        <source>Occurs whenever a panel in the StatusBar needs to be painted.</source>
-        <target state="translated">當需要繪製 StatusBar 中的面板時發生。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarOnPanelClickDescr">
-        <source>Occurs when a panel within the status bar is clicked.</source>
-        <target state="translated">當按一下狀態列內的面板時發生。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelAlignmentDescr">
-        <source>The alignment of the panel's text.</source>
-        <target state="translated">面板文字的對齊方式。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelAutoSizeDescr">
-        <source>Determines how a panel will resize when the parent changes size.</source>
-        <target state="translated">決定當父系變更大小時，面板將如何調整大小。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelBorderStyleDescr">
-        <source>Determines what type of border a panel has.</source>
-        <target state="translated">決定面板的框線類型。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelIconDescr">
-        <source>Determines what icon is displayed in the panel.</source>
-        <target state="translated">決定在面板中顯示何種圖示。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelMinWidthDescr">
-        <source>The minimum width of the panel.</source>
-        <target state="translated">面板的最小寬度。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelNameDescr">
-        <source>The name of the panel.</source>
-        <target state="translated">面板的名稱。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelStyleDescr">
-        <source>The style of the panel.</source>
-        <target state="translated">面板的樣式。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelTextDescr">
-        <source>The text displayed in the panel.</source>
-        <target state="translated">面板中顯示的文字。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelToolTipTextDescr">
-        <source>The panel's ToolTip text.</source>
-        <target state="translated">面板的工具提示文字。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelWidthDescr">
-        <source>The width of the panel.</source>
-        <target state="translated">面板的寬度。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelsDescr">
-        <source>The panels in the status bar.</source>
-        <target state="translated">狀態列中的面板。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarShowPanelsDescr">
-        <source>Determines if a status bar displays panels, or if it displays a single line of text.</source>
-        <target state="translated">決定狀態列是否顯示面板，或是否顯示單行文字。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarSizingGripDescr">
-        <source>Determines whether a status bar has a sizing grip.</source>
-        <target state="translated">決定狀態列是否有可調整大小的底框。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="StatusStripPanelBorderSidesDescr">
         <source>Specifies the sides of the panel that should display borders.</source>
         <target state="translated">指定面板中應該顯示框線的邊。</target>
@@ -8944,6 +8864,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="SystemInformationFeatureNotSupported">
         <source>Feature not supported with this operating system.</source>
         <target state="translated">此作業系統不支援這項功能。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="translated">參數必須屬於 TabPage 類型。</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlTabPageNotOnTabControl">
@@ -9123,7 +9048,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TableLayoutSettingsConverterNoName">
         <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
-        <target state="new">Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</target>
+        <target state="translated">無法將 TableLayoutSettings 轉換成字串: 在控制項上找不到 'Name' 字串屬性。</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
@@ -11033,7 +10958,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32SetParentFailed">
         <source>Failed to set Win32 parent window of the Control.</source>
-        <target state="new">Failed to set Win32 parent window of the Control.</target>
+        <target state="translated">無法設定控制項的 Win32 父視窗。</target>
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">

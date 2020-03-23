@@ -4,6 +4,7 @@
 
 using System.IO;
 using System.Runtime.InteropServices;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -87,24 +88,6 @@ namespace System.Windows.Forms
         {
             [PreserveSig]
             int Show([In] IntPtr parent);
-        }
-
-        public enum SIATTRIBFLAGS
-        {
-            /// <summary>
-            ///  Multiple items and the attributes together.
-            /// </summary>
-            SIATTRIBFLAGS_AND = 0x00000001,
-
-            /// <summary>
-            ///  Multiple items or the attributes together.
-            /// </summary>
-            SIATTRIBFLAGS_OR = 0x00000002,
-
-            /// <summary>
-            ///  Call GetAttributes directly on the ShellFolder for multiple attributes
-            /// </summary>
-            SIATTRIBFLAGS_APPCOMPAT = 0x00000003
         }
 
         [ComImport]
@@ -337,11 +320,11 @@ namespace System.Windows.Forms
 
             void OnSelectionChange([In, MarshalAs(UnmanagedType.Interface)] IFileDialog pfd);
 
-            void OnShareViolation([In, MarshalAs(UnmanagedType.Interface)] IFileDialog pfd, [In, MarshalAs(UnmanagedType.Interface)] IShellItem psi, out FDE_SHAREVIOLATION_RESPONSE pResponse);
+            void OnShareViolation([In, MarshalAs(UnmanagedType.Interface)] IFileDialog pfd, [In, MarshalAs(UnmanagedType.Interface)] IShellItem psi, out FDESVR pResponse);
 
             void OnTypeChange([In, MarshalAs(UnmanagedType.Interface)] IFileDialog pfd);
 
-            void OnOverwrite([In, MarshalAs(UnmanagedType.Interface)] IFileDialog pfd, [In, MarshalAs(UnmanagedType.Interface)] IShellItem psi, out FDE_OVERWRITE_RESPONSE pResponse);
+            void OnOverwrite([In, MarshalAs(UnmanagedType.Interface)] IFileDialog pfd, [In, MarshalAs(UnmanagedType.Interface)] IShellItem psi, out FDEOR pResponse);
         }
 
         [ComImport,
@@ -360,8 +343,8 @@ namespace System.Windows.Forms
             void AddSeparator([In] int dwIDCtl);
             void AddText([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszText);
             void SetControlLabel([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
-            void GetControlState([In] int dwIDCtl, [Out] out CDCONTROLSTATE pdwState);
-            void SetControlState([In] int dwIDCtl, [In] CDCONTROLSTATE dwState);
+            void GetControlState([In] int dwIDCtl, [Out] out CDCS pdwState);
+            void SetControlState([In] int dwIDCtl, [In] CDCS dwState);
             void GetEditBoxText([In] int dwIDCtl, [Out] IntPtr ppszText);
             void SetEditBoxText([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszText);
             void GetCheckButtonState([In] int dwIDCtl, [Out] out bool pbChecked);
@@ -369,8 +352,8 @@ namespace System.Windows.Forms
             void AddControlItem([In] int dwIDCtl, [In] int dwIDItem, [In, MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
             void RemoveControlItem([In] int dwIDCtl, [In] int dwIDItem);
             void RemoveAllControlItems([In] int dwIDCtl);
-            void GetControlItemState([In] int dwIDCtl, [In] int dwIDItem, [Out] out CDCONTROLSTATE pdwState);
-            void SetControlItemState([In] int dwIDCtl, [In] int dwIDItem, [In] CDCONTROLSTATE dwState);
+            void GetControlItemState([In] int dwIDCtl, [In] int dwIDItem, [Out] out CDCS pdwState);
+            void SetControlItemState([In] int dwIDCtl, [In] int dwIDItem, [In] CDCS dwState);
             void GetSelectedControlItem([In] int dwIDCtl, [Out] out int pdwIDItem);
             void SetSelectedControlItem([In] int dwIDCtl, [In] int dwIDItem); // Not valid for OpenDropDown
             void StartVisualGroup([In] int dwIDCtl, [In, MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
@@ -394,19 +377,6 @@ namespace System.Windows.Forms
             void Compare([In, MarshalAs(UnmanagedType.Interface)] IShellItem psi, [In] uint hint, out int piOrder);
         }
 
-        public enum SIGDN : uint
-        {
-            SIGDN_NORMALDISPLAY = 0x00000000,           // SHGDN_NORMAL
-            SIGDN_PARENTRELATIVEPARSING = 0x80018001,   // SHGDN_INFOLDER | SHGDN_FORPARSING
-            SIGDN_DESKTOPABSOLUTEPARSING = 0x80028000,  // SHGDN_FORPARSING
-            SIGDN_PARENTRELATIVEEDITING = 0x80031001,   // SHGDN_INFOLDER | SHGDN_FOREDITING
-            SIGDN_DESKTOPABSOLUTEEDITING = 0x8004c000,  // SHGDN_FORPARSING | SHGDN_FORADDRESSBAR
-            SIGDN_FILESYSPATH = 0x80058000,             // SHGDN_FORPARSING
-            SIGDN_URL = 0x80068000,                     // SHGDN_FORPARSING
-            SIGDN_PARENTRELATIVEFORADDRESSBAR = 0x8007c001,     // SHGDN_INFOLDER | SHGDN_FORPARSING | SHGDN_FORADDRESSBAR
-            SIGDN_PARENTRELATIVE = 0x80080001           // SHGDN_INFOLDER
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
         public struct COMDLG_FILTERSPEC
         {
@@ -414,52 +384,6 @@ namespace System.Windows.Forms
             public string pszName;
             [MarshalAs(UnmanagedType.LPWStr)]
             public string pszSpec;
-        }
-
-        [Flags]
-        public enum FOS : uint
-        {
-            FOS_OVERWRITEPROMPT = 0x00000002,
-            FOS_STRICTFILETYPES = 0x00000004,
-            FOS_NOCHANGEDIR = 0x00000008,
-            FOS_PICKFOLDERS = 0x00000020,
-            FOS_FORCEFILESYSTEM = 0x00000040, // Ensure that items returned are filesystem items.
-            FOS_ALLNONSTORAGEITEMS = 0x00000080, // Allow choosing items that have no storage.
-            FOS_NOVALIDATE = 0x00000100,
-            FOS_ALLOWMULTISELECT = 0x00000200,
-            FOS_PATHMUSTEXIST = 0x00000800,
-            FOS_FILEMUSTEXIST = 0x00001000,
-            FOS_CREATEPROMPT = 0x00002000,
-            FOS_SHAREAWARE = 0x00004000,
-            FOS_NOREADONLYRETURN = 0x00008000,
-            FOS_NOTESTFILECREATE = 0x00010000,
-            FOS_HIDEMRUPLACES = 0x00020000,
-            FOS_HIDEPINNEDPLACES = 0x00040000,
-            FOS_NODEREFERENCELINKS = 0x00100000,
-            FOS_DONTADDTORECENT = 0x02000000,
-            FOS_FORCESHOWHIDDEN = 0x10000000,
-            FOS_DEFAULTNOMINIMODE = 0x20000000
-        }
-
-        public enum CDCONTROLSTATE
-        {
-            CDCS_INACTIVE = 0x00000000,
-            CDCS_ENABLED = 0x00000001,
-            CDCS_VISIBLE = 0x00000002
-        }
-
-        public enum FDE_SHAREVIOLATION_RESPONSE
-        {
-            FDESVR_DEFAULT = 0x00000000,
-            FDESVR_ACCEPT = 0x00000001,
-            FDESVR_REFUSE = 0x00000002
-        }
-
-        public enum FDE_OVERWRITE_RESPONSE
-        {
-            FDEOR_DEFAULT = 0x00000000,
-            FDEOR_ACCEPT = 0x00000001,
-            FDEOR_REFUSE = 0x00000002
         }
 
         [DllImport(ExternDll.Shell32, CharSet = CharSet.Unicode)]

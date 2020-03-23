@@ -79,10 +79,10 @@
 
     <!-- Reference and Source System.Windows.Forms.Design includes -->
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
-    
-    <!-- Reference and Source System.Windows.Forms.Design.Editors includes -->
-    <ProjectReference Include="..\..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
 
+    <!-- Facade for System.Windows.Forms.Design.Editors includes -->
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.Facade3x.csproj" />
+    
     <!-- Facade for Microsoft.VisualBasic include -->
     <ProjectReference Include="..\..\src\Microsoft.VisualBasic\src\Microsoft.VisualBasic.Facade.csproj" />
 

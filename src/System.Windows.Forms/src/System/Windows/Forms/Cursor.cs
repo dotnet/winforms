@@ -199,14 +199,12 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag { get; set; }
 
         /// <summary>

@@ -62,14 +62,8 @@ namespace System.Windows.Forms
         [DefaultValue(true)]
         public new bool AutoToolTip
         {
-            get
-            {
-                return base.AutoToolTip;
-            }
-            set
-            {
-                base.AutoToolTip = value;
-            }
+            get => base.AutoToolTip;
+            set => base.AutoToolTip = value;
         }
 
         protected override bool DefaultAutoToolTip
@@ -80,11 +74,9 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        DefaultValue(true),
-        SRDescription(nameof(SR.ToolStripDropDownButtonShowDropDownArrowDescr)),
-        SRCategory(nameof(SR.CatAppearance))
-        ]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.ToolStripDropDownButtonShowDropDownArrowDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
         public bool ShowDropDownArrow
         {
             get
@@ -104,7 +96,7 @@ namespace System.Windows.Forms
         ///  Creates an instance of the object that defines how image and text
         ///  gets laid out in the ToolStripItem
         /// </summary>
-        internal override ToolStripItemInternalLayout CreateInternalLayout()
+        private protected override ToolStripItemInternalLayout CreateInternalLayout()
         {
             return new ToolStripDropDownButtonInternalLayout(this);
         }
@@ -246,7 +238,8 @@ namespace System.Windows.Forms
             }
         }
 
-        internal class ToolStripDropDownButtonInternalLayout : ToolStripItemInternalLayout {
+        private protected class ToolStripDropDownButtonInternalLayout : ToolStripItemInternalLayout
+        {
             private ToolStripDropDownButton    ownerItem;
             private static readonly Size       dropDownArrowSizeUnscaled = new Size(5, 3);
             private static Size                dropDownArrowSize = dropDownArrowSizeUnscaled;

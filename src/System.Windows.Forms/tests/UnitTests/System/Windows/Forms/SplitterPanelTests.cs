@@ -130,21 +130,25 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void SplitterPanel_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            using var control = new SplitterPanel(null)
-            {
-                AutoSize = value
-            };
+            using var control = new SplitterPanel(null);
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.AutoSize = value;
             Assert.Equal(value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             control.AutoSize = !value;
             Assert.Equal(!value, control.AutoSize);
+            Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -191,17 +195,20 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoSizeMode))]
         public void SplitterPanel_AutoSizeMode_Set_GetReturnsExpected(AutoSizeMode value)
         {
-            using var control = new SplitterPanel(null)
-            {
-                AutoSizeMode = value
-            };
+            using var control = new SplitterPanel(null);
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.AutoSizeMode = value;
             Assert.Equal(AutoSizeMode.GrowOnly, control.AutoSizeMode);
             Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, layoutCallCount);
 
             // Set same.
             control.AutoSizeMode = value;
             Assert.Equal(AutoSizeMode.GrowOnly, control.AutoSizeMode);
             Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, layoutCallCount);
         }
 
         [WinFormsTheory]

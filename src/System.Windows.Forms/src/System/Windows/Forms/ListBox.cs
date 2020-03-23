@@ -38,15 +38,13 @@ namespace System.Windows.Forms
     ///     "D" };
     /// </code>
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    Designer("System.Windows.Forms.Design.ListBoxDesigner, " + AssemblyRef.SystemDesign),
-    DefaultEvent(nameof(SelectedIndexChanged)),
-    DefaultProperty(nameof(Items)),
-    DefaultBindingProperty(nameof(SelectedValue)),
-    SRDescription(nameof(SR.DescriptionListBox))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [Designer("System.Windows.Forms.Design.ListBoxDesigner, " + AssemblyRef.SystemDesign)]
+    [DefaultEvent(nameof(SelectedIndexChanged))]
+    [DefaultProperty(nameof(Items))]
+    [DefaultBindingProperty(nameof(SelectedValue))]
+    [SRDescription(nameof(SR.DescriptionListBox))]
     public partial class ListBox : ListControl
     {
         /// <summary>
@@ -188,46 +186,35 @@ namespace System.Windows.Forms
                     return SystemColors.Window;
                 }
             }
-            set
-            {
-                base.BackColor = value;
-            }
+            set => base.BackColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
@@ -271,12 +258,10 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DefaultValue(0),
-        SRDescription(nameof(SR.ListBoxColumnWidthDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [DefaultValue(0)]
+        [SRDescription(nameof(SR.ListBoxColumnWidthDescr))]
         public int ColumnWidth
         {
             get
@@ -391,11 +376,9 @@ namespace System.Windows.Forms
         ///  Enables a list box to recognize and expand tab characters when drawing
         ///  its strings using the CustomTabOffsets integer array.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        Browsable(false)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [Browsable(false)]
         public bool UseCustomTabOffsets
         {
             get
@@ -425,12 +408,10 @@ namespace System.Windows.Forms
         ///  draws it, or if the user paints each item manually.  It also indicates
         ///  whether or not items have to be of the same height.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(DrawMode.Normal),
-        SRDescription(nameof(SR.ListBoxDrawModeDescr)),
-        RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(DrawMode.Normal)]
+        [SRDescription(nameof(SR.ListBoxDrawModeDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public virtual DrawMode DrawMode
         {
             get
@@ -485,10 +466,7 @@ namespace System.Windows.Forms
 
         public override Font Font
         {
-            get
-            {
-                return base.Font;
-            }
+            get => base.Font;
             set
             {
                 base.Font = value;
@@ -515,22 +493,17 @@ namespace System.Windows.Forms
                     return SystemColors.WindowText;
                 }
             }
-            set
-            {
-                base.ForeColor = value;
-            }
+            set => base.ForeColor = value;
         }
 
         /// <summary>
         ///  Indicates the width, in pixels, by which a list box can be scrolled horizontally (the scrollable width).
         ///  This property will only have an effect if HorizontalScrollbars is true.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(0),
-        Localizable(true),
-        SRDescription(nameof(SR.ListBoxHorizontalExtentDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(0)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ListBoxHorizontalExtentDescr))]
         public int HorizontalExtent
         {
             get
@@ -555,12 +528,10 @@ namespace System.Windows.Forms
         ///  of items in the ListBox. The exception is if the ListBox is owner-draw, in
         ///  which case HorizontalExtent will need to be explicitly set.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        Localizable(true),
-        SRDescription(nameof(SR.ListBoxHorizontalScrollbarDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ListBoxHorizontalScrollbarDescr))]
         public bool HorizontalScrollbar
         {
             get
@@ -597,13 +568,11 @@ namespace System.Windows.Forms
         ///  to prevent partial items from being shown.  Otherwise, they will be
         ///  shown
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        Localizable(true),
-        SRDescription(nameof(SR.ListBoxIntegralHeightDescr)),
-        RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ListBoxIntegralHeightDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public bool IntegralHeight
         {
             get
@@ -637,13 +606,11 @@ namespace System.Windows.Forms
         ///  Returns
         ///  the height of an item in an owner-draw list box.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(DefaultItemHeight),
-        Localizable(true),
-        SRDescription(nameof(SR.ListBoxItemHeightDescr)),
-        RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(DefaultItemHeight)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ListBoxItemHeightDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public virtual int ItemHeight
         {
             get
@@ -689,14 +656,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of items in this listbox.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        Localizable(true),
-        SRDescription(nameof(SR.ListBoxItemsDescr)),
-        Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        MergableProperty(false)
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ListBoxItemsDescr))]
+        [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [MergableProperty(false)]
         public ObjectCollection Items
         {
             get
@@ -755,11 +720,9 @@ namespace System.Windows.Forms
         ///  Indicates if the listbox is multi-column
         ///  or not.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.ListBoxMultiColumnDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ListBoxMultiColumnDescr))]
         public bool MultiColumn
         {
             get
@@ -783,11 +746,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The total height of the items in the list box.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ListBoxPreferredHeightDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ListBoxPreferredHeightDescr))]
         public int PreferredHeight
         {
             get
@@ -854,12 +816,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets whether the scrollbar is shown at all times.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        Localizable(true),
-        SRDescription(nameof(SR.ListBoxScrollIsVisibleDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ListBoxScrollIsVisibleDescr))]
         public bool ScrollAlwaysVisible
         {
             get
@@ -896,12 +856,10 @@ namespace System.Windows.Forms
         ///  then a non-zero value for this property is the index of the first
         ///  selection
         /// </summary>
-        [
-        Browsable(false),
-        Bindable(true),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ListBoxSelectedIndexDescr))
-        ]
+        [Browsable(false)]
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ListBoxSelectedIndexDescr))]
         public override int SelectedIndex
         {
             get
@@ -990,11 +948,9 @@ namespace System.Windows.Forms
         ///  list box. If there are no selected items in the list box, the result is
         ///  an empty collection.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ListBoxSelectedIndicesDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ListBoxSelectedIndicesDescr))]
         public SelectedIndexCollection SelectedIndices
         {
             get
@@ -1015,12 +971,10 @@ namespace System.Windows.Forms
         ///  non-null return value for this method is the value of the first item
         ///  selected
         /// </summary>
-        [
-        Browsable(false),
-        Bindable(true),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ListBoxSelectedItemDescr))
-        ]
+        [Browsable(false)]
+        [Bindable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ListBoxSelectedItemDescr))]
         public object SelectedItem
         {
             get
@@ -1055,11 +1009,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The collection of selected items.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ListBoxSelectedItemsDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ListBoxSelectedItemsDescr))]
         public SelectedObjectCollection SelectedItems
         {
             get
@@ -1076,11 +1028,9 @@ namespace System.Windows.Forms
         ///  Controls how many items at a time can be selected in the listbox. Valid
         ///  values are from the System.Windows.Forms.SelectionMode enumeration.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(SelectionMode.One),
-        SRDescription(nameof(SR.ListBoxSelectionModeDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(SelectionMode.One)]
+        [SRDescription(nameof(SR.ListBoxSelectionModeDescr))]
         public virtual SelectionMode SelectionMode
         {
             get
@@ -1121,11 +1071,9 @@ namespace System.Windows.Forms
         ///  Indicates if the ListBox is sorted or not.  'true' means that strings in
         ///  the list will be sorted alphabetically
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.ListBoxSortedDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ListBoxSortedDescr))]
         public bool Sorted
         {
             get
@@ -1148,11 +1096,10 @@ namespace System.Windows.Forms
 
         internal override bool SupportsUiaProviders => true;
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Bindable(false)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Bindable(false)]
         public override string Text
         {
             get
@@ -1195,7 +1142,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TextChanged
         {
             add => base.TextChanged += value;
@@ -1207,11 +1155,9 @@ namespace System.Windows.Forms
         ///  the item with index 0 is at the top of the list box, but if the list
         ///  box contents have been scrolled another item may be at the top.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ListBoxTopIndexDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ListBoxTopIndexDescr))]
         public int TopIndex
         {
             get
@@ -1242,11 +1188,9 @@ namespace System.Windows.Forms
         ///  Enables a list box to recognize and expand tab characters when drawing
         ///  its strings.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.ListBoxUseTabStopsDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.ListBoxUseTabStopsDescr))]
         public bool UseTabStops
         {
             get
@@ -1266,12 +1210,10 @@ namespace System.Windows.Forms
         ///  Allows to set the width of the tabs between the items in the list box.
         ///  The integer array should have the tab spaces in the ascending order.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ListBoxCustomTabOffsetsDescr)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        Browsable(false)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ListBoxCustomTabOffsetsDescr))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [Browsable(false)]
         public IntegerCollection CustomTabOffsets
         {
             get
@@ -1299,35 +1241,33 @@ namespace System.Windows.Forms
             Items.AddRangeInternal(value);
         }
 
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
         }
 
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler PaddingChanged
         {
             add => base.PaddingChanged += value;
@@ -1337,28 +1277,32 @@ namespace System.Windows.Forms
         /// <summary>
         ///  ListBox / CheckedListBox Onpaint.
         /// </summary>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint
         {
             add => base.Paint += value;
             remove => base.Paint -= value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem
         {
             add => Events.AddHandler(EVENT_DRAWITEM, value);
             remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem
         {
             add => Events.AddHandler(EVENT_MEASUREITEM, value);
             remove => Events.RemoveHandler(EVENT_MEASUREITEM, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged
         {
             add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
@@ -2420,7 +2364,7 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+            if (((PRF)m.LParam & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
                 using (Graphics g = Graphics.FromHdc(m.WParam))
                 {
@@ -2513,28 +2457,28 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_COMMAND:
+                case WM.REFLECT | WM.COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
+                case WM.REFLECT | WM.DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_MEASUREITEM:
+                case WM.REFLECT | WM.MEASUREITEM:
                     WmReflectMeasureItem(ref m);
                     break;
-                case WindowMessages.WM_PRINT:
+                case WM.PRINT:
                     WmPrint(ref m);
                     break;
-                case WindowMessages.WM_LBUTTONDOWN:
+                case WM.LBUTTONDOWN:
                     if (selectedItems != null)
                     {
                         selectedItems.Dirty();
                     }
                     base.WndProc(ref m);
                     break;
-                case WindowMessages.WM_LBUTTONUP:
+                case WM.LBUTTONUP:
                     // Get the mouse location
                     //
                     int x = PARAM.SignedLOWORD(m.LParam);
@@ -2581,7 +2525,7 @@ namespace System.Windows.Forms
                     doubleClickFired = false;
                     break;
 
-                case WindowMessages.WM_RBUTTONUP:
+                case WM.RBUTTONUP:
                     // Get the mouse location
                     //
                     int rx = PARAM.SignedLOWORD(m.LParam);
@@ -2599,7 +2543,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
 
-                case WindowMessages.WM_LBUTTONDBLCLK:
+                case WM.LBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //the first WM_LBUTTONUP, resets the flag for Doubleclick
@@ -2608,7 +2552,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
 
-                case WindowMessages.WM_WINDOWPOSCHANGED:
+                case WM.WINDOWPOSCHANGED:
                     base.WndProc(ref m);
                     if (integralHeight && fontIsChanged)
                     {
@@ -3347,7 +3291,8 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the item with the specified index.
             /// </summary>
-            [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [Browsable(false)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual object this[int index]
             {
                 get
@@ -4433,7 +4378,8 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the specified selected item.
             /// </summary>
-            [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [Browsable(false)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public object this[int index]
             {
                 get

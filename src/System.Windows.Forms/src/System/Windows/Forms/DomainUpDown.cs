@@ -19,14 +19,12 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a Windows up-down control that displays string values.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Items)),
-    DefaultEvent(nameof(SelectedItemChanged)),
-    DefaultBindingProperty(nameof(SelectedItem)),
-    SRDescription(nameof(SR.DescriptionDomainUpDown))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(Items))]
+    [DefaultEvent(nameof(SelectedItemChanged))]
+    [DefaultBindingProperty(nameof(SelectedItem))]
+    [SRDescription(nameof(SR.DescriptionDomainUpDown))]
     public class DomainUpDown : UpDownBase
     {
         private readonly static string DefaultValue = string.Empty;
@@ -67,13 +65,11 @@ namespace System.Windows.Forms
         ///  Gets the collection of objects assigned to the
         ///  up-down control.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(nameof(SR.DomainUpDownItemsDescr)),
-        Localizable(true),
-        Editor("System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRDescription(nameof(SR.DomainUpDownItemsDescr))]
+        [Localizable(true)]
+        [Editor("System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         public DomainUpDownItemCollection Items
         {
             get
@@ -86,21 +82,17 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler PaddingChanged
         {
             add => base.PaddingChanged += value;
@@ -110,12 +102,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the index value of the selected item.
         /// </summary>
-        [
-        Browsable(false),
-        DefaultValue(-1),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.DomainUpDownSelectedIndexDescr))
-        ]
+        [Browsable(false)]
+        [DefaultValue(-1)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DomainUpDownSelectedIndexDescr))]
         public int SelectedIndex
         {
             get
@@ -149,11 +139,9 @@ namespace System.Windows.Forms
         ///  of the selected item in the
         ///  collection.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.DomainUpDownSelectedItemDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.DomainUpDownSelectedItemDescr))]
         public object SelectedItem
         {
             get
@@ -175,7 +163,7 @@ namespace System.Windows.Forms
                     //
                     for (int i = 0; i < Items.Count; i++)
                     {
-                        if (value != null && value.Equals(Items[i]))
+                        if (value.Equals(Items[i]))
                         {
                             SelectedIndex = i;
                             break;
@@ -188,11 +176,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets a value indicating whether the item collection is sorted.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.DomainUpDownSortedDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.DomainUpDownSortedDescr))]
         public bool Sorted
         {
             get
@@ -216,12 +202,10 @@ namespace System.Windows.Forms
         ///  Gets or sets a value indicating whether the collection of items continues to
         ///  the first or last item if the user continues past the end of the list.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DefaultValue(false),
-        SRDescription(nameof(SR.DomainUpDownWrapDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.DomainUpDownWrapDescr))]
         public bool Wrap
         {
             get
@@ -243,7 +227,8 @@ namespace System.Windows.Forms
         ///  Occurs when the <see cref='SelectedItem'/> property has
         ///  been changed.
         /// </summary>
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.DomainUpDownOnSelectedItemChangedDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DomainUpDownOnSelectedItemChangedDescr))]
         public event EventHandler SelectedItemChanged
         {
             add => onSelectedItemChanged += value;
@@ -479,11 +464,7 @@ namespace System.Windows.Forms
             try
             {
                 // Sanity check
-                Debug.Assert(sorted == true, "Sorted == false");
-                if (!sorted)
-                {
-                    return;
-                }
+                Debug.Assert(sorted, "Sorted == false");
 
                 if (domainItems != null)
                 {
@@ -568,13 +549,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void UpdateEditText()
         {
-            Debug.Assert(!UserEdit, "UserEdit should be false");
-            // Defensive programming
             UserEdit = false;
-
             ChangingText = true;
             Text = stringValue;
         }
+
         // This is not a breaking change -- Even though this control previously autosized to hieght,
         // it didn't actually have an AutoSize property.  The new AutoSize property enables the
         // smarter behavior.
@@ -584,7 +563,7 @@ namespace System.Windows.Forms
             int width = LayoutUtils.OldGetLargestStringSizeInCollection(Font, Items).Width;
 
             // AdjuctWindowRect with our border, since textbox is borderless.
-            width = SizeFromClientSize(width, height).Width + upDownButtons.Width;
+            width = SizeFromClientSize(width, height).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }
 
@@ -604,9 +583,8 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
-            /// <summary>
-            /// </summary>
-            [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [Browsable(false)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public override object this[int index]
             {
                 get
@@ -851,10 +829,7 @@ namespace System.Windows.Forms
                     }
                     return baseName;
                 }
-                set
-                {
-                    base.Name = value;
-                }
+                set => base.Name = value;
             }
 
             public override AccessibleObject Parent

@@ -20,13 +20,11 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Displays text that can contain a hyperlink.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultEvent(nameof(LinkClicked)),
-    ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionLinkLabel))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultEvent(nameof(LinkClicked))]
+    [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionLinkLabel))]
     public class LinkLabel : Label, IButtonControl
     {
         static readonly object EventLinkClicked = new object();
@@ -78,10 +76,8 @@ namespace System.Windows.Forms
         /// <summary>
             ///  Gets or sets the color used to display active links.
             /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.LinkLabelActiveLinkColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.LinkLabelActiveLinkColorDescr))]
         public Color ActiveLinkColor
         {
             get
@@ -108,10 +104,8 @@ namespace System.Windows.Forms
         /// <summary>
             ///  Gets or sets the color used to display disabled links.
             /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.LinkLabelDisabledLinkColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.LinkLabelDisabledLinkColorDescr))]
         public Color DisabledLinkColor
         {
             get
@@ -204,29 +198,22 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new FlatStyle FlatStyle
         {
-            get
-            {
-                return base.FlatStyle;
-            }
-            set
-            {
-                base.FlatStyle = value;
-            }
+            get => base.FlatStyle;
+            set => base.FlatStyle = value;
         }
 
         /// <summary>
-            ///  Gets or sets the range in the text that is treated as a link.
-            /// </summary>
-        [
-        Editor("System.Windows.Forms.Design.LinkAreaEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        RefreshProperties(RefreshProperties.Repaint),
-        Localizable(true),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.LinkLabelLinkAreaDescr))
-        ]
+        ///  Gets or sets the range in the text that is treated as a link.
+        /// </summary>
+        [Editor("System.Windows.Forms.Design.LinkAreaEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.LinkLabelLinkAreaDescr))]
         public LinkArea LinkArea
         {
             get
@@ -280,11 +267,9 @@ namespace System.Windows.Forms
         /// <summary>
             ///  Gets ir sets a value that represents how the link will be underlined.
             /// </summary>
-        [
-        DefaultValue(LinkBehavior.SystemDefault),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.LinkLabelLinkBehaviorDescr))
-        ]
+        [DefaultValue(LinkBehavior.SystemDefault)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.LinkLabelLinkBehaviorDescr))]
         public LinkBehavior LinkBehavior
         {
             get
@@ -310,10 +295,8 @@ namespace System.Windows.Forms
         /// <summary>
             ///  Gets or sets the color used to display links in normal cases.
             /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.LinkLabelLinkColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.LinkLabelLinkColorDescr))]
         public Color LinkColor
         {
             get
@@ -344,10 +327,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the collection of links used in a <see cref='LinkLabel'/>.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public LinkCollection Links
         {
             get
@@ -363,11 +344,9 @@ namespace System.Windows.Forms
         /// <summary>
             ///  Gets or sets a value indicating whether the link should be displayed as if it was visited.
             /// </summary>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.LinkLabelLinkVisitedDescr))
-        ]
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.LinkLabelLinkVisitedDescr))]
         public bool LinkVisited
         {
             get
@@ -425,7 +404,7 @@ namespace System.Windows.Forms
                         User32.GetWindowRect(this, ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                         {
-                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
+                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (IntPtr)User32.HT.CLIENT);
                         }
                     }
                 }
@@ -433,53 +412,41 @@ namespace System.Windows.Forms
         }
 
         // Make this event visible through the property browser.
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler TabStopChanged
         {
             add => base.TabStopChanged += value;
             remove => base.TabStopChanged -= value;
         }
 
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
         new public bool TabStop
         {
-            get
-            {
-                return base.TabStop;
-            }
-            set
-            {
-                base.TabStop = value;
-            }
+            get => base.TabStop;
+            set => base.TabStop = value;
         }
 
         [RefreshProperties(RefreshProperties.Repaint)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
         [RefreshProperties(RefreshProperties.Repaint)]
         public new Padding Padding
         {
-            get { return base.Padding; }
-            set { base.Padding = value; }
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
         /// <summary>
-            ///  Gets or sets the color used to display the link once it has been visited.
-            /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.LinkLabelVisitedLinkColorDescr))
-        ]
+        ///  Gets or sets the color used to display the link once it has been visited.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.LinkLabelVisitedLinkColorDescr))]
         public Color VisitedLinkColor
         {
             get
@@ -508,9 +475,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Occurs when the link is clicked.
-            /// </summary>
-        [WinCategory("Action"), SRDescription(nameof(SR.LinkLabelLinkClickedDescr))]
+        ///  Occurs when the link is clicked.
+        /// </summary>
+        [WinCategory("Action")]
+        [SRDescription(nameof(SR.LinkLabelLinkClickedDescr))]
         public event LinkLabelLinkClickedEventHandler LinkClicked
         {
             add => Events.AddHandler(EventLinkClicked, value);
@@ -2018,12 +1986,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </summary>
-        [
-        // DefaultValue(false), - // See ShouldSerailizeUseCompatibleTextRendering method.
-        RefreshProperties(RefreshProperties.Repaint),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
-        ]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
         public new bool UseCompatibleTextRendering
         {
             get
@@ -2052,7 +2017,7 @@ namespace System.Windows.Forms
             // Accessing through the Handle property has side effects that break this
             // logic. You must use InternalHandle.
             //
-            if (m.WParam == InternalHandle && PARAM.LOWORD(m.LParam) == NativeMethods.HTCLIENT)
+            if (m.WParam == InternalHandle && PARAM.LOWORD(m.LParam) == (int)User32.HT.CLIENT)
             {
                 if (OverrideCursor != null)
                 {
@@ -2071,9 +2036,9 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message msg)
         {
-            switch (msg.Msg)
+            switch ((User32.WM)msg.Msg)
             {
-                case WindowMessages.WM_SETCURSOR:
+                case User32.WM.SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
                 default:
@@ -2820,10 +2785,7 @@ namespace System.Windows.Forms
 
                     return name;
                 }
-                set
-                {
-                    base.Name = value;
-                }
+                set => base.Name = value;
             }
 
             public override AccessibleObject Parent

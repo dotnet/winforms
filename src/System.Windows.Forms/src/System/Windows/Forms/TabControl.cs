@@ -22,14 +22,12 @@ namespace System.Windows.Forms
     ///  The TabControl.  This control has a lot of the functionality of a TabStrip
     ///  but manages a list of TabPages which are the 'pages' that appear on each tab.
     /// </summary>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(TabPages)),
-    DefaultEvent(nameof(SelectedIndexChanged)),
-    Designer("System.Windows.Forms.Design.TabControlDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionTabControl))
-    ]
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(TabPages))]
+    [DefaultEvent(nameof(SelectedIndexChanged))]
+    [Designer("System.Windows.Forms.Design.TabControlDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionTabControl))]
     public partial class TabControl : Control
     {
         private static readonly Size DefaultItemSize = Size.Empty;
@@ -63,7 +61,7 @@ namespace System.Windows.Forms
         // Perf: take all the bools and put them into a state variable: see TabControlState consts above
         private BitVector32 _tabControlState;
 
-        public const string TabBaseReLayoutMessageName = "_TabBaseReLayout";
+        private const string TabBaseReLayoutMessageName = "_TabBaseReLayout";
 
         /// <summary>
         ///  This message is posted by the control to itself after a TabPage is
@@ -104,13 +102,11 @@ namespace System.Windows.Forms
         ///  If the alignment is anything other than top, TabAppearance.FlatButtons degenerates
         ///  to TabAppearance.Buttons.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DefaultValue(TabAlignment.Top),
-        RefreshProperties(RefreshProperties.All),
-        SRDescription(nameof(SR.TabBaseAlignmentDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [DefaultValue(TabAlignment.Top)]
+        [RefreshProperties(RefreshProperties.All)]
+        [SRDescription(nameof(SR.TabBaseAlignmentDescr))]
         public TabAlignment Alignment
         {
             get
@@ -145,12 +141,10 @@ namespace System.Windows.Forms
         ///  If the alignment is anything other than top, TabAppearance.FlatButtons degenerates
         ///  to TabAppearance.Buttons.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DefaultValue(TabAppearance.Normal),
-        SRDescription(nameof(SR.TabBaseAppearanceDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [DefaultValue(TabAppearance.Normal)]
+        [SRDescription(nameof(SR.TabBaseAppearanceDescr))]
         public TabAppearance Appearance
         {
             get
@@ -184,7 +178,8 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor
         {
             get
@@ -199,47 +194,40 @@ namespace System.Windows.Forms
             }
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
-            set
-            {
-                base.BackgroundImage = value;
-            }
+            get => base.BackgroundImage;
+            set => base.BackgroundImage = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
-            set
-            {
-                base.BackgroundImageLayout = value;
-            }
+            get => base.BackgroundImageLayout;
+            set => base.BackgroundImageLayout = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
@@ -265,30 +253,20 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered
         {
-            get
-            {
-                return base.DoubleBuffered;
-            }
-            set
-            {
-                base.DoubleBuffered = value;
-            }
+            get => base.DoubleBuffered;
+            set => base.DoubleBuffered = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor
         {
-            get
-            {
-                return base.ForeColor;
-            }
-            set
-            {
-                base.ForeColor = value;
-            }
+            get => base.ForeColor;
+            set => base.ForeColor = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
@@ -430,11 +408,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The drawing mode of the tabs in the tab strip.  This will indicate
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(TabDrawMode.Normal),
-        SRDescription(nameof(SR.TabBaseDrawModeDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(TabDrawMode.Normal)]
+        [SRDescription(nameof(SR.TabBaseDrawModeDescr))]
         public TabDrawMode DrawMode
         {
             get
@@ -461,11 +437,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates whether the tabs visually change when the mouse passes over them.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.TabBaseHotTrackDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.TabBaseHotTrackDescr))]
         public bool HotTrack
         {
             get => GetState(State.HotTrack);
@@ -486,12 +460,10 @@ namespace System.Windows.Forms
         ///  Returns the imageList the control points at.  This is where tabs that have imageIndex
         ///  set will get there images from.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        RefreshProperties(RefreshProperties.Repaint),
-        DefaultValue(null),
-        SRDescription(nameof(SR.TabBaseImageListDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.TabBaseImageListDescr))]
         public ImageList ImageList
         {
             get
@@ -515,7 +487,7 @@ namespace System.Windows.Forms
                     IntPtr handle = (value != null) ? value.Handle : IntPtr.Zero;
                     if (IsHandleCreated)
                     {
-                        SendMessage((int)ComCtl32.TCM.SETIMAGELIST, IntPtr.Zero, handle);
+                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, IntPtr.Zero, handle);
                     }
 
                     // Update the image list in the tab pages.
@@ -537,11 +509,9 @@ namespace System.Windows.Forms
         ///  By default, tabs will automatically size themselves to fit their icon, if any, and their label.
         ///  However, the tab size can be explicity set by setting this property.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        SRDescription(nameof(SR.TabBaseItemSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.TabBaseItemSizeDescr))]
         public Size ItemSize
         {
             get
@@ -593,11 +563,9 @@ namespace System.Windows.Forms
         ///  tabs, but only one row is shown.  If this property is set to true, then
         ///  Windows spills extra tabs over on to second rows.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.TabBaseMultilineDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.TabBaseMultilineDescr))]
         public bool Multiline
         {
             get => GetState(State.Multiline);
@@ -620,11 +588,9 @@ namespace System.Windows.Forms
         ///  The amount of padding around the items in the individual tabs.
         ///  You can specify both horizontal and vertical padding.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        SRDescription(nameof(SR.TabBasePaddingDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.TabBasePaddingDescr))]
         public new Point Padding
         {
             get
@@ -654,12 +620,10 @@ namespace System.Windows.Forms
         ///  When this property is true, and the RightToLeft is true, mirroring will be turned on on
         ///  the form, and control placement and text will be from right to left.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DefaultValue(false),
-        SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))]
         public virtual bool RightToLeftLayout
         {
             get
@@ -686,21 +650,12 @@ namespace System.Windows.Forms
         ///  is 'true' and you want to know how many rows the tabs are currently
         ///  taking up.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.TabBaseRowCountDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.TabBaseRowCountDescr))]
         public int RowCount
-        {
-            get
-            {
-                int n;
-                n = unchecked((int)(long)SendMessage((int)ComCtl32.TCM.GETROWCOUNT, 0, 0));
-                return n;
-            }
-        }
+            => unchecked((int)(long)User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETROWCOUNT));
 
         /// <summary>
         ///  The index of the currently selected tab in the strip, if there
@@ -708,26 +663,20 @@ namespace System.Windows.Forms
         ///  value is 0 or greater, than the value is the index of the currently
         ///  selected tab.
         /// </summary>
-        [
-        Browsable(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(-1),
-        SRDescription(nameof(SR.selectedIndexDescr))
-        ]
+        [Browsable(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(-1)]
+        [SRDescription(nameof(SR.selectedIndexDescr))]
         public int SelectedIndex
         {
             get
             {
                 if (IsHandleCreated)
                 {
-                    int n;
-                    n = unchecked((int)(long)SendMessage((int)ComCtl32.TCM.GETCURSEL, 0, 0));
-                    return n;
+                    return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETCURSEL));
                 }
-                else
-                {
-                    return _selectedIndex;
-                }
+
+                return _selectedIndex;
             }
             set
             {
@@ -758,7 +707,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        SendMessage((int)ComCtl32.TCM.SETCURSEL, value, 0);
+                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, (IntPtr)value);
 
                         if (!GetState(State.FromCreateHandles) && !GetState(State.SelectFirstControl))
                         {
@@ -790,38 +739,22 @@ namespace System.Windows.Forms
         ///  list.  The return value is the index of the tab that was selected,
         ///  or -1 if no tab was selected.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.TabControlSelectedTabDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.TabControlSelectedTabDescr))]
         public TabPage SelectedTab
         {
             get
             {
-                return SelectedTabInternal;
-            }
-            set
-            {
-                SelectedTabInternal = value;
-            }
-        }
-
-        internal TabPage SelectedTabInternal
-        {
-            get
-            {
                 int index = SelectedIndex;
-                if (index == -1)
+                if (index == -1 || _tabPages == null)
                 {
                     return null;
                 }
-                else
-                {
-                    Debug.Assert(0 <= index && index < _tabPages.Length, "SelectedIndex returned an invalid index");
-                    return _tabPages[index];
-                }
+
+                Debug.Assert(0 <= index && index < _tabPages.Length, "SelectedIndex returned an invalid index");
+                return _tabPages[index];
             }
             set
             {
@@ -837,12 +770,10 @@ namespace System.Windows.Forms
         ///  of the strip, if necessary, or you can set it such that all tabs
         ///  the same width.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(TabSizeMode.Normal),
-        SRDescription(nameof(SR.TabBaseSizeModeDescr)),
-        RefreshProperties(RefreshProperties.Repaint)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(TabSizeMode.Normal)]
+        [SRDescription(nameof(SR.TabBaseSizeModeDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
         public TabSizeMode SizeMode
         {
             get
@@ -871,12 +802,10 @@ namespace System.Windows.Forms
         ///  Indicates whether tooltips are being shown for tabs that have tooltips set on
         ///  them.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        Localizable(true),
-        SRDescription(nameof(SR.TabBaseShowToolTipsDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.TabBaseShowToolTipsDescr))]
         public bool ShowToolTips
         {
             get => GetState(State.ShowToolTips);
@@ -893,12 +822,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the number of tabs in the strip
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.TabBaseTabCountDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.TabBaseTabCountDescr))]
         public int TabCount
         {
             get { return _tabPageCount; }
@@ -907,13 +834,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the Collection of TabPages.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.TabControlTabsDescr)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        Editor("System.Windows.Forms.Design.TabPageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        MergableProperty(false)
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.TabControlTabsDescr))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Editor("System.Windows.Forms.Design.TabPageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [MergableProperty(false)]
         public TabPageCollection TabPages
         {
             get
@@ -921,41 +846,41 @@ namespace System.Windows.Forms
                 return _tabCollection;
             }
         }
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Bindable(false)]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
-            set
-            {
-                base.Text = value;
-            }
+            get => base.Text;
+            set => base.Text = value;
         }
 
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem
         {
             add => _onDrawItem += value;
             remove => _onDrawItem -= value;
         }
 
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged
         {
             add => Events.AddHandler(s_rightToLeftLayoutChangedEvent, value);
             remove => Events.RemoveHandler(s_rightToLeftLayoutChangedEvent, value);
         }
 
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged
         {
             add => _onSelectedIndexChanged += value;
@@ -965,8 +890,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs before a tabpage is selected as the top tabPage.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlSelectingEventDescr))
-        ]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.TabControlSelectingEventDescr))]
         public event TabControlCancelEventHandler Selecting
         {
             add => Events.AddHandler(s_selectingEvent, value);
@@ -976,8 +901,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs after a tabpage is selected as the top tabPage.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlSelectedEventDescr))
-        ]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.TabControlSelectedEventDescr))]
         public event TabControlEventHandler Selected
         {
             add => Events.AddHandler(s_selectedEvent, value);
@@ -987,8 +912,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs before the visible property of the top tabpage is set to false.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlDeselectingEventDescr))
-        ]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.TabControlDeselectingEventDescr))]
         public event TabControlCancelEventHandler Deselecting
         {
             add => Events.AddHandler(s_deselectingEvent, value);
@@ -998,8 +923,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs after the visible property of the top tabpage is set to false.
         /// </summary>
-        [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlDeselectedEventDescr))
-        ]
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.TabControlDeselectedEventDescr))]
         public event TabControlEventHandler Deselected
         {
             add => Events.AddHandler(s_deselectedEvent, value);
@@ -1010,7 +935,8 @@ namespace System.Windows.Forms
         ///  TabControl Onpaint.
         /// </summary>
         /// <hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint
         {
             add => base.Paint += value;
@@ -1038,8 +964,9 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && ShouldSerializeItemSize())
             {
-                SendMessage((int)ComCtl32.TCM.SETITEMSIZE, 0, (int)PARAM.FromLowHigh(_itemSize.Width, _itemSize.Height));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETITEMSIZE, IntPtr.Zero, PARAM.FromLowHigh(_itemSize.Width, _itemSize.Height));
             }
+
             _cachedDisplayRect = Rectangle.Empty;
         }
 
@@ -1238,14 +1165,23 @@ namespace System.Windows.Forms
 
         protected string GetToolTipText(object item)
         {
-            return ((TabPage)item).ToolTipText;
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+            if (!(item is TabPage tabPage))
+            {
+                throw new ArgumentException(SR.TabControlBadControl, nameof(item));
+            }
+
+            return tabPage.ToolTipText;
         }
 
         private void ImageListRecreateHandle(object sender, EventArgs e)
         {
             if (IsHandleCreated)
             {
-                SendMessage((int)ComCtl32.TCM.SETIMAGELIST, 0, ImageList.Handle);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, IntPtr.Zero, ImageList.Handle);
             }
         }
 
@@ -1343,7 +1279,7 @@ namespace System.Windows.Forms
             // horizontal and vertical dimensions of the padding rectangle.
             if (!_padding.IsEmpty)
             {
-                SendMessage((int)ComCtl32.TCM.SETPADDING, 0, PARAM.FromLowHigh(_padding.X, _padding.Y));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETPADDING, IntPtr.Zero, PARAM.FromLowHigh(_padding.X, _padding.Y));
             }
 
             base.OnHandleCreated(e);
@@ -1351,13 +1287,13 @@ namespace System.Windows.Forms
             ApplyItemSize();
             if (_imageList != null)
             {
-                SendMessage((int)ComCtl32.TCM.SETIMAGELIST, 0, _imageList.Handle);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, IntPtr.Zero, _imageList.Handle);
             }
 
             if (ShowToolTips)
             {
                 IntPtr tooltipHwnd;
-                tooltipHwnd = SendMessage((int)ComCtl32.TCM.GETTOOLTIPS, 0, 0);
+                tooltipHwnd = User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETTOOLTIPS);
                 if (tooltipHwnd != IntPtr.Zero)
                 {
                     User32.SetWindowPos(
@@ -1643,7 +1579,7 @@ namespace System.Windows.Forms
             // So, no RemoveAll()
             if (IsHandleCreated)
             {
-                SendMessage((int)ComCtl32.TCM.DELETEALLITEMS, 0, 0);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.DELETEALLITEMS);
             }
             this._tabPages = null;
             _tabPageCount = 0;
@@ -1698,7 +1634,7 @@ namespace System.Windows.Forms
             _tabPages[_tabPageCount] = null;
             if (IsHandleCreated)
             {
-                SendMessage((int)ComCtl32.TCM.DELETEITEM, index, 0);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.DELETEITEM, (IntPtr)index);
             }
             _cachedDisplayRect = Rectangle.Empty;
         }
@@ -1728,7 +1664,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetToolTip(ToolTip toolTip, string controlToolTipText)
         {
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)ComCtl32.TCM.SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
+            User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETTOOLTIPS, toolTip.Handle);
+            GC.KeepAlive(toolTip);
             _controlTipText = controlToolTipText;
         }
 
@@ -2064,7 +2001,7 @@ namespace System.Windows.Forms
             else
             {
                 // user Cancelled the Selection of the new Tab.
-                SendMessage((int)ComCtl32.TCM.SETCURSEL, _lastSelection, 0);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, (IntPtr)_lastSelection);
                 UpdateTabSelection(true);
             }
             return tcc.Cancel;
@@ -2121,18 +2058,18 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_DRAWITEM:
+                case User32.WM.REFLECT | User32.WM.DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
 
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_MEASUREITEM:
+                case User32.WM.REFLECT | User32.WM.MEASUREITEM:
                     // We use TCM_SETITEMSIZE instead
                     break;
 
-                case WindowMessages.WM_NOTIFY:
-                case WindowMessages.WM_REFLECT + WindowMessages.WM_NOTIFY:
+                case User32.WM.NOTIFY:
+                case User32.WM.REFLECT | User32.WM.NOTIFY:
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
                     switch (nmhdr->code)
                     {
@@ -2173,7 +2110,7 @@ namespace System.Windows.Forms
                                 SetState(State.UISelection, true);
                             }
                             break;
-                        case (int)ComCtl32.TTN.GETDISPINFOW:
+                        case (int)TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling Multiline tool tips
                             User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);

@@ -24,14 +24,12 @@ namespace System.Windows.Forms
     ///  Toolbar.  You can add either bitmaps or Icons to the ImageList, and the
     ///  other controls will be able to use the Images as they desire.
     /// </summary>
-    [
-    Designer("System.Windows.Forms.Design.ImageListDesigner, " + AssemblyRef.SystemDesign),
-    ToolboxItemFilter("System.Windows.Forms"),
-    DefaultProperty(nameof(Images)),
-    TypeConverter(typeof(ImageListConverter)),
-    DesignerSerializer("System.Windows.Forms.Design.ImageListCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionImageList))
-    ]
+    [Designer("System.Windows.Forms.Design.ImageListDesigner, " + AssemblyRef.SystemDesign)]
+    [ToolboxItemFilter("System.Windows.Forms")]
+    [DefaultProperty(nameof(Images))]
+    [TypeConverter(typeof(ImageListConverter))]
+    [DesignerSerializer("System.Windows.Forms.Design.ImageListCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionImageList))]
     public sealed class ImageList : Component, IHandle
     {
         // gpr: Copied from Icon
@@ -159,10 +157,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the color depth of the imagelist.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ImageListColorDepthDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ImageListColorDepthDescr))]
         public ColorDepth ColorDepth
         {
             get
@@ -204,11 +200,10 @@ namespace System.Windows.Forms
         ///  The handle of the ImageList object.  This corresponds to a win32
         ///  HIMAGELIST Handle.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ImageListHandleDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ImageListHandleDescr))]
         public IntPtr Handle
         {
             get
@@ -224,23 +219,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Whether or not the underlying Win32 handle has been created.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ImageListHandleCreatedDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ImageListHandleCreatedDescr))]
         public bool HandleCreated
         {
             get { return nativeImageList != null; }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(null),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ImageListImagesDescr)),
-        MergableProperty(false)
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(null)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ImageListImagesDescr))]
+        [MergableProperty(false)]
         public ImageCollection Images
         {
             get
@@ -257,11 +249,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the size of the images in the ImageList
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        SRDescription(nameof(SR.ImageListSizeDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ImageListSizeDescr))]
         public Size ImageSize
         {
             get
@@ -305,11 +295,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns an ImageListStreamer, or null if the image list is empty.
         /// </summary>
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DefaultValue(null),
-        SRDescription(nameof(SR.ImageListImageStreamDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.ImageListImageStreamDescr))]
         public ImageListStreamer ImageStream
         {
             get
@@ -369,14 +358,12 @@ namespace System.Windows.Forms
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
         public object Tag
         {
             get
@@ -392,10 +379,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The color to treat as transparent.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ImageListTransparentColorDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ImageListTransparentColorDescr))]
         public Color TransparentColor
         {
             get
@@ -414,10 +399,9 @@ namespace System.Windows.Forms
             get { return TransparentColor.A > 0; }
         }
 
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        SRDescription(nameof(SR.ImageListOnRecreateHandleDescr))
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [SRDescription(nameof(SR.ImageListOnRecreateHandleDescr))]
         public event EventHandler RecreateHandle
         {
             add => recreateHandler += value;
@@ -1068,9 +1052,7 @@ namespace System.Windows.Forms
         }
 
         // Everything other than set_All, Add, and Clear will force handle creation.
-        [
-        Editor("System.Windows.Forms.Design.ImageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
-        ]
+        [Editor("System.Windows.Forms.Design.ImageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         public sealed class ImageCollection : IList
         {
             private readonly ImageList owner;
@@ -1199,7 +1181,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [Browsable(false)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public Image this[int index]
             {
                 get

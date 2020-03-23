@@ -4,22 +4,22 @@
     <body>
       <trans-unit id="$this.Text">
         <source>#</source>
-        <target state="new">#</target>
+        <target state="translated">#</target>
         <note />
       </trans-unit>
       <trans-unit id="Label.Text">
         <source>#</source>
-        <target state="new">#</target>
+        <target state="translated">#</target>
         <note />
       </trans-unit>
       <trans-unit id="MyCancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">Annulla</target>
         <note />
       </trans-unit>
       <trans-unit id="OKButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">OK</target>
         <note />
       </trans-unit>
     </body>

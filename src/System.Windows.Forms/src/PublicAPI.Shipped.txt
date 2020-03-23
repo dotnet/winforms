@@ -6063,79 +6063,6 @@ System.Windows.Forms.SplitterPanel.Visible.set -> void
 System.Windows.Forms.SplitterPanel.VisibleChanged -> System.EventHandler
 System.Windows.Forms.SplitterPanel.Width.get -> int
 System.Windows.Forms.SplitterPanel.Width.set -> void
-System.Windows.Forms.StatusBar
-System.Windows.Forms.StatusBar.BackColorChanged -> System.EventHandler
-System.Windows.Forms.StatusBar.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.StatusBar.BackgroundImageLayoutChanged -> System.EventHandler
-System.Windows.Forms.StatusBar.DrawItem -> System.Windows.Forms.StatusBarDrawItemEventHandler
-System.Windows.Forms.StatusBar.ForeColorChanged -> System.EventHandler
-System.Windows.Forms.StatusBar.ImeMode.get -> System.Windows.Forms.ImeMode
-System.Windows.Forms.StatusBar.ImeMode.set -> void
-System.Windows.Forms.StatusBar.ImeModeChanged -> System.EventHandler
-System.Windows.Forms.StatusBar.Paint -> System.Windows.Forms.PaintEventHandler
-System.Windows.Forms.StatusBar.PanelClick -> System.Windows.Forms.StatusBarPanelClickEventHandler
-System.Windows.Forms.StatusBar.Panels.get -> System.Windows.Forms.StatusBar.StatusBarPanelCollection
-System.Windows.Forms.StatusBar.ShowPanels.get -> bool
-System.Windows.Forms.StatusBar.ShowPanels.set -> void
-System.Windows.Forms.StatusBar.SizingGrip.get -> bool
-System.Windows.Forms.StatusBar.SizingGrip.set -> void
-System.Windows.Forms.StatusBar.StatusBar() -> void
-System.Windows.Forms.StatusBar.StatusBarPanelCollection
-System.Windows.Forms.StatusBar.StatusBarPanelCollection.Contains(System.Windows.Forms.StatusBarPanel panel) -> bool
-System.Windows.Forms.StatusBar.StatusBarPanelCollection.Count.get -> int
-System.Windows.Forms.StatusBar.StatusBarPanelCollection.GetEnumerator() -> System.Collections.IEnumerator
-System.Windows.Forms.StatusBar.StatusBarPanelCollection.IndexOf(System.Windows.Forms.StatusBarPanel panel) -> int
-System.Windows.Forms.StatusBar.StatusBarPanelCollection.IsReadOnly.get -> bool
-System.Windows.Forms.StatusBar.StatusBarPanelCollection.StatusBarPanelCollection(System.Windows.Forms.StatusBar owner) -> void
-System.Windows.Forms.StatusBar.TabStop.get -> bool
-System.Windows.Forms.StatusBar.TabStop.set -> void
-System.Windows.Forms.StatusBarDrawItemEventArgs
-System.Windows.Forms.StatusBarDrawItemEventArgs.Panel.get -> System.Windows.Forms.StatusBarPanel
-System.Windows.Forms.StatusBarDrawItemEventArgs.StatusBarDrawItemEventArgs(System.Drawing.Graphics g, System.Drawing.Font font, System.Drawing.Rectangle r, int itemId, System.Windows.Forms.DrawItemState itemState, System.Windows.Forms.StatusBarPanel panel) -> void
-System.Windows.Forms.StatusBarDrawItemEventArgs.StatusBarDrawItemEventArgs(System.Drawing.Graphics g, System.Drawing.Font font, System.Drawing.Rectangle r, int itemId, System.Windows.Forms.DrawItemState itemState, System.Windows.Forms.StatusBarPanel panel, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
-System.Windows.Forms.StatusBarDrawItemEventHandler
-System.Windows.Forms.StatusBarPanel
-System.Windows.Forms.StatusBarPanel.Alignment.get -> System.Windows.Forms.HorizontalAlignment
-System.Windows.Forms.StatusBarPanel.Alignment.set -> void
-System.Windows.Forms.StatusBarPanel.AutoSize.get -> System.Windows.Forms.StatusBarPanelAutoSize
-System.Windows.Forms.StatusBarPanel.AutoSize.set -> void
-System.Windows.Forms.StatusBarPanel.BeginInit() -> void
-System.Windows.Forms.StatusBarPanel.BorderStyle.get -> System.Windows.Forms.StatusBarPanelBorderStyle
-System.Windows.Forms.StatusBarPanel.BorderStyle.set -> void
-System.Windows.Forms.StatusBarPanel.EndInit() -> void
-System.Windows.Forms.StatusBarPanel.Icon.get -> System.Drawing.Icon
-System.Windows.Forms.StatusBarPanel.Icon.set -> void
-System.Windows.Forms.StatusBarPanel.MinWidth.get -> int
-System.Windows.Forms.StatusBarPanel.MinWidth.set -> void
-System.Windows.Forms.StatusBarPanel.Name.get -> string
-System.Windows.Forms.StatusBarPanel.Name.set -> void
-System.Windows.Forms.StatusBarPanel.Parent.get -> System.Windows.Forms.StatusBar
-System.Windows.Forms.StatusBarPanel.StatusBarPanel() -> void
-System.Windows.Forms.StatusBarPanel.Style.get -> System.Windows.Forms.StatusBarPanelStyle
-System.Windows.Forms.StatusBarPanel.Style.set -> void
-System.Windows.Forms.StatusBarPanel.Tag.get -> object
-System.Windows.Forms.StatusBarPanel.Tag.set -> void
-System.Windows.Forms.StatusBarPanel.Text.get -> string
-System.Windows.Forms.StatusBarPanel.Text.set -> void
-System.Windows.Forms.StatusBarPanel.ToolTipText.get -> string
-System.Windows.Forms.StatusBarPanel.ToolTipText.set -> void
-System.Windows.Forms.StatusBarPanel.Width.get -> int
-System.Windows.Forms.StatusBarPanel.Width.set -> void
-System.Windows.Forms.StatusBarPanelAutoSize
-System.Windows.Forms.StatusBarPanelAutoSize.Contents = 3 -> System.Windows.Forms.StatusBarPanelAutoSize
-System.Windows.Forms.StatusBarPanelAutoSize.None = 1 -> System.Windows.Forms.StatusBarPanelAutoSize
-System.Windows.Forms.StatusBarPanelAutoSize.Spring = 2 -> System.Windows.Forms.StatusBarPanelAutoSize
-System.Windows.Forms.StatusBarPanelBorderStyle
-System.Windows.Forms.StatusBarPanelBorderStyle.None = 1 -> System.Windows.Forms.StatusBarPanelBorderStyle
-System.Windows.Forms.StatusBarPanelBorderStyle.Raised = 2 -> System.Windows.Forms.StatusBarPanelBorderStyle
-System.Windows.Forms.StatusBarPanelBorderStyle.Sunken = 3 -> System.Windows.Forms.StatusBarPanelBorderStyle
-System.Windows.Forms.StatusBarPanelClickEventArgs
-System.Windows.Forms.StatusBarPanelClickEventArgs.StatusBarPanel.get -> System.Windows.Forms.StatusBarPanel
-System.Windows.Forms.StatusBarPanelClickEventArgs.StatusBarPanelClickEventArgs(System.Windows.Forms.StatusBarPanel statusBarPanel, System.Windows.Forms.MouseButtons button, int clicks, int x, int y) -> void
-System.Windows.Forms.StatusBarPanelClickEventHandler
-System.Windows.Forms.StatusBarPanelStyle
-System.Windows.Forms.StatusBarPanelStyle.OwnerDraw = 2 -> System.Windows.Forms.StatusBarPanelStyle
-System.Windows.Forms.StatusBarPanelStyle.Text = 1 -> System.Windows.Forms.StatusBarPanelStyle
 System.Windows.Forms.StatusStrip
 System.Windows.Forms.StatusStrip.CanOverflow.get -> bool
 System.Windows.Forms.StatusStrip.CanOverflow.set -> void
@@ -10107,36 +10034,6 @@ override System.Windows.Forms.Splitter.Text.set -> void
 override System.Windows.Forms.Splitter.ToString() -> string
 override System.Windows.Forms.SplitterPanel.AutoSizeMode.get -> System.Windows.Forms.AutoSizeMode
 override System.Windows.Forms.SplitterPanel.AutoSizeMode.set -> void
-override System.Windows.Forms.StatusBar.BackColor.get -> System.Drawing.Color
-override System.Windows.Forms.StatusBar.BackColor.set -> void
-override System.Windows.Forms.StatusBar.BackgroundImage.get -> System.Drawing.Image
-override System.Windows.Forms.StatusBar.BackgroundImage.set -> void
-override System.Windows.Forms.StatusBar.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
-override System.Windows.Forms.StatusBar.BackgroundImageLayout.set -> void
-override System.Windows.Forms.StatusBar.CreateHandle() -> void
-override System.Windows.Forms.StatusBar.CreateParams.get -> System.Windows.Forms.CreateParams
-override System.Windows.Forms.StatusBar.DefaultImeMode.get -> System.Windows.Forms.ImeMode
-override System.Windows.Forms.StatusBar.DefaultSize.get -> System.Drawing.Size
-override System.Windows.Forms.StatusBar.Dispose(bool disposing) -> void
-override System.Windows.Forms.StatusBar.Dock.get -> System.Windows.Forms.DockStyle
-override System.Windows.Forms.StatusBar.Dock.set -> void
-override System.Windows.Forms.StatusBar.DoubleBuffered.get -> bool
-override System.Windows.Forms.StatusBar.DoubleBuffered.set -> void
-override System.Windows.Forms.StatusBar.Font.get -> System.Drawing.Font
-override System.Windows.Forms.StatusBar.Font.set -> void
-override System.Windows.Forms.StatusBar.ForeColor.get -> System.Drawing.Color
-override System.Windows.Forms.StatusBar.ForeColor.set -> void
-override System.Windows.Forms.StatusBar.OnHandleCreated(System.EventArgs e) -> void
-override System.Windows.Forms.StatusBar.OnHandleDestroyed(System.EventArgs e) -> void
-override System.Windows.Forms.StatusBar.OnLayout(System.Windows.Forms.LayoutEventArgs levent) -> void
-override System.Windows.Forms.StatusBar.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
-override System.Windows.Forms.StatusBar.OnResize(System.EventArgs e) -> void
-override System.Windows.Forms.StatusBar.Text.get -> string
-override System.Windows.Forms.StatusBar.Text.set -> void
-override System.Windows.Forms.StatusBar.ToString() -> string
-override System.Windows.Forms.StatusBar.WndProc(ref System.Windows.Forms.Message m) -> void
-override System.Windows.Forms.StatusBarPanel.Dispose(bool disposing) -> void
-override System.Windows.Forms.StatusBarPanel.ToString() -> string
 override System.Windows.Forms.StatusStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 override System.Windows.Forms.StatusStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
 override System.Windows.Forms.StatusStrip.DefaultDock.get -> System.Windows.Forms.DockStyle
@@ -12905,21 +12802,6 @@ virtual System.Windows.Forms.ScrollableControl.OnScroll(System.Windows.Forms.Scr
 virtual System.Windows.Forms.ScrollableControl.ScrollToControl(System.Windows.Forms.Control activeControl) -> System.Drawing.Point
 virtual System.Windows.Forms.Splitter.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs sevent) -> void
 virtual System.Windows.Forms.Splitter.OnSplitterMoving(System.Windows.Forms.SplitterEventArgs sevent) -> void
-virtual System.Windows.Forms.StatusBar.OnDrawItem(System.Windows.Forms.StatusBarDrawItemEventArgs sbdievent) -> void
-virtual System.Windows.Forms.StatusBar.OnPanelClick(System.Windows.Forms.StatusBarPanelClickEventArgs e) -> void
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.Add(System.Windows.Forms.StatusBarPanel value) -> int
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.Add(string text) -> System.Windows.Forms.StatusBarPanel
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.AddRange(System.Windows.Forms.StatusBarPanel[] panels) -> void
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.Clear() -> void
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.ContainsKey(string key) -> bool
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.IndexOfKey(string key) -> int
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.Insert(int index, System.Windows.Forms.StatusBarPanel value) -> void
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.Remove(System.Windows.Forms.StatusBarPanel value) -> void
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.RemoveAt(int index) -> void
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.RemoveByKey(string key) -> void
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.this[int index].get -> System.Windows.Forms.StatusBarPanel
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.this[int index].set -> void
-virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.this[string key].get -> System.Windows.Forms.StatusBarPanel
 virtual System.Windows.Forms.StatusStrip.OnSpringTableLayoutCore() -> void
 virtual System.Windows.Forms.TabControl.GetItems() -> object[]
 virtual System.Windows.Forms.TabControl.GetItems(System.Type baseType) -> object[]
@@ -13244,3 +13126,6 @@ virtual System.Windows.Forms.WebBrowser.StatusText.get -> string
 System.Windows.Forms.DataGridView.ProcessControlShiftF10Keys(System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 override System.Windows.Forms.MonthCalendar.OnGotFocus(System.EventArgs e) -> void
+System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown owner) -> void
+System.Windows.Forms.VisualStyles.EdgeEffects.Flat = 16384 -> System.Windows.Forms.VisualStyles.EdgeEffects
+System.Windows.Forms.VisualStyles.EdgeEffects.Soft = 4096 -> System.Windows.Forms.VisualStyles.EdgeEffects

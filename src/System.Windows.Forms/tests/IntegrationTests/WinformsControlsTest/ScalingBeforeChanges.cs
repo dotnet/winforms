@@ -78,9 +78,9 @@ namespace WinformsControlsTest
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_DPICHANGED:
+                case User32.WM.DPICHANGED:
                     int x = LOWORD(m.WParam);
                     int y = HIWORD(m.WParam);
                     if (x != deviceDpiX || y != deviceDpiY)
@@ -116,15 +116,15 @@ namespace WinformsControlsTest
         protected override void WndProc(ref Message m)
         {
             uint dpi;
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case WindowMessages.WM_DPICHANGED_BEFOREPARENT:
+                case User32.WM.DPICHANGED_BEFOREPARENT:
                     dpi = GetDpiForWindow(new HandleRef(this, Handle));
                     Debug.WriteLine($"WM_DPICHANGED_BEFOREPARENT  {dpi}");
 
                     m.Result = (IntPtr)1;
                     break;
-                case WindowMessages.WM_DPICHANGED_AFTERPARENT:
+                case User32.WM.DPICHANGED_AFTERPARENT:
                     dpi = GetDpiForWindow(new HandleRef(this, Handle));
                     Debug.WriteLine($"WM_DPICHANGED_AFTERPARENT {dpi}");
                     m.Result = (IntPtr)1;
