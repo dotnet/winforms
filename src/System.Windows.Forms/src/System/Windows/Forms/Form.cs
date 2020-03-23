@@ -3168,7 +3168,7 @@ namespace System.Windows.Forms
                     Icon icon = Icon;
                     if (icon != null && TaskbarOwner.Handle != IntPtr.Zero)
                     {
-                        User32.SendMessageW(TaskbarOwner, User32.WM.SETICON, (IntPtr)NativeMethods.ICON_BIG, icon.Handle);
+                        User32.SendMessageW(TaskbarOwner, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, icon.Handle);
                     }
                 }
 
@@ -5854,15 +5854,15 @@ namespace System.Windows.Forms
 
                     if (smallIcon != null)
                     {
-                        User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)NativeMethods.ICON_SMALL, smallIcon.Handle);
+                        User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, smallIcon.Handle);
                     }
 
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)NativeMethods.ICON_BIG, icon.Handle);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, icon.Handle);
                 }
                 else
                 {
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)NativeMethods.ICON_SMALL, IntPtr.Zero);
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)NativeMethods.ICON_BIG, IntPtr.Zero);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
                 }
 
                 if (redrawFrame)
