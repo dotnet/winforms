@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         // Perf: take all the bools and put them into a state variable: see TabControlState consts above
         private BitVector32 _tabControlState;
 
-        public const string TabBaseReLayoutMessageName = "_TabBaseReLayout";
+        private const string TabBaseReLayoutMessageName = "_TabBaseReLayout";
 
         /// <summary>
         ///  This message is posted by the control to itself after a TabPage is
