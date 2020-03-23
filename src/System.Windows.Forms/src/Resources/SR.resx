@@ -6674,6 +6674,9 @@ Stack trace where the illegal operation occurred was:
   <data name="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged" xml:space="preserve">
     <value>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</value>
   </data>
+  <data name="TaskDialogCannotNavigateWithoutDialog" xml:space="preserve">
+    <value>Cannot navigate from a page not bound to a dialog.</value>
+  </data>
   <data name="TaskDialogCannotRemoveProgressBarWhileDialogIsShown" xml:space="preserve">
     <value>Cannot remove the progress bar while the task dialog is shown.</value>
   </data>

@@ -53,11 +53,6 @@ namespace System.Windows.Forms
         ///   To prevent the dialog from closing when this button is clicked, set the
         ///   <see cref="AllowCloseDialog"/> property to <see langword="false"/>.
         /// </para>
-        /// <para>
-        ///   When <see cref="AllowCloseDialog"/> is set to <see langword="true"/>,
-        ///   the <see cref="TaskDialog.Closing"/> event will occur afterwards,
-        ///   which also allows you to prevent the dialog from closing.
-        /// </para>
         /// </remarks>
         public event EventHandler? Click;
 
@@ -177,15 +172,6 @@ namespace System.Windows.Forms
         ///   <see langword="true"/> if the task dialog should close when
         ///   this button is clicked; otherwise, <see langword="false"/>. The default value is <see langword="true"/>.
         /// </value>
-        /// <remarks>
-        /// <para>
-        ///   If this property is set to <see langword="true"/> after the <see cref="Click"/>
-        ///   event handler returns, the <see cref="TaskDialog.Closing"/> event will occur
-        ///   (except if this button is the <see cref="TaskDialogButton.Help"/> button),
-        ///   which allows you to cancel the close. If it isn't canceled, the dialog closes and
-        ///   sets the clicked button as result value.
-        /// </para>
-        /// </remarks>
         public bool AllowCloseDialog { get; set; } = true;
 
         /// <summary>
@@ -316,7 +302,7 @@ namespace System.Windows.Forms
 
         internal TaskDialogResult StandardButtonResult => _standardButtonResult ?? throw new InvalidOperationException();
 
-        internal int ButtonID => IsStandardButton ? (int)StandardButtonResult: _customButtonID;
+        internal int ButtonID => IsStandardButton ? (int)StandardButtonResult : _customButtonID;
 
         internal TaskDialogButtonCollection? Collection { get; set; }
 

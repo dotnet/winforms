@@ -14,10 +14,9 @@ namespace System.Windows.Forms
     /// </summary>
     /// <remarks>
     /// <para>
-    ///   It is possible to navigate a task dialog while it is shown by setting the
-    ///   <see cref="TaskDialog.Page"/> property to a different <see cref="TaskDialogPage"/>
-    ///   instance. For more information about navigation, see the
-    ///   <see cref="TaskDialog.Page"/> property.
+    ///   It is possible to navigate a task dialog while it is shown by invoking the
+    ///   <see cref="Navigate(TaskDialogPage)"/> method with a target <see cref="TaskDialogPage"/>
+    ///   instance.
     /// </para>
     /// </remarks>
     public class TaskDialogPage
@@ -532,6 +531,40 @@ namespace System.Windows.Forms
         ///   (in which case we cannot modify the dialog even though we are bound).
         /// </summary>
         internal bool WaitingForInitialization => BoundDialog != null && !_appliedInitialization;
+
+        /// <summary>
+        ///  Show the new content in the dialog.
+        /// <paramref name="page"/>.
+        /// </summary>
+        /// <param name="page">
+        ///   The page instance that contains the contents which this task dialog will display.
+        /// </param>
+        /// <remarks>
+        /// <para>
+        ///   During the navigation the dialog will recreate the dialog from the specified
+        ///   <paramref name="page"/> and its controls, and unbind and destroy the currently shown page.
+        /// </para>
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="page"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The page instance is not bound to a dialog, <see cref="BoundDialog"/> is <see langword="null"/>.
+        /// </exception>
+        public void Navigate(TaskDialogPage page)
+        {
+            if (page == null)
+            {
+                throw new ArgumentNullException(nameof(page));
+            }
+
+            if (BoundDialog == null)
+            {
+                throw new InvalidOperationException(SR.TaskDialogCannotNavigateWithoutDialog);
+            }
+
+            BoundDialog.Navigate(page);
+        }
 
         internal static bool IsNativeStringNullOrEmpty(string? str)
         {

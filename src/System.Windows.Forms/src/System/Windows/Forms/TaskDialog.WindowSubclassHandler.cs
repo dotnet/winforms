@@ -32,9 +32,6 @@ namespace System.Windows.Forms
                             !_processedShowWindowMessage)
                         {
                             _processedShowWindowMessage = true;
-
-                            // The task dialog window has been shown for the first time.
-                            _taskDialog.OnShown(EventArgs.Empty);
                         }
 
                         break;

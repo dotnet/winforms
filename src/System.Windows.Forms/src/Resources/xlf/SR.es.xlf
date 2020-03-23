@@ -9166,6 +9166,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="new">Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
+        <source>Cannot navigate from a page not bound to a dialog.</source>
+        <target state="new">Cannot navigate from a page not bound to a dialog.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
         <source>Cannot remove the progress bar while the task dialog is shown.</source>
         <target state="new">Cannot remove the progress bar while the task dialog is shown.</target>

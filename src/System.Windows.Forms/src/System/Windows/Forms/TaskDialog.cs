@@ -66,8 +66,7 @@ namespace System.Windows.Forms
         ///   that should be unlikely.
         /// </para>
         /// </remarks>
-        private const User32.WM ContinueButtonClickHandlingMessage =
-            User32.WM.APP + 0x3FFF;
+        private const User32.WM ContinueButtonClickHandlingMessage = User32.WM.APP + 0x3FFF;
 
         /// <summary>
         ///   The delegate for <see cref="HandleTaskDialogNativeCallback"/> which is
@@ -89,7 +88,7 @@ namespace System.Windows.Forms
 
         private TaskDialogStartupLocation _startupLocation;
         private bool _setToForeground;
-        private TaskDialogPage _page;
+        private TaskDialogPage? _currentPage;
         private TaskDialogPage? _boundPage;
 
         /// <summary>
@@ -108,21 +107,6 @@ namespace System.Windows.Forms
         private IntPtr _instanceHandlePtr;
 
         private WindowSubclassHandler? _windowSubclassHandler;
-
-        /// <summary>
-        ///   Stores a value that indicates if the
-        ///   <see cref="Opened"/> event has been called and so the
-        ///   <see cref="Closed"/> event can be called later.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        ///   This is used to prevent raising the
-        ///   <see cref="Closed"/> event without raising the
-        ///   <see cref="Opened"/> event first (e.g. if the dialog cannot be shown
-        ///   due to an invalid icon).
-        /// </para>
-        /// </remarks>
-        private bool _raisedOpened;
 
         /// <summary>
         ///   Stores a value that indicates if the
@@ -178,7 +162,7 @@ namespace System.Windows.Forms
         ///   This will be set the first time the
         ///   <see cref="ComCtl32.TDN.BUTTON_CLICKED"/> handler returns
         ///   <see cref="HRESULT.S_OK"/> to cache the button instance,
-        ///   so that <see cref="ShowDialog(IntPtr)"/> can then return it.
+        ///   so that <see cref="ShowDialog(IntPtr, TaskDialogPage)"/> can then return it.
         /// </para>
         /// <para>
         ///   Additionally, this is used to check if there was already a
@@ -230,80 +214,11 @@ namespace System.Windows.Forms
         private bool _receivedDestroyedNotification;
 
         /// <summary>
-        ///   Occurs after the task dialog has been created but before it is displayed.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        ///   You can use this event to allocate resources associated with the
-        ///   task dialog window handle, as it is the first event where
-        /// <see cref="Handle"/> is available.
-        /// </para>
-        /// <para>
-        ///   Note: The dialog will not show until this handler returns (even if the
-        ///   handler would run the message loop).
-        /// </para>
-        /// </remarks>
-        public event EventHandler? Opened;
-
-        /// <summary>
-        ///   Occurs when the task dialog is first displayed.
-        /// </summary>
-        public event EventHandler? Shown;
-
-        /// <summary>
-        ///   Occurs when the task dialog is closing.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        ///   You can cancel the close by setting
-        ///   <see cref="CancelEventArgs.Cancel"/> to <see langword="true"/>. Otherwise, the
-        ///   dialog window will close, and the <see cref="Closed"/> event will be
-        ///   raised afterwards.
-        /// </para>
-        /// <para>
-        ///   Note: The <see cref="Closed"/> event might not be called immediately
-        ///   after the <see cref="Closing"/> event (even though the dialog window
-        ///   has already closed). This can happen, for example, when showing multiple
-        ///   (modeless) dialogs at the same time and then closing the one that
-        ///   was shown first. In that case, the <see cref="Closed"/> event for
-        ///   that dialog will be called only after the second dialog is also closed.
-        /// </para>
-        /// <para>
-        ///   Note: This event might not always be called. For example, if navigation of the
-        ///   dialog fails; however, the <see cref="Closed"/> event will always be
-        ///   called.
-        /// </para>
-        /// </remarks>
-        public event EventHandler<TaskDialogClosingEventArgs>? Closing;
-
-        /// <summary>
-        ///   Occurs when the task dialog is closed.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        ///   You can use this event to free resources associated with the
-        ///   task dialog window handle, as it is the last event where
-        ///   <see cref="Handle"/> is available.
-        /// </para>
-        /// </remarks>
-        public event EventHandler? Closed;
-
-        /// <summary>
-        ///   Initializes a new instance of the <see cref="TaskDialog"/> class.
-        /// </summary>
-        public TaskDialog()
-            : this(new TaskDialogPage())
-        {
-        }
-
-        /// <summary>
         ///   Initializes a new instance of the <see cref="TaskDialog"/> class using the
         ///   specified task dialog page.
         /// </summary>
-        public TaskDialog(TaskDialogPage page)
+        private TaskDialog()
         {
-            _page = page ?? throw new ArgumentNullException(nameof(page));
-
             // Set default properties.
             _startupLocation = TaskDialogStartupLocation.CenterParent;
         }
@@ -312,76 +227,7 @@ namespace System.Windows.Forms
         ///   Gets the window handle of the task dialog window, or <see cref="IntPtr.Zero"/>
         ///   if the dialog is currently not being shown.
         /// </summary>
-        /// <remarks>
-        /// <para>
-        ///   When showing the dialog, the handle will be available first when the
-        ///   <see cref="Opened"/> event occurs, and last when the
-        ///   <see cref="Closed"/> event occurs after which you shouldn't use it any more.
-        /// </para>
-        /// </remarks>
         public IntPtr Handle { get; private set; }
-
-        /// <summary>
-        ///   Gets or sets the <see cref="TaskDialogPage"/> instance that contains
-        ///   the contents which this task dialog will display.
-        /// </summary>
-        /// <value>
-        ///   The page instance that contains the contents which this task dialog will
-        ///   display.
-        /// </value>
-        /// <remarks>
-        /// <para>
-        ///   When setting this property while the task dialog is displayed, its contents
-        ///   will be recreated from the specified <see cref="TaskDialogPage"/>
-        ///   ("navigation"). This means that the <see cref="TaskDialogPage.Destroyed"/>
-        ///   event will occur for the current page, and after the dialog
-        ///   completed navigation, the <see cref="TaskDialogPage.Created"/> event
-        ///   of the new page will occur.
-        /// </para>
-        /// <para>
-        ///   You can't manipulate the task dialog or its controls
-        ///   immediately after navigating it (except for calling <see cref="Close"/>
-        ///   or navigating the dialog again).
-        ///   You need to wait for the <see cref="TaskDialogPage.Created"/>
-        ///   event to occur before you can manipulate the dialog or its controls.
-        /// </para>
-        /// <para>
-        ///   When navigating the dialog, the new page will be bound
-        ///   immediately, but the previous page won't be unbound until the
-        ///   <see cref="TaskDialogPage.Created"/> event of the new page is raised,
-        ///   because during that time the task dialog behaves as if it still
-        ///   showed the controls of the previous page.
-        /// </para>
-        /// </remarks>
-        public TaskDialogPage Page
-        {
-            get => _page;
-
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                // TODO: Maybe ignore the set call if the value is the same
-                // (but we currently also don't do that for other properties).
-                //if (value == _page)
-                //{
-                //    return;
-                //}
-
-                if (IsShown)
-                {
-                    // Try to navigate the dialog. This will validate the new page
-                    // and assign it only if it is OK.
-                    Navigate(value);
-                }
-                else
-                {
-                    _page = value;
-                }
-            }
-        }
 
         /// <summary>
         ///   Gets or sets the position of the task dialog when it is shown.
@@ -454,7 +300,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets a value that indicates whether <see cref="ShowDialog(IntPtr)"/> is
+        ///   Gets a value that indicates whether <see cref="ShowDialog(IntPtr, TaskDialogPage)"/> is
         ///   currently being called.
         /// </summary>
         internal bool IsShown
@@ -499,116 +345,6 @@ namespace System.Windows.Forms
             set;
         }
 
-        /// <summary>
-        ///   Displays a task dialog with the specified text, instruction,
-        ///   caption, buttons, and icon.
-        /// </summary>
-        /// <param name="text">The text ("content") to display in the task dialog.</param>
-        /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
-        /// <param name="caption">The text to display in the title bar of the task dialog.</param>
-        /// <param name="buttons">A bitwise combination of the enumeration values that specify the buttons to be shown
-        /// in the task dialog.</param>
-        /// <param name="icon">The icon to display in the main area of the task dialog.</param>
-        /// <returns>
-        ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
-        /// </returns>
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
-        public static TaskDialogButton ShowDialog(
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
-            string? text,
-            string? mainInstruction = null,
-            string? caption = null,
-            IEnumerable<TaskDialogButton>? buttons = null,
-            TaskDialogIcon? icon = null,
-            TaskDialogButton? defaultButton = null) => ShowDialog(
-                IntPtr.Zero,
-                text,
-                mainInstruction,
-                caption,
-                buttons,
-                icon,
-                defaultButton);
-
-        /// <summary>
-        ///   Displays a task dialog in front of the specified window and with the specified
-        ///   text, main instruction, caption, buttons, and icon.
-        /// </summary>
-        /// <param name="owner">The owner window, or <see langword="null"/> to show a modeless dialog.</param>
-        /// <param name="text">The text ("content") to display in the task dialog.</param>
-        /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
-        /// <param name="caption">The text to display in the title bar of the task dialog.</param>
-        /// <param name="buttons">A bitwise combination of the enumeration values that specify the buttons to be shown
-        /// in the task dialog.</param>
-        /// <param name="icon">The icon to display in the main area of the task dialog.</param>
-        /// <returns>
-        ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
-        /// </returns>
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
-        public static TaskDialogButton ShowDialog(
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
-            IWin32Window owner,
-            string? text,
-            string? mainInstruction = null,
-            string? caption = null,
-            IEnumerable<TaskDialogButton>? buttons = null,
-            TaskDialogIcon? icon = null,
-            TaskDialogButton? defaultButton = null) => ShowDialog(
-                owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
-                text,
-                mainInstruction,
-                caption,
-                buttons,
-                icon,
-                defaultButton);
-
-        /// <summary>
-        ///   Displays a task dialog in front of the specified window and with the specified
-        ///   text, instruction, caption, buttons, and icon.
-        /// </summary>
-        /// <param name="hwndOwner">
-        /// The handle of the owner window, or <see cref="IntPtr.Zero"/> to show a
-        /// modeless dialog.
-        /// </param>
-        /// <param name="text">The text ("content") to display in the task dialog.</param>
-        /// <param name="mainInstruction">The main instruction to display in the task dialog.</param>
-        /// <param name="caption">The text to display in the title bar of the task dialog.</param>
-        /// <param name="buttons">A bitwise combination of enumeration values that specify the buttons to be shown
-        /// in the task dialog.</param>
-        /// <param name="icon">The icon to display in the main area of the task dialog.</param>
-        /// <returns>
-        ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
-        /// </returns>
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
-        public static TaskDialogButton ShowDialog(
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
-            IntPtr hwndOwner,
-            string? text,
-            string? mainInstruction = null,
-            string? caption = null,
-            IEnumerable<TaskDialogButton>? buttons = null,
-            TaskDialogIcon? icon = null,
-            TaskDialogButton? defaultButton = null)
-        {
-            var page = new TaskDialogPage()
-            {
-                Text = text,
-                MainInstruction = mainInstruction,
-                Caption = caption,
-                Icon = icon,
-            };
-
-            foreach (TaskDialogButton button in buttons ?? Array.Empty<TaskDialogButton>())
-            {
-                page.Buttons.Add(button);
-            }
-
-            page.DefaultButton = defaultButton;
-
-            var dialog = new TaskDialog(page);
-
-            return dialog.ShowDialog(hwndOwner);
-        }
-
         private static void FreeConfig(IntPtr ptrToFree) => Marshal.FreeHGlobal(ptrToFree);
 
         private static HRESULT HandleTaskDialogNativeCallback(
@@ -651,23 +387,33 @@ namespace System.Windows.Forms
         /// <summary>
         ///   Shows the task dialog.
         /// </summary>
+        /// <param name="page">
+        ///   The page instance that contains the contents which this task dialog will display.
+        /// </param>
         /// <remarks>
         /// <para>
-        ///   Showing the dialog will bind the <see cref="Page"/> and its controls until
+        ///   Showing the dialog will bind the <paramref name="page"/> and its controls until
         ///   this method returns or the dialog is navigated to a different page.
         /// </para>
         /// </remarks>
         /// <returns>
         ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
         /// </returns>
-        public TaskDialogButton ShowDialog() => ShowDialog(IntPtr.Zero);
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="page"/> is <see langword="null"/>.
+        /// </exception>
+        public static TaskDialogButton ShowDialog(TaskDialogPage page)
+            => ShowDialog(IntPtr.Zero, page ?? throw new ArgumentNullException(nameof(page)));
 
         /// <summary>
         ///   Shows the task dialog with the specified owner.
         /// </summary>
+        /// <param name="page">
+        ///   The page instance that contains the contents which this task dialog will display.
+        /// </param>
         /// <remarks>
         /// <para>
-        ///   Showing the dialog will bind the <see cref="Page"/> and its controls until
+        ///   Showing the dialog will bind the <paramref name="page"/> and its controls until
         ///   this method returns or the dialog is navigated to a different page.
         /// </para>
         /// </remarks>
@@ -675,15 +421,24 @@ namespace System.Windows.Forms
         /// <returns>
         ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
         /// </returns>
-        public TaskDialogButton ShowDialog(IWin32Window owner) => ShowDialog(
-            owner?.Handle ?? throw new ArgumentNullException(nameof(owner)));
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="owner"/> is <see langword="null"/>
+        ///   - or -
+        ///   <paramref name="page"/> is <see langword="null"/>.
+        /// </exception>
+        public static TaskDialogButton ShowDialog(IWin32Window owner, TaskDialogPage page)
+            => ShowDialog(owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
+                          page ?? throw new ArgumentNullException(nameof(page)));
 
         /// <summary>
         ///   Shows the task dialog with the specified owner.
         /// </summary>
+        /// <param name="page">
+        ///   The page instance that contains the contents which this task dialog will display.
+        /// </param>
         /// <remarks>
         /// <para>
-        ///   Showing the dialog will bind the <see cref="Page"/> and its controls until
+        ///   Showing the dialog will bind the <paramref name="page"/> and its controls until
         ///   this method returns or the dialog is navigated to a different page.
         /// </para>
         /// </remarks>
@@ -694,16 +449,49 @@ namespace System.Windows.Forms
         /// <returns>
         ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
         /// </returns>
-        public unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner)
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="hwndOwner"/> is <see langword="null"/>
+        ///   - or -
+        ///   <paramref name="page"/> is <see langword="null"/>.
+        /// </exception>
+        public static unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner, TaskDialogPage page)
+        {
+            if (hwndOwner == null)
+            {
+                throw new ArgumentNullException(nameof(hwndOwner));
+            }
+            if (page == null)
+            {
+                throw new ArgumentNullException(nameof(page));
+            }
+
+            TaskDialog dialog = new TaskDialog();
+            return dialog.ShowDialogInternal(hwndOwner, page);
+        }
+
+        /// <summary>
+        ///   Shows the task dialog with the specified owner.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        ///   Showing the dialog will bind the <paramref name="page"/> and its controls until
+        ///   this method returns or the dialog is navigated to a different page.
+        /// </para>
+        /// </remarks>
+        /// <returns>
+        ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
+        /// </returns>
+        private unsafe TaskDialogButton ShowDialogInternal(IntPtr hwndOwner, TaskDialogPage page)
         {
             // Recursive Show() is not possible because a TaskDialog instance can only
             // represent a single native dialog.
             if (IsShown)
-                throw new InvalidOperationException(string.Format(
-                    SR.TaskDialogInstanceAlreadyShown,
-                    nameof(TaskDialog)));
+            {
+                throw new InvalidOperationException(string.Format(SR.TaskDialogInstanceAlreadyShown, nameof(TaskDialog)));
+            }
 
-            _page.Validate();
+            page.Validate();
+            _currentPage = page;
 
             // Allocate a GCHandle which we will use for the callback data.
             var instanceHandle = GCHandle.Alloc(this);
@@ -713,14 +501,14 @@ namespace System.Windows.Forms
 
                 // Bind the page and allocate the memory.
                 BindPageAndAllocateConfig(
-                    _page,
+                    page,
                     hwndOwner,
                     _startupLocation,
                     _setToForeground,
                     out IntPtr ptrToFree,
                     out ComCtl32.TASKDIALOGCONFIG* ptrTaskDialogConfig);
 
-                _boundPage = _page;
+                _boundPage = page;
                 try
                 {
                     // Note: When an uncaught exception occurs in the callback or a
@@ -820,7 +608,6 @@ namespace System.Windows.Forms
                     // the TDN_DESTROYED notification did not occur (although that
                     // should only happen when there was an exception).
                     Handle = IntPtr.Zero;
-                    _raisedOpened = false;
                     _raisedPageCreated = false;
 
                     // Clear cached objects and other fields.
@@ -835,9 +622,9 @@ namespace System.Windows.Forms
 
                     // If we started navigating the dialog but navigation wasn't
                     // successful, we also need to unbind the new pages.
-                    foreach (TaskDialogPage page in _waitingNavigationPages)
+                    foreach (TaskDialogPage dialogPage in _waitingNavigationPages)
                     {
-                        page.Unbind();
+                        dialogPage.Unbind();
                     }
 
                     _waitingNavigationPages.Clear();
@@ -1101,30 +888,6 @@ namespace System.Windows.Forms
             User32.SetWindowTextW(Handle, caption);
         }
 
-        /// <summary>
-        ///   Raises the <see cref="Opened"/> event.
-        /// </summary>
-        /// <param name="e">The event data.</param>
-        protected void OnOpened(EventArgs e) => Opened?.Invoke(this, e);
-
-        /// <summary>
-        ///   Raises the <see cref="Shown"/> event.
-        /// </summary>
-        /// <param name="e">The event data.</param>
-        protected void OnShown(EventArgs e) => Shown?.Invoke(this, e);
-
-        /// <summary>
-        ///   Raises the <see cref="Closing"/> event.
-        /// </summary>
-        /// <param name="e">The event data.</param>
-        protected void OnClosing(TaskDialogClosingEventArgs e) => Closing?.Invoke(this, e);
-
-        /// <summary>
-        ///   Raises the <see cref="Closed"/> event.
-        /// </summary>
-        /// <param name="e">The event data.</param>
-        protected void OnClosed(EventArgs e) => Closed?.Invoke(this, e);
-
         private HRESULT HandleTaskDialogCallback(
             IntPtr hWnd,
             ComCtl32.TDN notification,
@@ -1150,18 +913,6 @@ namespace System.Windows.Forms
                 {
                     case ComCtl32.TDN.CREATED:
                         _boundPage.ApplyInitialization();
-
-                        // Note: If the user navigates the dialog within the Opened event
-                        // and then runs the message loop, the Created and Destroyed events
-                        // for the original page would never be called (because the callback
-                        // would raise the Created event for the new page from the
-                        // TDN_NAVIGATED notification and then the Opened event returns),
-                        // but we consider this to be OK.
-                        if (!_raisedOpened)
-                        {
-                            _raisedOpened = true;
-                            OnOpened(EventArgs.Empty);
-                        }
 
                         // Don't raise the Created event of the bound page if we are
                         // waiting for the TDN_NAVIGATED notification, because that means
@@ -1228,12 +979,6 @@ namespace System.Windows.Forms
                             {
                                 _raisedPageCreated = false;
                                 _boundPage.OnDestroyed(EventArgs.Empty);
-                            }
-
-                            if (_raisedOpened)
-                            {
-                                _raisedOpened = false;
-                                OnClosed(EventArgs.Empty);
                             }
                         }
                         finally
@@ -1363,17 +1108,8 @@ namespace System.Windows.Forms
                                     button = CreatePlaceholderButton((TaskDialogResult)buttonID);
                                 }
 
-                                // The button would close the dialog, so raise the event.
-                                var closingEventArgs = new TaskDialogClosingEventArgs(button);
-                                OnClosing(closingEventArgs);
-
-                                applyButtonResult = !closingEventArgs.Cancel;
-
                                 // Cache the result button if we return S_OK.
-                                if (applyButtonResult)
-                                {
-                                    _resultButton = (button, buttonID);
-                                }
+                                _resultButton = (button, buttonID);
                             }
                         }
 
@@ -1430,13 +1166,7 @@ namespace System.Windows.Forms
         ///   While the dialog is being shown, recreates the dialog from the specified
         /// <paramref name="page"/>.
         /// </summary>
-        /// <remarks>
-        /// <para>
-        ///   Note that you should not call this method in the <see cref="Opened"/>
-        ///   event because the task dialog is not yet displayed in that state.
-        /// </para>
-        /// </remarks>
-        private unsafe void Navigate(TaskDialogPage page)
+        internal unsafe void Navigate(TaskDialogPage page)
         {
             // We allow to nagivate the dialog even if the previous navigation did
             // not complete yet, as this seems to work in the native implementation.
@@ -1467,8 +1197,7 @@ namespace System.Windows.Forms
             // (TaskDialogPage.Destroyed) that is raised from within this method.
             if (_isInNavigate)
             {
-                throw new InvalidOperationException(
-                    SR.TaskDialogCannotNavigateWithinNavigationEventHandler);
+                throw new InvalidOperationException(SR.TaskDialogCannotNavigateWithinNavigationEventHandler);
             }
 
             // Don't allow navigation if the dialog window is already closed (and
@@ -1521,8 +1250,8 @@ namespace System.Windows.Forms
                 _isInNavigate = false;
             }
 
-            TaskDialogPage previousPage = _page;
-            _page = page;
+            TaskDialogPage previousPage = _currentPage;
+            _currentPage = page;
             try
             {
                 // Note: We don't unbind the previous page here - this will be done
@@ -1596,7 +1325,7 @@ namespace System.Windows.Forms
             }
             catch
             {
-                _page = previousPage;
+                _currentPage = previousPage;
                 throw;
             }
         }
