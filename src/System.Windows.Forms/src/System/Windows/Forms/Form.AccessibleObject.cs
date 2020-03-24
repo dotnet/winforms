@@ -29,6 +29,14 @@ namespace System.Windows.Forms
 
             internal override Rectangle BoundingRectangle => _owner.Bounds;
 
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction) =>
+                direction switch
+                {
+                    UiaCore.NavigateDirection.FirstChild => _owner.GetFirstChildControlInTabOrder(true)?.AccessibilityObject,
+                    UiaCore.NavigateDirection.LastChild => _owner.GetFirstChildControlInTabOrder(false)?.AccessibilityObject,
+                            _ => base.FragmentNavigate(direction)
+                };
+
             internal override bool IsIAccessibleExSupported()
             {
                 if (_owner != null)
