@@ -22,12 +22,12 @@ internal static partial class Interop
             public int iCalendar;
             public int iRow;
             public int iCol;
-            public bool bSelected;
+            public BOOL bSelected;
             public Kernel32.SYSTEMTIME stStart;
             public Kernel32.SYSTEMTIME stEnd;
             public RECT rc;
             public char* pszName;
-            public uint cchName;
+            public UIntPtr cchName;
         }
     }
 }
