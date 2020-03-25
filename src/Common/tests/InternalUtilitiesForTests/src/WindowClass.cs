@@ -80,7 +80,7 @@ namespace System
 
             if (cursor == default)
             {
-                cursor = User32.LoadCursorW(IntPtr.Zero, User32.CursorResourceId.IDC_ARROW);
+                cursor = User32.LoadCursorW(IntPtr.Zero, (IntPtr)User32.CursorResourceId.IDC_ARROW);
             }
             else if (cursor == (IntPtr)(-1))
             {

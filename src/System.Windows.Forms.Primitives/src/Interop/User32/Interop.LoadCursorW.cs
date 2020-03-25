@@ -9,22 +9,27 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
+        // The Cursor class has an IntPtr constructor that takes a handle
+        // to an existing cursor. The int constructor does the LoadCursorW
+        // call. To avoid accidental use of the IntPtr constructor this
+        // set of defines should be left as int, even though they ultimately
+        // need converted to IntPtr.
         public static class CursorResourceId
         {
-            public static IntPtr IDC_ARROW = (IntPtr)32512;
-            public static IntPtr IDC_IBEAM = (IntPtr)32513;
-            public static IntPtr IDC_WAIT = (IntPtr)32514;
-            public static IntPtr IDC_CROSS = (IntPtr)32515;
-            public static IntPtr IDC_SIZEALL = (IntPtr)32646;
-            public static IntPtr IDC_SIZENWSE = (IntPtr)32642;
-            public static IntPtr IDC_SIZENESW = (IntPtr)32643;
-            public static IntPtr IDC_SIZEWE = (IntPtr)32644;
-            public static IntPtr IDC_SIZENS = (IntPtr)32645;
-            public static IntPtr IDC_UPARROW = (IntPtr)32516;
-            public static IntPtr IDC_NO = (IntPtr)32648;
-            public static IntPtr IDC_HAND = (IntPtr)32649;
-            public static IntPtr IDC_APPSTARTING = (IntPtr)32650;
-            public static IntPtr IDC_HELP = (IntPtr)32651;
+            public const int IDC_ARROW = 32512;
+            public const int IDC_IBEAM = 32513;
+            public const int IDC_WAIT = 32514;
+            public const int IDC_CROSS = 32515;
+            public const int IDC_SIZEALL = 32646;
+            public const int IDC_SIZENWSE = 32642;
+            public const int IDC_SIZENESW = 32643;
+            public const int IDC_SIZEWE = 32644;
+            public const int IDC_SIZENS = 32645;
+            public const int IDC_UPARROW = 32516;
+            public const int IDC_NO = 32648;
+            public const int IDC_HAND = 32649;
+            public const int IDC_APPSTARTING = 32650;
+            public const int IDC_HELP = 32651;
         }
 
         [DllImport(Libraries.User32, ExactSpelling = true)]
