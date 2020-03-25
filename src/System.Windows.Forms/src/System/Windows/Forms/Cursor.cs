@@ -40,7 +40,7 @@ namespace System.Windows.Forms
             // We don't delete stock cursors.
             _ownHandle = false;
             _resourceId = nResourceId;
-            _handle = User32.LoadCursorW(IntPtr.Zero, nResourceId);
+            _handle = User32.LoadCursorW(IntPtr.Zero, (IntPtr)nResourceId);
         }
 
         /// <summary>

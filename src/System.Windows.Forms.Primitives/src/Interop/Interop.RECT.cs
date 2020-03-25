@@ -37,7 +37,17 @@ internal partial class Interop
         public static implicit operator RECT(Rectangle r)
             => new RECT(r);
 
+        public int X => left;
+
+        public int Y => top;
+
+        public int Width
+            => right - left;
+
+        public int Height
+            => bottom - top;
+
         public Size Size
-            => new Size(right - left, bottom - top);
+            => new Size(Width, Height);
     }
 }
