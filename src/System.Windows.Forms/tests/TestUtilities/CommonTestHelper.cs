@@ -20,7 +20,7 @@ namespace WinForms.Common.Tests
     public static class CommonTestHelper
     {
         // helper method to generate theory data from all values of an enum type
-        internal static TheoryData<T> GetEnumTheoryData<T>() where T : Enum
+        public static TheoryData<T> GetEnumTheoryData<T>() where T : Enum
         {
             var data = new TheoryData<T>();
             foreach (T item in Enum.GetValues(typeof(T)))
@@ -43,7 +43,7 @@ namespace WinForms.Common.Tests
 
         // helper method to generate invalid theory data for an enum type
         // This method assumes that int.MinValue and int.MaxValue are not in the enum
-        internal static TheoryData<T> GetEnumTheoryDataInvalid<T>() where T : Enum
+        public static TheoryData<T> GetEnumTheoryDataInvalid<T>() where T : Enum
         {
             var data = new TheoryData<T>
             {

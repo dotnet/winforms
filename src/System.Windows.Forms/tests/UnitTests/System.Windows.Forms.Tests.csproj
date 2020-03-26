@@ -16,22 +16,12 @@
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
-    <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
-    <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
-    <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
+    <ProjectReference Include="..\Utilities\System.Windows.Forms.TestUtilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
     <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(TargetFramework)\System.Drawing.dll" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\..\Common\tests\CommonMemberDataAttribute.cs" Link="Common\CommonMemberDataAttribute.cs" />
-    <Compile Include="..\..\..\Common\tests\CommonTestHelper.cs" Link="Common\CommonTestHelper.cs" />
-    <Compile Include="..\..\..\Common\tests\SystemEventsHelper.cs" Link="Common\SystemEventsHelper.cs" />
-    <Compile Include="..\..\..\Common\tests\TempFile.cs" Link="Common\TempFile.cs" />
-    <Compile Include="..\..\..\Common\tests\ThreadExceptionFixture.cs" Link="Common\ThreadExceptionFixture.cs" />
   </ItemGroup>
 
   <ItemGroup>
