@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests.Interop.Richedit
 {
     public class EDITSTREAMTests
     {
-        [WinFormsFact]
+        [Fact]
         public unsafe void EditStream_Size_Get_ReturnsExpected()
         {
             if (IntPtr.Size == 4)
