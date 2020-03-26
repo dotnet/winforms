@@ -15,13 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Windows.Forms\tests\Utilities\System.Windows.Forms.TestUtilities.csproj" />
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design.csproj" />
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
-    <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
-    <Compile Include="..\..\..\Common\tests\CommonMemberDataAttribute.cs" Link="Common\CommonMemberDataAttribute.cs" />
-    <Compile Include="..\..\..\Common\tests\CommonTestHelper.cs" Link="Common\CommonTestHelper.cs" />
-    <Compile Include="..\..\..\Common\tests\ThreadExceptionFixture.cs" Link="Common\ThreadExceptionFixture.cs" />
   </ItemGroup>
 
   <ItemGroup>
