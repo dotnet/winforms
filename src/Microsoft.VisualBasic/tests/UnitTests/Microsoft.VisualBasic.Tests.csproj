@@ -6,17 +6,14 @@
   
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
+    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
+    <PackageReference Include="xunit.assert" Version="$(XUnitAssertVersion)" />
+    <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="$(MicrosoftDotNetXUnitExtensionsPackageVersion)" />
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\tests\Utilities\System.Windows.Forms.Primitives.TestUtilities.csproj" />
     <ProjectReference Include="..\..\src\Microsoft.VisualBasic.Facade.csproj" />
-    <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\..\Common\tests\CommonMemberDataAttribute.cs" Link="Common\CommonMemberDataAttribute.cs" />
-    <Compile Include="..\..\..\Common\tests\CommonTestHelper.cs" Link="Common\CommonTestHelper.cs" />
-    <Compile Include="..\..\..\Common\tests\ThreadExceptionFixture.cs" Link="Common\ThreadExceptionFixture.cs" />
   </ItemGroup>
 
 </Project>

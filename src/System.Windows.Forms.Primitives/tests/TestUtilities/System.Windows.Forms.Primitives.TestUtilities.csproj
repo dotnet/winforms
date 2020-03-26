@@ -14,4 +14,8 @@
     <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryPackageVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Primitives.csproj" />
+  </ItemGroup>
+
 </Project>
