@@ -8,7 +8,7 @@ using Xunit;
 using static Interop;
 using static Interop.Mso;
 
-namespace System.Windows.Forms.Primitives.Tests.Interop.Mso
+namespace System.Windows.Forms.Tests.Interop.Mso
 {
     public unsafe class IMsoComponentManagerTests : IClassFixture<ThreadExceptionFixture>
     {

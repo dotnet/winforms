@@ -8,7 +8,7 @@ using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests.InteropTests
 {
-    public class LVITEMWTests : IClassFixture<ThreadExceptionFixture>
+    public class LVITEMWTests
     {
         [Fact]
         public unsafe void UpdateText_should_throw_AOOR_if_cchTextMax_less_than_1()

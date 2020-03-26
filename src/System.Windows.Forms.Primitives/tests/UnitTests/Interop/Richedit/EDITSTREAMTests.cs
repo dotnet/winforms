@@ -7,7 +7,7 @@ using static Interop.Richedit;
 
 namespace System.Windows.Forms.Tests.Interop.Richedit
 {
-    public class EDITSTREAMTests : IClassFixture<ThreadExceptionFixture>
+    public class EDITSTREAMTests
     {
         [WinFormsFact]
         public unsafe void EditStream_Size_Get_ReturnsExpected()

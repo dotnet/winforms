@@ -7,7 +7,7 @@ using static Interop.Richedit;
 
 namespace System.Windows.Forms.Tests.Interop.Richedit
 {
-    public class CHARFORMATWTests : IClassFixture<ThreadExceptionFixture>
+    public class CHARFORMATWTests
     {
         [Fact]
         public unsafe void CharFormat_Size()

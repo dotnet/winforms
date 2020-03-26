@@ -8,7 +8,7 @@ using static Interop.Comdlg32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Comdlg32
 {
-    public class PRINTDLGWTests : IClassFixture<ThreadExceptionFixture>
+    public class PRINTDLGWTests
     {
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void PRINTDLGW_32_Size()

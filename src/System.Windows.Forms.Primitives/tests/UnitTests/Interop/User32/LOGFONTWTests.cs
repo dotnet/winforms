@@ -8,7 +8,7 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 {
-    public class LOGFONTWTests : IClassFixture<ThreadExceptionFixture>
+    public class LOGFONTWTests
     {
         [Fact]
         public unsafe void LogFont_Size()

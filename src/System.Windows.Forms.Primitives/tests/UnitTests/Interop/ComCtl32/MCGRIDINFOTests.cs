@@ -8,7 +8,7 @@ using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32
 {
-    public class MCGRIDINFOTests : IClassFixture<ThreadExceptionFixture>
+    public class MCGRIDINFOTests
     {
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void MCGRIDINFO_x32_Size()
