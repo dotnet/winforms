@@ -130,9 +130,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiMonthCalendarTests", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiTestsHelper", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiTestsHelper\MauiTestsHelper.csproj", "{44BB1092-1844-4EAF-8DF5-338DE4C3149A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Primitives.TestUtilities", "src\System.Windows.Forms.Primitives\tests\Utilities\System.Windows.Forms.Primitives.TestUtilities.csproj", "{73B0857A-966B-4E7D-8A83-FECFE0281AB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Primitives.TestUtilities", "src\System.Windows.Forms.Primitives\tests\TestUtilities\System.Windows.Forms.Primitives.TestUtilities.csproj", "{73B0857A-966B-4E7D-8A83-FECFE0281AB9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.TestUtilities", "src\System.Windows.Forms\tests\Utilities\System.Windows.Forms.TestUtilities.csproj", "{86418F0B-39DC-4B5A-8145-6D607E6150AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.TestUtilities", "src\System.Windows.Forms\tests\TestUtilities\System.Windows.Forms.TestUtilities.csproj", "{86418F0B-39DC-4B5A-8145-6D607E6150AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
