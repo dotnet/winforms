@@ -3533,8 +3533,8 @@ namespace System.Windows.Forms
             if (ImeMode == ImeMode.Hangul || ImeMode == ImeMode.HangulFull)
             {
                 // Is the IME CompositionWindow open?
-                int compMode = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETIMECOMPMODE));
-                if (RichTextBoxConstants.ICM_NOTOPEN != compMode)
+                ICM compMode = unchecked((ICM)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETIMECOMPMODE));
+                if (compMode != ICM.NOTOPEN)
                 {
                     int textLength = User32.GetWindowTextLengthW(new HandleRef(this, Handle));
                     if (selStart == selEnd && textLength == MaxLength)

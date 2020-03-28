@@ -16,13 +16,6 @@ namespace System.Windows.Forms
 
         /* RichTextBox messages */
 
-        // Values for EM_GETIMECOMPMODE
-        internal const int ICM_NOTOPEN = 0x0000;
-        internal const int ICM_LEVEL3 = 0x0001;
-        internal const int ICM_LEVEL2 = 0x0002;
-        internal const int ICM_LEVEL2_5 = 0x0003;
-        internal const int ICM_LEVEL2_SUI = 0x0004;
-
         // New notifications
         internal const int EN_MSGFILTER = 0x0700;
         internal const int EN_REQUESTRESIZE = 0x0701;
