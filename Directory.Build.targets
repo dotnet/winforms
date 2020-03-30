@@ -20,6 +20,7 @@
     <Platforms Condition="'$(Platform)' == 'x86'">AnyCPU;x86</Platforms>
     <TestArchitectures Condition="'$(Platform)' == 'x86'">x86</TestArchitectures>
     <TestArchitectures Condition="'$(Platform)' != 'x86'">x64;x86</TestArchitectures>
+    <Deterministic>false</Deterministic>
   </PropertyGroup>
 
   <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">
