@@ -23,7 +23,7 @@ Namespace Microsoft.VisualBasic
 
     ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction in Microsoft.VisualBasic.Core.dll. 
     ' Do not change this API without also updating that dependent module.
-    Public Module _Interaction
+    Friend Module _Interaction
 
         Public Function Shell(ByVal PathName As String, ByVal Style As AppWinStyle, ByVal Wait As Boolean, ByVal Timeout As Integer) As Integer
             Dim StartupInfo As New NativeTypes.STARTUPINFO
