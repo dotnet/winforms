@@ -11,19 +11,19 @@ namespace System.Windows.Forms.Tests.PropertyGridInternal.Tests
         [WinFormsFact]
         public void PropertyGridView_Constructor()
         {
-            var propertyGrid = new PropertyGrid();
+            using var propertyGrid = new PropertyGrid();
             var entity = new Entity();
             propertyGrid.SelectedObject = entity;
 
             var item = propertyGrid.SelectedGridItem;
 
             Assert.NotNull(item);
-            Assert.NotNull(item.Value);
+            Assert.Same(entity, item.Value);
         }
-    }
 
-    public class Entity
-    {
-        string[] Values { get; set; }
+        private class Entity
+        {
+            string[] Values { get; set; }
+        }
     }
 }
