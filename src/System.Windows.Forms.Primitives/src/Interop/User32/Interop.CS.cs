@@ -14,6 +14,8 @@ internal static partial class Interop
         [Flags]
         public enum CS : uint
         {
+            VREDRAW = 0x0001,
+            HREDRAW = 0x0002,
             DBLCLKS = 0x0008,
             DROPSHADOW = 0x00020000,
             SAVEBITS = 0x0800

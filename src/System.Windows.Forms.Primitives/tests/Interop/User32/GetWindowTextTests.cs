@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
-using static Interop;
 using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.User32
@@ -29,26 +28,23 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
             // Use a long string that exceeds the initial buffer size (16).
             string longText = new string('X', 50);
 
-            using var form = new ChangeWindowTextForm()
-            {
-                Text = shortText
-            };
+            var windowClass = new ChangeWindowTextClass();
+            windowClass.Register();
+            IntPtr windowHandle = windowClass.CreateWindow(shortText);
 
-            // Creating the handle causes GetWindowText to be called,
-            // so do it before setting the delegates.
-            IntPtr formHandle = form.Handle;
-
-            form.BeforeGetTextCallback = () => longText;
+            windowClass.BeforeGetTextCallback = () => longText;
             if (useBeforeGetTextLengthCallback)
             {
-                form.BeforeGetTextLengthCallback = () => shortText;
+                windowClass.BeforeGetTextLengthCallback = () => shortText;
             }
 
-            string result = GetWindowText(formHandle);
+            string result = GetWindowText(windowHandle);
+            DestroyWindow(windowHandle);
+
             Assert.Equal(longText, result);
         }
 
-        private class ChangeWindowTextForm : Form
+        private class ChangeWindowTextClass : WindowClass
         {
             public Func<string> BeforeGetTextLengthCallback
             {
@@ -62,26 +58,27 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                 set;
             }
 
-            protected override void WndProc(ref Message m)
+            protected override IntPtr WNDPROC(IntPtr hWnd, WM msg, IntPtr wParam, IntPtr lParam)
             {
-                if (m.Msg == (int)WM.GETTEXTLENGTH)
+                switch (msg)
                 {
-                    string text = BeforeGetTextLengthCallback?.Invoke();
-                    if (text != null)
-                    {
-                        SetWindowTextW(m.HWnd, text);
-                    }
-                }
-                else if (m.Msg == (int)WM.GETTEXT)
-                {
-                    string text = BeforeGetTextCallback?.Invoke();
-                    if (text != null)
-                    {
-                        SetWindowTextW(m.HWnd, text);
-                    }
+                    case WM.GETTEXTLENGTH:
+                        string text = BeforeGetTextLengthCallback?.Invoke();
+                        if (text != null)
+                        {
+                            SetWindowTextW(hWnd, text);
+                        }
+                        break;
+                   case WM.GETTEXT:
+                        text = BeforeGetTextCallback?.Invoke();
+                        if (text != null)
+                        {
+                            SetWindowTextW(hWnd, text);
+                        }
+                        break;
                 }
 
-                base.WndProc(ref m);
+                return base.WNDPROC(hWnd, msg, wParam, lParam);
             }
         }
     }

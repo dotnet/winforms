@@ -454,10 +454,10 @@ namespace System.Windows.Forms
                             }
 
                             createResult = User32.CreateWindowExW(
-                                cp.ExStyle,
+                                (User32.WS_EX)cp.ExStyle,
                                 windowClass._windowClassName,
                                 cp.Caption,
-                                cp.Style,
+                                (User32.WS)cp.Style,
                                 cp.X,
                                 cp.Y,
                                 cp.Width,
