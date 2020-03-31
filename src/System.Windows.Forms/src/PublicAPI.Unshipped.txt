@@ -1,6 +1,0 @@
-System.Windows.Forms.ListViewGroup.Footer.get -> string
-System.Windows.Forms.ListViewGroup.Footer.set -> void
-System.Windows.Forms.ListViewGroup.FooterAlignment.get -> System.Windows.Forms.HorizontalAlignment
-System.Windows.Forms.ListViewGroup.FooterAlignment.set -> void
-System.Windows.Forms.FileDialog.ClientGuid.get -> System.Guid?
-System.Windows.Forms.FileDialog.ClientGuid.set -> void

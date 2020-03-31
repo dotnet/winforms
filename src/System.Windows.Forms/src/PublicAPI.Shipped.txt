@@ -1594,6 +1594,7 @@ System.Windows.Forms.DataGridView.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.DataGridView.Padding.set -> void
 System.Windows.Forms.DataGridView.PaddingChanged -> System.EventHandler
 System.Windows.Forms.DataGridView.ProcessAKey(System.Windows.Forms.Keys keyData) -> bool
+System.Windows.Forms.DataGridView.ProcessControlShiftF10Keys(System.Windows.Forms.Keys keyData) -> bool
 System.Windows.Forms.DataGridView.ProcessDeleteKey(System.Windows.Forms.Keys keyData) -> bool
 System.Windows.Forms.DataGridView.ProcessDownKey(System.Windows.Forms.Keys keyData) -> bool
 System.Windows.Forms.DataGridView.ProcessEndKey(System.Windows.Forms.Keys keyData) -> bool
@@ -2680,6 +2681,7 @@ System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject
 System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.DomainItemAccessibleObject(string name, System.Windows.Forms.AccessibleObject parent) -> void
 System.Windows.Forms.DomainUpDown.DomainUpDown() -> void
 System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject
+System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown owner) -> void
 System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection
 System.Windows.Forms.DomainUpDown.Items.get -> System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection
 System.Windows.Forms.DomainUpDown.OnSelectedItemChanged(object source, System.EventArgs e) -> void
@@ -2867,6 +2869,8 @@ System.Windows.Forms.FileDialog.AutoUpgradeEnabled.get -> bool
 System.Windows.Forms.FileDialog.AutoUpgradeEnabled.set -> void
 System.Windows.Forms.FileDialog.CheckPathExists.get -> bool
 System.Windows.Forms.FileDialog.CheckPathExists.set -> void
+System.Windows.Forms.FileDialog.ClientGuid.get -> System.Guid?
+System.Windows.Forms.FileDialog.ClientGuid.set -> void
 System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDialogCustomPlacesCollection
 System.Windows.Forms.FileDialog.DefaultExt.get -> string
 System.Windows.Forms.FileDialog.DefaultExt.set -> void
@@ -4360,6 +4364,10 @@ System.Windows.Forms.ListViewAlignment.Left = 1 -> System.Windows.Forms.ListView
 System.Windows.Forms.ListViewAlignment.SnapToGrid = 5 -> System.Windows.Forms.ListViewAlignment
 System.Windows.Forms.ListViewAlignment.Top = 2 -> System.Windows.Forms.ListViewAlignment
 System.Windows.Forms.ListViewGroup
+System.Windows.Forms.ListViewGroup.Footer.get -> string
+System.Windows.Forms.ListViewGroup.Footer.set -> void
+System.Windows.Forms.ListViewGroup.FooterAlignment.get -> System.Windows.Forms.HorizontalAlignment
+System.Windows.Forms.ListViewGroup.FooterAlignment.set -> void
 System.Windows.Forms.ListViewGroup.Header.get -> string
 System.Windows.Forms.ListViewGroup.Header.set -> void
 System.Windows.Forms.ListViewGroup.HeaderAlignment.get -> System.Windows.Forms.HorizontalAlignment
@@ -7928,8 +7936,10 @@ System.Windows.Forms.VisualStyles.ContentAlignment.Left = 0 -> System.Windows.Fo
 System.Windows.Forms.VisualStyles.ContentAlignment.Right = 2 -> System.Windows.Forms.VisualStyles.ContentAlignment
 System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeEffects.FillInterior = 2048 -> System.Windows.Forms.VisualStyles.EdgeEffects
+System.Windows.Forms.VisualStyles.EdgeEffects.Flat = 16384 -> System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeEffects.Mono = 32768 -> System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeEffects.None = 0 -> System.Windows.Forms.VisualStyles.EdgeEffects
+System.Windows.Forms.VisualStyles.EdgeEffects.Soft = 4096 -> System.Windows.Forms.VisualStyles.EdgeEffects
 System.Windows.Forms.VisualStyles.EdgeStyle
 System.Windows.Forms.VisualStyles.EdgeStyle.Bump = 9 -> System.Windows.Forms.VisualStyles.EdgeStyle
 System.Windows.Forms.VisualStyles.EdgeStyle.Etched = 6 -> System.Windows.Forms.VisualStyles.EdgeStyle
@@ -9367,6 +9377,7 @@ override System.Windows.Forms.Form.BackColor.get -> System.Drawing.Color
 override System.Windows.Forms.Form.BackColor.set -> void
 override System.Windows.Forms.Form.ControlCollection.Add(System.Windows.Forms.Control value) -> void
 override System.Windows.Forms.Form.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
+override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 override System.Windows.Forms.Form.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 override System.Windows.Forms.Form.CreateHandle() -> void
 override System.Windows.Forms.Form.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -9678,6 +9689,7 @@ override System.Windows.Forms.MonthCalendar.IsInputKey(System.Windows.Forms.Keys
 override System.Windows.Forms.MonthCalendar.OnBackColorChanged(System.EventArgs e) -> void
 override System.Windows.Forms.MonthCalendar.OnFontChanged(System.EventArgs e) -> void
 override System.Windows.Forms.MonthCalendar.OnForeColorChanged(System.EventArgs e) -> void
+override System.Windows.Forms.MonthCalendar.OnGotFocus(System.EventArgs e) -> void
 override System.Windows.Forms.MonthCalendar.OnHandleCreated(System.EventArgs e) -> void
 override System.Windows.Forms.MonthCalendar.OnHandleDestroyed(System.EventArgs e) -> void
 override System.Windows.Forms.MonthCalendar.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
@@ -13123,9 +13135,3 @@ virtual System.Windows.Forms.WebBrowser.OnNewWindow(System.ComponentModel.Cancel
 virtual System.Windows.Forms.WebBrowser.OnProgressChanged(System.Windows.Forms.WebBrowserProgressChangedEventArgs e) -> void
 virtual System.Windows.Forms.WebBrowser.OnStatusTextChanged(System.EventArgs e) -> void
 virtual System.Windows.Forms.WebBrowser.StatusText.get -> string
-System.Windows.Forms.DataGridView.ProcessControlShiftF10Keys(System.Windows.Forms.Keys keyData) -> bool
-override System.Windows.Forms.Form.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-override System.Windows.Forms.MonthCalendar.OnGotFocus(System.EventArgs e) -> void
-System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown owner) -> void
-System.Windows.Forms.VisualStyles.EdgeEffects.Flat = 16384 -> System.Windows.Forms.VisualStyles.EdgeEffects
-System.Windows.Forms.VisualStyles.EdgeEffects.Soft = 4096 -> System.Windows.Forms.VisualStyles.EdgeEffects
