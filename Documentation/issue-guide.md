@@ -10,7 +10,7 @@ We will keep issues open even if the WinForms team internally has no plans to ad
 
 You can help us streamline our response time to your feedback and ideas by filing high-quality reports.
 
-## Known Issues
+### Known Issues
 
 If you encounter an issue using the latest .NET Core 3.1 SDK, please:
 
@@ -18,18 +18,29 @@ If you encounter an issue using the latest .NET Core 3.1 SDK, please:
 1. Explore [this repositories issues][winforms-issues], and then
 1. [Open a new issue][new-issue] if there is none.
 
-### High-quality bug reports
+### Bug reports
 
 In general, try to be specific. Get straight to the main point. Leave additional details, options, and alternatives to the end (hint: separate them visually). Don't write long bug reports, unless you have to.
 
-* Include a minimal reproduction (repro) in your bug if at all possible (chop off dependencies, remove as much code as possible). If it is not possible, say why.
-  * Note: Yes, it may take some time to minimize a repro from your larger app - but that is exactly what we would do in most cases anyway. Issues with clear, concise reproduction guidelines are easier for us to investigate; such issues will have higher chance of being addressed quickly.
+* Include a minimal reproduction (repro) in your bug if at all possible (chop off dependencies, remove as much code as possible). If it is not possible, say why.<br />
+  :warning: Note: Yes, it may take some time to minimize a repro from your larger app - but that is exactly what we would do in most cases anyway. Issues with clear, concise reproduction guidelines are easier for us to investigate; such issues will have higher chance of being addressed quickly.
 * Include call-stacks, symptom descriptions, and differences between actual and expected behaviors.
 
-### High-quality feature and API suggestions
+### Feature and API suggestions
 
-Provide clear description of your suggestion. Explain scenarios in which it would be helpful and why (motivation).
-Ideally, assume that the reader has minimal knowledge and experience with writing apps/libraries that would benefit from the feature.
+Assume that the reader has minimal knowledge and experience with writing apps/libraries that would benefit from the feature, so try and write to that audience. Provide clear description of your suggestion, and explain scenarios in which it would be helpful and why (motivation).
+
+Prepare code examples that showcase the need and general usefulness of the proposal. Specifically:
+* Code that shows the surface area of the API.
+* Code that shows real world scenarios, and how they would otherwise be handled.
+* Details showing the usage/consumption of the proposed new package, and alternatives (e.g. not having this be a separate package).
+
+:warning: All new API or changes to public API must undergo an API review process. Learn more about what the API review process entails here: https://github.com/dotnet/runtime/blob/master/docs/project/api-review-process.md
+
+Here are few example of a good API proposal: 
+* https://github.com/dotnet/runtime/issues/15725
+* https://github.com/dotnet/runtime/issues/15725
+
 
 For API suggestions, check [API review process][corefx-api-review-process], especially [example of good API proposals][corefx-api-proposal-ex].
 
