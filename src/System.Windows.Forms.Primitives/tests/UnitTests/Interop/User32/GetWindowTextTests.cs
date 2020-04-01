@@ -7,7 +7,7 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 {
-    public class GetWindowTextTests : IClassFixture<ThreadExceptionFixture>
+    public class GetWindowTextTests
     {
         [WinFormsFact]
         public void GetWindowText_DoesNotTruncateText()
