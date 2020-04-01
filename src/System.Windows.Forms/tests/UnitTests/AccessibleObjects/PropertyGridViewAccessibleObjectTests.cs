@@ -263,5 +263,42 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             ControlAccessibleObject accessibleObject = (ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
             Assert.NotNull(accessibleObject.Parent);
         }
+
+        [Theory]
+        [InlineData("Some test text")]
+        [InlineData("")]
+        public void PropertyGridView_GridViewListBoxAccessibleObject_Name_ReturnsDeterminedName(string name)
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            Control.ControlAccessibleObject gridViewAccessibleObject = (Control.ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
+            PropertyGridView propertyGridView = (PropertyGridView)gridViewAccessibleObject.Owner;
+
+            propertyGridView.DropDownListBoxAccessibleObject.Name = name;
+            string listAccessibleName = propertyGridView.DropDownListBoxAccessibleObject.Name;
+            Assert.Equal(name, listAccessibleName);
+        }
+
+        [WinFormsFact]
+        public void PropertyGridView_GridViewListBoxAccessibleObject_ReturnsDefaultName()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            Control.ControlAccessibleObject gridViewAccessibleObject = (Control.ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
+            PropertyGridView propertyGridView = (PropertyGridView)gridViewAccessibleObject.Owner;
+
+            string listAccessibleName = propertyGridView.DropDownListBoxAccessibleObject.Name;
+            Assert.Equal(SR.PropertyGridEntryValuesListDefaultAccessibleName, listAccessibleName);
+        }
+
+        [WinFormsFact]
+        public void PropertyGridView_GridViewListBoxAccessibleObject_ReturnsDefaultName_IfBaseNameIsSetAsNull()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            Control.ControlAccessibleObject gridViewAccessibleObject = (Control.ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
+            PropertyGridView propertyGridView = (PropertyGridView)gridViewAccessibleObject.Owner;
+
+            propertyGridView.DropDownListBoxAccessibleObject.Name = null;
+            string listAccessibleName = propertyGridView.DropDownListBoxAccessibleObject.Name;
+            Assert.Equal(SR.PropertyGridEntryValuesListDefaultAccessibleName, listAccessibleName);
+        }
     }
 }
