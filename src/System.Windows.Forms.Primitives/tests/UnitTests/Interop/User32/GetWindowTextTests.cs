@@ -9,13 +9,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 {
     public class GetWindowTextTests
     {
-        [WinFormsFact]
+        [StaFact]
         public void GetWindowText_DoesNotTruncateText()
         {
             CallGetWindowText(useBeforeGetTextLengthCallback: false);
         }
 
-        [WinFormsFact]
+        [StaFact]
         public void GetWindowText_DoesNotLoopInfinitely()
         {
             CallGetWindowText(useBeforeGetTextLengthCallback: true);
