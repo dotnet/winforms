@@ -12,15 +12,10 @@ namespace System.Windows.Forms
     public sealed class TaskDialogRadioButton : TaskDialogControl
     {
         private string? _text;
-
         private int _radioButtonID;
-
         private bool _enabled = true;
-
         private bool _checked;
-
         private TaskDialogRadioButtonCollection? _collection;
-
         private bool _ignoreRadioButtonClickedNotification;
 
         /// <summary>
@@ -63,7 +58,6 @@ namespace System.Windows.Forms
         public bool Enabled
         {
             get => _enabled;
-
             set
             {
                 DenyIfBoundAndNotCreated();
@@ -94,7 +88,6 @@ namespace System.Windows.Forms
         public string? Text
         {
             get => _text;
-
             set
             {
                 DenyIfBound();
@@ -121,7 +114,6 @@ namespace System.Windows.Forms
         public bool Checked
         {
             get => _checked;
-
             set
             {
                 DenyIfBoundAndNotCreated();

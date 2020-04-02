@@ -18,7 +18,6 @@ namespace System.Windows.Forms
         private string? _collapsedButtonText;
         private TaskDialogExpanderPosition _expanderPosition;
         private bool _expanded;
-
         private bool _updateTextOnInitialization;
 
         /// <summary>
@@ -69,7 +68,6 @@ namespace System.Windows.Forms
         public string? Text
         {
             get => _text;
-
             set
             {
                 DenyIfBoundAndNotCreated();
@@ -106,7 +104,6 @@ namespace System.Windows.Forms
         public string? ExpandedButtonText
         {
             get => _expandedButtonText;
-
             set
             {
                 DenyIfBound();
@@ -127,7 +124,6 @@ namespace System.Windows.Forms
         public string? CollapsedButtonText
         {
             get => _collapsedButtonText;
-
             set
             {
                 DenyIfBound();
@@ -147,7 +143,6 @@ namespace System.Windows.Forms
         public bool Expanded
         {
             get => _expanded;
-
             set
             {
                 // The Task Dialog doesn't provide a message type to click the expando
@@ -173,7 +168,6 @@ namespace System.Windows.Forms
         public TaskDialogExpanderPosition Position
         {
             get => _expanderPosition;
-
             set
             {
                 if (!ClientUtils.IsEnumValid(

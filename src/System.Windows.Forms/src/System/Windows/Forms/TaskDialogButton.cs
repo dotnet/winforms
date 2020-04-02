@@ -31,12 +31,10 @@ namespace System.Windows.Forms
     /// </remarks>
     public class TaskDialogButton : TaskDialogControl
     {
+        private readonly TaskDialogResult? _standardButtonResult;
         private bool _enabled = true;
         private bool _elevationRequired;
         private bool _visible = true;
-
-        private readonly TaskDialogResult? _standardButtonResult;
-
         private string? _text;
         private int _customButtonID;
 
@@ -94,12 +92,12 @@ namespace System.Windows.Forms
         // Static factory properties that return a new instance of the button.
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>OK</c> button.
         /// </summary>
         public static TaskDialogButton OK => new TaskDialogButton(TaskDialogResult.OK);
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Cancel</c> button.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -112,37 +110,37 @@ namespace System.Windows.Forms
         public static TaskDialogButton Cancel => new TaskDialogButton(TaskDialogResult.Cancel);
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Abort</c> button.
         /// </summary>
         public static TaskDialogButton Abort => new TaskDialogButton(TaskDialogResult.Abort);
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Retry</c> button.
         /// </summary>
         public static TaskDialogButton Retry => new TaskDialogButton(TaskDialogResult.Retry);
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Ignore</c> button.
         /// </summary>
         public static TaskDialogButton Ignore => new TaskDialogButton(TaskDialogResult.Ignore);
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Yes</c> button.
         /// </summary>
         public static TaskDialogButton Yes => new TaskDialogButton(TaskDialogResult.Yes);
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>No</c> button.
         /// </summary>
         public static TaskDialogButton No => new TaskDialogButton(TaskDialogResult.No);
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Close</c> button.
         /// </summary>
         public static TaskDialogButton Close => new TaskDialogButton(TaskDialogResult.Close);
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Help</c> button.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -153,12 +151,12 @@ namespace System.Windows.Forms
         public static TaskDialogButton Help => new TaskDialogButton(TaskDialogResult.Help);
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Try Again</c> button.
         /// </summary>
         public static TaskDialogButton TryAgain => new TaskDialogButton(TaskDialogResult.TryAgain);
 
         /// <summary>
-        ///
+        ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Continue</c> button.
         /// </summary>
         public static TaskDialogButton Continue => new TaskDialogButton(TaskDialogResult.Continue);
 
@@ -189,7 +187,6 @@ namespace System.Windows.Forms
         public bool Enabled
         {
             get => _enabled;
-
             set
             {
                 DenyIfBoundAndNotCreated();
@@ -221,7 +218,6 @@ namespace System.Windows.Forms
         public bool ElevationRequired
         {
             get => _elevationRequired;
-
             set
             {
                 DenyIfBoundAndNotCreated();
@@ -253,7 +249,6 @@ namespace System.Windows.Forms
         public bool Visible
         {
             get => _visible;
-
             set
             {
                 DenyIfBound();
@@ -282,7 +277,6 @@ namespace System.Windows.Forms
         public string? Text
         {
             get => _text;
-
             set
             {
                 // For standard buttons, the text is set by the constructor (but it's only
@@ -343,6 +337,7 @@ namespace System.Windows.Forms
             BoundPage!.BoundDialog!.ClickButton(ButtonID);
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
             // For standard buttons, we consider them to be equal if they have the same
@@ -355,6 +350,7 @@ namespace System.Windows.Forms
             return base.Equals(obj);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             if (IsStandardButton)

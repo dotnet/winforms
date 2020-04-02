@@ -46,7 +46,6 @@ namespace System.Windows.Forms
         public string? DescriptionText
         {
             get => _descriptionText;
-
             set
             {
                 DenyIfBound();

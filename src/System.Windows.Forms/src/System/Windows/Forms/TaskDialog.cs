@@ -391,8 +391,6 @@ namespace System.Windows.Forms
         ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        ///   <paramref name="hwndOwner"/> is <see langword="null"/>
-        ///   - or -
         ///   <paramref name="page"/> is <see langword="null"/>.
         /// </exception>
         public static unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner, TaskDialogPage page,

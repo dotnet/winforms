@@ -45,8 +45,22 @@ namespace System.Windows.Forms
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="item"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///   <paramref name="item"/> has already been added to the collection.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///   <paramref name="item"/> is already a part of a different collection.
+        /// </exception>
         protected override void SetItem(int index, TaskDialogRadioButton item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
             BoundPage?.DenyIfBound();
@@ -72,8 +86,22 @@ namespace System.Windows.Forms
         }
 
         /// <inheritdoc/>
+        /// <exception cref="ArgumentNullException">
+        ///   <paramref name="item"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        ///   <paramref name="item"/> has already been added to the collection.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///   <paramref name="item"/> is already a part of a different collection.
+        /// </exception>
         protected override void InsertItem(int index, TaskDialogRadioButton item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
             BoundPage?.DenyIfBound();

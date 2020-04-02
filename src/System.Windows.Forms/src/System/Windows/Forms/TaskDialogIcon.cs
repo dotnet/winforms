@@ -93,7 +93,6 @@ namespace System.Windows.Forms
 #pragma warning restore IDE1006 // Naming Styles
 
         private readonly TaskDialogStandardIcon? _standardIcon;
-
         private readonly IntPtr? _iconHandle;
 
         /// <summary>

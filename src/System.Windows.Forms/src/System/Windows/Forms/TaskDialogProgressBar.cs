@@ -49,21 +49,23 @@ namespace System.Windows.Forms
         ///   where the default value is <see cref="TaskDialogProgressBarState.None"/>.
         /// </value>
         /// <remarks>
-        /// <para>
-        ///   This control will only be shown if this property is not
-        ///   <see cref="TaskDialogProgressBarState.None"/>.
-        /// </para>
-        /// <para>
-        ///   This property can be set while the dialog is shown. However, while the dialog is
-        ///   shown, it is not possible to change the state from
-        ///   <see cref="TaskDialogProgressBarState.None"/> to any other state,
-        ///   and vice versa.
-        /// </para>
+        ///   <para>
+        ///     This control will only be shown if this property is not
+        ///     <see cref="TaskDialogProgressBarState.None"/>.
+        ///   </para>
+        ///   <para>
+        ///     This property can be set while the dialog is shown. However, while the dialog is
+        ///     shown, it is not possible to change the state from
+        ///     <see cref="TaskDialogProgressBarState.None"/> to any other state,
+        ///     and vice versa.
+        ///   </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   The value is <c>TaskDialogProgressBarState.None</c> while the dialog is displayed.
+        /// </exception>
         public TaskDialogProgressBarState State
         {
             get => _state;
-
             set
             {
                 if (!ClientUtils.IsEnumValid(
@@ -113,18 +115,20 @@ namespace System.Windows.Forms
         ///   The minimum value of the range. The default is <c>0</c>.
         /// </value>
         /// <remarks>
-        /// <para>
-        ///   This value is only used if the progress bar is not a marquee progress bar (as defined
-        ///   by the <see cref="State"/> property).
-        /// </para>
-        /// <para>
-        ///   This property can be set while the dialog is shown.
-        /// </para>
+        ///   <para>
+        ///     This value is only used if the progress bar is not a marquee progress bar (as defined
+        ///     by the <see cref="State"/> property).
+        ///   </para>
+        ///   <para>
+        ///     This property can be set while the dialog is shown.
+        ///   </para>
         /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///   The value is less than 0 or greater than <see cref="ushort.MaxValue" />.
+        /// </exception>
         public int Minimum
         {
             get => _minimum;
-
             set
             {
                 if (value < 0 || value > ushort.MaxValue)
@@ -152,18 +156,20 @@ namespace System.Windows.Forms
         ///   The maximum value of the range. The default is <c>100</c>.
         /// </value>
         /// <remarks>
-        /// <para>
-        ///   This value is only used if the progress bar is not a marquee progress bar (as defined
-        ///   by the <see cref="State"/> property).
-        /// </para>
-        /// <para>
-        ///   This property can be set while the dialog is shown.
-        /// </para>
+        ///   <para>
+        ///     This value is only used if the progress bar is not a marquee progress bar (as defined
+        ///     by the <see cref="State"/> property).
+        ///   </para>
+        ///   <para>
+        ///     This property can be set while the dialog is shown.
+        ///   </para>
         /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///   The value is less than 0 or greater than <see cref="ushort.MaxValue" />.
+        /// </exception>
         public int Maximum
         {
             get => _maximum;
-
             set
             {
                 if (value < 0 || value > ushort.MaxValue)
@@ -191,18 +197,20 @@ namespace System.Windows.Forms
         ///   The position within the range of the progress bar. The default is <c>0</c>.
         /// </value>
         /// <remarks>
-        /// <para>
-        ///   This value is only used if the progress bar is not a marquee progress bar (as defined
-        ///   by the <see cref="State"/> property).
-        /// </para>
-        /// <para>
-        ///   This property can be set while the dialog is shown.
-        /// </para>
+        ///   <para>
+        ///     This value is only used if the progress bar is not a marquee progress bar (as defined
+        ///     by the <see cref="State"/> property).
+        ///   </para>
+        ///   <para>
+        ///     This property can be set while the dialog is shown.
+        ///   </para>
         /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///   The value is less than 0 or greater than <see cref="ushort.MaxValue" />.
+        /// </exception>
         public int Value
         {
             get => _value;
-
             set
             {
                 if (value < 0 || value > ushort.MaxValue)
@@ -256,7 +264,6 @@ namespace System.Windows.Forms
         public int MarqueeSpeed
         {
             get => _marqueeSpeed;
-
             set
             {
                 DenyIfBoundAndNotCreated();

@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     public sealed class TaskDialogCheckBox : TaskDialogControl
     {
         private string? _text;
-
         private bool _checked;
 
         /// <summary>
@@ -54,7 +53,6 @@ namespace System.Windows.Forms
         public string? Text
         {
             get => _text;
-
             set
             {
                 DenyIfBound();
@@ -79,7 +77,6 @@ namespace System.Windows.Forms
         public bool Checked
         {
             get => _checked;
-
             set
             {
                 DenyIfBoundAndNotCreated();

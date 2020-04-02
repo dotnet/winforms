@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         None = 0,
 
         /// <summary>
-        ///   The task dialog contains a symbol consisting of a lowercase letter i in a circle.
+        ///   The task dialog contains a symbol consisting of a lowercase letter "i" in a circle.
         /// </summary>
         Information = ushort.MaxValue - 2, // TD_INFORMATION_ICON
 
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         Warning = ushort.MaxValue, // TD_WARNING_ICON
 
         /// <summary>
-        ///   The task dialog contains an icon consisting of white X in a circle with a red background.
+        ///   The task dialog contains an icon consisting of white "x" in a circle with a red background.
         /// </summary>
         Error = ushort.MaxValue - 1, // TD_ERROR_ICON
 
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         ShieldWarningYellowBar = ushort.MaxValue - 5,
 
         /// <summary>
-        ///   The task dialog contains an icon consisting of white X in a red shield and shows a red bar around the icon.
+        ///   The task dialog contains an icon consisting of white "x" in a red shield and shows a red bar around the icon.
         /// </summary>
         ShieldErrorRedBar = ushort.MaxValue - 6,
 

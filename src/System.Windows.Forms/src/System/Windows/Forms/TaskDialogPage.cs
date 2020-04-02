@@ -127,7 +127,6 @@ namespace System.Windows.Forms
         public TaskDialogButtonCollection Buttons
         {
             get => _buttons;
-
             set
             {
                 // We must deny this if we are bound because we need to be able to
@@ -156,7 +155,6 @@ namespace System.Windows.Forms
         public TaskDialogRadioButtonCollection RadioButtons
         {
             get => _radioButtons;
-
             set
             {
                 // We must deny this if we are bound because we need to be able to
@@ -179,7 +177,6 @@ namespace System.Windows.Forms
         public TaskDialogCheckBox? CheckBox
         {
             get => _checkBox;
-
             set
             {
                 // We must deny this if we are bound because we need to be able to
@@ -202,7 +199,6 @@ namespace System.Windows.Forms
         public TaskDialogExpander? Expander
         {
             get => _expander;
-
             set
             {
                 // We must deny this if we are bound because we need to be able to
@@ -225,7 +221,6 @@ namespace System.Windows.Forms
         public TaskDialogFooter? Footer
         {
             get => _footer;
-
             set
             {
                 // We must deny this if we are bound because we need to be able to
@@ -248,7 +243,6 @@ namespace System.Windows.Forms
         public TaskDialogProgressBar? ProgressBar
         {
             get => _progressBar;
-
             set
             {
                 // We must deny this if we are bound because we need to be able to
@@ -270,7 +264,6 @@ namespace System.Windows.Forms
         public string? Caption
         {
             get => _caption;
-
             set
             {
                 DenyIfWaitingForInitialization();
@@ -294,7 +287,6 @@ namespace System.Windows.Forms
         public string? MainInstruction
         {
             get => _mainInstruction;
-
             set
             {
                 if (BoundDialog != null)
@@ -327,7 +319,6 @@ namespace System.Windows.Forms
         public string? Text
         {
             get => _text;
-
             set
             {
                 if (BoundDialog != null)
@@ -360,7 +351,6 @@ namespace System.Windows.Forms
         public unsafe TaskDialogIcon? Icon
         {
             get => _icon;
-
             set
             {
                 // We currently don't support to buffer changes while waiting for the
@@ -407,7 +397,6 @@ namespace System.Windows.Forms
         public int Width
         {
             get => _width;
-
             set
             {
                 if (value < 0)

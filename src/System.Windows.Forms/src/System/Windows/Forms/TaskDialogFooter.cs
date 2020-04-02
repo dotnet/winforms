@@ -14,7 +14,6 @@ namespace System.Windows.Forms
         private string? _text;
         private TaskDialogIcon? _icon;
         private bool _boundIconIsFromHandle;
-
         private bool _updateTextOnInitialization;
 
         /// <summary>
@@ -55,7 +54,6 @@ namespace System.Windows.Forms
         public string? Text
         {
             get => _text;
-
             set
             {
                 DenyIfBoundAndNotCreated();
@@ -94,7 +92,6 @@ namespace System.Windows.Forms
         public unsafe TaskDialogIcon? Icon
         {
             get => _icon;
-
             set
             {
                 DenyIfBoundAndNotCreated();
