@@ -8101,6 +8101,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Otevřít</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridEntryValuesListDefaultAccessibleName">
+        <source>Available values</source>
+        <target state="new">Available values</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridExceptionInfo">
         <source>Error Information</source>
         <target state="translated">Informace o chybě</target>

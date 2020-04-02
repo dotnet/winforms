@@ -16,70 +16,6 @@ namespace System.Windows.Forms
 
         /* RichTextBox messages */
 
-        // Extended edit style masks
-        internal const int SES_EMULATESYSEDIT = 1;
-        internal const int SES_BEEPONMAXTEXT = 2;
-        internal const int SES_EXTENDBACKCOLOR = 4;
-        internal const int SES_MAPCPS = 8;
-        internal const int SES_EMULATE10 = 16;
-        internal const int SES_USECRLF = 32;
-        internal const int SES_USEAIMM = 64;
-        internal const int SES_NOIME = 128;
-        internal const int SES_ALLOWBEEPS = 256;
-        internal const int SES_UPPERCASE = 512;
-        internal const int SES_LOWERCASE = 1024;
-        internal const int SES_NOINPUTSEQUENCECHK = 2048;
-        internal const int SES_BIDI = 4096;
-        internal const int SES_SCROLLONKILLFOCUS = 8192;
-        internal const int SES_XLTCRCRLFTOCR = 16384;
-
-        // Options for EM_SETLANGOPTIONS and EM_GETLANGOPTIONS
-        internal const int IMF_AUTOKEYBOARD = 0x0001;
-        internal const int IMF_AUTOFONT = 0x0002;
-        internal const int IMF_IMECANCELCOMPLETE = 0x0004;   // high completes the comp string when aborting, low cancels.
-        internal const int IMF_IMEALWAYSSENDNOTIFY = 0x0008;
-        internal const int IMF_AUTOFONTSIZEADJUST = 0x0010;
-        internal const int IMF_UIFONTS = 0x0020;
-        internal const int IMF_DUALFONT = 0x0080;
-
-        // Values for EM_GETIMECOMPMODE
-        internal const int ICM_NOTOPEN = 0x0000;
-        internal const int ICM_LEVEL3 = 0x0001;
-        internal const int ICM_LEVEL2 = 0x0002;
-        internal const int ICM_LEVEL2_5 = 0x0003;
-        internal const int ICM_LEVEL2_SUI = 0x0004;
-
-        // Outline mode wparam values
-        internal const int EMO_EXIT = 0; // enter normal mode,  lparam ignored
-        internal const int EMO_ENTER = 1; // enter outline mode, lparam ignored
-        internal const int EMO_PROMOTE = 2; // LOWORD(lparam) == 0 ==>
-                                            // promote  to body-text
-                                            // LOWORD(lparam) != 0 ==>
-                                            // promote/demote current selection
-                                            // by indicated number of levels
-        internal const int EMO_EXPAND = 3; // HIWORD(lparam) = EMO_EXPANDSELECTION
-                                           // -> expands selection to level
-                                           // indicated in LOWORD(lparam)
-                                           // LOWORD(lparam) = -1/+1 corresponds
-                                           // to collapse/expand button presses
-                                           // in winword (other values are
-                                           // equivalent to having pressed these
-                                           // buttons more than once)
-                                           // HIWORD(lparam) = EMO_EXPANDDOCUMENT
-                                           // -> expands whole document to
-                                           // indicated level
-        internal const int EMO_MOVESELECTION = 4; // LOWORD(lparam) != 0 -> move current
-                                                  // selection up/down by indicated
-                                                  // amount
-        internal const int EMO_GETVIEWMODE = 5; // Returns VM_NORMAL or VM_OUTLINE
-
-        // EMO_EXPAND options
-
-        internal const int EMO_EXPANDSELECTION = 0;
-        internal const int EMO_EXPANDDOCUMENT = 1;
-        internal const int VM_NORMAL = 4; // Agrees with RTF \viewkindN
-        internal const int VM_OUTLINE = 2;
-
         // New notifications
         internal const int EN_MSGFILTER = 0x0700;
         internal const int EN_REQUESTRESIZE = 0x0701;
@@ -95,10 +31,6 @@ namespace System.Windows.Forms
         internal const int EN_LINK = 0x070b;
         internal const int EN_DRAGDROPDONE = 0x070c;
         internal const int EN_PARAGRAPHEXPANDED = 0x070d;
-
-        // BiDi specific notifications
-        internal const int EN_ALIGNLTR = 0x0710;
-        internal const int EN_ALIGNRTL = 0x0711;
 
         // Event notification masks */
         internal const int ENM_NONE = 0x00000000;
@@ -155,104 +87,6 @@ namespace System.Windows.Forms
         internal const int ECOOP_OR = 0x0002;
         internal const int ECOOP_AND = 0x0003;
         internal const int ECOOP_XOR = 0x0004;
-
-        /* new word break function actions */
-        internal const int WB_CLASSIFY = 3;
-        internal const int WB_MOVEWORDLEFT = 4;
-        internal const int WB_MOVEWORDRIGHT = 5;
-        internal const int WB_LEFTBREAK = 6;
-        internal const int WB_RIGHTBREAK = 7;
-
-        /* Asia specific flags */
-        internal const int WB_MOVEWORDPREV = 4;
-        internal const int WB_MOVEWORDNEXT = 5;
-        internal const int WB_PREVBREAK = 6;
-        internal const int WB_NEXTBREAK = 7;
-
-        internal const int PC_FOLLOWING = 1;
-        internal const int PC_LEADING = 2;
-        internal const int PC_OVERFLOW = 3;
-        internal const int PC_DELIMITER = 4;
-
-        internal const int WBF_WORDWRAP = 0x010;
-        internal const int WBF_WORDBREAK = 0x020;
-        internal const int WBF_OVERFLOW = 0x040;
-        internal const int WBF_LEVEL1 = 0x080;
-        internal const int WBF_LEVEL2 = 0x100;
-        internal const int WBF_CUSTOM = 0x200;
-
-        /* for use with EM_GET/SETTEXTMODE */
-        internal const int TM_PLAINTEXT = 1;
-        internal const int TM_RICHTEXT = 2;    /* default behavior */
-        internal const int TM_SINGLELEVELUNDO = 4;
-        internal const int TM_MULTILEVELUNDO = 8;    /* default behavior */
-        internal const int TM_SINGLECODEPAGE = 16;
-        internal const int TM_MULTICODEPAGE = 32;   /* default behavior */
-
-        /* Asia specific flags */
-        internal const int IMF_FORCENONE = 0x0001;
-        internal const int IMF_FORCEENABLE = 0x0002;
-        internal const int IMF_FORCEDISABLE = 0x0004;
-        internal const int IMF_CLOSESTATUSWINDOW = 0x0008;
-        internal const int IMF_VERTICAL = 0x0020;
-        internal const int IMF_FORCEACTIVE = 0x0040;
-        internal const int IMF_FORCEINACTIVE = 0x0080;
-        internal const int IMF_FORCEREMEMBER = 0x0100;
-        internal const int IMF_MULTIPLEEDIT = 0x0400;
-
-        /* Word break flags (used with WB_CLASSIFY) */
-        internal const int WBF_CLASS = 0x0F;
-        internal const int WBF_ISWHITE = 0x10;
-        internal const int WBF_BREAKLINE = 0x20;
-        internal const int WBF_BREAKAFTER = 0x40;
-
-        internal const int cchTextLimitDefault = 32767;
-
-        /* all paragraph measurements are in twips */
-        internal const int lDefaultTab = 720;
-
-        /*
-         *  PARAFORMAT numbering options (values for wNumbering):
-         *
-         *          Numbering Type          Value   Meaning
-         *          tomNoNumbering            0             Turn off paragraph numbering
-         *          tomNumberAsLCLetter       1             a, b, c, ...
-         *          tomNumberAsUCLetter       2             A, B, C, ...
-         *          tomNumberAsLCRoman        3             i, ii, iii, ...
-         *          tomNumberAsUCRoman        4             I, II, III, ...
-         *          tomNumberAsSymbols        5             default is bullet
-         *          tomNumberAsNumber         6             0, 1, 2, ...
-         *          tomNumberAsSequence       7             tomNumberingStart is first Unicode to use
-         *
-         *  Other valid Unicode chars are Unicodes for bullets.
-         */
-
-        internal const int tomTrue = -1,
-                            tomFalse = 0,
-                            tomNone = 0,
-                            tomUndefined = -9999999,
-                            tomAutoColor = -9999997;
-
-        /* used with IRichEditOleCallback::GetContextMenu, this flag will be
-           passed as a "selection type".  It indicates that a context menu for
-           a right-mouse drag drop should be generated.  The IOleObject parameter
-           will really be the IDataObject for the drop
-         */
-        internal const int GCM_RIGHTMOUSEDROP = 0x8000;
-
-        internal const int OLEOP_DOVERB = 1;
-
-        /*  UndoName info */
-        internal const int UID_UNKNOWN = 0;
-        internal const int UID_TYPING = 1;
-        internal const int UID_DELETE = 2;
-        internal const int UID_DRAGDROP = 3;
-        internal const int UID_CUT = 4;
-        internal const int UID_PASTE = 5;
-
-        /* flags for the GETEXTEX data structure */
-        internal const int GT_DEFAULT = 0;
-        internal const int GT_USECRLF = 1;
 
         /* UNICODE embedding character */
         // disable csharp compiler warning #0414: field assigned unused value

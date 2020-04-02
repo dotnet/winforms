@@ -7229,6 +7229,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.FragmentNavigate(direction);
             }
 
+            public override string Name
+            {
+                get => base.Name ?? SR.PropertyGridEntryValuesListDefaultAccessibleName;
+                set => base.Name = value;
+            }
+
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
@@ -7285,7 +7291,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal void SetListBoxItemFocus()
             {
                 var selectedItem = _owningGridViewListBox.SelectedItem;
-                if (_itemAccessibleObjects[selectedItem] is AccessibleObject itemAccessibleObject)
+                if (selectedItem != null && _itemAccessibleObjects[selectedItem] is AccessibleObject itemAccessibleObject)
                 {
                     itemAccessibleObject.SetFocus();
                 }

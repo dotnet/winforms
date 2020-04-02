@@ -338,12 +338,6 @@ Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.MyPictures() -> String
 Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.ProgramFiles() -> String
 Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.Programs() -> String
 Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.Temp() -> String
-Microsoft.VisualBasic._Interaction
-Microsoft.VisualBasic._Interaction.AppActivateByProcessId(ProcessId As Integer) -> Void
-Microsoft.VisualBasic._Interaction.AppActivateByTitle(Title As String) -> Void
-Microsoft.VisualBasic._Interaction.InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) -> String
-Microsoft.VisualBasic._Interaction.MsgBox(Prompt As Object, Buttons As Microsoft.VisualBasic.MsgBoxStyle, Title As Object) -> Microsoft.VisualBasic.MsgBoxResult
-Microsoft.VisualBasic._Interaction.Shell(PathName As String, Style As Microsoft.VisualBasic.AppWinStyle, Wait As Boolean, Timeout As Integer) -> Integer
 Overridable Microsoft.VisualBasic.ApplicationServices.User.InternalPrincipal() -> System.Security.Principal.IPrincipal
 Overridable Microsoft.VisualBasic.ApplicationServices.User.InternalPrincipal(value As System.Security.Principal.IPrincipal) -> Void
 Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnCreateMainForm() -> Void

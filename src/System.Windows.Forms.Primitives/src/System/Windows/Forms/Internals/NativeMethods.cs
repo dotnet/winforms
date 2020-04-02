@@ -58,8 +58,6 @@ namespace System.Windows.Forms
         PATINVERT = 0x005A0049;
 
         public const int
-        SIZE_RESTORED = 0,
-        SIZE_MAXIMIZED = 2,
         SORT_DEFAULT = 0x0,
         SUBLANG_DEFAULT = 0x01;
 

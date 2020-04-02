@@ -9,6 +9,11 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
+        // The Cursor class has an IntPtr constructor that takes a handle
+        // to an existing cursor. The int constructor does the LoadCursorW
+        // call. To avoid accidental use of the IntPtr constructor this
+        // set of defines should be left as int, even though they ultimately
+        // need converted to IntPtr.
         public static class CursorResourceId
         {
             public const int IDC_ARROW = 32512;
@@ -28,6 +33,6 @@ internal static partial class Interop
         }
 
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr LoadCursorW(IntPtr hInst, int iconId);
+        public static extern IntPtr LoadCursorW(IntPtr hInstance, IntPtr lpCursorName);
     }
 }
