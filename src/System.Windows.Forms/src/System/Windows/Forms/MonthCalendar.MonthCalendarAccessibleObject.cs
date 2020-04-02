@@ -363,7 +363,7 @@ namespace System.Windows.Forms
             {
                 if (columnIndex < 0 ||
                     columnIndex >= MAX_DAYS ||
-                    columnIndex >= ColumnCount)
+                    columnIndex >= ColumnCount /*|| parentAccessibleObject == null*/)
                 {
                     return null;
                 }
@@ -501,6 +501,16 @@ namespace System.Windows.Forms
                 gridInfo.dwFlags &= ~MCGIF.NAME;
 
                 return User32.SendMessageW(_owner, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
+            }
+
+            public int GetCalendarCount()
+            {
+                // Do not use this if gridInfo.dwFlags contains MCGIF_NAME;
+                // use GetCalendarGridInfoText() instead.
+
+                int calendarCount = (int) User32.SendMessageW(_owner, (User32.WM)MCM.GETCALENDARCOUNT, IntPtr.Zero, IntPtr.Zero);
+
+                return calendarCount;
             }
 
             private unsafe bool GetCalendarGridInfoText(MCGIP dwPart, int calendarIndex, int row, int column, out string text)
