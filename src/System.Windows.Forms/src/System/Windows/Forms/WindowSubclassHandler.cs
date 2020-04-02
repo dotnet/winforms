@@ -27,11 +27,8 @@ namespace System.Windows.Forms
     internal class WindowSubclassHandler : IDisposable
     {
         private readonly IntPtr _handle;
-
         private bool _opened;
-
         private bool _disposed;
-
         private IntPtr _originalWindowProc;
 
         /// <summary>
