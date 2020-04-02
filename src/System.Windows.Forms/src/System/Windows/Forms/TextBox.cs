@@ -277,6 +277,23 @@ namespace System.Windows.Forms
             }
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            return base.CreateAccessibilityInstance();
+        }
+
+        private class TextBoxAccessibleObject : ControlAccessibleObject
+        {
+            public TextBoxAccessibleObject(TextBox owner) : base(owner)
+            {
+            }
+
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                return base.FragmentNavigate(direction);
+            }
+        }
+
         /// <summary>
         ///  Returns the parameters needed to create the handle. Inheriting classes
         ///  can override this to provide extra functionality. They should not,

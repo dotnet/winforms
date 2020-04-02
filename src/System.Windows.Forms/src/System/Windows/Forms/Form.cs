@@ -3865,6 +3865,46 @@ namespace System.Windows.Forms
             ((EventHandler)Events[EVENT_CLOSED])?.Invoke(this, e);
         }
 
+        protected override void OnControlAdded(ControlEventArgs e)
+        {
+            base.OnControlAdded(e);
+
+            ControlAccessibleObject controlAccessibleObject = e.Control.AccessibilityObject as ControlAccessibleObject;
+            if (controlAccessibleObject != null)
+            {
+                controlAccessibleObject.RequestingNavigationFragment += ControlAccessibleObject_RequestingNavigationFragment;
+            }
+        }
+
+        protected override void OnControlRemoved(ControlEventArgs e)
+        {
+            base.OnControlRemoved(e);
+
+            ControlAccessibleObject controlAccessibleObject = e.Control.AccessibilityObject as ControlAccessibleObject;
+            if (controlAccessibleObject != null)
+            {
+                controlAccessibleObject.RequestingNavigationFragment -= ControlAccessibleObject_RequestingNavigationFragment;
+            }
+        }
+
+        private void ControlAccessibleObject_RequestingNavigationFragment(object sender, ControlAccessibleObject.RequestingNavigationFragmentEventArgs e)
+        {
+            switch (e.NavigationDirection)
+            {
+                case UiaCore.NavigateDirection.Parent:
+                    e.RequestingNavigationFragment = AccessibilityObject;
+                    break;
+                case UiaCore.NavigateDirection.NextSibling:
+                    var nextControl = GetNextControl(sender as Control, true);
+                    e.RequestingNavigationFragment = nextControl?.AccessibilityObject;
+                    break;
+                case UiaCore.NavigateDirection.PreviousSibling:
+                    var previousControl = GetNextControl(sender as Control, false);
+                    e.RequestingNavigationFragment = previousControl?.AccessibilityObject;
+                    break;
+            }
+        }
+
         /// <summary>
         ///  The Closing event is fired before the form is closed.
         /// </summary>

@@ -26,6 +26,8 @@ namespace System.Windows.Forms
             private IntPtr _handle = IntPtr.Zero; // Associated window handle (if any)
             private int[] _runtimeId = null;      // Used by UIAutomation
 
+            internal event EventHandler<RequestingNavigationFragmentEventArgs> RequestingNavigationFragment;
+
             public ControlAccessibleObject(Control ownerControl)
             {
                 Owner = ownerControl ?? throw new ArgumentNullException(nameof(ownerControl));
@@ -365,6 +367,33 @@ namespace System.Windows.Forms
                     AccessibleRole role = Owner.AccessibleRole;
                     return role != AccessibleRole.Default
                         ? role : base.Role;
+                }
+            }
+
+            internal class RequestingNavigationFragmentEventArgs : EventArgs
+            {
+                public RequestingNavigationFragmentEventArgs(UiaCore.NavigateDirection navigationDirection)
+                {
+                    NavigationDirection = navigationDirection;
+                }
+
+                public UiaCore.IRawElementProviderFragment RequestingNavigationFragment { get; set; }
+
+                public UiaCore.NavigateDirection NavigationDirection { get; private set; }
+            }
+
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                switch (direction)
+                {
+                    case UiaCore.NavigateDirection.Parent:
+                    case UiaCore.NavigateDirection.NextSibling:
+                    case UiaCore.NavigateDirection.PreviousSibling:
+                        var eventArgs = new RequestingNavigationFragmentEventArgs(UiaCore.NavigateDirection.Parent);
+                        RequestingNavigationFragment.Invoke(this, eventArgs);
+                        return eventArgs.RequestingNavigationFragment;
+                    default:
+                        return base.FragmentNavigate(direction);
                 }
             }
 

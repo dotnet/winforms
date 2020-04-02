@@ -29,13 +29,25 @@ namespace System.Windows.Forms
 
             internal override Rectangle BoundingRectangle => _owner.Bounds;
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction) =>
-                direction switch
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                switch (direction)
                 {
-                    UiaCore.NavigateDirection.FirstChild => _owner.GetFirstChildControlInTabOrder(true)?.AccessibilityObject,
-                    UiaCore.NavigateDirection.LastChild => _owner.GetFirstChildControlInTabOrder(false)?.AccessibilityObject,
-                            _ => base.FragmentNavigate(direction)
-                };
+                    case UiaCore.NavigateDirection.FirstChild:
+                        return _owner.FirstChildControlInTabOrder?.AccessibilityObject;
+                    case UiaCore.NavigateDirection.LastChild:
+                        return _owner.LastChildControlInTabOrder?.AccessibilityObject;
+                    default:
+                        return base.FragmentNavigate(direction);
+                }
+            }
+
+            internal override UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
+            {
+                // return base.GetOverrideProviderForHwnd(hwnd);
+
+                return null;
+            }
 
             internal override bool IsIAccessibleExSupported()
             {

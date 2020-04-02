@@ -5924,6 +5924,10 @@ namespace System.Windows.Forms
             return holders;
         }
 
+        internal Control FirstChildControlInTabOrder => GetFirstChildControlInTabOrder(true);
+
+        internal Control LastChildControlInTabOrder => GetFirstChildControlInTabOrder(false);
+
         internal virtual Control GetFirstChildControlInTabOrder(bool forward)
         {
             ControlCollection ctlControls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
@@ -13364,7 +13368,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return false;
+                return true;
             }
         }
 

@@ -89,6 +89,18 @@ namespace System.Windows.Forms
             }
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
+            return new ButtonAccessibleObject(this);
+        }
+
+        private class ButtonAccessibleObject : ControlAccessibleObject
+        {
+            public ButtonAccessibleObject(Button owner) : base(owner)
+            {
+            }
+        }
+
         internal override ButtonBaseAdapter CreateFlatAdapter()
         {
             return new ButtonFlatAdapter(this);
