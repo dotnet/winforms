@@ -122,10 +122,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool IsCreatable
-        {
-            get => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
-        }
+        internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
         /// <summary>
         ///   Returns a string that represents the current <see cref="TaskDialogFooter"/> control.

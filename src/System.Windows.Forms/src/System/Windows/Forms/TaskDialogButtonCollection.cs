@@ -22,11 +22,7 @@ namespace System.Windows.Forms
         {
         }
 
-        internal TaskDialogPage? BoundPage
-        {
-            get;
-            set;
-        }
+        internal TaskDialogPage? BoundPage { get; set; }
 
         /// <summary>
         ///   Creates and adds a <see cref="TaskDialogButton"/> to the collection.

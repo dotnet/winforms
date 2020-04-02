@@ -23,11 +23,7 @@ namespace System.Windows.Forms
         ///   An <see cref="object"/> that contains data about the control.
         ///   The default is <see langword="null"/>.
         /// </value>
-        public object? Tag
-        {
-            get;
-            set;
-        }
+        public object? Tag { get; set; }
 
         /// <summary>
         ///   Gets the <see cref="TaskDialogPage"/> instance which this control
@@ -48,30 +44,19 @@ namespace System.Windows.Forms
         ///   different <see cref="TaskDialogPage"/> instance at the same time.
         /// </para>
         /// </remarks>
-        public TaskDialogPage? BoundPage
-        {
-            get;
-            private set;
-        }
+        public TaskDialogPage? BoundPage { get; private set; }
 
         /// <summary>
         ///   Gets a value that indicates whether the current state of this control
         ///   allows it to be created in a task dialog when binding it.
         /// </summary>
-        internal virtual bool IsCreatable
-        {
-            get => true;
-        }
+        internal virtual bool IsCreatable => true;
 
         /// <summary>
         ///   Gets or sets a value that indicates whether this control has been created
         ///   in a bound task dialog.
         /// </summary>
-        internal bool IsCreated
-        {
-            get;
-            private set;
-        }
+        internal bool IsCreated { get; private set; }
 
         internal ComCtl32.TDF Bind(TaskDialogPage page)
         {

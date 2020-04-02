@@ -229,10 +229,7 @@ namespace System.Windows.Forms
         ///   Gets a value that indicates whether <see cref="ShowDialog(IntPtr, TaskDialogPage, TaskDialogStartupLocation)"/> is
         ///   currently being called.
         /// </summary>
-        internal bool IsShown
-        {
-            get => _instanceHandlePtr != IntPtr.Zero;
-        }
+        internal bool IsShown => _instanceHandlePtr != IntPtr.Zero;
 
         /// <summary>
         ///   Gets a value that indicates whether the native task dialog window has
@@ -247,10 +244,7 @@ namespace System.Windows.Forms
         ///   callback should have been called setting the handle.
         /// </para>
         /// </remarks>
-        internal bool IsHandleCreated
-        {
-            get => Handle != IntPtr.Zero;
-        }
+        internal bool IsHandleCreated => Handle != IntPtr.Zero;
 
         /// <summary>
         ///   Gets or sets the current count of stack frames that are in the
@@ -265,11 +259,7 @@ namespace System.Windows.Forms
         ///   case.
         /// </para>
         /// </remarks>
-        internal int RadioButtonClickedStackCount
-        {
-            get;
-            set;
-        }
+        internal int RadioButtonClickedStackCount { get; set; }
 
         private static void FreeConfig(IntPtr ptrToFree) => Marshal.FreeHGlobal(ptrToFree);
 
