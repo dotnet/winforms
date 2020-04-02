@@ -21,9 +21,6 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             MonthCalendar.MonthCalendarAccessibleObject accessibleObject = Assert.IsType<MonthCalendar.MonthCalendarAccessibleObject>(calendar.AccessibilityObject);
             int childCalendarCount = accessibleObject.GetCalendarCount();
             Assert.Equal(12, childCalendarCount);
-
-            //TO DO: написать тест (на размер календаря 1000х500 приходится 27 чайлд компанентов[3 кнопки и 24 элемента(по 2 на каждый месяц)])
-            //почему-то, при наведении на любой месяц, в фокус попадают элементы первого месяца
         }
     }
 }
