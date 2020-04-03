@@ -3895,12 +3895,16 @@ namespace System.Windows.Forms
                     e.RequestingNavigationFragment = AccessibilityObject;
                     break;
                 case UiaCore.NavigateDirection.NextSibling:
-                    var nextControl = GetNextControl(sender as Control, true);
-                    e.RequestingNavigationFragment = nextControl?.AccessibilityObject;
-                    break;
                 case UiaCore.NavigateDirection.PreviousSibling:
-                    var previousControl = GetNextControl(sender as Control, false);
-                    e.RequestingNavigationFragment = previousControl?.AccessibilityObject;
+                    bool forward = e.NavigationDirection == UiaCore.NavigateDirection.NextSibling;
+                    var controlAccessibleObject = AccessibilityObject as ControlAccessibleObject;
+                    var senderControlAccessibleObject = sender as ControlAccessibleObject;
+                    if (controlAccessibleObject != null && senderControlAccessibleObject != null)
+                    {
+                        var nextControlAccessibleObject = controlAccessibleObject.GetNextChildInTabOrder(senderControlAccessibleObject.Owner, forward);
+                        e.RequestingNavigationFragment = nextControlAccessibleObject;
+                    }
+
                     break;
             }
         }

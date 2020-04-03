@@ -389,12 +389,102 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.Parent:
                     case UiaCore.NavigateDirection.NextSibling:
                     case UiaCore.NavigateDirection.PreviousSibling:
-                        var eventArgs = new RequestingNavigationFragmentEventArgs(UiaCore.NavigateDirection.Parent);
+                        var eventArgs = new RequestingNavigationFragmentEventArgs(direction);
                         RequestingNavigationFragment.Invoke(this, eventArgs);
                         return eventArgs.RequestingNavigationFragment;
                     default:
                         return base.FragmentNavigate(direction);
                 }
+            }
+
+            internal AccessibleObject GetNextChildInTabOrder(AccessibleObject currentChild)
+            {
+                var currentChildControlAccessibleObject = currentChild as ControlAccessibleObject;
+                if (currentChildControlAccessibleObject == null || currentChildControlAccessibleObject.Owner == null)
+                {
+                    return null;
+                }
+
+                return GetNextChildInTabOrder(currentChildControlAccessibleObject.Owner, true);
+            }
+
+            internal AccessibleObject GetPreviousChildInTabOrder(AccessibleObject currentChild)
+            {
+                var currentChildControlAccessibleObject = currentChild as ControlAccessibleObject;
+                if (currentChildControlAccessibleObject == null || currentChildControlAccessibleObject.Owner == null)
+                {
+                    return null;
+                }
+
+                return GetNextChildInTabOrder(currentChildControlAccessibleObject.Owner, true);
+            }
+
+            private static bool HaveSameTabIndex(ControlCollection controls)
+            {
+                if (controls.Count == 0 || controls.Count == 1)
+                {
+                    return true;
+                }
+
+                int firstTabIndex = controls[0]._tabIndex;
+                for(int i = 1; i < controls.Count; i++)
+                {
+                    if (controls[i]._tabIndex != firstTabIndex)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            internal AccessibleObject GetNextChildInTabOrder(Control currentChild, bool forward)
+            {
+                if (Owner == null || !Owner.IsHandleCreated)
+                {
+                    return null;
+                }
+
+                ControlCollection childControls = (ControlCollection)Owner.Properties.GetObject(s_controlsCollectionProperty);
+                if (childControls == null && childControls.Count == 0)
+                {
+                    return null;
+                }
+
+                bool controlsHaveSameTabIndex = HaveSameTabIndex(childControls);
+
+                Control nextChild = null;
+                if (forward)
+                {
+                    for (int i = 0; i < childControls.Count - 1; i++)
+                    {
+                        if ((currentChild == null && (nextChild == null || childControls[i]._tabIndex <= nextChild._tabIndex)) ||
+                            (currentChild != null && (childControls[i]._tabIndex > currentChild._tabIndex)) ||
+                            (currentChild != null && controlsHaveSameTabIndex && i < childControls.Count - 1 && currentChild == childControls[i + 1]))
+                        {
+                            nextChild = childControls[i];
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = childControls.Count - 1; i >= 0; i--)
+                    {
+                        if ((currentChild == null && (nextChild == null || childControls[i]._tabIndex > nextChild._tabIndex)) ||
+                            (currentChild != null && (childControls[i]._tabIndex < currentChild._tabIndex)) ||
+                            (currentChild != null && controlsHaveSameTabIndex && i > 1 && currentChild == childControls[i - 1]))
+                        {
+                            nextChild = childControls[i];
+                        }
+                    }
+                }
+
+                if (nextChild != null)
+                {
+                    return nextChild.AccessibilityObject;
+                }
+
+                return null;
             }
 
             public override int GetHelpTopic(out string fileName)

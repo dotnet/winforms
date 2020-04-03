@@ -38,15 +38,8 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.LastChild:
                         return _owner.LastChildControlInTabOrder?.AccessibilityObject;
                     default:
-                        return base.FragmentNavigate(direction);
+                        return null;
                 }
-            }
-
-            internal override UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
-            {
-                // return base.GetOverrideProviderForHwnd(hwnd);
-
-                return null;
             }
 
             internal override bool IsIAccessibleExSupported()
