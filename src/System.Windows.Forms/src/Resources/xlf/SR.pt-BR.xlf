@@ -5437,6 +5437,11 @@ Deseja substituí-lo?</target>
         <target state="translated">O número de linhas na tabela.</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="new">Horizontal</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">O identificador de janela já existe.</target>
@@ -10799,6 +10804,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">Ocorre sempre que o controle de usuário é carregado.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="new">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">

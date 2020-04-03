@@ -5437,6 +5437,11 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">Tablodaki satır sayısı.</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="new">Horizontal</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">Pencere işleyicisi zaten var.</target>
@@ -10799,6 +10804,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">Kullanıcı denetimi her yüklendiğinde gerçekleşir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="new">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">

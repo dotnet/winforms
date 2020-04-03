@@ -5437,6 +5437,11 @@ Chcete jej nahradit?</target>
         <target state="translated">Počet řádků v tabulce</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="new">Horizontal</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">Popisovač okna již existuje.</target>
@@ -10799,6 +10804,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">Vyvolá se při každém načtení uživatelského ovládacího prvku.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="new">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">

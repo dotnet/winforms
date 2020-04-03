@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(Value))]
     [DefaultEvent(nameof(Scroll))]
-    public abstract class ScrollBar : Control
+    public abstract partial class ScrollBar : Control
     {
         private static readonly object s_scrollEvent = new object();
         private static readonly object s_valueChangedEvent = new object();
@@ -747,76 +747,6 @@ namespace System.Windows.Forms
         ///  AccessibleObject for this <see cref='ScrollBar'/> instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
-           => new ScrollBarAccessibleObject(this);
-
-        [ComVisible(true)]
-        internal class ScrollBarAccessibleObject : ControlAccessibleObject
-        {
-            internal ScrollBarAccessibleObject(ScrollBar owner) : base(owner)
-            {
-            }
-
-            public override string Name
-            {
-                get => base.Name ?? SR.ScrollBarDefaultAccessibleName;
-                set => base.Name = value;
-            }
-
-            private ScrollBar OwningScrollBar => Owner as ScrollBar;
-
-            internal override bool IsIAccessibleExSupported() => true;
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ValuePatternId ||
-                    patternId == UiaCore.UIA.RangeValuePatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ProgressBarControlTypeId;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        // This is necessary for compatibility with MSAA proxy:
-                        // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                        return true;
-                    case UiaCore.UIA.IsRangeValuePatternAvailablePropertyId:
-                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
-                    case UiaCore.UIA.RangeValueIsReadOnlyPropertyId:
-                        return true;
-                    case UiaCore.UIA.RangeValueLargeChangePropertyId:
-                    case UiaCore.UIA.RangeValueSmallChangePropertyId:
-                        return double.NaN;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
-            internal override void SetValue(double newValue)
-            {
-                throw new InvalidOperationException("Scroll Bar is read-only.");
-            }
-
-            internal override double LargeChange => double.NaN;
-
-            internal override double Maximum => OwningScrollBar?.Maximum ?? double.NaN;
-
-            internal override double Minimum => OwningScrollBar?.Minimum ?? double.NaN;
-
-            internal override double SmallChange => double.NaN;
-
-            internal override double RangeValue => OwningScrollBar?.Value ?? double.NaN;
-
-            internal override bool IsReadOnly => true;
-        }
+            => new ScrollBarAccessibleObject(this);
     }
 }

@@ -7,3 +7,6 @@ System.Windows.Forms.ListViewGroup.TitleImageKey.set -> void
 ~System.Windows.Forms.ListView.GroupImageList.get -> System.Windows.Forms.ImageList
 ~System.Windows.Forms.ListView.GroupImageList.set -> void
 ~override System.Windows.Forms.PictureBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.HScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.VScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!

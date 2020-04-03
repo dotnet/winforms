@@ -6596,9 +6596,6 @@ Stack trace where the illegal operation occurred was:
   <data name="TreeNodeCircularReference" xml:space="preserve">
     <value>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</value>
   </data>
-  <data name="ScrollBarDefaultAccessibleName" xml:space="preserve">
-    <value>ScrollBar</value>
-  </data>
   <data name="DefaultNumericUpDownAccessibleName" xml:space="preserve">
     <value>NumericUpDown</value>
   </data>
@@ -6655,6 +6652,12 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="TaskDialogCanUpdateStateOnlyWhenShown" xml:space="preserve">
     <value>Can only update the state of a task dialog while it is shown.</value>
+  </data>
+  <data name="HScrollBarDefaultAccessibleName" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="VScrollBarDefaultAccessibleName" xml:space="preserve">
+    <value>Vertical</value>
   </data>
   <data name="TaskDialogCollectionAlreadyBound" xml:space="preserve">
     <value>One of the collections of this {0} is already bound to a {1} instance.</value>

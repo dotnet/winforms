@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     ///  Represents a standard Windows horizontal scroll bar.
     /// </summary>
     [SRDescription(nameof(SR.DescriptionHScrollBar))]
-    public class HScrollBar : ScrollBar
+    public partial class HScrollBar : ScrollBar
     {
         protected override CreateParams CreateParams
         {
@@ -24,6 +24,10 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override Size DefaultSize => new Size(80, SystemInformation.HorizontalScrollBarHeight);
+        protected override Size DefaultSize
+            => new Size(80, SystemInformation.HorizontalScrollBarHeight);
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new HScrollBarAccessibleObject(this);
     }
 }

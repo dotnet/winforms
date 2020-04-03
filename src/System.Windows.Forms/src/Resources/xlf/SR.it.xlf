@@ -5437,6 +5437,11 @@ Sostituirlo?</target>
         <target state="translated">Il numero di righe nella tabella.</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="new">Horizontal</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">Handle di finestra già esistente.</target>
@@ -10799,6 +10804,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">Generato quando viene caricato il controllo utente.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="new">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">
