@@ -6596,6 +6596,9 @@ Stack trace where the illegal operation occurred was:
   <data name="TreeNodeCircularReference" xml:space="preserve">
     <value>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</value>
   </data>
+  <data name="ScrollBarDefaultAccessibleName" xml:space="preserve">
+    <value>ScrollBar</value>
+  </data>
   <data name="DefaultNumericUpDownAccessibleName" xml:space="preserve">
     <value>NumericUpDown</value>
   </data>
