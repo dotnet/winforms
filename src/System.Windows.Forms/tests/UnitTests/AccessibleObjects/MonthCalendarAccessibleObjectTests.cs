@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         [WinFormsFact]
         public void MonthCalendarAccessibleObject_CalendarCountIsCorrect_IfCalendarContainerIsBig ()
         {
-            var calendar = new MonthCalendar();
+            using var calendar = new MonthCalendar();
             calendar.Size = new System.Drawing.Size(1000, 500);
             MonthCalendar.MonthCalendarAccessibleObject accessibleObject = Assert.IsType<MonthCalendar.MonthCalendarAccessibleObject>(calendar.AccessibilityObject);
             int childCalendarCount = accessibleObject.GetCalendarCount();

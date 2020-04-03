@@ -503,12 +503,9 @@ namespace System.Windows.Forms
                 return User32.SendMessageW(_owner, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
             }
 
-            public int GetCalendarCount()
+            private int GetCalendarCount()
             {
-                // Do not use this if gridInfo.dwFlags contains MCGIF_NAME;
-                // use GetCalendarGridInfoText() instead.
-
-                int calendarCount = (int) User32.SendMessageW(_owner, (User32.WM)MCM.GETCALENDARCOUNT, IntPtr.Zero, IntPtr.Zero);
+                int calendarCount = (int) User32.SendMessageW(_owner, (User32.WM)MCM.GETCALENDARCOUNT);
 
                 return calendarCount;
             }
