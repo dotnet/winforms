@@ -18,7 +18,7 @@ namespace System.Windows.Forms
                 _taskDialog = taskDialog;
             }
 
-            protected override unsafe void WndProc(ref Message m)
+            protected override void WndProc(ref Message m)
             {
                 switch ((User32.WM)m.Msg)
                 {
