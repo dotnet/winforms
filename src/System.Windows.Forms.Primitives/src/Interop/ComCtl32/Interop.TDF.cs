@@ -34,7 +34,7 @@ internal static partial class Interop
             /// </summary>
             /// <remarks>
             /// <para>
-            ///   This flag has an effect on Windows NT 6.2 ("Windows 8") and higher.
+            ///   This flag has an effect only on Windows NT 6.2 ("Windows 8") and higher.
             /// </para>
             /// </remarks>
             NO_SET_FOREGROUND = 0x00010000,
