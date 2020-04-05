@@ -60,8 +60,6 @@ namespace System.Windows.Forms
                 formatetc.lindex = -1;
                 formatetc.tymed = TYMED.TYMED_ISTREAM;
 
-                medium.tymed = TYMED.TYMED_ISTREAM;
-
                 // Limit the # of exceptions we may throw below.
                 if ((int)HRESULT.S_OK != QueryGetDataUnsafe(ref formatetc))
                 {
@@ -77,23 +75,37 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                if (medium.unionmember != IntPtr.Zero)
+                Ole32.IStream pStream = null;
+                IntPtr hglobal = IntPtr.Zero;
+                try
                 {
-                    Ole32.IStream pStream = (Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
-                    Marshal.Release(medium.unionmember);
-                    pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.STATFLAG_DEFAULT);
+                    if (medium.tymed == TYMED.TYMED_ISTREAM && medium.unionmember != IntPtr.Zero)
+                    {
+                        pStream = (Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
+                        pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.STATFLAG_DEFAULT);
 
-                    IntPtr hglobal = Kernel32.GlobalAlloc(
-                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
-                        (uint)sstg.cbSize);
-                    IntPtr ptr = Kernel32.GlobalLock(hglobal);
-                    pStream.Read((byte*)ptr, (uint)sstg.cbSize, null);
-                    Kernel32.GlobalUnlock(hglobal);
+                        hglobal = Kernel32.GlobalAlloc(
+                            Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                            (uint)sstg.cbSize);
+                        IntPtr ptr = Kernel32.GlobalLock(hglobal);
+                        pStream.Read((byte*)ptr, (uint)sstg.cbSize, null);
+                        Kernel32.GlobalUnlock(hglobal);
 
-                    return GetDataFromHGLOBAL(format, hglobal);
+                        return GetDataFromHGLOBAL(format, hglobal);
+                    }
+
+                    return null;
                 }
+                finally
+                {
+                    if (hglobal != IntPtr.Zero)
+                        Kernel32.GlobalFree(hglobal);
 
-                return null;
+                    if (pStream != null)
+                        Marshal.ReleaseComObject(pStream);
+
+                    Ole32.ReleaseStgMedium(ref medium);
+                }
             }
 
             /// <summary>
@@ -137,8 +149,6 @@ namespace System.Windows.Forms
                     {
                         data = ReadObjectFromHandle(hglobal, DataObject.RestrictDeserializationToSafeTypes(format));
                     }
-
-                    Kernel32.GlobalFree(hglobal);
                 }
 
                 return data;
@@ -160,8 +170,6 @@ namespace System.Windows.Forms
                 formatetc.lindex = -1;
                 formatetc.tymed = TYMED.TYMED_HGLOBAL;
 
-                medium.tymed = TYMED.TYMED_HGLOBAL;
-
                 object data = null;
 
                 if ((int)HRESULT.S_OK == QueryGetDataUnsafe(ref formatetc))
@@ -170,7 +178,7 @@ namespace System.Windows.Forms
                     {
                         innerData.GetData(ref formatetc, out medium);
 
-                        if (medium.unionmember != IntPtr.Zero)
+                        if (medium.tymed == TYMED.TYMED_HGLOBAL && medium.unionmember != IntPtr.Zero)
                         {
                             data = GetDataFromHGLOBAL(format, medium.unionmember);
                         }
@@ -181,6 +189,10 @@ namespace System.Windows.Forms
                     }
                     catch
                     {
+                    }
+                    finally
+                    {
+                        Ole32.ReleaseStgMedium(ref medium);
                     }
                 }
                 return data;
@@ -204,10 +216,6 @@ namespace System.Windows.Forms
                 {
                     tymed = TYMED.TYMED_GDI;
                 }
-                else if (format.Equals(DataFormats.EnhancedMetafile))
-                {
-                    tymed = TYMED.TYMED_ENHMF;
-                }
 
                 if (tymed == (TYMED)0)
                 {
@@ -218,7 +226,6 @@ namespace System.Windows.Forms
                 formatetc.dwAspect = DVASPECT.DVASPECT_CONTENT;
                 formatetc.lindex = -1;
                 formatetc.tymed = tymed;
-                medium.tymed = tymed;
 
                 object data = null;
                 if ((int)HRESULT.S_OK == QueryGetDataUnsafe(ref formatetc))
@@ -232,26 +239,32 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (medium.unionmember != IntPtr.Zero)
+                try
                 {
-                    if (format.Equals(DataFormats.Bitmap))
+                    if (medium.tymed == TYMED.TYMED_GDI && medium.unionmember != IntPtr.Zero)
                     {
-                        // as/urt 140870 -- GDI+ doesn't own this HBITMAP, but we can't
-                        // delete it while the object is still around.  So we have to do the really expensive
-                        // thing of cloning the image so we can release the HBITMAP.
-
-                        // This bitmap is created by the com object which originally copied the bitmap to tbe
-                        // clipboard. We call Add here, since DeleteObject calls Remove.
-                        Image clipboardImage = Image.FromHbitmap(medium.unionmember);
-                        if (clipboardImage != null)
+                        if (format.Equals(DataFormats.Bitmap))
                         {
-                            Image firstImage = clipboardImage;
-                            clipboardImage = (Image)clipboardImage.Clone();
-                            Gdi32.DeleteObject(medium.unionmember);
-                            firstImage.Dispose();
+                            // as/urt 140870 -- GDI+ doesn't own this HBITMAP, but we can't
+                            // delete it while the object is still around.  So we have to do the really expensive
+                            // thing of cloning the image so we can release the HBITMAP.
+
+                            // This bitmap is created by the com object which originally copied the bitmap to tbe
+                            // clipboard. We call Add here, since DeleteObject calls Remove.
+                            Image clipboardImage = Image.FromHbitmap(medium.unionmember);
+                            if (clipboardImage != null)
+                            {
+                                Image firstImage = clipboardImage;
+                                clipboardImage = (Image)clipboardImage.Clone();
+                                firstImage.Dispose();
+                            }
+                            data = clipboardImage;
                         }
-                        data = clipboardImage;
                     }
+                }
+                finally
+                {
+                    Ole32.ReleaseStgMedium(ref medium);
                 }
 
                 return data;

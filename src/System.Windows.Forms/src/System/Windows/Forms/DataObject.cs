@@ -36,8 +36,6 @@ namespace System.Windows.Forms
         new TYMED[] {
             TYMED.TYMED_HGLOBAL,
             TYMED.TYMED_ISTREAM,
-            TYMED.TYMED_ENHMF,
-            TYMED.TYMED_MFPICT,
             TYMED.TYMED_GDI};
 
         private readonly IDataObject innerData = null;

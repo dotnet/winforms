@@ -94,10 +94,6 @@ namespace System.Windows.Forms
                         {
                             temp.tymed = TYMED.TYMED_GDI;
                         }
-                        else if (format.Equals(DataFormats.EnhancedMetafile))
-                        {
-                            temp.tymed = TYMED.TYMED_ENHMF;
-                        }
                         else if (format.Equals(DataFormats.Text)
                                  || format.Equals(DataFormats.UnicodeText)
                                  || format.Equals(DataFormats.StringFormat)
