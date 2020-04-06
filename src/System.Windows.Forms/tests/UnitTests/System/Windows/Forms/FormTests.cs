@@ -8,6 +8,7 @@ using System.Drawing;
 using Moq;
 using Xunit;
 using WinForms.Common.Tests;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -29,6 +30,23 @@ namespace System.Windows.Forms.Tests
             Assert.False(form.IsRestrictedWindow);
             Assert.True(form.TopLevel);
             Assert.False(form.Visible);
+        }
+
+        [WinFormsFact]
+        public static void Form_Ctor_show_icon_by_default()
+        {
+            using var form = new Form();
+            Assert.True(form.Handle != IntPtr.Zero);
+
+            IntPtr hSmallIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            Assert.True(hSmallIcon != IntPtr.Zero);
+
+            IntPtr hLargeIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            Assert.True(hLargeIcon != IntPtr.Zero);
+
+            // normal form doesn't have WS_EX.DLGMODALFRAME set, and show icon
+            User32.WS_EX extendedStyle = unchecked((User32.WS_EX)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
+            Assert.False(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
         }
 
         [WinFormsFact]
@@ -796,6 +814,38 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.MdiParent);
             Assert.Empty(oldParent.Controls);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        public static void ShowIcon_renders_icon_correctly(bool showIcon, bool expectedIconNull)
+        {
+            using var form = new Form();
+            Assert.True(form.Handle != IntPtr.Zero);
+
+            form.ShowIcon = showIcon;
+
+            IntPtr hSmallIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            IntPtr hLargeIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            Assert.Equal(expectedIconNull, hSmallIcon == IntPtr.Zero);
+            Assert.Equal(expectedIconNull, hLargeIcon == IntPtr.Zero);
+        }
+
+        [WinFormsFact]
+        public static void ShowIcon_false_should_render_no_icon()
+        {
+            using var form = new Form();
+            Assert.True(form.Handle != IntPtr.Zero);
+
+            User32.WS_EX extendedStyle = unchecked((User32.WS_EX)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
+            Assert.False(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
+
+            form.ShowIcon = false;
+
+            // hiding icon sets WS_EX.DLGMODALFRAME
+            extendedStyle = unchecked((User32.WS_EX)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
+            Assert.True(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
         }
 
         public static IEnumerable<object[]> Parent_SetMdiChild_TestData()

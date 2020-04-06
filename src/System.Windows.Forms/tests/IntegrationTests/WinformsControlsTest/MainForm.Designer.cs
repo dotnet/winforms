@@ -32,6 +32,7 @@ namespace WinformsControlsTest
         /// </summary>
         private void InitializeComponent()
         {
+            this.toggleIconButton = new System.Windows.Forms.Button();
             this.buttonsButton = new System.Windows.Forms.Button();
             this.calendar = new System.Windows.Forms.Button();
             this.treeViewButton = new System.Windows.Forms.Button();
@@ -57,6 +58,16 @@ namespace WinformsControlsTest
             this.formBorderStyles = new System.Windows.Forms.Button();
             this.flowLayoutPanelUITypeEditors.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // toggleIconButton
+            // 
+            this.toggleIconButton.Location = new System.Drawing.Point(3, 3);
+            this.toggleIconButton.Name = "toggleIconButton";
+            this.toggleIconButton.Size = new System.Drawing.Size(259, 23);
+            this.toggleIconButton.TabIndex = 0;
+            this.toggleIconButton.Text = "Toggle form icon";
+            this.toggleIconButton.UseVisualStyleBackColor = true;
+            this.toggleIconButton.Click += new System.EventHandler(this.toggleIconButton_Click);
             // 
             // buttonsButton
             // 
@@ -230,6 +241,7 @@ namespace WinformsControlsTest
             // 
             // flowLayoutPanelUITypeEditors
             // 
+            this.flowLayoutPanelUITypeEditors.Controls.Add(this.toggleIconButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.buttonsButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.calendar);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.multipleControls);
@@ -313,9 +325,9 @@ namespace WinformsControlsTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(554, 335);
+            this.ClientSize = new System.Drawing.Size(554, 400);
             this.Controls.Add(this.flowLayoutPanelUITypeEditors);
-            this.MinimumSize = new System.Drawing.Size(570, 330);
+            this.MinimumSize = new System.Drawing.Size(570, 400);
             this.Name = "MainForm";
             this.Padding = new System.Windows.Forms.Padding(8);
             this.Text = "MenuForm";
@@ -326,6 +338,7 @@ namespace WinformsControlsTest
 
         #endregion
 
+        private System.Windows.Forms.Button toggleIconButton;
         private System.Windows.Forms.Button buttonsButton;
         private System.Windows.Forms.Button calendar;
         private System.Windows.Forms.Button treeViewButton;
