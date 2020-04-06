@@ -18,6 +18,10 @@ namespace System.Windows.Forms
             public CalendarBodyAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex)
                 : base(calendarAccessibleObject, calendarIndex, CalendarChildType.CalendarBody)
             {
+                if (calendarAccessibleObject == null)
+                {
+                    throw new ArgumentNullException(nameof(calendarAccessibleObject));
+                }
             }
 
             protected override RECT CalculateBoundingRectangle()
@@ -34,7 +38,7 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.NavigateDirection.NextSibling => new Func<AccessibleObject>(() =>
                     {
                         MonthCalendar owner = (MonthCalendar)_calendarAccessibleObject.Owner;
-                        return owner.ShowToday ? _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.TodayLink) : null;
+                        return (owner != null && owner.ShowToday) ? _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.TodayLink) : null;
                     })(),
                     UnsafeNativeMethods.NavigateDirection.PreviousSibling => _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarHeader),
                     UnsafeNativeMethods.NavigateDirection.FirstChild =>
@@ -54,6 +58,12 @@ namespace System.Windows.Forms
                     case ComCtl32.MCHT.CALENDARDATE:
                         AccessibleObject rowAccessibleObject =
                             _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, this, hitTestInfo.iRow);
+
+                        if (rowAccessibleObject == null)
+                        {
+                            return null;
+                        }
+
                         return _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, rowAccessibleObject, hitTestInfo.iCol);
                 }
 

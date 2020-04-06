@@ -15,6 +15,10 @@ namespace System.Windows.Forms
             public CalendarTodayLinkAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex, CalendarChildType type)
                 : base(calendarAccessibleObject, calendarIndex, CalendarChildType.TodayLink)
             {
+                if (calendarAccessibleObject == null)
+                {
+                    throw new ArgumentNullException(nameof(calendarAccessibleObject));
+                }
             }
 
             protected override RECT CalculateBoundingRectangle()

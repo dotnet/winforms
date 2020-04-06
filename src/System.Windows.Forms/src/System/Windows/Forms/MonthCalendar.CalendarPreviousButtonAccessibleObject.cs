@@ -13,6 +13,10 @@ namespace System.Windows.Forms
             public CalendarPreviousButtonAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex)
                 : base(calendarAccessibleObject, calendarIndex, CalendarButtonType.Previous)
             {
+                if (calendarAccessibleObject == null)
+                {
+                    throw new ArgumentNullException(nameof(calendarAccessibleObject));
+                }
             }
 
             protected override CalendarButtonType ButtonType => CalendarButtonType.Previous;

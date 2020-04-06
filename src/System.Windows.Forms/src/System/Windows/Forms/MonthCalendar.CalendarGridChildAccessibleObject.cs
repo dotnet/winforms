@@ -16,6 +16,11 @@ namespace System.Windows.Forms
             public CalendarGridChildAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex, CalendarChildType itemType,
                 AccessibleObject parentAccessibleObject, int itemIndex) : base(calendarAccessibleObject, calendarIndex, itemType)
             {
+                if (calendarAccessibleObject == null || parentAccessibleObject == null)
+                {
+                    throw new ArgumentNullException(nameof(calendarAccessibleObject) + " | " + nameof(parentAccessibleObject));
+                }
+
                 _parentAccessibleObject = parentAccessibleObject;
             }
 

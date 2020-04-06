@@ -21,7 +21,7 @@ namespace System.Windows.Forms
 
             public CalendarChildAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex, CalendarChildType itemType)
             {
-                _calendarAccessibleObject = calendarAccessibleObject;
+                _calendarAccessibleObject = calendarAccessibleObject ?? throw new ArgumentNullException(nameof(calendarAccessibleObject));
                 _calendarIndex = calendarIndex;
                 _itemType = itemType;
             }
@@ -52,19 +52,21 @@ namespace System.Windows.Forms
                 new int[]
                 {
                     RuntimeIDFirstItem,
-                    _calendarAccessibleObject.Owner.Handle.ToInt32(),
+                    _calendarAccessibleObject.Owner?.Handle.ToInt32() ?? 0,
                     GetChildId()
                 };
 
             public void RaiseMouseClick()
             {
                 // Make sure that the control is enabled.
-                if (!SafeNativeMethods.IsWindowEnabled(new HandleRef(null, _calendarAccessibleObject.Owner.Handle)))
+                Control owner = _calendarAccessibleObject.Owner;
+                
+                if (owner == null || !SafeNativeMethods.IsWindowEnabled(new HandleRef(null, owner.Handle)))
                 {
                     return;
                 }
 
-                var rectangle = CalculateBoundingRectangle();
+                RECT rectangle = CalculateBoundingRectangle();
                 int x = rectangle.left + ((rectangle.right - rectangle.left) / 2);
                 int y = rectangle.top + ((rectangle.bottom - rectangle.top) / 2);
 

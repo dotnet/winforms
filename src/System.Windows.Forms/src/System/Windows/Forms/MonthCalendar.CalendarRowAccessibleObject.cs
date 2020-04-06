@@ -15,6 +15,11 @@ namespace System.Windows.Forms
             public CalendarRowAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex, CalendarBodyAccessibleObject parentAccessibleObject, int rowIndex)
                 : base(calendarAccessibleObject, calendarIndex, CalendarChildType.CalendarRow, parentAccessibleObject, rowIndex)
             {
+                if (calendarAccessibleObject == null || parentAccessibleObject == null)
+                {
+                    throw new ArgumentNullException(nameof(calendarAccessibleObject) + " | " + nameof(parentAccessibleObject));
+                }
+
                 _rowIndex = rowIndex;
             }
 

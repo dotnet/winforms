@@ -13,6 +13,10 @@ namespace System.Windows.Forms
             public CalendarButtonAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex, CalendarButtonType buttonType)
                 : base(calendarAccessibleObject, calendarIndex, (CalendarChildType)buttonType)
             {
+                if (calendarAccessibleObject == null)
+                {
+                    throw new ArgumentNullException(nameof(calendarAccessibleObject));
+                }
             }
 
             protected abstract CalendarButtonType ButtonType { get; }
@@ -20,6 +24,7 @@ namespace System.Windows.Forms
             protected override RECT CalculateBoundingRectangle()
             {
                 ComCtl32.MCGIP dwPart;
+
                 switch (ButtonType)
                 {
                     case CalendarButtonType.Previous:
