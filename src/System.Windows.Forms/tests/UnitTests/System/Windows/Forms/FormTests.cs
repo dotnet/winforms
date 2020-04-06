@@ -13,10 +13,10 @@ namespace System.Windows.Forms.Tests
 {
     public class FormTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void Form_Ctor_Default()
         {
-            var form = new Form();
+            using var form = new Form();
             Assert.False(form.Active);
             Assert.Null(form.ActiveMdiChild);
             Assert.False(form.AllowTransparency);
@@ -31,10 +31,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(form.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Form_AcceptButtonGetSet()
         {
-            var form = new Form();
+            using var form = new Form();
             var mock = new Mock<IButtonControl>(MockBehavior.Strict);
             mock.Setup(x => x.NotifyDefault(It.IsAny<bool>()));
 
@@ -43,11 +43,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(mock.Object, form.AcceptButton);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_Active_Set_GetReturnsExpected(bool value)
         {
-            var form = new Form
+            using var form = new Form
             {
                 Active = value
             };
@@ -72,11 +72,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(Form.ActiveForm.Active);
         }*/
 
-        [Fact]
+        [WinFormsFact]
         public void Form_ActiveMdiChildInternalGetSet()
         {
-            var form = new Form();
-            var child = new Form();
+            using var form = new Form();
+            using var child = new Form();
 
             form.ActiveMdiChildInternal = child;
 
@@ -84,11 +84,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(child, form.ActiveMdiChildInternal);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Form_ActiveMdiChildGetSet()
         {
-            var form = new Form();
-            var child = new Form
+            using var form = new Form();
+            using var child = new Form
             {
                 Visible = true,
                 Enabled = true
@@ -100,11 +100,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(child, form.ActiveMdiChild);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Form_ActiveMdiChildGetSetChildNotVisible()
         {
-            var form = new Form();
-            var child = new Form
+            using var form = new Form();
+            using var child = new Form
             {
                 Visible = false,
                 Enabled = true
@@ -115,11 +115,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(form.ActiveMdiChild);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Form_ActiveMdiChildGetSetChildNotEnabled()
         {
-            var form = new Form();
-            var child = new Form
+            using var form = new Form();
+            using var child = new Form
             {
                 Visible = true,
                 Enabled = false
