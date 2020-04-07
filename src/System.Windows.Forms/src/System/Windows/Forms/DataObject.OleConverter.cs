@@ -87,6 +87,10 @@ namespace System.Windows.Forms
                         hglobal = Kernel32.GlobalAlloc(
                             Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
                             (uint)sstg.cbSize);
+                        // not throwing here because the other out of memory condition on GlobalAlloc
+                        // happens inside innerData.GetData and gets turned into a null return value
+                        if (hglobal == IntPtr.Zero)
+                            return null;
                         IntPtr ptr = Kernel32.GlobalLock(hglobal);
                         pStream.Read((byte*)ptr, (uint)sstg.cbSize, null);
                         Kernel32.GlobalUnlock(hglobal);
@@ -249,7 +253,7 @@ namespace System.Windows.Forms
                             // delete it while the object is still around.  So we have to do the really expensive
                             // thing of cloning the image so we can release the HBITMAP.
 
-                            // This bitmap is created by the com object which originally copied the bitmap to tbe
+                            // This bitmap is created by the com object which originally copied the bitmap to the
                             // clipboard. We call Add here, since DeleteObject calls Remove.
                             Image clipboardImage = Image.FromHbitmap(medium.unionmember);
                             if (clipboardImage != null)
