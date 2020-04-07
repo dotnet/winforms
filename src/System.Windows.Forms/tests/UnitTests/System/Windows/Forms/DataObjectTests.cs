@@ -8,6 +8,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using Moq;
 using WinForms.Common.Tests;
@@ -1557,6 +1559,53 @@ namespace System.Windows.Forms.Tests
         {
             var dataObject = new DataObject();
             Assert.Throws<InvalidEnumArgumentException>("format", () => dataObject.SetText("text", format));
+        }
+
+        private sealed class DataObjectIgnoringStorageMediumForEnhancedMetafile : System.Runtime.InteropServices.ComTypes.IDataObject
+        {
+            private const int DV_E_FORMATETC = unchecked((int)0x80040064);
+            private const int CF_ENHMETAFILE = 14;
+
+            public void GetData(ref FORMATETC format, out STGMEDIUM medium)
+            {
+                Marshal.ThrowExceptionForHR(QueryGetData(ref format));
+
+                using var metafile = new Drawing.Imaging.Metafile("bitmaps/milkmateya01.emf");
+
+                medium = default;
+                medium.tymed = TYMED.TYMED_ENHMF;
+                medium.unionmember = metafile.GetHenhmetafile();
+            }
+
+            public int QueryGetData(ref FORMATETC format)
+            {
+                // do not check the requested storage medium, we always return a metafile handle, thats what Office does
+
+                if (format.cfFormat != CF_ENHMETAFILE || format.dwAspect != DVASPECT.DVASPECT_CONTENT || format.lindex != -1)
+                    return DV_E_FORMATETC;
+
+                return 0;
+            }
+
+            public IEnumFORMATETC EnumFormatEtc(DATADIR direction) => throw new NotImplementedException();
+            public void GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => throw new NotImplementedException();
+            public int GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut) => throw new NotImplementedException();
+            public void SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release) => throw new NotImplementedException();
+            public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
+            public void DUnadvise(int connection) => throw new NotImplementedException();
+            public int EnumDAdvise(out IEnumSTATDATA enumAdvise) => throw new NotImplementedException();
+        }
+
+        [WinFormsFact]
+        public void DataObject_GetData_EnhancedMetafile_DoesNotTerminateProcess()
+        {
+            var data = new DataObject(new DataObjectIgnoringStorageMediumForEnhancedMetafile());
+
+            // Office ignores the storage medium in GetData(EnhancedMetafile) and always returns a handle,
+            // even when asked for a stream. This used to crash the process when DataObject interpreted the
+            // handle as a pointer to a COM IStream without checking the storage medium it retrieved.
+
+            Assert.Null(data.GetData(DataFormats.EnhancedMetafile));
         }
     }
 }
