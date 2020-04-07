@@ -311,7 +311,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If FirstInstance() Then
                     ' Create a new pipe - it will return immediately and async wait for connections
                     NamedPipeServerCreateServer()
-
+                    DoApplicationModel()
                 Else
                     ' We are not the first instance, send the named pipe message with our payload and stop loading
                     Dim _NamedPipeXmlData = New NamedPipeXMLData With
@@ -899,8 +899,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         Private Function GetTypeLibGuidForAssembly(_assembly As Assembly) As Guid
-            Dim attribute As GuidAttribute = CType(_assembly.GetCustomAttributes(GetType(GuidAttribute), True)(0), GuidAttribute)
-            Return New Guid(attribute.Value)
+            Dim CustomAttributes As Object() = _assembly.GetCustomAttributes(GetType(GuidAttribute), True)
+            If CustomAttributes.Any Then
+                Dim attribute As GuidAttribute = CType(CustomAttributes(0), GuidAttribute)
+                Return New Guid(attribute.Value)
+            End If
+            Dim Hash As Integer = _assembly.GetHashCode
+            Return New Guid($"{(Hex(Hash) & "0000000").Substring(0, 8)}-0852-4dbc-8021-36955cd24ce3")
         End Function
 
         ''' <summary>
