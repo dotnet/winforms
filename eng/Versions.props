@@ -12,6 +12,8 @@
   <!-- Core Setup for coherency -->
   <PropertyGroup>
     <MicrosoftNETCoreAppPackageVersion>5.0.0-preview.4.20205.13</MicrosoftNETCoreAppPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>5.0.0-preview.4.20205.13</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>5.0.0-preview.4.20205.13</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
   </PropertyGroup>
   <!-- CoreFX via Core Setup -->
   <PropertyGroup>

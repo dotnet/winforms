@@ -87,5 +87,13 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>bce0a98620c1c5a110b2bba9912f3d5929069c6b</Sha>
     </Dependency>
+    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="5.0.0-preview.4.20205.13" CoherentParentDependency="Microsoft.NetCore.ILAsm">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>59ca590949ade88c712e4ca8c6835acd0e9cbf46</Sha>
+    </Dependency>
+    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="5.0.0-preview.4.20205.13" CoherentParentDependency="Microsoft.NetCore.ILAsm">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>59ca590949ade88c712e4ca8c6835acd0e9cbf46</Sha>
+    </Dependency>
   </ToolsetDependencies>
 </Dependencies>
