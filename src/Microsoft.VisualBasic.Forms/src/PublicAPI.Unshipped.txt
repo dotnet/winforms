@@ -1,0 +1,4 @@
+NamedPipeXMLData
+NamedPipeXMLData.CommandLineArguments() -> System.Collections.Generic.List(Of String)
+NamedPipeXMLData.CommandLineArguments(value As System.Collections.Generic.List(Of String)) -> Void
+NamedPipeXMLData.New() -> Void
