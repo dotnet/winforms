@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms
             set
             {
                 formStateEx[FormStateExShowIcon] = value ? 1 : 0;
-                if (value)
+                if (!value)
                 {
                     UpdateStyles();
                 }

@@ -1,20 +1,23 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Xunit;
-using Moq;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using Moq;
+using Xunit;
 using WinForms.Common.Tests;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
     public class FormTests
     {
-        [Fact]
+        [WinFormsFact]
         public void Form_Ctor_Default()
         {
-            var form = new Form();
+            using var form = new Form();
             Assert.False(form.Active);
             Assert.Null(form.ActiveMdiChild);
             Assert.False(form.AllowTransparency);
@@ -29,10 +32,27 @@ namespace System.Windows.Forms.Tests
             Assert.False(form.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
+        public static void Form_Ctor_show_icon_by_default()
+        {
+            using var form = new Form();
+            Assert.True(form.Handle != IntPtr.Zero);
+
+            IntPtr hSmallIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            Assert.True(hSmallIcon != IntPtr.Zero);
+
+            IntPtr hLargeIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            Assert.True(hLargeIcon != IntPtr.Zero);
+
+            // normal form doesn't have WS_EX.DLGMODALFRAME set, and show icon
+            User32.WS_EX extendedStyle = unchecked((User32.WS_EX)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
+            Assert.False(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
+        }
+
+        [WinFormsFact]
         public void Form_AcceptButtonGetSet()
         {
-            var form = new Form();
+            using var form = new Form();
             var mock = new Mock<IButtonControl>(MockBehavior.Strict);
             mock.Setup(x => x.NotifyDefault(It.IsAny<bool>()));
 
@@ -41,11 +61,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(mock.Object, form.AcceptButton);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_Active_Set_GetReturnsExpected(bool value)
         {
-            var form = new Form
+            using var form = new Form
             {
                 Active = value
             };
@@ -70,11 +90,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(Form.ActiveForm.Active);
         }*/
 
-        [Fact]
+        [WinFormsFact]
         public void Form_ActiveMdiChildInternalGetSet()
         {
-            var form = new Form();
-            var child = new Form();
+            using var form = new Form();
+            using var child = new Form();
 
             form.ActiveMdiChildInternal = child;
 
@@ -82,11 +102,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(child, form.ActiveMdiChildInternal);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Form_ActiveMdiChildGetSet()
         {
-            var form = new Form();
-            var child = new Form
+            using var form = new Form();
+            using var child = new Form
             {
                 Visible = true,
                 Enabled = true
@@ -98,11 +118,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(child, form.ActiveMdiChild);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Form_ActiveMdiChildGetSetChildNotVisible()
         {
-            var form = new Form();
-            var child = new Form
+            using var form = new Form();
+            using var child = new Form
             {
                 Visible = false,
                 Enabled = true
@@ -113,11 +133,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(form.ActiveMdiChild);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Form_ActiveMdiChildGetSetChildNotEnabled()
         {
-            var form = new Form();
-            var child = new Form
+            using var form = new Form();
+            using var child = new Form
             {
                 Visible = true,
                 Enabled = false
