@@ -28,7 +28,7 @@ namespace System.Windows.Forms
     ///   one.
     /// </para>
     /// </remarks>
-    public class TaskDialogIcon
+    public class TaskDialogIcon : IDisposable
     {
 #pragma warning disable IDE1006 // Naming Styles
         /// <summary>
@@ -93,22 +93,42 @@ namespace System.Windows.Forms
 #pragma warning restore IDE1006 // Naming Styles
 
         private readonly TaskDialogStandardIcon? _standardIcon;
+        private readonly Icon? _ownedIcon;
         private readonly IntPtr? _iconHandle;
+
+        /// <summary>
+        ///   Initializes a new instance of the <see cref="TaskDialogIcon"/> class from an
+        ///   <see cref="Bitmap"/> instance.
+        /// </summary>
+        /// <param name="image">The <see cref="Bitmap"/> instance.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="image"/> is <see langword="null"/>.</exception>
+        /// <remarks>
+        ///   <para>
+        ///     The <see cref="Icon"/> instance from which this <see cref="TaskDialogIcon"/>
+        ///     instance is created must not be disposed while the icon is shown in the task
+        ///     dialog.
+        ///   </para>
+        /// </remarks>
+        public TaskDialogIcon(Bitmap image)
+            : this(BitmapToIcon(image ?? throw new ArgumentNullException(nameof(image))), true)
+        {
+        }
 
         /// <summary>
         ///   Initializes a new instance of the <see cref="TaskDialogIcon"/> class from an
         ///   <see cref="Icon"/> instance.
         /// </summary>
-        /// <param name="icon">The <see cref="Icon"/> instance</param>
+        /// <param name="icon">The <see cref="Icon"/> instance.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="icon"/> is <see langword="null"/>.</exception>
         /// <remarks>
-        /// <para>
-        ///   The <see cref="Icon"/> instance from which this <see cref="TaskDialogIcon"/>
-        ///   instance is created must not be disposed while the icon is shown in the task
-        ///   dialog.
-        /// </para>
+        ///   <para>
+        ///     The <see cref="Icon"/> instance from which this <see cref="TaskDialogIcon"/>
+        ///     instance is created must not be disposed while the icon is shown in the task
+        ///     dialog.
+        ///   </para>
         /// </remarks>
-        public TaskDialogIcon(Icon? icon)
-            : this(icon?.Handle ?? default)
+        public TaskDialogIcon(Icon icon)
+            : this((icon ?? throw new ArgumentNullException(nameof(icon))), false)
         {
         }
 
@@ -116,21 +136,38 @@ namespace System.Windows.Forms
         ///   Initializes a new instance of the <see cref="TaskDialogIcon"/> class from an
         ///   icon handle.
         /// </summary>
-        /// <param name="iconHandle"></param>
-        /// <remarks>
-        /// <para>
-        ///   The specified icon handle must not be released while the icon is shown in the
-        ///   task dialog.
-        /// </para>
+        /// <param name="iconHandle">A handle to an instance of an icon.</param>
+        ///   <remarks>
+        ///   <para>
+        ///     The specified icon handle must not be released while the icon is shown in the
+        ///     task dialog.
+        ///   </para>
         /// </remarks>
         public TaskDialogIcon(IntPtr iconHandle)
         {
             _iconHandle = iconHandle;
         }
 
+        private TaskDialogIcon(Icon icon, bool takeOwnership)
+            : this(icon.Handle)
+        {
+            if (takeOwnership)
+            {
+                _ownedIcon = icon;
+            }
+        }
+
         private TaskDialogIcon(TaskDialogStandardIcon standardIcon)
         {
             _standardIcon = standardIcon;
+        }
+
+        /// <summary>
+        ///   Releases all resources used by this <see cref="TaskDialogIcon"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            _ownedIcon?.Dispose();
         }
 
         /// <summary>
@@ -148,5 +185,24 @@ namespace System.Windows.Forms
         internal bool IsStandardIcon => _standardIcon != null;
 
         internal bool IsHandleIcon => _iconHandle != null;
+
+        private static Icon BitmapToIcon(Bitmap bitmap)
+        {
+            IntPtr handle = IntPtr.Zero;
+            try
+            {
+                handle = bitmap.GetHicon();
+                var icon = Icon.FromHandle(handle);
+
+                return (Icon)icon.Clone();
+            }
+            finally
+            {
+                if (handle != IntPtr.Zero)
+                {
+                    Interop.User32.DestroyIcon(handle);
+                }
+            }
+        }
     }
 }

@@ -62,7 +62,9 @@ System.Windows.Forms.TaskDialogFooter.TaskDialogFooter(string text) -> void
 System.Windows.Forms.TaskDialogFooter.Text.get -> string
 System.Windows.Forms.TaskDialogFooter.Text.set -> void
 System.Windows.Forms.TaskDialogIcon
+System.Windows.Forms.TaskDialogIcon.Dispose() -> void
 System.Windows.Forms.TaskDialogIcon.IconHandle.get -> System.IntPtr
+System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.Drawing.Bitmap image) -> void
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.Drawing.Icon icon) -> void
 System.Windows.Forms.TaskDialogIcon.TaskDialogIcon(System.IntPtr iconHandle) -> void
 System.Windows.Forms.TaskDialogPage
