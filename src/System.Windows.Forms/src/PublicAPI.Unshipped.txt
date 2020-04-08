@@ -87,11 +87,11 @@ System.Windows.Forms.TaskDialogPage.Expander.get -> System.Windows.Forms.TaskDia
 System.Windows.Forms.TaskDialogPage.Expander.set -> void
 System.Windows.Forms.TaskDialogPage.Footer.get -> System.Windows.Forms.TaskDialogFooter
 System.Windows.Forms.TaskDialogPage.Footer.set -> void
+System.Windows.Forms.TaskDialogPage.Heading.get -> string
+System.Windows.Forms.TaskDialogPage.Heading.set -> void
 System.Windows.Forms.TaskDialogPage.HelpRequest -> System.EventHandler
 System.Windows.Forms.TaskDialogPage.Icon.get -> System.Windows.Forms.TaskDialogIcon
 System.Windows.Forms.TaskDialogPage.Icon.set -> void
-System.Windows.Forms.TaskDialogPage.MainInstruction.get -> string
-System.Windows.Forms.TaskDialogPage.MainInstruction.set -> void
 System.Windows.Forms.TaskDialogPage.Navigate(System.Windows.Forms.TaskDialogPage page) -> void
 System.Windows.Forms.TaskDialogPage.OnCreated(System.EventArgs e) -> void
 System.Windows.Forms.TaskDialogPage.OnDestroyed(System.EventArgs e) -> void

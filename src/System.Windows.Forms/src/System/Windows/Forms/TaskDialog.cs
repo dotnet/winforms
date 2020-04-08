@@ -1295,7 +1295,7 @@ namespace System.Windows.Forms
                     // Strings in TasDialogConfig
                     Align(ref sizeToAllocate, sizeof(char));
                     sizeToAllocate += SizeOfString(page.Caption);
-                    sizeToAllocate += SizeOfString(page.MainInstruction);
+                    sizeToAllocate += SizeOfString(page.Heading);
                     sizeToAllocate += SizeOfString(page.Text);
                     sizeToAllocate += SizeOfString(page.CheckBox?.Text);
                     sizeToAllocate += SizeOfString(page.Expander?.Text);
@@ -1366,7 +1366,7 @@ namespace System.Windows.Forms
                             mainIcon = mainIcon,
                             footerIcon = footerIcon,
                             pszWindowTitle = MarshalString(page.Caption),
-                            pszMainInstruction = MarshalString(page.MainInstruction),
+                            pszMainInstruction = MarshalString(page.Heading),
                             pszContent = MarshalString(page.Text),
                             pszVerificationText = MarshalString(page.CheckBox?.Text),
                             pszExpandedInformation = MarshalString(page.Expander?.Text),
@@ -1598,7 +1598,7 @@ namespace System.Windows.Forms
             // causes the size/layout to be updated).
             // We use the MainInstruction because it cannot contain hyperlinks
             // (and therefore there is no risk that one of the links loses focus).
-            UpdateTextElement(ComCtl32.TDE.MAIN_INSTRUCTION, _boundPage!.MainInstruction);
+            UpdateTextElement(ComCtl32.TDE.MAIN_INSTRUCTION, _boundPage!.Heading);
         }
     }
 }

@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         private ComCtl32.TDF _flags;
         private TaskDialogIcon? _icon;
         private string? _caption;
-        private string? _mainInstruction;
+        private string? _heading;
         private string? _text;
         private int _width;
         private bool _boundIconIsFromHandle;
@@ -277,16 +277,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the main instruction text.
+        ///   Gets or sets the heading (main instruction).
         /// </summary>
         /// <remarks>
         /// <para>
         ///   This property can be set while the dialog is shown.
         /// </para>
         /// </remarks>
-        public string? MainInstruction
+        public string? Heading
         {
-            get => _mainInstruction;
+            get => _heading;
             set
             {
                 if (BoundDialog != null)
@@ -304,7 +304,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                _mainInstruction = value;
+                _heading = value;
             }
         }
 
@@ -913,7 +913,7 @@ namespace System.Windows.Forms
             // after starting navigation, but before navigation was finished).
             if (_updateMainInstructionOnInitialization)
             {
-                MainInstruction = _mainInstruction;
+                Heading = _heading;
                 _updateMainInstructionOnInitialization = false;
             }
 
