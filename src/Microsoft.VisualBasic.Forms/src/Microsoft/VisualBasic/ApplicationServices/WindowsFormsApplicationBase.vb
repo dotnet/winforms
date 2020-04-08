@@ -898,8 +898,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Permissions.Assert()
 
             Dim Guid As Guid = GetTypeLibGuidForAssembly(Entry)
+            If Guid = Nothing Then
+                Return Entry.ManifestModule.ModuleVersionId.ToString
+            End If
             Dim Version As String = Entry.GetName.Version.ToString
             Dim VersionParts As String() = Version.Split(CType(".", Char()))
+            Dim SemiUniqueApplicationID As String = Guid.ToString + VersionParts(0) + "." + VersionParts(1)
             PermissionSet.RevertAssert()
 
             'Note: We used to make the terminal server session ID part of the key.  It turns out to be unnecessary and the call to
@@ -909,7 +913,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             'any other global system object named "FOO" whether it be in session 2 running as  or session n running as whoever.
             'So it isn't necessary to make the session id part of the unique name that identifies a
 
-            Return Guid.ToString + VersionParts(0) + "." + VersionParts(1)  'Re: version parts, we have the major, minor, build, revision.  We key off major+minor.
+            Return SemiUniqueApplicationID  'Re: version parts, we have the major, minor, build, revision.  We key off major+minor.
         End Function
 
         Private Function GetTypeLibGuidForAssembly(_assembly As Assembly) As Guid
@@ -918,8 +922,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Dim attribute As GuidAttribute = CType(CustomAttributes(0), GuidAttribute)
                 Return New Guid(attribute.Value)
             End If
-            Dim Hash As Integer = _assembly.GetHashCode
-            Return New Guid($"{(Hex(Hash) & "0000000").Substring(0, 8)}-0852-4dbc-8021-36955cd24ce3")
+            Return Nothing
         End Function
 
         ''' <summary>
