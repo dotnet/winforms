@@ -434,7 +434,7 @@ namespace System.Windows.Forms
                     IntPtr createResult = IntPtr.Zero;
                     int lastWin32Error = 0;
 
-                    var prevTargetWindow = windowClass._targetWindow;
+                    NativeWindow prevTargetWindow = windowClass._targetWindow;
                     try
                     {
                         windowClass._targetWindow = this;
