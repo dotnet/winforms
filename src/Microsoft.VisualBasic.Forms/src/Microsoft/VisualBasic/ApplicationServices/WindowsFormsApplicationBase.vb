@@ -323,7 +323,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     End Try
                 Else
                     ' We are not the first instance, send the named pipe message with our payload and stop loading
-                    Dim _NamedPipeXmlData = New NamedPipeXMLData With
+                    Dim _NamedPipeXmlData As New NamedPipeXMLData With
                         {
                         .CommandLineArguments = Environment.GetCommandLineArgs().ToList()
                         }
@@ -944,11 +944,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="namedPipePayload"></param>
         Private Sub NamedPipeClientSendOptions(namedPipePayload As NamedPipeXMLData)
             Try
-                Using _namedPipeClientStream = New NamedPipeClientStream(".", m_NamedPipeID, PipeDirection.Out)
+                Using _namedPipeClientStream As New NamedPipeClientStream(".", m_NamedPipeID, PipeDirection.Out)
                     _namedPipeClientStream.Connect(3000)
                     ' Maximum wait 3 seconds
 
-                    Dim _xmlSerializer = New XmlSerializer(GetType(NamedPipeXMLData))
+                    Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
                     _xmlSerializer.Serialize(_namedPipeClientStream, namedPipePayload)
                 End Using
             Catch ex As Exception
@@ -995,13 +995,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private Sub NamedPipeServerCreateServer()
             ' Create a new pipe accessible by local authenticated users, disallow network
             'var sidAuthUsers = new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null);
-            Dim sidNetworkService = New SecurityIdentifier(WellKnownSidType.NetworkServiceSid, Nothing)
-            Dim sidWorld = New SecurityIdentifier(WellKnownSidType.WorldSid, Nothing)
+            Dim sidNetworkService As New SecurityIdentifier(WellKnownSidType.NetworkServiceSid, Nothing)
+            Dim sidWorld As New SecurityIdentifier(WellKnownSidType.WorldSid, Nothing)
 
-            Dim _pipeSecurity = New PipeSecurity
+            Dim _pipeSecurity As New PipeSecurity
 
             ' Deny network access to the pipe
-            Dim accessRule = New PipeAccessRule(sidNetworkService, PipeAccessRights.ReadWrite, AccessControlType.Deny)
+            Dim accessRule As New PipeAccessRule(sidNetworkService, PipeAccessRights.ReadWrite, AccessControlType.Deny)
             _pipeSecurity.AddAccessRule(accessRule)
 
             ' Allow Everyone to read/write
