@@ -103,7 +103,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         ''' Returns the command line sent to this application
         ''' </summary>
-        ''' <remarks>I'm using Me.CommandLine so that it is consistent with my.net and to assure they 
+        ''' <remarks>I'm using Me.CommandLine so that it is consistent with my.net and to assure they
         ''' always return the same values</remarks>
         Public ReadOnly Property CommandLine() As ReadOnlyCollection(Of String)
     End Class
@@ -267,11 +267,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ValidateAuthenticationModeEnumValue(authenticationMode, "authenticationMode")
 
             'Setup Windows Authentication if that's what the user wanted.  Note, we want to do this now, before the Network object gets created because
-            'the network object will be doing a AsyncOperationsManager.CreateOperation() which captures the execution context.  So we have to have our 
-            'principal on the thread before that happens.  
+            'the network object will be doing a AsyncOperationsManager.CreateOperation() which captures the execution context.  So we have to have our
+            'principal on the thread before that happens.
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
-                    'Consider:  - sadly, a call to: System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))  
+                    'Consider:  - sadly, a call to: System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
                     'will only check THIS caller so you'll always get TRUE.  What is needed is a way to get to the value of this on a demand basis.  So I try/catch instead for now
                     'but would rather be able to IF my way around this block.
                     System.Threading.Thread.CurrentPrincipal = New System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent)
@@ -311,7 +311,16 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If FirstInstance() Then
                     ' Create a new pipe - it will return immediately and async wait for connections
                     NamedPipeServerCreateServer()
-                    DoApplicationModel()
+                    Try
+                        DoApplicationModel()
+                    Finally
+                        If _mutexSingleInstance IsNot Nothing Then
+                            _mutexSingleInstance.Dispose()
+                        End If
+                        If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.IsConnected Then
+                            _namedPipeServerStream.Close()
+                        End If
+                    End Try
                 Else
                     ' We are not the first instance, send the named pipe message with our payload and stop loading
                     Dim _NamedPipeXmlData = New NamedPipeXMLData With
@@ -387,7 +396,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         ''' Use GDI for the text rendering engine by default.
         ''' The user can shadow this function to return True if they want their app
-        ''' to use the GDI+ render.  We read this function in Main() (My template) to 
+        ''' to use the GDI+ render.  We read this function in Main() (My template) to
         ''' determine how to set the text rendering flag on the WinForms application object.
         ''' </summary>
         ''' <returns>True - Use GDI+ renderer.  False - use GDI renderer</returns>
@@ -476,7 +485,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         ''' <summary>
-        ''' Extensibility point which raises the StartupNextInstance 
+        ''' Extensibility point which raises the StartupNextInstance
         ''' </summary>
         ''' <param name="eventArgs"></param>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
@@ -484,18 +493,23 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Protected Overridable Sub OnStartupNextInstance(ByVal eventArgs As StartupNextInstanceEventArgs)
             RaiseEvent StartupNextInstance(Me, eventArgs)
             'Activate the original instance
-            Call New System.Security.Permissions.UIPermission(UIPermissionWindow.SafeSubWindows Or UIPermissionWindow.SafeTopLevelWindows).Assert()
+            Call New UIPermission(UIPermissionWindow.SafeSubWindows Or UIPermissionWindow.SafeTopLevelWindows).Assert()
             If eventArgs.BringToForeground = True AndAlso Me.MainForm IsNot Nothing Then
                 If MainForm.WindowState = System.Windows.Forms.FormWindowState.Minimized Then
-                    MainForm.WindowState = System.Windows.Forms.FormWindowState.Normal
+                    MainForm.Invoke(Sub()
+                                        MainForm.WindowState = Windows.Forms.FormWindowState.Normal
+                                    End Sub)
                 End If
-                MainForm.Activate()
+                MainForm.Invoke(Sub()
+                                    MainForm.Activate()
+                                End Sub)
+
             End If
         End Sub
 
         ''' <summary>
         ''' At this point, the command line args should have been processed and the application will create the
-        ''' main form and enter the message loop.  
+        ''' main form and enter the message loop.
         ''' </summary>
         <SecuritySafeCritical()>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
@@ -511,7 +525,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 AddHandler Me.MainForm.Load, AddressOf MainFormLoadingDone
             End If
 
-            'Run() eats all exceptions (unless running under the debugger) If the user wrote an UnhandledException handler we will hook 
+            'Run() eats all exceptions (unless running under the debugger) If the user wrote an UnhandledException handler we will hook
             'the System.Windows.Forms.Application.ThreadException event (see Public Custom Event UnhandledException) which will raise our
             'UnhandledException Event.  If our user didn't write an UnhandledException event, then we land in the try/catch handler for Forms.Application.Run()
             Try
@@ -605,7 +619,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        ''' Hide the splash screen.  The splash screen was created on another thread 
+        ''' Hide the splash screen.  The splash screen was created on another thread
         ''' thread (main thread) than the one it was run on (secondary thread for the
         ''' splash screen so it doesn't block app startup. We need to invoke the close.
         ''' This function gets called from the main thread by the app fx.
@@ -615,12 +629,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Protected Sub HideSplashScreen()
             SyncLock m_SplashLock 'This ultimately wasn't necessary.  I suppose we better keep it for backwards compat
                 'Dev10 590587 - we now activate the main form before calling Dispose on the Splash screen. (we're just
-                '       swapping the order of the two If blocks). This is to fix the issue where the main form 
+                '       swapping the order of the two If blocks). This is to fix the issue where the main form
                 '       doesn't come to the front after the Splash screen disappears
                 If Me.MainForm IsNot Nothing Then
                     Call New System.Security.Permissions.UIPermission(UIPermissionWindow.AllWindows).Assert()
                     Me.MainForm.Activate()
-                    System.Security.PermissionSet.RevertAssert() 'CLR also reverts if we throw or when we return from this function 
+                    System.Security.PermissionSet.RevertAssert() 'CLR also reverts if we throw or when we return from this function
                 End If
                 If m_SplashScreen IsNot Nothing AndAlso Not m_SplashScreen.IsDisposed Then
                     Dim TheBigGoodbye As New DisposeDelegate(AddressOf m_SplashScreen.Dispose)
@@ -660,7 +674,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Get
                 Return _IsSingleInstance
             End Get
-            Set(ByVal value As Boolean)
+            Set(value As Boolean)
                 If value Then
                     _IsSingleInstance = value
                 End If
@@ -747,7 +761,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Sub
 
             ''' <summary>
-            ''' Handles the two types of application shutdown: 
+            ''' Handles the two types of application shutdown:
             '''   1 - shutdown when the main form closes
             '''   2 - shutdown only after the last form closes
             ''' </summary>
@@ -802,7 +816,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private m_UnhandledExceptionHandlers As System.Collections.ArrayList
         Private m_ProcessingUnhandledExceptionEvent As Boolean
         Private m_TurnOnNetworkListener As Boolean 'Tracks whether we need to create the network object so we can listen to the NetworkAvailabilityChanged event
-        Private m_FinishedOnInitilaize As Boolean 'Whether we have made it through the processing of OnInitialize 
+        Private m_FinishedOnInitilaize As Boolean 'Whether we have made it through the processing of OnInitialize
         Private m_NetworkAvailabilityEventHandlers As System.Collections.ArrayList
         Private m_NetworkObject As Microsoft.VisualBasic.Devices.Network
         Private m_ShutdownStyle As ShutdownMode 'defines when the application decides to close
@@ -829,7 +843,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private ReadOnly _namedPiperServerThreadLock As New Object
 
         ''' <summary>
-        ''' Runs the user's program through the VB Startup/Shutdown application model 
+        ''' Runs the user's program through the VB Startup/Shutdown application model
         ''' </summary>
         Private Sub DoApplicationModel()
 
@@ -857,7 +871,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         End If
                     End If
                 End Try
-            Else 'DEBUGGER ATTACHED - we don't have an uber catch when debugging so the exception will bubble out to the exception helper 
+            Else 'DEBUGGER ATTACHED - we don't have an uber catch when debugging so the exception will bubble out to the exception helper
                 'We also don't hook up the Application.ThreadException event because WinForms ignores it when we are running under the debugger
                 If OnInitialize(MyBase.CommandLineArgs) Then
                     If OnStartup(EventArgs) = True Then
@@ -879,7 +893,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             'CONSIDER: We may want to make this public so users can set up what single instance means to them, e.g. for us, separate paths mean different instances, etc.
 
             Dim Permissions As New System.Security.PermissionSet(PermissionState.None)
-            Permissions.AddPermission(New FileIOPermission(PermissionState.Unrestricted)) 'Chicken and egg problem.  All I need is PathDiscovery for the location of this assembly but to get the location of the assembly (see Getname below) I need to know the path which I can't get without asserting...  
+            Permissions.AddPermission(New FileIOPermission(PermissionState.Unrestricted)) 'Chicken and egg problem.  All I need is PathDiscovery for the location of this assembly but to get the location of the assembly (see Getname below) I need to know the path which I can't get without asserting...
             Permissions.AddPermission(New SecurityPermission(System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode))
             Permissions.Assert()
 
@@ -888,12 +902,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Dim VersionParts As String() = Version.Split(CType(".", Char()))
             PermissionSet.RevertAssert()
 
-            'Note: We used to make the terminal server session ID part of the key.  It turns out to be unnecessary and the call to 
+            'Note: We used to make the terminal server session ID part of the key.  It turns out to be unnecessary and the call to
             'NativeMethods.ProcessIdToSessionId(System.Diagnostics.Process.GetCurrentProcess.Id, TerminalSessionID) was not supported on Win98, anyway.
             'It turns out that terminal server sessions, even when you are logged in as the same user to multiple terminal server sessions on the same
             'machine, are separate.  So you can have session 1 running as  and have a global system object named "FOO" that won't conflict with
             'any other global system object named "FOO" whether it be in session 2 running as  or session n running as whoever.
-            'So it isn't necessary to make the session id part of the unique name that identifies a 
+            'So it isn't necessary to make the session id part of the unique name that identifies a
 
             Return Guid.ToString + VersionParts(0) + "." + VersionParts(1)  'Re: version parts, we have the major, minor, build, revision.  We key off major+minor.
         End Function
@@ -950,9 +964,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Read data and prevent access to _NamedPipeXmlData during threaded operations
                 SyncLock _namedPiperServerThreadLock
-                    ' Read data from client
-                    Dim _xmlSerializer = New XmlSerializer(GetType(NamedPipeXMLData))
+                    Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
                     _namedPipeXmlData = CType(_xmlSerializer.Deserialize(_namedPipeServerStream), NamedPipeXMLData)
+                    Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
+                    OnStartupNextInstance(remoteEventArgs)
                 End SyncLock
             Catch ex As ObjectDisposedException
                 ' EndWaitForConnection will throw exception when someone closes the pipe before connection made
