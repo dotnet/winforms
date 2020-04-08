@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         private TaskDialogRadioButtonCollection _radioButtons;
         private TaskDialogCheckBox? _checkBox;
         private TaskDialogExpander? _expander;
-        private TaskDialogFooter? _footer;
+        private TaskDialogFootnote? _footnote;
         private TaskDialogProgressBar? _progressBar;
 
         private ComCtl32.TDF _flags;
@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         private Dictionary<int, TaskDialogButton>? _boundStandardButtonsByID;
 
         private bool _appliedInitialization;
-        private bool _updateMainInstructionOnInitialization;
+        private bool _updateHeadingOnInitialization;
         private bool _updateTextOnInitialization;
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
             // Create empty (hidden) controls.
             _checkBox = new TaskDialogCheckBox();
             _expander = new TaskDialogExpander();
-            _footer = new TaskDialogFooter();
+            _footnote = new TaskDialogFootnote();
             _progressBar = new TaskDialogProgressBar(TaskDialogProgressBarState.None);
         }
 
@@ -210,24 +210,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the footer to be shown in this page.
+        ///   Gets or sets the footnote to be shown in this page.
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   The footer will only be shown if its <see cref="TaskDialogFooter.Text"/> property
+        ///   The footnote will only be shown if its <see cref="TaskDialogFootnote.Text"/> property
         ///   is not <see langword="null"/> or an empty string.
         /// </para>
         /// </remarks>
-        public TaskDialogFooter? Footer
+        public TaskDialogFootnote? Footnote
         {
-            get => _footer;
+            get => _footnote;
             set
             {
                 // We must deny this if we are bound because we need to be able to
                 // access the control from the task dialog's callback.
                 DenyIfBound();
 
-                _footer = value;
+                _footnote = value;
             }
         }
 
@@ -296,7 +296,7 @@ namespace System.Windows.Forms
                     // initialization (when navigation is finished).
                     if (WaitingForInitialization)
                     {
-                        _updateMainInstructionOnInitialization = true;
+                        _updateHeadingOnInitialization = true;
                     }
                     else
                     {
@@ -354,7 +354,7 @@ namespace System.Windows.Forms
             set
             {
                 // We currently don't support to buffer changes while waiting for the
-                // initialization like it is done for string properties (Text, MainInstruction),
+                // initialization like it is done for string properties (Text, Heading),
                 // because for handle icons, this would mean that the previous icon cannot
                 // yet be disposed (until initialization is applied) even though the property
                 // has been updated to a different icon.
@@ -669,7 +669,7 @@ namespace System.Windows.Forms
             if (_buttons.Concat<TaskDialogControl>(_radioButtons)
                 .Append(_checkBox)
                 .Append(_expander)
-                .Append(_footer)
+                .Append(_footnote)
                 .Append(_progressBar)
                 .Any(c => c?.BoundPage != null))
             {
@@ -741,7 +741,7 @@ namespace System.Windows.Forms
             out IEnumerable<(int buttonID, string text)> customButtonElements,
             out IEnumerable<(int buttonID, string text)> radioButtonElements,
             out ComCtl32.TASKDIALOGCONFIG.IconUnion mainIcon,
-            out ComCtl32.TASKDIALOGCONFIG.IconUnion footerIcon,
+            out ComCtl32.TASKDIALOGCONFIG.IconUnion footnoteIcon,
             out int defaultButtonID,
             out int defaultRadioButtonID)
         {
@@ -756,7 +756,7 @@ namespace System.Windows.Forms
             flags = _flags;
 
             _updateTextOnInitialization = false;
-            _updateMainInstructionOnInitialization = false;
+            _updateHeadingOnInitialization = false;
 
             (ComCtl32.TASKDIALOGCONFIG.IconUnion localIconValue, bool? iconIsFromHandle) = GetIconValue(_icon);
             (mainIcon, _boundIconIsFromHandle) = (localIconValue, iconIsFromHandle ?? false);
@@ -850,13 +850,13 @@ namespace System.Windows.Forms
                 flags |= _expander.Bind(this);
             }
 
-            if (_footer != null)
+            if (_footnote != null)
             {
-                flags |= _footer.Bind(this, out footerIcon);
+                flags |= _footnote.Bind(this, out footnoteIcon);
             }
             else
             {
-                footerIcon = default;
+                footnoteIcon = default;
             }
 
             if (_progressBar != null)
@@ -893,7 +893,7 @@ namespace System.Windows.Forms
 
             _checkBox?.Unbind();
             _expander?.Unbind();
-            _footer?.Unbind();
+            _footnote?.Unbind();
             _progressBar?.Unbind();
 
             BoundDialog = null;
@@ -911,10 +911,10 @@ namespace System.Windows.Forms
 
             // Check if we need to update some of our elements (if they have been modified
             // after starting navigation, but before navigation was finished).
-            if (_updateMainInstructionOnInitialization)
+            if (_updateHeadingOnInitialization)
             {
                 Heading = _heading;
-                _updateMainInstructionOnInitialization = false;
+                _updateHeadingOnInitialization = false;
             }
 
             if (_updateTextOnInitialization)
@@ -938,7 +938,7 @@ namespace System.Windows.Forms
 
             _checkBox?.ApplyInitialization();
             _expander?.ApplyInitialization();
-            _footer?.ApplyInitialization();
+            _footnote?.ApplyInitialization();
             _progressBar?.ApplyInitialization();
         }
 

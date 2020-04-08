@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///   Represents an icon that can be shown in the main area of a task dialog
     ///   (by setting the <see cref="TaskDialogPage.Icon"/> property) or in the
-    ///   footer of a task dialog (by setting the <see cref="TaskDialogFooter.Icon"/>
+    ///   footnote of a task dialog (by setting the <see cref="TaskDialogFootnote.Icon"/>
     ///   property).
     /// </summary>
     /// <remarks>

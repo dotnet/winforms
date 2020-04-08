@@ -1301,7 +1301,7 @@ namespace System.Windows.Forms
                     sizeToAllocate += SizeOfString(page.Expander?.Text);
                     sizeToAllocate += SizeOfString(page.Expander?.ExpandedButtonText);
                     sizeToAllocate += SizeOfString(page.Expander?.CollapsedButtonText);
-                    sizeToAllocate += SizeOfString(page.Footer?.Text);
+                    sizeToAllocate += SizeOfString(page.Footnote?.Text);
 
                     // Buttons array
                     if (customButtonElements.Any())
@@ -1372,7 +1372,7 @@ namespace System.Windows.Forms
                             pszExpandedInformation = MarshalString(page.Expander?.Text),
                             pszExpandedControlText = MarshalString(page.Expander?.ExpandedButtonText),
                             pszCollapsedControlText = MarshalString(page.Expander?.CollapsedButtonText),
-                            pszFooter = MarshalString(page.Footer?.Text),
+                            pszFooter = MarshalString(page.Footnote?.Text),
                             nDefaultButton = defaultButtonID,
                             nDefaultRadioButton = defaultRadioButtonID,
                             pfCallback = Marshal.GetFunctionPointerForDelegate(s_callbackProcDelegate),

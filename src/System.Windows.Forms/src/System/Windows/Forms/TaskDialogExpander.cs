@@ -174,7 +174,7 @@ namespace System.Windows.Forms
                     value,
                     (int)value,
                     (int)TaskDialogExpanderPosition.AfterText,
-                    (int)TaskDialogExpanderPosition.AfterFooter))
+                    (int)TaskDialogExpanderPosition.AfterFootnote))
                 {
                     throw new InvalidEnumArgumentException(
                         nameof(value),
@@ -212,7 +212,7 @@ namespace System.Windows.Forms
             {
                 flags |= ComCtl32.TDF.EXPANDED_BY_DEFAULT;
             }
-            if (_expanderPosition == TaskDialogExpanderPosition.AfterFooter)
+            if (_expanderPosition == TaskDialogExpanderPosition.AfterFootnote)
             {
                 flags |= ComCtl32.TDF.EXPAND_FOOTER_AREA;
             }

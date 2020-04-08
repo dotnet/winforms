@@ -18,8 +18,8 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///   The expanded area is to be displayed at the bottom of the dialog's
-        ///   footer area.
+        ///   footnote area.
         /// </summary>
-        AfterFooter = 1
+        AfterFootnote = 1
     }
 }

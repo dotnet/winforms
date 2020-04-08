@@ -7,9 +7,9 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///   Represents the footer area of a task dialog.
+    ///   Represents the footnote area of a task dialog.
     /// </summary>
-    public sealed class TaskDialogFooter : TaskDialogControl
+    public sealed class TaskDialogFootnote : TaskDialogControl
     {
         private string? _text;
         private TaskDialogIcon? _icon;
@@ -17,31 +17,31 @@ namespace System.Windows.Forms
         private bool _updateTextOnInitialization;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref="TaskDialogFooter"/> class.
+        ///   Initializes a new instance of the <see cref="TaskDialogFootnote"/> class.
         /// </summary>
-        public TaskDialogFooter()
+        public TaskDialogFootnote()
         {
         }
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref="TaskDialogFooter"/> class
+        ///   Initializes a new instance of the <see cref="TaskDialogFootnote"/> class
         ///   using the given <paramref name="text"/>.
         /// </summary>
-        /// <param name="text">The text to be displayed in the dialog's footer area.</param>
-        public TaskDialogFooter(string? text)
+        /// <param name="text">The text to be displayed in the dialog's footnote area.</param>
+        public TaskDialogFootnote(string? text)
             : this()
         {
             _text = text;
         }
 
-        public static implicit operator TaskDialogFooter(string footerText)
-            => new TaskDialogFooter(footerText);
+        public static implicit operator TaskDialogFootnote(string footnoteText)
+            => new TaskDialogFootnote(footnoteText);
 
         /// <summary>
-        ///   Gets or sets the text to be displayed in the dialog's footer area.
+        ///   Gets or sets the text to be displayed in the dialog's footnote area.
         /// </summary>
         /// <value>
-        ///   The text to be displayed in the dialog's footer area. The default value is <see langword="null"/>.
+        ///   The text to be displayed in the dialog's footnote area. The default value is <see langword="null"/>.
         /// </value>
         /// <remarks>
         /// <para>
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the footer icon.
+        ///   Gets or sets the footnote icon.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -125,7 +125,7 @@ namespace System.Windows.Forms
         internal override bool IsCreatable => base.IsCreatable && !TaskDialogPage.IsNativeStringNullOrEmpty(_text);
 
         /// <summary>
-        ///   Returns a string that represents the current <see cref="TaskDialogFooter"/> control.
+        ///   Returns a string that represents the current <see cref="TaskDialogFootnote"/> control.
         /// </summary>
         /// <returns>A string that contains the control text.</returns>
         public override string ToString() => _text ?? base.ToString() ?? string.Empty;
