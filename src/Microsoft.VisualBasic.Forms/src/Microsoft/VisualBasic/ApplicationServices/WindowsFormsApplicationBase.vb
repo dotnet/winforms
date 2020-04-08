@@ -301,11 +301,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             MyBase.InternalCommandLine = New System.Collections.ObjectModel.ReadOnlyCollection(Of String)(commandLine)
 
             'Is this a single-instance application?
-            If Not Me.IsSingleInstance Then
+            If Not IsSingleInstance Then
                 DoApplicationModel() 'This isn't a Single-Instance application
             Else 'This is a Single-Instance application
-                Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly) 'Note: Must pass the calling assembly from here so we can get the running app.  Otherwise, can break single instance
-                m_NamedPipeID = ApplicationInstanceID & "NamedPipe"
+                ' Must pass the calling assembly from here so we can get the running app. Otherwise, can break single instance.
+                Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly)
+                _namedPipeID = ApplicationInstanceID & "NamedPipe"
                 _semaphoreID = ApplicationInstanceID & "Semaphore"
                 ' If are the first instance then we start the named pipe server listening and allow the form to load
                 If FirstInstance() Then
@@ -672,11 +673,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Property IsSingleInstance() As Boolean
             Get
-                Return _IsSingleInstance
+                Return _isSingleInstance
             End Get
             Set(value As Boolean)
                 If value Then
-                    _IsSingleInstance = value
+                    _isSingleInstance = value
                 End If
             End Set
         End Property
@@ -835,11 +836,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Private _firstInstance As Boolean
         Private _mutexSingleInstance As Mutex
-        Private m_NamedPipeID As String 'global OS handles must have a unique ID
+        Private _namedPipeID As String 'global OS handles must have a unique ID
         Private _namedPipeServerStream As NamedPipeServerStream
         Private _namedPipeXmlData As NamedPipeXMLData
         Private _semaphoreID As String
-        Private _IsSingleInstance As Boolean
+        Private _isSingleInstance As Boolean
         Private ReadOnly _namedPiperServerThreadLock As New Object
 
         ''' <summary>
@@ -850,7 +851,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Dim EventArgs As New StartupEventArgs(MyBase.CommandLineArgs)
 
             'Only do the try/catch if we aren't running under the debugger.  If we do try/catch under the debugger the debugger never gets a crack at exceptions which breaks the exception helper
-            If Not System.Diagnostics.Debugger.IsAttached Then
+            If Not Debugger.IsAttached Then
                 'NO DEBUGGER ATTACHED - we use a catch so that we can run our UnhandledException code
                 'Note - Sadly, code changes within this IF (that don't pertain to exception handling) need to be mirrored in the ELSE debugger attached clause below
                 Try
@@ -860,7 +861,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                             OnShutdown()
                         End If
                     End If
-                Catch ex As System.Exception
+                Catch ex As Exception
                     'This catch is for exceptions that happen during the On* methods above, but have occurred outside of the message pump (which exceptions we would
                     'have already seen via our hook of System.Windows.Forms.Application.ThreadException)
                     If m_ProcessingUnhandledExceptionEvent Then
@@ -886,15 +887,19 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' Generates the name for the remote singleton that we use to channel multiple instances
         ''' to the same application model thread.
         ''' </summary>
+        ''' <param name="Entry">Call with Assembly.GetCallingAssembly</param>
         ''' <returns></returns>
-        ''' <remarks></remarks>
+        ''' <remarks>
+        ''' Current behavior will try to find a unique GUID that is stable through application builds
+        ''' then append Major and Minor Versions. This causes different versions of the application to be considered the same
+        ''' as long as the Major and Minor version don't change.
+        ''' </remarks>
         <SecurityCritical()>
-        Private Function GetApplicationInstanceID(ByVal Entry As Assembly) As String
-            'CONSIDER: We may want to make this public so users can set up what single instance means to them, e.g. for us, separate paths mean different instances, etc.
-
-            Dim Permissions As New System.Security.PermissionSet(PermissionState.None)
-            Permissions.AddPermission(New FileIOPermission(PermissionState.Unrestricted)) 'Chicken and egg problem.  All I need is PathDiscovery for the location of this assembly but to get the location of the assembly (see Getname below) I need to know the path which I can't get without asserting...
-            Permissions.AddPermission(New SecurityPermission(System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode))
+        Public Overridable Function GetApplicationInstanceID(ByVal Entry As Assembly) As String
+            Dim Permissions As New PermissionSet(PermissionState.None)
+            'Chicken and egg problem.  All I need is PathDiscovery for the location of this assembly but to get the location of the assembly I need to know the path which I can't get without asserting...
+            Permissions.AddPermission(New FileIOPermission(PermissionState.Unrestricted))
+            Permissions.AddPermission(New SecurityPermission(SecurityPermissionFlag.UnmanagedCode))
             Permissions.Assert()
 
             Dim Guid As Guid = GetTypeLibGuidForAssembly(Entry)
@@ -903,17 +908,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End If
             Dim Version As String = Entry.GetName.Version.ToString
             Dim VersionParts As String() = Version.Split(CType(".", Char()))
-            Dim SemiUniqueApplicationID As String = Guid.ToString + VersionParts(0) + "." + VersionParts(1)
             PermissionSet.RevertAssert()
 
-            'Note: We used to make the terminal server session ID part of the key.  It turns out to be unnecessary and the call to
-            'NativeMethods.ProcessIdToSessionId(System.Diagnostics.Process.GetCurrentProcess.Id, TerminalSessionID) was not supported on Win98, anyway.
-            'It turns out that terminal server sessions, even when you are logged in as the same user to multiple terminal server sessions on the same
-            'machine, are separate.  So you can have session 1 running as  and have a global system object named "FOO" that won't conflict with
-            'any other global system object named "FOO" whether it be in session 2 running as  or session n running as whoever.
-            'So it isn't necessary to make the session id part of the unique name that identifies a
-
-            Return SemiUniqueApplicationID  'Re: version parts, we have the major, minor, build, revision.  We key off major+minor.
+            'Re: version parts, we have the major, minor, build, revision. We key off major+minor.
+            Return Guid.ToString + VersionParts(0) + "." + VersionParts(1)
         End Function
 
         Private Function GetTypeLibGuidForAssembly(_assembly As Assembly) As Guid
@@ -944,7 +942,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="namedPipePayload"></param>
         Private Sub NamedPipeClientSendOptions(namedPipePayload As NamedPipeXMLData)
             Try
-                Using _namedPipeClientStream As New NamedPipeClientStream(".", m_NamedPipeID, PipeDirection.Out)
+                Using _namedPipeClientStream As New NamedPipeClientStream(".", _namedPipeID, PipeDirection.Out)
                     _namedPipeClientStream.Connect(3000)
                     ' Maximum wait 3 seconds
 
@@ -994,7 +992,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         Private Sub NamedPipeServerCreateServer()
             ' Create a new pipe accessible by local authenticated users, disallow network
-            'var sidAuthUsers = new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null);
             Dim sidNetworkService As New SecurityIdentifier(WellKnownSidType.NetworkServiceSid, Nothing)
             Dim sidWorld As New SecurityIdentifier(WellKnownSidType.WorldSid, Nothing)
 
@@ -1017,13 +1014,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Create pipe and start the async connection wait
             _namedPipeServerStream = New NamedPipeServerStream(
-                    pipeName:=m_NamedPipeID,
+                    pipeName:=_namedPipeID,
                     direction:=PipeDirection.In,
                     maxNumberOfServerInstances:=1,
                     transmissionMode:=PipeTransmissionMode.Byte,
-                    options:=PipeOptions.Asynchronous,
-                    inBufferSize:=0,
-                    outBufferSize:=0)
+                    options:=PipeOptions.Asynchronous)
 
             ' Begin async wait for connections
             _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
@@ -1031,4 +1026,3 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
     End Class 'WindowsFormsApplicationBase
 End Namespace
-
