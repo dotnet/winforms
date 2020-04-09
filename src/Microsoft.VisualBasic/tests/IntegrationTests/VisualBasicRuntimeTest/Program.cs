@@ -130,7 +130,6 @@ namespace VisualBasicRuntimeTest
             }
         }
 
-
         private static void ProgressDialog_ShowProgressDialog()
         {
             var dialogType = typeof(ApplicationBase).Assembly.GetType("Microsoft.VisualBasic.MyServices.Internal.ProgressDialog");

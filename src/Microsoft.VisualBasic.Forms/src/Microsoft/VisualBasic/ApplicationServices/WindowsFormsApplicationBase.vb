@@ -305,7 +305,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 DoApplicationModel() 'This isn't a Single-Instance application
                 Return
             End If
-            'This is a Single-Instance application
+            ' This is a Single-Instance application
             ' Must pass the calling assembly from here so we can get the running app. Otherwise, can break single instance.
             Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly)
             _namedPipeID = ApplicationInstanceID & "NamedPipe"
