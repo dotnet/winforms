@@ -303,36 +303,37 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             'Is this a single-instance application?
             If Not IsSingleInstance Then
                 DoApplicationModel() 'This isn't a Single-Instance application
-            Else 'This is a Single-Instance application
-                ' Must pass the calling assembly from here so we can get the running app. Otherwise, can break single instance.
-                Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly)
-                _namedPipeID = ApplicationInstanceID & "NamedPipe"
-                _semaphoreID = ApplicationInstanceID & "Semaphore"
-                ' If are the first instance then we start the named pipe server listening and allow the form to load
-                If FirstInstance() Then
-                    ' Create a new pipe - it will return immediately and async wait for connections
-                    NamedPipeServerCreateServer()
-                    Try
-                        DoApplicationModel()
-                    Finally
-                        If _mutexSingleInstance IsNot Nothing Then
-                            _mutexSingleInstance.Dispose()
-                        End If
-                        If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.IsConnected Then
-                            _namedPipeServerStream.Close()
-                        End If
-                    End Try
-                Else
-                    ' We are not the first instance, send the named pipe message with our payload and stop loading
-                    Dim _NamedPipeXmlData As New NamedPipeXMLData With
-                        {
-                        .CommandLineArguments = Environment.GetCommandLineArgs().ToList()
-                        }
-                    ' Notify first instance by sending args
-                    NamedPipeClientSendOptions(_NamedPipeXmlData)
-                    RaiseEvent Shutdown(Me, EventArgs.Empty)
-                End If
+                Return
             End If
+            'This is a Single-Instance application
+            ' Must pass the calling assembly from here so we can get the running app. Otherwise, can break single instance.
+            Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly)
+            _namedPipeID = ApplicationInstanceID & "NamedPipe"
+            _semaphoreID = ApplicationInstanceID & "Semaphore"
+            ' If are the first instance then we start the named pipe server listening and allow the form to load
+            If FirstInstance() Then
+                ' Create a new pipe - it will return immediately and async wait for connections
+                NamedPipeServerCreateServer()
+                Try
+                    DoApplicationModel()
+                Finally
+                    If _mutexSingleInstance IsNot Nothing Then
+                        _mutexSingleInstance.Dispose()
+                    End If
+                    If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.IsConnected Then
+                        _namedPipeServerStream.Close()
+                    End If
+                End Try
+                Return
+            End If
+            ' We are not the first instance, send the named pipe message with our payload and stop loading
+            Dim _NamedPipeXmlData As New NamedPipeXMLData With
+                {
+                .CommandLineArguments = Environment.GetCommandLineArgs().ToList()
+                }
+            ' Notify first instance by sending args
+            NamedPipeClientSendOptions(_NamedPipeXmlData)
+            RaiseEvent Shutdown(Me, EventArgs.Empty)
         End Sub
 
         ''' <summary>
