@@ -108,14 +108,7 @@ namespace VisualBasicRuntimeTest
 
             application.StartupNextInstance += (object sender, StartupNextInstanceEventArgs e) =>
             {
-                var forms = application.OpenForms;
-                valid = forms.Count == 1 &&
-                    forms[0] == mainForm &&
-                    application.ApplicationContext.MainForm == mainForm;
-                if (!valid)
-                {
-                    mainForm.Close();
-                }
+                // this needs testing
             };
 
             mainForm.Load += (object sender, EventArgs e) =>
