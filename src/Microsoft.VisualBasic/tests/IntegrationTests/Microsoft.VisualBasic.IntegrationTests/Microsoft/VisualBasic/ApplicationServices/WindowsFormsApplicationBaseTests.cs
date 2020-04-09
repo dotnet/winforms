@@ -18,10 +18,26 @@ namespace Microsoft.VisualBasic.IntegrationTests
             string exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
             var startInfo = new ProcessStartInfo { FileName = exePath, Arguments = "WindowsFormsApplicationBase.Run" };
             var process = TestHelpers.StartProcess(startInfo);
+            var process1 = TestHelpers.StartProcess(startInfo);
+            Assert.False(process1.HasExited);
+            TestHelpers.EndProcess(process, timeout: 1000);
+            Assert.True(process.HasExited);
+            TestHelpers.EndProcess(process1, timeout: 1000);
+            Assert.True(process1.HasExited);
+        }
+
+        [Fact]
+        public void RunSingleInstance()
+        {
+            string exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
+            var startInfo = new ProcessStartInfo { FileName = exePath, Arguments = "WindowsFormsApplicationBase.RunSingleInstance" };
+            var process = TestHelpers.StartProcess(startInfo);
+            var process1 = TestHelpers.StartProcess(startInfo);
+            System.Threading.Thread.Sleep(1000);
+            Assert.True(process1.HasExited);
             TestHelpers.EndProcess(process, timeout: 1000);
             Assert.True(process.HasExited);
         }
-
         [Fact]
         public void Run_NoStartupFormException()
         {

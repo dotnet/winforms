@@ -42,6 +42,9 @@ namespace VisualBasicRuntimeTest
                     case "WindowsFormsApplicationBase.Run":
                         WindowsFormsApplicationBase_Run();
                         break;
+                    case "WindowsFormsApplicationBase.RunSingleInstance":
+                        WindowsFormsApplicationBase_RunSingleInstance();
+                        break;
                     case "ProgressDialog.ShowProgressDialog":
                         ProgressDialog_ShowProgressDialog();
                         break;
@@ -75,7 +78,7 @@ namespace VisualBasicRuntimeTest
         private static void WindowsFormsApplicationBase_Run()
         {
             var mainForm = new Form();
-            var application = new WindowsApplication(mainForm);
+            var application = new WindowsApplication(mainForm, false);
             bool valid = false;
 
             mainForm.Load += (object sender, EventArgs e) =>
@@ -96,6 +99,44 @@ namespace VisualBasicRuntimeTest
                 throw new InvalidOperationException();
             }
         }
+        private static void WindowsFormsApplicationBase_RunSingleInstance()
+        {
+            var mainForm = new Form();
+            var application = new WindowsApplication(mainForm, true);
+
+            bool valid = false;
+
+            application.StartupNextInstance += (object sender, StartupNextInstanceEventArgs e) =>
+            {
+                var forms = application.OpenForms;
+                valid = forms.Count == 1 &&
+                    forms[0] == mainForm &&
+                    application.ApplicationContext.MainForm == mainForm;
+                if (!valid)
+                {
+                    mainForm.Close();
+                }
+            };
+
+            mainForm.Load += (object sender, EventArgs e) =>
+            {
+                var forms = application.OpenForms;
+                valid = forms.Count == 1 &&
+                    forms[0] == mainForm &&
+                    application.ApplicationContext.MainForm == mainForm;
+                if (!valid)
+                {
+                    mainForm.Close();
+                }
+            };
+
+            application.Run(new string[0]);
+            if (!valid)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
 
         private static void ProgressDialog_ShowProgressDialog()
         {
@@ -146,9 +187,10 @@ namespace VisualBasicRuntimeTest
 
         private sealed class WindowsApplication : WindowsFormsApplicationBase
         {
-            internal WindowsApplication(Form mainForm)
+            internal WindowsApplication(Form mainForm, bool isSingleInstance)
             {
                 MainForm = mainForm;
+                IsSingleInstance = isSingleInstance;
             }
         }
 
