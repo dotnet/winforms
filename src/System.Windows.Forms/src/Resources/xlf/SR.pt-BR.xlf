@@ -8103,7 +8103,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="PropertyGridEntryValuesListDefaultAccessibleName">
         <source>Available values</source>
-        <target state="new">Available values</target>
+        <target state="translated">Valores disponíveis</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridExceptionInfo">
