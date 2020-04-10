@@ -303,28 +303,26 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             'Is this a single-instance application?
             If Not IsSingleInstance Then
                 DoApplicationModel() 'This isn't a Single-Instance application
-                Return
+                Exit Sub
             End If
             ' This is a Single-Instance application
             ' Must pass the calling assembly from here so we can get the running app. Otherwise, can break single instance.
             Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly)
             _namedPipeID = ApplicationInstanceID & "NamedPipe"
-            _semaphoreID = ApplicationInstanceID & "Semaphore"
             ' If are the first instance then we start the named pipe server listening and allow the form to load
-            If FirstInstance() Then
-                ' Create a new pipe - it will return immediately and async wait for connections
-                NamedPipeServerCreateServer()
+            _namedPipeServerStream = TryNamedPipeServerCreateServer()
+            If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.CanRead Then
                 Try
+                    ' We are the first instance with the named pipe server listening and allow the form to load
+                    ' Begin async wait for connections
+                    _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
                     DoApplicationModel()
                 Finally
-                    If _mutexSingleInstance IsNot Nothing Then
-                        _mutexSingleInstance.Dispose()
-                    End If
                     If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.IsConnected Then
                         _namedPipeServerStream.Close()
                     End If
                 End Try
-                Return
+                Exit Sub
             End If
             ' We are not the first instance, send the named pipe message with our payload and stop loading
             Dim _NamedPipeXmlData As New NamedPipeXMLData With
@@ -333,7 +331,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 }
             ' Notify first instance by sending args
             NamedPipeClientSendOptions(_NamedPipeXmlData)
-            RaiseEvent Shutdown(Me, EventArgs.Empty)
+            If _namedPipeServerStream IsNot Nothing Then
+                _namedPipeServerStream.Dispose()
+            End If
+            OnShutdown()
         End Sub
 
         ''' <summary>
@@ -498,14 +499,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Call New UIPermission(UIPermissionWindow.SafeSubWindows Or UIPermissionWindow.SafeTopLevelWindows).Assert()
             If eventArgs.BringToForeground = True AndAlso Me.MainForm IsNot Nothing Then
                 If MainForm.WindowState = System.Windows.Forms.FormWindowState.Minimized Then
-                    MainForm.Invoke(Sub()
-                                        MainForm.WindowState = Windows.Forms.FormWindowState.Normal
-                                    End Sub)
+                    MainForm.WindowState = Windows.Forms.FormWindowState.Normal
                 End If
-                MainForm.Invoke(Sub()
-                                    MainForm.Activate()
-                                End Sub)
-
+                MainForm.Activate()
             End If
         End Sub
 
@@ -563,14 +559,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Overridable Sub OnShutdown()
-            If _namedPipeServerStream IsNot Nothing Then
-                _namedPipeServerStream.Dispose()
-            End If
-
-            If _mutexSingleInstance IsNot Nothing Then
-                _mutexSingleInstance.Dispose()
-            End If
-
             RaiseEvent Shutdown(Me, System.EventArgs.Empty)
         End Sub
 
@@ -835,14 +823,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private m_NetworkAvailChangeLock As New Object 'sync object
         Private m_SaveMySettingsOnExit As Boolean 'Informs My.Settings whether to save the settings on exit or not
 
-        Private _firstInstance As Boolean
-        Private _mutexSingleInstance As Mutex
         Private _namedPipeID As String 'global OS handles must have a unique ID
         Private _namedPipeServerStream As NamedPipeServerStream
-        Private _namedPipeXmlData As NamedPipeXMLData
-        Private _semaphoreID As String
         Private _isSingleInstance As Boolean
-        Private ReadOnly _namedPiperServerThreadLock As New Object
 
         ''' <summary>
         ''' Runs the user's program through the VB Startup/Shutdown application model
@@ -925,19 +908,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         ''' <summary>
-        '''     Are we the first instance of this application.
-        ''' </summary>
-        ''' <returns></returns>
-        Private Function FirstInstance() As Boolean
-            ' Allow for multiple runs but only try and get the mutex once
-            If _mutexSingleInstance Is Nothing Then
-                _mutexSingleInstance = New Mutex(True, _semaphoreID, _firstInstance)
-            End If
-
-            Return _firstInstance
-        End Function
-
-        ''' <summary>
         '''     Uses a named pipe to send the currently parsed options to an already running instance.
         ''' </summary>
         ''' <param name="namedPipePayload"></param>
@@ -965,12 +935,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 _namedPipeServerStream.EndWaitForConnection(_iAsyncResult)
 
                 ' Read data and prevent access to _NamedPipeXmlData during threaded operations
-                SyncLock _namedPiperServerThreadLock
-                    Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
-                    _namedPipeXmlData = CType(_xmlSerializer.Deserialize(_namedPipeServerStream), NamedPipeXMLData)
-                    Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
-                    OnStartupNextInstance(remoteEventArgs)
-                End SyncLock
+                Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
+                Dim _namedPipeXmlData As NamedPipeXMLData = CType(_xmlSerializer.Deserialize(_namedPipeServerStream), NamedPipeXMLData)
+                Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
+                MainForm.Invoke(Sub()
+                                    OnStartupNextInstance(remoteEventArgs)
+                                End Sub)
             Catch ex As ObjectDisposedException
                 ' EndWaitForConnection will throw exception when someone closes the pipe before connection made
                 ' In that case we don't create any more pipes and just return
@@ -985,14 +955,16 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Try
 
             ' Create a new pipe for next connection
-            NamedPipeServerCreateServer()
+            _namedPipeServerStream = TryNamedPipeServerCreateServer()
         End Sub
 
         ''' <summary>
         '''     Starts a new pipe server if one isn't already active.
         ''' </summary>
-        Private Sub NamedPipeServerCreateServer()
+        ''' <returns>True if first instance</returns>
+        Private Function TryNamedPipeServerCreateServer() As NamedPipeServerStream
             ' Create a new pipe accessible by local authenticated users, disallow network
+            'var sidAuthUsers = new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null);
             Dim sidNetworkService As New SecurityIdentifier(WellKnownSidType.NetworkServiceSid, Nothing)
             Dim sidWorld As New SecurityIdentifier(WellKnownSidType.WorldSid, Nothing)
 
@@ -1013,17 +985,20 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 _pipeSecurity.AddAccessRule(accessRule)
             End If
 
-            ' Create pipe and start the async connection wait
-            _namedPipeServerStream = New NamedPipeServerStream(
-                    pipeName:=_namedPipeID,
-                    direction:=PipeDirection.In,
-                    maxNumberOfServerInstances:=1,
-                    transmissionMode:=PipeTransmissionMode.Byte,
-                    options:=PipeOptions.Asynchronous)
-
-            ' Begin async wait for connections
-            _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
-        End Sub
+            Try
+                ' Create pipe and start the async connection wait
+                Return New NamedPipeServerStream(
+                        pipeName:=_namedPipeID,
+                        direction:=PipeDirection.In,
+                        maxNumberOfServerInstances:=1,
+                        transmissionMode:=PipeTransmissionMode.Byte,
+                        options:=PipeOptions.Asynchronous,
+                        inBufferSize:=0,
+                        outBufferSize:=0)
+            Catch ex As Exception
+                Return Nothing
+            End Try
+        End Function
 
     End Class 'WindowsFormsApplicationBase
 End Namespace
