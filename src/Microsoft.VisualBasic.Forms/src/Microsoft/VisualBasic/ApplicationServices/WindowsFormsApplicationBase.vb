@@ -942,12 +942,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                                     OnStartupNextInstance(remoteEventArgs)
                                 End Sub)
                 ' Create a new pipe for next connection
-                _namedPipeServerStream = TryNamedPipeServerCreateServer()
-                If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.CanRead Then
-                    ' We are the first instance with the named pipe server listening and allow the form to load
-                    ' Begin async wait for connections
-                    _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
-                End If
             Catch ex As ObjectDisposedException
                 ' EndWaitForConnection will throw exception when someone closes the pipe before connection made
                 ' In that case we don't create any more pipes and just return
@@ -957,8 +951,18 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' ignored
             Finally
                 ' Close the original pipe (we will create a new one each time)
-                _namedPipeServerStream.Dispose()
-                ' ignored
+                If _namedPipeServerStream IsNot Nothing Then
+                    _namedPipeServerStream.Dispose()
+                End If
+            End Try
+            Try
+                _namedPipeServerStream = TryNamedPipeServerCreateServer()
+                If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.CanRead Then
+                    ' We are the first instance with the named pipe server listening and allow the form to load
+                    ' Begin async wait for connections
+                    _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
+                End If
+            Catch ex As Exception
             End Try
         End Sub
 
