@@ -13,10 +13,6 @@ namespace System.Windows.Forms
             public CalendarButtonAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex, CalendarButtonType buttonType)
                 : base(calendarAccessibleObject, calendarIndex, (CalendarChildType)buttonType)
             {
-                if (calendarAccessibleObject == null)
-                {
-                    throw new ArgumentNullException(nameof(calendarAccessibleObject));
-                }
             }
 
             protected abstract CalendarButtonType ButtonType { get; }

@@ -18,10 +18,6 @@ namespace System.Windows.Forms
             public CalendarBodyAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex)
                 : base(calendarAccessibleObject, calendarIndex, CalendarChildType.CalendarBody)
             {
-                if (calendarAccessibleObject == null)
-                {
-                    throw new ArgumentNullException(nameof(calendarAccessibleObject));
-                }
             }
 
             protected override RECT CalculateBoundingRectangle()

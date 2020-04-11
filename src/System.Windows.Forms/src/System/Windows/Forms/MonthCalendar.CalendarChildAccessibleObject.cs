@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal abstract class CalendarChildAccessibleObject : AccessibleObject
         {
-            protected MonthCalendarAccessibleObject _calendarAccessibleObject;
+            protected readonly MonthCalendarAccessibleObject _calendarAccessibleObject;
             protected int _calendarIndex;
             protected CalendarChildType _itemType;
 
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
             {
                 // Make sure that the control is enabled.
                 Control owner = _calendarAccessibleObject.Owner;
-                
+
                 if (owner == null || !SafeNativeMethods.IsWindowEnabled(new HandleRef(null, owner.Handle)))
                 {
                     return;

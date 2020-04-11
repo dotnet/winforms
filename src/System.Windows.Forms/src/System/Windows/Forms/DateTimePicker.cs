@@ -1108,9 +1108,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Constructs the new instance of the accessibility object for this control. Subclasses
+        ///  Constructs the new instance of the accessibility object for this control. Subclasses
         ///  should not call base.CreateAccessibilityObject.
-            /// </summary>
+        /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DateTimePickerAccessibleObject(this);
@@ -1769,7 +1769,7 @@ namespace System.Windows.Forms
         {
             if (s.wYear <= 0 || s.wMonth <= 0 || s.wDay <= 0)
             {
-                Debug.Fail("Incorrect SYSTEMTIME info!");
+                Debug.WriteLine("Incorrect SYSTEMTIME info!");
                 return DateTime.MinValue;
             }
 

@@ -20,11 +20,6 @@ namespace System.Windows.Forms
             public CalendarCellAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex, AccessibleObject parentAccessibleObject, int rowIndex, int columnIndex, string name)
                 : base(calendarAccessibleObject, calendarIndex, CalendarChildType.CalendarCell, parentAccessibleObject, rowIndex * columnIndex)
             {
-                if (calendarAccessibleObject == null)
-                {
-                    throw new ArgumentNullException(nameof(calendarAccessibleObject));
-                }
-
                 _rowIndex = rowIndex;
                 _columnIndex = columnIndex;
                 _name = name;

@@ -13,8 +13,6 @@ namespace WinformsControlsTest
         public Calendar()
         {
             InitializeComponent();
-            monthCalendar1.Size = new Size(2000, 2000);
-            monthCalendar1.MinDate = new DateTime(2019, 12, 20);
         }
     }
 }

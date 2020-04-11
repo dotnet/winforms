@@ -15,10 +15,6 @@ namespace System.Windows.Forms
             public CalendarHeaderAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex)
                 : base(calendarAccessibleObject, calendarIndex, CalendarChildType.CalendarHeader)
             {
-                if (calendarAccessibleObject == null)
-                {
-                    throw new ArgumentNullException(nameof(calendarAccessibleObject));
-                }
             }
 
             public override string Name => _calendarAccessibleObject.GetCalendarChildName(_calendarIndex, CalendarChildType.CalendarHeader);
