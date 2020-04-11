@@ -20,7 +20,6 @@ namespace System.Windows.Forms
             protected override RECT CalculateBoundingRectangle()
             {
                 ComCtl32.MCGIP dwPart;
-
                 switch (ButtonType)
                 {
                     case CalendarButtonType.Previous:

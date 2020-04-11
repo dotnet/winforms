@@ -580,6 +580,9 @@ namespace System.Windows.Forms
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.SYSTEMTIMEARRAY lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
+        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.NMSELCHANGE lParam);
+
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.LOGFONTW lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
