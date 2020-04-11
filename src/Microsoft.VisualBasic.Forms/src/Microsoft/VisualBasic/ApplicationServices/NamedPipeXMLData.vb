@@ -2,9 +2,7 @@
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
-    Friend Class NamedPipeXMLData
-        Private _commandLineArguments As New List(Of String)
-
+    Public Class NamedPipeXMLData
         Sub New()
 
         End Sub
@@ -13,15 +11,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''     A list of command line arguments.
         ''' </summary>
         <XmlElement("CommandLineArguments")>
-        Friend Property CommandLineArguments As List(Of String)
-            Get
-                Return _commandLineArguments
-            End Get
-            Set(value As List(Of String))
-                _commandLineArguments = value
-            End Set
-        End Property
-
+        Public Property CommandLineArguments As New List(Of String)
     End Class
 
 End Namespace

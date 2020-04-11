@@ -1,1 +1,4 @@
+Microsoft.VisualBasic.ApplicationServices.NamedPipeXMLData
+Microsoft.VisualBasic.ApplicationServices.NamedPipeXMLData.CommandLineArguments(AutoPropertyValue As System.Collections.Generic.List(Of String)) -> Void
+Microsoft.VisualBasic.ApplicationServices.NamedPipeXMLData.New() -> Void
 Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.GetApplicationInstanceID(Entry As System.Reflection.Assembly) -> String
