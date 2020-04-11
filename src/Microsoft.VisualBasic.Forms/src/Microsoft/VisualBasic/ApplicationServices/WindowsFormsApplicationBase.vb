@@ -296,28 +296,34 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         ''' <param name="commandLine">The command line from Main()</param>
         <SecuritySafeCritical()>
-        Public Sub Run(ByVal commandLine As String())
+        Public Sub Run(commandLine As String())
             'Prime the command line args with what we receive from Main() so that Click-Once windows apps don't have to do a System.Environment call which would require permissions.
-            MyBase.InternalCommandLine = New System.Collections.ObjectModel.ReadOnlyCollection(Of String)(commandLine)
+            InternalCommandLine = New ReadOnlyCollection(Of String)(commandLine)
 
             'Is this a single-instance application?
             If Not IsSingleInstance Then
                 DoApplicationModel() 'This isn't a Single-Instance application
                 Exit Sub
             End If
-            ' This is a Single-Instance application
-            ' Must pass the calling assembly from here so we can get the running app. Otherwise, can break single instance.
+            'This is a Single-Instance application
+            'Note: Must pass the calling assembly from here so we can get the running app.  Otherwise, can break single instance
             _namedPipeID = GetApplicationInstanceID(Assembly.GetCallingAssembly) & "NamedPipe"
-            ' If are the first instance then we start the named pipe server listening and allow the form to load
+            ' Create a Mutex - If _FirstInstance
+            Dim _FirstInstance As Boolean = False
+            _mutexSingleInstance = New Mutex(initiallyOwned:=True, _namedPipeID, createdNew:=_FirstInstance)
 
-            If TryNamedPipeServerCreateServer(needMutex:=True) Then
+            If _FirstInstance Then
                 Try
+                    TryNamedPipeServerCreateServer()
+                    _mutexSingleInstance.ReleaseMutex()
+                    ' We are the first instance with the named pipe server listening and allow the form to load
+                    ' Begin async wait for connections
                     DoApplicationModel()
                 Finally
                     If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.IsConnected Then
                         _namedPipeServerStream.Close()
                     End If
-                    If _mutexSingleInstance IsNot Nothing Then
+                    If _FirstInstance Then
                         _mutexSingleInstance.Dispose()
                     End If
                 End Try
@@ -493,8 +499,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         <SecuritySafeCritical()>
         Protected Overridable Sub OnStartupNextInstance(ByVal eventArgs As StartupNextInstanceEventArgs)
-            RaiseEvent StartupNextInstance(Me, eventArgs)
-            'Activate the original instance
+            If eventArgs Is Nothing Then
+                Throw New ArgumentNullException(NameOf(eventArgs))
+            End If
+            ' Review is the next statement needed
+            ' RaiseEvent StartupNextInstance(Me, eventArgs)
+            ' Activate the original instance
             Call New UIPermission(UIPermissionWindow.SafeSubWindows Or UIPermissionWindow.SafeTopLevelWindows).Assert()
             If eventArgs.BringToForeground = True AndAlso Me.MainForm IsNot Nothing Then
                 If MainForm.WindowState = System.Windows.Forms.FormWindowState.Minimized Then
@@ -822,7 +832,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private m_NetworkAvailChangeLock As New Object 'sync object
         Private m_SaveMySettingsOnExit As Boolean 'Informs My.Settings whether to save the settings on exit or not
 
-        Private _mutexSingleInstance As New Mutex
+        Private _mutexSingleInstance As Mutex
         Private _namedPipeID As String
         Private _namedPipeServerStream As NamedPipeServerStream
         Private _isSingleInstance As Boolean
@@ -940,7 +950,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
                 _namedPipeServerStream.Close()
                 _namedPipeServerStream.Dispose()
-                TryNamedPipeServerCreateServer(False)
+                TryNamedPipeServerCreateServer()
                 _mutexSingleInstance.ReleaseMutex()
                 MainForm.Invoke(Sub()
                                     OnStartupNextInstance(remoteEventArgs)
@@ -958,14 +968,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''     Starts a new pipe server if one isn't already active.
+        ''' Starts a new pipe server if one isn't already active.
         ''' </summary>
-        ''' <param name="needMutex"></param>
-        ''' <returns>
-        ''' True if this function needs to use Mutex
-        ''' False if the calling routine is already in Mutex
-        ''' </returns>
-        Private Function TryNamedPipeServerCreateServer(needMutex As Boolean) As Boolean
+        Private Sub TryNamedPipeServerCreateServer()
             ' Create a new pipe accessible by local authenticated users, disallow network
             'var sidAuthUsers = new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null);
             Dim sidNetworkService As New SecurityIdentifier(WellKnownSidType.NetworkServiceSid, Nothing)
@@ -989,9 +994,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End If
 
             Try
-                If needMutex Then
-                    _mutexSingleInstance.WaitOne()
-                End If
                 ' Create pipe and start the async connection wait
                 _namedPipeServerStream = New NamedPipeServerStream(
                         pipeName:=_namedPipeID,
@@ -1004,15 +1006,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' We are the first instance with the named pipe server listening and allow the form to load
                 ' Begin async wait for connections
                 _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
-                Return True
             Catch ex As Exception
-                Return False
-            Finally
-                If needMutex Then
-                    _mutexSingleInstance.ReleaseMutex()
-                End If
             End Try
-        End Function
+        End Sub
 
     End Class 'WindowsFormsApplicationBase
 End Namespace
