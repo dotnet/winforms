@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms.IntegrationTests.Common;
 using Microsoft.VisualBasic.ApplicationServices;
@@ -31,12 +32,18 @@ namespace Microsoft.VisualBasic.IntegrationTests
         {
             string exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
             var startInfo = new ProcessStartInfo { FileName = exePath, Arguments = "WindowsFormsApplicationBase.RunSingleInstance" };
-            var process = TestHelpers.StartProcess(startInfo);
-            var process1 = TestHelpers.StartProcess(startInfo);
+            List<Process> ProcessList = new List<Process>();
+            for (int i = 0; i <= 9; i++)
+            {
+                ProcessList.Add(TestHelpers.StartProcess(startInfo));
+            }
             System.Threading.Thread.Sleep(1000);
-            Assert.True(process1.HasExited);
-            TestHelpers.EndProcess(process, timeout: 1000);
-            Assert.True(process.HasExited);
+            for (int i = 1; i <= 9; i++)
+            {
+            Assert.True(ProcessList[i].HasExited, $"Instance {i} didn't exit");
+            }
+            TestHelpers.EndProcess(ProcessList[0], timeout: 1000);
+            Assert.True(ProcessList[0].HasExited, "First Instance didn't exit");
         }
         [Fact]
         public void Run_NoStartupFormException()
