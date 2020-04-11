@@ -948,9 +948,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
                 Dim _namedPipeXmlData As NamedPipeXMLData = CType(_xmlSerializer.Deserialize(_namedPipeServerStream), NamedPipeXMLData)
                 Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
-                _namedPipeServerStream.Close()
-                _namedPipeServerStream.Dispose()
-                TryNamedPipeServerCreateServer()
+                _namedPipeServerStream.Disconnect()
+                _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
+
                 _mutexSingleInstance.ReleaseMutex()
                 MainForm.Invoke(Sub()
                                     OnStartupNextInstance(remoteEventArgs)
