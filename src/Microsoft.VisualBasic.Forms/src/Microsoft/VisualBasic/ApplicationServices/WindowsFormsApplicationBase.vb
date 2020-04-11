@@ -154,7 +154,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             MyBase.New(message, inner)
         End Sub
 
-        ' Deserialization constructor must be defined since we are serializable
+        ' De-serialization constructor must be defined since we are serializable
         <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)>
         Protected Sub New(ByVal info As System.Runtime.Serialization.SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
@@ -307,19 +307,18 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End If
             ' This is a Single-Instance application
             ' Must pass the calling assembly from here so we can get the running app. Otherwise, can break single instance.
-            Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly)
-            _namedPipeID = ApplicationInstanceID & "NamedPipe"
+            _namedPipeID = GetApplicationInstanceID(Assembly.GetCallingAssembly) & "NamedPipe"
             ' If are the first instance then we start the named pipe server listening and allow the form to load
-            _namedPipeServerStream = TryNamedPipeServerCreateServer()
-            If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.CanRead Then
+
+            If TryNamedPipeServerCreateServer(needMutex:=True) Then
                 Try
-                    ' We are the first instance with the named pipe server listening and allow the form to load
-                    ' Begin async wait for connections
-                    _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
                     DoApplicationModel()
                 Finally
                     If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.IsConnected Then
                         _namedPipeServerStream.Close()
+                    End If
+                    If _mutexSingleInstance IsNot Nothing Then
+                        _mutexSingleInstance.Dispose()
                     End If
                 End Try
                 Exit Sub
@@ -823,7 +822,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private m_NetworkAvailChangeLock As New Object 'sync object
         Private m_SaveMySettingsOnExit As Boolean 'Informs My.Settings whether to save the settings on exit or not
 
-        Private _namedPipeID As String 'global OS handles must have a unique ID
+        Private _mutexSingleInstance As New Mutex
+        Private _namedPipeID As String
         Private _namedPipeServerStream As NamedPipeServerStream
         Private _isSingleInstance As Boolean
 
@@ -931,13 +931,17 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="_iAsyncResult"></param>
         Private Sub NamedPipeServerConnectionCallback(_iAsyncResult As IAsyncResult)
             Try
+                _mutexSingleInstance.WaitOne()
                 ' End waiting for the connection
                 _namedPipeServerStream.EndWaitForConnection(_iAsyncResult)
-
                 ' Read data and prevent access to _NamedPipeXmlData during threaded operations
                 Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
                 Dim _namedPipeXmlData As NamedPipeXMLData = CType(_xmlSerializer.Deserialize(_namedPipeServerStream), NamedPipeXMLData)
                 Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
+                _namedPipeServerStream.Close()
+                _namedPipeServerStream.Dispose()
+                TryNamedPipeServerCreateServer(False)
+                _mutexSingleInstance.ReleaseMutex()
                 MainForm.Invoke(Sub()
                                     OnStartupNextInstance(remoteEventArgs)
                                 End Sub)
@@ -946,31 +950,22 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' EndWaitForConnection will throw exception when someone closes the pipe before connection made
                 ' In that case we don't create any more pipes and just return
                 ' This will happen when app is closing and our pipe is closed/disposed
-                Return
-            Catch
-                ' ignored
-            Finally
-                ' Close the original pipe (we will create a new one each time)
-                If _namedPipeServerStream IsNot Nothing Then
-                    _namedPipeServerStream.Dispose()
-                End If
-            End Try
-            Try
-                _namedPipeServerStream = TryNamedPipeServerCreateServer()
-                If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.CanRead Then
-                    ' We are the first instance with the named pipe server listening and allow the form to load
-                    ' Begin async wait for connections
-                    _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
-                End If
+                Exit Sub
             Catch ex As Exception
+                Stop
+                ' ignored
             End Try
         End Sub
 
         ''' <summary>
         '''     Starts a new pipe server if one isn't already active.
         ''' </summary>
-        ''' <returns>True if first instance</returns>
-        Private Function TryNamedPipeServerCreateServer() As NamedPipeServerStream
+        ''' <param name="needMutex"></param>
+        ''' <returns>
+        ''' True if this function needs to use Mutex
+        ''' False if the calling routine is already in Mutex
+        ''' </returns>
+        Private Function TryNamedPipeServerCreateServer(needMutex As Boolean) As Boolean
             ' Create a new pipe accessible by local authenticated users, disallow network
             'var sidAuthUsers = new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null);
             Dim sidNetworkService As New SecurityIdentifier(WellKnownSidType.NetworkServiceSid, Nothing)
@@ -994,8 +989,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End If
 
             Try
+                If needMutex Then
+                    _mutexSingleInstance.WaitOne()
+                End If
                 ' Create pipe and start the async connection wait
-                Return New NamedPipeServerStream(
+                _namedPipeServerStream = New NamedPipeServerStream(
                         pipeName:=_namedPipeID,
                         direction:=PipeDirection.In,
                         maxNumberOfServerInstances:=1,
@@ -1003,8 +1001,16 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         options:=PipeOptions.Asynchronous,
                         inBufferSize:=0,
                         outBufferSize:=0)
+                ' We are the first instance with the named pipe server listening and allow the form to load
+                ' Begin async wait for connections
+                _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
+                Return True
             Catch ex As Exception
-                Return Nothing
+                Return False
+            Finally
+                If needMutex Then
+                    _mutexSingleInstance.ReleaseMutex()
+                End If
             End Try
         End Function
 
