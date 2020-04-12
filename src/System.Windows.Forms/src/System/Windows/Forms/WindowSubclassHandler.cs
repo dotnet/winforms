@@ -32,9 +32,8 @@ namespace System.Windows.Forms
         private IntPtr _originalWindowProc;
 
         /// <summary>
-        ///   The delegate for the callback handler (that calls
-        ///   <see cref="WndProc(ref Message)"/> from which the native function
-        ///   pointer <see cref="_windowProcDelegatePtr"/> is created.
+        ///   The delegate for <see cref="WndProc(ref Message)"/>
+        ///   which is marshaled as native callback.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -54,11 +53,6 @@ namespace System.Windows.Forms
         private readonly User32.WNDPROC _windowProcDelegate;
 
         /// <summary>
-        ///   The function pointer created from <see cref="_windowProcDelegate"/>.
-        /// </summary>
-        private readonly IntPtr _windowProcDelegatePtr;
-
-        /// <summary>
         ///   Initializes a new instance of the <see cref="WindowSubclassHandler"/> class.
         /// </summary>
         /// <param name="handle">The window handle of the window to subclass.</param>
@@ -69,11 +63,9 @@ namespace System.Windows.Forms
 
             _handle = handle;
 
-            // Create a delegate for our window procedure, and get a function
-            // pointer for it.
+            // Create a delegate for our window procedure for which we will later get a
+            // function pointer.
             _windowProcDelegate = NativeWndProc;
-            _windowProcDelegatePtr = Marshal.GetFunctionPointerForDelegate(
-                    _windowProcDelegate);
         }
 
         /// <summary>
@@ -101,17 +93,18 @@ namespace System.Windows.Forms
             // Replace the existing window procedure with our one ("instance subclassing").
             // Note: It shouldn't be possible to set a null pointer as window procedure, so we
             // can use the return value to determine if the call succeeded.
+            IntPtr windowProcDelegatePtr = Marshal.GetFunctionPointerForDelegate(_windowProcDelegate);
             _originalWindowProc = User32.SetWindowLong(
                 _handle,
                 User32.GWL.WNDPROC,
-                _windowProcDelegatePtr);
+                windowProcDelegatePtr);
 
             if (_originalWindowProc == IntPtr.Zero)
             {
                 throw new Win32Exception();
             }
 
-            Debug.Assert(_originalWindowProc != _windowProcDelegatePtr);
+            Debug.Assert(_originalWindowProc != windowProcDelegatePtr);
 
             _opened = true;
         }
@@ -194,7 +187,8 @@ namespace System.Windows.Forms
                     throw new Win32Exception();
                 }
 
-                if (currentWindowProcedure != _windowProcDelegatePtr)
+                IntPtr windowProcDelegatePtr = Marshal.GetFunctionPointerForDelegate(_windowProcDelegate);
+                if (currentWindowProcedure != windowProcDelegatePtr)
                 {
                     // This can mean other code has also subclassed the window but failed
                     // to undo it.
