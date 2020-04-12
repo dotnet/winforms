@@ -31,11 +31,22 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new MonthCalendar() };
         }
 
+        /// <summary>
+        ///  We have to check that UseVisualStyles state isn't changed.
+        ///  This test name is used to make sure the test will be executed 
+        ///  BEFORE <see cref="MonthCalendar_SettingDate_DoesntCrashApplication(MonthCalendar)" /> test.
+        /// </summary>
+        [Fact]
+        public void Application_UseVisualStyles_IsNotSet()
+        {
+            Assert.False(Application.UseVisualStyles);
+        }
+
         [Theory]
         [MemberData(nameof(MonthCalendar_SettingDate_DoesntCrashApplication_TestData))]
         public void MonthCalendar_SettingDate_DoesntCrashApplication(MonthCalendar calendar)
         {
-            //Assert.False(Application.UseVisualStyles);
+            Assert.False(Application.UseVisualStyles);
             Exception exception = null;
             ThreadExceptionEventHandler getException =
                     (object sender, ThreadExceptionEventArgs e) => exception = e.Exception;
@@ -121,7 +132,7 @@ namespace System.Windows.Forms.Tests
         /// <summary>
         ///  We have to check that UseVisualStyles state isn't changed.
         ///  This test name is used to make sure the test will be executed 
-        ///  after <see cref="MonthCalendar_SettingDate_DoesntCrashApplication(MonthCalendar)" /> test.
+        ///  AFTER <see cref="MonthCalendar_SettingDate_DoesntCrashApplication(MonthCalendar)" /> test.
         /// </summary>
         [Fact]
         public void MonthCalendar_SettingDate_UseVisualStyles_IsNotSet()
