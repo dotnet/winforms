@@ -365,10 +365,10 @@ namespace System.Windows.Forms
 
             private CalendarCellAccessibleObject GetCalendarCell(int calendarIndex, AccessibleObject parentAccessibleObject, int columnIndex)
             {
-                if (columnIndex < 0 ||
+                if (parentAccessibleObject == null ||
+                    columnIndex < 0 ||
                     columnIndex >= MAX_DAYS ||
-                    columnIndex >= ColumnCount ||
-                    parentAccessibleObject == null)
+                    columnIndex >= ColumnCount)
                 {
                     return null;
                 }
@@ -419,8 +419,9 @@ namespace System.Windows.Forms
 
             private CalendarRowAccessibleObject GetCalendarRow(int calendarIndex, AccessibleObject parentAccessibleObject, int rowIndex)
             {
-                if ((HasHeaderRow ? rowIndex < -1 : rowIndex < 0) ||
-                    rowIndex >= RowCount || parentAccessibleObject == null)
+                if (parentAccessibleObject == null ||
+                    (HasHeaderRow ? rowIndex < -1 : rowIndex < 0) ||
+                    rowIndex >= RowCount)
                 {
                     return null;
                 }

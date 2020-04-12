@@ -34,7 +34,7 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.NavigateDirection.NextSibling => new Func<AccessibleObject>(() =>
                     {
                         MonthCalendar owner = (MonthCalendar)_calendarAccessibleObject.Owner;
-                        return (owner != null && owner.ShowToday) ? _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.TodayLink) : null;
+                        return owner.ShowToday ? _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.TodayLink) : null;
                     })(),
                     UnsafeNativeMethods.NavigateDirection.PreviousSibling => _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarHeader),
                     UnsafeNativeMethods.NavigateDirection.FirstChild =>
