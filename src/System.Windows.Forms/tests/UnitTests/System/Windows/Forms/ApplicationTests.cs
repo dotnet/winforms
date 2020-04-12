@@ -10,17 +10,22 @@ namespace System.Windows.Forms.Tests
 {
     public class ApplicationTests
     {
+        private readonly object _locker = new object();
+
         [Fact]
         public void Application_EnableVisualStyles_GetUseVisualStyles_ReturnsTrue()
         {
-            Assert.False(Application.UseVisualStyles);
+            lock (_locker)
+            {
+                Assert.False(Application.UseVisualStyles);
 
-            Application.EnableVisualStyles();
-            Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
+                Application.EnableVisualStyles();
+                Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
 
-            // Return UseVisualStyles as it was before.
-            PropertyInfo prop = typeof(Application).GetProperty(nameof(Application.UseVisualStyles));
-            prop?.SetValue(null, false, BindingFlags.NonPublic | BindingFlags.Static, null, null, null);
+                // Return UseVisualStyles as it was before.
+                PropertyInfo prop = typeof(Application).GetProperty(nameof(Application.UseVisualStyles));
+                prop?.SetValue(null, false, BindingFlags.NonPublic | BindingFlags.Static, null, null, null);
+            }
 
             Assert.False(Application.UseVisualStyles);
         }
