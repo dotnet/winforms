@@ -23,7 +23,6 @@ System.Windows.Forms.TaskDialogCheckBox
 System.Windows.Forms.TaskDialogCheckBox.Checked.get -> bool
 System.Windows.Forms.TaskDialogCheckBox.Checked.set -> void
 System.Windows.Forms.TaskDialogCheckBox.CheckedChanged -> System.EventHandler
-System.Windows.Forms.TaskDialogCheckBox.Focus() -> void
 System.Windows.Forms.TaskDialogCheckBox.TaskDialogCheckBox() -> void
 System.Windows.Forms.TaskDialogCheckBox.TaskDialogCheckBox(string text) -> void
 System.Windows.Forms.TaskDialogCheckBox.Text.get -> string
