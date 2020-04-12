@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms
                             cbSize = (uint)sizeof(ComCtl32.TASKDIALOGCONFIG),
                             hwndParent = hwndOwner,
                             dwFlags = flags,
-                            dwCommonButtons = (ComCtl32.TDCBF)standardButtonFlags,
+                            dwCommonButtons = standardButtonFlags,
                             mainIcon = mainIcon,
                             footerIcon = footerIcon,
                             pszWindowTitle = MarshalString(page.Caption),
