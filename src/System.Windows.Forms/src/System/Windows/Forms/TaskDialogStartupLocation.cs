@@ -23,6 +23,6 @@ namespace System.Windows.Forms
         ///   This value will only have an effect when showing a modal dialog.
         /// </para>
         /// </remarks>
-        CenterParent = 1
+        CenterOwner = 1
     }
 }

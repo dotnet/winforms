@@ -323,7 +323,7 @@ namespace System.Windows.Forms
         ///   <paramref name="page"/> is <see langword="null"/>.
         /// </exception>
         public static TaskDialogButton ShowDialog(TaskDialogPage page,
-                                                  TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterParent)
+                                                  TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
             => ShowDialog(IntPtr.Zero,
                           page ?? throw new ArgumentNullException(nameof(page)),
                           startupLocation);
@@ -353,7 +353,7 @@ namespace System.Windows.Forms
         ///   <paramref name="page"/> is <see langword="null"/>.
         /// </exception>
         public static TaskDialogButton ShowDialog(IWin32Window owner, TaskDialogPage page,
-                                                  TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterParent)
+                                                  TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
             => ShowDialog(owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
                           page ?? throw new ArgumentNullException(nameof(page)),
                           startupLocation);
@@ -384,7 +384,7 @@ namespace System.Windows.Forms
         ///   <paramref name="page"/> is <see langword="null"/>.
         /// </exception>
         public static unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner, TaskDialogPage page,
-                                                  TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterParent)
+                                                  TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
         {
             if (page == null)
             {
@@ -1277,7 +1277,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (startupLocation == TaskDialogStartupLocation.CenterParent)
+                if (startupLocation == TaskDialogStartupLocation.CenterOwner)
                 {
                     flags |= ComCtl32.TDF.POSITION_RELATIVE_TO_WINDOW;
                 }

@@ -101,7 +101,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///   Sets input focus to the control.
         /// </summary>
-        public void Focus()
+        internal void Focus()
         {
             DenyIfNotBoundOrWaitingForInitialization();
             DenyIfBoundAndNotCreated();

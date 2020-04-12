@@ -33,7 +33,7 @@ namespace System.Windows.Forms
     {
         private readonly TaskDialogResult? _standardButtonResult;
         private bool _enabled = true;
-        private bool _elevationRequired;
+        private bool _showShieldIcon;
         private bool _visible = true;
         private string? _text;
         private int _customButtonID;
@@ -215,9 +215,9 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown.
         /// </para>
         /// </remarks>
-        public bool ElevationRequired
+        public bool ShowShieldIcon
         {
-            get => _elevationRequired;
+            get => _showShieldIcon;
             set
             {
                 DenyIfBoundAndNotCreated();
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
                     BoundPage!.BoundDialog!.SetButtonElevationRequiredState(ButtonID, value);
                 }
 
-                _elevationRequired = value;
+                _showShieldIcon = value;
             }
         }
 
@@ -412,9 +412,9 @@ namespace System.Windows.Forms
             {
                 Enabled = _enabled;
             }
-            if (_elevationRequired)
+            if (_showShieldIcon)
             {
-                ElevationRequired = _elevationRequired;
+                ShowShieldIcon = _showShieldIcon;
             }
         }
 
