@@ -9,6 +9,7 @@ using Moq;
 using Xunit;
 using WinForms.Common.Tests;
 using static Interop;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Tests
 {
@@ -38,15 +39,15 @@ namespace System.Windows.Forms.Tests
             using var form = new Form();
             Assert.True(form.Handle != IntPtr.Zero);
 
-            IntPtr hSmallIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            IntPtr hSmallIcon = User32.SendMessageW(form, WindowMessages.WM_GETICON, (IntPtr)NativeMethods.ICON_SMALL, IntPtr.Zero);
             Assert.True(hSmallIcon != IntPtr.Zero);
 
-            IntPtr hLargeIcon = User32.SendMessageW(form, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            IntPtr hLargeIcon = User32.SendMessageW(form, WindowMessages.WM_GETICON, (IntPtr)NativeMethods.ICON_BIG, IntPtr.Zero);
             Assert.True(hLargeIcon != IntPtr.Zero);
 
             // normal form doesn't have WS_EX.DLGMODALFRAME set, and show icon
-            User32.WS_EX extendedStyle = unchecked((User32.WS_EX)(long)User32.GetWindowLong(form, User32.GWL.EXSTYLE));
-            Assert.False(extendedStyle.HasFlag(User32.WS_EX.DLGMODALFRAME));
+            int extendedStyle = unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(form, form.Handle), NativeMethods.GWL_EXSTYLE));
+            Assert.True((extendedStyle & NativeMethods.WS_EX_DLGMODALFRAME) == 0);
         }
 
         [WinFormsFact]
