@@ -45,7 +45,7 @@ namespace System.Windows.Forms
 
         private TaskDialogButtonCollection _buttons;
         private TaskDialogRadioButtonCollection _radioButtons;
-        private TaskDialogCheckBox? _checkBox;
+        private TaskDialogVerificationCheckBox? _checkBox;
         private TaskDialogExpander? _expander;
         private TaskDialogFootnote? _footnote;
         private TaskDialogProgressBar? _progressBar;
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
             _radioButtons = new TaskDialogRadioButtonCollection();
 
             // Create empty (hidden) controls.
-            _checkBox = new TaskDialogCheckBox();
+            _checkBox = new TaskDialogVerificationCheckBox();
             _expander = new TaskDialogExpander();
             _footnote = new TaskDialogFootnote();
             _progressBar = new TaskDialogProgressBar(TaskDialogProgressBarState.None);
@@ -166,15 +166,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the check box to be shown in this page.
+        ///   Gets or sets the verification checkbox to be shown in this page.
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   The check box will only be shown if its <see cref="TaskDialogCheckBox.Text"/> property
-        ///   is not <see langword="null"/> or an empty string.
+        ///   The verification checkbox will only be shown if its <see cref="TaskDialogVerificationCheckBox.Text"/>
+        ///   property is not <see langword="null"/> or an empty string.
         /// </para>
         /// </remarks>
-        public TaskDialogCheckBox? CheckBox
+        public TaskDialogVerificationCheckBox? Verification
         {
             get => _checkBox;
             set
