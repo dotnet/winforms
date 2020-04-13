@@ -128,7 +128,7 @@ namespace System.Windows.Forms
         ///   </para>
         /// </remarks>
         public TaskDialogIcon(Icon icon)
-            : this((icon ?? throw new ArgumentNullException(nameof(icon))), false)
+            : this(icon ?? throw new ArgumentNullException(nameof(icon)), false)
         {
         }
 
@@ -136,8 +136,8 @@ namespace System.Windows.Forms
         ///   Initializes a new instance of the <see cref="TaskDialogIcon"/> class from an
         ///   icon handle.
         /// </summary>
-        /// <param name="iconHandle">A handle to an instance of an icon.</param>
-        ///   <remarks>
+        /// <param name="iconHandle">A handle to an instance of an icon, or <see cref="IntPtr.Zero"/> to not show an icon.</param>
+        /// <remarks>
         ///   <para>
         ///     The specified icon handle must not be released while the icon is shown in the
         ///     task dialog.

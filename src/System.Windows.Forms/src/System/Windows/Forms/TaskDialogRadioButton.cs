@@ -53,14 +53,12 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown.
         /// </para>
         /// </remarks>
-        /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog
-        /// but it has not been created.</exception>
         public bool Enabled
         {
             get => _enabled;
             set
             {
-                DenyIfBoundAndNotCreated();
+                DenyIfBoundAndNotCreated(); // Shouldn't throw here as the control must have been created.
 
                 // Check if we can update the button.
                 if (CanUpdate())
@@ -84,7 +82,7 @@ namespace System.Windows.Forms
         ///   the dialog; otherwise the operation will fail.
         /// </para>
         /// </remarks>
-        /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
+        /// <exception cref="InvalidOperationException">This radio button instance is currently bound to a task dialog.</exception>
         public string? Text
         {
             get => _text;
@@ -110,13 +108,20 @@ namespace System.Windows.Forms
         ///   set it from within the <see cref="CheckedChanged"/> event.
         /// </para>
         /// </remarks>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The task dialog has just navigated to a new page containing this radio button instance, but the
+        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        ///   - or -
+        ///   The value <see langword="false"/> is to be set, but this radio button instance is currently bound to a task dialog.
+        ///   - or -
+        ///   This property is set within the <see cref="CheckedChanged"/> event of one of the radio buttons of the currently bound task dialog.
+        /// </exception>
         public bool Checked
         {
             get => _checked;
             set
             {
-                DenyIfBoundAndNotCreated();
+                DenyIfBoundAndNotCreated(); // Shouldn't throw here as the control must have been created.
                 DenyIfWaitingForInitialization();
 
                 if (BoundPage == null)

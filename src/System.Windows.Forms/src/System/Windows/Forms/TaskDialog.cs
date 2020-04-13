@@ -322,6 +322,9 @@ namespace System.Windows.Forms
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="page"/> is <see langword="null"/>.
         /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// The specified <paramref name="page"/> contains an invalid configuration.
+        /// </exception>
         public static TaskDialogButton ShowDialog(TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
             => ShowDialog(IntPtr.Zero,
@@ -351,6 +354,9 @@ namespace System.Windows.Forms
         ///   <paramref name="owner"/> is <see langword="null"/>
         ///   - or -
         ///   <paramref name="page"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// The specified <paramref name="page"/> contains an invalid configuration.
         /// </exception>
         public static TaskDialogButton ShowDialog(IWin32Window owner, TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
@@ -382,6 +388,9 @@ namespace System.Windows.Forms
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="page"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// The specified <paramref name="page"/> contains an invalid configuration.
         /// </exception>
         public static unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner, TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)

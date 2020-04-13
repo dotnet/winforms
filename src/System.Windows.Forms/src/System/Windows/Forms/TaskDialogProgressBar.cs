@@ -62,6 +62,9 @@ namespace System.Windows.Forms
         /// </remarks>
         /// <exception cref="InvalidOperationException">
         ///   The value is <c>TaskDialogProgressBarState.None</c> while the dialog is displayed.
+        ///   - or -
+        ///   The task dialog has just navigated to a new page containing this progress bar instance, but the
+        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
         /// </exception>
         public TaskDialogProgressBarState State
         {
@@ -126,6 +129,10 @@ namespace System.Windows.Forms
         /// <exception cref="ArgumentOutOfRangeException">
         ///   The value is less than 0 or greater than <see cref="ushort.MaxValue" />.
         /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The task dialog has just navigated to a new page containing this progress bar instance, but the
+        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        /// </exception>
         public int Minimum
         {
             get => _minimum;
@@ -167,6 +174,10 @@ namespace System.Windows.Forms
         /// <exception cref="ArgumentOutOfRangeException">
         ///   The value is less than 0 or greater than <see cref="ushort.MaxValue" />.
         /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The task dialog has just navigated to a new page containing this progress bar instance, but the
+        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        /// </exception>
         public int Maximum
         {
             get => _maximum;
@@ -207,6 +218,10 @@ namespace System.Windows.Forms
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">
         ///   The value is less than 0 or greater than <see cref="ushort.MaxValue" />.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The task dialog has just navigated to a new page containing this progress bar instance, but the
+        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
         /// </exception>
         public int Value
         {
@@ -261,6 +276,10 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   The task dialog has just navigated to a new page containing this progress bar instance, but the
+        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        /// </exception>
         public int MarqueeSpeed
         {
             get => _marqueeSpeed;

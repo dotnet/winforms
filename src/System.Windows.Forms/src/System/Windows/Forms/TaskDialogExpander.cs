@@ -65,6 +65,10 @@ namespace System.Windows.Forms
         /// <para>
         ///   This property can be set while the dialog is shown.</para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This expander instance is currently bound to a task dialog, but it's not visible as its initial
+        ///   <see cref="Text"/> property value was <see langword="null"/> or an empty string.
+        /// </exception>
         public string? Text
         {
             get => _text;
@@ -101,6 +105,9 @@ namespace System.Windows.Forms
         ///   is in the expanded state, or <see langword="null"/> or an empty string to use a
         ///   text provided by the operating system. The default value is <see langword="null"/>.
         /// </value>
+        /// <exception cref="InvalidOperationException">
+        ///   This expander instance is currently bound to a task dialog.
+        /// </exception>
         public string? ExpandedButtonText
         {
             get => _expandedButtonText;
@@ -121,6 +128,9 @@ namespace System.Windows.Forms
         ///   is in the collapsed state, or <see langword="null"/> or an empty string to use a
         ///   text provided by the operating system. The default value is <see langword="null"/>.
         /// </value>
+        /// <exception cref="InvalidOperationException">
+        ///   This expander instance is currently bound to a task dialog.
+        /// </exception>
         public string? CollapsedButtonText
         {
             get => _collapsedButtonText;
@@ -140,6 +150,9 @@ namespace System.Windows.Forms
         ///   <see langword="true"/> if the expander button is in the expanded state; <see langword="false"/> if
         ///   it's in the collapsed state. The default value is <see langword="false"/>.
         /// </value>
+        /// <exception cref="InvalidOperationException">
+        ///   This expander instance is currently bound to a task dialog.
+        /// </exception>
         public bool Expanded
         {
             get => _expanded;
@@ -165,6 +178,9 @@ namespace System.Windows.Forms
         ///   of the task dialog is to be displayed. The default is
         ///   <see cref="TaskDialogExpanderPosition.AfterText"/>.
         /// </value>
+        /// <exception cref="InvalidOperationException">
+        ///   This expander instance is currently bound to a task dialog.
+        /// </exception>
         public TaskDialogExpanderPosition Position
         {
             get => _expanderPosition;

@@ -43,6 +43,9 @@ namespace System.Windows.Forms
         ///   Gets or sets an additional description text that will be displayed in a separate
         ///   line.
         /// </summary>
+        /// <exception cref="InvalidOperationException">
+        ///   This button instance is currently bound to a task dialog.
+        /// </exception>
         public string? DescriptionText
         {
             get => _descriptionText;

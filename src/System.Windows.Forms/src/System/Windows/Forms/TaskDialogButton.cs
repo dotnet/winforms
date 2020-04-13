@@ -184,6 +184,9 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This button is currently bound to a task dialog, but its <see cref="Visible"/> property value is <see langword="false"/>.
+        /// </exception>
         public bool Enabled
         {
             get => _enabled;
@@ -215,6 +218,9 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This button is currently bound to a task dialog, but its <see cref="Visible"/> property value is <see langword="false"/>.
+        /// </exception>
         public bool ShowShieldIcon
         {
             get => _showShieldIcon;
@@ -246,6 +252,9 @@ namespace System.Windows.Forms
         ///   is not shown.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This button instance is currently bound to a task dialog.
+        /// </exception>
         public bool Visible
         {
             get => _visible;
@@ -272,8 +281,11 @@ namespace System.Windows.Forms
         ///   the dialog; otherwise, the operation will fail.
         /// </para>
         /// </remarks>
-        /// <exception cref="InvalidOperationException">This button is a standard button, for which the text is provided by the OS.</exception>
-        /// <exception cref="InvalidOperationException">This control is currently bound to a task dialog.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   This button is a standard button, for which the text is provided by the OS.
+        ///   - or -
+        ///   This button instance is currently bound to a task dialog.
+        /// </exception>
         public string? Text
         {
             get => _text;
@@ -329,6 +341,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///   Simulates a click on this button.
         /// </summary>
+        /// <exception cref="InvalidOperationException">
+        ///   This button instance is not currently bound to a task dialog.
+        ///   - or -
+        ///   The task dialog has just navigated to a new page containing this button instance, but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        /// </exception>
         public void PerformClick()
         {
             // Note: We allow a click even if the button is not visible/created.

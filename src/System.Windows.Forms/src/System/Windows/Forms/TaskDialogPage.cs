@@ -124,6 +124,9 @@ namespace System.Windows.Forms
         /// <value>
         ///   The collection of custom buttons to be shown in this page.
         /// </value>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public TaskDialogButtonCollection Buttons
         {
             get => _buttons;
@@ -152,6 +155,9 @@ namespace System.Windows.Forms
         /// <value>
         ///   The collection of radio buttons to be shown in this page.
         /// </value>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public TaskDialogRadioButtonCollection RadioButtons
         {
             get => _radioButtons;
@@ -174,6 +180,9 @@ namespace System.Windows.Forms
         ///   property is not <see langword="null"/> or an empty string.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public TaskDialogVerificationCheckBox? Verification
         {
             get => _checkBox;
@@ -196,6 +205,9 @@ namespace System.Windows.Forms
         ///   <see cref="TaskDialogExpander.Text"/> property is not <see langword="null"/> or an empty string.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public TaskDialogExpander? Expander
         {
             get => _expander;
@@ -218,6 +230,9 @@ namespace System.Windows.Forms
         ///   is not <see langword="null"/> or an empty string.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public TaskDialogFootnote? Footnote
         {
             get => _footnote;
@@ -240,6 +255,9 @@ namespace System.Windows.Forms
         ///   property is not <see cref="TaskDialogProgressBarState.None"/>.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public TaskDialogProgressBar? ProgressBar
         {
             get => _progressBar;
@@ -261,6 +279,9 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   The task dialog has just navigated to this page instance, but the <see cref="Created"/> event has not been raised yet.
+        /// </exception>
         public string? Caption
         {
             get => _caption;
@@ -348,6 +369,9 @@ namespace System.Windows.Forms
         ///   and standard icon instances.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   The task dialog has just navigated to this page instance, but the <see cref="Created"/> event has not been raised yet.
+        /// </exception>
         public unsafe TaskDialogIcon? Icon
         {
             get => _icon;
@@ -394,6 +418,9 @@ namespace System.Windows.Forms
         ///   The width in dialog units that the dialog's client area will get. The default is
         ///   <c>0</c> which means the width is calculated by the system.
         /// </value>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public int Width
         {
             get => _width;
@@ -427,6 +454,9 @@ namespace System.Windows.Forms
         ///   <see cref="TaskDialogButton.Visible"/> property set to <see langword="false"/>.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public bool AllowCancel
         {
             get => GetFlag(ComCtl32.TDF.ALLOW_DIALOG_CANCELLATION);
@@ -449,6 +479,9 @@ namespace System.Windows.Forms
         ///   it doesn't have this flag set.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public bool RightToLeftLayout
         {
             get => GetFlag(ComCtl32.TDF.RTL_LAYOUT);
@@ -469,6 +502,9 @@ namespace System.Windows.Forms
         ///   automatically implied.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public bool AllowMinimize
         {
             get => GetFlag(ComCtl32.TDF.CAN_BE_MINIMIZED);
@@ -488,6 +524,9 @@ namespace System.Windows.Forms
         ///   This flag is ignored if <see cref="Width"/> is not set to <c>0</c>.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   This page instance is currently bound to a task dialog.
+        /// </exception>
         public bool SizeToContent
         {
             get => GetFlag(ComCtl32.TDF.SIZE_TO_CONTENT);
@@ -522,7 +561,7 @@ namespace System.Windows.Forms
         internal bool WaitingForInitialization => BoundDialog != null && !_appliedInitialization;
 
         /// <summary>
-        ///  Show the new content in the dialog.
+        ///  Shows the new content in the current task dialog.
         /// <paramref name="page"/>.
         /// </summary>
         /// <param name="page">
@@ -538,7 +577,14 @@ namespace System.Windows.Forms
         ///   <paramref name="page"/> is <see langword="null"/>.
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        ///   The page instance is not bound to a dialog, <see cref="BoundDialog"/> is <see langword="null"/>.
+        ///   The page instance is not currently bound to a dialog, <see cref="BoundDialog"/> is <see langword="null"/>.
+        ///   - or -
+        ///   This page instance contains an invalid configuration.
+        ///   - or -
+        ///   This method is called from within the <see cref="TaskDialogRadioButton.CheckedChanged"/> event
+        ///   of one of the radio buttons of the current task dialog.
+        ///   - or -
+        ///   The task dialog has already been closed.
         /// </exception>
         public void Navigate(TaskDialogPage page)
         {
