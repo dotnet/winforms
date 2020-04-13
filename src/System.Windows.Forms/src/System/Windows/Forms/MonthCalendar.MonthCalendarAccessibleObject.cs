@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             public MonthCalendarAccessibleObject(Control owner)
                 : base(owner)
             {
-                _owner = owner as MonthCalendar;
+                _owner = (MonthCalendar)owner;
             }
 
             public int ControlType =>
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
                     case ComCtl32.MCHT.CALENDARDATE:
                         // Get calendar body's child.
                         CalendarBodyAccessibleObject calendarBodyAccessibleObject = (CalendarBodyAccessibleObject)GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody);
-                        return calendarBodyAccessibleObject.GetFromPoint(hitTestInfo);
+                        return calendarBodyAccessibleObject?.GetFromPoint(hitTestInfo);
 
                     case ComCtl32.MCHT.TODAYLINK:
                         return GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.TodayLink);
@@ -365,7 +365,8 @@ namespace System.Windows.Forms
 
             private CalendarCellAccessibleObject GetCalendarCell(int calendarIndex, AccessibleObject parentAccessibleObject, int columnIndex)
             {
-                if (columnIndex < 0 ||
+                if (parentAccessibleObject == null ||
+                    columnIndex < 0 ||
                     columnIndex >= MAX_DAYS ||
                     columnIndex >= ColumnCount)
                 {
@@ -418,7 +419,8 @@ namespace System.Windows.Forms
 
             private CalendarRowAccessibleObject GetCalendarRow(int calendarIndex, AccessibleObject parentAccessibleObject, int rowIndex)
             {
-                if ((HasHeaderRow ? rowIndex < -1 : rowIndex < 0) ||
+                if (parentAccessibleObject == null ||
+                    (HasHeaderRow ? rowIndex < -1 : rowIndex < 0) ||
                     rowIndex >= RowCount)
                 {
                     return null;
@@ -443,7 +445,7 @@ namespace System.Windows.Forms
 
                 SelectionRange cellsRange = _owner.GetDisplayRange(false);
 
-                if (cellsRange.Start > DateTimePicker.SysTimeToDateTime(endDate) || cellsRange.End < DateTimePicker.SysTimeToDateTime(startDate))
+                if (cellsRange == null || cellsRange.Start > DateTimePicker.SysTimeToDateTime(endDate) || cellsRange.End < DateTimePicker.SysTimeToDateTime(startDate))
                 {
                     // Do not create row if the row's first cell is out of the current calendar's view range.
                     return null;
@@ -588,7 +590,7 @@ namespace System.Windows.Forms
             {
                 POINT previousPosition = new POINT();
                 bool setOldCursorPos = UnsafeNativeMethods.GetPhysicalCursorPos(ref previousPosition);
- 
+
                 bool mouseSwapped = User32.GetSystemMetrics(User32.SystemMetric.SM_SWAPBUTTON) != 0;
 
                 SendMouseInput(x, y, User32.MOUSEEVENTF.MOVE | User32.MOUSEEVENTF.ABSOLUTE);
@@ -669,13 +671,23 @@ namespace System.Windows.Forms
 
             private AccessibleObject GetCalendarChildAccessibleObject(DateTime selectionStart, DateTime selectionEnd)
             {
-                int columnCount = ColumnCount;
-
                 AccessibleObject bodyAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody);
+
+                if (bodyAccessibleObject == null)
+                {
+                    return null;
+                }
+
                 for (int row = 0; row < RowCount; row++)
                 {
                     AccessibleObject rowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, bodyAccessibleObject, row);
-                    for (int column = 0; column < columnCount; column++)
+
+                    if (rowAccessibleObject == null)
+                    {
+                        continue;
+                    }
+
+                    for (int column = 0; column < ColumnCount; column++)
                     {
                         bool success = GetCalendarGridInfo(
                             ComCtl32.MCGIF.DATE,
@@ -724,6 +736,12 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.IRawElementProviderSimple[] headers =
                     new UnsafeNativeMethods.IRawElementProviderSimple[MonthCalendarAccessibleObject.MAX_DAYS];
                 AccessibleObject headerRowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, this, -1);
+
+                if (headerRowAccessibleObject == null)
+                {
+                    return null;
+                }
+
                 for (int columnIndex = 0; columnIndex < MonthCalendarAccessibleObject.MAX_DAYS; columnIndex++)
                 {
                     headers[columnIndex] = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, headerRowAccessibleObject, columnIndex);
