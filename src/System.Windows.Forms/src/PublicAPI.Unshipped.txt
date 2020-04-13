@@ -19,15 +19,6 @@ System.Windows.Forms.TaskDialogButton.Visible.set -> void
 System.Windows.Forms.TaskDialogButtonCollection
 System.Windows.Forms.TaskDialogButtonCollection.Add(string text, bool enabled = true, bool allowCloseDialog = true) -> System.Windows.Forms.TaskDialogButton
 System.Windows.Forms.TaskDialogButtonCollection.TaskDialogButtonCollection() -> void
-System.Windows.Forms.TaskDialogCheckBox
-System.Windows.Forms.TaskDialogCheckBox.Checked.get -> bool
-System.Windows.Forms.TaskDialogCheckBox.Checked.set -> void
-System.Windows.Forms.TaskDialogCheckBox.CheckedChanged -> System.EventHandler
-System.Windows.Forms.TaskDialogCheckBox.Focus() -> void
-System.Windows.Forms.TaskDialogCheckBox.TaskDialogCheckBox() -> void
-System.Windows.Forms.TaskDialogCheckBox.TaskDialogCheckBox(string text) -> void
-System.Windows.Forms.TaskDialogCheckBox.Text.get -> string
-System.Windows.Forms.TaskDialogCheckBox.Text.set -> void
 System.Windows.Forms.TaskDialogCommandLinkButton
 System.Windows.Forms.TaskDialogCommandLinkButton.DescriptionText.get -> string
 System.Windows.Forms.TaskDialogCommandLinkButton.DescriptionText.set -> void
@@ -77,8 +68,6 @@ System.Windows.Forms.TaskDialogPage.Buttons.get -> System.Windows.Forms.TaskDial
 System.Windows.Forms.TaskDialogPage.Buttons.set -> void
 System.Windows.Forms.TaskDialogPage.Caption.get -> string
 System.Windows.Forms.TaskDialogPage.Caption.set -> void
-System.Windows.Forms.TaskDialogPage.CheckBox.get -> System.Windows.Forms.TaskDialogCheckBox
-System.Windows.Forms.TaskDialogPage.CheckBox.set -> void
 System.Windows.Forms.TaskDialogPage.Created -> System.EventHandler
 System.Windows.Forms.TaskDialogPage.DefaultButton.get -> System.Windows.Forms.TaskDialogButton
 System.Windows.Forms.TaskDialogPage.DefaultButton.set -> void
@@ -107,6 +96,8 @@ System.Windows.Forms.TaskDialogPage.SizeToContent.set -> void
 System.Windows.Forms.TaskDialogPage.TaskDialogPage() -> void
 System.Windows.Forms.TaskDialogPage.Text.get -> string
 System.Windows.Forms.TaskDialogPage.Text.set -> void
+System.Windows.Forms.TaskDialogPage.Verification.get -> System.Windows.Forms.TaskDialogVerificationCheckBox
+System.Windows.Forms.TaskDialogPage.Verification.set -> void
 System.Windows.Forms.TaskDialogPage.Width.get -> int
 System.Windows.Forms.TaskDialogPage.Width.set -> void
 System.Windows.Forms.TaskDialogProgressBar
@@ -145,6 +136,15 @@ System.Windows.Forms.TaskDialogRadioButtonCollection.TaskDialogRadioButtonCollec
 System.Windows.Forms.TaskDialogStartupLocation
 System.Windows.Forms.TaskDialogStartupLocation.CenterParent = 1 -> System.Windows.Forms.TaskDialogStartupLocation
 System.Windows.Forms.TaskDialogStartupLocation.CenterScreen = 0 -> System.Windows.Forms.TaskDialogStartupLocation
+System.Windows.Forms.TaskDialogVerificationCheckBox
+System.Windows.Forms.TaskDialogVerificationCheckBox.Checked.get -> bool
+System.Windows.Forms.TaskDialogVerificationCheckBox.Checked.set -> void
+System.Windows.Forms.TaskDialogVerificationCheckBox.CheckedChanged -> System.EventHandler
+System.Windows.Forms.TaskDialogVerificationCheckBox.Focus() -> void
+System.Windows.Forms.TaskDialogVerificationCheckBox.TaskDialogVerificationCheckBox() -> void
+System.Windows.Forms.TaskDialogVerificationCheckBox.TaskDialogVerificationCheckBox(string text, bool isChecked = false) -> void
+System.Windows.Forms.TaskDialogVerificationCheckBox.Text.get -> string
+System.Windows.Forms.TaskDialogVerificationCheckBox.Text.set -> void
 override System.Windows.Forms.TaskDialogButton.Equals(object obj) -> bool
 override System.Windows.Forms.TaskDialogButton.GetHashCode() -> int
 override System.Windows.Forms.TaskDialogButton.ToString() -> string
@@ -152,7 +152,6 @@ override System.Windows.Forms.TaskDialogButtonCollection.ClearItems() -> void
 override System.Windows.Forms.TaskDialogButtonCollection.InsertItem(int index, System.Windows.Forms.TaskDialogButton item) -> void
 override System.Windows.Forms.TaskDialogButtonCollection.RemoveItem(int index) -> void
 override System.Windows.Forms.TaskDialogButtonCollection.SetItem(int index, System.Windows.Forms.TaskDialogButton item) -> void
-override System.Windows.Forms.TaskDialogCheckBox.ToString() -> string
 override System.Windows.Forms.TaskDialogExpander.ToString() -> string
 override System.Windows.Forms.TaskDialogFootnote.ToString() -> string
 override System.Windows.Forms.TaskDialogRadioButton.ToString() -> string
@@ -160,6 +159,7 @@ override System.Windows.Forms.TaskDialogRadioButtonCollection.ClearItems() -> vo
 override System.Windows.Forms.TaskDialogRadioButtonCollection.InsertItem(int index, System.Windows.Forms.TaskDialogRadioButton item) -> void
 override System.Windows.Forms.TaskDialogRadioButtonCollection.RemoveItem(int index) -> void
 override System.Windows.Forms.TaskDialogRadioButtonCollection.SetItem(int index, System.Windows.Forms.TaskDialogRadioButton item) -> void
+override System.Windows.Forms.TaskDialogVerificationCheckBox.ToString() -> string
 static System.Windows.Forms.TaskDialog.ShowDialog(System.IntPtr hwndOwner, System.Windows.Forms.TaskDialogPage page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterParent) -> System.Windows.Forms.TaskDialogButton
 static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.IWin32Window owner, System.Windows.Forms.TaskDialogPage page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterParent) -> System.Windows.Forms.TaskDialogButton
 static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.TaskDialogPage page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterParent) -> System.Windows.Forms.TaskDialogButton
@@ -177,6 +177,7 @@ static System.Windows.Forms.TaskDialogButton.Yes.get -> System.Windows.Forms.Tas
 static System.Windows.Forms.TaskDialogButton.operator !=(System.Windows.Forms.TaskDialogButton b1, System.Windows.Forms.TaskDialogButton b2) -> bool
 static System.Windows.Forms.TaskDialogButton.operator ==(System.Windows.Forms.TaskDialogButton b1, System.Windows.Forms.TaskDialogButton b2) -> bool
 static System.Windows.Forms.TaskDialogFootnote.implicit operator System.Windows.Forms.TaskDialogFootnote(string footnoteText) -> System.Windows.Forms.TaskDialogFootnote
+static System.Windows.Forms.TaskDialogVerificationCheckBox.implicit operator System.Windows.Forms.TaskDialogVerificationCheckBox(string confirmationText) -> System.Windows.Forms.TaskDialogVerificationCheckBox
 static readonly System.Windows.Forms.TaskDialogIcon.Error -> System.Windows.Forms.TaskDialogIcon
 static readonly System.Windows.Forms.TaskDialogIcon.Information -> System.Windows.Forms.TaskDialogIcon
 static readonly System.Windows.Forms.TaskDialogIcon.None -> System.Windows.Forms.TaskDialogIcon
