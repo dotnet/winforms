@@ -451,16 +451,34 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                bool controlsHaveSameTabIndex = HaveSameTabIndex(childControls);
-
                 Control nextChild = null;
                 if (forward)
                 {
-                    for (int i = 0; i < childControls.Count - 1; i++)
+                    for (int i = 0; i < childControls.Count; i++)
                     {
-                        if ((currentChild == null && (nextChild == null || childControls[i]._tabIndex <= nextChild._tabIndex)) ||
-                            (currentChild != null && (childControls[i]._tabIndex > currentChild._tabIndex)) ||
-                            (currentChild != null && controlsHaveSameTabIndex && i < childControls.Count - 1 && currentChild == childControls[i + 1]))
+                        if (currentChild == null &&
+                            i < childControls.Count &&
+                            (nextChild == null || nextChild.TabIndex >= childControls[i].TabIndex))
+                        {
+                            nextChild = childControls[i];
+                            continue;
+                        }
+
+                        if (childControls[i].Name == currentChild.Name)
+                        {
+                            continue;
+                        }
+
+                        if (i < childControls.Count - 1 &&
+                            currentChild.Name == childControls[i + 1].Name &&
+                            currentChild.TabIndex == childControls[i + 1].TabIndex)
+                        {
+                            nextChild = childControls[i];
+                            break;
+                        }
+
+                        if ((childControls[i].TabIndex > currentChild.TabIndex) &&
+                            (nextChild == null || nextChild.TabIndex > childControls[i].TabIndex))
                         {
                             nextChild = childControls[i];
                         }
@@ -470,9 +488,29 @@ namespace System.Windows.Forms
                 {
                     for (int i = childControls.Count - 1; i >= 0; i--)
                     {
-                        if ((currentChild == null && (nextChild == null || childControls[i]._tabIndex > nextChild._tabIndex)) ||
-                            (currentChild != null && (childControls[i]._tabIndex < currentChild._tabIndex)) ||
-                            (currentChild != null && controlsHaveSameTabIndex && i > 1 && currentChild == childControls[i - 1]))
+                        if (currentChild == null &&
+                            i >= 0 &&
+                            (nextChild == null || nextChild.TabIndex <= childControls[i].TabIndex))
+                        {
+                            nextChild = childControls[i];
+                            continue;
+                        }
+
+                        if (childControls[i].Name == currentChild.Name)
+                        {
+                            continue;
+                        }
+
+                        if (i > 0 &&
+                            currentChild == childControls[i - 1] &&
+                            currentChild.TabIndex == childControls[i - 1].TabIndex)
+                        {
+                            nextChild = childControls[i];
+                            break;
+                        }
+
+                        if ((childControls[i].TabIndex < currentChild.TabIndex) &&
+                            (nextChild == null || nextChild.TabIndex <= childControls[i].TabIndex))
                         {
                             nextChild = childControls[i];
                         }

@@ -34,9 +34,9 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.FirstChild:
-                        return _owner.FirstChildControlInTabOrder?.AccessibilityObject;
+                        return GetNextChildInTabOrder(null, true);
                     case UiaCore.NavigateDirection.LastChild:
-                        return _owner.LastChildControlInTabOrder?.AccessibilityObject;
+                        return GetNextChildInTabOrder(null, false);
                     default:
                         return null;
                 }
