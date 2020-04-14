@@ -474,7 +474,7 @@ namespace System.Windows.Forms
 
                         if (i < childControls.Count - 1 &&
                             currentChild.Name == childControls[i + 1].Name &&
-                            currentChild.TabIndex == childControls[i + 1].TabIndex)
+                            currentChild.TabIndex == childControls[i].TabIndex)
                         {
                             nextChild = childControls[i];
                             break;
@@ -508,8 +508,8 @@ namespace System.Windows.Forms
                         }
 
                         if (i > 0 &&
-                            currentChild == childControls[i - 1] &&
-                            currentChild.TabIndex == childControls[i - 1].TabIndex)
+                            currentChild.Name == childControls[i - 1].Name &&
+                            currentChild.TabIndex == childControls[i].TabIndex)
                         {
                             nextChild = childControls[i];
                             break;
