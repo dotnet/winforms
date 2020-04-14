@@ -45,7 +45,8 @@ namespace System.Windows.Forms
         UiaCore.ISelectionProvider,
         UiaCore.ISelectionItemProvider,
         UiaCore.IRawElementProviderHwndOverride,
-        UiaCore.IScrollItemProvider
+        UiaCore.IScrollItemProvider,
+        UiaCore.IMultipleViewProvider
     {
         /// <summary>
         ///  Specifies the <see cref='IAccessible'/> interface used by this <see cref='AccessibleObject'/>.
@@ -679,6 +680,16 @@ namespace System.Windows.Forms
         }
 
         internal virtual UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd) => null;
+
+        internal virtual int GetMultiViewProviderCurrentView() => 0;
+
+        internal virtual int[] GetMultiViewProviderSupportedViews() => new int[0];
+
+        internal virtual string GetMultiViewProviderViewName(int viewId) => null;
+
+        internal virtual void SetMultiViewProviderCurrentView(int viewId)
+        {
+        }
 
         internal virtual void SetValue(double newValue)
         {
@@ -2182,6 +2193,14 @@ namespace System.Windows.Forms
         UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
             => GetOverrideProviderForHwnd(hwnd);
 
+        int UiaCore.IMultipleViewProvider.CurrentView => GetMultiViewProviderCurrentView();
+
+        int[] UiaCore.IMultipleViewProvider.GetSupportedViews() => GetMultiViewProviderSupportedViews();
+
+        string UiaCore.IMultipleViewProvider.GetViewName(int viewId) => GetMultiViewProviderViewName(viewId);
+
+        void UiaCore.IMultipleViewProvider.SetCurrentView(int viewId) => SetMultiViewProviderCurrentView(viewId);
+
         BOOL UiaCore.IRangeValueProvider.IsReadOnly => IsReadOnly ? BOOL.TRUE : BOOL.FALSE;
 
         double UiaCore.IRangeValueProvider.LargeChange => LargeChange;
@@ -2541,7 +2560,8 @@ namespace System.Windows.Forms
         UiaCore.ISelectionProvider,
         UiaCore.ISelectionItemProvider,
         UiaCore.IScrollItemProvider,
-        UiaCore.IRawElementProviderHwndOverride
+        UiaCore.IRawElementProviderHwndOverride,
+        UiaCore.IMultipleViewProvider
     {
         private IAccessible publicIAccessible;                      // AccessibleObject as IAccessible
         private readonly OleAut32.IEnumVariant publicIEnumVariant;  // AccessibleObject as IEnumVariant
@@ -2569,6 +2589,7 @@ namespace System.Windows.Forms
         private readonly UiaCore.ISelectionItemProvider publicISelectionItemProvider;                      // AccessibleObject as ISelectionItemProvider
         private readonly UiaCore.IScrollItemProvider publicIScrollItemProvider;                            // AccessibleObject as IScrollItemProvider
         private readonly UiaCore.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride;    // AccessibleObject as IRawElementProviderHwndOverride
+        private readonly UiaCore.IMultipleViewProvider publicIMultiViewProvider;                           // AccessibleObject as IMultipleViewProvider
 
         /// <summary>
         ///  Create a new wrapper.
@@ -2599,6 +2620,7 @@ namespace System.Windows.Forms
             publicISelectionItemProvider = (UiaCore.ISelectionItemProvider)accessibleImplemention;
             publicIScrollItemProvider = (UiaCore.IScrollItemProvider)accessibleImplemention;
             publicIRawElementProviderHwndOverride = (UiaCore.IRawElementProviderHwndOverride)accessibleImplemention;
+            publicIMultiViewProvider = (UiaCore.IMultipleViewProvider)accessibleImplemention;
             // Note: Deliberately not holding onto AccessibleObject to enforce all access through the interfaces
         }
 
@@ -2846,6 +2868,10 @@ namespace System.Windows.Forms
                 {
                     return (UiaCore.IScrollItemProvider)this;
                 }
+                else if (patternId == UiaCore.UIA.MultipleViewPatternId)
+                {
+                    return (UiaCore.IMultipleViewProvider)this;
+                }
                 else
                 {
                     return null;
@@ -3043,5 +3069,17 @@ namespace System.Windows.Forms
         /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
         UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
             => publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
+
+        int UiaCore.IMultipleViewProvider.CurrentView
+            => publicIMultiViewProvider.CurrentView;
+
+        int[] UiaCore.IMultipleViewProvider.GetSupportedViews()
+            => publicIMultiViewProvider.GetSupportedViews();
+
+        string UiaCore.IMultipleViewProvider.GetViewName(int viewId)
+            => publicIMultiViewProvider.GetViewName(viewId);
+
+        void UiaCore.IMultipleViewProvider.SetCurrentView(int viewId)
+            => publicIMultiViewProvider.SetCurrentView(viewId);
     }
 }

@@ -28,7 +28,7 @@ namespace System.Windows.Forms
     [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionLabel))]
     // If not for FormatControl, we could inherit from ButtonBase and get foreground images for free.
-    public class Label : Control, IAutomationLiveRegion
+    public partial class Label : Control, IAutomationLiveRegion
     {
         private static readonly object EVENT_TEXTALIGNCHANGED = new object();
 
@@ -1643,95 +1643,62 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
-        internal class LabelAccessibleObject : ControlAccessibleObject
+        /// <summary>
+        ///  Override ImageList.Indexer to support Label's ImageList semantics.
+        /// </summary>
+        internal class LabelImageIndexer : ImageList.Indexer
         {
-            public LabelAccessibleObject(Label owner) : base(owner)
+            private readonly Label owner;
+            private bool useIntegerIndex = true;
+
+            public LabelImageIndexer(Label owner)
             {
+                this.owner = owner;
             }
 
-            public override AccessibleRole Role
+            public override ImageList ImageList
+            {
+                get { return owner?.ImageList; }
+                set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
+            }
+
+            public override string Key
+            {
+                get => base.Key;
+                set
+                {
+                    base.Key = value;
+                    useIntegerIndex = false;
+                }
+            }
+
+            public override int Index
+            {
+                get => base.Index;
+                set
+                {
+                    base.Index = value;
+                    useIntegerIndex = true;
+                }
+            }
+
+            public override int ActualIndex
             {
                 get
                 {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
+                    if (useIntegerIndex)
                     {
-                        return role;
+                        // The behavior of label is to return the last item in the Images collection
+                        // if the index is currently set higher than the count.
+                        return (Index < ImageList.Images.Count) ? Index : ImageList.Images.Count - 1;
                     }
-                    return AccessibleRole.StaticText;
+                    else if (ImageList != null)
+                    {
+                        return ImageList.Images.IndexOfKey(Key);
+                    }
+
+                    return -1;
                 }
-            }
-
-            internal override bool IsIAccessibleExSupported() => true;
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.TextControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-        }
-    }
-
-    /// <summary>
-    ///  Override ImageList.Indexer to support Label's ImageList semantics.
-    /// </summary>
-    internal class LabelImageIndexer : ImageList.Indexer
-    {
-        private readonly Label owner;
-        private bool useIntegerIndex = true;
-
-        public LabelImageIndexer(Label owner)
-        {
-            this.owner = owner;
-        }
-
-        public override ImageList ImageList
-        {
-            get { return owner?.ImageList; }
-            set{ Debug.Assert(false, "Setting the image list in this class is not supported"); }
-        }
-
-        public override string Key
-        {
-            get => base.Key;
-            set
-            {
-                base.Key = value;
-                useIntegerIndex = false;
-            }
-        }
-
-        public override int Index
-        {
-            get => base.Index;
-            set
-            {
-                base.Index = value;
-                useIntegerIndex = true;
-            }
-        }
-
-        public override int ActualIndex
-        {
-            get
-            {
-                if (useIntegerIndex)
-                {
-                    // The behavior of label is to return the last item in the Images collection
-                    // if the index is currently set higher than the count.
-                    return (Index < ImageList.Images.Count) ? Index : ImageList.Images.Count - 1;
-                }
-                else if (ImageList != null)
-                {
-                    return ImageList.Images.IndexOfKey(Key);
-                }
-
-                return -1;
             }
         }
     }

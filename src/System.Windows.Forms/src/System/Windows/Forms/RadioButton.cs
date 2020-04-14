@@ -26,7 +26,7 @@ namespace System.Windows.Forms
     [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
     [Designer("System.Windows.Forms.Design.RadioButtonDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionRadioButton))]
-    public class RadioButton : ButtonBase
+    public partial class RadioButton : ButtonBase
     {
         private static readonly object EVENT_CHECKEDCHANGED = new object();
         private static readonly ContentAlignment anyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
@@ -601,58 +601,6 @@ namespace System.Windows.Forms
         {
             string s = base.ToString();
             return s + ", Checked: " + Checked.ToString();
-        }
-
-        [ComVisible(true)]
-        public class RadioButtonAccessibleObject : ButtonBaseAccessibleObject
-        {
-            public RadioButtonAccessibleObject(RadioButton owner) : base(owner)
-            {
-            }
-
-            public override string DefaultAction
-            {
-                get
-                {
-                    string defaultAction = Owner.AccessibleDefaultActionDescription;
-                    if (defaultAction != null)
-                    {
-                        return defaultAction;
-                    }
-
-                    return SR.AccessibleActionCheck;
-                }
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    return AccessibleRole.RadioButton;
-                }
-            }
-
-            public override AccessibleStates State
-            {
-                get
-                {
-                    if (((RadioButton)Owner).Checked)
-                    {
-                        return AccessibleStates.Checked | base.State;
-                    }
-                    return base.State;
-                }
-            }
-
-            public override void DoDefaultAction()
-            {
-                ((RadioButton)Owner).PerformClick();
-            }
         }
     }
 }

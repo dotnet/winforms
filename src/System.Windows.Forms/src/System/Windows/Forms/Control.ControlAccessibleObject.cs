@@ -390,7 +390,7 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.NextSibling:
                     case UiaCore.NavigateDirection.PreviousSibling:
                         var eventArgs = new RequestingNavigationFragmentEventArgs(direction);
-                        RequestingNavigationFragment.Invoke(this, eventArgs);
+                        RequestingNavigationFragment?.Invoke(this, eventArgs);
                         return eventArgs.RequestingNavigationFragment;
                     default:
                         return base.FragmentNavigate(direction);
@@ -600,8 +600,7 @@ namespace System.Windows.Forms
                 return RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
             }
 
-            internal override bool IsIAccessibleExSupported()
-                => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {

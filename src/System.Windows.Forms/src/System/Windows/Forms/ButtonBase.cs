@@ -753,11 +753,6 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ButtonBaseAccessibleObject(this);
-        }
-
         private void DetachImageList(object sender, EventArgs e)
         {
             ImageList = null;
@@ -1324,35 +1319,6 @@ namespace System.Windows.Forms
                     default:
                         base.WndProc(ref m);
                         break;
-                }
-            }
-        }
-
-        [ComVisible(true)]
-        public class ButtonBaseAccessibleObject : ControlAccessibleObject
-        {
-            public ButtonBaseAccessibleObject(Control owner) : base(owner)
-            {
-            }
-
-            public override void DoDefaultAction()
-            {
-                ((ButtonBase)Owner).OnClick(EventArgs.Empty);
-            }
-
-            public override AccessibleStates State
-            {
-                get
-                {
-                    AccessibleStates state = base.State;
-
-                    ButtonBase owner = (ButtonBase)Owner;
-                    if (owner.OwnerDraw && owner.MouseIsDown)
-                    {
-                        state |= AccessibleStates.Pressed;
-                    }
-
-                    return state;
                 }
             }
         }
