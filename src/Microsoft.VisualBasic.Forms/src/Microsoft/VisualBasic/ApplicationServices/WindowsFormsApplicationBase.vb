@@ -941,18 +941,19 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="_iAsyncResult"></param>
         Private Sub NamedPipeServerConnectionCallback(_iAsyncResult As IAsyncResult)
             Try
-                _mutexSingleInstance.WaitOne()
-                ' End waiting for the connection
-                _namedPipeServerStream.EndWaitForConnection(_iAsyncResult)
-                ' Read data and prevent access to _NamedPipeXmlData during threaded operations
-                Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
-                Dim _namedPipeXmlData As NamedPipeXMLData = CType(_xmlSerializer.Deserialize(_namedPipeServerStream), NamedPipeXMLData)
-                Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
-                _namedPipeServerStream.Disconnect()
-                _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
-
-                _mutexSingleInstance.ReleaseMutex()
+                ' Mutex access needs to be on UI thread
                 MainForm.Invoke(Sub()
+                                    _mutexSingleInstance.WaitOne()
+                                    ' End waiting for the connection
+                                    _namedPipeServerStream.EndWaitForConnection(_iAsyncResult)
+                                    ' Read data and prevent access to _NamedPipeXmlData during threaded operations
+                                    Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
+                                    Dim _namedPipeXmlData As NamedPipeXMLData = CType(_xmlSerializer.Deserialize(_namedPipeServerStream), NamedPipeXMLData)
+                                    Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
+                                    _namedPipeServerStream.Disconnect()
+                                    _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
+
+                                    _mutexSingleInstance.ReleaseMutex()
                                     OnStartupNextInstance(remoteEventArgs)
                                 End Sub)
                 ' Create a new pipe for next connection
