@@ -456,11 +456,14 @@ namespace System.Windows.Forms
                 {
                     for (int i = 0; i < childControls.Count; i++)
                     {
-                        if (currentChild == null &&
-                            i < childControls.Count &&
-                            (nextChild == null || nextChild.TabIndex >= childControls[i].TabIndex))
+                        if (currentChild == null)
                         {
-                            nextChild = childControls[i];
+                            if (i < childControls.Count &&
+                                (nextChild == null || nextChild.TabIndex >= childControls[i].TabIndex))
+                            {
+                                nextChild = childControls[i];
+                            }
+
                             continue;
                         }
 
@@ -488,11 +491,14 @@ namespace System.Windows.Forms
                 {
                     for (int i = childControls.Count - 1; i >= 0; i--)
                     {
-                        if (currentChild == null &&
-                            i >= 0 &&
-                            (nextChild == null || nextChild.TabIndex <= childControls[i].TabIndex))
+                        if (currentChild == null)
                         {
-                            nextChild = childControls[i];
+                            if (i >= 0 &&
+                                (nextChild == null || nextChild.TabIndex <= childControls[i].TabIndex))
+                            {
+                                nextChild = childControls[i];
+                            }
+
                             continue;
                         }
 
