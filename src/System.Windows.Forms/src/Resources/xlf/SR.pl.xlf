@@ -8101,6 +8101,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Otwórz</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridEntryValuesListDefaultAccessibleName">
+        <source>Available values</source>
+        <target state="translated">Dostępne wartości</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridExceptionInfo">
         <source>Error Information</source>
         <target state="translated">Informacje o błędzie</target>

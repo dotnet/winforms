@@ -1928,7 +1928,7 @@ namespace System.Windows.Forms
             set
             {
                 formStateEx[FormStateExShowIcon] = value ? 1 : 0;
-                if (value)
+                if (!value)
                 {
                     UpdateStyles();
                 }
@@ -4250,7 +4250,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(true)]
         [EditorBrowsable(EditorBrowsableState.Always)]
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         protected virtual void OnDpiChanged(DpiChangedEventArgs e)
         {
             if (e.DeviceDpiNew != e.DeviceDpiOld)
@@ -5867,11 +5867,7 @@ namespace System.Windows.Forms
 
                 if (redrawFrame)
                 {
-                    User32.RedrawWindow(
-                    new HandleRef(this, Handle),
-                    null,
-                    IntPtr.Zero,
-                    User32.RDW.INVALIDATE | User32.RDW.FRAME);
+                    User32.RedrawWindow(new HandleRef(this, Handle), null, IntPtr.Zero, User32.RDW.INVALIDATE | User32.RDW.FRAME);
                 }
             }
         }

@@ -8101,6 +8101,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">열기</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridEntryValuesListDefaultAccessibleName">
+        <source>Available values</source>
+        <target state="translated">사용 가능한 값</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridExceptionInfo">
         <source>Error Information</source>
         <target state="translated">오류 정보</target>

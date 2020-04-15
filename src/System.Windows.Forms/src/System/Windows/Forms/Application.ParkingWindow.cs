@@ -78,14 +78,14 @@ namespace System.Windows.Forms
                 // messagepump is gone and then decide to clean them up.  We should clean
                 // up the parkingwindow in this case and a postmessage won't do it.
 
-                uint id = User32.GetWindowThreadProcessId(this, out _);
+                uint id = User32.GetWindowThreadProcessId(HandleInternal, out _);
                 ThreadContext context = ThreadContext.FromId(id);
 
                 // We only do this if the ThreadContext tells us that we are currently
                 // handling a window message.
                 if (context == null || !ReferenceEquals(context, ThreadContext.FromCurrent()))
                 {
-                    User32.PostMessageW(this, (User32.WM)WM_CHECKDESTROY);
+                    User32.PostMessageW(HandleInternal, (User32.WM)WM_CHECKDESTROY);
                 }
                 else
                 {

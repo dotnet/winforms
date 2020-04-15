@@ -431,50 +431,58 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    windowClass._targetWindow = this;
                     IntPtr createResult = IntPtr.Zero;
                     int lastWin32Error = 0;
 
-                    // Parking window dpi awareness context need to match with dpi awareness context of control being
-                    // parented to this parking window. Otherwise, reparenting of control will fail.
-                    using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext))
+                    NativeWindow prevTargetWindow = windowClass._targetWindow;
+                    try
                     {
-                        IntPtr modHandle = Kernel32.GetModuleHandleW(null);
+                        windowClass._targetWindow = this;
 
-                        // Older versions of Windows AV rather than returning E_OUTOFMEMORY.
-                        // Catch this and then we re-throw an out of memory error.
-                        try
+                        // Parking window dpi awareness context need to match with dpi awareness context of control being
+                        // parented to this parking window. Otherwise, reparenting of control will fail.
+                        using (DpiHelper.EnterDpiAwarenessScope(DpiAwarenessContext))
                         {
-                            // CreateWindowEx throws if WindowText is greater than the max
-                            // length of a 16 bit int (32767).
-                            // If it exceeds the max, we should take the substring....
-                            if (cp.Caption != null && cp.Caption.Length > short.MaxValue)
+                            IntPtr modHandle = Kernel32.GetModuleHandleW(null);
+
+                            // Older versions of Windows AV rather than returning E_OUTOFMEMORY.
+                            // Catch this and then we re-throw an out of memory error.
+                            try
                             {
-                                cp.Caption = cp.Caption.Substring(0, short.MaxValue);
+                                // CreateWindowEx throws if WindowText is greater than the max
+                                // length of a 16 bit int (32767).
+                                // If it exceeds the max, we should take the substring....
+                                if (cp.Caption != null && cp.Caption.Length > short.MaxValue)
+                                {
+                                    cp.Caption = cp.Caption.Substring(0, short.MaxValue);
+                                }
+
+                                createResult = User32.CreateWindowExW(
+                                    (User32.WS_EX)cp.ExStyle,
+                                    windowClass._windowClassName,
+                                    cp.Caption,
+                                    (User32.WS)cp.Style,
+                                    cp.X,
+                                    cp.Y,
+                                    cp.Width,
+                                    cp.Height,
+                                    cp.Parent,
+                                    IntPtr.Zero,
+                                    modHandle,
+                                    cp.Param);
+
+                                lastWin32Error = Marshal.GetLastWin32Error();
                             }
-
-                            createResult = User32.CreateWindowExW(
-                                (User32.WS_EX)cp.ExStyle,
-                                windowClass._windowClassName,
-                                cp.Caption,
-                                (User32.WS)cp.Style,
-                                cp.X,
-                                cp.Y,
-                                cp.Width,
-                                cp.Height,
-                                cp.Parent,
-                                IntPtr.Zero,
-                                modHandle,
-                                cp.Param);
-
-                            lastWin32Error = Marshal.GetLastWin32Error();
-                        }
-                        catch (NullReferenceException e)
-                        {
-                            throw new OutOfMemoryException(SR.ErrorCreatingHandle, e);
+                            catch (NullReferenceException e)
+                            {
+                                throw new OutOfMemoryException(SR.ErrorCreatingHandle, e);
+                            }
                         }
                     }
-                    windowClass._targetWindow = null;
+                    finally
+                    {
+                        windowClass._targetWindow = prevTargetWindow;
+                    }
 
                     Debug.WriteLineIf(CoreSwitches.PerfTrack.Enabled, "Handle created of type '" + cp.ClassName + "' with caption '" + cp.Caption + "' from NativeWindow of type '" + GetType().FullName + "'");
 
