@@ -1,3 +1,8 @@
+Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceExceptionMutex
+Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceExceptionMutex.New() -> Void
+Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceExceptionMutex.New(info As System.Runtime.Serialization.SerializationInfo, context As System.Runtime.Serialization.StreamingContext) -> Void
+Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceExceptionMutex.New(message As String) -> Void
+Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceExceptionMutex.New(message As String, inner As System.Exception) -> Void
 Microsoft.VisualBasic.ApplicationServices.NamedPipeXMLData
 Microsoft.VisualBasic.ApplicationServices.NamedPipeXMLData.CommandLineArguments(AutoPropertyValue As System.Collections.Generic.List(Of String)) -> Void
 Microsoft.VisualBasic.ApplicationServices.NamedPipeXMLData.New() -> Void

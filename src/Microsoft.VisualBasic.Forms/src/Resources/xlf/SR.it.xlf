@@ -7,6 +7,11 @@
         <target state="translated">Non è stato specificato un form di avvio.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AppModel_SingleInstanceMutexTimeout">
+        <source>Single Instance Mutex Timeout</source>
+        <target state="new">Single Instance Mutex Timeout</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AppModel_SplashAndMainFormTheSame">
         <source>Splash screen and main form cannot be the same form.</source>
         <target state="translated">La schermata iniziale e il form principale non possono avere lo stesso formato.</target>

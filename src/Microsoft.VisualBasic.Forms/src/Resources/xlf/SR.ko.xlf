@@ -7,6 +7,11 @@
         <target state="translated">시작 폼이 지정되지 않았습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AppModel_SingleInstanceMutexTimeout">
+        <source>Single Instance Mutex Timeout</source>
+        <target state="new">Single Instance Mutex Timeout</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AppModel_SplashAndMainFormTheSame">
         <source>Splash screen and main form cannot be the same form.</source>
         <target state="translated">시작 화면과 기본 폼은 같은 폼일 수 없습니다.</target>

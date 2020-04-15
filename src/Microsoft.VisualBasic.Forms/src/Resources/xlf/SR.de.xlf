@@ -7,6 +7,11 @@
         <target state="translated">Es wurde kein Startformular angegeben.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AppModel_SingleInstanceMutexTimeout">
+        <source>Single Instance Mutex Timeout</source>
+        <target state="new">Single Instance Mutex Timeout</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AppModel_SplashAndMainFormTheSame">
         <source>Splash screen and main form cannot be the same form.</source>
         <target state="translated">Das Formular für den Begrüßungsbildschirm und das Hauptformular dürfen nicht identisch sein.</target>

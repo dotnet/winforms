@@ -162,6 +162,37 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     End Class
 
     ''' <summary>
+    ''' Exception for when we launch a single-instance application and it can't connect with the
+    ''' original instance.
+    ''' </summary>
+    ''' <remarks></remarks>
+    <EditorBrowsableAttribute(EditorBrowsableState.Never)>
+    <Serializable()>
+    Public Class CantGetSingleInstanceExceptionMutex : Inherits Exception
+        ''' <summary>
+        '''  Creates a new exception
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub New()
+            MyBase.New(SR.AppModel_SingleInstanceMutexTimeout)
+        End Sub
+
+        Public Sub New(ByVal message As String)
+            MyBase.New(message)
+        End Sub
+
+        Public Sub New(ByVal message As String, ByVal inner As System.Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ' Deserialization constructor must be defined since we are serializable
+        <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)>
+        Protected Sub New(ByVal info As System.Runtime.Serialization.SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
+
+    ''' <summary>
     ''' Provides the infrastructure for the VB Windows Forms application model
     ''' </summary>
     ''' <remarks>Don't put access on this definition.</remarks>
@@ -322,9 +353,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Finally
                     If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.IsConnected Then
                         _namedPipeServerStream.Close()
+                        _namedPipeServerStream = Nothing
                     End If
                     If _FirstInstance Then
                         _mutexSingleInstance.Dispose()
+                        _mutexSingleInstance = Nothing
                     End If
                 End Try
                 Exit Sub
@@ -943,18 +976,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Try
                 ' Mutex access needs to be on UI thread
                 MainForm.Invoke(Sub()
-                                    _mutexSingleInstance.WaitOne()
-                                    ' End waiting for the connection
-                                    _namedPipeServerStream.EndWaitForConnection(_iAsyncResult)
-                                    ' Read data and prevent access to _NamedPipeXmlData during threaded operations
-                                    Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
-                                    Dim _namedPipeXmlData As NamedPipeXMLData = CType(_xmlSerializer.Deserialize(_namedPipeServerStream), NamedPipeXMLData)
-                                    Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
-                                    _namedPipeServerStream.Disconnect()
-                                    _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
+                                    If _mutexSingleInstance.WaitOne(5000) Then
+                                        ' End waiting for the connection
+                                        _namedPipeServerStream.EndWaitForConnection(_iAsyncResult)
+                                        ' Read data and prevent access to _NamedPipeXmlData during threaded operations
+                                        Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
+                                        Dim _namedPipeXmlData As NamedPipeXMLData = CType(_xmlSerializer.Deserialize(_namedPipeServerStream), NamedPipeXMLData)
+                                        Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
+                                        _namedPipeServerStream.Disconnect()
+                                        _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
 
-                                    _mutexSingleInstance.ReleaseMutex()
-                                    OnStartupNextInstance(remoteEventArgs)
+                                        _mutexSingleInstance.ReleaseMutex()
+                                        OnStartupNextInstance(remoteEventArgs)
+                                    Else
+                                        Throw New CantGetSingleInstanceExceptionMutex
+                                    End If
                                 End Sub)
                 ' Create a new pipe for next connection
             Catch ex As ObjectDisposedException
