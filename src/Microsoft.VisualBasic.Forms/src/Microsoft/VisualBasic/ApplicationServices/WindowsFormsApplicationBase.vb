@@ -362,6 +362,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End Try
                 Exit Sub
             End If
+            _mutexSingleInstance.WaitOne()
             ' We are not the first instance, send the named pipe message with our payload and stop loading
             Dim _NamedPipeXmlData As New NamedPipeXMLData With
                 {
@@ -369,6 +370,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 }
             ' Notify first instance by sending args
             NamedPipeClientSendOptions(_NamedPipeXmlData)
+            _mutexSingleInstance.ReleaseMutex()
+            _mutexSingleInstance.Dispose()
+            _mutexSingleInstance = Nothing
             If _namedPipeServerStream IsNot Nothing Then
                 _namedPipeServerStream.Dispose()
             End If
