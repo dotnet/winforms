@@ -2799,6 +2799,11 @@ namespace System.Windows.Forms
             base.OnSelectedIndexChanged(e);
             ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
 
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             if (dropDownWillBeClosed)
             {
                 // This is after-closing selection - do not focus on the list item
