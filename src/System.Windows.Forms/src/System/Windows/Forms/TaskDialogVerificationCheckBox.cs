@@ -41,8 +41,8 @@ namespace System.Windows.Forms
             Checked = isChecked;
         }
 
-        public static implicit operator TaskDialogVerificationCheckBox(string confirmationText)
-            => new TaskDialogVerificationCheckBox(confirmationText);
+        public static implicit operator TaskDialogVerificationCheckBox(string verificationText)
+            => new TaskDialogVerificationCheckBox(verificationText);
 
         /// <summary>
         ///   Gets or sets the text associated with this control.

@@ -174,7 +174,7 @@ static System.Windows.Forms.TaskDialogButton.Yes.get -> System.Windows.Forms.Tas
 static System.Windows.Forms.TaskDialogButton.operator !=(System.Windows.Forms.TaskDialogButton b1, System.Windows.Forms.TaskDialogButton b2) -> bool
 static System.Windows.Forms.TaskDialogButton.operator ==(System.Windows.Forms.TaskDialogButton b1, System.Windows.Forms.TaskDialogButton b2) -> bool
 static System.Windows.Forms.TaskDialogFootnote.implicit operator System.Windows.Forms.TaskDialogFootnote(string footnoteText) -> System.Windows.Forms.TaskDialogFootnote
-static System.Windows.Forms.TaskDialogVerificationCheckBox.implicit operator System.Windows.Forms.TaskDialogVerificationCheckBox(string confirmationText) -> System.Windows.Forms.TaskDialogVerificationCheckBox
+static System.Windows.Forms.TaskDialogVerificationCheckBox.implicit operator System.Windows.Forms.TaskDialogVerificationCheckBox(string verificationText) -> System.Windows.Forms.TaskDialogVerificationCheckBox
 static readonly System.Windows.Forms.TaskDialogIcon.Error -> System.Windows.Forms.TaskDialogIcon
 static readonly System.Windows.Forms.TaskDialogIcon.Information -> System.Windows.Forms.TaskDialogIcon
 static readonly System.Windows.Forms.TaskDialogIcon.None -> System.Windows.Forms.TaskDialogIcon
