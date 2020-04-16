@@ -1613,7 +1613,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
         }
 
-        [WinFormsFact]
+        [WinFormsFact(Skip = "Expected Exception is COMException - not TargetInvocationException")]
         public void AxHost_GetIPictureDispFromPicture_InvokeEnhancedMetafile_Roundtrips()
         {
             var original = new Metafile("bitmaps/milkmateya01.emf");

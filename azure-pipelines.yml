@@ -28,6 +28,7 @@ pr:
 - master
 - release/*
 - internal/release/*
+- internal/experimental/*
 
 # Call the ci.yml template, which does the real work
 stages:
