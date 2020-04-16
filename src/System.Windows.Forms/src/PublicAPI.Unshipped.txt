@@ -98,8 +98,6 @@ System.Windows.Forms.TaskDialogPage.Text.get -> string
 System.Windows.Forms.TaskDialogPage.Text.set -> void
 System.Windows.Forms.TaskDialogPage.Verification.get -> System.Windows.Forms.TaskDialogVerificationCheckBox
 System.Windows.Forms.TaskDialogPage.Verification.set -> void
-System.Windows.Forms.TaskDialogPage.Width.get -> int
-System.Windows.Forms.TaskDialogPage.Width.set -> void
 System.Windows.Forms.TaskDialogProgressBar
 System.Windows.Forms.TaskDialogProgressBar.MarqueeSpeed.get -> int
 System.Windows.Forms.TaskDialogProgressBar.MarqueeSpeed.set -> void

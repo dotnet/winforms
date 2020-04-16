@@ -55,7 +55,6 @@ namespace System.Windows.Forms
         private string? _caption;
         private string? _heading;
         private string? _text;
-        private int _width;
         private bool _boundIconIsFromHandle;
 
         private TaskDialogButton[]? _boundCustomButtons;
@@ -410,34 +409,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///   Gets or sets the width in dialog units that the dialog's client area will get
-        ///   when the dialog is is created or navigated.
-        ///   If <c>0</c>, the width will be automatically calculated by the system.
-        /// </summary>
-        /// <value>
-        ///   The width in dialog units that the dialog's client area will get. The default is
-        ///   <c>0</c> which means the width is calculated by the system.
-        /// </value>
-        /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
-        /// </exception>
-        public int Width
-        {
-            get => _width;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value));
-                }
-
-                DenyIfBound();
-
-                _width = value;
-            }
-        }
-
-        /// <summary>
         ///   Gets or sets a value that indicates whether the task dialog can be closed with
         ///   <see cref="TaskDialogButton.Cancel"/> as resulting button by pressing ESC or Alt+F4
         ///   or by clicking the title bar's close button, even if a <see cref="TaskDialogButton.Cancel"/>
@@ -519,11 +490,6 @@ namespace System.Windows.Forms
         ///   <see langword="true"/> to determine the width of the task dialog by the width of
         ///   its content area; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
-        /// <remarks>
-        /// <para>
-        ///   This flag is ignored if <see cref="Width"/> is not set to <c>0</c>.
-        /// </para>
-        /// </remarks>
         /// <exception cref="InvalidOperationException">
         ///   This page instance is currently bound to a task dialog.
         /// </exception>

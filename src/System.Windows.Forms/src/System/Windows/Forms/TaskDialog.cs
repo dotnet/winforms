@@ -1385,8 +1385,7 @@ namespace System.Windows.Forms
                             nDefaultButton = defaultButtonID,
                             nDefaultRadioButton = defaultRadioButtonID,
                             pfCallback = Marshal.GetFunctionPointerForDelegate(s_callbackProcDelegate),
-                            lpCallbackData = _instanceHandlePtr,
-                            cxWidth = checked((uint)page.Width)
+                            lpCallbackData = _instanceHandlePtr
                         };
 
                         // Buttons array
