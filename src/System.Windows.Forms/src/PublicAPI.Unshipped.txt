@@ -1,2 +1,0 @@
-#nullable enable
-const System.Windows.Forms.TabControl.TabBaseReLayoutMessageName = "_TabBaseReLayout" -> string
