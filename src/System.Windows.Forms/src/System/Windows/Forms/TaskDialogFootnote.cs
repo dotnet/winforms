@@ -52,8 +52,11 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This footnote instance is currently bound to a task dialog, but it's not visible as its initial
+        ///   The property is set on a footnote instance that is currently bound to a task dialog, but it's not visible as its initial
         ///   <see cref="Text"/> property value was <see langword="null"/> or an empty string.
+        ///   - or -
+        ///   The property is set on a footnote instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public string? Text
         {
@@ -94,11 +97,14 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This footnote instance is currently bound to a task dialog, but it's not visible as its initial
+        ///   The property is set on a footnote instance that is currently bound to a task dialog, but it's not visible as its initial
         ///   <see cref="Text"/> property value was <see langword="null"/> or an empty string.
         ///   - or -
-        ///   The task dialog has just navigated to a new page containing this footnote instance, but the
+        ///   The property is set and the task dialog has started navigating to a new page containing this footnote instance, but the
         ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        ///   - or -
+        ///   The property is set on a footnote instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public unsafe TaskDialogIcon? Icon
         {

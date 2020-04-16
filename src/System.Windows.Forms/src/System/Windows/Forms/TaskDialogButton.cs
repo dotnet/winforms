@@ -185,16 +185,14 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This button is currently bound to a task dialog, but its <see cref="Visible"/> property value is <see langword="false"/>.
+        ///   The property is set on a button that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public bool Enabled
         {
             get => _enabled;
             set
             {
-                DenyIfBoundAndNotCreated();
-
-                // Check if we can update the button.
                 if (CanUpdate())
                 {
                     BoundPage!.BoundDialog!.SetButtonEnabled(ButtonID, value);
@@ -219,15 +217,14 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This button is currently bound to a task dialog, but its <see cref="Visible"/> property value is <see langword="false"/>.
+        ///   The property is set on a button that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public bool ShowShieldIcon
         {
             get => _showShieldIcon;
             set
             {
-                DenyIfBoundAndNotCreated();
-
                 if (CanUpdate())
                 {
                     BoundPage!.BoundDialog!.SetButtonElevationRequiredState(ButtonID, value);
@@ -253,7 +250,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This button instance is currently bound to a task dialog.
+        ///   The property is set and this button instance is currently bound to a task dialog.
         /// </exception>
         public bool Visible
         {
@@ -282,9 +279,9 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This button is a standard button, for which the text is provided by the OS.
+        ///   The property is set and this button instance is a standard button, for which the text is provided by the OS.
         ///   - or -
-        ///   This button instance is currently bound to a task dialog.
+        ///   The property is set and this button instance is currently bound to a task dialog.
         /// </exception>
         public string? Text
         {
@@ -344,7 +341,9 @@ namespace System.Windows.Forms
         /// <exception cref="InvalidOperationException">
         ///   This button instance is not currently bound to a task dialog.
         ///   - or -
-        ///   The task dialog has just navigated to a new page containing this button instance, but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        ///   The task dialog has started navigating to a new page containing this button instance, but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        ///   - or -
+        ///   This button is currently bound to a task dialog, but the dialog has just started navigating to a different page.
         /// </exception>
         public void PerformClick()
         {
@@ -446,11 +445,11 @@ namespace System.Windows.Forms
 
         private bool CanUpdate()
         {
-            // Only update the button when bound to a task dialog and we are not
-            // waiting for the Navigated event. In the latter case we don't throw
-            // an exception however, because ApplyInitialization() will be called
-            // in the Navigated handler that does the necessary updates.
-            return BoundPage?.WaitingForInitialization == false;
+            // Only update the button when bound to a task dialog, the button has actually been
+            // created, and we are not waiting for the Navigated event. In the latter case we
+            // don't throw an exception however, because ApplyInitialization() will be called in
+            // the Navigated handler that does the necessary updates.
+            return BoundPage?.WaitingForInitialization == false && IsCreated;
         }
     }
 }

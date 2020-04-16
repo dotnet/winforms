@@ -124,7 +124,7 @@ namespace System.Windows.Forms
         ///   The collection of custom buttons to be shown in this page.
         /// </value>
         /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
+        ///   The property is set and this page instance is currently bound to a task dialog.
         /// </exception>
         public TaskDialogButtonCollection Buttons
         {
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
         ///   The collection of radio buttons to be shown in this page.
         /// </value>
         /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
+        ///   The property is set and this page instance is currently bound to a task dialog.
         /// </exception>
         public TaskDialogRadioButtonCollection RadioButtons
         {
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
+        ///   The property is set and this page instance is currently bound to a task dialog.
         /// </exception>
         public TaskDialogVerificationCheckBox? Verification
         {
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
+        ///   The property is set and this page instance is currently bound to a task dialog.
         /// </exception>
         public TaskDialogExpander? Expander
         {
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
+        ///   The property is set and this page instance is currently bound to a task dialog.
         /// </exception>
         public TaskDialogFootnote? Footnote
         {
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
+        ///   The property is set and this page instance is currently bound to a task dialog.
         /// </exception>
         public TaskDialogProgressBar? ProgressBar
         {
@@ -279,7 +279,11 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   The task dialog has just navigated to this page instance, but the <see cref="Created"/> event has not been raised yet.
+        ///   The property is set and the task dialog has started navigating to this page instance,
+        ///   but the <see cref="Created"/> event has not been raised yet.
+        ///   - or -
+        ///   The property is set on a page instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public string? Caption
         {
@@ -304,6 +308,10 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   The property is set on a page instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
+        /// </exception>
         public string? Heading
         {
             get => _heading;
@@ -336,6 +344,10 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   The property is set on a page instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
+        /// </exception>
         public string? Text
         {
             get => _text;
@@ -369,7 +381,11 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   The task dialog has just navigated to this page instance, but the <see cref="Created"/> event has not been raised yet.
+        ///   The property is set and the task dialog has started navigating to this page instance,
+        ///   but the <see cref="Created"/> event has not been raised yet.
+        ///   - or -
+        ///   The property is set on a page instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public unsafe TaskDialogIcon? Icon
         {
@@ -426,7 +442,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
+        ///   The property is set and this page instance is currently bound to a task dialog.
         /// </exception>
         public bool AllowCancel
         {
@@ -451,7 +467,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
+        ///   The property is set and this page instance is currently bound to a task dialog.
         /// </exception>
         public bool RightToLeftLayout
         {
@@ -474,7 +490,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
+        ///   The property is set and this page instance is currently bound to a task dialog.
         /// </exception>
         public bool AllowMinimize
         {
@@ -491,7 +507,7 @@ namespace System.Windows.Forms
         ///   its content area; otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
         /// </value>
         /// <exception cref="InvalidOperationException">
-        ///   This page instance is currently bound to a task dialog.
+        ///   The property is set and this page instance is currently bound to a task dialog.
         /// </exception>
         public bool SizeToContent
         {

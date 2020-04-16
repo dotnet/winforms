@@ -66,8 +66,11 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown.</para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   This expander instance is currently bound to a task dialog, but it's not visible as its initial
+        ///   The property is set on an expander instance that is currently bound to a task dialog, but it's not visible as its initial
         ///   <see cref="Text"/> property value was <see langword="null"/> or an empty string.
+        ///   - or -
+        ///   The property is set on an expander instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public string? Text
         {
@@ -106,7 +109,7 @@ namespace System.Windows.Forms
         ///   text provided by the operating system. The default value is <see langword="null"/>.
         /// </value>
         /// <exception cref="InvalidOperationException">
-        ///   This expander instance is currently bound to a task dialog.
+        ///   The property is set and this expander instance is currently bound to a task dialog.
         /// </exception>
         public string? ExpandedButtonText
         {
@@ -129,7 +132,7 @@ namespace System.Windows.Forms
         ///   text provided by the operating system. The default value is <see langword="null"/>.
         /// </value>
         /// <exception cref="InvalidOperationException">
-        ///   This expander instance is currently bound to a task dialog.
+        ///   The property is set and this expander instance is currently bound to a task dialog.
         /// </exception>
         public string? CollapsedButtonText
         {
@@ -151,7 +154,7 @@ namespace System.Windows.Forms
         ///   it's in the collapsed state. The default value is <see langword="false"/>.
         /// </value>
         /// <exception cref="InvalidOperationException">
-        ///   This expander instance is currently bound to a task dialog.
+        ///   The property is set and this expander instance is currently bound to a task dialog.
         /// </exception>
         public bool Expanded
         {
@@ -179,7 +182,7 @@ namespace System.Windows.Forms
         ///   <see cref="TaskDialogExpanderPosition.AfterText"/>.
         /// </value>
         /// <exception cref="InvalidOperationException">
-        ///   This expander instance is currently bound to a task dialog.
+        ///   The property is set and this expander instance is currently bound to a task dialog.
         /// </exception>
         public TaskDialogExpanderPosition Position
         {

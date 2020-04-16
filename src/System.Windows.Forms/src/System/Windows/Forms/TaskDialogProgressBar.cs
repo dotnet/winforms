@@ -61,10 +61,14 @@ namespace System.Windows.Forms
         ///   </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   The value is <c>TaskDialogProgressBarState.None</c> while the dialog is displayed.
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but the value
+        ///   to be set is <see cref="TaskDialogProgressBarState.None"/>.
         ///   - or -
-        ///   The task dialog has just navigated to a new page containing this progress bar instance, but the
-        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but it's not visible as its initial
+        ///   <see cref="State"/> property value was <see cref="TaskDialogProgressBarState.None"/>.
+        ///   - or -
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public TaskDialogProgressBarState State
         {
@@ -130,8 +134,11 @@ namespace System.Windows.Forms
         ///   The value is less than 0 or greater than <see cref="ushort.MaxValue" />.
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        ///   The task dialog has just navigated to a new page containing this progress bar instance, but the
-        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but it's not visible as its initial
+        ///   <see cref="State"/> property value was <see cref="TaskDialogProgressBarState.None"/>.
+        ///   - or -
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public int Minimum
         {
@@ -175,8 +182,11 @@ namespace System.Windows.Forms
         ///   The value is less than 0 or greater than <see cref="ushort.MaxValue" />.
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        ///   The task dialog has just navigated to a new page containing this progress bar instance, but the
-        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but it's not visible as its initial
+        ///   <see cref="State"/> property value was <see cref="TaskDialogProgressBarState.None"/>.
+        ///   - or -
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public int Maximum
         {
@@ -220,8 +230,11 @@ namespace System.Windows.Forms
         ///   The value is less than 0 or greater than <see cref="ushort.MaxValue" />.
         /// </exception>
         /// <exception cref="InvalidOperationException">
-        ///   The task dialog has just navigated to a new page containing this progress bar instance, but the
-        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but it's not visible as its initial
+        ///   <see cref="State"/> property value was <see cref="TaskDialogProgressBarState.None"/>.
+        ///   - or -
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public int Value
         {
@@ -277,8 +290,11 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   The task dialog has just navigated to a new page containing this progress bar instance, but the
-        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but it's not visible as its initial
+        ///   <see cref="State"/> property value was <see cref="TaskDialogProgressBarState.None"/>.
+        ///   - or -
+        ///   The property is set on a progress bar instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public int MarqueeSpeed
         {

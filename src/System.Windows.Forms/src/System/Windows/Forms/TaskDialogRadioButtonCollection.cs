@@ -29,6 +29,9 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="text">The text of the radio button.</param>
         /// <returns>The created <see cref="TaskDialogRadioButton"/>.</returns>
+        /// <exception cref="InvalidOperationException">
+        ///   This collection is currently bound to a task dialog.
+        /// </exception>
         public TaskDialogRadioButton Add(string? text)
         {
             var button = new TaskDialogRadioButton()
@@ -49,6 +52,8 @@ namespace System.Windows.Forms
         /// </exception>
         /// <exception cref="InvalidOperationException">
         ///   <paramref name="item"/> is already a part of a different collection.
+        ///   - or -
+        ///   This collection is currently bound to a task dialog.
         /// </exception>
         protected override void SetItem(int index, TaskDialogRadioButton item)
         {
@@ -90,6 +95,8 @@ namespace System.Windows.Forms
         /// </exception>
         /// <exception cref="InvalidOperationException">
         ///   <paramref name="item"/> is already a part of a different collection.
+        ///   - or -
+        ///   This collection is currently bound to a task dialog.
         /// </exception>
         protected override void InsertItem(int index, TaskDialogRadioButton item)
         {
@@ -113,6 +120,9 @@ namespace System.Windows.Forms
         }
 
         /// <inheritdoc/>
+        /// <exception cref="InvalidOperationException">
+        ///   This collection is currently bound to a task dialog.
+        /// </exception>
         protected override void RemoveItem(int index)
         {
             // Disallow collection modification, so that we don't need to copy it
@@ -126,6 +136,9 @@ namespace System.Windows.Forms
         }
 
         /// <inheritdoc/>
+        /// <exception cref="InvalidOperationException">
+        ///   This collection is currently bound to a task dialog.
+        /// </exception>
         protected override void ClearItems()
         {
             // Disallow collection modification, so that we don't need to copy it

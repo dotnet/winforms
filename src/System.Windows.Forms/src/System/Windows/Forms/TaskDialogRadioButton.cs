@@ -53,14 +53,15 @@ namespace System.Windows.Forms
         ///   This property can be set while the dialog is shown.
         /// </para>
         /// </remarks>
+        /// <exception cref="InvalidOperationException">
+        ///   The property is set on a radio button that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
+        /// </exception>
         public bool Enabled
         {
             get => _enabled;
             set
             {
-                DenyIfBoundAndNotCreated(); // Shouldn't throw here as the control must have been created.
-
-                // Check if we can update the button.
                 if (CanUpdate())
                 {
                     BoundPage!.BoundDialog!.SetRadioButtonEnabled(_radioButtonID, value);
@@ -82,7 +83,9 @@ namespace System.Windows.Forms
         ///   the dialog; otherwise the operation will fail.
         /// </para>
         /// </remarks>
-        /// <exception cref="InvalidOperationException">This radio button instance is currently bound to a task dialog.</exception>
+        /// <exception cref="InvalidOperationException">
+        ///   The property is set and this radio button instance is currently bound to a task dialog.
+        /// </exception>
         public string? Text
         {
             get => _text;
@@ -109,12 +112,16 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         /// <exception cref="InvalidOperationException">
-        ///   The task dialog has just navigated to a new page containing this radio button instance, but the
-        ///   <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+        ///   The property is set and the task dialog has started navigating to a new page containing this radio button instance,
+        ///   but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
         ///   - or -
-        ///   The value <see langword="false"/> is to be set, but this radio button instance is currently bound to a task dialog.
+        ///   The property is set on a radio button instance that is currently bound to a task dialog,
+        ///   but the value to be set is <see langword="false"/>.
         ///   - or -
-        ///   This property is set within the <see cref="CheckedChanged"/> event of one of the radio buttons of the currently bound task dialog.
+        ///   The property is set within the <see cref="CheckedChanged"/> event of one of the radio buttons of the currently bound task dialog.
+        ///   - or -
+        ///   The property is set on a radio button instance that is currently bound to a task dialog, but the dialog
+        ///   has just started navigating to a different page.
         /// </exception>
         public bool Checked
         {
@@ -315,11 +322,11 @@ namespace System.Windows.Forms
 
         private bool CanUpdate()
         {
-            // Only update the button when bound to a task dialog and we are not
-            // waiting for the Navigated event. In the latter case we don't throw
-            // an exception however, because ApplyInitialization() will be called
-            // in the Navigated handler that does the necessary updates.
-            return BoundPage?.WaitingForInitialization == false;
+            // Only update the button when bound to a task dialog, the button has actually been
+            // created, and we are not waiting for the Navigated event. In the latter case we
+            // don't throw an exception however, because ApplyInitialization() will be called in
+            // the Navigated handler that does the necessary updates.
+            return BoundPage?.WaitingForInitialization == false && IsCreated;
         }
 
         private void OnCheckedChanged(EventArgs e) => CheckedChanged?.Invoke(this, e);

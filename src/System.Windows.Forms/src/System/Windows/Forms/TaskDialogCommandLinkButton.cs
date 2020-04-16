@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         ///   line.
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        ///   This button instance is currently bound to a task dialog.
+        ///   The property is set and this button instance is currently bound to a task dialog.
         /// </exception>
         public string? DescriptionText
         {
