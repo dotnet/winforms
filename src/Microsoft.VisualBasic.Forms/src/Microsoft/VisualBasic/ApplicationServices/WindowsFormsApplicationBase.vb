@@ -162,38 +162,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     End Class
 
     ''' <summary>
-    ''' Exception for when we launch a Single-Instance application and it can't connect with the
-    ''' original instance.
-    ''' </summary>
-    ''' <remarks></remarks>
-    <EditorBrowsableAttribute(EditorBrowsableState.Never)>
-    <Serializable()>
-    Public Class CantGetSingleInstanceMutexException : Inherits Exception
-        ''' <summary>
-        '''  Creates a new exception
-        ''' </summary>
-        ''' <remarks></remarks>
-        Public Sub New()
-            MyBase.New(SR.AppModel_SingleInstanceMutexTimeout)
-        End Sub
-
-        Public Sub New(message As String)
-            MyBase.New(message)
-        End Sub
-
-        Public Sub New(message As String, innerException As Exception)
-            MyBase.New(message, innerException)
-        End Sub
-
-        ' De-serialization constructor must be defined since we are serializable
-        <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)>
-        Protected Sub New(info As SerializationInfo, context As System.Runtime.Serialization.StreamingContext)
-            MyBase.New(info, context)
-        End Sub
-
-    End Class
-
-    ''' <summary>
     ''' Provides the infrastructure for the VB Windows Forms application model
     ''' </summary>
     ''' <remarks>Don't put access on this definition.</remarks>
