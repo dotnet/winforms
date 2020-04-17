@@ -10,19 +10,19 @@ Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 Imports System.Diagnostics
 Imports System.Globalization
+Imports System.IO.Pipes
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports System.Runtime.Serialization
 Imports System.Runtime.Versioning
 Imports System.Security
 Imports System.Security.AccessControl
 Imports System.Security.Permissions
+Imports System.Security.Principal
 Imports System.Threading
-Imports Microsoft.Win32.SafeHandles
+Imports System.Xml
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.Utils
-Imports System.IO.Pipes
-Imports System.Security.Principal
-Imports System.Xml.Serialization
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -162,13 +162,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     End Class
 
     ''' <summary>
-    ''' Exception for when we launch a single-instance application and it can't connect with the
+    ''' Exception for when we launch a Single-Instance application and it can't connect with the
     ''' original instance.
     ''' </summary>
     ''' <remarks></remarks>
     <EditorBrowsableAttribute(EditorBrowsableState.Never)>
     <Serializable()>
-    Public Class CantGetSingleInstanceExceptionMutex : Inherits Exception
+    Public Class CantGetSingleInstanceMutexException : Inherits Exception
         ''' <summary>
         '''  Creates a new exception
         ''' </summary>
@@ -181,15 +181,16 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             MyBase.New(message)
         End Sub
 
-        Public Sub New(ByVal message As String, ByVal inner As System.Exception)
-            MyBase.New(message, inner)
+        Public Sub New(message As String, innerException As Exception)
+            MyBase.New(message, innerException)
         End Sub
 
-        ' Deserialization constructor must be defined since we are serializable
+        ' De-serialization constructor must be defined since we are serializable
         <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)>
-        Protected Sub New(ByVal info As System.Runtime.Serialization.SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
+        Protected Sub New(ByVal info As SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
         End Sub
+
     End Class
 
     ''' <summary>
@@ -331,51 +332,41 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             'Prime the command line args with what we receive from Main() so that Click-Once windows apps don't have to do a System.Environment call which would require permissions.
             InternalCommandLine = New ReadOnlyCollection(Of String)(commandLine)
 
-            'Is this a single-instance application?
             If Not IsSingleInstance Then
                 DoApplicationModel() 'This isn't a Single-Instance application
                 Exit Sub
             End If
+            Stop
             'This is a Single-Instance application
-            'Note: Must pass the calling assembly from here so we can get the running app.  Otherwise, can break single instance
+            'Note: Must pass the calling assembly from here so we can get the running app.  Otherwise, can break Single-Instance.
             _namedPipeID = GetApplicationInstanceID(Assembly.GetCallingAssembly) & "NamedPipe"
             ' Create a Mutex - If _FirstInstance
             Dim _FirstInstance As Boolean = False
-            _mutexSingleInstance = New Mutex(initiallyOwned:=True, _namedPipeID, createdNew:=_FirstInstance)
+            Try
+                _mutexSingleInstance = New Mutex(initiallyOwned:=True, _namedPipeID, createdNew:=_FirstInstance)
 
-            If _FirstInstance Then
-                Try
-                    TryNamedPipeServerCreateServer()
+                If _FirstInstance Then
+                    namedPipeServerCreateServer()
                     _mutexSingleInstance.ReleaseMutex()
                     ' We are the first instance with the named pipe server listening and allow the form to load
                     ' Begin async wait for connections
                     DoApplicationModel()
-                Finally
-                    If _namedPipeServerStream IsNot Nothing AndAlso _namedPipeServerStream.IsConnected Then
+                    Exit Sub
+                End If
+                ' We are not the first instance send payload And stop loading
+                ' Notify first instance by sending args
+                namedPipeClientSendOptions(_namedPipeID, Environment.GetCommandLineArgs())
+            Finally
+                If _namedPipeServerStream IsNot Nothing Then
+                    If _namedPipeServerStream.IsConnected Then
                         _namedPipeServerStream.Close()
-                        _namedPipeServerStream = Nothing
                     End If
-                    If _FirstInstance Then
-                        _mutexSingleInstance.Dispose()
-                        _mutexSingleInstance = Nothing
-                    End If
-                End Try
-                Exit Sub
-            End If
-            _mutexSingleInstance.WaitOne()
-            ' We are not the first instance, send the named pipe message with our payload and stop loading
-            Dim _NamedPipeXmlData As New NamedPipeXMLData With
-                {
-                .CommandLineArguments = Environment.GetCommandLineArgs().ToList()
-                }
-            ' Notify first instance by sending args
-            NamedPipeClientSendOptions(_NamedPipeXmlData)
-            _mutexSingleInstance.ReleaseMutex()
-            _mutexSingleInstance.Dispose()
-            _mutexSingleInstance = Nothing
-            If _namedPipeServerStream IsNot Nothing Then
-                _namedPipeServerStream.Dispose()
-            End If
+                    _namedPipeServerStream.Dispose()
+                End If
+                If _FirstInstance Then
+                    _mutexSingleInstance.Dispose()
+                End If
+            End Try
             OnShutdown()
         End Sub
 
@@ -707,15 +698,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Property IsSingleInstance() As Boolean
-            Get
-                Return _isSingleInstance
-            End Get
-            Set(value As Boolean)
-                If value Then
-                    _isSingleInstance = value
-                End If
-            End Set
-        End Property
 
         ''' <summary>
         ''' Validates that the value being passed as an AuthenticationMode enum is a legal value
@@ -872,7 +854,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _mutexSingleInstance As Mutex
         Private _namedPipeID As String
         Private _namedPipeServerStream As NamedPipeServerStream
-        Private _isSingleInstance As Boolean
 
         ''' <summary>
         ''' Runs the user's program through the VB Startup/Shutdown application model
@@ -933,7 +914,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Permissions.AddPermission(New SecurityPermission(SecurityPermissionFlag.UnmanagedCode))
             Permissions.Assert()
 
-            Dim Guid As Guid = GetTypeLibGuidForAssembly(Entry)
+            Dim Guid As Guid = getTypeLibGuidForAssembly(Entry)
             If Guid = Nothing Then
                 Return Entry.ManifestModule.ModuleVersionId.ToString
             End If
@@ -944,9 +925,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             'Re: version parts, we have the major, minor, build, revision. We key off major+minor.
             Return Guid.ToString + VersionParts(0) + "." + VersionParts(1)
         End Function
-
-        Private Function GetTypeLibGuidForAssembly(_assembly As Assembly) As Guid
-            Dim CustomAttributes As Object() = _assembly.GetCustomAttributes(GetType(GuidAttribute), True)
+        ''' <summary>
+        ''' This function replaces a function from Framework with
+        ''' same name. It relies on Visual Studio setting an GUID attribute
+        ''' which is not done for Core applications
+        ''' </summary>
+        ''' <param name="assembly"></param>
+        ''' <returns></returns>
+        Private Shared Function getTypeLibGuidForAssembly(assembly As Assembly) As Guid
+            Dim CustomAttributes As Object() = assembly.GetCustomAttributes(GetType(GuidAttribute), True)
             If CustomAttributes.Any Then
                 Dim attribute As GuidAttribute = CType(CustomAttributes(0), GuidAttribute)
                 Return New Guid(attribute.Value)
@@ -955,45 +942,57 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         ''' <summary>
-        '''     Uses a named pipe to send the currently parsed options to an already running instance.
+        ''' Uses a named pipe to send the currently parsed options to an already running instance.
         ''' </summary>
-        ''' <param name="namedPipePayload"></param>
-        Private Sub NamedPipeClientSendOptions(namedPipePayload As NamedPipeXMLData)
+        ''' <param name="commandLineArgs"></param>
+        Private Sub namedPipeClientSendOptions(namedPipeID As String, commandLineArgs() As String)
             Try
-                Using _namedPipeClientStream As New NamedPipeClientStream(".", _namedPipeID, PipeDirection.Out)
-                    _namedPipeClientStream.Connect(3000)
+                ' We are not the first instance, send the named pipe message with our payload and stop loading
+                Using namedClientStream As New NamedPipeClientStream(".", namedPipeID, PipeDirection.Out)
+                    _mutexSingleInstance.WaitOne()
                     ' Maximum wait 3 seconds
+                    namedClientStream.Connect(3000)
+                    _mutexSingleInstance.ReleaseMutex()
 
-                    Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
-                    _xmlSerializer.Serialize(_namedPipeClientStream, namedPipePayload)
+                    Dim serializer As New DataContractSerializer(GetType(NamedPipeXmlData))
+                    serializer.WriteObject(namedClientStream, New NamedPipeXmlData With
+                            {
+                            .CommandLineArguments = commandLineArgs
+                            })
                 End Using
-            Catch ex As Exception
+            Catch
                 ' Error connecting or sending
+                _mutexSingleInstance.ReleaseMutex()
             End Try
         End Sub
 
         ''' <summary>
         '''     The function called when a client connects to the named pipe. Note: This method is called on a non-UI thread.
         ''' </summary>
-        ''' <param name="_iAsyncResult"></param>
-        Private Sub NamedPipeServerConnectionCallback(_iAsyncResult As IAsyncResult)
+        ''' <param name="iAsyncResult"></param>
+        Private Sub namedPipeServerConnectionCallback(iAsyncResult As IAsyncResult)
             Try
+                If MainForm Is Nothing Then
+                    ' This can happen when app is closing
+                    Exit Sub
+                End If
                 ' Mutex access needs to be on UI thread
                 MainForm.Invoke(Sub()
                                     If _mutexSingleInstance.WaitOne(5000) Then
                                         ' End waiting for the connection
-                                        _namedPipeServerStream.EndWaitForConnection(_iAsyncResult)
+                                        _namedPipeServerStream.EndWaitForConnection(iAsyncResult)
                                         ' Read data and prevent access to _NamedPipeXmlData during threaded operations
-                                        Dim _xmlSerializer As New XmlSerializer(GetType(NamedPipeXMLData))
-                                        Dim _namedPipeXmlData As NamedPipeXMLData = CType(_xmlSerializer.Deserialize(_namedPipeServerStream), NamedPipeXMLData)
+                                        Dim serializer As New DataContractSerializer(GetType(NamedPipeXmlData))
+                                        Dim reader As XmlReader = XmlReader.Create(_namedPipeServerStream)
+                                        Dim _namedPipeXmlData As NamedPipeXmlData = CType(serializer.ReadObject(reader), NamedPipeXmlData)
                                         Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(_namedPipeXmlData.CommandLineArguments), bringToForegroundFlag:=True)
                                         _namedPipeServerStream.Disconnect()
-                                        _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
+                                        _namedPipeServerStream.BeginWaitForConnection(AddressOf namedPipeServerConnectionCallback, _namedPipeServerStream)
 
                                         _mutexSingleInstance.ReleaseMutex()
                                         OnStartupNextInstance(remoteEventArgs)
                                     Else
-                                        Throw New CantGetSingleInstanceExceptionMutex
+                                        Throw New Exception("Cant get Single Instance Mutex")
                                     End If
                                 End Sub)
                 ' Create a new pipe for next connection
@@ -1011,27 +1010,27 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         ''' Starts a new pipe server if one isn't already active.
         ''' </summary>
-        Private Sub TryNamedPipeServerCreateServer()
+        Private Sub namedPipeServerCreateServer()
             ' Create a new pipe accessible by local authenticated users, disallow network
             'var sidAuthUsers = new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null);
             Dim sidNetworkService As New SecurityIdentifier(WellKnownSidType.NetworkServiceSid, Nothing)
             Dim sidWorld As New SecurityIdentifier(WellKnownSidType.WorldSid, Nothing)
 
-            Dim _pipeSecurity As New PipeSecurity
+            Dim pipeSecurity As New PipeSecurity
 
             ' Deny network access to the pipe
             Dim accessRule As New PipeAccessRule(sidNetworkService, PipeAccessRights.ReadWrite, AccessControlType.Deny)
-            _pipeSecurity.AddAccessRule(accessRule)
+            pipeSecurity.AddAccessRule(accessRule)
 
             ' Allow Everyone to read/write
             accessRule = New PipeAccessRule(sidWorld, PipeAccessRights.ReadWrite, AccessControlType.Allow)
-            _pipeSecurity.AddAccessRule(accessRule)
+            pipeSecurity.AddAccessRule(accessRule)
 
             ' Current user is the owner
             Dim sidOwner As SecurityIdentifier = WindowsIdentity.GetCurrent().Owner
             If sidOwner IsNot Nothing Then
                 accessRule = New PipeAccessRule(sidOwner, PipeAccessRights.FullControl, AccessControlType.Allow)
-                _pipeSecurity.AddAccessRule(accessRule)
+                pipeSecurity.AddAccessRule(accessRule)
             End If
 
             Try
@@ -1046,7 +1045,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         outBufferSize:=0)
                 ' We are the first instance with the named pipe server listening and allow the form to load
                 ' Begin async wait for connections
-                _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
+                _namedPipeServerStream.BeginWaitForConnection(AddressOf namedPipeServerConnectionCallback, _namedPipeServerStream)
             Catch ex As Exception
             End Try
         End Sub

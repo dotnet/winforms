@@ -40,10 +40,10 @@ namespace VisualBasicRuntimeTest
                         Interaction_MsgBox(useVbHost: true);
                         break;
                     case "WindowsFormsApplicationBase.Run":
-                        WindowsFormsApplicationBase_Run();
+                        WindowsFormsApplicationBase_Run(useSingleInstance: false);
                         break;
                     case "WindowsFormsApplicationBase.RunSingleInstance":
-                        WindowsFormsApplicationBase_RunSingleInstance();
+                        WindowsFormsApplicationBase_Run(useSingleInstance: true);
                         break;
                     case "ProgressDialog.ShowProgressDialog":
                         ProgressDialog_ShowProgressDialog();
@@ -75,10 +75,10 @@ namespace VisualBasicRuntimeTest
             Interaction.MsgBox(Prompt: "Message", Buttons: MsgBoxStyle.OkCancel, Title: "Title");
         }
 
-        private static void WindowsFormsApplicationBase_Run()
+        private static void WindowsFormsApplicationBase_Run(bool useSingleInstance )
         {
             var mainForm = new Form();
-            var application = new WindowsApplication(mainForm, false);
+            var application = new WindowsApplication(mainForm, useSingleInstance);
             bool valid = false;
 
             mainForm.Load += (object sender, EventArgs e) =>
@@ -99,37 +99,6 @@ namespace VisualBasicRuntimeTest
                 throw new InvalidOperationException();
             }
         }
-        private static void WindowsFormsApplicationBase_RunSingleInstance()
-        {
-            var mainForm = new Form();
-            var application = new WindowsApplication(mainForm, true);
-
-            bool valid = false;
-
-            application.StartupNextInstance += (object sender, StartupNextInstanceEventArgs e) =>
-            {
-                // this needs testing
-            };
-
-            mainForm.Load += (object sender, EventArgs e) =>
-            {
-                var forms = application.OpenForms;
-                valid = forms.Count == 1 &&
-                    forms[0] == mainForm &&
-                    application.ApplicationContext.MainForm == mainForm;
-                if (!valid)
-                {
-                    mainForm.Close();
-                }
-            };
-
-            application.Run(new string[0]);
-            if (!valid)
-            {
-                throw new InvalidOperationException();
-            }
-        }
-
         private static void ProgressDialog_ShowProgressDialog()
         {
             var dialogType = typeof(ApplicationBase).Assembly.GetType("Microsoft.VisualBasic.MyServices.Internal.ProgressDialog");

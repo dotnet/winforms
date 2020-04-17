@@ -45,6 +45,7 @@ namespace Microsoft.VisualBasic.IntegrationTests
             TestHelpers.EndProcess(ProcessList[0], timeout: 1000);
             Assert.True(ProcessList[0].HasExited, "First Instance didn't exit");
         }
+
         [Fact]
         public void Run_NoStartupFormException()
         {

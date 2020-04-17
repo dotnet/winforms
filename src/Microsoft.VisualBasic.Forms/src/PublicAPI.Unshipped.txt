@@ -1,9 +1,7 @@
-Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceExceptionMutex
-Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceExceptionMutex.New() -> Void
-Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceExceptionMutex.New(info As System.Runtime.Serialization.SerializationInfo, context As System.Runtime.Serialization.StreamingContext) -> Void
-Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceExceptionMutex.New(message As String) -> Void
-Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceExceptionMutex.New(message As String, inner As System.Exception) -> Void
-Microsoft.VisualBasic.ApplicationServices.NamedPipeXMLData
-Microsoft.VisualBasic.ApplicationServices.NamedPipeXMLData.CommandLineArguments(AutoPropertyValue As System.Collections.Generic.List(Of String)) -> Void
-Microsoft.VisualBasic.ApplicationServices.NamedPipeXMLData.New() -> Void
+Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceMutexException
+Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceMutexException.New() -> Void
+Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceMutexException.New(info As System.Runtime.Serialization.SerializationInfo, context As System.Runtime.Serialization.StreamingContext) -> Void
+Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceMutexException.New(message As String) -> Void
+Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceMutexException.New(message As String, innerException As System.Exception) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.IsSingleInstance(AutoPropertyValue As Boolean) -> Void
 Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.GetApplicationInstanceID(Entry As System.Reflection.Assembly) -> String
