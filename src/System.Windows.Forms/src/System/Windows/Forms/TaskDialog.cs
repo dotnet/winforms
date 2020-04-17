@@ -86,7 +86,6 @@ namespace System.Windows.Forms
         private static readonly ComCtl32.PFTASKDIALOGCALLBACK s_callbackProcDelegate =
             HandleTaskDialogNativeCallback;
 
-        private TaskDialogPage? _currentPage;
         private TaskDialogPage? _boundPage;
 
         /// <summary>
@@ -425,7 +424,6 @@ namespace System.Windows.Forms
             }
 
             page.Validate();
-            _currentPage = page;
 
             // Allocate a GCHandle which we will use for the callback data.
             var instanceHandle = GCHandle.Alloc(this);
@@ -1183,82 +1181,73 @@ namespace System.Windows.Forms
                 _isInNavigate = false;
             }
 
-            TaskDialogPage previousPage = _currentPage!;
-            _currentPage = page;
+            // Note: We don't unbind the previous page here - this will be done
+            // when the TDN_NAVIGATED notification occurs, because technically
+            // the controls of both the previous page AND the new page exist
+            // on the native Task Dialog until the TDN_NAVIGATED notification
+            // occurs, and the dialog behaves as if it currently still showing
+            // the previous page (which can be verified using the behavior of
+            // the "Help" button, where simulating a click to that button will
+            // raise the "Help" event if the dialog considers the button to
+            // be shown, and otherwise will close the dialog without raising
+            // the "Help" event; also, if you updated e.g. the dialog's text or
+            // instruction during that time, these changes would be lost when
+            // the TDN_NAVIGATED notification occurs).
+            BindPageAndAllocateConfig(
+                page,
+                IntPtr.Zero,
+                startupLocation: default,
+                out IntPtr ptrToFree,
+                out ComCtl32.TASKDIALOGCONFIG* ptrTaskDialogConfig);
             try
             {
-                // Note: We don't unbind the previous page here - this will be done
-                // when the TDN_NAVIGATED notification occurs, because technically
-                // the controls of both the previous page AND the new page exist
-                // on the native Task Dialog until the TDN_NAVIGATED notification
-                // occurs, and the dialog behaves as if it currently still showing
-                // the previous page (which can be verified using the behavior of
-                // the "Help" button, where simulating a click to that button will
-                // raise the "Help" event if the dialog considers the button to
-                // be shown, and otherwise will close the dialog without raising
-                // the "Help" event; also, if you updated e.g. the dialog's text or
-                // instruction during that time, these changes would be lost when
-                // the TDN_NAVIGATED notification occurs).
-                BindPageAndAllocateConfig(
-                    page,
-                    IntPtr.Zero,
-                    startupLocation: default,
-                    out IntPtr ptrToFree,
-                    out ComCtl32.TASKDIALOGCONFIG* ptrTaskDialogConfig);
+                // Enqueue the page before sending the message. This ensures
+                // that if the native task dialog's behavior is ever changed
+                // to raise the TDN_NAVIGATED notification recursively from
+                // sending the TDM_NAVIGATE_PAGE message, we can correctly
+                // process the page in the callback.
+                _waitingNavigationPages.Enqueue(page);
                 try
                 {
-                    // Enqueue the page before sending the message. This ensures
-                    // that if the native task dialog's behavior is ever changed
-                    // to raise the TDN_NAVIGATED notification recursively from
-                    // sending the TDM_NAVIGATE_PAGE message, we can correctly
-                    // process the page in the callback.
-                    _waitingNavigationPages.Enqueue(page);
-                    try
-                    {
-                        // Note: If the task dialog cannot be recreated with the
-                        // new page, the dialog will close and TaskDialogIndirect()
-                        // returns with an error code; but this will not be
-                        // noticeable in the SendMessage() return value.
-                        SendTaskDialogMessage(
-                            ComCtl32.TDM.NAVIGATE_PAGE,
-                            IntPtr.Zero,
-                            (IntPtr)ptrTaskDialogConfig,
-                            checkWaitingForNavigation: false);
-                    }
-                    catch
-                    {
-                        // Since navigation failed, we need to remove our page
-                        // from the queue.
-                        // However, this should not happen because
-                        // SendTaskDialogMessage() shouldn't throw here.
-                        int originalCount = _waitingNavigationPages.Count;
-                        for (int i = 0; i < originalCount; i++)
-                        {
-                            TaskDialogPage element = _waitingNavigationPages.Dequeue();
-                            if (element != page)
-                            {
-                                _waitingNavigationPages.Enqueue(element);
-                            }
-                        }
-                        throw;
-                    }
+                    // Note: If the task dialog cannot be recreated with the
+                    // new page, the dialog will close and TaskDialogIndirect()
+                    // returns with an error code; but this will not be
+                    // noticeable in the SendMessage() return value.
+                    SendTaskDialogMessage(
+                        ComCtl32.TDM.NAVIGATE_PAGE,
+                        IntPtr.Zero,
+                        (IntPtr)ptrTaskDialogConfig,
+                        checkWaitingForNavigation: false);
                 }
                 catch
                 {
-                    page.Unbind();
+                    // Since navigation failed, we need to remove our page
+                    // from the queue.
+                    // However, this should not happen because
+                    // SendTaskDialogMessage() shouldn't throw here.
+                    int originalCount = _waitingNavigationPages.Count;
+                    for (int i = 0; i < originalCount; i++)
+                    {
+                        TaskDialogPage element = _waitingNavigationPages.Dequeue();
+                        if (element != page)
+                        {
+                            _waitingNavigationPages.Enqueue(element);
+                        }
+                    }
+
                     throw;
-                }
-                finally
-                {
-                    // We can now free the memory because SendMessage does not
-                    // return until the message has been processed.
-                    FreeConfig(ptrToFree);
                 }
             }
             catch
             {
-                _currentPage = previousPage;
+                page.Unbind();
                 throw;
+            }
+            finally
+            {
+                // We can now free the memory because SendMessage does not
+                // return until the message has been processed.
+                FreeConfig(ptrToFree);
             }
         }
 
