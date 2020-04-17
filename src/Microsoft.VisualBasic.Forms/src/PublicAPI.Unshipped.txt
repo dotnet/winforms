@@ -1,6 +1,6 @@
-Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.CantStartSingleInstanceException
-Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.CantStartSingleInstanceException.New() -> Void
-Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.CantStartSingleInstanceException.New(info As System.Runtime.Serialization.SerializationInfo, context As System.Runtime.Serialization.StreamingContext) -> Void
-Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.CantStartSingleInstanceException.New(message As String) -> Void
-Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.CantStartSingleInstanceException.New(message As String, inner As System.Exception) -> Void
+Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException
+Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New() -> Void
+Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New(info As System.Runtime.Serialization.SerializationInfo, context As System.Runtime.Serialization.StreamingContext) -> Void
+Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New(message As String) -> Void
+Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New(message As String, inner As System.Exception) -> Void
 Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.GetApplicationInstanceID(Entry As System.Reflection.Assembly) -> String

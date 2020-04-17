@@ -163,6 +163,33 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     End Class
 
     ''' <summary>
+    ''' Exception for when we launch a single-instance application and it can't connect with the
+    ''' original instance.
+    ''' </summary>
+    <EditorBrowsable(EditorBrowsableState.Never)>
+    <Serializable()>
+    Public Class CantStartSingleInstanceException : Inherits Exception
+
+        Public Sub New()
+            MyBase.New(SR.AppModel_SingleInstanceCantConnect)
+        End Sub
+
+        Public Sub New(message As String)
+            MyBase.New(message)
+        End Sub
+
+        Public Sub New(ByVal message As String, ByVal inner As Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ' De-serialization constructor must be defined since we are serializable
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Protected Sub New(ByVal info As SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
+
+    ''' <summary>
     ''' Provides the infrastructure for the VB Windows Forms application model
     ''' </summary>
     ''' <remarks>Don't put access on this definition.</remarks>
@@ -246,38 +273,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
             End RaiseEvent
         End Event
-
-        ''' <summary>
-        ''' Exception for when we launch a single-instance application and it can't connect with the
-        ''' original instance.
-        ''' </summary>
-        ''' <remarks></remarks>
-        <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)>
-        <System.Serializable()>
-        Public Class CantStartSingleInstanceException : Inherits System.Exception
-
-            ''' <summary>
-            '''  Creates a new exception
-            ''' </summary>
-            ''' <remarks></remarks>
-            Public Sub New()
-                MyBase.New(SR.AppModel_SingleInstanceCantConnect)
-            End Sub
-
-            Public Sub New(ByVal message As String)
-                MyBase.New(message)
-            End Sub
-
-            Public Sub New(ByVal message As String, ByVal inner As System.Exception)
-                MyBase.New(message, inner)
-            End Sub
-
-            ' De-serialization constructor must be defined since we are serializable
-            <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)>
-            Protected Sub New(ByVal info As System.Runtime.Serialization.SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
-                MyBase.New(info, context)
-            End Sub
-        End Class
 
         ''' <summary>
         ''' Constructs the application Shutdown/Startup model object
