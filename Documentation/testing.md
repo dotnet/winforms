@@ -98,6 +98,68 @@ Tests are built and executed by file name convention
     }  
   ```
   
+#### Theory tests
+
+Quite often there may be multiple tests that test exectly the same functionality but with different input parameters (e.g. `null`, `""`, `" "` for a `string` argument). 
+In such cases instead of creating multiple tests it is preferred to have a theory test, which is in another words a data-driven test.
+
+When writing theories note the following:
+
+1. theory test must be [correctly decorated](#Decoration)
+
+2. theories must avoid creating UI controls. E.g. instead of writing:
+    ```cs
+    public static IEnumerable<object[]> GetButton_TestData()
+    {
+        yield return new object[] { new Button() };
+        yield return new object[] { new Button() { Text = "bla" } };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(GetButton_TestData))]
+    public void Ctor_Control_DataGridViewCellStyle(Button button) { ... }
+    ```
+    prefer the following:
+    ```cs
+    public static IEnumerable<object[]> GetButton_TestData()
+    {
+        yield return new object[] { string.Empty };
+        yield return new object[] { "bla" };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(GetButton_TestData))]
+    public void Ctor_Control_DataGridViewCellStyle(string buttonText) 
+    { 
+        using var button = new Button() { Text = buttonText };
+        ...
+    }    
+    ```
+  
+3. theories must not reuse disposable components.<br />
+  In situations where following the above recommentation could be impractical, it is maybe acceptable to create disposable controls for each theory data, e.g.:
+    ```cs
+    public static IEnumerable<object[]> GetButton_TestData()
+    {
+        yield return new object[] { new Button(), new DataGridViewCellStyle() };
+        yield return new object[] { new Button() { Text = "bla" }, new DataGridViewCellStyle() };
+    }
+    ```
+    xUnit tries its best to [dispose](https://github.com/xunit/xunit/blob/56476a9691bb061661190b183733c5d8a2c6ef4d/src/xunit.execution/Sdk/Frameworks/TestMethodTestCase.cs#L191-L197) of disposable objects.
+    However objects must not be shared across theories, as it could lead to unknown state, e.g.
+    ```cs
+    // ** DO NOT DO THIS! **
+    public static IEnumerable<object[]> GetButton_TestData()
+    {
+        var button = new Button();
+        yield return new object[] { button, new DataGridViewCellStyle() };
+        yield return new object[] { button { Text = "bla" }, new DataGridViewCellStyle() }; // the button could already be disposed by the time this theory runs
+    }
+    ```
+
+
+Also be beware and be midful of VS-specific behaviours: https://xunit.net/faq/theory-data-stability-in-vs
+  
 ### Throw unhandled exceptions
 
 We have been observed unexplainable hanging tests. To get better handle on the situation we have started trapping `ThreadException`s.
