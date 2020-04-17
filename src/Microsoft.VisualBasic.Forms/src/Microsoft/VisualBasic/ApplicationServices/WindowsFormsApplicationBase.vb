@@ -698,6 +698,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Property IsSingleInstance() As Boolean
+            Get
+                Return _isSingleInstance
+            End Get
+            Set(value As Boolean)
+                If value Then
+                    _isSingleInstance = value
+                End If
+            End Set
+        End Property
 
         ''' <summary>
         ''' Validates that the value being passed as an AuthenticationMode enum is a legal value
@@ -851,6 +860,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private m_NetworkAvailChangeLock As New Object 'sync object
         Private m_SaveMySettingsOnExit As Boolean 'Informs My.Settings whether to save the settings on exit or not
 
+        Private _isSingleInstance As Boolean
         Private _mutexSingleInstance As Mutex
         Private _namedPipeID As String
         Private _namedPipeServerStream As NamedPipeServerStream

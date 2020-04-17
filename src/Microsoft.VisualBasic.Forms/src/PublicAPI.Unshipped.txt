@@ -3,5 +3,4 @@ Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceMutexException.Ne
 Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceMutexException.New(info As System.Runtime.Serialization.SerializationInfo, context As System.Runtime.Serialization.StreamingContext) -> Void
 Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceMutexException.New(message As String) -> Void
 Microsoft.VisualBasic.ApplicationServices.CantGetSingleInstanceMutexException.New(message As String, innerException As System.Exception) -> Void
-Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.IsSingleInstance(AutoPropertyValue As Boolean) -> Void
 Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.GetApplicationInstanceID(Entry As System.Reflection.Assembly) -> String
