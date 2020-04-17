@@ -7,6 +7,11 @@
         <target state="translated">尚未指定啟動表單。</target>
         <note />
       </trans-unit>
+      <trans-unit id="AppModel_SingleInstanceMutexTimeout">
+        <source>Can't start Single Instance, MutexTimeout</source>
+        <target state="new">Can't start Single Instance, MutexTimeout</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AppModel_SplashAndMainFormTheSame">
         <source>Splash screen and main form cannot be the same form.</source>
         <target state="translated">啟動顯示畫面和主要表單不能是同樣的表單。</target>

@@ -7,6 +7,11 @@
         <target state="translated">未指定启动窗体。</target>
         <note />
       </trans-unit>
+      <trans-unit id="AppModel_SingleInstanceMutexTimeout">
+        <source>Can't start Single Instance, MutexTimeout</source>
+        <target state="new">Can't start Single Instance, MutexTimeout</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AppModel_SplashAndMainFormTheSame">
         <source>Splash screen and main form cannot be the same form.</source>
         <target state="translated">初始屏幕和主窗体不能是同一个窗体。</target>
