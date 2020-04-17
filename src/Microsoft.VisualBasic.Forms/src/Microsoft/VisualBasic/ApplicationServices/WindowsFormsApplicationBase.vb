@@ -177,7 +177,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             MyBase.New(SR.AppModel_SingleInstanceMutexTimeout)
         End Sub
 
-        Public Sub New(ByVal message As String)
+        Public Sub New(message As String)
             MyBase.New(message)
         End Sub
 
@@ -187,7 +187,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' De-serialization constructor must be defined since we are serializable
         <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)>
-        Protected Sub New(ByVal info As SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
+        Protected Sub New(info As SerializationInfo, context As System.Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
         End Sub
 
@@ -530,8 +530,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             If eventArgs Is Nothing Then
                 Throw New ArgumentNullException(NameOf(eventArgs))
             End If
-            ' Review is the next statement needed
-            ' RaiseEvent StartupNextInstance(Me, eventArgs)
+            RaiseEvent StartupNextInstance(Me, eventArgs)
             ' Activate the original instance
             Call New UIPermission(UIPermissionWindow.SafeSubWindows Or UIPermissionWindow.SafeTopLevelWindows).Assert()
             If eventArgs.BringToForeground = True AndAlso Me.MainForm IsNot Nothing Then

@@ -7,9 +7,9 @@ Imports System.Runtime.Serialization
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     <DataContract>
-    Friend NotInheritable Class NamedPipeXmlData
+    Friend Structure NamedPipeXmlData
         <DataMember>
         Public Property CommandLineArguments As String()
-    End Class
+    End Structure
 
 End Namespace
