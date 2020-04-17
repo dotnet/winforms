@@ -252,29 +252,30 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' original instance.
         ''' </summary>
         ''' <remarks></remarks>
-        <EditorBrowsable(EditorBrowsableState.Never)>
-        <Serializable()>
-        Friend Class CantGetSingleInstanceMutexException : Inherits Exception
+        <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)>
+        <System.Serializable()>
+        Public Class CantStartSingleInstanceException : Inherits System.Exception
+
             ''' <summary>
             '''  Creates a new exception
             ''' </summary>
             ''' <remarks></remarks>
             Public Sub New()
-                MyBase.New(SR.AppModel_SingleInstanceMutexTimeout)
+                MyBase.New(SR.AppModel_SingleInstanceCantConnect)
             End Sub
 
-            ' De-serialization constructor must be defined since we are serializable
-            <EditorBrowsable(EditorBrowsableState.Advanced)>
-            Protected Sub New(ByVal info As SerializationInfo, ByVal context As StreamingContext)
-                MyBase.New(info, context)
-            End Sub
-
-            Public Sub New(message As String)
+            Public Sub New(ByVal message As String)
                 MyBase.New(message)
             End Sub
 
-            Public Sub New(message As String, innerException As Exception)
-                MyBase.New(message, innerException)
+            Public Sub New(ByVal message As String, ByVal inner As System.Exception)
+                MyBase.New(message, inner)
+            End Sub
+
+            ' De-serialization constructor must be defined since we are serializable
+            <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)>
+            Protected Sub New(ByVal info As System.Runtime.Serialization.SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
+                MyBase.New(info, context)
             End Sub
         End Class
 
@@ -968,7 +969,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End Try
 
                 Dim serializer As New DataContractSerializer(GetType(NamedPipeXmlData))
-                    serializer.WriteObject(_namedPipeClientStream, New NamedPipeXmlData With
+                serializer.WriteObject(_namedPipeClientStream, New NamedPipeXmlData With
                             {
                             .CommandLineArguments = commandLineArgs
                             })
@@ -979,7 +980,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''     The function called when a client connects to the named pipe. Note: This method is called on a non-UI thread.
         ''' </summary>
         ''' <param name="iAsyncResult"></param>
-        Private Sub namedPipeServerConnectionCallback(iAsyncResult As IAsyncResult)
+        Private Sub NamedPipeServerConnectionCallback(iAsyncResult As IAsyncResult)
             If MainForm Is Nothing Then
                 ' This can happen when app is closing
                 Exit Sub
@@ -987,28 +988,35 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' Mutex access needs to be on UI thread
             MainForm.Invoke(
                 Sub()
+                    Dim remoteEventArgs As StartupNextInstanceEventArgs = Nothing
+                    Dim ReleaseMutex As Boolean = False
                     Try
                         If _mutexSingleInstance.WaitOne(5000) Then
+                            ReleaseMutex = True
                             ' End waiting for the connection
                             _namedPipeServerStream.EndWaitForConnection(iAsyncResult)
                             Dim serializer As New DataContractSerializer(GetType(NamedPipeXmlData))
                             Dim reader As XmlReader = XmlReader.Create(_namedPipeServerStream)
                             Dim namedPipePayload As NamedPipeXmlData = CType(serializer.ReadObject(reader), NamedPipeXmlData)
-                            Dim remoteEventArgs As New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(namedPipePayload.CommandLineArguments), bringToForegroundFlag:=True)
+                            remoteEventArgs = New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(namedPipePayload.CommandLineArguments), bringToForegroundFlag:=True)
                             _namedPipeServerStream.Disconnect()
                             ' Create a new pipe for next connection
-                            _namedPipeServerStream.BeginWaitForConnection(AddressOf namedPipeServerConnectionCallback, _namedPipeServerStream)
-
-                            _mutexSingleInstance.ReleaseMutex()
-                            OnStartupNextInstance(remoteEventArgs)
+                            _namedPipeServerStream.BeginWaitForConnection(AddressOf NamedPipeServerConnectionCallback, _namedPipeServerStream)
                         Else
-                            Throw New CantGetSingleInstanceMutexException()
+                            Throw New CantStartSingleInstanceException()
                         End If
                     Catch ex As Exception When TypeOf ex Is IOException OrElse TypeOf ex Is ObjectDisposedException
                         ' EndWaitForConnection will throw exception when someone closes the pipe before connection made
                         ' In that case we don't create any more pipes and just return
                         ' This will happen when app is closing and our pipe is closed/disposed
+                    Finally
+                        If ReleaseMutex Then
+                            _mutexSingleInstance.ReleaseMutex()
+                        End If
                     End Try
+                    If remoteEventArgs IsNot Nothing Then
+                        OnStartupNextInstance(remoteEventArgs)
+                    End If
                 End Sub)
         End Sub
 

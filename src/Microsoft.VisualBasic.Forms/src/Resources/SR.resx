@@ -219,7 +219,7 @@
   <data name="EnvVarNotFound_Name" xml:space="preserve">
     <value>Environment variable is not defined: '{0}'.</value>
   </data>
-  <data name="AppModel_SingleInstanceMutexTimeout" xml:space="preserve">
-    <value>Can't start Single Instance, MutexTimeout</value>
+  <data name="AppModel_SingleInstanceCantConnect" xml:space="preserve">
+    <value>This single-instance application could not connect to the original instance.</value>
   </data>
 </root>

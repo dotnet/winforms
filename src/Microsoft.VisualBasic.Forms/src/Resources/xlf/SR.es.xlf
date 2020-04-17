@@ -7,9 +7,9 @@
         <target state="translated">No se ha especificado un formulario de inicio.</target>
         <note />
       </trans-unit>
-      <trans-unit id="AppModel_SingleInstanceMutexTimeout">
-        <source>Can't start Single Instance, MutexTimeout</source>
-        <target state="new">Can't start Single Instance, MutexTimeout</target>
+      <trans-unit id="AppModel_SingleInstanceCantConnect">
+        <source>This single-instance application could not connect to the original instance.</source>
+        <target state="new">This single-instance application could not connect to the original instance.</target>
         <note />
       </trans-unit>
       <trans-unit id="AppModel_SplashAndMainFormTheSame">
