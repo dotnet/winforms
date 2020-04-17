@@ -290,10 +290,6 @@ namespace System.Windows.Forms
 
         private static TaskDialogButton CreatePlaceholderButton(TaskDialogResult result)
         {
-            // TODO: Maybe bind the button so that the user
-            // cannot change the properties, like it is the
-            // case with the regular buttons added to the
-            // collections.
             return new TaskDialogButton(result)
             {
                 Visible = false
