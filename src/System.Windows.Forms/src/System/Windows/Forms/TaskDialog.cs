@@ -1453,34 +1453,35 @@ namespace System.Windows.Forms
                         Marshal.FreeHGlobal(ptrToFree);
                         throw;
                     }
-
-                    static void Align(ref byte* currentPtr, int? alignment = null)
-                    {
-                        if (alignment <= 0)
-                        {
-                            throw new ArgumentOutOfRangeException(nameof(alignment));
-                        }
-
-                        // Align the pointer to the next align size. If not specified,
-                        // we will use the pointer (register) size.
-                        // TODO: Use nuint (System.UIntN) once available instead of
-                        // ulong to avoid the overhead for 32-bit platforms.
-                        ulong add = (ulong)(alignment ?? IntPtr.Size) - 1;
-                        currentPtr = (byte*)(((ulong)currentPtr + add) & ~add);
-                    }
-
-                    static long SizeOfString(string? str)
-                    {
-                        return str == null ? 0 : ((long)str.Length + 1) * sizeof(char);
-                    }
                 }
             }
             catch
             {
                 // Unbind the page, then rethrow the exception.
                 page.Unbind();
-
                 throw;
+            }
+
+            return;
+
+            static void Align(ref byte* currentPtr, int? alignment = null)
+            {
+                if (alignment <= 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(alignment));
+                }
+
+                // Align the pointer to the next align size. If not specified,
+                // we will use the pointer (register) size.
+                // TODO: Use nuint (System.UIntN) once available instead of
+                // ulong to avoid the overhead for 32-bit platforms.
+                ulong add = (ulong)(alignment ?? IntPtr.Size) - 1;
+                currentPtr = (byte*)(((ulong)currentPtr + add) & ~add);
+            }
+
+            static long SizeOfString(string? str)
+            {
+                return str == null ? 0 : ((long)str.Length + 1) * sizeof(char);
             }
         }
 
