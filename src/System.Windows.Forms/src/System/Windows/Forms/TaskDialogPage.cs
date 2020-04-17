@@ -554,6 +554,13 @@ namespace System.Windows.Forms
         ///   During the navigation the dialog will recreate the dialog from the specified
         ///   <paramref name="page"/> and its controls, and unbind and destroy the currently shown page.
         /// </para>
+        /// <para>
+        ///   You can't manipulate the page or its controls
+        ///   immediately after navigating the dialog (except for calling
+        ///   <see cref="TaskDialog.Close"/> or navigating the dialog again).
+        ///   You will need to wait for the <see cref="Created"/>
+        ///   event to occur before you can manipulate the page or its controls.
+        /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException">
         ///   <paramref name="page"/> is <see langword="null"/>.

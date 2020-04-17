@@ -597,12 +597,12 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        /// To close the dialog with a different result, call the
-        /// <see cref="TaskDialogButton.PerformClick"/> method of the
-        /// <see cref="TaskDialogButton"/> that you want to set as a result.
+        ///   To close the dialog with a different result, call the
+        ///   <see cref="TaskDialogButton.PerformClick"/> method of the
+        ///   <see cref="TaskDialogButton"/> that you want to set as a result.
         /// </para>
         /// <para>
-        ///   Note: This method can be called while the dialog is waiting for
+        ///   This method can be called while the dialog is waiting for
         ///   navigation to complete, whereas <see cref="TaskDialogButton.PerformClick"/>
         ///   would throw in that case. When calling this method, the
         ///   <see cref="TaskDialogButton.Click"/> event won't be raised.
