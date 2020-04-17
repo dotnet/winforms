@@ -197,10 +197,9 @@ namespace System.Windows.Forms
                 {
                     // This can mean other code has also subclassed the window but failed
                     // to undo it.
-                    // TODO: Instead of failing, we could simply cut off the subclass chain and
+                    // Note: Instead of failing, we could simply cut off the subclass chain and
                     // always restore the original window procedure here.
-                    throw new InvalidOperationException(
-                            "The current window procedure is not the expected one.");
+                    throw new InvalidOperationException(SR.WindowSubclassHandlerWndProcIsNotExceptedOne);
                 }
 
                 // Undo the subclassing by restoring the original window

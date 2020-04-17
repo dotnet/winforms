@@ -746,7 +746,7 @@ namespace System.Windows.Forms
 
             if (foundCustomButton && foundCommandLink)
             {
-                throw new InvalidOperationException(/* TODO */ "Cannot show both custom buttons and command links at the same time.");
+                throw new InvalidOperationException(SR.TaskDialogCannotShowCustomButtonsAndCommandLinks);
             }
 
             // For custom and radio buttons, we need to ensure the strings are not null or empty

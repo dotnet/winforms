@@ -9126,6 +9126,11 @@ Stack trace where the illegal operation occurred was:
         <target state="new">Cannot set the text for a standard button.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TaskDialogCannotShowCustomButtonsAndCommandLinks">
+        <source>Cannot show both custom buttons and command links at the same time.</source>
+        <target state="new">Cannot show both custom buttons and command links at the same time.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TaskDialogCannotUncheckRadioButtonWhileBound">
         <source>Cannot uncheck a radio button while it is bound to a task dialog.</source>
         <target state="new">Cannot uncheck a radio button while it is bound to a task dialog.</target>
@@ -10969,6 +10974,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
         <target state="translated">在應用程式中建立第一個 IWin32Window 物件之前，必須先呼叫 SetCompatibleTextRenderingDefault。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">
+        <source>The current window procedure is not the expected one.</source>
+        <target state="new">The current window procedure is not the expected one.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsSetEvent">
