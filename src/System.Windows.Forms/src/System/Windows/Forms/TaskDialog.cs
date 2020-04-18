@@ -128,9 +128,9 @@ namespace System.Windows.Forms
         /// <remarks>
         /// <para>
         ///   When the dialog navigates within a ButtonClicked handler, the handler should
-        ///   always return S_FALSE to prevent the dialog from applying the button that
-        ///   raised the handler as dialog result. Otherwise, this can lead to memory access
-        ///   problems like <see cref="AccessViolationException"/>s, especially if the
+        ///   always return <see cref="HRESULT.S_FALSE"/> to prevent the dialog from applying the
+        ///   button that raised the handler as dialog result. Otherwise, this can lead to memory
+        ///   access problems like <see cref="AccessViolationException"/>s, especially if the
         ///   previous dialog page had radio buttons (but the new ones do not).
         /// </para>
         /// <para>
@@ -272,8 +272,7 @@ namespace System.Windows.Forms
             (((GCHandle)lpRefData).Target as TaskDialog)!.HandleTaskDialogCallback(
                 hwnd,
                 msg,
-                wParam,
-                lParam);
+                wParam);
 
         private static bool IsTaskDialogButtonCommitting(TaskDialogButton? button)
         {
@@ -822,8 +821,7 @@ namespace System.Windows.Forms
         private HRESULT HandleTaskDialogCallback(
             IntPtr hWnd,
             ComCtl32.TDN notification,
-            IntPtr wParam,
-            IntPtr lParam)
+            IntPtr wParam)
         {
             Debug.Assert(_boundPage != null);
 

@@ -836,7 +836,7 @@ namespace System.Windows.Forms
             {
                 // Retrieve the button from the collection, to handle the case for standard buttons
                 // when the user set an equal (but not same) instance as default button.
-                var defaultButton = buttons[buttons.IndexOf(DefaultButton)];
+                TaskDialogButton defaultButton = buttons[buttons.IndexOf(DefaultButton)];
                 if (defaultButton.IsCreated)
                 {
                     defaultButtonID = defaultButton.ButtonID;

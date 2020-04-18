@@ -20,7 +20,7 @@ internal partial class Interop
             // which ensures the high dword being zero for 64-bit pointers.
             // This corresponds to the logic of the MAKELPARAM/MAKEWPARAM/MAKELRESULT
             // macros.
-            // TODO: Use nuint instead of void* when it is available.
+            // TODO: Use nint (with 'unchecked') instead of void* when it is available.
             => (IntPtr)(void*)unchecked((uint)ToInt(low, high));
 
         public static int ToInt(int low, int high)
