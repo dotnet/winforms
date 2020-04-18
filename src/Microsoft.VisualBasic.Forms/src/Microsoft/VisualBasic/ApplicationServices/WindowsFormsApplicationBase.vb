@@ -17,9 +17,7 @@ Imports System.Runtime.InteropServices
 Imports System.Runtime.Serialization
 Imports System.Runtime.Versioning
 Imports System.Security
-Imports System.Security.AccessControl
 Imports System.Security.Permissions
-Imports System.Security.Principal
 Imports System.Threading
 Imports System.Xml
 Imports Microsoft.VisualBasic.CompilerServices
@@ -207,7 +205,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     If m_NetworkAvailabilityEventHandlers Is Nothing Then m_NetworkAvailabilityEventHandlers = New System.Collections.ArrayList
                     m_NetworkAvailabilityEventHandlers.Add(value)
                     m_TurnOnNetworkListener = True 'We don't want to create the network object now - it takes a snapshot of the executionContext and our IPrincipal isn't on the thread yet.  We know we need to create it and we will at the appropriate time
-                    If m_NetworkObject Is Nothing And m_FinishedOnInitilaize = True Then 'But the user may be doing an Addhandler of their own in which case we need to make sure to honor the request.  If we aren't past OnInitialize() yet we shouldn't do it but the flag above catches that case
+                    If m_NetworkObject Is Nothing And m_FinishedOnInitilaize = True Then 'But the user may be doing an AddHandler of their own in which case we need to make sure to honor the request.  If we aren't past OnInitialize() yet we shouldn't do it but the flag above catches that case
                         m_NetworkObject = New Microsoft.VisualBasic.Devices.Network
                         AddHandler m_NetworkObject.NetworkAvailabilityChanged, AddressOf Me.NetworkAvailableEventAdaptor
                     End If
@@ -1030,27 +1028,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="namedPipeID"></param>
         ''' <returns>The applications Unique NamedPipeServerStream</returns>
         Private Function NamedPipeServerCreateServer(namedPipeID As String) As NamedPipeServerStream
-            ' Create a new pipe accessible by local authenticated users, disallow network
-            'var sidAuthUsers = new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, null);
-            Dim sidNetworkService As New SecurityIdentifier(WellKnownSidType.NetworkServiceSid, Nothing)
-            Dim sidWorld As New SecurityIdentifier(WellKnownSidType.WorldSid, Nothing)
-
-            Dim pipeSecurity As New PipeSecurity
-
-            ' Deny network access to the pipe
-            Dim accessRule As New PipeAccessRule(sidNetworkService, PipeAccessRights.ReadWrite, AccessControlType.Deny)
-            pipeSecurity.AddAccessRule(accessRule)
-
-            ' Allow Everyone to read/write
-            accessRule = New PipeAccessRule(sidWorld, PipeAccessRights.ReadWrite, AccessControlType.Allow)
-            pipeSecurity.AddAccessRule(accessRule)
-
-            ' Current user is the owner
-            Dim sidOwner As SecurityIdentifier = WindowsIdentity.GetCurrent().Owner
-            If sidOwner IsNot Nothing Then
-                accessRule = New PipeAccessRule(sidOwner, PipeAccessRights.FullControl, AccessControlType.Allow)
-                pipeSecurity.AddAccessRule(accessRule)
-            End If
             Dim namedPipeServerStream As NamedPipeServerStream = Nothing
             Try
                 ' Create pipe and start the async connection wait
@@ -1059,7 +1036,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         direction:=PipeDirection.In,
                         maxNumberOfServerInstances:=1,
                         transmissionMode:=PipeTransmissionMode.Byte,
-                        options:=PipeOptions.Asynchronous,
+                        options:=PipeOptions.Asynchronous Or PipeOptions.CurrentUserOnly,
                         inBufferSize:=0,
                         outBufferSize:=0)
                 ' We are the first instance with the named pipe server listening and allow the form to load
