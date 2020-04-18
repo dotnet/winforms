@@ -158,7 +158,7 @@ When writing theories note the following:
     ```
 
 
-Also be beware and be midful of VS-specific behaviours: https://xunit.net/faq/theory-data-stability-in-vs
+Also be beware and be mindful of VS-specific behaviours: https://xunit.net/faq/theory-data-stability-in-vs
   
 ### Throw unhandled exceptions
 
