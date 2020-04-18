@@ -53,5 +53,13 @@ namespace Microsoft.VisualBasic.IntegrationTests
             // Exception.ToString() called to verify message is constructed successfully.
             _ = Assert.Throws<NoStartupFormException>(() => application.Run(new string[0])).ToString();
         }
+
+        [Fact]
+        public void Run_CantStartSingleInstanceException()
+        {
+            var e = new CantStartSingleInstanceException();
+            // Exception.ToString() called to verify message is constructed successfully.
+            _ = e.ToString();
+        }
     }
 }

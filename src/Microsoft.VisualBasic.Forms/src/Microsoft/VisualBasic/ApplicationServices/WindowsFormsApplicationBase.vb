@@ -952,15 +952,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private Sub NamedPipeClientSendOptions(namedPipeID As String, commandLineArgs() As String)
             ' We are not the first instance, send the named pipe message with our payload and stop loading
             Using _namedPipeClientStream As New NamedPipeClientStream(".", namedPipeID, PipeDirection.Out)
+                Dim releaseMutex As Boolean = False
                 Try
                     _mutexSingleInstance.WaitOne()
+                    releaseMutex = True
                     ' Maximum wait 3 seconds
                     _namedPipeClientStream.Connect(3000)
-                Catch ex As Exception When TypeOf ex Is IOException OrElse TypeOf ex Is ObjectDisposedException
-                    Exit Sub
+                Catch ex As Exception When TypeOf ex Is IOException OrElse TypeOf ex Is TimeoutException
+                    Throw New CantStartSingleInstanceException
                     ' Error connecting or sending
+                Catch ex As ObjectDisposedException
+                    ' application closing ignore
                 Finally
-                    _mutexSingleInstance.ReleaseMutex()
+                    If releaseMutex Then
+                        _mutexSingleInstance.ReleaseMutex()
+                    End If
                 End Try
 
                 Dim serializer As New DataContractSerializer(GetType(NamedPipeXmlData))
@@ -984,10 +990,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             MainForm.Invoke(
                 Sub()
                     Dim remoteEventArgs As StartupNextInstanceEventArgs = Nothing
-                    Dim ReleaseMutex As Boolean = False
+                    Dim releaseMutex As Boolean = False
                     Try
                         If _mutexSingleInstance.WaitOne(5000) Then
-                            ReleaseMutex = True
+                            releaseMutex = True
                             ' End waiting for the connection
                             _namedPipeServerStream.EndWaitForConnection(iAsyncResult)
                             Dim serializer As New DataContractSerializer(GetType(NamedPipeXmlData))
@@ -1000,12 +1006,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Else
                             Throw New CantStartSingleInstanceException()
                         End If
-                    Catch ex As Exception When TypeOf ex Is IOException OrElse TypeOf ex Is ObjectDisposedException
+                    Catch ex As Exception When TypeOf ex Is IOException OrElse TypeOf ex Is TimeoutException
+                        ' Error connecting or sending
+                        Throw New CantStartSingleInstanceException
+                    Catch ex As ObjectDisposedException
                         ' EndWaitForConnection will throw exception when someone closes the pipe before connection made
                         ' In that case we don't create any more pipes and just return
                         ' This will happen when app is closing and our pipe is closed/disposed
                     Finally
-                        If ReleaseMutex Then
+                        If releaseMutex Then
                             _mutexSingleInstance.ReleaseMutex()
                         End If
                     End Try
