@@ -151,6 +151,7 @@ namespace VisualBasicRuntimeTest
             internal WindowsApplication(Form mainForm)
             {
                 MainForm = mainForm;
+                IsSingleInstance = true;
             }
         }
 

@@ -7,6 +7,11 @@
         <target state="translated">Un formulaire de démarrage n'a pas été spécifié.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AppModel_SingleInstanceCantConnect">
+        <source>This single-instance application could not connect to the original instance.</source>
+        <target state="new">This single-instance application could not connect to the original instance.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AppModel_SplashAndMainFormTheSame">
         <source>Splash screen and main form cannot be the same form.</source>
         <target state="translated">L'écran de démarrage et le formulaire principal ne peuvent pas être le même formulaire.</target>
