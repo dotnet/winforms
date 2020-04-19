@@ -1,4 +1,4 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -782,15 +782,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _turnOnNetworkListener As Boolean 'Tracks whether we need to create the network object so we can listen to the NetworkAvailabilityChanged event
         Private _unhandledExceptionHandlers As ArrayList
         Private Delegate Sub DisposeDelegate() 'used to marshal a call to Dispose on the Splash Screen
-        Private m_Ok2CloseSplashScreen As Boolean 'For splash screens with a minimum display time, this let's us know when that time has expired and it is ok to close the splash screen.
-        Private m_SplashScreen As System.Windows.Forms.Form
-        Private m_MinimumSplashExposure As Integer = 2000 'Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
-        Private m_SplashTimer As Timers.Timer
-        Private m_SplashLock As New Object
-        Private m_AppContext As WinFormsAppContext
-        Private m_AppSyncronizationContext As SynchronizationContext
-        Private m_NetworkAvailChangeLock As New Object 'sync object
-        Private m_SaveMySettingsOnExit As Boolean 'Informs My.Settings whether to save the settings on exit or not
+        Private ReadOnly _appContext As WinFormsAppContext
+        Private ReadOnly _networkAvailChangeLock As New Object 'sync object
+        Private ReadOnly _splashLock As New Object
 
         ''' <summary>
         ''' Runs the user's program through the VB Startup/Shutdown application model
