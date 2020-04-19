@@ -1,10 +1,9 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
 Option Strict On
 
-Imports System
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.CompilerServices
@@ -22,7 +21,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Private Sub New()
         End Sub
 
-        Friend Shared Function VbMakeException(ByVal hr As Integer) As System.Exception
+        Friend Shared Function VbMakeException(hr As Integer) As Exception
             Dim sMsg As String
 
             If hr > 0 AndAlso hr <= &HFFFFI Then
@@ -33,7 +32,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             VbMakeException = VbMakeExceptionEx(hr, sMsg)
         End Function
 
-        Friend Shared Function VbMakeExceptionEx(ByVal number As Integer, ByVal sMsg As String) As System.Exception
+        Friend Shared Function VbMakeExceptionEx(number As Integer, sMsg As String) As Exception
             Dim vBDefinedError As Boolean
 
             VbMakeExceptionEx = BuildException(number, sMsg, vBDefinedError)
@@ -45,7 +44,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         End Function
 
-        Friend Shared Function BuildException(ByVal Number As Integer, ByVal Description As String, ByRef VBDefinedError As Boolean) As System.Exception
+        Friend Shared Function BuildException(Number As Integer, Description As String, ByRef VBDefinedError As Boolean) As Exception
 
             VBDefinedError = True
 
@@ -78,8 +77,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of ArgumentException.</returns>
         ''' <remarks>This is the preferred way to construct an argument exception.</remarks>
-        Friend Shared Function GetArgumentExceptionWithArgName(ByVal ArgumentName As String,
-            ByVal ResourceID As String, ByVal ParamArray PlaceHolders() As String) As ArgumentException
+        Friend Shared Function GetArgumentExceptionWithArgName(ArgumentName As String,
+            ResourceID As String, ParamArray PlaceHolders() As String) As ArgumentException
 
             Return New ArgumentException(GetResourceString(ResourceID, PlaceHolders), ArgumentName)
         End Function
@@ -89,7 +88,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' </summary>
         ''' <param name="ArgumentName">The name of the argument (parameter). Not localized.</param>
         ''' <returns>A new instance of ArgumentNullException.</returns>
-        Friend Shared Function GetArgumentNullException(ByVal ArgumentName As String) As ArgumentNullException
+        Friend Shared Function GetArgumentNullException(ArgumentName As String) As ArgumentNullException
 
             Return New ArgumentNullException(ArgumentName, GetResourceString(SR.General_ArgumentNullException))
         End Function
@@ -101,8 +100,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of ArgumentNullException.</returns>
-        Friend Shared Function GetArgumentNullException(ByVal ArgumentName As String,
-            ByVal ResourceID As String, ByVal ParamArray PlaceHolders() As String) As ArgumentNullException
+        Friend Shared Function GetArgumentNullException(ArgumentName As String,
+            ResourceID As String, ParamArray PlaceHolders() As String) As ArgumentNullException
 
             Return New ArgumentNullException(ArgumentName, GetResourceString(ResourceID, PlaceHolders))
         End Function
@@ -114,7 +113,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of IO.DirectoryNotFoundException.</returns>
         Friend Shared Function GetDirectoryNotFoundException(
-            ByVal ResourceID As String, ByVal ParamArray PlaceHolders() As String) As IO.DirectoryNotFoundException
+            ResourceID As String, ParamArray PlaceHolders() As String) As IO.DirectoryNotFoundException
 
             Return New IO.DirectoryNotFoundException(GetResourceString(ResourceID, PlaceHolders))
         End Function
@@ -126,8 +125,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of IO.FileNotFoundException.</returns>
-        Friend Shared Function GetFileNotFoundException(ByVal FileName As String,
-            ByVal ResourceID As String, ByVal ParamArray PlaceHolders() As String) As IO.FileNotFoundException
+        Friend Shared Function GetFileNotFoundException(FileName As String,
+            ResourceID As String, ParamArray PlaceHolders() As String) As IO.FileNotFoundException
 
             Return New IO.FileNotFoundException(GetResourceString(ResourceID, PlaceHolders), FileName)
         End Function
@@ -139,7 +138,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of InvalidOperationException.</returns>
         Friend Shared Function GetInvalidOperationException(
-            ByVal ResourceID As String, ByVal ParamArray PlaceHolders() As String) As InvalidOperationException
+            ResourceID As String, ParamArray PlaceHolders() As String) As InvalidOperationException
 
             Return New InvalidOperationException(GetResourceString(ResourceID, PlaceHolders))
         End Function
@@ -150,7 +149,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="ResourceID">The resource ID.</param>
         ''' <param name="PlaceHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of IO.IOException.</returns>
-        Friend Shared Function GetIOException(ByVal ResourceID As String, ByVal ParamArray PlaceHolders() As String) As IO.IOException
+        Friend Shared Function GetIOException(ResourceID As String, ParamArray PlaceHolders() As String) As IO.IOException
 
             Return New IO.IOException(GetResourceString(ResourceID, PlaceHolders))
         End Function
@@ -164,7 +163,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <remarks>There is no way to exclude the Win32 error so this function will call Marshal.GetLastWin32Error all the time.</remarks>
 
         Friend Shared Function GetWin32Exception(
-            ByVal ResourceID As String, ByVal ParamArray PlaceHolders() As String) As ComponentModel.Win32Exception
+            ResourceID As String, ParamArray PlaceHolders() As String) As ComponentModel.Win32Exception
 
             Return New ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error(), GetResourceString(ResourceID, PlaceHolders))
         End Function

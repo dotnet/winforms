@@ -1,11 +1,10 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
 Option Strict On
 Option Explicit On
 
-Imports System
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -19,6 +18,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Gets a DateTime that is the current local date and time on this computer.
         ''' </summary>
         ''' <value>A DateTime whose value is the current date and time.</value>
+        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
         Public ReadOnly Property LocalTime() As DateTime
             Get
                 Return DateTime.Now
@@ -26,10 +26,11 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets a DateTime that is the current local date and time on this 
+        ''' Gets a DateTime that is the current local date and time on this
         ''' computer expressed as GMT time.
         ''' </summary>
         ''' <value>A DateTime whose value is the current date and time expressed as GMT time.</value>
+        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
         Public ReadOnly Property GmtTime() As DateTime
             Get
                 Return DateTime.UtcNow

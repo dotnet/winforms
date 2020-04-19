@@ -1,4 +1,4 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -30,20 +30,20 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         ''' <remarks>This function differs from System.Environment.GetCommandLineArgs in that the
         ''' path of the executing file (the 0th entry) is omitted from the returned collection</remarks>
-        Public ReadOnly Property CommandLineArgs() As System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+        Public ReadOnly Property CommandLineArgs() As ObjectModel.ReadOnlyCollection(Of String)
             Get
-                If m_CommandLineArgs Is Nothing Then
+                If _commandLineArgs Is Nothing Then
                     'Get rid of Arg(0) which is the path of the executing program.  Main(args() as string) doesn't report the name of the app and neither will we
                     Dim EnvArgs As String() = System.Environment.GetCommandLineArgs
                     If EnvArgs.GetLength(0) >= 2 Then '1 element means no args, just the executing program.  >= 2 means executing program + one or more command line arguments
                         Dim NewArgs(EnvArgs.GetLength(0) - 2) As String 'dimming z(0) gives a z() of 1 element.
-                        System.Array.Copy(EnvArgs, 1, NewArgs, 0, EnvArgs.GetLength(0) - 1) 'copy everything but the 0th element (the path of the executing program)
-                        m_CommandLineArgs = New System.Collections.ObjectModel.ReadOnlyCollection(Of String)(NewArgs)
+                        Array.Copy(EnvArgs, 1, NewArgs, 0, EnvArgs.GetLength(0) - 1) 'copy everything but the 0th element (the path of the executing program)
+                        _commandLineArgs = New ObjectModel.ReadOnlyCollection(Of String)(NewArgs)
                     Else
-                        m_CommandLineArgs = New System.Collections.ObjectModel.ReadOnlyCollection(Of String)(New String() {})  'provide the empty set
+                        _commandLineArgs = New ObjectModel.ReadOnlyCollection(Of String)(Array.Empty(Of String)())  'provide the empty set
                     End If
                 End If
-                Return m_CommandLineArgs
+                Return _commandLineArgs
             End Get
         End Property
 
@@ -52,12 +52,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' for instance because we snag the command line from Main().
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Protected WriteOnly Property InternalCommandLine() As System.Collections.ObjectModel.ReadOnlyCollection(Of String)
-            Set(ByVal value As System.Collections.ObjectModel.ReadOnlyCollection(Of String))
-                m_CommandLineArgs = value
+        Protected WriteOnly Property InternalCommandLine() As ObjectModel.ReadOnlyCollection(Of String)
+            Set(value As ObjectModel.ReadOnlyCollection(Of String))
+                _commandLineArgs = value
             End Set
         End Property
 
-        Private m_CommandLineArgs As System.Collections.ObjectModel.ReadOnlyCollection(Of String) ' Lazy-initialized and cached collection of command line arguments.
+        Private _commandLineArgs As ObjectModel.ReadOnlyCollection(Of String) ' Lazy-initialized and cached collection of command line arguments.
     End Class 'ApplicationBase
 End Namespace

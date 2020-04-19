@@ -1,14 +1,10 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
 Option Explicit On
 Option Strict On
 
-Imports System
-Imports System.Diagnostics
-Imports System.Windows.Forms
-Imports System.ComponentModel
 Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Devices
@@ -23,7 +19,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Sends keys to the active window as if typed as keyboard with wait = false.
         ''' </summary>
         ''' <param name="keys">A string containing the keys to be sent (typed).</param>
-        Public Sub SendKeys(ByVal keys As String)
+        Public Sub SendKeys(keys As String)
             SendKeys(keys, False)
         End Sub
 
@@ -33,11 +29,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <param name="keys">A string containing the keys to be sent (typed).</param>
         ''' <param name="wait">Wait for messages to be processed before returning.</param>
-        Public Sub SendKeys(ByVal keys As String, ByVal wait As Boolean)
+        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
+        Public Sub SendKeys(keys As String, wait As Boolean)
             If wait Then
-                System.Windows.Forms.SendKeys.SendWait(keys)
+                Windows.Forms.SendKeys.SendWait(keys)
             Else
-                System.Windows.Forms.SendKeys.Send(keys)
+                Windows.Forms.SendKeys.Send(keys)
             End If
         End Sub
 

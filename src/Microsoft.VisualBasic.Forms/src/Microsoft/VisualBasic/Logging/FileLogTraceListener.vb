@@ -1,21 +1,15 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
 Option Explicit On
 Option Strict On
 
-Imports System
-Imports System.Collections.Generic
 Imports System.ComponentModel
-Imports System.Diagnostics
 Imports System.Globalization
 Imports System.IO
-Imports System.Reflection
 Imports System.Security.Permissions
-Imports System.Windows.Forms
 Imports System.Text
-Imports Microsoft.VisualBasic
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
@@ -58,7 +52,7 @@ Namespace Microsoft.VisualBasic.Logging
     ''' TraceListener is ComVisible(False), Microsoft.VisualBasic.dll is ComVisible(True).
     ''' Therefore, mark FileLogTraceListener as ComVisible(False).
     ''' </remarks>
-    <System.Runtime.InteropServices.ComVisible(False)> _
+    <Runtime.InteropServices.ComVisible(False)>
     Public Class FileLogTraceListener
         Inherits TraceListener
 
@@ -66,7 +60,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Creates a FileLogTraceListener with the passed in name
         ''' </summary>
         ''' <param name="name">The name of the listener</param>
-        Public Sub New(ByVal name As String)
+        Public Sub New(name As String)
             MyBase.New(name)
         End Sub
 
@@ -83,23 +77,23 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <value>An enum which can indicate one of several logical locations for the log</value>
         Public Property Location() As LogFileLocation
             Get
-                If Not m_PropertiesSet(LOCATION_INDEX) Then
+                If Not _propertiesSet(LOCATION_INDEX) Then
                     If Attributes.ContainsKey(KEY_LOCATION) Then
                         Dim converter As TypeConverter = TypeDescriptor.GetConverter(GetType(LogFileLocation))
                         Me.Location = DirectCast(converter.ConvertFromInvariantString(Attributes(KEY_LOCATION)), LogFileLocation)
                     End If
                 End If
-                Return m_Location
+                Return _location
             End Get
-            Set(ByVal value As LogFileLocation)
-                ValidateLogFileLocationEnumValue(value, "value")
+            Set(value As LogFileLocation)
+                ValidateLogFileLocationEnumValue(value, NameOf(value))
 
                 ' If the location is changing we need to close the current file
-                If m_Location <> value Then
+                If _location <> value Then
                     CloseCurrentStream()
                 End If
-                m_Location = value
-                m_PropertiesSet(LOCATION_INDEX) = True
+                _location = value
+                _propertiesSet(LOCATION_INDEX) = True
             End Set
         End Property
 
@@ -109,18 +103,18 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <value>True if the stream should be flushed after every write, otherwise False</value>
         Public Property AutoFlush() As Boolean
             Get
-                If Not m_PropertiesSet(AUTOFLUSH_INDEX) Then
+                If Not _propertiesSet(AUTOFLUSH_INDEX) Then
                     If Attributes.ContainsKey(KEY_AUTOFLUSH) Then
                         Me.AutoFlush = Convert.ToBoolean(Attributes(KEY_AUTOFLUSH), CultureInfo.InvariantCulture)
                     End If
                 End If
 
-                Return m_AutoFlush
+                Return _autoFlush
             End Get
-            Set(ByVal value As Boolean)
+            Set(value As Boolean)
                 DemandWritePermission()
-                m_AutoFlush = value
-                m_PropertiesSet(AUTOFLUSH_INDEX) = True
+                _autoFlush = value
+                _propertiesSet(AUTOFLUSH_INDEX) = True
             End Set
         End Property
 
@@ -131,17 +125,17 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <value>True if the HostId should be included, otherwise False</value>
         Public Property IncludeHostName() As Boolean
             Get
-                If Not m_PropertiesSet(INCLUDEHOSTNAME_INDEX) Then
+                If Not _propertiesSet(INCLUDEHOSTNAME_INDEX) Then
                     If Attributes.ContainsKey(KEY_INCLUDEHOSTNAME) Then
                         Me.IncludeHostName = Convert.ToBoolean(Attributes(KEY_INCLUDEHOSTNAME), CultureInfo.InvariantCulture)
                     End If
                 End If
-                Return m_IncludeHostName
+                Return _includeHostName
             End Get
-            Set(ByVal value As Boolean)
+            Set(value As Boolean)
                 DemandWritePermission()
-                m_IncludeHostName = value
-                m_PropertiesSet(INCLUDEHOSTNAME_INDEX) = True
+                _includeHostName = value
+                _propertiesSet(INCLUDEHOSTNAME_INDEX) = True
             End Set
         End Property
 
@@ -151,24 +145,24 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <value>True if the file should be appended to, otherwise False</value>
         Public Property Append() As Boolean
             Get
-                If Not m_PropertiesSet(APPEND_INDEX) Then
+                If Not _propertiesSet(APPEND_INDEX) Then
                     If Attributes.ContainsKey(KEY_APPEND) Then
                         Me.Append = Convert.ToBoolean(Attributes(KEY_APPEND), CultureInfo.InvariantCulture)
                     End If
                 End If
 
-                Return m_Append
+                Return _append
             End Get
-            Set(ByVal value As Boolean)
+            Set(value As Boolean)
 
                 DemandWritePermission()
 
                 ' If this property is changing, we need to close the current file
-                If value <> m_Append Then
+                If value <> _append Then
                     CloseCurrentStream()
                 End If
-                m_Append = value
-                m_PropertiesSet(APPEND_INDEX) = True
+                _append = value
+                _propertiesSet(APPEND_INDEX) = True
             End Set
         End Property
 
@@ -179,19 +173,19 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <value>An enum indicating the desired behavior (do nothing, throw)</value>
         Public Property DiskSpaceExhaustedBehavior() As DiskSpaceExhaustedOption
             Get
-                If Not m_PropertiesSet(DISKSPACEEXHAUSTEDBEHAVIOR_INDEX) Then
+                If Not _propertiesSet(DISKSPACEEXHAUSTEDBEHAVIOR_INDEX) Then
                     If Attributes.ContainsKey(KEY_DISKSPACEEXHAUSTEDBEHAVIOR) Then
                         Dim converter As TypeConverter = TypeDescriptor.GetConverter(GetType(DiskSpaceExhaustedOption))
                         Me.DiskSpaceExhaustedBehavior = DirectCast(converter.ConvertFromInvariantString(Attributes(KEY_DISKSPACEEXHAUSTEDBEHAVIOR)), DiskSpaceExhaustedOption)
                     End If
                 End If
-                Return m_DiskSpaceExhaustedBehavior
+                Return _diskSpaceExhaustedBehavior
             End Get
-            Set(ByVal value As DiskSpaceExhaustedOption)
+            Set(value As DiskSpaceExhaustedOption)
                 DemandWritePermission()
-                ValidateDiskSpaceExhaustedOptionEnumValue(value, "value")
-                m_DiskSpaceExhaustedBehavior = value
-                m_PropertiesSet(DISKSPACEEXHAUSTEDBEHAVIOR_INDEX) = True
+                ValidateDiskSpaceExhaustedOptionEnumValue(value, NameOf(value))
+                _diskSpaceExhaustedBehavior = value
+                _propertiesSet(DISKSPACEEXHAUSTEDBEHAVIOR_INDEX) = True
             End Set
         End Property
 
@@ -201,27 +195,27 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <value>The name of the log file</value>
         Public Property BaseFileName() As String
             Get
-                If Not m_PropertiesSet(BASEFILENAME_INDEX) Then
+                If Not _propertiesSet(BASEFILENAME_INDEX) Then
                     If Attributes.ContainsKey(KEY_BASEFILENAME) Then
                         Me.BaseFileName = Attributes(KEY_BASEFILENAME)
                     End If
                 End If
-                Return m_BaseFileName
+                Return _baseFileName
             End Get
-            Set(ByVal value As String)
-                If value = "" Then
+            Set(value As String)
+                If value.Length = 0 Then
                     Throw GetArgumentNullException("value", SR.ApplicationLogBaseNameNull)
                 End If
 
-                ' Test the file name. This will throw if the name is invalid. 
+                ' Test the file name. This will throw if the name is invalid.
                 Path.GetFullPath(value)
 
-                If String.Compare(value, m_BaseFileName, StringComparison.OrdinalIgnoreCase) <> 0 Then
+                If String.Compare(value, _baseFileName, StringComparison.OrdinalIgnoreCase) <> 0 Then
                     CloseCurrentStream()
-                    m_BaseFileName = value
+                    _baseFileName = value
                 End If
 
-                m_PropertiesSet(BASEFILENAME_INDEX) = True
+                _propertiesSet(BASEFILENAME_INDEX) = True
             End Set
         End Property
 
@@ -237,7 +231,7 @@ Namespace Microsoft.VisualBasic.Logging
                 EnsureStreamIsOpen()
 
                 ' We shouldn't use fields for demands so we use a local variable
-                Dim returnPath As String = m_FullFileName
+                Dim returnPath As String = _fullFileName
                 Dim filePermission As New FileIOPermission(FileIOPermissionAccess.PathDiscovery, returnPath)
                 filePermission.Demand()
 
@@ -251,23 +245,23 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <value>An enum indicating how to stamp the file</value>
         Public Property LogFileCreationSchedule() As LogFileCreationScheduleOption
             Get
-                If Not m_PropertiesSet(LOGFILECREATIONSCHEDULE_INDEX) Then
+                If Not _propertiesSet(LOGFILECREATIONSCHEDULE_INDEX) Then
                     If Attributes.ContainsKey(KEY_LOGFILECREATIONSCHEDULE) Then
                         Dim converter As TypeConverter = TypeDescriptor.GetConverter(GetType(LogFileCreationScheduleOption))
                         Me.LogFileCreationSchedule = DirectCast(converter.ConvertFromInvariantString(Attributes(KEY_LOGFILECREATIONSCHEDULE)), LogFileCreationScheduleOption)
                     End If
                 End If
-                Return m_LogFileDateStamp
+                Return _logFileDateStamp
             End Get
-            Set(ByVal value As LogFileCreationScheduleOption)
-                ValidateLogFileCreationScheduleOptionEnumValue(value, "value")
+            Set(value As LogFileCreationScheduleOption)
+                ValidateLogFileCreationScheduleOptionEnumValue(value, NameOf(value))
 
-                If value <> m_LogFileDateStamp Then
+                If value <> _logFileDateStamp Then
                     CloseCurrentStream()
-                    m_LogFileDateStamp = value
+                    _logFileDateStamp = value
                 End If
 
-                m_PropertiesSet(LOGFILECREATIONSCHEDULE_INDEX) = True
+                _propertiesSet(LOGFILECREATIONSCHEDULE_INDEX) = True
             End Set
         End Property
 
@@ -277,20 +271,20 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <value>The maximum size</value>
         Public Property MaxFileSize() As Long
             Get
-                If Not m_PropertiesSet(MAXFILESIZE_INDEX) Then
+                If Not _propertiesSet(MAXFILESIZE_INDEX) Then
                     If Attributes.ContainsKey(KEY_MAXFILESIZE) Then
                         Me.MaxFileSize = Convert.ToInt64(Attributes(KEY_MAXFILESIZE), CultureInfo.InvariantCulture)
                     End If
                 End If
-                Return m_MaxFileSize
+                Return _maxFileSize
             End Get
-            Set(ByVal value As Long)
+            Set(value As Long)
                 DemandWritePermission()
                 If value < MIN_FILE_SIZE Then
                     Throw GetArgumentExceptionWithArgName("value", SR.ApplicationLogNumberTooSmall, "MaxFileSize")
                 End If
-                m_MaxFileSize = value
-                m_PropertiesSet(MAXFILESIZE_INDEX) = True
+                _maxFileSize = value
+                _propertiesSet(MAXFILESIZE_INDEX) = True
             End Set
         End Property
 
@@ -300,20 +294,20 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <value>The reserved disk space</value>
         Public Property ReserveDiskSpace() As Long
             Get
-                If Not m_PropertiesSet(RESERVEDISKSPACE_INDEX) Then
+                If Not _propertiesSet(RESERVEDISKSPACE_INDEX) Then
                     If Attributes.ContainsKey(KEY_RESERVEDISKSPACE) Then
                         Me.ReserveDiskSpace = Convert.ToInt64(Attributes(KEY_RESERVEDISKSPACE), CultureInfo.InvariantCulture)
                     End If
                 End If
-                Return m_ReserveDiskSpace
+                Return _reserveDiskSpace
             End Get
-            Set(ByVal value As Long)
+            Set(value As Long)
                 DemandWritePermission()
                 If value < 0 Then
                     Throw GetArgumentExceptionWithArgName("value", SR.ApplicationLog_NegativeNumber, "ReserveDiskSpace")
                 End If
-                m_ReserveDiskSpace = value
-                m_PropertiesSet(RESERVEDISKSPACE_INDEX) = True
+                _reserveDiskSpace = value
+                _propertiesSet(RESERVEDISKSPACE_INDEX) = True
             End Set
         End Property
 
@@ -323,21 +317,21 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <value>The delimiter</value>
         Public Property Delimiter() As String
             Get
-                If Not m_PropertiesSet(DELIMITER_INDEX) Then
+                If Not _propertiesSet(DELIMITER_INDEX) Then
                     If Attributes.ContainsKey(KEY_DELIMITER) Then
                         Me.Delimiter = Attributes(KEY_DELIMITER)
                     End If
                 End If
-                Return m_Delimiter
+                Return _delimiter
             End Get
-            Set(ByVal value As String)
-                m_Delimiter = value
-                m_PropertiesSet(DELIMITER_INDEX) = True
+            Set(value As String)
+                _delimiter = value
+                _propertiesSet(DELIMITER_INDEX) = True
             End Set
         End Property
 
         ''' <summary>
-        ''' The encoding to try when opening a file. 
+        ''' The encoding to try when opening a file.
         ''' </summary>
         ''' <value>The encoding</value>
         ''' <remarks>
@@ -346,19 +340,19 @@ Namespace Microsoft.VisualBasic.Logging
         ''' </remarks>
         Public Property Encoding() As Encoding
             Get
-                If Not m_PropertiesSet(ENCODING_INDEX) Then
+                If Not _propertiesSet(ENCODING_INDEX) Then
                     If Attributes.ContainsKey(KEY_ENCODING) Then
                         Me.Encoding = System.Text.Encoding.GetEncoding(Attributes(KEY_ENCODING))
                     End If
                 End If
-                Return m_Encoding
+                Return _encoding
             End Get
-            Set(ByVal value As Encoding)
+            Set(value As Encoding)
                 If value Is Nothing Then
                     Throw GetArgumentNullException("value")
                 End If
-                m_Encoding = value
-                m_PropertiesSet(ENCODING_INDEX) = True
+                _encoding = value
+                _propertiesSet(ENCODING_INDEX) = True
             End Set
         End Property
 
@@ -369,18 +363,18 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <remarks>This will throw if the path cannot be resolved</remarks>
         Public Property CustomLocation() As String
             Get
-                If Not m_PropertiesSet(CUSTOMLOCATION_INDEX) Then
+                If Not _propertiesSet(CUSTOMLOCATION_INDEX) Then
                     If Attributes.ContainsKey(KEY_CUSTOMLOCATION) Then
                         Me.CustomLocation = Attributes(KEY_CUSTOMLOCATION)
                     End If
                 End If
 
-                Dim fileName As String = Path.GetFullPath(m_CustomLocation)
+                Dim fileName As String = Path.GetFullPath(_customLocation)
                 Dim filePermission As New FileIOPermission(FileIOPermissionAccess.PathDiscovery, fileName)
                 filePermission.Demand()
                 Return fileName
             End Get
-            Set(ByVal value As String)
+            Set(value As String)
 
                 ' Validate the path
                 Dim tempPath As String = Path.GetFullPath(value)
@@ -391,15 +385,15 @@ Namespace Microsoft.VisualBasic.Logging
 
                 ' If we're using custom location and the value is changing we need to
                 ' close the stream
-                If Me.Location = LogFileLocation.Custom And String.Compare(tempPath, m_CustomLocation, StringComparison.OrdinalIgnoreCase) <> 0 Then
+                If Me.Location = LogFileLocation.Custom And String.Compare(tempPath, _customLocation, StringComparison.OrdinalIgnoreCase) <> 0 Then
                     CloseCurrentStream()
                 End If
 
                 ' Since the user is setting a custom path, set Location to custom
-                Me.Location = LogFileLocation.Custom
+                Location = LogFileLocation.Custom
 
-                m_CustomLocation = tempPath
-                m_PropertiesSet(CUSTOMLOCATION_INDEX) = True
+                _customLocation = tempPath
+                _propertiesSet(CUSTOMLOCATION_INDEX) = True
 
             End Set
         End Property
@@ -408,18 +402,18 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Writes the message to the log
         ''' </summary>
         ''' <param name="message">The message to be written</param>
-        Public Overloads Overrides Sub Write(ByVal message As String)
+        Public Overloads Overrides Sub Write(message As String)
 
             ' Use Try block to attempt to close stream if an exception is thrown
             Try
                 HandleDateChange()
 
                 ' Check resources
-                Dim NewEntrySize As Int64 = Me.Encoding.GetByteCount(message)
+                Dim NewEntrySize As Long = Encoding.GetByteCount(message)
 
                 If ResourcesAvailable(NewEntrySize) Then
                     ListenerStream.Write(message)
-                    If Me.AutoFlush Then
+                    If AutoFlush Then
                         ListenerStream.Flush()
                     End If
                 End If
@@ -434,18 +428,18 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Writes the message to the log as a line
         ''' </summary>
         ''' <param name="message">The message to be written</param>
-        Public Overloads Overrides Sub WriteLine(ByVal message As String)
+        Public Overloads Overrides Sub WriteLine(message As String)
 
             ' Use Try block to attempt to close stream if an exception is thrown
             Try
                 HandleDateChange()
 
                 ' Check resources
-                Dim NewEntrySize As Int64 = Me.Encoding.GetByteCount(message & vbCrLf)
+                Dim NewEntrySize As Long = Encoding.GetByteCount(message & vbCrLf)
 
                 If ResourcesAvailable(NewEntrySize) Then
                     ListenerStream.WriteLine(message)
-                    If Me.AutoFlush Then
+                    If AutoFlush Then
                         ListenerStream.Flush()
                     End If
                 End If
@@ -463,10 +457,10 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="eventType">The eventType of the message</param>
         ''' <param name="id">The id of the message</param>
         ''' <param name="message">The message</param>
-        Public Overrides Sub TraceEvent(ByVal eventCache As TraceEventCache, ByVal source As String, ByVal eventType As TraceEventType, ByVal id As Integer, ByVal message As String)
+        Public Overrides Sub TraceEvent(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, message As String)
 
-            If Me.Filter IsNot Nothing Then
-                If Not Me.Filter.ShouldTrace(eventCache, source, eventType, id, message, Nothing, Nothing, Nothing) Then
+            If Filter IsNot Nothing Then
+                If Not Filter.ShouldTrace(eventCache, source, eventType, id, message, Nothing, Nothing, Nothing) Then
                     Return
                 End If
             End If
@@ -474,13 +468,13 @@ Namespace Microsoft.VisualBasic.Logging
 
             ' Add fields that always appear (source, eventType, id, message)
             ' source
-            outBuilder.Append(source & Me.Delimiter)
+            outBuilder.Append(source & Delimiter)
 
             ' eventType
-            outBuilder.Append([Enum].GetName(GetType(TraceEventType), eventType) & Me.Delimiter)
+            outBuilder.Append([Enum].GetName(GetType(TraceEventType), eventType) & Delimiter)
 
             ' id
-            outBuilder.Append(id.ToString(CultureInfo.InvariantCulture) & Me.Delimiter)
+            outBuilder.Append(id.ToString(CultureInfo.InvariantCulture) & Delimiter)
 
             ' message
             outBuilder.Append(message)
@@ -488,38 +482,38 @@ Namespace Microsoft.VisualBasic.Logging
             ' Add optional fields
             ' Callstack
             If (Me.TraceOutputOptions And TraceOptions.Callstack) = TraceOptions.Callstack Then
-                outBuilder.Append(Me.Delimiter & eventCache.Callstack)
+                outBuilder.Append(Delimiter & eventCache.Callstack)
             End If
 
             ' LogicalOperationStack
             If (Me.TraceOutputOptions And TraceOptions.LogicalOperationStack) = TraceOptions.LogicalOperationStack Then
-                outBuilder.Append(Me.Delimiter & StackToString(eventCache.LogicalOperationStack))
+                outBuilder.Append(Delimiter & StackToString(eventCache.LogicalOperationStack))
             End If
 
             ' DateTime
             If (Me.TraceOutputOptions And TraceOptions.DateTime) = TraceOptions.DateTime Then
                 ' Add datetime. Time will be in GMT.
-                outBuilder.Append(Me.Delimiter & eventCache.DateTime.ToString("u", CultureInfo.InvariantCulture))
+                outBuilder.Append(Delimiter & eventCache.DateTime.ToString("u", CultureInfo.InvariantCulture))
             End If
 
             ' ProcessId
             If (Me.TraceOutputOptions And TraceOptions.ProcessId) = TraceOptions.ProcessId Then
-                outBuilder.Append(Me.Delimiter & eventCache.ProcessId.ToString(CultureInfo.InvariantCulture))
+                outBuilder.Append(Delimiter & eventCache.ProcessId.ToString(CultureInfo.InvariantCulture))
             End If
 
             ' ThreadId
             If (Me.TraceOutputOptions And TraceOptions.ThreadId) = TraceOptions.ThreadId Then
-                outBuilder.Append(Me.Delimiter & eventCache.ThreadId)
+                outBuilder.Append(Delimiter & eventCache.ThreadId)
             End If
 
             ' Timestamp
             If (Me.TraceOutputOptions And TraceOptions.Timestamp) = TraceOptions.Timestamp Then
-                outBuilder.Append(Me.Delimiter & eventCache.Timestamp.ToString(CultureInfo.InvariantCulture))
+                outBuilder.Append(Delimiter & eventCache.Timestamp.ToString(CultureInfo.InvariantCulture))
             End If
 
             ' HostName
-            If Me.IncludeHostName Then
-                outBuilder.Append(Me.Delimiter & HostName)
+            If IncludeHostName Then
+                outBuilder.Append(Delimiter & HostName)
             End If
 
             WriteLine(outBuilder.ToString())
@@ -535,10 +529,10 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="id">The id of the message</param>
         ''' <param name="format">A string with placeholders that serves as a format for the message</param>
         ''' <param name="args">The values for the placeholders in format</param>
-        Public Overrides Sub TraceEvent(ByVal eventCache As TraceEventCache, ByVal source As String, ByVal eventType As TraceEventType, ByVal id As Integer, ByVal format As String, ByVal ParamArray args() As Object)
+        Public Overrides Sub TraceEvent(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, format As String, ParamArray args() As Object)
 
             ' Create the message
-            Dim message As String = Nothing
+            Dim message As String
             If args IsNot Nothing Then
                 message = String.Format(CultureInfo.InvariantCulture, format, args)
             Else
@@ -556,7 +550,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="eventType">The eventType of the message</param>
         ''' <param name="id">The id of the message</param>
         ''' <param name="data">An object containing the message to be logged</param>
-        Public Overrides Sub TraceData(ByVal eventCache As TraceEventCache, ByVal source As String, ByVal eventType As TraceEventType, ByVal id As Integer, ByVal data As Object)
+        Public Overrides Sub TraceData(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, data As Object)
 
             Dim message As String = ""
             If data IsNot Nothing Then
@@ -574,7 +568,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="eventType">The eventType of the message</param>
         ''' <param name="id">The id of the message</param>
         ''' <param name="data">A list of objects making up the message to be logged</param>
-        Public Overrides Sub TraceData(ByVal eventCache As TraceEventCache, ByVal source As String, ByVal eventType As TraceEventType, ByVal id As Integer, ByVal ParamArray data As Object())
+        Public Overrides Sub TraceData(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, ParamArray data As Object())
 
             Dim messageBuilder As New StringBuilder()
             If data IsNot Nothing Then
@@ -582,7 +576,7 @@ Namespace Microsoft.VisualBasic.Logging
                 For i As Integer = 0 To bound
                     messageBuilder.Append(data(i).ToString())
                     If i <> bound Then
-                        messageBuilder.Append(Me.Delimiter)
+                        messageBuilder.Append(Delimiter)
                     End If
                 Next i
             End If
@@ -594,8 +588,8 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Flushes the underlying stream
         ''' </summary>
         Public Overrides Sub Flush()
-            If m_Stream IsNot Nothing Then
-                m_Stream.Flush()
+            If _stream IsNot Nothing Then
+                _stream.Flush()
             End If
         End Sub
 
@@ -612,21 +606,21 @@ Namespace Microsoft.VisualBasic.Logging
         ''' </summary>
         ''' <returns>An array of attribute names</returns>
         Protected Overrides Function GetSupportedAttributes() As String()
-            Return m_SupportedAttributes
+            Return _supportedAttributes
         End Function
 
         ''' <summary>
         ''' Makes sure stream is flushed
         ''' </summary>
         ''' <param name="disposing"></param>
-        Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        Protected Overrides Sub Dispose(disposing As Boolean)
             If disposing Then
                 CloseCurrentStream()
             End If
         End Sub
 
         ''' <summary>
-        ''' Gets the log file name under the current configuration. 
+        ''' Gets the log file name under the current configuration.
         ''' </summary>
         ''' <value>The log file name</value>
         ''' <remarks>
@@ -638,7 +632,7 @@ Namespace Microsoft.VisualBasic.Logging
                 Dim basePath As String
 
                 ' Get the directory
-                Select Case Me.Location
+                Select Case Location
                     Case LogFileLocation.CommonApplicationDirectory
                         basePath = Application.CommonAppDataPath
                     Case LogFileLocation.ExecutableDirectory
@@ -648,10 +642,10 @@ Namespace Microsoft.VisualBasic.Logging
                     Case LogFileLocation.TempDirectory
                         basePath = Path.GetTempPath()
                     Case LogFileLocation.Custom
-                        If Me.CustomLocation = "" Then
+                        If CustomLocation.Length = 0 Then
                             basePath = Application.UserAppDataPath
                         Else
-                            basePath = Me.CustomLocation
+                            basePath = CustomLocation
                         End If
                     Case Else
                         Debug.Fail("Unrecognized location")
@@ -659,16 +653,16 @@ Namespace Microsoft.VisualBasic.Logging
                 End Select
 
                 ' Add the base name
-                Dim fileName As String = Me.BaseFileName
+                Dim fileName As String = BaseFileName
 
                 ' Add DateTime Stamp
-                Select Case Me.LogFileCreationSchedule
+                Select Case LogFileCreationSchedule
                     Case LogFileCreationScheduleOption.Daily
                         fileName += "-" & Now.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)
                     Case LogFileCreationScheduleOption.Weekly
                         ' Get first day of week
-                        m_FirstDayOfWeek = Now.AddDays(-Now.DayOfWeek)
-                        fileName += "-" & m_FirstDayOfWeek.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)
+                        _firstDayOfWeek = Now.AddDays(-Now.DayOfWeek)
+                        fileName += "-" & _firstDayOfWeek.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)
                     Case LogFileCreationScheduleOption.None
                     Case Else
                         Debug.Fail("Unrecognized LogFileCreationSchedule")
@@ -686,8 +680,8 @@ Namespace Microsoft.VisualBasic.Logging
             Get
                 EnsureStreamIsOpen()
 
-                Debug.Assert(m_Stream IsNot Nothing, "Unable to get stream")
-                Return m_Stream
+                Debug.Assert(_stream IsNot Nothing, "Unable to get stream")
+                Return _stream
             End Get
         End Property
 
@@ -697,7 +691,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <returns>The stream</returns>
         Private Function GetStream() As ReferencedStream
 
-            ' Check the hash table to see if this file is already opened by another 
+            ' Check the hash table to see if this file is already opened by another
             ' FileLogTraceListener in the same process
             Dim i As Integer = 0
             Dim refStream As ReferencedStream = Nothing
@@ -715,23 +709,23 @@ Namespace Microsoft.VisualBasic.Logging
                 End If
 
                 Dim caseInsensitiveKey As String = fileName.ToUpper(CultureInfo.InvariantCulture)
-                SyncLock m_Streams
+                SyncLock s_streams
 
-                    If m_Streams.ContainsKey(caseInsensitiveKey) Then
-                        refStream = m_Streams(caseInsensitiveKey)
+                    If s_streams.ContainsKey(caseInsensitiveKey) Then
+                        refStream = s_streams(caseInsensitiveKey)
                         If Not refStream.IsInUse Then
                             ' This means that the referenced stream has somehow entered an invalid state so remove it
                             Debug.Fail("Referenced stream is in invalid state")
-                            m_Streams.Remove(caseInsensitiveKey)
+                            s_streams.Remove(caseInsensitiveKey)
                             refStream = Nothing
                         Else
-                            If Me.Append Then
+                            If Append Then
                                 ' We are handing off an already existing stream, so we need to make sure the caller has permissions to write to this stream
                                 Dim filePermission As New FileIOPermission(FileIOPermissionAccess.Write, fileName)
                                 filePermission.Demand()
 
                                 refStream.AddReference()
-                                m_FullFileName = fileName
+                                _fullFileName = fileName
                                 Return refStream
                             Else
                                 ' The user wants to overwrite, so we need to open a new stream
@@ -743,22 +737,22 @@ Namespace Microsoft.VisualBasic.Logging
                     End If
 
                     ' Try to open the file
-                    Dim fileEncoding As Encoding = Me.Encoding
+                    Dim fileEncoding As Encoding = Encoding
                     Try
-                        If Me.Append Then
+                        If Append Then
                             ' Try to get the file's actual encoding. If we get it, that trumps
                             ' the user specified value
                             fileEncoding = GetFileEncoding(fileName)
                             If fileEncoding Is Nothing Then
-                                fileEncoding = Me.Encoding
+                                fileEncoding = Encoding
                             End If
                         End If
 
-                        Dim baseStreamWriter As New StreamWriter(fileName, Me.Append, fileEncoding)
+                        Dim baseStreamWriter As New StreamWriter(fileName, Append, fileEncoding)
                         refStream = New ReferencedStream(baseStreamWriter)
                         refStream.AddReference()
-                        m_Streams.Add(caseInsensitiveKey, refStream)
-                        m_FullFileName = fileName
+                        s_streams.Add(caseInsensitiveKey, refStream)
+                        _fullFileName = fileName
                         Return refStream
                     Catch ex As IOException
                     End Try
@@ -775,8 +769,8 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Makes sure we have an open stream
         ''' </summary>
         Private Sub EnsureStreamIsOpen()
-            If m_Stream Is Nothing Then
-                m_Stream = GetStream()
+            If _stream Is Nothing Then
+                _stream = GetStream()
             End If
         End Sub
 
@@ -785,13 +779,13 @@ Namespace Microsoft.VisualBasic.Logging
         ''' </summary>
         ''' <remarks>This method should be safe to call whether or not there is a stream</remarks>
         Private Sub CloseCurrentStream()
-            If m_Stream IsNot Nothing Then
-                SyncLock m_Streams
-                    m_Stream.CloseStream()
-                    If Not m_Stream.IsInUse Then
-                        m_Streams.Remove(m_FullFileName.ToUpper(CultureInfo.InvariantCulture))
+            If _stream IsNot Nothing Then
+                SyncLock s_streams
+                    _stream.CloseStream()
+                    If Not _stream.IsInUse Then
+                        s_streams.Remove(_fullFileName.ToUpper(CultureInfo.InvariantCulture))
                     End If
-                    m_Stream = Nothing
+                    _stream = Nothing
                 End SyncLock
             End If
         End Sub
@@ -801,7 +795,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' </summary>
         ''' <returns>True if the date has changed, otherwise False</returns>
         Private Function DayChanged() As Boolean
-            Return m_Day.Date <> Now.Date
+            Return _day.Date <> Now.Date
         End Function
 
         ''' <summary>
@@ -809,14 +803,14 @@ Namespace Microsoft.VisualBasic.Logging
         ''' </summary>
         ''' <returns>True if the date has changed, otherwise False</returns>
         Private Function WeekChanged() As Boolean
-            Return m_FirstDayOfWeek.Date <> GetFirstDayOfWeek(Now.Date)
+            Return _firstDayOfWeek.Date <> GetFirstDayOfWeek(Now.Date)
         End Function
 
         ''' <summary>
         ''' Utility to get the date of the first day of the week from the passed in date
         ''' </summary>
         ''' <param name="checkDate">The date being checked</param>
-        Private Shared Function GetFirstDayOfWeek(ByVal checkDate As Date) As Date
+        Private Shared Function GetFirstDayOfWeek(checkDate As Date) As Date
             Return checkDate.AddDays(-checkDate.DayOfWeek).Date
         End Function
 
@@ -846,16 +840,16 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="newEntrySize">The size of what's about to be written to the file</param>
         ''' <returns>True if the limits aren't trespassed, otherwise False</returns>
         ''' <remarks>This method is not 100% accurate if AutoFlush is False</remarks>
-        Private Function ResourcesAvailable(ByVal newEntrySize As Long) As Boolean
+        Private Function ResourcesAvailable(newEntrySize As Long) As Boolean
 
-            If ListenerStream.FileSize + newEntrySize > Me.MaxFileSize Then
+            If ListenerStream.FileSize + newEntrySize > MaxFileSize Then
                 If Me.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
                     Throw New InvalidOperationException(GetResourceString(SR.ApplicationLog_FileExceedsMaximumSize))
                 End If
                 Return False
             End If
 
-            If Me.GetFreeDiskSpace() - newEntrySize < Me.ReserveDiskSpace Then
+            If GetFreeDiskSpace() - newEntrySize < ReserveDiskSpace Then
                 If Me.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
                     Throw New InvalidOperationException(GetResourceString(SR.ApplicationLog_ReservedSpaceEncroached))
                 End If
@@ -894,7 +888,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Opens a file and attempts to determine the file's encoding
         ''' </summary>
         ''' <returns>The encoding or Nothing</returns>
-        Private Function GetFileEncoding(ByVal fileName As String) As Encoding
+        Private Function GetFileEncoding(fileName As String) As Encoding
 
             If File.Exists(fileName) Then
                 Dim Reader As StreamReader = Nothing
@@ -902,7 +896,7 @@ Namespace Microsoft.VisualBasic.Logging
 
                     'Attempt to determine the encodoing of the file. The call to Reader.ReadLine
                     'will change the current encoding of Reader to that of the file.
-                    Reader = New StreamReader(fileName, Me.Encoding, True)
+                    Reader = New StreamReader(fileName, Encoding, True)
 
                     'Ignore 0 length file
                     If Reader.BaseStream.Length > 0 Then
@@ -927,11 +921,11 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <remarks>We use the machine name because we can get that even if not hooked up to a network</remarks>
         Private ReadOnly Property HostName() As String
             Get
-                If m_HostName = "" Then
+                If _hostName.Length = 0 Then
                     ' Use the machine name
-                    m_HostName = System.Environment.MachineName
+                    _hostName = System.Environment.MachineName
                 End If
-                Return m_HostName
+                Return _hostName
             End Get
         End Property
 
@@ -942,8 +936,8 @@ Namespace Microsoft.VisualBasic.Logging
         ''' This ensures these API cannot be used to circumvent CAS
         '''</remarks>
         Private Sub DemandWritePermission()
-            Debug.Assert(Path.GetDirectoryName(Me.LogFileName) <> "", "The log directory shouldn't be empty.")
-            Dim fileName As String = Path.GetDirectoryName(Me.LogFileName)
+            Debug.Assert(Path.GetDirectoryName(LogFileName).Length <> 0, "The log directory shouldn't be empty.")
+            Dim fileName As String = Path.GetDirectoryName(LogFileName)
             Dim filePermission As New FileIOPermission(FileIOPermissionAccess.Write, fileName)
             filePermission.Demand()
         End Sub
@@ -952,9 +946,9 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Validates that the value being passed as an LogFileLocation enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateLogFileLocationEnumValue(ByVal value As LogFileLocation, ByVal paramName As String)
+        Private Sub ValidateLogFileLocationEnumValue(value As LogFileLocation, paramName As String)
             If value < LogFileLocation.TempDirectory OrElse value > LogFileLocation.Custom Then
-                Throw New System.ComponentModel.InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileLocation))
+                Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileLocation))
             End If
         End Sub
 
@@ -962,9 +956,9 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Validates that the value being passed as an DiskSpaceExhaustedOption enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateDiskSpaceExhaustedOptionEnumValue(ByVal value As DiskSpaceExhaustedOption, ByVal paramName As String)
+        Private Sub ValidateDiskSpaceExhaustedOptionEnumValue(value As DiskSpaceExhaustedOption, paramName As String)
             If value < DiskSpaceExhaustedOption.ThrowException OrElse value > DiskSpaceExhaustedOption.DiscardMessages Then
-                Throw New System.ComponentModel.InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(DiskSpaceExhaustedOption))
+                Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(DiskSpaceExhaustedOption))
             End If
         End Sub
 
@@ -972,9 +966,9 @@ Namespace Microsoft.VisualBasic.Logging
         ''' Validates that the value being passed as an LogFileCreationScheduleOption enum is a legal value
         ''' </summary>
         ''' <param name="value"></param>
-        Private Sub ValidateLogFileCreationScheduleOptionEnumValue(ByVal value As LogFileCreationScheduleOption, ByVal paramName As String)
+        Private Sub ValidateLogFileCreationScheduleOptionEnumValue(value As LogFileCreationScheduleOption, paramName As String)
             If value < LogFileCreationScheduleOption.None OrElse value > LogFileCreationScheduleOption.Weekly Then
-                Throw New System.ComponentModel.InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileCreationScheduleOption))
+                Throw New InvalidEnumArgumentException(paramName, DirectCast(value, Integer), GetType(LogFileCreationScheduleOption))
             End If
         End Sub
 
@@ -983,7 +977,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' </summary>
         ''' <param name="stack"></param>
         ''' <returns>Returns the stack as a .csv string</returns>
-        Private Shared Function StackToString(ByVal stack As System.Collections.Stack) As String
+        Private Shared Function StackToString(stack As Stack) As String
             Debug.Assert(stack IsNot Nothing, "Stack wasn't created.")
 
             Dim length As Integer = STACK_DELIMITER.Length
@@ -1006,69 +1000,69 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ' Indicates the location of the log's directory
-        Private m_Location As LogFileLocation = LogFileLocation.LocalUserApplicationDirectory
+        Private _location As LogFileLocation = LogFileLocation.LocalUserApplicationDirectory
 
         ' Indicates whether or not to flush after every write
-        Private m_AutoFlush As Boolean = False
+        Private _autoFlush As Boolean = False
 
         ' Indicates whether to append to or overwrite the log file
-        Private m_Append As Boolean = True
+        Private _append As Boolean = True
 
         ' Indicates whether or not to include the host id in the output
-        Private m_IncludeHostName As Boolean = False
+        Private _includeHostName As Boolean = False
 
         ' Indicates what behavior should take place when a resource level has been passed
-        Private m_DiskSpaceExhaustedBehavior As DiskSpaceExhaustedOption = DiskSpaceExhaustedOption.DiscardMessages
+        Private _diskSpaceExhaustedBehavior As DiskSpaceExhaustedOption = DiskSpaceExhaustedOption.DiscardMessages
 
         ' Stores the name of the file minus the path, date stamp, and file number
-        Private m_BaseFileName As String = Path.GetFileNameWithoutExtension(Application.ExecutablePath)
+        Private _baseFileName As String = Path.GetFileNameWithoutExtension(Application.ExecutablePath)
 
         ' Indicate which date stamp should be used in the log file name
-        Private m_LogFileDateStamp As LogFileCreationScheduleOption = LogFileCreationScheduleOption.None
+        Private _logFileDateStamp As LogFileCreationScheduleOption = LogFileCreationScheduleOption.None
 
         ' The maximum size of the log file
-        Private m_MaxFileSize As Long = 5000000L
+        Private _maxFileSize As Long = 5000000L
 
         ' The amount of free disk space there needs to be on the drive of the log file
-        Private m_ReserveDiskSpace As Long = 10000000L
+        Private _reserveDiskSpace As Long = 10000000L
 
         ' The delimiter to be used to separate fields in a line of output
-        Private m_Delimiter As String = vbTab
+        Private _delimiter As String = vbTab
 
         ' The encoding of the log file
-        Private m_Encoding As Encoding = System.Text.Encoding.UTF8
+        Private _encoding As Encoding = System.Text.Encoding.UTF8
 
         ' The full name and path of the log file
-        Private m_FullFileName As String
+        Private _fullFileName As String
 
         ' Directory to be used for the log file if Location is set to Custom
-        Private m_CustomLocation As String = Application.UserAppDataPath
+        Private _customLocation As String = Application.UserAppDataPath
 
         ' Reference counted stream used for writing to the log file
-        Private m_Stream As ReferencedStream
+        Private _stream As ReferencedStream
 
-        Private m_Day As DateTime = Now.Date
+        Private ReadOnly _day As Date = Now.Date
 
-        Private m_FirstDayOfWeek As DateTime = GetFirstDayOfWeek(Now.Date)
+        Private _firstDayOfWeek As Date = GetFirstDayOfWeek(Now.Date)
 
-        Private m_HostName As String
+        Private _hostName As String
 
         ' Indicates whether or not properties have been set
         ' Note: Properties that use m_PropertiesSet to track whether or not
         '       they've been set should always be set through the property setter and not
         '       by directly changing the corresponding private field.
-        Private m_PropertiesSet As New System.Collections.BitArray(PROPERTY_COUNT, False)
+        Private ReadOnly _propertiesSet As New BitArray(PROPERTY_COUNT, False)
 
         ' Table of all of the files opened by any FileLogTraceListener in the current process
-        Private Shared m_Streams As New Dictionary(Of String, ReferencedStream)
+        Private Shared ReadOnly s_streams As New Dictionary(Of String, ReferencedStream)
 
         ' A list of supported attributes
-        Private m_SupportedAttributes() As String = New String() {KEY_APPEND, KEY_APPEND_PASCAL, KEY_AUTOFLUSH, KEY_AUTOFLUSH_PASCAL, KEY_AUTOFLUSH_CAMEL, _
-                                                                  KEY_BASEFILENAME, KEY_BASEFILENAME_PASCAL, KEY_BASEFILENAME_CAMEL, KEY_BASEFILENAME_PASCAL_ALT, KEY_BASEFILENAME_CAMEL_ALT, _
-                                                                  KEY_CUSTOMLOCATION, KEY_CUSTOMLOCATION_PASCAL, KEY_CUSTOMLOCATION_CAMEL, KEY_DELIMITER, KEY_DELIMITER_PASCAL, _
-                                                                  KEY_DISKSPACEEXHAUSTEDBEHAVIOR, KEY_DISKSPACEEXHAUSTEDBEHAVIOR_PASCAL, KEY_DISKSPACEEXHAUSTEDBEHAVIOR_CAMEL, _
-                                                                  KEY_ENCODING, KEY_ENCODING_PASCAL, KEY_INCLUDEHOSTNAME, KEY_INCLUDEHOSTNAME_PASCAL, KEY_INCLUDEHOSTNAME_CAMEL, KEY_LOCATION, KEY_LOCATION_PASCAL, _
-                                                                  KEY_LOGFILECREATIONSCHEDULE, KEY_LOGFILECREATIONSCHEDULE_PASCAL, KEY_LOGFILECREATIONSCHEDULE_CAMEL, _
+        Private ReadOnly _supportedAttributes() As String = New String() {KEY_APPEND, KEY_APPEND_PASCAL, KEY_AUTOFLUSH, KEY_AUTOFLUSH_PASCAL, KEY_AUTOFLUSH_CAMEL,
+                                                                  KEY_BASEFILENAME, KEY_BASEFILENAME_PASCAL, KEY_BASEFILENAME_CAMEL, KEY_BASEFILENAME_PASCAL_ALT, KEY_BASEFILENAME_CAMEL_ALT,
+                                                                  KEY_CUSTOMLOCATION, KEY_CUSTOMLOCATION_PASCAL, KEY_CUSTOMLOCATION_CAMEL, KEY_DELIMITER, KEY_DELIMITER_PASCAL,
+                                                                  KEY_DISKSPACEEXHAUSTEDBEHAVIOR, KEY_DISKSPACEEXHAUSTEDBEHAVIOR_PASCAL, KEY_DISKSPACEEXHAUSTEDBEHAVIOR_CAMEL,
+                                                                  KEY_ENCODING, KEY_ENCODING_PASCAL, KEY_INCLUDEHOSTNAME, KEY_INCLUDEHOSTNAME_PASCAL, KEY_INCLUDEHOSTNAME_CAMEL, KEY_LOCATION, KEY_LOCATION_PASCAL,
+                                                                  KEY_LOGFILECREATIONSCHEDULE, KEY_LOGFILECREATIONSCHEDULE_PASCAL, KEY_LOGFILECREATIONSCHEDULE_CAMEL,
                                                                   KEY_MAXFILESIZE, KEY_MAXFILESIZE_PASCAL, KEY_MAXFILESIZE_CAMEL, KEY_RESERVEDISKSPACE, KEY_RESERVEDISKSPACE_PASCAL, KEY_RESERVEDISKSPACE_CAMEL}
 
         ' Identifies properties in the bitarray
@@ -1147,7 +1141,7 @@ Namespace Microsoft.VisualBasic.Logging
         Private Const STACK_DELIMITER As String = ", "
 
         ''' <summary>
-        ''' Wraps a StreamWriter and keeps a reference count. This enables multiple 
+        ''' Wraps a StreamWriter and keeps a reference count. This enables multiple
         ''' FileLogTraceListeners on multiple threads to access the same file.
         ''' </summary>
         Friend Class ReferencedStream
@@ -1157,17 +1151,17 @@ Namespace Microsoft.VisualBasic.Logging
             ''' Creates a new referenced stream
             ''' </summary>
             ''' <param name="stream">The stream that does the actual writing</param>
-            Friend Sub New(ByVal stream As StreamWriter)
-                m_Stream = stream
+            Friend Sub New(stream As StreamWriter)
+                _stream = stream
             End Sub
 
             ''' <summary>
             ''' Writes a message to the stream
             ''' </summary>
             ''' <param name="message">The message to write</param>
-            Friend Sub Write(ByVal message As String)
-                SyncLock m_SyncObject
-                    m_Stream.Write(message)
+            Friend Sub Write(message As String)
+                SyncLock _syncObject
+                    _stream.Write(message)
                 End SyncLock
             End Sub
 
@@ -1175,9 +1169,9 @@ Namespace Microsoft.VisualBasic.Logging
             ''' Writes a message to the stream as a line
             ''' </summary>
             ''' <param name="message">The message to write</param>
-            Friend Sub WriteLine(ByVal message As String)
-                SyncLock m_SyncObject
-                    m_Stream.WriteLine(message)
+            Friend Sub WriteLine(message As String)
+                SyncLock _syncObject
+                    _stream.WriteLine(message)
                 End SyncLock
             End Sub
 
@@ -1185,8 +1179,8 @@ Namespace Microsoft.VisualBasic.Logging
             ''' Increments the reference count for the stream
             ''' </summary>
             Friend Sub AddReference()
-                SyncLock m_SyncObject
-                    m_ReferenceCount += 1
+                SyncLock _syncObject
+                    _referenceCount += 1
                 End SyncLock
             End Sub
 
@@ -1194,25 +1188,25 @@ Namespace Microsoft.VisualBasic.Logging
             ''' Flushes the stream
             ''' </summary>
             Friend Sub Flush()
-                SyncLock m_SyncObject
-                    m_Stream.Flush()
+                SyncLock _syncObject
+                    _stream.Flush()
                 End SyncLock
             End Sub
 
             ''' <summary>
-            ''' Decrements the reference count to the stream and closes the stream if the reference count 
+            ''' Decrements the reference count to the stream and closes the stream if the reference count
             ''' is zero
             ''' </summary>
             Friend Sub CloseStream()
-                SyncLock m_SyncObject
+                SyncLock _syncObject
                     Try
-                        m_ReferenceCount -= 1
-                        m_Stream.Flush()
-                        Debug.Assert(m_ReferenceCount >= 0, "Ref count is below 0")
+                        _referenceCount -= 1
+                        _stream.Flush()
+                        Debug.Assert(_referenceCount >= 0, "Ref count is below 0")
                     Finally
-                        If m_ReferenceCount <= 0 Then
-                            m_Stream.Close()
-                            m_Stream = Nothing
+                        If _referenceCount <= 0 Then
+                            _stream.Close()
+                            _stream = Nothing
                         End If
                     End Try
                 End SyncLock
@@ -1224,7 +1218,7 @@ Namespace Microsoft.VisualBasic.Logging
             ''' <value>True if the stream is being used, otherwise False</value>
             Friend ReadOnly Property IsInUse() As Boolean
                 Get
-                    Return m_Stream IsNot Nothing
+                    Return _stream IsNot Nothing
                 End Get
             End Property
 
@@ -1234,7 +1228,7 @@ Namespace Microsoft.VisualBasic.Logging
             ''' <value>The size</value>
             Friend ReadOnly Property FileSize() As Long
                 Get
-                    Return m_Stream.BaseStream.Length
+                    Return _stream.BaseStream.Length
                 End Get
             End Property
 
@@ -1242,13 +1236,13 @@ Namespace Microsoft.VisualBasic.Logging
             ''' Ensures the stream is closed (flushed) no matter how we are closed
             ''' </summary>
             ''' <param name="disposing">Indicates who called dispose</param>
-            Private Overloads Sub Dispose(ByVal disposing As Boolean)
+            Private Overloads Sub Dispose(disposing As Boolean)
                 If disposing Then
-                    If Not m_Disposed Then
-                        If m_Stream IsNot Nothing Then
-                            m_Stream.Close()
+                    If Not _disposed Then
+                        If _stream IsNot Nothing Then
+                            _stream.Close()
                         End If
-                        m_Disposed = True
+                        _disposed = True
                     End If
                 End If
             End Sub
@@ -1257,7 +1251,7 @@ Namespace Microsoft.VisualBasic.Logging
             ''' Standard implementation of IDisposable
             ''' </summary>
             Public Overloads Sub Dispose() Implements IDisposable.Dispose
-                ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+                ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
                 Dispose(True)
                 GC.SuppressFinalize(Me)
             End Sub
@@ -1266,22 +1260,22 @@ Namespace Microsoft.VisualBasic.Logging
             ''' Ensures stream is closed at GC
             ''' </summary>
             Protected Overrides Sub Finalize()
-                ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+                ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
                 Dispose(False)
                 MyBase.Finalize()
             End Sub
 
             ' The stream that does the writing
-            Private m_Stream As StreamWriter
+            Private _stream As StreamWriter
 
             ' The number of FileLogTraceListeners using the stream
-            Private m_ReferenceCount As Integer = 0
+            Private _referenceCount As Integer = 0
 
             ' Used for synchronizing writing and reference counting
-            Private m_SyncObject As Object = New Object
+            Private ReadOnly _syncObject As Object = New Object
 
             ' Indicates whether or not the object has been disposed
-            Private m_Disposed As Boolean = False
+            Private _disposed As Boolean = False
 
         End Class 'ReferencedStream
 
