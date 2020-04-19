@@ -4,11 +4,7 @@
 Option Strict On
 Option Explicit On
 
-Imports System
-Imports System.Diagnostics
-Imports System.Globalization
 Imports System.Security
-Imports System.Text
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
@@ -25,7 +21,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="Path">The input path.</param>
         ''' <param name="ParamName">The parameter name to include in the exception if one is raised.</param>
         ''' <returns>The normalized path.</returns>
-        Friend Shared Function NormalizeFilePath(ByVal Path As String, ByVal ParamName As String) As String
+        Friend Shared Function NormalizeFilePath(Path As String, ParamName As String) As String
             CheckFilePathTrailingSeparator(Path, ParamName)
             Return NormalizePath(Path)
         End Function
@@ -37,7 +33,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>The normalized path.</returns>
         ''' <exception cref="IO.Path.GetFullPath">See IO.Path.GetFullPath for possible exceptions.</exception>
         ''' <remarks>Keep this function since we might change the implementation / behavior later.</remarks>
-        Friend Shared Function NormalizePath(ByVal Path As String) As String
+        Friend Shared Function NormalizePath(Path As String) As String
             Return GetLongPath(RemoveEndingSeparator(IO.Path.GetFullPath(Path)))
         End Function
 
@@ -46,8 +42,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' </summary>
         ''' <param name="path">The file path.</param>
         ''' <param name="paramName">The parameter name to include in ArgumentException.</param>
-        Friend Shared Sub CheckFilePathTrailingSeparator(ByVal path As String, ByVal paramName As String)
-            If path = "" Then ' Check for argument null
+        Friend Shared Sub CheckFilePathTrailingSeparator(path As String, paramName As String)
+            If String.IsNullOrEmpty(path) Then ' Check for argument null
                 Throw ExUtils.GetArgumentNullException(paramName)
             End If
             If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
@@ -65,8 +61,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         '''  GetLongPathName is a PInvoke call and requires unmanaged code permission.
         '''  Use DirectoryInfo.GetFiles and GetDirectories (which call FindFirstFile) so that we always have permission.
         '''</remarks>
-        Private Shared Function GetLongPath(ByVal FullPath As String) As String
-            Debug.Assert(Not FullPath = "" AndAlso IO.Path.IsPathRooted(FullPath), "Must be full path")
+        Private Shared Function GetLongPath(FullPath As String) As String
+            Debug.Assert(Not String.IsNullOrEmpty(FullPath) AndAlso IO.Path.IsPathRooted(FullPath), "Must be full path")
             Try
                 ' If root path, return itself. UNC path do not recognize 8.3 format in root path, so this is fine.
                 If IsRoot(FullPath) Then
@@ -120,7 +116,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         '''           BUT \\machine\share\ -> \\machine\share (No separator here).
         '''   Therefore, remove any separators at the end to have correct result.
         ''' </remarks>
-        Private Shared Function IsRoot(ByVal Path As String) As Boolean
+        Private Shared Function IsRoot(Path As String) As Boolean
             ' This function accepts a relative path since GetParentPath will call this,
             ' and GetParentPath accept relative paths.
             If Not IO.Path.IsPathRooted(Path) Then
@@ -138,7 +134,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="Path">a full or relative path.</param>
         ''' <returns>If Path is a root path, the same value. Otherwise, removes any directory separators at the end.</returns>
         ''' <remarks>We decided not to return path with separators at the end.</remarks>
-        Private Shared Function RemoveEndingSeparator(ByVal Path As String) As String
+        Private Shared Function RemoveEndingSeparator(Path As String) As String
             If IO.Path.IsPathRooted(Path) Then
                 ' If the path is rooted, attempt to check if it is a root path.
                 ' Note: IO.Path.GetPathRoot: C: -> C:, C:\ -> C:\, \\myshare\mydir -> \\myshare\mydir
@@ -152,10 +148,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
             ' Otherwise, remove all separators at the end.
             Return Path.TrimEnd(IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar)
         End Function
-
-        ' Array containing all the path separator chars. Used to verify that input is a name, not a path.
-        Private Shared ReadOnly m_SeparatorChars() As Char = {
-            IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar, IO.Path.VolumeSeparatorChar}
 
     End Class
 

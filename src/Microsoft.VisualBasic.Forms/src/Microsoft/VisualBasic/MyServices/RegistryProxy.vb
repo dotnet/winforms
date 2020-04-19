@@ -1,4 +1,4 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -10,7 +10,7 @@ Namespace Microsoft.VisualBasic.MyServices
     ''' <summary>
     ''' An extremely thin wrapper around Microsoft.Win32.Registry to expose the type through My.
     ''' </summary>
-    <System.ComponentModel.EditorBrowsable(EditorBrowsableState.Never)>
+    <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class RegistryProxy
 
         Public ReadOnly Property CurrentUser() As RegistryKey
@@ -49,18 +49,21 @@ Namespace Microsoft.VisualBasic.MyServices
             End Get
         End Property
 
-        Public Function GetValue(ByVal keyName As String, ByVal valueName As String,
-            ByVal defaultValue As Object) As Object
+        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
+        Public Function GetValue(keyName As String, valueName As String,
+            defaultValue As Object) As Object
 
             Return Registry.GetValue(keyName, valueName, defaultValue)
         End Function
 
-        Public Sub SetValue(ByVal keyName As String, ByVal valueName As String, ByVal value As Object)
+        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
+        Public Sub SetValue(keyName As String, valueName As String, value As Object)
             Registry.SetValue(keyName, valueName, value)
         End Sub
 
-        Public Sub SetValue(ByVal keyName As String, ByVal valueName As String, ByVal value As Object,
-            ByVal valueKind As Microsoft.Win32.RegistryValueKind)
+        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
+        Public Sub SetValue(keyName As String, valueName As String, value As Object,
+            valueKind As RegistryValueKind)
 
             Registry.SetValue(keyName, valueName, value, valueKind)
         End Sub
