@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Microsoft.VisualBasic.Forms\src\Microsoft.VisualBasic.Forms.vbproj" />
     <ProjectReference Include="..\..\..\src\Microsoft.VisualBasic.Facade.csproj" />
     <ProjectReference Include="..\..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
