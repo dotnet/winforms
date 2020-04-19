@@ -6,9 +6,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests
 {
@@ -7643,7 +7645,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Selected_GetWithOwner_ReturnsFalse()
+        public void ToolStripItem_Selected_GetWithOwner_ReturnsFalse()
         {
             using var owner = new ToolStrip();
             using var item = new SubToolStripItem
@@ -7654,7 +7656,34 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Selected_GetWithParent_ReturnsFalse()
+        public void ToolStripItem_Selected_GetWithDraggingOwner_ReturnsFalse()
+        {
+            using var owner = new SubToolStrip();
+            owner.OnBeginDrag(EventArgs.Empty);
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Selected_GetWithSelectionSuspendedOwner_ReturnsFalse()
+        {
+            using var owner = new SubToolStrip();
+            owner.OnBeginDrag(EventArgs.Empty);
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotNull(owner.GetItemAt(item.Bounds.X, item.Bounds.Y));
+            owner.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, item.Bounds.X, item.Bounds.Y, 0));
+
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Selected_GetWithParent_ReturnsFalse()
         {
             using var parent = new ToolStrip();
             using var item = new SubToolStripItem
@@ -7662,6 +7691,51 @@ namespace System.Windows.Forms.Tests
                 Parent = parent
             };
             Assert.False(item.Selected);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Selected_GetWithDraggingParent_ReturnsFalse()
+        {
+            using var parent = new SubToolStrip();
+            parent.OnBeginDrag(EventArgs.Empty);
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Selected_GetWithSelectionSuspendedParentNotCurrentItem_ReturnsFalse()
+        {
+            using var parent = new SubToolStrip();
+            parent.OnBeginDrag(EventArgs.Empty);
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotNull(parent.GetItemAt(item.Bounds.X, item.Bounds.Y));
+            parent.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, item.Bounds.X, item.Bounds.Y, 0));
+
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Selected_GetWithSelectionSuspendedParentCurrentItem_ReturnsTrue()
+        {
+            using var parent = new SubToolStrip();
+            parent.OnBeginDrag(EventArgs.Empty);
+            using var item = new SubToolStripItem
+            {
+                Parent = parent,
+                Owner = parent,
+            };
+            Assert.True(item.Visible);
+            parent.PerformLayout();
+            Assert.Same(item, parent.GetItemAt(item.Bounds.X, item.Bounds.Y));
+            parent.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, item.Bounds.X, item.Bounds.Y, 0));
+
+            Assert.True(item.Selected);
         }
 
         [WinFormsFact]
@@ -9991,6 +10065,140 @@ namespace System.Windows.Forms.Tests
             {
                 item.Disposed -= handler;
             }
+        }
+
+        public static IEnumerable<object[]> DoDragDrop_TestData()
+        {
+            foreach (DragDropEffects allowedEffects in Enum.GetValues(typeof(DragDropEffects)))
+            {
+                yield return new object[] { "text", allowedEffects };
+                yield return new object[] { new SubToolStripItem(), allowedEffects };
+                yield return new object[] { new DataObject(), allowedEffects };
+                yield return new object[] { new DataObject("data"), allowedEffects };
+                yield return new object[] { new Mock<IDataObject>(MockBehavior.Strict).Object, allowedEffects };
+                yield return new object[] { new Mock<IComDataObject>(MockBehavior.Strict).Object, allowedEffects };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DoDragDrop_TestData))]
+        public void ToolStripItem_DoDragDrop_Invoke_ReturnsNone(object data, DragDropEffects allowedEffects)
+        {
+            using var item = new SubToolStripItem();
+            Assert.Equal(DragDropEffects.None, item.DoDragDrop(data, allowedEffects));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DoDragDrop_TestData))]
+        public void ToolStripItem_DoDragDrop_InvokeWithParent_ReturnsNone(object data, DragDropEffects allowedEffects)
+        {
+            using var parent = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Equal(DragDropEffects.None, item.DoDragDrop(data, allowedEffects));
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DoDragDrop_TestData))]
+        public void ToolStripItem_DoDragDrop_InvokeWithParentAllowItemReorder_ReturnsNone(object data, DragDropEffects allowedEffects)
+        {
+            using var parent = new ToolStrip
+            {
+                AllowItemReorder = true
+            };
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.Equal(DragDropEffects.None, item.DoDragDrop(data, allowedEffects));
+            Assert.False(parent.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DoDragDrop_TestData))]
+        public void ToolStripItem_DoDragDrop_InvokeWithOwner_ReturnsNone(object data, DragDropEffects allowedEffects)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Equal(DragDropEffects.None, item.DoDragDrop(data, allowedEffects));
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DoDragDrop_TestData))]
+        public void ToolStripItem_DoDragDrop_InvokeWithOwnerAllowItemReorder_ReturnsNone(object data, DragDropEffects allowedEffects)
+        {
+            using var owner = new ToolStrip
+            {
+                AllowItemReorder = true
+            };
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.Equal(DragDropEffects.None, item.DoDragDrop(data, allowedEffects));
+            Assert.False(owner.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_DoDragDrop_NullData_ThrowsArgumentNullException()
+        {
+            using var item = new SubToolStripItem();
+            Assert.Throws<ArgumentNullException>("data", () => item.DoDragDrop(null, DragDropEffects.All));
+        }
+
+        private class CustomDataObject : IDataObject
+        {
+            public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
+
+            public object GetData(string format) => throw new NotImplementedException();
+
+            public object GetData(Type format) => throw new NotImplementedException();
+
+            public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
+
+            public bool GetDataPresent(string format) => throw new NotImplementedException();
+
+            public bool GetDataPresent(Type format) => throw new NotImplementedException();
+
+            public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
+
+            public string[] GetFormats() => throw new NotImplementedException();
+
+            public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
+
+            public void SetData(string format, object data) => throw new NotImplementedException();
+
+            public void SetData(Type format, object data) => throw new NotImplementedException();
+
+            public void SetData(object data) => throw new NotImplementedException();
+        }
+
+        private class CustomComDataObject : IComDataObject
+        {
+            public void GetData(ref FORMATETC format, out STGMEDIUM medium) => throw new NotImplementedException();
+
+            public void GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => throw new NotImplementedException();
+
+            public int QueryGetData(ref FORMATETC format) => throw new NotImplementedException();
+
+            public int GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut) => throw new NotImplementedException();
+
+            public void SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release) => throw new NotImplementedException();
+
+            public IEnumFORMATETC EnumFormatEtc(DATADIR direction) => throw new NotImplementedException();
+
+            public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
+
+            public void DUnadvise(int connection) => throw new NotImplementedException();
+
+            public int EnumDAdvise(out IEnumSTATDATA enumAdvise) => throw new NotImplementedException();
         }
 
         [WinFormsFact]
@@ -13083,6 +13291,71 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(OnVisibleChanged_TestData))]
+        public void ToolStripItem_OnVisibleChanged_InvokeWithDisposingOwner_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
+        {
+            using var owner = new ToolStrip();
+            using var item = new SubToolStripItem
+            {
+                Enabled = enabled,
+                Visible = visible,
+                Image = image,
+                Owner = owner
+            };
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            int invalidatedCallCount = 0;
+            owner.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            owner.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            owner.HandleCreated += (sender, e) => createdCallCount++;
+            int ownerLayoutCallCount = 0;
+            void ownerHandler(object sender, LayoutEventArgs e) => ownerLayoutCallCount++;
+            owner.Layout += ownerHandler;
+            int disposedCallCount = 0;
+            owner.Disposed += (sender, e) =>
+            {
+                try
+                {
+                    int callCount = 0;
+                    EventHandler handler = (sender, e) =>
+                    {
+                        Assert.Same(item, sender);
+                        Assert.Same(eventArgs, e);
+                        callCount++;
+                    };
+
+                    // Call with handler.
+                    item.VisibleChanged += handler;
+                    item.OnVisibleChanged(eventArgs);
+                    Assert.Equal(1, callCount);
+                    Assert.Equal(0, ownerLayoutCallCount);
+                    Assert.False(owner.IsHandleCreated);
+                    Assert.Equal(0, invalidatedCallCount);
+                    Assert.Equal(0, styleChangedCallCount);
+                    Assert.Equal(0, createdCallCount);
+
+                    // Remove handler.
+                    item.VisibleChanged -= handler;
+                    item.OnVisibleChanged(eventArgs);
+                    Assert.Equal(1, callCount);
+                    Assert.Equal(0, ownerLayoutCallCount);
+                    Assert.False(owner.IsHandleCreated);
+                    Assert.Equal(0, invalidatedCallCount);
+                    Assert.Equal(0, styleChangedCallCount);
+                    Assert.Equal(0, createdCallCount);
+                }
+                finally
+                {
+                    owner.Layout -= ownerHandler;
+                }
+                disposedCallCount++;
+            };
+            owner.Dispose();
+            Assert.Equal(1, disposedCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnVisibleChanged_TestData))]
         public void ToolStripItem_OnVisibleChanged_InvokeWithDisposedOwner_CallsVisibleChanged(bool enabled, bool visible, Image image, EventArgs eventArgs)
         {
             using var owner = new ToolStrip();
@@ -13279,6 +13552,7 @@ namespace System.Windows.Forms.Tests
             item.Click -= handler;
             item.PerformClick();
             Assert.Equal(expectedClickCount, callCount);
+            Assert.False(item.Pressed);
         }
 
         [WinFormsFact]
@@ -13312,6 +13586,45 @@ namespace System.Windows.Forms.Tests
             item.Click -= handler;
             item.PerformClick();
             Assert.Equal(1, callCount);
+            Assert.False(item.Pressed);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(PerformClick_TestData))]
+        public void ToolStripItem_PerformClick_InvokeDoesNotSupportItemClick_Success(bool enabled, bool available, int expectedClickCount)
+        {
+            using var control = new ToolStrip();
+            ToolStripItem grip = Assert.IsAssignableFrom<ToolStripItem>(Assert.Single(control.DisplayedItems));
+            grip.Enabled = enabled;
+            grip.Available = available;
+
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(grip, sender);
+                Assert.Same(EventArgs.Empty, e);
+                Assert.False(grip.Pressed);
+                callCount++;
+            };
+            int itemClickedCallCount = 0;
+            ToolStripItemClickedEventHandler itemClickedHandler = (sender, e) => itemClickedCallCount++;
+            control.ItemClicked += itemClickedHandler;
+
+            // Call with handler.
+            grip.Click += handler;
+            grip.PerformClick();
+            Assert.Equal(expectedClickCount, callCount);
+            Assert.Equal(0, itemClickedCallCount);
+            Assert.False(grip.Pressed);
+            Assert.False(control.IsHandleCreated);
+
+            // Remove handler.
+            grip.Click -= handler;
+            grip.PerformClick();
+            Assert.Equal(expectedClickCount, callCount);
+            Assert.Equal(0, itemClickedCallCount);
+            Assert.False(grip.Pressed);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -13343,6 +13656,7 @@ namespace System.Windows.Forms.Tests
             item.Click -= handler;
             item.PerformClick();
             Assert.Equal(expectedClickCount, callCount);
+            Assert.False(item.Pressed);
         }
 
         [WinFormsFact]
@@ -13377,6 +13691,7 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(1, itemClickedCallCount);
+            Assert.False(item.Pressed);
             Assert.False(owner.IsHandleCreated);
 
             // Remove handler.
@@ -13384,6 +13699,7 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(2, itemClickedCallCount);
+            Assert.False(item.Pressed);
             Assert.False(owner.IsHandleCreated);
 
             // Remove other handler.
@@ -13391,6 +13707,7 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(2, itemClickedCallCount);
+            Assert.False(item.Pressed);
             Assert.False(owner.IsHandleCreated);
         }
 
@@ -13433,6 +13750,7 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(1, itemClickedCallCount);
+            Assert.False(item.Pressed);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -13443,6 +13761,7 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(2, itemClickedCallCount);
+            Assert.False(item.Pressed);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -13453,6 +13772,7 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(2, itemClickedCallCount);
+            Assert.False(item.Pressed);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -13484,6 +13804,7 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(0, itemClickedCallCount);
+            Assert.False(item.Pressed);
             Assert.False(parent.IsHandleCreated);
 
             // Remove handler.
@@ -13491,6 +13812,7 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(0, itemClickedCallCount);
+            Assert.False(item.Pressed);
             Assert.False(parent.IsHandleCreated);
         }
 
@@ -13526,6 +13848,7 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(0, itemClickedCallCount);
+            Assert.False(item.Pressed);
             Assert.True(parent.IsHandleCreated);
             Assert.Equal(2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -13536,6 +13859,7 @@ namespace System.Windows.Forms.Tests
             item.PerformClick();
             Assert.Equal(1, callCount);
             Assert.Equal(0, itemClickedCallCount);
+            Assert.False(item.Pressed);
             Assert.True(parent.IsHandleCreated);
             Assert.Equal(4, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -14003,6 +14327,44 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ToolStripItem_Select_InvokeWithDraggingOwner_Success()
+        {
+            using var owner = new SubToolStrip();
+            owner.OnBeginDrag(EventArgs.Empty);
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+
+            item.Select();
+            Assert.False(item.Selected);
+
+            // Select again.
+            item.Select();
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Select_InvokeWithSelectionSuspendedOwner_Success()
+        {
+            using var owner = new SubToolStrip();
+            owner.OnBeginDrag(EventArgs.Empty);
+            using var item = new SubToolStripItem
+            {
+                Owner = owner
+            };
+            Assert.NotNull(owner.GetItemAt(item.Bounds.X, item.Bounds.Y));
+            owner.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, item.Bounds.X, item.Bounds.Y, 0));
+
+            item.Select();
+            Assert.False(item.Selected);
+
+            // Select again.
+            item.Select();
+            Assert.False(item.Selected);
+        }
+
+        [WinFormsFact]
         public void ToolStripItem_Select_InvokeWithParent_Success()
         {
             using var parent = new ToolStrip();
@@ -14051,6 +14413,44 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Select_InvokeWithDraggingParent_Success()
+        {
+            using var parent = new SubToolStrip();
+            parent.OnBeginDrag(EventArgs.Empty);
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+
+            item.Select();
+            Assert.True(item.Selected);
+
+            // Select again.
+            item.Select();
+            Assert.True(item.Selected);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItem_Select_InvokeWithSelectionSuspendedParent_Success()
+        {
+            using var parent = new SubToolStrip();
+            parent.OnBeginDrag(EventArgs.Empty);
+            using var item = new SubToolStripItem
+            {
+                Parent = parent
+            };
+            Assert.NotNull(parent.GetItemAt(item.Bounds.X, item.Bounds.Y));
+            parent.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, item.Bounds.X, item.Bounds.Y, 0));
+
+            item.Select();
+            Assert.False(item.Selected);
+
+            // Select again.
+            item.Select();
+            Assert.False(item.Selected);
         }
 
         public static IEnumerable<object[]> SetBounds_TestData()
@@ -14909,6 +15309,13 @@ namespace System.Windows.Forms.Tests
             item.DragOver -= handler;
             dropTarget.OnDragOver(eventArgs);
             Assert.Equal(1, callCount);
+        }
+
+        private class SubToolStrip : ToolStrip
+        {
+            public new void OnBeginDrag(EventArgs e) => base.OnBeginDrag(e);
+
+            public new void OnMouseDown(MouseEventArgs mea) => base.OnMouseDown(mea);
         }
 
         private class FlippingEnabledToolStripItem : ToolStripItem
