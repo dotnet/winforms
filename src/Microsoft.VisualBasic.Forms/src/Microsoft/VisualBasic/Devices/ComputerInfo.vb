@@ -1,9 +1,7 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
-Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.CompilerServices
 
@@ -27,8 +25,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Gets the total size of physical memory on the machine.
         ''' </summary>
         ''' <value>A 64-bit unsigned integer containing the size of total physical memory on the machine, in bytes.</value>
-        ''' <exception cref="System.ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
+        ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
+        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
         Public ReadOnly Property TotalPhysicalMemory() As UInt64
             Get
                 Return MemoryStatus.TotalPhysicalMemory
@@ -39,8 +38,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Gets the total size of free physical memory on the machine.
         ''' </summary>
         ''' <value>A 64-bit unsigned integer containing the size of free physical memory on the machine, in bytes.</value>
-        ''' <exception cref="System.ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
+        ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
+        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
         Public ReadOnly Property AvailablePhysicalMemory() As UInt64
             Get
                 Return MemoryStatus.AvailablePhysicalMemory
@@ -52,8 +52,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <value>A 64-bit unsigned integer containing the size of user potion of virtual address space for calling process, 
         '''          in bytes.</value>
-        ''' <exception cref="System.ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
+        ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
+        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
         Public ReadOnly Property TotalVirtualMemory() As UInt64
             Get
                 Return MemoryStatus.TotalVirtualMemory
@@ -65,8 +66,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <value>A 64-bit unsigned integer containing the size of free user potion of virtual address space for calling process, 
         '''          in bytes.</value>
-        ''' <exception cref="System.ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
+        ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
+        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
         Public ReadOnly Property AvailableVirtualMemory() As UInt64
             Get
                 Return MemoryStatus.AvailableVirtualMemory
@@ -97,7 +99,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Gets the platform OS name.
         ''' </summary>
         ''' <value>A string containing a Platform ID like "Win32NT", "Win32S", "Win32Windows". See PlatformID enum.</value>
-        ''' <exception cref="System.ExecutionEngineException">If cannot obtain the OS Version information.</exception>
+        ''' <exception cref="ExecutionEngineException">If cannot obtain the OS Version information.</exception>
         Public ReadOnly Property OSPlatform() As String
             Get
                 Return Environment.OSVersion.Platform.ToString
@@ -108,7 +110,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Gets the current version number of the operating system.
         ''' </summary>
         ''' <value>A string contains the current version number of the operating system.</value>
-        ''' <exception cref="System.ExecutionEngineException">If cannot obtain the OS Version information.</exception>
+        ''' <exception cref="ExecutionEngineException">If cannot obtain the OS Version information.</exception>
         Public ReadOnly Property OSVersion() As String
             Get
                 Return Environment.OSVersion.Version.ToString
@@ -120,61 +122,65 @@ Namespace Microsoft.VisualBasic.Devices
         ''' so we offer a view that doesn't have that field. 
         ''' </summary>
         Friend NotInheritable Class ComputerInfoDebugView
-            Public Sub New(ByVal RealClass As ComputerInfo)
-                m_InstanceBeingWatched = RealClass
+            Public Sub New(RealClass As ComputerInfo)
+                _instanceBeingWatched = RealClass
             End Sub
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Public ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
-                    Return m_InstanceBeingWatched.TotalPhysicalMemory
+                    Return _instanceBeingWatched.TotalPhysicalMemory
                 End Get
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Public ReadOnly Property AvailablePhysicalMemory() As UInt64
                 Get
-                    Return m_InstanceBeingWatched.AvailablePhysicalMemory
+                    Return _instanceBeingWatched.AvailablePhysicalMemory
                 End Get
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Public ReadOnly Property TotalVirtualMemory() As UInt64
                 Get
-                    Return m_InstanceBeingWatched.TotalVirtualMemory
+                    Return _instanceBeingWatched.TotalVirtualMemory
                 End Get
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Public ReadOnly Property AvailableVirtualMemory() As UInt64
                 Get
-                    Return m_InstanceBeingWatched.AvailableVirtualMemory
+                    Return _instanceBeingWatched.AvailableVirtualMemory
                 End Get
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
                 Get
-                    Return m_InstanceBeingWatched.InstalledUICulture
+                    Return _instanceBeingWatched.InstalledUICulture
                 End Get
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property OSPlatform() As String
                 Get
-                    Return m_InstanceBeingWatched.OSPlatform
+                    Return _instanceBeingWatched.OSPlatform
                 End Get
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property OSVersion() As String
                 Get
-                    Return m_InstanceBeingWatched.OSVersion
+                    Return _instanceBeingWatched.OSVersion
                 End Get
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.Never)>
-            Private m_InstanceBeingWatched As ComputerInfo
+            Private ReadOnly _instanceBeingWatched As ComputerInfo
         End Class
 
         ''' <summary>
@@ -183,14 +189,14 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <value>An InternalMemoryStatus class.</value>
         Private ReadOnly Property MemoryStatus() As InternalMemoryStatus
             Get
-                If m_InternalMemoryStatus Is Nothing Then
-                    m_InternalMemoryStatus = New InternalMemoryStatus
+                If _internalMemoryStatus Is Nothing Then
+                    _internalMemoryStatus = New InternalMemoryStatus
                 End If
-                Return m_InternalMemoryStatus
+                Return _internalMemoryStatus
             End Get
         End Property
 
-        Private m_InternalMemoryStatus As InternalMemoryStatus = Nothing ' Cache our InternalMemoryStatus
+        Private _internalMemoryStatus As InternalMemoryStatus = Nothing ' Cache our InternalMemoryStatus
 
         ''' <summary>
         ''' Calls GlobalMemoryStatusEx and returns the correct value.
@@ -199,43 +205,47 @@ Namespace Microsoft.VisualBasic.Devices
             Friend Sub New()
             End Sub
 
+            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Friend ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
                     Refresh()
-                    Return m_MemoryStatusEx.ullTotalPhys
+                    Return _memoryStatusEx._ullTotalPhys
                 End Get
             End Property
 
+            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Friend ReadOnly Property AvailablePhysicalMemory() As UInt64
                 Get
                     Refresh()
-                    Return m_MemoryStatusEx.ullAvailPhys
+                    Return _memoryStatusEx._ullAvailPhys
                 End Get
             End Property
 
+            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Friend ReadOnly Property TotalVirtualMemory() As UInt64
                 Get
                     Refresh()
-                    Return m_MemoryStatusEx.ullTotalVirtual
+                    Return _memoryStatusEx._ullTotalVirtual
                 End Get
             End Property
 
+            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Friend ReadOnly Property AvailableVirtualMemory() As UInt64
                 Get
                     Refresh()
-                    Return m_MemoryStatusEx.ullAvailVirtual
+                    Return _memoryStatusEx._ullAvailVirtual
                 End Get
             End Property
 
             Private Sub Refresh()
-                m_MemoryStatusEx = New NativeMethods.MEMORYSTATUSEX
-                m_MemoryStatusEx.Init()
-                If (Not NativeMethods.GlobalMemoryStatusEx(m_MemoryStatusEx)) Then
+                _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
+                _memoryStatusEx.Init()
+                If (Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx)) Then
                     Throw ExceptionUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)
                 End If
             End Sub
 
-            Private m_MemoryStatusEx As NativeMethods.MEMORYSTATUSEX
+            Private _memoryStatusEx As NativeMethods.MEMORYSTATUSEX
         End Class
     End Class
 

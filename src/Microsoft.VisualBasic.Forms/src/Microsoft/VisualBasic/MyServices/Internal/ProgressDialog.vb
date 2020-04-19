@@ -1,16 +1,13 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
 Option Explicit On
 Option Strict On
 
-Imports System
 Imports System.Drawing
 Imports System.Globalization
-Imports System.Security
 Imports System.Threading
-Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
 
@@ -18,7 +15,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     '''  A dialog that shows progress used for Network.Download and Network.Upload
     ''' </summary>
     Friend Class ProgressDialog
-        Inherits System.Windows.Forms.Form
+        Inherits Windows.Forms.Form
 
         ''' <summary>
         ''' Event raised when user cancels the dialog or closes it before the operation is completed
@@ -41,8 +38,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  This method should never be called directly. It should be called with
         '''  an InvokeBegin by a secondary thread.
         '''</remarks>
-        Public Sub Increment(ByVal incrementAmount As Integer)
-            Me.ProgressBarWork.Increment(incrementAmount)
+        Public Sub Increment(incrementAmount As Integer)
+            ProgressBarWork.Increment(incrementAmount)
         End Sub
 
         ''' <summary>
@@ -53,7 +50,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  an InvokeBegin by a secondary thread.
         '''</remarks>
         Public Sub CloseDialog()
-            m_CloseDialogInvoked = True
+            _closeDialogInvoked = True
             Me.Close()
         End Sub
 
@@ -63,7 +60,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <remarks>This method should be called on the main thread after the worker thread has been started</remarks>
         Public Sub ShowProgressDialog()
             Try
-                If Not m_Closing Then
+                If Not _closing Then
                     Me.ShowDialog()
                 End If
             Finally
@@ -78,10 +75,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <remarks>This should only be called on the main thread before showing the dialog</remarks>
         Public Property LabelText() As String
             Get
-                Return Me.LabelInfo.Text
+                Return LabelInfo.Text
             End Get
-            Set(ByVal Value As String)
-                Me.LabelInfo.Text = Value
+            Set(Value As String)
+                LabelInfo.Text = Value
             End Set
         End Property
 
@@ -92,12 +89,12 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <value>The ManualResetEvent</value>
         Public ReadOnly Property FormClosableSemaphore() As ManualResetEvent
             Get
-                Return m_FormClosableSemaphore
+                Return _formClosableSemaphore
             End Get
         End Property
 
         ''' <summary>
-        '''  Inform the diaog that CloseDialog will soon be called
+        '''  Inform the dialog that CloseDialog will soon be called
         ''' </summary>
         ''' <remarks>
         '''  This method should be called directly from the secondary thread. We want
@@ -105,20 +102,20 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  don't need to (when the work is finished before we can show the dialog)
         '''</remarks>
         Public Sub IndicateClosing()
-            m_Closing = True
+            _closing = True
         End Sub
 
         ''' <summary>
         '''  Indicated if the user has clicked the cancel button
         ''' </summary>
-        ''' <value>True if the user has cancelled, otherwise False</value>
+        ''' <value>True if the user has canceled, otherwise False</value>
         ''' <remarks>
         '''  The secondary thread checks this property directly. If it's True, the thread
         '''  breaks out of its loop.
         '''</remarks>
         Public ReadOnly Property UserCanceledTheDialog() As Boolean
             Get
-                Return m_Canceled
+                Return _canceled
             End Get
         End Property
 
@@ -138,9 +135,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender">The cancel button</param>
         ''' <param name="e">Arguments</param>
-        Private Sub ButtonCloseDialog_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButtonCloseDialog.Click
-            Me.ButtonCloseDialog.Enabled = False
-            m_Canceled = True
+        Private Sub ButtonCloseDialog_Click(sender As Object, e As EventArgs) Handles ButtonCloseDialog.Click
+            ButtonCloseDialog.Enabled = False
+            _canceled = True
             RaiseEvent UserHitCancel()
         End Sub
 
@@ -153,16 +150,16 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' We listen for this event since we want to make closing the dialog before it's
         ''' finished behave the same as a cancel
         '''</remarks>
-        Private Sub ProgressDialog_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-            If e.CloseReason = CloseReason.UserClosing And Not m_CloseDialogInvoked Then
-                ' If the progress bar isn't finished and the user hasn't already cancelled
-                If Me.ProgressBarWork.Value < 100 And Not m_Canceled Then
-                    ' Cancel the Close since we want the dialog to be closed from a call from the 
+        Private Sub ProgressDialog_FormClosing(sender As Object, e As Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+            If e.CloseReason = CloseReason.UserClosing And Not _closeDialogInvoked Then
+                ' If the progress bar isn't finished and the user hasn't already canceled
+                If ProgressBarWork.Value < 100 And Not _canceled Then
+                    ' Cancel the Close since we want the dialog to be closed from a call from the
                     ' secondary thread
                     e.Cancel = True
 
-                    ' Indicate the user has cancelled. We'll actually close the dialog from WebClientCopy
-                    m_Canceled = True
+                    ' Indicate the user has canceled. We'll actually close the dialog from WebClientCopy
+                    _canceled = True
                     RaiseEvent UserHitCancel()
                 End If
             End If
@@ -178,8 +175,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' will grow down rather than off the dialog. As the size of the dialog changes, the maximum
         ''' size needs to be adjusted.
         ''' </remarks>
-        Private Sub ProgressDialog_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Resize
-            Me.LabelInfo.MaximumSize = New Size(Me.ClientSize.Width - BORDER_SIZE, 0)
+        Private Sub ProgressDialog_Resize(sender As Object, e As EventArgs) Handles Me.Resize
+            LabelInfo.MaximumSize = New Size(Me.ClientSize.Width - BORDER_SIZE, 0)
         End Sub
 
         ''' <summary>
@@ -187,25 +184,25 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender">Dialog</param>
         ''' <param name="e">Arguments</param>
-        Private Sub ProgressDialog_Activated(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
-            m_FormClosableSemaphore.Set()
+        Private Sub ProgressDialog_Activated(sender As Object, e As EventArgs) Handles Me.Shown
+            _formClosableSemaphore.Set()
         End Sub
 
         ' Indicates whether or not the dialog is closing
-        Private m_Closing As Boolean
+        Private _closing As Boolean
 
-        ' Indicates whether or not the user has cancelled the copy
-        Private m_Canceled As Boolean = False
+        ' Indicates whether or not the user has canceled the copy
+        Private _canceled As Boolean = False
 
         ' Used to signal when the dialog is in a closable state. The dialog is in a closable
-        ' state when it has been activated or when it has been flagged to be closed before 
+        ' state when it has been activated or when it has been flagged to be closed before
         ' ShowDialog has been called
-        Private m_FormClosableSemaphore As ManualResetEvent = New ManualResetEvent(False)
+        Private _formClosableSemaphore As ManualResetEvent = New ManualResetEvent(False)
 
         ' Indicates CloseDialog has been called
-        Private m_CloseDialogInvoked As Boolean
+        Private _closeDialogInvoked As Boolean
 
-        ' Constant used to get resizable dialog with border style set to fixed dialog.
+        ' Constant used to get re-sizable dialog with border style set to fixed dialog.
         Private Const WS_THICKFRAME As Integer = &H40000
 
         ' Border area for label (10 pixels on each side)
@@ -214,58 +211,58 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 #Region " Windows Form Designer generated code "
 
         'Form overrides dispose to clean up the component list.
-        Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
+        Protected Overloads Overrides Sub Dispose(disposing As Boolean)
             If disposing Then
-                If Not (components Is Nothing) Then
-                    components.Dispose()
+                If Not (_components Is Nothing) Then
+                    _components.Dispose()
                 End If
-                If m_FormClosableSemaphore IsNot Nothing Then
-                    m_FormClosableSemaphore.Dispose()
-                    m_FormClosableSemaphore = Nothing
+                If _formClosableSemaphore IsNot Nothing Then
+                    _formClosableSemaphore.Dispose()
+                    _formClosableSemaphore = Nothing
                 End If
             End If
             MyBase.Dispose(disposing)
         End Sub
-        Friend WithEvents LabelInfo As System.Windows.Forms.Label
-        Friend WithEvents ProgressBarWork As System.Windows.Forms.ProgressBar
-        Friend WithEvents ButtonCloseDialog As System.Windows.Forms.Button
+        Friend WithEvents LabelInfo As Windows.Forms.Label
+        Friend WithEvents ProgressBarWork As Windows.Forms.ProgressBar
+        Friend WithEvents ButtonCloseDialog As Windows.Forms.Button
 
         'Required by the Windows Form Designer
-        Private components As System.ComponentModel.IContainer
+        Private ReadOnly _components As ComponentModel.IContainer
 
         'NOTE: The following procedure is required by the Windows Form Designer
-        'It can be modified using the Windows Form Designer.  
+        'It can be modified using the Windows Form Designer.
         'Do not modify it using the code editor.
-        <System.Diagnostics.DebuggerStepThrough()>
+        <DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
-            Me.LabelInfo = New System.Windows.Forms.Label
-            Me.ProgressBarWork = New System.Windows.Forms.ProgressBar
-            Me.ButtonCloseDialog = New System.Windows.Forms.Button
+            Dim resources As ComponentModel.ComponentResourceManager = New ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
+            LabelInfo = New Windows.Forms.Label
+            ProgressBarWork = New Windows.Forms.ProgressBar
+            ButtonCloseDialog = New Windows.Forms.Button
             Me.SuspendLayout()
             '
             'LabelInfo
             '
-            resources.ApplyResources(Me.LabelInfo, "LabelInfo", CultureInfo.CurrentUICulture)
-            Me.LabelInfo.MaximumSize = New System.Drawing.Size(300, 0)
-            Me.LabelInfo.Name = "LabelInfo"
+            resources.ApplyResources(LabelInfo, "LabelInfo", CultureInfo.CurrentUICulture)
+            LabelInfo.MaximumSize = New Size(300, 0)
+            LabelInfo.Name = "LabelInfo"
             '
             'ProgressBarWork
             '
-            resources.ApplyResources(Me.ProgressBarWork, "ProgressBarWork", CultureInfo.CurrentUICulture)
-            Me.ProgressBarWork.Name = "ProgressBarWork"
+            resources.ApplyResources(ProgressBarWork, "ProgressBarWork", CultureInfo.CurrentUICulture)
+            ProgressBarWork.Name = "ProgressBarWork"
             '
             'ButtonCloseDialog
             '
-            resources.ApplyResources(Me.ButtonCloseDialog, "ButtonCloseDialog", CultureInfo.CurrentUICulture)
-            Me.ButtonCloseDialog.Name = "ButtonCloseDialog"
+            resources.ApplyResources(ButtonCloseDialog, "ButtonCloseDialog", CultureInfo.CurrentUICulture)
+            ButtonCloseDialog.Name = "ButtonCloseDialog"
             '
             'ProgressDialog
             '
             resources.ApplyResources(Me, "$this", CultureInfo.CurrentUICulture)
-            Me.Controls.Add(Me.ButtonCloseDialog)
-            Me.Controls.Add(Me.ProgressBarWork)
-            Me.Controls.Add(Me.LabelInfo)
+            Me.Controls.Add(ButtonCloseDialog)
+            Me.Controls.Add(ProgressBarWork)
+            Me.Controls.Add(LabelInfo)
             Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
             Me.MaximizeBox = False
             Me.MinimizeBox = False

@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
 Imports System.Runtime.InteropServices
 
 Namespace Microsoft.VisualBasic.CompilerServices
@@ -20,7 +19,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' if the key is toggled on (i.e. for keys like CapsLock)
         ''' </returns>
         <DllImport("User32.dll", ExactSpelling:=True, CharSet:=CharSet.Auto)>
-        Friend Shared Function GetKeyState(ByVal KeyCode As Integer) As Short
+        Friend Shared Function GetKeyState(KeyCode As Integer) As Short
         End Function
 
         ''' <summary>
@@ -28,7 +27,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' by LocalAlloc or LocalReAlloc.
         ''' </summary>
         <DllImport("kernel32", ExactSpelling:=True, SetLastError:=True)>
-        Friend Shared Function LocalFree(ByVal LocalHandle As IntPtr) As IntPtr
+        Friend Shared Function LocalFree(LocalHandle As IntPtr) As IntPtr
         End Function
 
         ''' <summary>
@@ -40,7 +39,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="TotalFreeSpace">The amount of free spave on the disk.</param>
         ''' <returns>True if function succeeds in getting info otherwise False</returns>
         <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, BestFitMapping:=False, SetLastError:=True)>
-        Friend Shared Function GetDiskFreeSpaceEx(ByVal Directory As String, ByRef UserSpaceFree As Long, ByRef TotalUserSpace As Long, ByRef TotalFreeSpace As Long) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        Friend Shared Function GetDiskFreeSpaceEx(Directory As String, ByRef UserSpaceFree As Long, ByRef TotalUserSpace As Long, ByRef TotalFreeSpace As Long) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
 
         ''' <summary>
