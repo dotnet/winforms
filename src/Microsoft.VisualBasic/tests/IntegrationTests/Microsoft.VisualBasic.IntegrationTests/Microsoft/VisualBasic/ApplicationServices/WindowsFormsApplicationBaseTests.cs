@@ -5,7 +5,6 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms.IntegrationTests.Common;
-using Microsoft.VisualBasic.ApplicationServices;
 using Xunit;
 
 namespace Microsoft.VisualBasic.IntegrationTests

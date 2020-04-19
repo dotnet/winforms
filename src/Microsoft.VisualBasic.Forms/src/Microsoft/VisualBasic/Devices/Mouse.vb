@@ -5,7 +5,6 @@
 Option Strict On
 Option Explicit On
 
-Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices

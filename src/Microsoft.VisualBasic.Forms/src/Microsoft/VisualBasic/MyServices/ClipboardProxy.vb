@@ -1,4 +1,4 @@
-﻿' Licensed to the .NET Foundation under one or more agreements.
+' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -200,6 +200,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <returns>The data object</returns>
         ''' <remarks>This gives the ability to save an object in multiple formats</remarks>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
+        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
         Public Function GetDataObject() As System.Windows.Forms.IDataObject
             Return Clipboard.GetDataObject()
         End Function
