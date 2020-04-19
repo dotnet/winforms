@@ -6,6 +6,7 @@ Imports System.Globalization
 
 Imports System.ComponentModel
 Imports System.Drawing
+Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
@@ -46,7 +47,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             _myCancelButton = New Windows.Forms.Button
             _textBox = New Windows.Forms.TextBox
             _label = New Windows.Forms.Label
-            Me.SuspendLayout()
+            SuspendLayout()
             '
             'OKButton
             '
@@ -71,29 +72,29 @@ Namespace Microsoft.VisualBasic.CompilerServices
             '
             'VBInputBox
             '
-            Me.AcceptButton = _oKButton
+            AcceptButton = _oKButton
             resources.ApplyResources(Me, "$this", CultureInfo.CurrentUICulture)
-            Me.CancelButton = _myCancelButton
-            Me.Controls.Add(_textBox)
-            Me.Controls.Add(_label)
-            Me.Controls.Add(_oKButton)
-            Me.Controls.Add(_myCancelButton)
-            Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-            Me.MaximizeBox = False
-            Me.MinimizeBox = False
-            Me.Name = "VBInputBox"
-            Me.ResumeLayout(False)
-            Me.PerformLayout()
+            CancelButton = _myCancelButton
+            Controls.Add(_textBox)
+            Controls.Add(_label)
+            Controls.Add(_oKButton)
+            Controls.Add(_myCancelButton)
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+            MaximizeBox = False
+            MinimizeBox = False
+            Name = "VBInputBox"
+            ResumeLayout(False)
+            PerformLayout()
 
         End Sub
 
         'Initialize labels etc from the args passed in to InputBox()
         Private Sub InitializeInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer)
-            Me.Text = Title
+            Text = Title
             _label.Text = Prompt
             _textBox.Text = DefaultResponse
-            AddHandler _oKButton.Click, AddressOf Me.OKButton_Click
-            AddHandler _myCancelButton.Click, AddressOf Me.MyCancelButton_Click
+            AddHandler _oKButton.Click, AddressOf OKButton_Click
+            AddHandler _myCancelButton.Click, AddressOf MyCancelButton_Click
 
             'Re-size the dialog if the prompt is too large
             Dim LabelGraphics As Graphics = _label.CreateGraphics
@@ -105,27 +106,27 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Dim DialogHeightChange As Integer = CInt(LabelSizeNeeded.Height) - _label.Height
                 _label.Height += DialogHeightChange
                 _textBox.Top += DialogHeightChange
-                Me.Height += DialogHeightChange
+                Height += DialogHeightChange
             End If
 
             'Position the form
             If (XPos = -1) AndAlso (YPos = -1) Then
-                Me.StartPosition = FormStartPosition.CenterScreen
+                StartPosition = FormStartPosition.CenterScreen
             Else
                 If (XPos = -1) Then XPos = 600
                 If (YPos = -1) Then YPos = 350
-                Me.StartPosition = FormStartPosition.Manual
-                Me.DesktopLocation = New Point(XPos, YPos)
+                StartPosition = FormStartPosition.Manual
+                DesktopLocation = New Point(XPos, YPos)
             End If
         End Sub
 
         Private Sub OKButton_Click(sender As Object, e As EventArgs)
             Output = _textBox.Text
-            Me.Close()
+            Close()
         End Sub
 
         Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
-            Me.Close()
+            Close()
         End Sub
     End Class
 

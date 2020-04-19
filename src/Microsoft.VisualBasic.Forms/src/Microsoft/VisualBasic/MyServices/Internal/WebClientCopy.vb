@@ -7,6 +7,7 @@ Option Strict On
 
 Imports System.IO
 Imports System.Net
+Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
 
@@ -113,7 +114,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 If m_ProgressDialog.IsHandleCreated Then
                     m_ProgressDialog.BeginInvoke(New MethodInvoker(AddressOf m_ProgressDialog.CloseDialog))
                 Else
-                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for 
+                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
                     ' the progress dialog was created.
                     m_ProgressDialog.Close()
                 End If
@@ -125,7 +126,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub m_WebClient_DownloadFileCompleted(sender As Object, e As ComponentModel.AsyncCompletedEventArgs) Handles m_WebClient.DownloadFileCompleted
+        Private Sub m_WebClient_DownloadFileCompleted(sender As Object, e As System.ComponentModel.AsyncCompletedEventArgs) Handles m_WebClient.DownloadFileCompleted
             Try
                 ' If the download was interrupted by an exception, keep track of the exception, which we'll throw from the main thread
                 If e.Error IsNot Nothing Then
@@ -136,7 +137,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     InvokeIncrement(100)
                 End If
             Finally
-                'We don't close the dialog until we receive the WebClient.DownloadFileCompleted event 
+                'We don't close the dialog until we receive the WebClient.DownloadFileCompleted event
                 CloseProgressDialog()
             End Try
         End Sub
@@ -166,7 +167,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     InvokeIncrement(100)
                 End If
             Finally
-                'We don't close the dialog until we receive the WebClient.DownloadFileCompleted event 
+                'We don't close the dialog until we receive the WebClient.DownloadFileCompleted event
                 CloseProgressDialog()
             End Try
         End Sub
