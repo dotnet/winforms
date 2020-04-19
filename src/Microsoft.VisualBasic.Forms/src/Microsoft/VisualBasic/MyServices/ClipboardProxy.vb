@@ -10,6 +10,7 @@ Imports System.ComponentModel
 Imports System.Drawing
 Imports System.IO
 Imports System.Security.Permissions
+Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices
 

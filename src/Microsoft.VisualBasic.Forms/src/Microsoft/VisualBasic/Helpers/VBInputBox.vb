@@ -1,4 +1,4 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -125,8 +125,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Me.Close()
         End Sub
 
-        Private Sub MyCancelButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-            Me.Close()
+        Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
+            Close()
         End Sub
     End Class
 

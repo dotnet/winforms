@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Windows.Forms.IntegrationTests.Common;
 using Xunit;
 
+using Microsoft.VisualBasic.ApplicationServices;
+
 namespace Microsoft.VisualBasic.IntegrationTests
 {
     public class WindowsFormsApplicationBaseTests
