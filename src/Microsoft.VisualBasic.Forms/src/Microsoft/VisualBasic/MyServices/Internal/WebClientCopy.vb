@@ -1,4 +1,4 @@
-﻿' Licensed to the .NET Foundation under one or more agreements.
+' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -126,7 +126,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub m_WebClient_DownloadFileCompleted(sender As Object, e As System.ComponentModel.AsyncCompletedEventArgs) Handles m_WebClient.DownloadFileCompleted
+        Private Sub m_WebClient_DownloadFileCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.AsyncCompletedEventArgs) Handles m_WebClient.DownloadFileCompleted
             Try
                 ' If the download was interrupted by an exception, keep track of the exception, which we'll throw from the main thread
                 If e.Error IsNot Nothing Then
