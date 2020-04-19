@@ -1,4 +1,4 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -6,19 +6,18 @@ Imports System.Globalization
 
 Imports System.ComponentModel
 Imports System.Drawing
+Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
     Friend NotInheritable Class VBInputBox
         Inherits Windows.Forms.Form
 
-#Disable Warning IDE1006 ' Naming Styles, Justification:=<VBInputBox.resx depends on these names>
-        Private ReadOnly components As Container
-        Private TextBox As Windows.Forms.TextBox
-        Private Label As Windows.Forms.Label
-        Private OKButton As Windows.Forms.Button
-        Private MyCancelButton As Windows.Forms.Button
-#Enable Warning IDE1006 ' Naming Styles
+        Private ReadOnly _components As Container
+        Private _textBox As Windows.Forms.TextBox
+        Private _label As Windows.Forms.Label
+        Private _oKButton As Windows.Forms.Button
+        Private _myCancelButton As Windows.Forms.Button
         Public Output As String = ""
 
         'This constructor needed to be able to show the designer at design-time.
