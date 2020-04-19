@@ -250,7 +250,7 @@ Namespace Microsoft.VisualBasic
             Private ReadOnly _xPos As Integer
             Private ReadOnly _yPos As Integer
             Private _result As String
-            Private _parentWindow As Windows.Forms.IWin32Window
+            Private ReadOnly _parentWindow As Windows.Forms.IWin32Window
             Private _exception As Exception
 
             Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As Windows.Forms.IWin32Window)

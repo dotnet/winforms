@@ -214,14 +214,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _unhandledExceptionHandlers Is Nothing Then _unhandledExceptionHandlers = New ArrayList
                 _unhandledExceptionHandlers.Add(value)
                 'Only add the listener once so we don't fire the UnHandledException event over and over for the same exception
-                If _unhandledExceptionHandlers.Count = 1 Then AddHandler Windows.Forms.Application.ThreadException, AddressOf Me.OnUnhandledExceptionEventAdaptor
+                If _unhandledExceptionHandlers.Count = 1 Then AddHandler Windows.Forms.Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
             End AddHandler
 
             RemoveHandler(value As UnhandledExceptionEventHandler)
                 If _unhandledExceptionHandlers IsNot Nothing AndAlso _unhandledExceptionHandlers.Count > 0 Then
                     _unhandledExceptionHandlers.Remove(value)
                     'Last one to leave, turn out the lights...
-                    If _unhandledExceptionHandlers.Count = 0 Then RemoveHandler Windows.Forms.Application.ThreadException, AddressOf Me.OnUnhandledExceptionEventAdaptor
+                    If _unhandledExceptionHandlers.Count = 0 Then RemoveHandler Windows.Forms.Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
                 End If
             End RemoveHandler
 
@@ -731,7 +731,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         '2 - It returns the first window it hits from enum thread windows, which is not necessarily a windows forms form, so that doesn't help us even if it did work
                         'all the time.  So I'll use one of our open forms.  We may not necessairily get a visible form here but that's ok.  Some apps may run on an invisible window
                         'and we need to keep them going until all windows close.
-                        Me.MainForm = forms(0)
+                        MainForm = forms(0)
                     Else
                         MyBase.OnMainFormClosed(sender, e)
                     End If
@@ -783,7 +783,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _unhandledExceptionHandlers As ArrayList
         Private Delegate Sub DisposeDelegate() 'used to marshal a call to Dispose on the Splash Screen
         Private ReadOnly _appContext As WinFormsAppContext
-        Private ReadOnly _memoryMappedID As String 'global OS handles must have a unique ID
         Private ReadOnly _networkAvailChangeLock As New Object 'sync object
         Private ReadOnly _splashLock As New Object
 
