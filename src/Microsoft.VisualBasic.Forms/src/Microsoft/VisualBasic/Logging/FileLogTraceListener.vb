@@ -10,6 +10,7 @@ Imports System.Globalization
 Imports System.IO
 Imports System.Security.Permissions
 Imports System.Text
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils

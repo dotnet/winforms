@@ -8,6 +8,7 @@ Option Strict On
 Imports System.Drawing
 Imports System.Globalization
 Imports System.Threading
+Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
 
@@ -51,7 +52,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''</remarks>
         Public Sub CloseDialog()
             _closeDialogInvoked = True
-            Me.Close()
+            Close()
         End Sub
 
         ''' <summary>
@@ -61,7 +62,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Public Sub ShowProgressDialog()
             Try
                 If Not _closing Then
-                    Me.ShowDialog()
+                    ShowDialog()
                 End If
             Finally
                 FormClosableSemaphore.Set()
@@ -176,7 +177,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' size needs to be adjusted.
         ''' </remarks>
         Private Sub ProgressDialog_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-            LabelInfo.MaximumSize = New Size(Me.ClientSize.Width - BORDER_SIZE, 0)
+            LabelInfo.MaximumSize = New Size(ClientSize.Width - BORDER_SIZE, 0)
         End Sub
 
         ''' <summary>
@@ -228,18 +229,18 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Friend WithEvents ButtonCloseDialog As Windows.Forms.Button
 
         'Required by the Windows Form Designer
-        Private ReadOnly _components As ComponentModel.IContainer
+        Private ReadOnly _components As System.ComponentModel.IContainer
 
         'NOTE: The following procedure is required by the Windows Form Designer
         'It can be modified using the Windows Form Designer.
         'Do not modify it using the code editor.
         <DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim resources As ComponentModel.ComponentResourceManager = New ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
+            Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
             LabelInfo = New Windows.Forms.Label
             ProgressBarWork = New Windows.Forms.ProgressBar
             ButtonCloseDialog = New Windows.Forms.Button
-            Me.SuspendLayout()
+            SuspendLayout()
             '
             'LabelInfo
             '
@@ -260,16 +261,16 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             'ProgressDialog
             '
             resources.ApplyResources(Me, "$this", CultureInfo.CurrentUICulture)
-            Me.Controls.Add(ButtonCloseDialog)
-            Me.Controls.Add(ProgressBarWork)
-            Me.Controls.Add(LabelInfo)
-            Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
-            Me.MaximizeBox = False
-            Me.MinimizeBox = False
-            Me.Name = "ProgressDialog"
-            Me.ShowInTaskbar = False
-            Me.ResumeLayout(False)
-            Me.PerformLayout()
+            Controls.Add(ButtonCloseDialog)
+            Controls.Add(ProgressBarWork)
+            Controls.Add(LabelInfo)
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+            MaximizeBox = False
+            MinimizeBox = False
+            Name = "ProgressDialog"
+            ShowInTaskbar = False
+            ResumeLayout(False)
+            PerformLayout()
 
         End Sub
 
