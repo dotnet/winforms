@@ -286,8 +286,7 @@ try {
     }
 
     # remove any rouge bin/obj folders that intermitently get created
-    $errorCount = Remove-Artifacts -Path ./artifacts;
-    $errorCount += Remove-Artifacts -Path ./src;
+    $errorCount = Remove-Artifacts -Path ./src;
     $errorCount += Remove-Artifacts -Path ./pkg;
     if ($errorCount -gt 0) {
         throw "Failed to remove bin/obj folders";
