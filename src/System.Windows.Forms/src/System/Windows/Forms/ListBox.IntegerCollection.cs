@@ -286,6 +286,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (index < 0 || index >= count)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
+
                     return innerArray[index];
                 }
                 set

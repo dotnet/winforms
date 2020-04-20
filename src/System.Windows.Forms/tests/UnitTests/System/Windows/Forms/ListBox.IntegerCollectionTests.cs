@@ -71,25 +71,19 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox();
             var collection = new ListBox.IntegerCollection(owner);
-#if false
-            Assert.Throws<ArgumentOutOfRangeException, NullReferenceException>("index", () => collection[index]);
-#endif
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
         }
 
         [WinFormsTheory]
         [InlineData(-1)]
-#if false
         [InlineData(1)]
         [InlineData(2)]
-#endif
         public void ListBoxIntegerCollection_Item_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
         {
             using var owner = new ListBox();
             var collection = new ListBox.IntegerCollection(owner);
             collection.Add(1);
-#if false
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
-#endif
         }
 
         [WinFormsFact]
@@ -1531,25 +1525,19 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox();
             IList collection = new ListBox.IntegerCollection(owner);
-#if false
-            Assert.Throws<ArgumentOutOfRangeException, NullReferenceException>("index", () => collection[index]);
-#endif
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
         }
 
         [WinFormsTheory]
         [InlineData(-1)]
-#if false
         [InlineData(1)]
         [InlineData(2)]
-#endif
         public void ListBoxIntegerCollection_IListItem_GetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
         {
             using var owner = new ListBox();
             IList collection = new ListBox.IntegerCollection(owner);
             collection.Add(1);
-#if false
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
-#endif
         }
 
         [WinFormsFact]
