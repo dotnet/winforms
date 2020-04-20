@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         [WinFormsFact(Skip = "Suspect causing deadlocks, see: https://github.com/dotnet/winforms/issues/3095")]
         public void PropertyGridViewRowsAccessibleObject_Ctor_Default()
         {
-            TestForm form = new TestForm();
+            using TestForm form = new TestForm();
             Application.Run(form);
 
             const int topBorder = 1;
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             }
             AccPropertyGridViewHeight = propertyGridView.AccessibilityObject.Bounds.Height;
 
-            Application.Exit();
+            Application.ExitThread();
         }
 
         public TestForm()
