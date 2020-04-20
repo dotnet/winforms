@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             }
             AccPropertyGridViewHeight = propertyGridView.AccessibilityObject.Bounds.Height;
 
-            Application.ExitThread();
+            BeginInvoke(new Action(Application.ExitThread));
         }
 
         public TestForm()

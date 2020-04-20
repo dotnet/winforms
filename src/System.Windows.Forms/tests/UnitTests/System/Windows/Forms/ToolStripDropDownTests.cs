@@ -4915,7 +4915,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact(Skip = "Suspect causing deadlocks, see: https://github.com/dotnet/winforms/issues/3095")]
         public void ToolStripDropDown_KeyboardAccelerators_Test()
         {
-            TestForm testForm = new TestForm();
+            using TestForm testForm = new TestForm();
             Application.Run(testForm); //it needs for correct work of ToolStripDropDown.CanProcessMnemonic method
 
             //TestResult property is made as separate for the reason that
@@ -4953,7 +4953,7 @@ namespace System.Windows.Forms.Tests
                 _result &= toolStrip.ProcessDialogChar('S');
                 _result &= !(toolStrip.ProcessDialogChar('T'));
 
-                Application.Exit();
+                BeginInvoke(new Action(Application.ExitThread));
             }
         }
 
