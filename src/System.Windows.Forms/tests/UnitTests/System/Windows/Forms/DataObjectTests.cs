@@ -1561,6 +1561,18 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("format", () => dataObject.SetText("text", format));
         }
 
+        [WinFormsFact]
+        public void DataObject_GetData_EnhancedMetafile_DoesNotTerminateProcess()
+        {
+            var data = new DataObject(new DataObjectIgnoringStorageMediumForEnhancedMetafile());
+
+            // Office ignores the storage medium in GetData(EnhancedMetafile) and always returns a handle,
+            // even when asked for a stream. This used to crash the process when DataObject interpreted the
+            // handle as a pointer to a COM IStream without checking the storage medium it retrieved.
+
+            Assert.Null(data.GetData(DataFormats.EnhancedMetafile));
+        }
+
         private sealed class DataObjectIgnoringStorageMediumForEnhancedMetafile : System.Runtime.InteropServices.ComTypes.IDataObject
         {
             public void GetData(ref FORMATETC format, out STGMEDIUM medium)
@@ -1591,18 +1603,6 @@ namespace System.Windows.Forms.Tests
             public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
             public void DUnadvise(int connection) => throw new NotImplementedException();
             public int EnumDAdvise(out IEnumSTATDATA enumAdvise) => throw new NotImplementedException();
-        }
-
-        [WinFormsFact]
-        public void DataObject_GetData_EnhancedMetafile_DoesNotTerminateProcess()
-        {
-            var data = new DataObject(new DataObjectIgnoringStorageMediumForEnhancedMetafile());
-
-            // Office ignores the storage medium in GetData(EnhancedMetafile) and always returns a handle,
-            // even when asked for a stream. This used to crash the process when DataObject interpreted the
-            // handle as a pointer to a COM IStream without checking the storage medium it retrieved.
-
-            Assert.Null(data.GetData(DataFormats.EnhancedMetafile));
         }
     }
 }
