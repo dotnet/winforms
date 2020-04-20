@@ -26,9 +26,7 @@ namespace System.Windows.Forms.Tests
         public void ListBoxIntegerCollection_Ctor_NullOwner_ThrowsArgumentNullException()
         {
             using var owner = new ListBox();
-#if false
             Assert.Throws<ArgumentNullException>("owner", () => new ListBox.IntegerCollection(null));
-#endif
         }
 
         [WinFormsFact]
