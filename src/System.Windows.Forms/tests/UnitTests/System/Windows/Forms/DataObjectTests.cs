@@ -1563,9 +1563,6 @@ namespace System.Windows.Forms.Tests
 
         private sealed class DataObjectIgnoringStorageMediumForEnhancedMetafile : System.Runtime.InteropServices.ComTypes.IDataObject
         {
-            private const int DV_E_FORMATETC = unchecked((int)0x80040064);
-            private const int CF_ENHMETAFILE = 14;
-
             public void GetData(ref FORMATETC format, out STGMEDIUM medium)
             {
                 Marshal.ThrowExceptionForHR(QueryGetData(ref format));
@@ -1581,8 +1578,8 @@ namespace System.Windows.Forms.Tests
             {
                 // do not check the requested storage medium, we always return a metafile handle, thats what Office does
 
-                if (format.cfFormat != CF_ENHMETAFILE || format.dwAspect != DVASPECT.DVASPECT_CONTENT || format.lindex != -1)
-                    return DV_E_FORMATETC;
+                if (format.cfFormat != (short)Interop.User32.CF.ENHMETAFILE || format.dwAspect != DVASPECT.DVASPECT_CONTENT || format.lindex != -1)
+                    return (int)Interop.HRESULT.DV_E_FORMATETC;
 
                 return 0;
             }
