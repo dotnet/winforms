@@ -1035,7 +1035,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new object[] { "1", 1, 2 }, array);
         }
 
-#if false
         [WinFormsFact]
         public void ListBoxIntegerCollection_CopyTo_NullArrayEmpty_ThrowsArgumentNullException()
         {
@@ -1052,7 +1051,6 @@ namespace System.Windows.Forms.Tests
             collection.Add(1);
             Assert.Throws<ArgumentNullException>("destination", () => collection.CopyTo(null, 0));
         }
-#endif
 
         [WinFormsFact]
         public void ListBoxIntegerCollection_IndexOf_InvokeEmpty_ReturnsExpected()

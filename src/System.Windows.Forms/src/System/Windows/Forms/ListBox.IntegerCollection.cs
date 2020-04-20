@@ -325,6 +325,11 @@ namespace System.Windows.Forms
 
             public void CopyTo(Array destination, int index)
             {
+                if (destination == null)
+                {
+                    throw new ArgumentNullException(nameof(destination));
+                }
+
                 int cnt = Count;
                 for (int i = 0; i < cnt; i++)
                 {
