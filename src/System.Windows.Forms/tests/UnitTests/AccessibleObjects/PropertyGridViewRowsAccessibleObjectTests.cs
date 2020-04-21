@@ -24,6 +24,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             form.Load += (s, e) =>
             {
                 dimensions = form.CalculateDimensions();
+                formShown = true;
             };
             form.Show();
 
