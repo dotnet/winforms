@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.True(formShown);
         }
 
-        private ref struct Dimensions
+        private struct Dimensions
         {
             public int AccPropertyGridViewHeight;
             public int AccRowHeightSum;
