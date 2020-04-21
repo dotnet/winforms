@@ -293,7 +293,7 @@ Namespace Microsoft.VisualBasic
                 ParentWindow = vbhost.GetParentWindow()
             End If
 
-            If Title.Length = 0 Then
+            If String.IsNullOrEmpty(Title) Then
                 If vbhost Is Nothing Then
                     Title = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
                 Else
