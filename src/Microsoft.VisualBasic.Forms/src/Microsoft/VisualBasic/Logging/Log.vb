@@ -108,7 +108,7 @@ Namespace Microsoft.VisualBasic.Logging
             Dim builder As New StringBuilder()
             builder.Append(ex.Message)
 
-            If additionalInfo.Length <> 0 Then
+            If Not String.IsNullOrEmpty(additionalInfo) Then
                 builder.Append(" ")
                 builder.Append(additionalInfo)
             End If

@@ -209,7 +209,7 @@ Namespace Microsoft.VisualBasic.Devices
             Friend ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
                     Refresh()
-                    Return _memoryStatusEx._ullTotalPhys
+                    Return _memoryStatusEx.ullTotalPhys
                 End Get
             End Property
 
@@ -217,7 +217,7 @@ Namespace Microsoft.VisualBasic.Devices
             Friend ReadOnly Property AvailablePhysicalMemory() As UInt64
                 Get
                     Refresh()
-                    Return _memoryStatusEx._ullAvailPhys
+                    Return _memoryStatusEx.ullAvailPhys
                 End Get
             End Property
 
@@ -225,7 +225,7 @@ Namespace Microsoft.VisualBasic.Devices
             Friend ReadOnly Property TotalVirtualMemory() As UInt64
                 Get
                     Refresh()
-                    Return _memoryStatusEx._ullTotalVirtual
+                    Return _memoryStatusEx.ullTotalVirtual
                 End Get
             End Property
 
@@ -233,7 +233,7 @@ Namespace Microsoft.VisualBasic.Devices
             Friend ReadOnly Property AvailableVirtualMemory() As UInt64
                 Get
                     Refresh()
-                    Return _memoryStatusEx._ullAvailVirtual
+                    Return _memoryStatusEx.ullAvailVirtual
                 End Get
             End Property
 

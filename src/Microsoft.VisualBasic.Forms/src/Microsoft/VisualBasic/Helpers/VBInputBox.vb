@@ -13,11 +13,13 @@ Namespace Microsoft.VisualBasic.CompilerServices
     Friend NotInheritable Class VBInputBox
         Inherits Windows.Forms.Form
 
-        Private ReadOnly _components As Container
-        Private _textBox As Windows.Forms.TextBox
-        Private _label As Windows.Forms.Label
-        Private _oKButton As Windows.Forms.Button
-        Private _myCancelButton As Windows.Forms.Button
+#Disable Warning IDE1006 ' Naming Styles
+        Private ReadOnly components As Container
+        Private TextBox As Windows.Forms.TextBox
+        Private Label As Windows.Forms.Label
+        Private OKButton As Windows.Forms.Button
+        Private MyCancelButton As Windows.Forms.Button
+#Enable Warning IDE1006 ' Naming Styles
         Public Output As String = ""
 
         'This constructor needed to be able to show the designer at design-time.
@@ -34,8 +36,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         Protected Overloads Overrides Sub Dispose(disposing As Boolean)
             If disposing Then
-                If Not (_components Is Nothing) Then
-                    _components.Dispose()
+                If Not (components Is Nothing) Then
+                    components.Dispose()
                 End If
             End If
             MyBase.Dispose(disposing)
@@ -43,42 +45,42 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         Private Sub InitializeComponent()
             Dim resources As ComponentResourceManager = New ComponentResourceManager(GetType(VBInputBox))
-            _oKButton = New Windows.Forms.Button
-            _myCancelButton = New Windows.Forms.Button
-            _textBox = New Windows.Forms.TextBox
-            _label = New Windows.Forms.Label
+            OKButton = New Windows.Forms.Button
+            MyCancelButton = New Windows.Forms.Button
+            TextBox = New Windows.Forms.TextBox
+            Label = New Windows.Forms.Label
             SuspendLayout()
             '
             'OKButton
             '
-            resources.ApplyResources(_oKButton, "OKButton", CultureInfo.CurrentUICulture)
-            _oKButton.Name = "OKButton"
+            resources.ApplyResources(OKButton, "OKButton", CultureInfo.CurrentUICulture)
+            OKButton.Name = "OKButton"
             '
             'MyCancelButton
             '
-            _myCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
-            resources.ApplyResources(_myCancelButton, "MyCancelButton", CultureInfo.CurrentUICulture)
-            _myCancelButton.Name = "MyCancelButton"
+            MyCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
+            resources.ApplyResources(MyCancelButton, "MyCancelButton", CultureInfo.CurrentUICulture)
+            MyCancelButton.Name = "MyCancelButton"
             '
             'TextBox
             '
-            resources.ApplyResources(_textBox, "TextBox", CultureInfo.CurrentUICulture)
-            _textBox.Name = "TextBox"
+            resources.ApplyResources(TextBox, "TextBox", CultureInfo.CurrentUICulture)
+            TextBox.Name = "TextBox"
             '
             'Label
             '
-            resources.ApplyResources(_label, "Label", CultureInfo.CurrentUICulture)
-            _label.Name = "Label"
+            resources.ApplyResources(Label, "Label", CultureInfo.CurrentUICulture)
+            Label.Name = "Label"
             '
             'VBInputBox
             '
-            AcceptButton = _oKButton
+            AcceptButton = OKButton
             resources.ApplyResources(Me, "$this", CultureInfo.CurrentUICulture)
-            CancelButton = _myCancelButton
-            Controls.Add(_textBox)
-            Controls.Add(_label)
-            Controls.Add(_oKButton)
-            Controls.Add(_myCancelButton)
+            CancelButton = MyCancelButton
+            Controls.Add(TextBox)
+            Controls.Add(Label)
+            Controls.Add(OKButton)
+            Controls.Add(MyCancelButton)
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
             MaximizeBox = False
             MinimizeBox = False
@@ -91,21 +93,21 @@ Namespace Microsoft.VisualBasic.CompilerServices
         'Initialize labels etc from the args passed in to InputBox()
         Private Sub InitializeInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer)
             Text = Title
-            _label.Text = Prompt
-            _textBox.Text = DefaultResponse
-            AddHandler _oKButton.Click, AddressOf OKButton_Click
-            AddHandler _myCancelButton.Click, AddressOf MyCancelButton_Click
+            Label.Text = Prompt
+            TextBox.Text = DefaultResponse
+            AddHandler OKButton.Click, AddressOf OKButton_Click
+            AddHandler MyCancelButton.Click, AddressOf MyCancelButton_Click
 
             'Re-size the dialog if the prompt is too large
-            Dim LabelGraphics As Graphics = _label.CreateGraphics
-            Dim LabelSizeNeeded As SizeF = LabelGraphics.MeasureString(Prompt, _label.Font, _label.Width)
+            Dim LabelGraphics As Graphics = Label.CreateGraphics
+            Dim LabelSizeNeeded As SizeF = LabelGraphics.MeasureString(Prompt, Label.Font, Label.Width)
             LabelGraphics.Dispose()
-            If LabelSizeNeeded.Height > _label.Height Then
+            If LabelSizeNeeded.Height > Label.Height Then
                 'The current label size is not large enough to accommodate the prompt.  We need
                 '  to expand the label and the dialog, and move the textbox to make room.
-                Dim DialogHeightChange As Integer = CInt(LabelSizeNeeded.Height) - _label.Height
-                _label.Height += DialogHeightChange
-                _textBox.Top += DialogHeightChange
+                Dim DialogHeightChange As Integer = CInt(LabelSizeNeeded.Height) - Label.Height
+                Label.Height += DialogHeightChange
+                TextBox.Top += DialogHeightChange
                 Height += DialogHeightChange
             End If
 
@@ -120,9 +122,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End If
         End Sub
 
-        Private Sub OKButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-            Output = TextBox.Text
-            Me.Close()
+        Private Sub OKButton_Click(sender As Object, e As EventArgs)
+            Output = _textBox.Text
+            Close()
         End Sub
 
         Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
