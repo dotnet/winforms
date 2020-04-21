@@ -255,7 +255,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
-            If String.IsNullOrEmpty(address) OrElse address.Trim().Length = 0 Then
+            If String.IsNullOrWhiteSpace(address) Then
                 Throw ExceptionUtils.GetArgumentNullException("address")
             End If
 
@@ -404,7 +404,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim targetDirectory As String = System.IO.Path.GetDirectoryName(fullFilename)
 
                 ' Make sure we have a meaningful directory. If we don't, the destinationFileName is suspect
-                If targetDirectory.Length = 0 Then
+                If String.IsNullOrEmpty(targetDirectory) Then
                     Throw ExceptionUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
                 End If
 
@@ -508,7 +508,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' We're safe from UploadFile(Nothing, ...) due to overload failure (UploadFile(String,...) vs. UploadFile(Uri,...)).
             ' However, it is good practice to verify address before calling address.Trim.
-            If String.IsNullOrEmpty(address) OrElse address.Trim().Length = 0 Then
+            If String.IsNullOrWhiteSpace(address) Then
                 Throw ExceptionUtils.GetArgumentNullException("address")
             End If
 
@@ -516,7 +516,7 @@ Namespace Microsoft.VisualBasic.Devices
             Dim addressUri As Uri = GetUri(address.Trim())
 
             ' For uploads, we need to make sure the address includes the filename
-            If IO.Path.GetFileName(addressUri.AbsolutePath).Length = 0 Then
+            If String.IsNullOrEmpty(IO.Path.GetFileName(addressUri.AbsolutePath)) Then
                 Throw ExceptionUtils.GetInvalidOperationException(SR.Network_UploadAddressNeedsFilename)
             End If
 

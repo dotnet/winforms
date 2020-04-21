@@ -204,7 +204,7 @@ Namespace Microsoft.VisualBasic.Logging
                 Return _baseFileName
             End Get
             Set(value As String)
-                If value.Length = 0 Then
+                If String.IsNullOrEmpty(value) Then
                     Throw GetArgumentNullException("value", SR.ApplicationLogBaseNameNull)
                 End If
 
@@ -643,7 +643,7 @@ Namespace Microsoft.VisualBasic.Logging
                     Case LogFileLocation.TempDirectory
                         basePath = Path.GetTempPath()
                     Case LogFileLocation.Custom
-                        If CustomLocation.Length = 0 Then
+                        If String.IsNullOrEmpty(CustomLocation) Then
                             basePath = Application.UserAppDataPath
                         Else
                             basePath = CustomLocation
@@ -922,7 +922,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <remarks>We use the machine name because we can get that even if not hooked up to a network</remarks>
         Private ReadOnly Property HostName() As String
             Get
-                If _hostName.Length = 0 Then
+                If String.IsNullOrEmpty(_hostName) Then
                     ' Use the machine name
                     _hostName = System.Environment.MachineName
                 End If
@@ -937,7 +937,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' This ensures these API cannot be used to circumvent CAS
         '''</remarks>
         Private Sub DemandWritePermission()
-            Debug.Assert(Path.GetDirectoryName(LogFileName).Length <> 0, "The log directory shouldn't be empty.")
+            Debug.Assert(Not String.IsNullOrWhiteSpace(Path.GetDirectoryName(LogFileName)), "The log directory shouldn't be empty.")
             Dim fileName As String = Path.GetDirectoryName(LogFileName)
             Dim filePermission As New FileIOPermission(FileIOPermissionAccess.Write, fileName)
             filePermission.Demand()
