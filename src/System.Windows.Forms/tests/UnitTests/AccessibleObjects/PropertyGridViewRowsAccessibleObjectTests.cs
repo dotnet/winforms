@@ -18,17 +18,17 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             // track that the form has been shown and executed the main assert
             bool formShown = false;
+            Dimensions dimensions = default;
 
             using TestForm form = new TestForm();
             form.Load += (s, e) =>
             {
-                Dimensions dimensions = form.CalculateDimensions();
-                Assert.True(dimensions.AccRowHeightSum == dimensions.AccPropertyGridViewHeight - topBorder - bottomBorder - dimensions.EntriesBorders);
-                formShown = true;
+                dimensions = form.CalculateDimensions();
             };
             form.Show();
 
             Assert.True(formShown);
+            Assert.True(dimensions.AccRowHeightSum == dimensions.AccPropertyGridViewHeight - topBorder - bottomBorder - dimensions.EntriesBorders);
         }
 
         private struct Dimensions
