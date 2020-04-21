@@ -55,11 +55,9 @@ namespace System.Windows.Forms.Tests
         public void ListBoxObjectCollection_Ctor_NullOwner_ThrowsArgumentNullException()
         {
             using var owner = new ListBox();
-#if false
             Assert.Throws<ArgumentNullException>("owner", () => new ListBox.ObjectCollection(null));
             Assert.Throws<ArgumentNullException>("owner", () => new ListBox.ObjectCollection(null, new ListBox.ObjectCollection(owner)));
             Assert.Throws<ArgumentNullException>("owner", () => new ListBox.ObjectCollection(null, new object[0]));
-#endif
         }
 
         [WinFormsFact]

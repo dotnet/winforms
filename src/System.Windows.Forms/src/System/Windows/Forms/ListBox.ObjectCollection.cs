@@ -24,24 +24,22 @@ namespace System.Windows.Forms
 
             public ObjectCollection(ListBox owner)
             {
-                this.owner = owner;
+                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
             /// <summary>
-                    ///  Initializes a new instance of ListBox.ObjectCollection based on another ListBox.ObjectCollection.
-                /// </summary>
-            public ObjectCollection(ListBox owner, ObjectCollection value)
+            ///  Initializes a new instance of ListBox.ObjectCollection based on another ListBox.ObjectCollection.
+            /// </summary>
+            public ObjectCollection(ListBox owner, ObjectCollection value) : this(owner)
             {
-                this.owner = owner;
                 AddRange(value);
             }
 
             /// <summary>
-                    ///  Initializes a new instance of ListBox.ObjectCollection containing any array of objects.
-                /// </summary>
-            public ObjectCollection(ListBox owner, object[] value)
+            ///  Initializes a new instance of ListBox.ObjectCollection containing any array of objects.
+            /// </summary>
+            public ObjectCollection(ListBox owner, object[] value) : this(owner)
             {
-                this.owner = owner;
                 AddRange(value);
             }
 
