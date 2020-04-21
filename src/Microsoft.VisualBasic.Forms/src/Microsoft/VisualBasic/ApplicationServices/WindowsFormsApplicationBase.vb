@@ -774,7 +774,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _finishedOnInitilaize As Boolean 'Whether we have made it through the processing of OnInitialize
         Private _networkAvailabilityEventHandlers As ArrayList
         Private _networkObject As Devices.Network
-        Private _ok2CloseSplashScreen As Boolean 'For splash screens with a minimum display time, this let's us know when that time has expired and it is ok to close the splash screen.
+        Private _ok2CloseSplashScreen As Boolean 'For splash screens with a minimum display time, this let's us know when that time has expired and it is OK to close the splash screen.
         Private _processingUnhandledExceptionEvent As Boolean
         Private _shutdownStyle As ShutdownMode 'defines when the application decides to close
         Private _splashScreen As Windows.Forms.Form
