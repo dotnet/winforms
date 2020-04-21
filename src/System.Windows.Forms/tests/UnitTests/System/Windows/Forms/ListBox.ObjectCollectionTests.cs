@@ -5809,7 +5809,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-#if false
         [WinFormsFact]
         public void ListBoxObjectCollection_Remove_OwnerHasDataSourceEmpty_ThrowsArgumentException()
         {
@@ -5832,7 +5831,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>(null, () => collection.Remove(1));
             Assert.Throws<ArgumentException>(null, () => collection.Remove(2));
         }
-#endif
 
         [WinFormsFact]
         public void ListBoxObjectCollection_RemoveAt_NotSorted_Success()
@@ -10975,7 +10973,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-#if false
         [WinFormsFact]
         public void ListBoxObjectCollection_IListRemove_OwnerHasDataSourceEmpty_ThrowsArgumentException()
         {
@@ -10998,7 +10995,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>(null, () => collection.Remove(1));
             Assert.Throws<ArgumentException>(null, () => collection.Remove(2));
         }
-#endif
 
         [WinFormsFact]
         public void ListBoxObjectCollection_IListRemoveAt_NotSorted_Success()

@@ -408,8 +408,9 @@ namespace System.Windows.Forms
             /// </summary>
             public void Remove(object value)
             {
-                int index = InnerArray.IndexOf(value, 0);
+                owner.CheckNoDataSource();
 
+                int index = InnerArray.IndexOf(value, 0);
                 if (index != -1)
                 {
                     RemoveAt(index);
