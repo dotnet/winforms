@@ -38,7 +38,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Public Sub DownloadFile(address As Uri, destinationFileName As String)
             Debug.Assert(m_WebClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
-            Debug.Assert(destinationFileName.Length <> 0 AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(destinationFileName))), "Invalid path")
+            Debug.Assert((Not String.IsNullOrWhiteSpace(destinationFileName)) AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(destinationFileName))), "Invalid path")
 
             ' If we have a dialog we need to set up an async download
             If m_ProgressDialog IsNot Nothing Then
@@ -65,7 +65,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Public Sub UploadFile(sourceFileName As String, address As Uri)
             Debug.Assert(m_WebClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
-            Debug.Assert(sourceFileName.Length <> 0 AndAlso File.Exists(sourceFileName), "Invalid file")
+            Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) AndAlso File.Exists(sourceFileName), "Invalid file")
 
             ' If we have a dialog we need to set up an async download
             If m_ProgressDialog IsNot Nothing Then
