@@ -17,7 +17,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         {
             var propertyGrid = new PropertyGrid();
             var propertyDescriptorGridEntryTestEntity = new PropertyDescriptorGridEntryTestEntity(propertyGrid, null, false);
-            var propertyDescriptorGridEntryAccessibleObject = propertyDescriptorGridEntryTestEntity.PropertyDescriptorGridEntryAccessibleObject;
+            var propertyDescriptorGridEntryAccessibleObject = propertyDescriptorGridEntryTestEntity.TestPropertyDescriptorGridEntryAccessibleObject;
 
             Assert.NotNull(propertyDescriptorGridEntryAccessibleObject);
 
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         {
             var propertyGrid = new PropertyGrid();
             var propertyDescriptorGridEntryTestEntity = new PropertyDescriptorGridEntryTestEntity(propertyGrid, null, false);
-            var propertyDescriptorGridEntryAccessibleObject = propertyDescriptorGridEntryTestEntity.PropertyDescriptorGridEntryAccessibleObject;
+            var propertyDescriptorGridEntryAccessibleObject = propertyDescriptorGridEntryTestEntity.TestPropertyDescriptorGridEntryAccessibleObject;
 
             var expandCollapseState = propertyDescriptorGridEntryAccessibleObject.ExpandCollapseState;
             Assert.Equal(UiaCore.ExpandCollapseState.Collapsed, expandCollapseState);
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
                 _accessibleObject = new PropertyDescriptorGridEntryAccessibleObject(this);
             }
 
-            public GridEntryAccessibleObject PropertyDescriptorGridEntryAccessibleObject
+            public GridEntryAccessibleObject TestPropertyDescriptorGridEntryAccessibleObject
             {
                 get
                 {
