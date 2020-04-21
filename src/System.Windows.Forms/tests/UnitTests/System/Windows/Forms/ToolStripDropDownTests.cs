@@ -4912,7 +4912,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
         }
 
-        [WinFormsFact(Skip = "Suspect causing deadlocks, see: https://github.com/dotnet/winforms/issues/3095")]
+        [WinFormsFact]
         public void ToolStripDropDown_KeyboardAccelerators_Test()
         {
             using TestForm testForm = new TestForm();
