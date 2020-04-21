@@ -3690,10 +3690,10 @@ namespace System.Windows.Forms.Tests
             control.OnChangeUICues(eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.ChangeUICues -= handler;
-           control.OnChangeUICues(eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.ChangeUICues -= handler;
+            control.OnChangeUICues(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         public static IEnumerable<object[]> OnClosed_TestData()
@@ -4903,7 +4903,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
         }
 
-        [WinFormsFact]
+        [WinFormsFact(Skip = "Suspect causing deadlocks, see: https://github.com/dotnet/winforms/issues/3095")]
         public void ToolStripDropDown_KeyboardAccelerators_Test()
         {
             TestForm testForm = new TestForm();

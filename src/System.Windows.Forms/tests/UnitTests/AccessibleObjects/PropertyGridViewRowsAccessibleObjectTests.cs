@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class PropertyGridViewRowsAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        [StaFact]
+        [WinFormsFact(Skip = "Suspect causing deadlocks, see: https://github.com/dotnet/winforms/issues/3095")]
         public void PropertyGridViewRowsAccessibleObject_Ctor_Default()
         {
             TestForm form = new TestForm();
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
                 {
                     int itemHeight = propertyGridView.AccessibilityGetGridEntryBounds(item).Height;
                     AccRowHeightSum += itemHeight;
-                    if(itemHeight > 0)
+                    if (itemHeight > 0)
                     {
                         entriesBorders++;
                     }
