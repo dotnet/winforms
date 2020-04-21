@@ -4878,7 +4878,6 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewColumn.DataGridView == this);
             // dataGridViewColumn.DisplayIndex has been set already.
             Debug.Assert(dataGridViewColumn.DisplayIndex >= 0);
-            Debug.Assert(dataGridViewColumn.DisplayIndex < Columns.Count);
 
             try
             {
@@ -10469,7 +10468,6 @@ namespace System.Windows.Forms
         internal void OnAddedColumn(DataGridViewColumn dataGridViewColumn)
         {
             Debug.Assert(dataGridViewColumn.Index >= 0);
-            Debug.Assert(dataGridViewColumn.Index < Columns.Count);
             Debug.Assert(dataGridViewColumn.DataGridView == this);
 
             if (dataGridViewColumn.DisplayIndex == -1 || dataGridViewColumn.DisplayIndex >= Columns.Count)
