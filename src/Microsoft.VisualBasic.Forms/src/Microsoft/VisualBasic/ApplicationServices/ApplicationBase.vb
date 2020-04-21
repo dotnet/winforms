@@ -10,8 +10,8 @@ Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    ''' Abstract class that defines the application Startup/Shutdown model for VB 
-    ''' Windows Applications such as console, winforms, dll, service.
+    ''' Abstract class that defines the application Startup/Shutdown model for VB
+    ''' Windows Applications such as console, WinForms, dll, service.
     ''' </summary>
     Public Class ApplicationBase
 
