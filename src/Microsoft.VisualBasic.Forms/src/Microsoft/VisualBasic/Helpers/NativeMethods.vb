@@ -107,18 +107,20 @@ Namespace Microsoft.VisualBasic.CompilerServices
             '   DWORDLONG ullAvailExtendedVirtual;  Total size of unreserved and uncommitted memory in extended portion of virual address.
             '} MEMORYSTATUSEX, *LPMEMORYSTATUSEX;
 
-            Friend _dwLength As UInt32
-            Friend _dwMemoryLoad As UInt32
-            Friend _ullTotalPhys As UInt64
-            Friend _ullAvailPhys As UInt64
-            Friend _ullTotalPageFile As UInt64
-            Friend _ullAvailPageFile As UInt64
-            Friend _ullTotalVirtual As UInt64
-            Friend _ullAvailVirtual As UInt64
-            Friend _ullAvailExtendedVirtual As UInt64
+#Disable Warning IDE1006 ' Naming Styles
+            Friend dwLength As UInt32
+            Friend dwMemoryLoad As UInt32
+            Friend ullTotalPhys As UInt64
+            Friend ullAvailPhys As UInt64
+            Friend ullTotalPageFile As UInt64
+            Friend ullAvailPageFile As UInt64
+            Friend ullTotalVirtual As UInt64
+            Friend ullAvailVirtual As UInt64
+            Friend ullAvailExtendedVirtual As UInt64
+#Enable Warning IDE1006 ' Naming Styles
 
             Friend Sub Init()
-                _dwLength = CType(Marshal.SizeOf(GetType(MEMORYSTATUSEX)), UInt32)
+                dwLength = CType(Marshal.SizeOf(GetType(MEMORYSTATUSEX)), UInt32)
             End Sub
         End Structure
 #Enable Warning IDE0049 ' Simplify Names

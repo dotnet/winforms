@@ -15,25 +15,23 @@ Namespace Microsoft.VisualBasic.Devices
     Public Class Clock
 
         ''' <summary>
-        ''' Gets a DateTime that is the current local date and time on this computer.
+        ''' Gets a Date that is the current local date and time on this computer.
         ''' </summary>
-        ''' <value>A DateTime whose value is the current date and time.</value>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
-        Public ReadOnly Property LocalTime() As DateTime
+        ''' <value>A Date whose value is the current date and time.</value>
+        Public ReadOnly Property LocalTime() As Date
             Get
-                Return DateTime.Now
+                Return Date.Now
             End Get
         End Property
 
         ''' <summary>
-        ''' Gets a DateTime that is the current local date and time on this
+        ''' Gets a Date that is the current local date and time on this
         ''' computer expressed as GMT time.
         ''' </summary>
-        ''' <value>A DateTime whose value is the current date and time expressed as GMT time.</value>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
-        Public ReadOnly Property GmtTime() As DateTime
+        ''' <value>A Date whose value is the current date and time expressed as GMT time.</value>
+        Public ReadOnly Property GmtTime() As Date
             Get
-                Return DateTime.UtcNow
+                Return Date.UtcNow
             End Get
         End Property
 

@@ -763,28 +763,27 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RaiseEvent NetworkAvailabilityChanged(sender, e)
         End Sub
 
-#Disable Warning IDE0032 ' Use auto property
-        Private _enableVisualStyles As Boolean 'whether to use Windows XP styles
-        Private _minimumSplashExposure As Integer = 2000 'Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
-        Private _saveMySettingsOnExit As Boolean 'Informs My.Settings whether to save the settings on exit or not
-#Enable Warning IDE0032 ' Use auto property
-
-        Private _appSyncronizationContext As SynchronizationContext
-        Private _didSplashScreen As Boolean 'we only need to show the splash screen once.  Protect the user from himself if they are overriding our app model.
+        Private _unhandledExceptionHandlers As ArrayList
+        Private _processingUnhandledExceptionEvent As Boolean
+        Private _turnOnNetworkListener As Boolean 'Tracks whether we need to create the network object so we can listen to the NetworkAvailabilityChanged event
         Private _finishedOnInitilaize As Boolean 'Whether we have made it through the processing of OnInitialize
         Private _networkAvailabilityEventHandlers As ArrayList
         Private _networkObject As Devices.Network
-        Private _ok2CloseSplashScreen As Boolean 'For splash screens with a minimum display time, this let's us know when that time has expired and it is OK to close the splash screen.
-        Private _processingUnhandledExceptionEvent As Boolean
         Private _shutdownStyle As ShutdownMode 'defines when the application decides to close
-        Private _splashScreen As Windows.Forms.Form
-        Private _splashTimer As Timers.Timer
-        Private _turnOnNetworkListener As Boolean 'Tracks whether we need to create the network object so we can listen to the NetworkAvailabilityChanged event
-        Private _unhandledExceptionHandlers As ArrayList
+#Disable Warning IDE0032 ' Use auto property
+        Private _enableVisualStyles As Boolean 'whether to use Windows XP styles
+        Private _didSplashScreen As Boolean 'we only need to show the splash screen once.  Protect the user from himself if they are overriding our app model.
         Private Delegate Sub DisposeDelegate() 'used to marshal a call to Dispose on the Splash Screen
-        Private ReadOnly _appContext As WinFormsAppContext
-        Private ReadOnly _networkAvailChangeLock As New Object 'sync object
+        Private _ok2CloseSplashScreen As Boolean 'For splash screens with a minimum display time, this let's us know when that time has expired and it is OK to close the splash screen.
+        Private _splashScreen As Windows.Forms.Form
+        Private _minimumSplashExposure As Integer = 2000 'Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
+        Private _splashTimer As Timers.Timer
         Private ReadOnly _splashLock As New Object
+        Private ReadOnly _appContext As WinFormsAppContext
+        Private _appSyncronizationContext As SynchronizationContext
+        Private ReadOnly _networkAvailChangeLock As New Object 'sync object
+        Private _saveMySettingsOnExit As Boolean 'Informs My.Settings whether to save the settings on exit or not
+#Disable Warning IDE0032 ' Use auto property
 
         ''' <summary>
         ''' Runs the user's program through the VB Startup/Shutdown application model
