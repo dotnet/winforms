@@ -3851,7 +3851,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new object[] { "1", 1, 2 }, array);
         }
 
-#if false
         [WinFormsFact]
         public void ListBoxObjectCollection_CopyTo_NullArrayEmpty_ThrowsArgumentNullException()
         {
@@ -3868,7 +3867,6 @@ namespace System.Windows.Forms.Tests
             collection.Add(1);
             Assert.Throws<ArgumentNullException>("destination", () => collection.CopyTo(null, 0));
         }
-#endif
 
         [WinFormsFact]
         public void ListBoxObjectCollection_GetEnumerator_InvokeEmpty_ReturnsExpected()
@@ -9019,7 +9017,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new object[] { "1", 1, 2 }, array);
         }
 
-#if false
         [WinFormsFact]
         public void ListBoxObjectCollection_IListCopyTo_NullArrayEmpty_ThrowsArgumentNullException()
         {
@@ -9036,7 +9033,6 @@ namespace System.Windows.Forms.Tests
             collection.Add(1);
             Assert.Throws<ArgumentNullException>("destination", () => collection.CopyTo(null, 0));
         }
-#endif
 
         [WinFormsFact]
         public void ListBoxObjectCollection_IListGetEnumerator_InvokeEmpty_ReturnsExpected()

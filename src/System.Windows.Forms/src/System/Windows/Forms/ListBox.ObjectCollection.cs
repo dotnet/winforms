@@ -293,6 +293,11 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
+                if (destination == null)
+                {
+                    throw new ArgumentNullException(nameof(destination));
+                }
+
                 int count = InnerArray.GetCount(0);
                 for (int i = 0; i < count; i++)
                 {
@@ -302,6 +307,11 @@ namespace System.Windows.Forms
 
             void ICollection.CopyTo(Array destination, int index)
             {
+                if (destination == null)
+                {
+                    throw new ArgumentNullException(nameof(destination));
+                }
+
                 int count = InnerArray.GetCount(0);
                 for (int i = 0; i < count; i++)
                 {
