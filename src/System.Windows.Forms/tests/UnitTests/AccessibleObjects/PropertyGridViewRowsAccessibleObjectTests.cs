@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,81 +10,96 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class PropertyGridViewRowsAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        [WinFormsFact(Skip = "Suspect causing deadlocks, see: https://github.com/dotnet/winforms/issues/3095")]
+        [WinFormsFact]
         public void PropertyGridViewRowsAccessibleObject_Ctor_Default()
         {
-            using TestForm form = new TestForm();
-            Application.Run(form);
-
-            const int topBorder = 1;
             const int bottomBorder = 1;
-            int entriesBorders = form.entriesBorders;
+            const int topBorder = 1;
 
-            Assert.True(form.AccRowHeightSum == form.AccPropertyGridViewHeight - topBorder - bottomBorder - entriesBorders);
-        }
-    }
+            // track that the form has been shown and executed the main assert
+            bool formShown = false;
 
-    public class TestForm : Form
-    {
-        public int AccPropertyGridViewHeight { get; set; }
-        public int AccRowHeightSum { get; set; }
-
-        DomainUpDown domainUpDown;
-        PropertyGrid propertyGrid;
-
-        public int entriesBorders = 0;
-
-        private void TestForm_Load(object sender, EventArgs e)
-        {
-            propertyGrid.SelectedObject = domainUpDown;
-
-            GridEntryCollection entries = propertyGrid.GetPropEntries();
-            PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.ActiveControl;
-
-            foreach (GridEntry entry in entries)
+            using TestForm form = new TestForm();
+            form.Load += (s, e) =>
             {
-                int entryHeight = propertyGridView.AccessibilityGetGridEntryBounds(entry).Height;
-                AccRowHeightSum += entryHeight;
-                if (entryHeight > 0)
-                {
-                    entriesBorders++;
-                }
+                Dimensions dimensions = form.CalculateDimensions();
+                Assert.True(dimensions.AccRowHeightSum == dimensions.AccPropertyGridViewHeight - topBorder - bottomBorder - dimensions.EntriesBorders);
+                formShown = true;
+            };
+            form.Show();
 
-                foreach (GridEntry item in entry.GridItems)
+            Assert.True(formShown);
+        }
+
+        private ref struct Dimensions
+        {
+            public int AccPropertyGridViewHeight;
+            public int AccRowHeightSum;
+            public int EntriesBorders;
+        }
+
+        private class TestForm : Form
+        {
+            private DomainUpDown domainUpDown;
+            private PropertyGrid propertyGrid;
+
+            public Dimensions CalculateDimensions()
+            {
+                propertyGrid.SelectedObject = domainUpDown;
+                int heightSum = 0;
+                int entriesBorders = 0;
+
+                GridEntryCollection entries = propertyGrid.GetPropEntries();
+                PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.ActiveControl;
+
+                foreach (GridEntry entry in entries)
                 {
-                    int itemHeight = propertyGridView.AccessibilityGetGridEntryBounds(item).Height;
-                    AccRowHeightSum += itemHeight;
-                    if (itemHeight > 0)
+                    int entryHeight = propertyGridView.AccessibilityGetGridEntryBounds(entry).Height;
+                    heightSum += entryHeight;
+                    if (entryHeight > 0)
                     {
                         entriesBorders++;
                     }
+
+                    foreach (GridEntry item in entry.GridItems)
+                    {
+                        int itemHeight = propertyGridView.AccessibilityGetGridEntryBounds(item).Height;
+                        heightSum += itemHeight;
+                        if (itemHeight > 0)
+                        {
+                            entriesBorders++;
+                        }
+                    }
                 }
+
+                return new Dimensions
+                {
+                    AccPropertyGridViewHeight = propertyGridView.AccessibilityObject.Bounds.Height,
+                    AccRowHeightSum = heightSum,
+                    EntriesBorders = entriesBorders
+                };
             }
-            AccPropertyGridViewHeight = propertyGridView.AccessibilityObject.Bounds.Height;
 
-            BeginInvoke(new Action(Application.ExitThread));
-        }
+            public TestForm()
+            {
+                InitializeComponent();
+            }
 
-        public TestForm()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            domainUpDown = new DomainUpDown();
-            propertyGrid = new PropertyGrid();
-            //
-            // propertyGrid
-            //
-            propertyGrid.Size = new Size(223, 244);
-            //
-            // TestForm
-            //
-            ClientSize = new Size(508, 367);
-            Controls.Add(propertyGrid);
-            Controls.Add(domainUpDown);
-            Load += TestForm_Load;
+            private void InitializeComponent()
+            {
+                domainUpDown = new DomainUpDown();
+                propertyGrid = new PropertyGrid();
+                //
+                // propertyGrid
+                //
+                propertyGrid.Size = new Size(223, 244);
+                //
+                // TestForm
+                //
+                ClientSize = new Size(508, 367);
+                Controls.Add(propertyGrid);
+                Controls.Add(domainUpDown);
+            }
         }
     }
 }
