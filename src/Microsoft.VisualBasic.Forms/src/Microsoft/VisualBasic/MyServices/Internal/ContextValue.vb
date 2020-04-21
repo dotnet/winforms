@@ -29,10 +29,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         ''' Get the object from the correct thread-appropriate location
         ''' </summary>
-        Public Property Value() As T 'No Synclocks required because we are operating upon instance data and the object is not shared across threads
+        Public Property Value() As T 'No SyncLocks required because we are operating upon instance data and the object is not shared across threads
             Get
                 Dim dictionary As IDictionary = GetDictionary()
-                Return DirectCast(dictionary(_contextKey), T) 'Note, IDictionary(key) can return Nothing and that's ok
+                Return DirectCast(dictionary(_contextKey), T) 'Note, IDictionary(key) can return Nothing and that's OK
             End Get
             Set(value As T)
                 Dim dictionary As IDictionary = GetDictionary()
@@ -47,7 +47,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Return s_threadLocal.Value
         End Function
 
-        Private ReadOnly _contextKey As String 'An item is stored in the dictionary by a guid which this string maintains
+        Private ReadOnly _contextKey As String 'An item is stored in the dictionary by a GUID which this string maintains
 
         Private Shared s_threadLocal As ThreadLocal(Of IDictionary)
 

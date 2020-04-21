@@ -162,13 +162,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Public Custom Event NetworkAvailabilityChanged As Devices.NetworkAvailableEventHandler
             'This is a custom event because we want to hook up the NetworkAvailabilityChanged event only if the user writes a handler for it.
-            'The reason being that it is very expensive to handle and kills our application startup perf.
+            'The reason being that it is very expensive to handle and kills our application startup performance.
             AddHandler(value As Devices.NetworkAvailableEventHandler)
                 SyncLock _networkAvailChangeLock
                     If _networkAvailabilityEventHandlers Is Nothing Then _networkAvailabilityEventHandlers = New ArrayList
                     _networkAvailabilityEventHandlers.Add(value)
                     _turnOnNetworkListener = True 'We don't want to create the network object now - it takes a snapshot of the executionContext and our IPrincipal isn't on the thread yet.  We know we need to create it and we will at the appropriate time
-                    If _networkObject Is Nothing And _finishedOnInitilaize = True Then 'But the user may be doing an Addhandler of their own in which case we need to make sure to honor the request.  If we aren't past OnInitialize() yet we shouldn't do it but the flag above catches that case
+                    If _networkObject Is Nothing And _finishedOnInitilaize = True Then 'But the user may be doing an AddHandler of their own in which case we need to make sure to honor the request.  If we aren't past OnInitialize() yet we shouldn't do it but the flag above catches that case
                         _networkObject = New Devices.Network
                         Dim windowsFormsApplicationBase As WindowsFormsApplicationBase = Me
                         AddHandler _networkObject.NetworkAvailabilityChanged, AddressOf windowsFormsApplicationBase.NetworkAvailableEventAdaptor
@@ -420,7 +420,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ShowSplashScreen()
             End If
 
-            _finishedOnInitilaize = True 'we are now at a point where we can allow the network object to be created since the iprincipal is on the thread by now.
+            _finishedOnInitilaize = True 'we are now at a point where we can allow the network object to be created since the iPrincipal is on the thread by now.
             Return True 'true means to not bail out but keep on running after OnIntiailize() finishes
         End Function
 
@@ -548,7 +548,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             If Not _didSplashScreen Then
                 _didSplashScreen = True
                 If _splashScreen Is Nothing Then
-                    OnCreateSplashScreen() 'If the user specified a splash screen, the designer will have overriden this method to set it
+                    OnCreateSplashScreen() 'If the user specified a splash screen, the designer will have overridden this method to set it
                 End If
                 If _splashScreen IsNot Nothing Then
                     'Some splash screens have minimum face time they are supposed to get.  We'll set up a time to let us know when we can take it down.
@@ -577,7 +577,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         <SecuritySafeCritical()>
         Protected Sub HideSplashScreen()
-            SyncLock _splashLock 'This ultimately wasn't necessary.  I suppose we better keep it for backwards compat
+            SyncLock _splashLock 'This ultimately wasn't necessary.  I suppose we better keep it for backwards compatibility
                 'Dev10 590587 - we now activate the main form before calling Dispose on the Splash screen. (we're just
                 '       swapping the order of the two If blocks). This is to fix the issue where the main form
                 '       doesn't come to the front after the Splash screen disappears
@@ -667,7 +667,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         ''' If a splash screen has a minimum time out, then once that is up we check to see whether
         ''' we should close the splash screen.  If the main form has activated then we close it.
-        ''' Note that we are getting called on a secondary thread here which isn't necessairly
+        ''' Note that we are getting called on a secondary thread here which isn't necessarily
         ''' associated with any form.  Don't touch forms from this function.
         ''' </summary>
         Private Sub MinimumSplashExposureTimeIsUp(sender As Object, e As Timers.ElapsedEventArgs)
@@ -729,7 +729,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         'Note: Initially I used Process::MainWindowHandle to obtain an open form.  But that is bad for two reasons:
                         '1 - It appears to be broken and returns NULL sometimes even when there is still a window around.  WinForms people are looking at that issue.
                         '2 - It returns the first window it hits from enum thread windows, which is not necessarily a windows forms form, so that doesn't help us even if it did work
-                        'all the time.  So I'll use one of our open forms.  We may not necessairily get a visible form here but that's ok.  Some apps may run on an invisible window
+                        'all the time.  So I'll use one of our open forms.  We may not necessarily get a visible form here but that's OK.  Some apps may run on an invisible window
                         'and we need to keep them going until all windows close.
                         MainForm = forms(0)
                     Else
@@ -774,7 +774,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _finishedOnInitilaize As Boolean 'Whether we have made it through the processing of OnInitialize
         Private _networkAvailabilityEventHandlers As ArrayList
         Private _networkObject As Devices.Network
-        Private _ok2CloseSplashScreen As Boolean 'For splash screens with a minimum display time, this let's us know when that time has expired and it is ok to close the splash screen.
+        Private _ok2CloseSplashScreen As Boolean 'For splash screens with a minimum display time, this let's us know when that time has expired and it is OK to close the splash screen.
         Private _processingUnhandledExceptionEvent As Boolean
         Private _shutdownStyle As ShutdownMode 'defines when the application decides to close
         Private _splashScreen As Windows.Forms.Form
