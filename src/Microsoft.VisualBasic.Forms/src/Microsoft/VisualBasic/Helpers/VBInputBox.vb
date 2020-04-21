@@ -13,11 +13,13 @@ Namespace Microsoft.VisualBasic.CompilerServices
     Friend NotInheritable Class VBInputBox
         Inherits Windows.Forms.Form
 
-        Private ReadOnly _components As Container
-        Private _textBox As Windows.Forms.TextBox
-        Private _label As Windows.Forms.Label
-        Private _oKButton As Windows.Forms.Button
-        Private _myCancelButton As Windows.Forms.Button
+#Disable Warning IDE1006 ' Naming Styles
+        Private ReadOnly components As Container
+        Private TextBox As Windows.Forms.TextBox
+        Private Label As Windows.Forms.Label
+        Private OKButton As Windows.Forms.Button
+        Private MyCancelButton As Windows.Forms.Button
+#Enable Warning IDE1006 ' Naming Styles
         Public Output As String = ""
 
         'This constructor needed to be able to show the designer at design-time.
