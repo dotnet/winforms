@@ -127,19 +127,19 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
                         Const STARTF_USESTDHANDLES As Integer = 256 'Defined in windows.h
                         If (dwFlags And STARTF_USESTDHANDLES) <> 0 Then
-                            If hStdInput <> IntPtr.Zero AndAlso hStdInput <> NativeTypes.s_iNVALID_HANDLE Then
+                            If hStdInput <> IntPtr.Zero AndAlso hStdInput <> NativeTypes.INVALID_HANDLE Then
                                 NativeMethods.CloseHandle(hStdInput)
-                                hStdInput = NativeTypes.s_iNVALID_HANDLE
+                                hStdInput = NativeTypes.INVALID_HANDLE
                             End If
 
-                            If hStdOutput <> IntPtr.Zero AndAlso hStdOutput <> NativeTypes.s_iNVALID_HANDLE Then
+                            If hStdOutput <> IntPtr.Zero AndAlso hStdOutput <> NativeTypes.INVALID_HANDLE Then
                                 NativeMethods.CloseHandle(hStdOutput)
-                                hStdOutput = NativeTypes.s_iNVALID_HANDLE
+                                hStdOutput = NativeTypes.INVALID_HANDLE
                             End If
 
-                            If hStdError <> IntPtr.Zero AndAlso hStdError <> NativeTypes.s_iNVALID_HANDLE Then
+                            If hStdError <> IntPtr.Zero AndAlso hStdError <> NativeTypes.INVALID_HANDLE Then
                                 NativeMethods.CloseHandle(hStdError)
-                                hStdError = NativeTypes.s_iNVALID_HANDLE
+                                hStdError = NativeTypes.INVALID_HANDLE
                             End If
                         End If 'Me.dwFlags and STARTF_USESTDHANDLES
 
@@ -156,7 +156,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Class
 
         ' Handle Values
-        Friend Shared ReadOnly s_iNVALID_HANDLE As IntPtr = New IntPtr(-1)
+        Friend Shared ReadOnly INVALID_HANDLE As IntPtr = New IntPtr(-1)
 
         ' GetWindow() Constants
         Friend Const GW_HWNDFIRST As Integer = 0
