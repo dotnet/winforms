@@ -19,8 +19,8 @@ Namespace Microsoft.VisualBasic.Logging
 
         ''' <summary>
         ''' Creates a Log and the underlying TraceSource based on the platform
-        ''' </summary> 
-        ''' <remarks>Right now we only support Winapp as an application platform</remarks>
+        ''' </summary>
+        ''' <remarks>Right now we only support WinApp as an application platform</remarks>
         Public Sub New()
             ' Set trace source for platform. Right now we only support WinApp
             _traceSource = New DefaultTraceSource(WINAPP_SOURCE_NAME)
@@ -64,7 +64,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' </summary>
         ''' <param name="message">The message to be logged</param>
         ''' <param name="severity">The type of message (error, info, etc...)</param>
-        ''' <param name="id">An id for the message (used for corelation)</param>
+        ''' <param name="id">An id for the message (used for correlation)</param>
         Public Sub WriteEntry(message As String, severity As TraceEventType, id As Integer)
             If message Is Nothing Then
                 message = ""
@@ -81,7 +81,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        ''' Has the TraceSource fire a TraceEvent for all listeners using information in an exception to form the message 
+        ''' Has the TraceSource fire a TraceEvent for all listeners using information in an exception to form the message
         ''' and appending additional info
         ''' </summary>
         ''' <param name="ex">The exception being logged</param>
@@ -98,7 +98,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="ex">The exception being logged</param>
         ''' <param name="severity">The type of message (error, info, etc...)</param>
         ''' <param name="additionalInfo">Extra information to append to the message</param>
-        ''' <param name="id">An id for the message (used for corelation)</param>
+        ''' <param name="id">An id for the message (used for correlation)</param>
         Public Sub WriteException(ex As Exception, severity As TraceEventType, additionalInfo As String, id As Integer)
 
             If ex Is Nothing Then
@@ -139,7 +139,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        ''' Encapsulates a System.Diagnostics.TraceSource.  The value add is that it knows if it was initialized 
+        ''' Encapsulates a System.Diagnostics.TraceSource.  The value add is that it knows if it was initialized
         ''' using a config file or not.
         ''' </summary>
         Friend NotInheritable Class DefaultTraceSource
@@ -168,7 +168,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Property
 
             ''' <summary>
-            ''' Overriding this function is the trick that tells us whether this trace source was configured 
+            ''' Overriding this function is the trick that tells us whether this trace source was configured
             ''' from a config file or not.  It only gets called if a config file was found.
             ''' </summary>
             Protected Overrides Function GetSupportedAttributes() As String()
@@ -183,7 +183,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ''' <summary>
         ''' When there is no config file to configure the trace source, this function is called in order to
-        ''' configure the trace source according to the defaults they would have had in a default AppConfig 
+        ''' configure the trace source according to the defaults they would have had in a default AppConfig
         ''' </summary>
         Protected Friend Overridable Sub InitializeWithDefaultsSinceNoConfigExists()
             'By default, you get a file log listener that picks everything from level Information on up.

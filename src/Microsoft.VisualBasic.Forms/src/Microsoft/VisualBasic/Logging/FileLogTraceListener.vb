@@ -120,7 +120,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        ''' Indicates whether or not the the host name of the logging machine should
+        ''' Indicates whether or not the host name of the logging machine should
         ''' be included in the output.
         ''' </summary>
         ''' <value>True if the HostId should be included, otherwise False</value>
@@ -221,7 +221,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  The fullname and path of the actual log file including DateStamp and file number
+        '''  The full name and path of the actual log file including DateStamp and file number
         ''' </summary>
         ''' <value>The full name and path</value>
         ''' <remarks>Calling this method will open the log file if it's not already open</remarks>
@@ -493,7 +493,7 @@ Namespace Microsoft.VisualBasic.Logging
 
             ' DateTime
             If (Me.TraceOutputOptions And TraceOptions.DateTime) = TraceOptions.DateTime Then
-                ' Add datetime. Time will be in GMT.
+                ' Add DateTime. Time will be in GMT.
                 outBuilder.Append(Delimiter & eventCache.DateTime.ToString("u", CultureInfo.InvariantCulture))
             End If
 
@@ -625,7 +625,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' </summary>
         ''' <value>The log file name</value>
         ''' <remarks>
-        ''' Includes the full path and the datestamp, but does not include the
+        ''' Includes the full path and the DateStamp, but does not include the
         ''' file number or the extension.
         ''' </remarks>
         Private ReadOnly Property LogFileName() As String
@@ -895,7 +895,7 @@ Namespace Microsoft.VisualBasic.Logging
                 Dim Reader As StreamReader = Nothing
                 Try
 
-                    'Attempt to determine the encodoing of the file. The call to Reader.ReadLine
+                    'Attempt to determine the encoding of the file. The call to Reader.ReadLine
                     'will change the current encoding of Reader to that of the file.
                     Reader = New StreamReader(fileName, Encoding, True)
 
@@ -1066,7 +1066,7 @@ Namespace Microsoft.VisualBasic.Logging
                                                                   KEY_LOGFILECREATIONSCHEDULE, KEY_LOGFILECREATIONSCHEDULE_PASCAL, KEY_LOGFILECREATIONSCHEDULE_CAMEL,
                                                                   KEY_MAXFILESIZE, KEY_MAXFILESIZE_PASCAL, KEY_MAXFILESIZE_CAMEL, KEY_RESERVEDISKSPACE, KEY_RESERVEDISKSPACE_PASCAL, KEY_RESERVEDISKSPACE_CAMEL}
 
-        ' Identifies properties in the bitarray
+        ' Identifies properties in the BitArray
         Private Const PROPERTY_COUNT As Integer = 12
         Private Const APPEND_INDEX As Integer = 0
         Private Const AUTOFLUSH_INDEX As Integer = 1
