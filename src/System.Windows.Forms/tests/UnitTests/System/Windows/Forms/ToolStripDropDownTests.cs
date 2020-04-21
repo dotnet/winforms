@@ -4935,6 +4935,14 @@ namespace System.Windows.Forms.Tests
                 Load += FormLoaded;
             }
 
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+
+                if (disposing)
+                    toolStrip?.Dispose();
+            }
+
             public bool TestResult => _result;
 
             private void FormLoaded(object sender, EventArgs e)
