@@ -335,6 +335,7 @@ Namespace Microsoft.VisualBasic.Devices
 
         End Sub
 
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Downloads a file from the network to the specified path
         ''' </summary>
@@ -346,7 +347,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
         Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     networkCredentials As ICredentials,
@@ -354,6 +354,7 @@ Namespace Microsoft.VisualBasic.Devices
                     connectionTimeout As Integer,
                     overwrite As Boolean,
                     onUserCancel As UICancelOption)
+#Enable Warning CA1822 ' Mark members as static
 
             If connectionTimeout <= 0 Then
                 Throw GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
@@ -585,6 +586,7 @@ Namespace Microsoft.VisualBasic.Devices
             UploadFile(sourceFileName, address, networkCredentials, showUI, connectionTimeout, UICancelOption.ThrowException)
         End Sub
 
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Uploads a file from the local machine to the specified host
         ''' </summary>
@@ -594,13 +596,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
         ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
         Public Sub UploadFile(sourceFileName As String,
                               address As Uri,
                               networkCredentials As ICredentials,
                               showUI As Boolean,
                               connectionTimeout As Integer,
                               onUserCancel As UICancelOption)
+#Enable Warning CA1822 ' Mark members as static
 
             sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, "sourceFileName")
 

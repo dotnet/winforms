@@ -18,9 +18,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Gets a Date that is the current local date and time on this computer.
         ''' </summary>
         ''' <value>A Date whose value is the current date and time.</value>
-        Public ReadOnly Property LocalTime() As Date
+#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
+        Public ReadOnly Property LocalTime() As DateTime
             Get
-                Return Date.Now
+                Return DateTime.Now
             End Get
         End Property
 
@@ -29,11 +30,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' computer expressed as GMT time.
         ''' </summary>
         ''' <value>A Date whose value is the current date and time expressed as GMT time.</value>
-        Public ReadOnly Property GmtTime() As Date
+        Public ReadOnly Property GmtTime() As DateTime
             Get
-                Return Date.UtcNow
+                Return DateTime.UtcNow
             End Get
         End Property
+#Enable Warning IDE0049 ' Simplify Names
 
         ''' <summary>
         ''' This property wraps the Environment.TickCount property to get the
@@ -42,7 +44,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <value>An Integer containing the amount of time in milliseconds.</value>
         Public ReadOnly Property TickCount() As Integer
             Get
-                Return System.Environment.TickCount
+                Return Environment.TickCount
             End Get
         End Property
 

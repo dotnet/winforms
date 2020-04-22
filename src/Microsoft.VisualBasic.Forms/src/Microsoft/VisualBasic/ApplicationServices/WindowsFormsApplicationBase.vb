@@ -390,7 +390,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Set
         End Property
 
-#Disable Warning CA1822 ' Mark members as static
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         '''  Processes all windows messages currently in the message queue
         ''' </summary>
@@ -770,7 +770,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _networkAvailabilityEventHandlers As ArrayList
         Private _networkObject As Devices.Network
         Private _shutdownStyle As ShutdownMode 'defines when the application decides to close
-#Disable Warning IDE0032 ' Use auto property
+#Disable Warning IDE0032 ' Use auto property, Justification:=<Public API>
         Private _enableVisualStyles As Boolean 'whether to use Windows XP styles
         Private _didSplashScreen As Boolean 'we only need to show the splash screen once.  Protect the user from himself if they are overriding our app model.
         Private Delegate Sub DisposeDelegate() 'used to marshal a call to Dispose on the Splash Screen
@@ -783,7 +783,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _appSyncronizationContext As SynchronizationContext
         Private ReadOnly _networkAvailChangeLock As New Object 'sync object
         Private _saveMySettingsOnExit As Boolean 'Informs My.Settings whether to save the settings on exit or not
-#Disable Warning IDE0032 ' Use auto property
+#Enable Warning IDE0032 ' Use auto property
 
         ''' <summary>
         ''' Runs the user's program through the VB Startup/Shutdown application model

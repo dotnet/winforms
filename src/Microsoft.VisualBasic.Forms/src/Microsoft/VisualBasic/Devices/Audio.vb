@@ -85,12 +85,12 @@ Namespace Microsoft.VisualBasic
                 Play(New Media.SoundPlayer(stream), playMode)
             End Sub
 
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
             ''' <summary>
             '''   Plays a system messageBeep sound.
             ''' </summary>
             ''' <param name="systemSound">The sound to be played</param>
             ''' <remarks>Plays the sound asynchronously</remarks>
-            <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
             Public Sub PlaySystemSound(systemSound As Media.SystemSound)
                 If systemSound Is Nothing Then
                     Throw GetArgumentNullException("systemSound")
@@ -103,11 +103,11 @@ Namespace Microsoft.VisualBasic
             ''' <summary>
             '''  Stops the play of any playing sound
             ''' </summary>
-            <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
             Public Sub [Stop]()
                 Dim sound As New Media.SoundPlayer()
                 InternalStop(sound)
             End Sub
+#Enable Warning CA1822 ' Mark members as static
 
             ''' <summary>
             '''  Plays the passed in SoundPlayer in the passed in mode

@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Sub New()
         End Sub
 
-#Disable Warning CA1822 ' Mark members as static
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Returns the value of the specified environment variable.
         ''' </summary>
@@ -94,7 +94,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Get
         End Property
 
-#Disable Warning CA1822 ' Mark members as static
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Changes the culture currently in used by the current thread.
         ''' </summary>

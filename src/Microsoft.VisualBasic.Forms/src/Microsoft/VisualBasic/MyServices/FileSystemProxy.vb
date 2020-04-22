@@ -33,7 +33,7 @@ Namespace Microsoft.VisualBasic.MyServices
             End Get
         End Property
 
-#Disable Warning CA1822 ' Mark members as static
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         Public Property CurrentDirectory() As String
             Get
                 Return FileIO.FileSystem.CurrentDirectory

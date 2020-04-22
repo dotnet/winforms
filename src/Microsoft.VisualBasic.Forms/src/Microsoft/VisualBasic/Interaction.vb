@@ -262,12 +262,13 @@ Namespace Microsoft.VisualBasic
                 _parentWindow = ParentWindow
             End Sub
 
-            <STAThread()> <Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification:="<Pending>")>
             Public Sub StartHere()
                 Try
                     _result = InternalInputBox(_prompt, _title, _defaultResponse, _xPos, _yPos, _parentWindow)
+#Disable Warning CA1031 ' Do not catch general exception types
                 Catch ex As Exception
                     _exception = ex
+#Enable Warning CA1031 ' Do not catch general exception types
                 End Try
             End Sub
 
