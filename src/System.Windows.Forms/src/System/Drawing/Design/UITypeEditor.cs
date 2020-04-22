@@ -6,6 +6,7 @@
 
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.IO;
@@ -32,9 +33,8 @@ namespace System.Drawing.Design
 
                 // System.Windows.Forms type Editors
                 [typeof(string[])] = "System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign,
-
-                // System.Windows.Forms type Editors
                 [typeof(Collection<string>)] = "System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign,
+                [typeof(StringCollection)] = "System.Windows.Forms.Design.StringCollectionEditor, " + AssemblyRef.SystemDesign,
 
                 // System.Drawing.Design type Editors
                 [typeof(Bitmap)] = "System.Drawing.Design.BitmapEditor, " + AssemblyRef.SystemDrawingDesign,
