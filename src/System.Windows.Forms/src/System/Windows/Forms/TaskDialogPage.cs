@@ -849,16 +849,10 @@ namespace System.Windows.Forms
                 TaskDialogRadioButton radioButton = radioButtons[i];
                 flags |= radioButton.Bind(this, RadioButtonStartID + i);
 
-                if (radioButton.IsCreated)
+                // Validate() will already have verified that no more than one radio button is checked.
+                if (radioButton.IsCreated && radioButton.Checked)
                 {
-                    if (radioButton.Checked && defaultRadioButtonID == 0)
-                    {
-                        defaultRadioButtonID = radioButton.RadioButtonID;
-                    }
-                    else if (radioButton.Checked)
-                    {
-                        radioButton.Checked = false;
-                    }
+                    defaultRadioButtonID = radioButton.RadioButtonID;
                 }
             }
 
