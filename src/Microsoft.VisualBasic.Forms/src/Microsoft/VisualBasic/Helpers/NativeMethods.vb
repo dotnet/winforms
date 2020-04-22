@@ -89,13 +89,14 @@ Namespace Microsoft.VisualBasic.CompilerServices
             lpProcessInformation As NativeTypes.PROCESS_INFORMATION) As Integer
         End Function
 
-#Disable Warning IDE0049 ' Simplify Names
+#Disable Warning IDE0049 ' Simplify Names, Justification:=<Types come from Windows Native API>
+#Disable Warning IDE1006 ' Naming Styles, Justification:=<Names come from Windows Native API>
         ''' <summary>
         ''' Contains information about the current state of both physical and virtual memory, including extended memory.
         ''' </summary>
         <StructLayout(LayoutKind.Sequential)>
         Friend Structure MEMORYSTATUSEX
-            'typedef struct _MEMORYSTATUSEX {  
+            'typedef struct _MEMORYSTATUSEX {
             '   DWORD dwLength;                     Size of the structure. Must set before calling GlobalMemoryStatusEx.
             '   DWORD dwMemoryLoad;                 Number between 0 and 100 on current memory utilization.
             '   DWORDLONG ullTotalPhys;             Total size of physical memory.
@@ -107,7 +108,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
             '   DWORDLONG ullAvailExtendedVirtual;  Total size of unreserved and uncommitted memory in extended portion of virual address.
             '} MEMORYSTATUSEX, *LPMEMORYSTATUSEX;
 
-#Disable Warning IDE1006 ' Naming Styles
             Friend dwLength As UInt32
             Friend dwMemoryLoad As UInt32
             Friend ullTotalPhys As UInt64

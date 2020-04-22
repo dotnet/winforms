@@ -49,24 +49,23 @@ Namespace Microsoft.VisualBasic.MyServices
             End Get
         End Property
 
-        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         Public Function GetValue(keyName As String, valueName As String,
             defaultValue As Object) As Object
 
             Return Registry.GetValue(keyName, valueName, defaultValue)
         End Function
 
-        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
         Public Sub SetValue(keyName As String, valueName As String, value As Object)
             Registry.SetValue(keyName, valueName, value)
         End Sub
 
-        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
         Public Sub SetValue(keyName As String, valueName As String, value As Object,
             valueKind As RegistryValueKind)
 
             Registry.SetValue(keyName, valueName, value, valueKind)
         End Sub
+#Enable Warning CA1822 ' Mark members as static
 
         ''' <summary>
         ''' Proxy class can only created by internal classes.
