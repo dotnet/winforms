@@ -27,7 +27,7 @@ Namespace Microsoft.VisualBasic.MyServices
         Friend Sub New()
         End Sub
 
-#Disable Warning CA1822 ' Mark members as static
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Gets text from the clipboard
         ''' </summary>
@@ -191,7 +191,6 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' Removes everything from the clipboard
         ''' </summary>
         Public Sub Clear()
-#Enable Warning CA1822 ' Mark members as static
             Clipboard.Clear()
         End Sub
 
@@ -201,7 +200,6 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <returns>The data object</returns>
         ''' <remarks>This gives the ability to save an object in multiple formats</remarks>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
         Public Function GetDataObject() As System.Windows.Forms.IDataObject
             Return Clipboard.GetDataObject()
         End Function
@@ -212,9 +210,9 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="data">The data object to be saved</param>
         ''' <remarks>This gives the ability to save an object in multiple formats</remarks>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
         Public Sub SetDataObject(data As System.Windows.Forms.DataObject)
             Clipboard.SetDataObject(data)
         End Sub
+#Enable Warning CA1822 ' Mark members as static
     End Class
 End Namespace

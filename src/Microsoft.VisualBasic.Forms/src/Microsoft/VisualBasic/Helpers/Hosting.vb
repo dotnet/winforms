@@ -13,8 +13,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Public NotInheritable Class HostServices
 
-        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0032:Use auto property", Justification:="<Public API>")>
+#Disable Warning IDE0032 ' Use auto property, Justification:=<Public API>
         Private Shared s_host As IVbHost
+#Enable Warning IDE0032 ' Use auto property
 
         Public Shared Property VBHost() As IVbHost
             Get

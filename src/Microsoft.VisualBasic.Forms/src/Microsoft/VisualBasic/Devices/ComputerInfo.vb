@@ -21,13 +21,13 @@ Namespace Microsoft.VisualBasic.Devices
         Sub New()
         End Sub
 
+#Disable Warning IDE0049 ' Simplify Names, Justification:="<Public API>
         ''' <summary>
         ''' Gets the total size of physical memory on the machine.
         ''' </summary>
         ''' <value>A 64-bit unsigned integer containing the size of total physical memory on the machine, in bytes.</value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
         Public ReadOnly Property TotalPhysicalMemory() As UInt64
             Get
                 Return MemoryStatus.TotalPhysicalMemory
@@ -40,7 +40,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <value>A 64-bit unsigned integer containing the size of free physical memory on the machine, in bytes.</value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
         Public ReadOnly Property AvailablePhysicalMemory() As UInt64
             Get
                 Return MemoryStatus.AvailablePhysicalMemory
@@ -54,7 +53,6 @@ Namespace Microsoft.VisualBasic.Devices
         '''          in bytes.</value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
         Public ReadOnly Property TotalVirtualMemory() As UInt64
             Get
                 Return MemoryStatus.TotalVirtualMemory
@@ -68,12 +66,12 @@ Namespace Microsoft.VisualBasic.Devices
         '''          in bytes.</value>
         ''' <exception cref="ComponentModel.Win32Exception">If we are unable to obtain the memory status.</exception>
         <CLSCompliant(False)>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
         Public ReadOnly Property AvailableVirtualMemory() As UInt64
             Get
                 Return MemoryStatus.AvailableVirtualMemory
             End Get
         End Property
+#Enable Warning IDE0049 ' Simplify Names
 
         ''' <summary>
         ''' Gets the current UICulture installed on the machine.
@@ -119,15 +117,15 @@ Namespace Microsoft.VisualBasic.Devices
 
         ''' <summary>
         ''' Debugger proxy for the ComputerInfo class.  The problem is that OSFullName can time out the debugger
-        ''' so we offer a view that doesn't have that field. 
+        ''' so we offer a view that doesn't have that field.
         ''' </summary>
         Friend NotInheritable Class ComputerInfoDebugView
             Public Sub New(RealClass As ComputerInfo)
                 _instanceBeingWatched = RealClass
             End Sub
 
+#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Public ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
                     Return _instanceBeingWatched.TotalPhysicalMemory
@@ -135,7 +133,6 @@ Namespace Microsoft.VisualBasic.Devices
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Public ReadOnly Property AvailablePhysicalMemory() As UInt64
                 Get
                     Return _instanceBeingWatched.AvailablePhysicalMemory
@@ -143,7 +140,6 @@ Namespace Microsoft.VisualBasic.Devices
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Public ReadOnly Property TotalVirtualMemory() As UInt64
                 Get
                     Return _instanceBeingWatched.TotalVirtualMemory
@@ -151,12 +147,12 @@ Namespace Microsoft.VisualBasic.Devices
             End Property
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Public ReadOnly Property AvailableVirtualMemory() As UInt64
                 Get
                     Return _instanceBeingWatched.AvailableVirtualMemory
                 End Get
             End Property
+#Enable Warning IDE0049 ' Simplify Names
 
             <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
             Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
@@ -205,7 +201,7 @@ Namespace Microsoft.VisualBasic.Devices
             Friend Sub New()
             End Sub
 
-            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
+#Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
             Friend ReadOnly Property TotalPhysicalMemory() As UInt64
                 Get
                     Refresh()
@@ -213,7 +209,6 @@ Namespace Microsoft.VisualBasic.Devices
                 End Get
             End Property
 
-            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Friend ReadOnly Property AvailablePhysicalMemory() As UInt64
                 Get
                     Refresh()
@@ -221,7 +216,6 @@ Namespace Microsoft.VisualBasic.Devices
                 End Get
             End Property
 
-            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Friend ReadOnly Property TotalVirtualMemory() As UInt64
                 Get
                     Refresh()
@@ -229,13 +223,13 @@ Namespace Microsoft.VisualBasic.Devices
                 End Get
             End Property
 
-            <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
             Friend ReadOnly Property AvailableVirtualMemory() As UInt64
                 Get
                     Refresh()
                     Return _memoryStatusEx.ullAvailVirtual
                 End Get
             End Property
+#Enable Warning IDE0049 ' Simplify Names
 
             Private Sub Refresh()
                 _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX

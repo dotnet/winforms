@@ -24,14 +24,15 @@ Namespace Microsoft.VisualBasic.Devices
             SendKeys(keys, False)
         End Sub
 
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Sends keys to the active window as if typed at keyboard. This overloaded
         ''' version uses the same conventions as the VB6 SendKeys.
         ''' </summary>
         ''' <param name="keys">A string containing the keys to be sent (typed).</param>
         ''' <param name="wait">Wait for messages to be processed before returning.</param>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification:="<Public API>")>
         Public Sub SendKeys(keys As String, wait As Boolean)
+#Enable Warning CA1822 ' Mark members as static
             If wait Then
                 Windows.Forms.SendKeys.SendWait(keys)
             Else
