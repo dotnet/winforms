@@ -1,4 +1,4 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -18,6 +18,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Sub New()
         End Sub
 
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Returns the value of the specified environment variable.
         ''' </summary>

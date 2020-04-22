@@ -29,8 +29,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Gets a DateTime that is the current local date and time on this
         ''' computer expressed as GMT time.
         ''' </summary>
-        ''' <value>A DateTime whose value is the current date and time expressed as GMT time.</value>
-        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0049:Simplify Names", Justification:="<Public API>")>
+        ''' <value>A Date whose value is the current date and time expressed as GMT time.</value>
         Public ReadOnly Property GmtTime() As DateTime
             Get
                 Return DateTime.UtcNow

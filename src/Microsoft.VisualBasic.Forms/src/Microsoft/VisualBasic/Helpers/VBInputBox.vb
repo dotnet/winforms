@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
     Friend NotInheritable Class VBInputBox
         Inherits Windows.Forms.Form
 
-#Disable Warning IDE1006 ' Naming Styles
+#Disable Warning IDE1006 ' Naming Styles, Justification:=<VBInputBox.resx depends on these names>
         Private ReadOnly components As Container
         Private TextBox As Windows.Forms.TextBox
         Private Label As Windows.Forms.Label
