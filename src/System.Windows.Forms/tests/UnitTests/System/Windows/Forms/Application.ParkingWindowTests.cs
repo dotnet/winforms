@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
 {
     public class ParkingWindowTests
     {
-        [WinFormsFact]
+        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
         public void ParkingWindow_DoesNotThrowOnGarbageCollecting()
         {
             using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>

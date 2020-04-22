@@ -716,7 +716,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCreatedCallCount, createdCallCount);
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
         [InlineData(FlatStyle.Flat, true, true, true, 1, 0)]
         [InlineData(FlatStyle.Popup, true, true, true, 1, 0)]
         [InlineData(FlatStyle.Standard, false, true, false, 0, 0)]
@@ -832,7 +832,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCreatedCallCount, createdCallCount);
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
         [InlineData(FlatStyle.Flat, FlatStyle.Flat, false, true, true, 0, 0)]
         [InlineData(FlatStyle.Flat, FlatStyle.Popup, true, true, true, 1, 0)]
         [InlineData(FlatStyle.Flat, FlatStyle.Standard, true, true, true, 1, 0)]
