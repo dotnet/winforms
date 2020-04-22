@@ -52,7 +52,7 @@
     <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
     <XUnitRunnerVisualStudioVersion>$(XUnitVersion)</XUnitRunnerVisualStudioVersion>
     <XUnitExtensibilityExecutionVersion>$(XUnitVersion)</XUnitExtensibilityExecutionVersion>
-    <XUnitStaFactPackageVersion>0.3.18</XUnitStaFactPackageVersion>
+    <XUnitStaFactPackageVersion>1.0.33-beta</XUnitStaFactPackageVersion>
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
