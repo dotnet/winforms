@@ -3642,8 +3642,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
 
             Rectangle rect2 = control.GetItemRect(1);
-            Assert.True(rect2.X >= rect1.X + rect1.Width);
-            Assert.Equal(rect2.Y, rect1.Y);
+            Assert.True((rect2.X >= rect1.Right && rect2.Y == rect1.Y) || (rect2.X == rect1.X && rect2.Y >= rect1.Bottom));
             Assert.True(rect2.Width > 0);
             Assert.True(rect2.Height > 0);
             Assert.True(control.IsHandleCreated);
@@ -3677,8 +3676,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             Rectangle rect2 = control.GetItemRect(1);
-            Assert.True(rect2.X >= rect1.X + rect1.Width);
-            Assert.Equal(rect2.Y, rect1.Y);
+            Assert.True((rect2.X >= rect1.Right && rect2.Y == rect1.Y) || (rect2.X == rect1.X && rect2.Y >= rect1.Bottom));
             Assert.True(rect2.Width > 0);
             Assert.True(rect2.Height > 0);
             Assert.True(control.IsHandleCreated);

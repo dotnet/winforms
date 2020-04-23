@@ -583,16 +583,16 @@ namespace System.Windows.Forms.Tests
             {
                 CalendarDimensions = value
             };
-            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
-            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
-            Assert.NotEqual(value, calendar.CalendarDimensions);
+            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
+            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
             Assert.False(calendar.IsHandleCreated);
 
             // Set same.
+            var previousCalendarDimensions = calendar.CalendarDimensions;
             calendar.CalendarDimensions = value;
-            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
-            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
-            Assert.NotEqual(value, calendar.CalendarDimensions);
+            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
+            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
+            Assert.Equal(previousCalendarDimensions, calendar.CalendarDimensions);
             Assert.False(calendar.IsHandleCreated);
         }
 
@@ -641,19 +641,19 @@ namespace System.Windows.Forms.Tests
             calendar.HandleCreated += (sender, e) => createdCallCount++;
 
             calendar.CalendarDimensions = value;
-            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
-            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
-            Assert.NotEqual(value, calendar.CalendarDimensions);
+            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
+            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
             // Set same.
+            var previousCalendarDimensions = calendar.CalendarDimensions;
             calendar.CalendarDimensions = value;
-            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width < 12);
-            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height < 12);
-            Assert.NotEqual(value, calendar.CalendarDimensions);
+            Assert.True(calendar.CalendarDimensions.Width > 0 && calendar.CalendarDimensions.Width <= 12);
+            Assert.True(calendar.CalendarDimensions.Height > 0 && calendar.CalendarDimensions.Height <= 12);
+            Assert.Equal(previousCalendarDimensions, calendar.CalendarDimensions);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -2335,7 +2335,7 @@ namespace System.Windows.Forms.Tests
             control.HandleCreated += (sender, e) => createdCallCount++;
 
             Size size = control.SingleMonthSize;
-            Assert.True(size.Width >= 176);
+            Assert.True(size.Width >= 169);
             Assert.True(size.Height >= 153);
             Assert.Equal(size, control.SingleMonthSize);
             Assert.True(control.IsHandleCreated);
