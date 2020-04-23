@@ -249,7 +249,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("node", () => new TreeNode("text", 0, 0, new TreeNode[] { null }));
         }
 
-#if false
         [WinFormsTheory]
         [InlineData(-2)]
         public void TreeNode_Ctor_InvalidImageIndex_ThrowsArgumentOutOfRangeException(int imageIndex)
@@ -265,7 +264,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => new TreeNode("text", 0, selectedImageIndex));
             Assert.Throws<ArgumentOutOfRangeException>("value", () => new TreeNode("text", 0, selectedImageIndex, new TreeNode[0]));
         }
-#endif
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
@@ -993,18 +991,12 @@ namespace System.Windows.Forms.Tests
                 ImageIndex = value
             };
             Assert.Equal(value, node.ImageIndex);
-#if false
             Assert.Equal(expectedImageKey, node.ImageKey);
-#else
-            string _ = expectedImageKey;
-#endif
 
             // Set same.
             node.ImageIndex = value;
             Assert.Equal(value, node.ImageIndex);
-#if false
             Assert.Equal(expectedImageKey, node.ImageKey);
-#endif
         }
 
         [WinFormsTheory]
@@ -1200,7 +1192,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.iImage);
         }
 
-#if false
         [WinFormsTheory]
         [InlineData(-2)]
         public void TreeNode_ImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
@@ -1208,7 +1199,6 @@ namespace System.Windows.Forms.Tests
             var node = new TreeNode();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => node.ImageIndex = value);
         }
-#endif
 
         [WinFormsFact]
         public void TreeNode_ImageIndex_SetInvalidSetItem_ThrowsInvalidOperationException()
@@ -1252,18 +1242,12 @@ namespace System.Windows.Forms.Tests
                 ImageKey = value
             };
             Assert.Equal(expected, node.ImageKey);
-#if false
             Assert.Equal(expectedImageIndex, node.ImageIndex);
-#else
-            int _ = expectedImageIndex;
-#endif
 
             // Set same.
             node.ImageKey = value;
             Assert.Equal(expected, node.ImageKey);
-#if false
             Assert.Equal(expectedImageIndex, node.ImageIndex);
-#endif
         }
 
         [WinFormsTheory]
@@ -2868,18 +2852,12 @@ namespace System.Windows.Forms.Tests
                 SelectedImageIndex = value
             };
             Assert.Equal(value, node.SelectedImageIndex);
-#if false
             Assert.Equal(expectedSelectedImageKey, node.SelectedImageKey);
-#else
-            string _ = expectedSelectedImageKey;
-#endif
 
             // Set same.
             node.SelectedImageIndex = value;
             Assert.Equal(value, node.SelectedImageIndex);
-#if false
             Assert.Equal(expectedSelectedImageKey, node.SelectedImageKey);
-#endif
         }
 
         [WinFormsTheory]
@@ -3075,7 +3053,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, item.iSelectedImage);
         }
 
-#if false
         [WinFormsTheory]
         [InlineData(-2)]
         public void TreeNode_SelectedImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
@@ -3083,7 +3060,6 @@ namespace System.Windows.Forms.Tests
             var node = new TreeNode();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => node.SelectedImageIndex = value);
         }
-#endif
 
         [WinFormsFact]
         public void TreeNode_SelectedImageIndex_SetInvalidSetItem_ThrowsInvalidOperationException()
@@ -3127,18 +3103,12 @@ namespace System.Windows.Forms.Tests
                 SelectedImageKey = value
             };
             Assert.Equal(expected, node.SelectedImageKey);
-#if false
             Assert.Equal(expectedSelectedImageIndex, node.SelectedImageIndex);
-#else
-            int _ = expectedSelectedImageIndex;
-#endif
 
             // Set same.
             node.SelectedImageKey = value;
             Assert.Equal(expected, node.SelectedImageKey);
-#if false
             Assert.Equal(expectedSelectedImageIndex, node.SelectedImageIndex);
-#endif
         }
 
         [WinFormsTheory]
@@ -3393,18 +3363,12 @@ namespace System.Windows.Forms.Tests
                 StateImageIndex = value
             };
             Assert.Equal(-1, node.StateImageIndex);
-#if false
             Assert.Equal(expectedStateImageKey, node.StateImageKey);
-#else
-            string _ = expectedStateImageKey;
-#endif
 
             // Set same.
             node.StateImageIndex = value;
             Assert.Equal(-1, node.StateImageIndex);
-#if false
             Assert.Equal(expectedStateImageKey, node.StateImageKey);
-#endif
 
             // Set tree view.
             using var control = new TreeView();
@@ -3686,18 +3650,12 @@ namespace System.Windows.Forms.Tests
                 StateImageKey = value
             };
             Assert.Equal(expected, node.StateImageKey);
-#if false
             Assert.Equal(expectedStateImageIndex, node.StateImageIndex);
-#else
-            int _ = expectedStateImageIndex;
-#endif
 
             // Set same.
             node.StateImageKey = value;
             Assert.Equal(expected, node.StateImageKey);
-#if false
             Assert.Equal(expectedStateImageIndex, node.StateImageIndex);
-#endif
         }
 
         [WinFormsTheory]

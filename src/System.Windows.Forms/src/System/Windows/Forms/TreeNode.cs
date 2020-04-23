@@ -180,30 +180,25 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a TreeNode object.
         /// </summary>
-        public TreeNode(string text, TreeNode[] children) : this()
+        public TreeNode(string text, TreeNode[] children) : this(text)
         {
-            this.text = text;
             Nodes.AddRange(children);
         }
 
         /// <summary>
         ///  Creates a TreeNode object.
         /// </summary>
-        public TreeNode(string text, int imageIndex, int selectedImageIndex) : this()
+        public TreeNode(string text, int imageIndex, int selectedImageIndex) : this(text)
         {
-            this.text = text;
-            ImageIndexer.Index = imageIndex;
-            SelectedImageIndexer.Index = selectedImageIndex;
+            ImageIndex = imageIndex;
+            SelectedImageIndex = selectedImageIndex;
         }
 
         /// <summary>
         ///  Creates a TreeNode object.
         /// </summary>
-        public TreeNode(string text, int imageIndex, int selectedImageIndex, TreeNode[] children) : this()
+        public TreeNode(string text, int imageIndex, int selectedImageIndex, TreeNode[] children) : this(text, imageIndex, selectedImageIndex)
         {
-            this.text = text;
-            ImageIndexer.Index = imageIndex;
-            SelectedImageIndexer.Index = selectedImageIndex;
             Nodes.AddRange(children);
         }
 
@@ -572,9 +567,19 @@ namespace System.Windows.Forms
         [RelatedImageList("TreeView.ImageList")]
         public int ImageIndex
         {
-            get { return ImageIndexer.Index; }
+            get => ImageIndexer.Index;
             set
             {
+                if (value < -1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
+                }
+
+                if (ImageIndexer.Index == value)
+                {
+                    return;
+                }
+
                 ImageIndexer.Index = value;
                 UpdateNode(TVIF.IMAGE);
             }
@@ -594,9 +599,14 @@ namespace System.Windows.Forms
         [RelatedImageList("TreeView.ImageList")]
         public string ImageKey
         {
-            get { return ImageIndexer.Key; }
+            get => ImageIndexer.Key;
             set
             {
+                if (value == ImageIndexer.Key)
+                {
+                    return;
+                }
+
                 ImageIndexer.Key = value;
                 UpdateNode(TVIF.IMAGE);
             }
@@ -607,10 +617,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.TreeNodeIndexDescr))]
-        public int Index
-        {
-            get { return index; }
-        }
+        public int Index => index;
 
         /// <summary>
         ///  Specifies whether this node is being edited by the user.
@@ -955,12 +962,19 @@ namespace System.Windows.Forms
         [RelatedImageList("TreeView.ImageList")]
         public int SelectedImageIndex
         {
-            get
-            {
-                return SelectedImageIndexer.Index;
-            }
+            get => SelectedImageIndexer.Index;
             set
             {
+                if (value < -1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedImageIndex), value, -1));
+                }
+
+                if (SelectedImageIndexer.Index == value)
+                {
+                    return;
+                }
+
                 SelectedImageIndexer.Index = value;
                 UpdateNode(TVIF.SELECTEDIMAGE);
             }
@@ -980,12 +994,14 @@ namespace System.Windows.Forms
         [RelatedImageList("TreeView.ImageList")]
         public string SelectedImageKey
         {
-            get
-            {
-                return SelectedImageIndexer.Key;
-            }
+            get => SelectedImageIndexer.Key;
             set
             {
+                if (SelectedImageIndexer.Key == value)
+                {
+                    return;
+                }
+
                 SelectedImageIndexer.Key = value;
                 UpdateNode(TVIF.SELECTEDIMAGE);
             }
@@ -1070,6 +1086,12 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
                 }
+
+                if (StateImageIndexer.Index == value)
+                {
+                    return;
+                }
+
                 StateImageIndexer.Index = value;
                 if (treeView != null && !treeView.CheckBoxes)
                 {
