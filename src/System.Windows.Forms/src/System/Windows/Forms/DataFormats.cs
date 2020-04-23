@@ -159,6 +159,11 @@ namespace System.Windows.Forms
         /// </summary>
         public static Format GetFormat(string format)
         {
+            if (string.IsNullOrWhiteSpace(format))
+            {
+                throw new ArgumentException(nameof(format));
+            }
+
             lock (s_internalSyncObject)
             {
                 EnsurePredefined();

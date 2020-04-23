@@ -249,6 +249,11 @@ namespace System.Windows.Forms
 
         public static bool ContainsData(string format)
         {
+            if (string.IsNullOrWhiteSpace(format))
+            {
+                return false;
+            }
+
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null)
             {
