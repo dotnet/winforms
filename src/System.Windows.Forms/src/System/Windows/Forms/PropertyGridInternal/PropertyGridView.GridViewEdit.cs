@@ -495,6 +495,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                             return propertyGridView.DialogButton.AccessibilityObject;
                         }
                     }
+                    else if (direction == UiaCore.NavigateDirection.PreviousSibling)
+                    {
+                        if (propertyGridView.DropDownVisible)
+                        {
+                            return propertyGridView.DropDownControlHolder.AccessibilityObject;
+                        }
+                    }
 
                     return base.FragmentNavigate(direction);
                 }

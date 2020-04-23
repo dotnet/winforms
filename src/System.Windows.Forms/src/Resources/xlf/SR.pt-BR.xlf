@@ -8311,6 +8311,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">A cor da borda ao redor da área da grade.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
         <source>Editor created an object that is not valid.  The created object must be of type '{0}'.</source>
         <target state="translated">O editor criou um objeto que não é válido. O objeto criado deve ser do tipo '{0}'.</target>
