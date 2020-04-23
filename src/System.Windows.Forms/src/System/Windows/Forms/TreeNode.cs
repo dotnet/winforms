@@ -2168,6 +2168,10 @@ namespace System.Windows.Forms
 
             TreeView tv = TreeView;
             Debug.Assert(tv != null, "TreeNode has handle but no TreeView");
+            if (tv.IsDisposed)
+            {
+                return;
+            }
 
             var item = new TVITEMW
             {
