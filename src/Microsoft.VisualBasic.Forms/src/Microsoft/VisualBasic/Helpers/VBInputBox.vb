@@ -123,7 +123,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Sub
 
         Private Sub OKButton_Click(sender As Object, e As EventArgs)
-            Output = _textBox.Text
+            Output = TextBox.Text
             Close()
         End Sub
 
