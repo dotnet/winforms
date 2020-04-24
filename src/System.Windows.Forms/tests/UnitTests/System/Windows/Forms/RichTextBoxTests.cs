@@ -5082,6 +5082,34 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void RichTextBox_SetAnsiRtf_DoesNotCorrupt()
+        {
+            // RichTextBox.Rtf treats input as code page specific (i.e. not Unicode). To see
+            // that we're actually using the code page we'll set the text to 0xA0 (160 / nbsp) to see
+            // that we can get it back out. If the encoding is not done in the codepage we'll likely
+            // get multiple ASCII bytes back out. UTF-8, for example, encodes the .NET UTF-16 0x00A0 (160)
+            // to 0xC2 0xA0.
+
+            // Ultimately we should really update RichTextBox to always stream data in Unicode as
+            // we're hard-coded to load 4.1 (see RichTextBox.CreateParams).
+
+            using var control = new RichTextBox();
+
+            Span<char> input = stackalloc char[] { (char)0xA0 };
+            control.Rtf = $"{{\\rtf1\\ansi {input[0]}}}";
+
+            Span<byte> output = stackalloc byte[16];
+
+            int currentCodePage = CodePagesEncodingProvider.Instance.GetEncoding(0).CodePage;
+
+            // The non-lossy conversion of nbsp only works single byte Windows code pages (e.g. not Japanese).
+            if (currentCodePage >= 1250 && currentCodePage <= 1258)
+            {
+                Assert.Equal(input[0], control.Text[0]);
+            }
+        }
+
         private class CustomGetCharFormatRichTextBox : RichTextBox
         {
             public bool MakeCustom { get; set; }
