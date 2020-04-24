@@ -69,9 +69,6 @@ function Print-Usage() {
 
 . $PSScriptRoot\tools.ps1
 
-$moduleLocation = Resolve-Path "$PSScriptRoot\..\Screenshots.win.psm1"
-$initScreenshotsModule = [scriptblock]::Create("Import-Module $moduleLocation")
-
 function InitializeCustomToolset {
   if (-not $restore) {
     return
@@ -145,39 +142,12 @@ try {
     InitializeNativeTools
   }
 
-  $TakeScreenshots = $ci -and ($test -or $integrationTest -or $performanceTest);
-  $ImageLogs = '';
-  if ($TakeScreenshots) {
-    $ImageLogs = Join-Path $LogDir 'screenshots'
-    Create-Directory $ImageLogs
-
-    [ScriptBlock] $ScreenshotCaptureScript = {
-      param($ImageLogs)
-      Start-CaptureScreenshots "$ImageLogs"
-    };
-
-    $job = Start-Job -InitializationScript $initScreenshotsModule `
-              -ScriptBlock $ScreenshotCaptureScript `
-              -ArgumentList $ImageLogs
-  }
-
   Build
 }
 catch {
   Write-Host $_.ScriptStackTrace
   Write-PipelineTelemetryError -Category 'InitializeToolset' -Message $_
   ExitWithExitCode 1
-}
-finally {
-  if ($TakeScreenshots) {
-    [ScriptBlock] $ScreenshotCaptureScript = {
-      param($ImageLogs)
-      Stop-CaptureScreenshots -TargetDir $ImageLogs
-    };
-    Start-Job -InitializationScript $initScreenshotsModule `
-              -ScriptBlock $ScreenshotCaptureScript `
-              -ArgumentList $ImageLogs | Receive-Job -AutoRemoveJob -Wait
-  }
 }
 
 ExitWithExitCode 0
