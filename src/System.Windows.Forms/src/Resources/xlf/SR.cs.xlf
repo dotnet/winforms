@@ -9073,147 +9073,147 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="TaskDialogButtonTextMustNotBeNull">
         <source>The text of a custom button must not be null or an empty string.</source>
-        <target state="new">The text of a custom button must not be null or an empty string.</target>
+        <target state="translated">Text vlastního tlačítka nesmí být null ani prázdný řetězec.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCanUpdateStateOnlyWhenShown">
         <source>Can only update the state of a task dialog while it is shown.</source>
-        <target state="new">Can only update the state of a task dialog while it is shown.</target>
+        <target state="translated">Stav dialogu úlohy se dá aktualizovat jen v případě, že je dialog zobrazený.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateClosedDialog">
         <source>Cannot navigate the dialog when it has already closed.</source>
-        <target state="new">Cannot navigate the dialog when it has already closed.</target>
+        <target state="translated">Dialog, který se už zavřel, se nedá procházet.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
         <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
-        <target state="new">Cannot navigate the dialog from an event handler that is called from within navigation.</target>
+        <target state="translated">Dialogem z obslužné rutiny události, která se zavolala z navigace, se nedá procházet.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
         <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
-        <target state="new">Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</target>
+        <target state="translated">Dialogem z události {0} jednoho z přepínačů aktuálního dialogu úlohy se nedá procházet.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
         <source>Cannot navigate from a page not bound to a dialog.</source>
-        <target state="new">Cannot navigate from a page not bound to a dialog.</target>
+        <target state="translated">Ze stránky, která není svázaná s dialogem, se nedá odejít.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
         <source>Cannot remove the progress bar while the task dialog is shown.</source>
-        <target state="new">Cannot remove the progress bar while the task dialog is shown.</target>
+        <target state="translated">Když je dialog úlohy zobrazený, nedá se indikátor průběhu odebrat.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetPropertyOfBoundPage">
         <source>Cannot set this property or call this method while the page is bound to a task dialog.</source>
-        <target state="new">Cannot set this property or call this method while the page is bound to a task dialog.</target>
+        <target state="translated">Když je stránka svázaná s dialogem úlohy, nedá se nastavit tato vlastnost nebo zavolat tato metoda.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetPropertyOfShownDialog">
         <source>Cannot set this property while the task dialog is shown.</source>
-        <target state="new">Cannot set this property while the task dialog is shown.</target>
+        <target state="translated">Když je dialog úlohy zobrazený, nedá se tato vlastnost nastavit.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent">
         <source>Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</source>
-        <target state="new">Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</target>
+        <target state="translated">Vlastnost {0} se nedá nastavit z události {1} jednoho z přepínačů aktuálního dialogu úlohy.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetTextForStandardButton">
         <source>Cannot set the text for a standard button.</source>
-        <target state="new">Cannot set the text for a standard button.</target>
+        <target state="translated">Text standardního tlačítka se nedá nastavit.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotShowCustomButtonsAndCommandLinks">
         <source>Cannot show both custom buttons and command links at the same time.</source>
-        <target state="new">Cannot show both custom buttons and command links at the same time.</target>
+        <target state="translated">V jednu chvíli není možné zobrazit vlastní tlačítka a odkazy na příkazy najednou.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUncheckRadioButtonWhileBound">
         <source>Cannot uncheck a radio button while it is bound to a task dialog.</source>
-        <target state="new">Cannot uncheck a radio button while it is bound to a task dialog.</target>
+        <target state="translated">Když je přepínač svázaný s dialogem úlohy, nedá se jeho zaškrtnutí zrušit.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
         <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
-        <target state="new">Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</target>
+        <target state="translated">Hned po navigaci v dialogu úlohy není možné s dialogem manipulovat. Počkejte prosím, než dojde k události {0} na další stránce.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateIconType">
         <source>Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</source>
-        <target state="new">Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</target>
+        <target state="translated">Ikona se nedá aktualizovat z typu ikony popisovače na typ ikony bez popisovače a naopak.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCollectionAlreadyBound">
         <source>One of the collections of this {0} is already bound to a {1} instance.</source>
-        <target state="new">One of the collections of this {0} is already bound to a {1} instance.</target>
+        <target state="translated">Jedna z kolekcí tohoto {0} je už svázaná s instancí {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlAlreadyAddedToCollection">
         <source>This control has already been added to the collection.</source>
-        <target state="new">This control has already been added to the collection.</target>
+        <target state="translated">Tento ovládací prvek se už do kolekce přidal.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlAlreadyBound">
         <source>One of the controls of this {0} is already bound to a {1} instance.</source>
-        <target state="new">One of the controls of this {0} is already bound to a {1} instance.</target>
+        <target state="translated">Jeden z ovládacích prvků tohoto {0} je už svázaný s instancí {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlIsPartOfOtherCollection">
         <source>This control is already part of a different collection.</source>
-        <target state="new">This control is already part of a different collection.</target>
+        <target state="translated">Tento ovládací prvek je už součástí jiné kolekce.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlNotBound">
         <source>This control is not currently bound to a task dialog.</source>
-        <target state="new">This control is not currently bound to a task dialog.</target>
+        <target state="translated">Tento ovládací prvek není momentálně svázaný s dialogem úlohy.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlNotCreated">
         <source>The control has not been created.</source>
-        <target state="new">The control has not been created.</target>
+        <target state="translated">Ovládací prvek se nevytvořil.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogDefaultButtonMustExistInCollection">
         <source>The default button must exist in the buttons collection.</source>
-        <target state="new">The default button must exist in the buttons collection.</target>
+        <target state="translated">V kolekci tlačítek musí existovat výchozí tlačítko.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogInstanceAlreadyShown">
         <source>This {0} instance is already being shown.</source>
-        <target state="new">This {0} instance is already being shown.</target>
+        <target state="translated">Tato instance {0} se už zobrazuje.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogNavigationNotCompleted">
         <source>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</source>
-        <target state="new">Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</target>
+        <target state="translated">Navigace dialogem úlohy ještě neskončila. Počkejte prosím, než dojde k události {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogOnlySingleRadioButtonCanBeChecked">
         <source>Only a single radio button can be set as checked.</source>
-        <target state="new">Only a single radio button can be set as checked.</target>
+        <target state="translated">Jako zaškrtnutý může být nastavený jen jeden přepínač.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogPageIsAlreadyBound">
         <source>This {0} instance is already bound to a {1} instance.</source>
-        <target state="new">This {0} instance is already bound to a {1} instance.</target>
+        <target state="translated">Tato instance {0} je už svázaná s instancí {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogRadioButtonTextMustNotBeNull">
         <source>The text of a radio button must not be null or an empty string.</source>
-        <target state="new">The text of a radio button must not be null or an empty string.</target>
+        <target state="translated">Text přepínače nesmí být null ani prázdný řetězec.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogTooManyButtonsAdded">
         <source>Too many custom buttons or radio buttons have been added.</source>
-        <target state="new">Too many custom buttons or radio buttons have been added.</target>
+        <target state="translated">Přidalo se příliš mnoho vlastních tlačítek nebo přepínačů.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogVisualStylesNotEnabled">
         <source>Visual styles are not enabled. Please call {0} before showing the task dialog.</source>
-        <target state="new">Visual styles are not enabled. Please call {0} before showing the task dialog.</target>
+        <target state="translated">Vizuální styly nejsou povolené. Než zobrazíte dialog úlohy, zavolejte prosím {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxAcceptsReturnDescr">
@@ -10978,7 +10978,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">
         <source>The current window procedure is not the expected one.</source>
-        <target state="new">The current window procedure is not the expected one.</target>
+        <target state="translated">Aktuální procedura okna není ta, která se očekávala.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsSetEvent">

@@ -9073,147 +9073,147 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TaskDialogButtonTextMustNotBeNull">
         <source>The text of a custom button must not be null or an empty string.</source>
-        <target state="new">The text of a custom button must not be null or an empty string.</target>
+        <target state="translated">自訂按鈕的文字不得為 Null 或空白字串。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCanUpdateStateOnlyWhenShown">
         <source>Can only update the state of a task dialog while it is shown.</source>
-        <target state="new">Can only update the state of a task dialog while it is shown.</target>
+        <target state="translated">當顯示工作對話方塊時，只可更新其狀態。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateClosedDialog">
         <source>Cannot navigate the dialog when it has already closed.</source>
-        <target state="new">Cannot navigate the dialog when it has already closed.</target>
+        <target state="translated">當對話方塊已經關閉後就不可瀏覽。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
         <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
-        <target state="new">Cannot navigate the dialog from an event handler that is called from within navigation.</target>
+        <target state="translated">不可透過從瀏覽內呼叫的事件處理常式來瀏覽對話方塊。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
         <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
-        <target state="new">Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</target>
+        <target state="translated">不可從目前工作對話方塊內其中一個選項按鈕的 {0} 事件中瀏覽對話方塊。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
         <source>Cannot navigate from a page not bound to a dialog.</source>
-        <target state="new">Cannot navigate from a page not bound to a dialog.</target>
+        <target state="translated">不可從未繫結至對話方塊的頁面瀏覽。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
         <source>Cannot remove the progress bar while the task dialog is shown.</source>
-        <target state="new">Cannot remove the progress bar while the task dialog is shown.</target>
+        <target state="translated">當顯示工作對話方塊時，不可移除進度列。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetPropertyOfBoundPage">
         <source>Cannot set this property or call this method while the page is bound to a task dialog.</source>
-        <target state="new">Cannot set this property or call this method while the page is bound to a task dialog.</target>
+        <target state="translated">當頁面繫結至工作對話方塊時，不可設定此屬性或呼叫此方法。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetPropertyOfShownDialog">
         <source>Cannot set this property while the task dialog is shown.</source>
-        <target state="new">Cannot set this property while the task dialog is shown.</target>
+        <target state="translated">當顯示工作對話方塊時，不可設定此屬性。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent">
         <source>Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</source>
-        <target state="new">Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</target>
+        <target state="translated">不可從目前工作對話方塊內其中一個選項按鈕的 {1} 事件中設定 {0} 屬性。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetTextForStandardButton">
         <source>Cannot set the text for a standard button.</source>
-        <target state="new">Cannot set the text for a standard button.</target>
+        <target state="translated">不可設定標準按鈕的文字。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotShowCustomButtonsAndCommandLinks">
         <source>Cannot show both custom buttons and command links at the same time.</source>
-        <target state="new">Cannot show both custom buttons and command links at the same time.</target>
+        <target state="translated">不可同時顯示自訂按鈕和命令連結。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUncheckRadioButtonWhileBound">
         <source>Cannot uncheck a radio button while it is bound to a task dialog.</source>
-        <target state="new">Cannot uncheck a radio button while it is bound to a task dialog.</target>
+        <target state="translated">當選項按鈕繫結至工作對話方塊時，不可取消選取。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
         <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
-        <target state="new">Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</target>
+        <target state="translated">不可在瀏覽之後立即操作工作對話方塊。請等候下一頁的 {0} 事件發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateIconType">
         <source>Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</source>
-        <target state="new">Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</target>
+        <target state="translated">不可將圖示從控點圖示類型更新為非控點圖示類型，反之亦然。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCollectionAlreadyBound">
         <source>One of the collections of this {0} is already bound to a {1} instance.</source>
-        <target state="new">One of the collections of this {0} is already bound to a {1} instance.</target>
+        <target state="translated">此 {0} 的其中一個集合已繫結至 {1} 執行個體。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlAlreadyAddedToCollection">
         <source>This control has already been added to the collection.</source>
-        <target state="new">This control has already been added to the collection.</target>
+        <target state="translated">此控制項已新增至此集合。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlAlreadyBound">
         <source>One of the controls of this {0} is already bound to a {1} instance.</source>
-        <target state="new">One of the controls of this {0} is already bound to a {1} instance.</target>
+        <target state="translated">此 {0} 的其中一個控制項已繫結至 {1} 執行個體。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlIsPartOfOtherCollection">
         <source>This control is already part of a different collection.</source>
-        <target state="new">This control is already part of a different collection.</target>
+        <target state="translated">此控制項已屬於其他集合。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlNotBound">
         <source>This control is not currently bound to a task dialog.</source>
-        <target state="new">This control is not currently bound to a task dialog.</target>
+        <target state="translated">此控制項目前未繫結至工作對話方塊。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlNotCreated">
         <source>The control has not been created.</source>
-        <target state="new">The control has not been created.</target>
+        <target state="translated">尚未建立控制項。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogDefaultButtonMustExistInCollection">
         <source>The default button must exist in the buttons collection.</source>
-        <target state="new">The default button must exist in the buttons collection.</target>
+        <target state="translated">預設按鈕必須存在於按鈕集合中。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogInstanceAlreadyShown">
         <source>This {0} instance is already being shown.</source>
-        <target state="new">This {0} instance is already being shown.</target>
+        <target state="translated">已顯示此 {0} 執行個體。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogNavigationNotCompleted">
         <source>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</source>
-        <target state="new">Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</target>
+        <target state="translated">工作對話方塊的瀏覽尚未完成。請等候 {0} 事件發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogOnlySingleRadioButtonCanBeChecked">
         <source>Only a single radio button can be set as checked.</source>
-        <target state="new">Only a single radio button can be set as checked.</target>
+        <target state="translated">只能將單一選項按鈕設為選取狀態。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogPageIsAlreadyBound">
         <source>This {0} instance is already bound to a {1} instance.</source>
-        <target state="new">This {0} instance is already bound to a {1} instance.</target>
+        <target state="translated">此 {0} 執行個體已繫結至 {1} 執行個體。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogRadioButtonTextMustNotBeNull">
         <source>The text of a radio button must not be null or an empty string.</source>
-        <target state="new">The text of a radio button must not be null or an empty string.</target>
+        <target state="translated">選項按鈕的文字不得為 Null 或空白字串。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogTooManyButtonsAdded">
         <source>Too many custom buttons or radio buttons have been added.</source>
-        <target state="new">Too many custom buttons or radio buttons have been added.</target>
+        <target state="translated">已新增太多自訂按鈕或選項按鈕。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogVisualStylesNotEnabled">
         <source>Visual styles are not enabled. Please call {0} before showing the task dialog.</source>
-        <target state="new">Visual styles are not enabled. Please call {0} before showing the task dialog.</target>
+        <target state="translated">未啟用視覺效果樣式。顯示工作對話方塊之前，請呼叫 {0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxAcceptsReturnDescr">
@@ -10978,7 +10978,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">
         <source>The current window procedure is not the expected one.</source>
-        <target state="new">The current window procedure is not the expected one.</target>
+        <target state="translated">目前的視窗程序不是預期的程序。</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsSetEvent">

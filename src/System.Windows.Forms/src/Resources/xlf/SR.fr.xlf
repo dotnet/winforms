@@ -9073,147 +9073,147 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TaskDialogButtonTextMustNotBeNull">
         <source>The text of a custom button must not be null or an empty string.</source>
-        <target state="new">The text of a custom button must not be null or an empty string.</target>
+        <target state="translated">Le texte d'un bouton personnalisé ne doit pas avoir une valeur null ou être une chaîne vide.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCanUpdateStateOnlyWhenShown">
         <source>Can only update the state of a task dialog while it is shown.</source>
-        <target state="new">Can only update the state of a task dialog while it is shown.</target>
+        <target state="translated">Seul l'état d'une boîte de dialogue de tâche peut être mis à jour quand elle est affichée.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateClosedDialog">
         <source>Cannot navigate the dialog when it has already closed.</source>
-        <target state="new">Cannot navigate the dialog when it has already closed.</target>
+        <target state="translated">Impossible de naviguer dans la boîte de dialogue quand elle est déjà fermée.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
         <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
-        <target state="new">Cannot navigate the dialog from an event handler that is called from within navigation.</target>
+        <target state="translated">Impossible de naviguer dans la boîte de dialogue depuis un gestionnaire d'événements appelé à partir de la navigation.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
         <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
-        <target state="new">Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</target>
+        <target state="translated">Impossible de naviguer dans la boîte de dialogue à partir de l'événement {0} de l'une des cases d'option de la boîte de dialogue de tâche active.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
         <source>Cannot navigate from a page not bound to a dialog.</source>
-        <target state="new">Cannot navigate from a page not bound to a dialog.</target>
+        <target state="translated">Impossible de naviguer à partir d'une page non liée à une boîte de dialogue.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
         <source>Cannot remove the progress bar while the task dialog is shown.</source>
-        <target state="new">Cannot remove the progress bar while the task dialog is shown.</target>
+        <target state="translated">Impossible de supprimer la barre de progression quand la boîte de dialogue de tâche est affichée.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetPropertyOfBoundPage">
         <source>Cannot set this property or call this method while the page is bound to a task dialog.</source>
-        <target state="new">Cannot set this property or call this method while the page is bound to a task dialog.</target>
+        <target state="translated">Impossible de définir cette propriété ou d'appeler cette méthode quand la page est liée à une boîte de dialogue de tâche.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetPropertyOfShownDialog">
         <source>Cannot set this property while the task dialog is shown.</source>
-        <target state="new">Cannot set this property while the task dialog is shown.</target>
+        <target state="translated">Impossible de définir cette propriété quand la boîte de dialogue de tâche est affichée.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent">
         <source>Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</source>
-        <target state="new">Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</target>
+        <target state="translated">Impossible de définir la propriété {0} à partir de l'événement {1} de l'une des cases d'option de la boîte de dialogue de tâche active.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotSetTextForStandardButton">
         <source>Cannot set the text for a standard button.</source>
-        <target state="new">Cannot set the text for a standard button.</target>
+        <target state="translated">Impossible de définir le texte d'un bouton standard.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotShowCustomButtonsAndCommandLinks">
         <source>Cannot show both custom buttons and command links at the same time.</source>
-        <target state="new">Cannot show both custom buttons and command links at the same time.</target>
+        <target state="translated">Impossible d'afficher à la fois les boutons personnalisés et les liens de commande.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUncheckRadioButtonWhileBound">
         <source>Cannot uncheck a radio button while it is bound to a task dialog.</source>
-        <target state="new">Cannot uncheck a radio button while it is bound to a task dialog.</target>
+        <target state="translated">Impossible de décocher une case d'option tant qu'elle est liée à une boîte de dialogue de tâche.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
         <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
-        <target state="new">Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</target>
+        <target state="translated">Impossible de manipuler la boîte de dialogue de tâche juste après avoir navigué dans celle-ci. Attendez que l'événement {0} de la page suivante se produise.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateIconType">
         <source>Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</source>
-        <target state="new">Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</target>
+        <target state="translated">Impossible de mettre à jour l'icône d'un type d'icône avec descripteur vers un type d'icône sans descripteur, et inversement.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCollectionAlreadyBound">
         <source>One of the collections of this {0} is already bound to a {1} instance.</source>
-        <target state="new">One of the collections of this {0} is already bound to a {1} instance.</target>
+        <target state="translated">L'une des collections de ce {0} est déjà liée à une instance de {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlAlreadyAddedToCollection">
         <source>This control has already been added to the collection.</source>
-        <target state="new">This control has already been added to the collection.</target>
+        <target state="translated">Ce contrôle a déjà été ajouté à la collection.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlAlreadyBound">
         <source>One of the controls of this {0} is already bound to a {1} instance.</source>
-        <target state="new">One of the controls of this {0} is already bound to a {1} instance.</target>
+        <target state="translated">L'un des contrôles de ce {0} est déjà lié à une instance de {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlIsPartOfOtherCollection">
         <source>This control is already part of a different collection.</source>
-        <target state="new">This control is already part of a different collection.</target>
+        <target state="translated">Ce contrôle fait déjà partie d'une autre collection.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlNotBound">
         <source>This control is not currently bound to a task dialog.</source>
-        <target state="new">This control is not currently bound to a task dialog.</target>
+        <target state="translated">Ce contrôle n'est pas lié à une boîte de dialogue de tâche.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlNotCreated">
         <source>The control has not been created.</source>
-        <target state="new">The control has not been created.</target>
+        <target state="translated">Le contrôle n'a pas été créé.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogDefaultButtonMustExistInCollection">
         <source>The default button must exist in the buttons collection.</source>
-        <target state="new">The default button must exist in the buttons collection.</target>
+        <target state="translated">Le bouton par défaut doit exister dans la collection de boutons.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogInstanceAlreadyShown">
         <source>This {0} instance is already being shown.</source>
-        <target state="new">This {0} instance is already being shown.</target>
+        <target state="translated">Cette instance de {0} est déjà affichée.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogNavigationNotCompleted">
         <source>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</source>
-        <target state="new">Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</target>
+        <target state="translated">La navigation de la boîte de dialogue de tâche n'a pas encore eu lieu. Attendez que l'événement {0} se produise.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogOnlySingleRadioButtonCanBeChecked">
         <source>Only a single radio button can be set as checked.</source>
-        <target state="new">Only a single radio button can be set as checked.</target>
+        <target state="translated">Une seule case d'option peut être définie comme cochée.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogPageIsAlreadyBound">
         <source>This {0} instance is already bound to a {1} instance.</source>
-        <target state="new">This {0} instance is already bound to a {1} instance.</target>
+        <target state="translated">Cette instance de {0} est déjà liée à une instance de {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogRadioButtonTextMustNotBeNull">
         <source>The text of a radio button must not be null or an empty string.</source>
-        <target state="new">The text of a radio button must not be null or an empty string.</target>
+        <target state="translated">Le texte d'une case d'option ne doit pas avoir une valeur null ou être une chaîne vide.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogTooManyButtonsAdded">
         <source>Too many custom buttons or radio buttons have been added.</source>
-        <target state="new">Too many custom buttons or radio buttons have been added.</target>
+        <target state="translated">Trop de boutons personnalisés, ou des cases d'option ont été ajoutés.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogVisualStylesNotEnabled">
         <source>Visual styles are not enabled. Please call {0} before showing the task dialog.</source>
-        <target state="new">Visual styles are not enabled. Please call {0} before showing the task dialog.</target>
+        <target state="translated">Les styles visuels ne sont pas activés. Appelez {0} avant d'afficher la boîte de dialogue de tâche.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxAcceptsReturnDescr">
@@ -10978,7 +10978,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">
         <source>The current window procedure is not the expected one.</source>
-        <target state="new">The current window procedure is not the expected one.</target>
+        <target state="translated">La procédure de fenêtre active n'est pas celle attendue.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsSetEvent">
