@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Tests
             Assert.IsType<ToolStripProfessionalRenderer>(control.Renderer);
             Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
             Assert.True(control.ResizeRedraw);
-            Assert.Equal(2, control.Right);
+            Assert.Equal(SystemInformation.WorkingArea.X + 2, control.Right);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.True(control.ShowFocusCues);
             Assert.True(control.ShowItemToolTips);
@@ -1931,6 +1931,15 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Location_Set_TestData))]
         public void ToolStripDropDown_Location_Set_GetReturnsExpected(Point value, Point expected, int expectedLocationChangedCallCount)
         {
+            if (value != Point.Empty)
+            {
+                expected.X = Math.Max(expected.X, SystemInformation.WorkingArea.X);
+                expected.Y = Math.Max(expected.Y, SystemInformation.WorkingArea.Y);
+
+                if (expectedLocationChangedCallCount == 0 && SystemInformation.WorkingArea.Location != Point.Empty)
+                    expectedLocationChangedCallCount = 1;
+            }
+
             using var control = new ToolStripDropDown();
             int moveCallCount = 0;
             int locationChangedCallCount = 0;

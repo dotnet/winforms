@@ -159,9 +159,15 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Cursor_Clip_Set_GetReturnsExpected()
         {
+            IntPtr oldDpiAwarenessContext = Interop.User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
             Rectangle clip = Cursor.Clip;
             try
             {
+                // The clipping area is always defined in physical pixels (disregarding DPI) while
+                // the virtual screen area depends on the DPI awareness of the thread querying for it.
+                // Cannot use DpiAwarenessScope because it rejects to change the DPI awareness.
+                oldDpiAwarenessContext = Interop.User32.SetThreadDpiAwarenessContext(Interop.User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+
                 // Set non-empty.
                 Cursor.Clip = new Rectangle(1, 2, 3, 4);
                 Assert.True(Cursor.Clip.X >= 0);
@@ -181,6 +187,9 @@ namespace System.Windows.Forms.Tests
             }
             finally
             {
+                if (oldDpiAwarenessContext != Interop.User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT)
+                    Interop.User32.SetThreadDpiAwarenessContext(oldDpiAwarenessContext);
+
                 Cursor.Clip = clip;
             }
         }
