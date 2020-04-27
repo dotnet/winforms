@@ -567,7 +567,16 @@ namespace System.Windows.Forms
         [RelatedImageList("TreeView.ImageList")]
         public int ImageIndex
         {
-            get => ImageIndexer.Index;
+            get
+            {
+                TreeView tv = TreeView;
+                if (ImageIndexer.Index != -1 && tv != null && tv.ImageList != null && ImageIndexer.Index >= tv.ImageList.Images.Count)
+                {
+                    return tv.ImageList.Images.Count - 1;
+                }
+
+                return ImageIndexer.Index;
+            }
             set
             {
                 if (value < -1)
@@ -962,7 +971,16 @@ namespace System.Windows.Forms
         [RelatedImageList("TreeView.ImageList")]
         public int SelectedImageIndex
         {
-            get => SelectedImageIndexer.Index;
+            get
+            {
+                TreeView tv = TreeView;
+                if (SelectedImageIndexer.Index != -1 && tv != null && tv.ImageList != null && SelectedImageIndexer.Index >= tv.ImageList.Images.Count)
+                {
+                    return tv.ImageList.Images.Count - 1;
+                }
+
+                return SelectedImageIndexer.Index;
+            }
             set
             {
                 if (value < -1)
@@ -1078,7 +1096,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (treeView == null || treeView.StateImageList == null) ? -1 : StateImageIndexer.Index;
+                TreeView tv = TreeView;
+                if (StateImageIndexer.Index != -1 && tv != null && tv.StateImageList != null && StateImageIndexer.Index >= tv.StateImageList.Images.Count)
+                {
+                    return tv.StateImageList.Images.Count - 1;
+                }
+
+                return StateImageIndexer.Index;
             }
             set
             {
