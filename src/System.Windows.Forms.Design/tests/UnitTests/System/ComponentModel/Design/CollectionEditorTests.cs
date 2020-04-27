@@ -344,11 +344,18 @@ namespace System.ComponentModel.Design.Tests
             mockComponentInitializer.Verify(d => d.InitializeNewComponent(null), Times.Once());
         }
 
-        [Fact]
-        public void CollectionEditor_CreateInstance_InvokeWithoutContext_ReturnsExpected()
+        public static IEnumerable<object[]> CreateInstance_InvokeWithoutContext_TestData()
+        {
+            yield return new object[] { typeof(int), 0  };
+            yield return new object[] { typeof(string), string.Empty };
+        }
+
+        [Theory]
+        [MemberData(nameof(CreateInstance_InvokeWithoutContext_TestData))]
+        public void CollectionEditor_CreateInstance_InvokeWithoutContext_ReturnsExpected(Type type, object expected)
         {
             var editor = new SubCollectionEditor(null);
-            Assert.Equal(0, editor.CreateInstance(typeof(int)));
+            Assert.Equal(expected, editor.CreateInstance(type));
         }
 
         [Fact]

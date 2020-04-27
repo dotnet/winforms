@@ -121,7 +121,9 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            return TypeDescriptor.CreateInstance(host, itemType, null, null);
+            return itemType?.UnderlyingSystemType == typeof(string)
+                ? string.Empty
+                : TypeDescriptor.CreateInstance(host, itemType, null, null);
         }
 
         /// <summary>
