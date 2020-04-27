@@ -13,7 +13,7 @@ Please [file an issue][issues] for any larger change you would like to propose. 
 
 See [Developer Guide](developer-guide.md) to learn how to develop changes for this repository.
 
-This project follows the general [.NET Core Contribution Guidelines][corefx-contribution-guidelines]. Please read it before submitting PRs.
+This project follows the general [.NET Core Contribution Guidelines][runtime-contribution-guidelines]. Please read it before submitting PRs.
 
 The contribution bar from the general contribution guidelines is copied below.
 
@@ -30,4 +30,4 @@ Contributions must also satisfy the other published guidelines defined in this d
 [comment]: <> (URI Links)
 
 [issues]: https://github.com/dotnet/winforms/issues
-[corefx-contribution-guidelines]: https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md
+[runtime-contribution-guidelines]: https://github.com/dotnet/runtime/blob/master/CONTRIBUTING.md
