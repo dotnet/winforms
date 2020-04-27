@@ -1290,7 +1290,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return UiaCore.ExpandCollapseState.Collapsed;
                     }
 
-                    if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry && propertyGridView.DropDownVisible)
+                    if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry &&
+                        ((_owningPropertyDescriptorGridEntry != null && _owningPropertyDescriptorGridEntry.InternalExpanded)
+                         || propertyGridView.DropDownVisible))
                     {
                         return UiaCore.ExpandCollapseState.Expanded;
                     }
