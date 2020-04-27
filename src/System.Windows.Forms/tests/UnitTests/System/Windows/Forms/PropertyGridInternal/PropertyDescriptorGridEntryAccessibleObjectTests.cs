@@ -15,7 +15,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [WinFormsFact]
         public void PropertyDescriptorGridEntryAccessibleObject_Ctor_Default()
         {
-            var propertyGrid = new PropertyGrid();
+            using var propertyGrid = new PropertyGrid();
             var propertyDescriptorGridEntryTestEntity = new PropertyDescriptorGridEntryTestEntity(propertyGrid, null, false);
             var propertyDescriptorGridEntryAccessibleObject = propertyDescriptorGridEntryTestEntity.TestPropertyDescriptorGridEntryAccessibleObject;
 
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [WinFormsFact]
         public void PropertyDescriptorGridEntryAccessibleObject_ExpandCollapseState_collapsed_by_default()
         {
-            var propertyGrid = new PropertyGrid();
+            using var propertyGrid = new PropertyGrid();
             var propertyDescriptorGridEntryTestEntity = new PropertyDescriptorGridEntryTestEntity(propertyGrid, null, false);
             var propertyDescriptorGridEntryAccessibleObject = propertyDescriptorGridEntryTestEntity.TestPropertyDescriptorGridEntryAccessibleObject;
 
@@ -42,8 +42,8 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [WinFormsFact]
         public void PropertyDescriptorGridEntryAccessibleObject_ExpandCollapseState_reflects_ExpandablePropertyState()
         {
-            Form form = new Form();
-            PropertyGrid propertyGrid = new PropertyGrid();
+            using Form form = new Form();
+            using PropertyGrid propertyGrid = new PropertyGrid();
             var testEntity = new TestEntity();
             testEntity.FontProperty = new Font(FontFamily.GenericSansSerif, 1);
             propertyGrid.SelectedObject = testEntity;
