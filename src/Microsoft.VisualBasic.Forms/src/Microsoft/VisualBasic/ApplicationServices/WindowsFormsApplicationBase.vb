@@ -184,7 +184,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         RemoveHandler _networkObject.NetworkAvailabilityChanged, AddressOf NetworkAvailableEventAdaptor
                         If _networkObject IsNot Nothing Then
                             _networkObject.DisconnectListener() 'Stop listening to network change events because we are going to go away
-                            _networkObject = Nothing 'no sense hanging on to this if nobody is listening.
+                            _networkObject = Nothing 'no sense holding on to this if nobody is listening.
                         End If
                     End If
                 End If
