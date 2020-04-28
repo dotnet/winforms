@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests
 {
     public class DataGridViewTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void DataGridView_Ctor_Default()
         {
-            var dataGridView = new DataGridView();
+            using var dataGridView = new DataGridView();
             Assert.NotNull(dataGridView.RowTemplate);
             Assert.Same(dataGridView.RowTemplate, dataGridView.RowTemplate);
         }

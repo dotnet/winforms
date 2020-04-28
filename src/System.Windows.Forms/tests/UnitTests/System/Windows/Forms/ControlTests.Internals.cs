@@ -13,15 +13,15 @@ namespace System.Windows.Forms.Tests
 {
     public partial class ControlTests
     {
-        [Fact]
+        [WinFormsFact]
         public void Control_GetHandleInternalShouldBeZero()
         {
-            var cont = new Control();
+            using var control = new Control();
 
-            IntPtr intptr = cont.HandleInternal;
+            IntPtr intptr = control.HandleInternal;
 
             Assert.Equal(IntPtr.Zero, intptr);
-            Assert.False(cont.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         /// <summary>
@@ -30,23 +30,23 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<bool> IsTopMdiWindowClosingGetSetData =>
             CommonTestHelper.GetBoolTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(IsTopMdiWindowClosingGetSetData))]
         public void Control_IsTopMdiWindowClosingGetSet(bool expected)
         {
-            var cont = new Control
+            using var control = new Control
             {
                 IsTopMdiWindowClosing = expected
             };
 
-            Assert.Equal(expected, cont.IsTopMdiWindowClosing);
+            Assert.Equal(expected, control.IsTopMdiWindowClosing);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BoundsSpecified))]
         public void Control_RequiredScaling_Set_GetReturnsExpected(BoundsSpecified value)
         {
-            var control = new Control
+            using var control = new Control
             {
                 RequiredScaling = value
             };
@@ -57,11 +57,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.RequiredScaling);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_RequiredScalingEnabled_Get_ReturnsExpected(bool value)
         {
-            var control = new Control
+            using var control = new Control
             {
                 RequiredScalingEnabled = value
             };
@@ -76,11 +76,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, control.RequiredScalingEnabled);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_TabStopInternal_Set_GetReturnsExpected(bool value)
         {
-            var control = new Control
+            using var control = new Control
             {
                 TabStopInternal = value
             };
@@ -95,11 +95,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.TabStopInternal);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_TabStopInternal_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new Control();
+            using var control = new Control();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             control.TabStopInternal = value;
@@ -114,10 +114,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.TabStopInternal);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_TabStopInternal_SetWithHandler_DoesNotCallTabStopChanged()
         {
-            var control = new Control
+            using var control = new Control
             {
                 TabStop = true
             };
@@ -152,18 +152,18 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, true)]
         [InlineData(false, true)] // setting is impossible; default is false
         // SupportsUseCompatibleTextRendering is always false
         public void Control_UseCompatibleTextRenderingIntGetSet(bool given, bool expected)
         {
-            var cont = new Control
+            using var control = new Control
             {
                 UseCompatibleTextRenderingInt = given
             };
 
-            Assert.Equal(expected, cont.UseCompatibleTextRenderingInt);
+            Assert.Equal(expected, control.UseCompatibleTextRenderingInt);
         }
 
         /// <summary>
@@ -172,16 +172,16 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<bool> ValidationCancelledGetSetData =>
             CommonTestHelper.GetBoolTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ValidationCancelledGetSetData))]
         public void Control_ValidationCancelledGetSet(bool expected)
         {
-            var cont = new Control
+            using var control = new Control
             {
                 ValidationCancelled = expected
             };
 
-            Assert.Equal(expected, cont.ValidationCancelled);
+            Assert.Equal(expected, control.ValidationCancelled);
         }
 
         /// <summary>
@@ -190,14 +190,14 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<int> ApplyBoundsConstraintsData =>
             CommonTestHelper.GetIntTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ApplySizeConstraintsData))]
         public void Control_ApplyBoundsConstraints(int expected)
         {
-            var cont = new Control();
+            using var control = new Control();
             var expectedBounds = new Rectangle(expected, expected, expected, expected);
 
-            Rectangle actualBounds = cont.ApplyBoundsConstraints(expected, expected, expected, expected);
+            Rectangle actualBounds = control.ApplyBoundsConstraints(expected, expected, expected, expected);
 
             Assert.Equal(expectedBounds, actualBounds);
         }
@@ -208,93 +208,93 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<int> ApplySizeConstraintsData =>
             CommonTestHelper.GetIntTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ApplySizeConstraintsData))]
         public void Control_ApplySizeConstraints(int expected)
         {
-            var cont = new Control();
+            using var control = new Control();
             var expectedSize = new Size(expected, expected);
 
-            Size actualSize = cont.ApplySizeConstraints(expected, expected);
+            Size actualSize = control.ApplySizeConstraints(expected, expected);
 
             Assert.Equal(expectedSize, actualSize);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
         public void Control_ApplySizeConstraintsSize_Invoke_ReturnsExpected(Size expectedSize)
         {
-            var control = new Control();
+            using var control = new Control();
             Size actualSize = control.ApplySizeConstraints(expectedSize);
             Assert.Equal(expectedSize, actualSize);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_AssignParent()
         {
-            var cont = new Control();
+            using var control = new Control();
             var parent = new Control();
 
-            cont.AssignParent(parent);
+            control.AssignParent(parent);
 
-            Assert.Equal(parent, cont.Parent);
+            Assert.Equal(parent, control.Parent);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_ParentChangedFromAssign()
         {
             bool wasChanged = false;
-            var cont = new Control();
-            cont.ParentChanged += (sender, args) => wasChanged = true;
+            using var control = new Control();
+            control.ParentChanged += (sender, args) => wasChanged = true;
             var parent = new Control();
 
-            cont.AssignParent(parent);
+            control.AssignParent(parent);
 
             Assert.True(wasChanged);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_CanProcessMnemonic()
         {
-            var cont = new Control();
+            using var control = new Control();
 
             // act and assert
-            Assert.True(cont.CanProcessMnemonic());
+            Assert.True(control.CanProcessMnemonic());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_CanProcessMnemonicNotEnabled()
         {
-            var cont = new Control
+            using var control = new Control
             {
                 Enabled = false
             };
 
             // act and assert
-            Assert.False(cont.CanProcessMnemonic());
+            Assert.False(control.CanProcessMnemonic());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_CanProcessMnemonicNotVisible()
         {
-            var cont = new Control
+            using var control = new Control
             {
                 Visible = false
             };
 
             // act and assert
-            Assert.False(cont.CanProcessMnemonic());
+            Assert.False(control.CanProcessMnemonic());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_CanProcessMnemonicParent()
         {
-            var cont = new Control();
+            using var control = new Control();
             var parent = new Control();
-            cont.AssignParent(parent);
+            control.AssignParent(parent);
 
             // act and assert
-            Assert.True(cont.CanProcessMnemonic());
+            Assert.True(control.CanProcessMnemonic());
         }
 
         /// <summary>
@@ -303,21 +303,21 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<bool> CreateControlInternalData =>
             CommonTestHelper.GetBoolTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CreateControlInternalData))]
         public void Control_CreateControlInternal(bool fIgnoreVisible)
         {
-            var cont = new Control();
+            using var control = new Control();
 
-            cont.CreateControl(fIgnoreVisible);
+            control.CreateControl(fIgnoreVisible);
 
-            Assert.True(cont.Created);
+            Assert.True(control.Created);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_GetChildControlsInTabOrder()
         {
-            var cont = new Control();
+            using var control = new Control();
             var first = new Control
             {
                 TabIndex = 0
@@ -342,17 +342,17 @@ namespace System.Windows.Forms.Tests
                 first,
                 third
             };
-            cont.Controls.AddRange(unordered);
+            control.Controls.AddRange(unordered);
 
-            Control[] tabOrderedChildren = cont.GetChildControlsInTabOrder(false);
+            Control[] tabOrderedChildren = control.GetChildControlsInTabOrder(false);
 
             Assert.Equal(ordered, tabOrderedChildren);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_GetChildControlsInTabOrderHandlesOnly()
         {
-            var cont = new Control();
+            using var control = new Control();
             var first = new Control
             {
                 TabIndex = 0
@@ -371,17 +371,17 @@ namespace System.Windows.Forms.Tests
                 first,
                 third
             };
-            cont.Controls.AddRange(unordered);
+            control.Controls.AddRange(unordered);
 
-            Control[] tabOrderedChildrenWithhandlesOnly = cont.GetChildControlsInTabOrder(true);
+            Control[] tabOrderedChildrenWithhandlesOnly = control.GetChildControlsInTabOrder(true);
 
             Assert.Empty(tabOrderedChildrenWithhandlesOnly);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_GetFirstChildControlInTabOrder()
         {
-            var cont = new Control();
+            using var control = new Control();
             var first = new Control
             {
                 TabIndex = 0
@@ -400,16 +400,16 @@ namespace System.Windows.Forms.Tests
                 first,
                 third
             };
-            cont.Controls.AddRange(tabOrder);
+            control.Controls.AddRange(tabOrder);
 
             // act and assert
-            Assert.Equal(first, cont.GetFirstChildControlInTabOrder(true));
+            Assert.Equal(first, control.GetFirstChildControlInTabOrder(true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_GetFirstChildControlInTabOrderReverse()
         {
-            var cont = new Control();
+            using var control = new Control();
             var first = new Control
             {
                 TabIndex = 0
@@ -428,50 +428,50 @@ namespace System.Windows.Forms.Tests
                 first,
                 third
             };
-            cont.Controls.AddRange(tabOrder);
+            control.Controls.AddRange(tabOrder);
 
             // act and assert
-            Assert.Equal(third, cont.GetFirstChildControlInTabOrder(false));
+            Assert.Equal(third, control.GetFirstChildControlInTabOrder(false));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_NotifyEnter()
         {
             bool wasChanged = false;
-            var cont = new Control();
-            cont.Enter += (sender, args) => wasChanged = true;
+            using var control = new Control();
+            control.Enter += (sender, args) => wasChanged = true;
 
-            cont.NotifyEnter();
+            control.NotifyEnter();
 
             Assert.True(wasChanged);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_NotifyLeave()
         {
             bool wasChanged = false;
-            var cont = new Control();
-            cont.Leave += (sender, args) => wasChanged = true;
+            using var control = new Control();
+            control.Leave += (sender, args) => wasChanged = true;
 
-            cont.NotifyLeave();
+            control.NotifyLeave();
 
             Assert.True(wasChanged);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(10.0f)]
         [InlineData(0.1f)]
         [InlineData(float.Epsilon)]
         public void Control_ScaleFont(float expected)
         {
-            var cont = new Control
+            using var control = new Control
             {
                 Font = new Font(new FontFamily(Drawing.Text.GenericFontFamilies.Serif), 1.0f)
             };
 
-            cont.ScaleFont(expected);
+            control.ScaleFont(expected);
 
-            Assert.Equal(expected, cont.Font.Size);
+            Assert.Equal(expected, control.Font.Size);
         }
     }
 }

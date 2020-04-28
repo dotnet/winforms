@@ -13,10 +13,10 @@ namespace System.Windows.Forms.Tests
 {
     public class BindingSourceTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void Ctor_Default()
         {
-            var source = new SubBindingSource();
+            using var source = new SubBindingSource();
             Assert.True(source.AllowEdit);
             Assert.True(source.AllowNew);
             Assert.True(source.AllowRemove);
@@ -64,20 +64,18 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, null, typeof(BindingList<object>) };
             yield return new object[] { null, string.Empty, typeof(BindingList<object>) };
             yield return new object[] { null, "dataMember", typeof(BindingList<object>) };
-            var nullListDataClass = new DataClass { List = null };
-            yield return new object[] { nullListDataClass, nameof(DataClass.List), typeof(BindingList<int>) };
-            yield return new object[] { nullListDataClass, nameof(DataClass.List), typeof(BindingList<int>) };
+            yield return new object[] {  new DataClass { List = null }, nameof(DataClass.List), typeof(BindingList<int>) };
+            yield return new object[] {  new DataClass { List = null }, nameof(DataClass.List), typeof(BindingList<int>) };
 
-            var nullObjectDataClass = new ObjectDataClass { List = null };
-            yield return new object[] { nullObjectDataClass, nameof(ObjectDataClass.List), typeof(BindingList<object>) };
-            yield return new object[] { nullObjectDataClass, nameof(ObjectDataClass.List).ToLower(), typeof(BindingList<object>) };
+            yield return new object[] { new ObjectDataClass { List = null }, nameof(ObjectDataClass.List), typeof(BindingList<object>) };
+            yield return new object[] { new ObjectDataClass { List = null }, nameof(ObjectDataClass.List).ToLower(), typeof(BindingList<object>) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Object_String_Null_TestData))]
         public void Ctor_Object_String_Null(object dataSource, string dataMember, Type expectedType)
         {
-            var source = new SubBindingSource(dataSource, dataMember);
+            using var source = new SubBindingSource(dataSource, dataMember);
             Assert.True(source.AllowEdit);
             Assert.True(source.AllowNew);
             Assert.True(source.AllowRemove);
@@ -138,11 +136,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Object_String_Empty_TestData))]
         public void Ctor_Object_String_Empty(object dataSource, string dataMember, bool expectedAllowRemove, bool expectedIsFixedSize, IList expected)
         {
-            var source = new SubBindingSource(dataSource, dataMember);
+            using var source = new SubBindingSource(dataSource, dataMember);
             Assert.True(source.AllowEdit);
             Assert.False(source.AllowNew);
             Assert.Equal(expectedAllowRemove, source.AllowRemove);
@@ -198,7 +196,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { readOnlyList, dataMember, false, false, false, false, true, false, readOnlyList };
 
                 var synchronizedList = new SynchronizedList<int> { 1, 2, 3 };
-                yield return new object[] { synchronizedList, dataMember, true, false, true, false, false,true, synchronizedList };
+                yield return new object[] { synchronizedList, dataMember, true, false, true, false, false, true, synchronizedList };
 
                 var nonEmptyArray = new int[] { 1, 2, 3 };
                 yield return new object[] { nonEmptyArray, dataMember, true, false, false, true, false, false, nonEmptyArray };
@@ -224,11 +222,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { listSourceDataClass, nameof(ListSourceDataClass.ListSource).ToLower(), true, false, true, false, false, false, list };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Object_String_TestData))]
         public void Ctor_Object_String(object dataSource, string dataMember, bool expectedAllowEdit, bool expectedAllowNew, bool expectedAllowRemove, bool expectedIsFixedSize, bool expectedReadOnly, bool expectedIsSynchronized, IList expected)
         {
-            var source = new SubBindingSource(dataSource, dataMember);
+            using var source = new SubBindingSource(dataSource, dataMember);
             Assert.Equal(expectedAllowEdit, source.AllowEdit);
             Assert.Equal(expectedAllowNew, source.AllowNew);
             Assert.Equal(expectedAllowRemove, source.AllowRemove);
@@ -284,21 +282,21 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { nonEmptyEnumerable, dataMember, true, false, true, false, false, false, nonEmptyList, typeof(BindingList<int>) };
             }
 
-            var o = new object();
-            var objectDataClass = new ObjectDataClass { List = o };
-            yield return new object[] { objectDataClass, nameof(ObjectDataClass.List), true, true, true, false, false, false, new BindingList<object> { o }, typeof(BindingList<object>) };
-            yield return new object[] { objectDataClass, nameof(ObjectDataClass.List).ToLower(), true, true, true, false, false, false, new BindingList<object> { o }, typeof(BindingList<object>) };
+            var o1 = new object();
+            yield return new object[] { new ObjectDataClass { List = o1 }, nameof(ObjectDataClass.List), true, true, true, false, false, false, new BindingList<object> { o1 }, typeof(BindingList<object>) };
 
-            var intDataClass = new ObjectDataClass { List = 1 };
-            yield return new object[] { intDataClass, nameof(ObjectDataClass.List), true, true, true, false, false, false, new BindingList<int> { 1 }, typeof(BindingList<int>) };
-            yield return new object[] { intDataClass, nameof(ObjectDataClass.List).ToLower(), true, true, true, false, false, false, new BindingList<int> { 1 }, typeof(BindingList<int>) };
+            var o2 = new object();
+            yield return new object[] { new ObjectDataClass { List = o2 }, nameof(ObjectDataClass.List).ToLower(), true, true, true, false, false, false, new BindingList<object> { o2 }, typeof(BindingList<object>) };
+
+            yield return new object[] { new ObjectDataClass { List = 1 }, nameof(ObjectDataClass.List), true, true, true, false, false, false, new BindingList<int> { 1 }, typeof(BindingList<int>) };
+            yield return new object[] { new ObjectDataClass { List = 1 }, nameof(ObjectDataClass.List).ToLower(), true, true, true, false, false, false, new BindingList<int> { 1 }, typeof(BindingList<int>) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Object_String_BindingList_TestData))]
         public void Ctor_Object_String_BindingList(object dataSource, string dataMember, bool expectedAllowEdit, bool expectedAllowNew, bool expectedAllowRemove, bool expectedIsFixedSize, bool expectedReadOnly, bool expectedIsSynchronized, IList expected, Type expectedType)
         {
-            var source = new SubBindingSource(dataSource, dataMember);
+            using var source = new SubBindingSource(dataSource, dataMember);
             Assert.Equal(expectedAllowEdit, source.AllowEdit);
             Assert.Equal(expectedAllowNew, source.AllowNew);
             Assert.Equal(expectedAllowRemove, source.AllowRemove);
@@ -342,7 +340,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(source.List.SyncRoot, source.SyncRoot);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void Ctor_Object_String_IBindingList(string dataMember)
         {
@@ -407,7 +405,7 @@ namespace System.Windows.Forms.Tests
                 .Setup(p => p.SupportsFiltering)
                 .Returns(true);
 
-            var source = new SubBindingSource(mockList.Object, dataMember);
+            using var source = new SubBindingSource(mockList.Object, dataMember);
             Assert.False(source.AllowEdit);
             Assert.False(source.AllowNew);
             Assert.False(source.AllowRemove);
@@ -449,7 +447,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(syncRoot, source.SyncRoot);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void Ctor_Object_String_ICurrencyManagerProvider(string dataMember)
         {
@@ -458,11 +456,11 @@ namespace System.Windows.Forms.Tests
                 .Setup(p => p.CurrencyManager)
                 .Returns<CurrencyManager>(null)
                 .Verifiable();
-            var source = new BindingSource(mockCurrencyManagerProvider.Object, dataMember);
+            using var source = new BindingSource(mockCurrencyManagerProvider.Object, dataMember);
             mockCurrencyManagerProvider.Verify(p => p.CurrencyManager, Times.Once());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(PrivateDefaultConstructor))]
         [InlineData(typeof(NoDefaultConstructor))]
         [InlineData(typeof(ThrowingDefaultConstructor))]
@@ -471,17 +469,17 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<NotSupportedException>(() => new BindingSource(dataSource, "dataMember"));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Ctor_NoSuchDataMember_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentException>(null, () => new BindingSource(new DataClass(), "NoSuchProperty"));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Ctor_IContainer()
         {
-            var container = new Container();
-            var source = new SubBindingSource(container);
+            using var container = new Container();
+            using var source = new SubBindingSource(container);
             Assert.True(source.AllowEdit);
             Assert.True(source.AllowNew);
             Assert.True(source.AllowRemove);
@@ -524,23 +522,25 @@ namespace System.Windows.Forms.Tests
             Assert.Same(source.List.SyncRoot, source.SyncRoot);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Ctor_NullContainer_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("container", () => new SubBindingSource(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ISupportInitializeNotification_GetProperties_ReturnsExpected()
         {
-            ISupportInitializeNotification source = new BindingSource();
+            using var bindingSource = new BindingSource();
+            ISupportInitializeNotification source = bindingSource;
             Assert.True(source.IsInitialized);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void BeginInitEndInit_Invoke_Success()
         {
-            ISupportInitializeNotification source = new BindingSource();
+            using var bindingSource = new BindingSource();
+            ISupportInitializeNotification source = bindingSource;
             source.BeginInit();
             Assert.False(source.IsInitialized);
 
@@ -548,10 +548,11 @@ namespace System.Windows.Forms.Tests
             Assert.True(source.IsInitialized);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void BeginInitEndInit_WithInitializedEvent_CallsEvent()
         {
-            ISupportInitializeNotification source = new BindingSource();
+            using var bindingSource = new BindingSource();
+            ISupportInitializeNotification source = bindingSource;
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -576,10 +577,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void BeginInitEndInit_WithDataSource_CallsEvent()
         {
-            ISupportInitializeNotification source = new BindingSource(new DataSource(), nameof(DataSource.Member));
+            using var bindingSource = new BindingSource(new DataSource(), nameof(DataSource.Member));
+            ISupportInitializeNotification source = bindingSource;
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -598,11 +600,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void BeginInitEndInit_WithISupportInitializeNotificationDataSource_WaitsForDataSourceInitialize()
         {
             var dataSource = new ISupportInitializeNotificationDataSource { IsInitializedResult = false };
-            ISupportInitializeNotification source = new BindingSource(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
+            using var bindingSource = new BindingSource(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
+            ISupportInitializeNotification source = bindingSource;
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -633,11 +636,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void BeginInitEndInit_WithISupportInitializeNotificationDataSourceInitialized_DoesNotWaitForDataSourceInitialize()
         {
             var dataSource = new ISupportInitializeNotificationDataSource { IsInitializedResult = true };
-            ISupportInitializeNotification source = new BindingSource(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
+            using var bindingSource = new BindingSource(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
+            ISupportInitializeNotification source = bindingSource;
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -667,12 +671,13 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataSource() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BeginInitEndInit_SetDataSourceInInit_TestData))]
         public void BeginInitEndInit_SetDataSourceInInit_Success(object newDataSource)
         {
             var dataSource = new ISupportInitializeNotificationDataSource { IsInitializedResult = false };
-            ISupportInitializeNotification source = new BindingSource(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
+            using var bindingSource = new BindingSource(dataSource, nameof(ISupportInitializeNotificationDataSource.Member));
+            ISupportInitializeNotification source = bindingSource;
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {

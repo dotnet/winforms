@@ -12,6 +12,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class ListViewSubItemTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
@@ -40,7 +41,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { item, "reasonable", "reasonable" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_ListViewItem_String_TestData))]
         public void ListViewSubItem_Ctor_ListViewItem_String(ListViewItem owner, string text, string expectedText)
         {
@@ -61,13 +62,12 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ListViewItem(), "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, "reasonable" };
             yield return new object[] { new ListViewItem() { BackColor = Color.Yellow, ForeColor = Color.Yellow, Font = SystemFonts.StatusFont }, string.Empty, Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, string.Empty };
 
-            var listView = new ListView();
             var item = new ListViewItem();
             Assert.Null(item.ListView);
             yield return new object[] { item, "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, "reasonable" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_ListViewItem_String_Color_Color_Font_TestData))]
         public void ListViewSubItem_Ctor_ListViewItem_String_Color_Color_Font(ListViewItem owner, string text, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, string expectedText)
         {
@@ -81,10 +81,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedText, subItem.Text);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ListViewSubItem_BackColor_GetWithListView_ReturnsEqual()
         {
-            var listView = new ListView
+            using var listView = new ListView
             {
                 BackColor = Color.Red
             };
@@ -114,10 +114,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.Window, subItem.BackColor);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ListViewSubItem_BackColor_GetWithListViewItemWithListView_ReturnsEqual()
         {
-            var listView = new ListView
+            using var listView = new ListView
             {
                 BackColor = Color.Red
             };
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Empty, SystemColors.Window };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_Set_TestData))]
         public void ListViewSubItem_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
@@ -162,11 +162,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Empty, Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_SetWithListView_TestData))]
         public void ListViewSubItem_BackColor_SetWithListViewItemWithListView_GetReturnsExpected(Color value, Color expected)
         {
-            var listView = new ListView
+            using var listView = new ListView
             {
                 BackColor = Color.Red
             };
@@ -186,7 +186,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, subItem.BackColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_Set_TestData))]
         public void ListViewSubItem_BackColor_SetWithListViewItem_GetReturnsExpected(Color value, Color expected)
         {
@@ -205,10 +205,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, subItem.BackColor);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ListViewSubItem_Bounds_GetWithListViewHandle_ReturnsEqual()
         {
-            var listView = new ListView();
+            using var listView = new ListView();
             var item = new ListViewItem();
             listView.Items.Add(item);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -217,10 +217,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(subItem.Bounds, subItem.Bounds);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ListViewSubItem_Font_GetWithListView_ReturnsEqual()
         {
-            var listView = new ListView
+            using var listView = new ListView
             {
                 Font = SystemFonts.MenuFont
             };
@@ -250,10 +250,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Control.DefaultFont, subItem.Font);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ListViewSubItem_Font_GetWithListViewItemWithListView_ReturnsEqual()
         {
-            var listView = new ListView
+            using var listView = new ListView
             {
                 Font = SystemFonts.CaptionFont
             };
@@ -272,7 +272,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Control.DefaultFont, subItem.Font);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void ListViewSubItem_Font_Set_GetReturnsExpected(Font value)
         {
@@ -287,11 +287,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value ?? Control.DefaultFont, subItem.Font);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void ListViewSubItem_Font_SetWithListViewItemWithListView_GetReturnsExpected(Font value)
         {
-            var listView = new ListView
+            using var listView = new ListView
             {
                 Font = SystemFonts.CaptionFont
             };
@@ -311,7 +311,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? SystemFonts.CaptionFont, subItem.Font);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void ListViewSubItem_Font_SetWithListViewItem_GetReturnsExpected(Font value)
         {
@@ -330,10 +330,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? Control.DefaultFont, subItem.Font);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ListViewSubItem_ForeColor_GetWithListView_ReturnsEqual()
         {
-            var listView = new ListView
+            using var listView = new ListView
             {
                 ForeColor = Color.Red
             };
@@ -363,10 +363,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, subItem.ForeColor);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ListViewSubItem_ForeColor_GetWithListViewItemWithListView_ReturnsEqual()
         {
-            var listView = new ListView
+            using var listView = new ListView
             {
                 ForeColor = Color.Red
             };
@@ -392,7 +392,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red, Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ForeColor_Set_TestData))]
         public void ListViewSubItem_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
@@ -412,11 +412,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Empty, Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ForeColor_SetWithListView_TestData))]
         public void ListViewSubItem_ForeColor_SetWithListViewItemWithListView_GetReturnsExpected(Color value, Color expected)
         {
-            var listView = new ListView
+            using var listView = new ListView
             {
                 ForeColor = Color.Red
             };
@@ -436,7 +436,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, subItem.ForeColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ForeColor_Set_TestData))]
         public void ListViewSubItem_ForeColor_SetWithListViewItem_GetReturnsExpected(Color value, Color expected)
         {
@@ -455,7 +455,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, subItem.ForeColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Name_SetWithOwner_GetReturnsExpected(string value, string expected)
         {
@@ -471,7 +471,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, subItem.Name);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Name_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
@@ -486,7 +486,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, subItem.Name);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ListViewSubItem_Tag_Set_GetReturnsExpected(string value)
         {
@@ -501,7 +501,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, subItem.Tag);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Text_SetWithOwner_GetReturnsExpected(string value, string expected)
         {
@@ -517,7 +517,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, subItem.Text);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Text_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
@@ -538,7 +538,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ListViewItem() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ResetStyle_Owner_TestData))]
         public void ListViewSubItem_ResetStyle_NoStyle_Nop(ListViewItem owner)
         {
@@ -554,7 +554,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, subItem.ForeColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ResetStyle_Owner_TestData))]
         public void ListViewSubItem_ResetStyle_HasStyleWithOwner_Success(ListViewItem owner)
         {
@@ -577,7 +577,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ListViewItem.ListViewSubItem(null, "header", Color.Red, Color.Blue, SystemFonts.MenuFont) { Name = "name", Tag = "tag" } };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Serialize_Deserialize_TestData))]
         public void ListViewSubItem_Serialize_Deserialize_Success(ListViewItem.ListViewSubItem subItem)
         {
@@ -597,7 +597,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ListViewSubItem_ToString_Invoke_ReturnsExpected(string text)
         {

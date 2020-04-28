@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Bitmap(16, 24, PixelFormat.Format32bppArgb), Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ControlCreateHBitmap16Bit_TestData))]
         public void ControlPaint_CreateHBitmap16Bit_Invoke_ReturnsExpected(Bitmap bitmap, Color background)
         {
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ControlPaint_CreateHBitmap16Bit_InvokeSpecificPixels_Success()
         {
             using var bitmap = new Bitmap(3, 1);
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ControlPaint_CreateHBitmap16Bit_NullBitmap_ThrowsNullReferenceException()
         {
             Assert.Throws<NullReferenceException>(() => ControlPaint.CreateHBitmap16Bit(null, Color.Red));
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CreateHBitmapColorMask_TestData))]
         public void ControlPaint_CreateHBitmapColorMask_Invoke_ReturnsExpected(Bitmap bitmap, IntPtr monochromeMask)
         {
@@ -124,7 +124,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ControlPaint_CreateHBitmapColorMask_InvokeSpecificPixelsWithMonochromeMask_Success()
         {
             using var mask = new Bitmap(3, 1);
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ControlPaint_CreateHBitmapColorMask_InvokeSpecificPixelsWithoutMonochromeMask_Success()
         {
             using var bitmap = new Bitmap(3, 1);
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ControlPaint_CreateHBitmapColorMask_NullBitmap_ThrowsNullReferenceException()
         {
             Assert.Throws<NullReferenceException>(() => ControlPaint.CreateHBitmapColorMask(null, IntPtr.Zero));
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Bitmap(11, 11, PixelFormat.Format32bppArgb) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CreateHBitmapTransparencyMask_TestData))]
         public void ControlPaint_CreateHBitmapTransparencyMask_Invoke_ReturnsExpected(Bitmap bitmap)
         {
@@ -232,7 +232,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ControlPaint_CreateHBitmapTransparencyMask_InvokeSpecificPixels_Success()
         {
             using var bitmap = new Bitmap(3, 1);
@@ -260,7 +260,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ControlPaint_CreateHBitmapTransparencyMask_NullBitmap_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("bitmap", () => ControlPaint.CreateHBitmapTransparencyMask(null));
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { SystemColors.ControlLightLight, Color.FromArgb(255, 85, 85, 85) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Dark_Color_TestData))]
         public void ControlPaint_Dark_InvokeColor_ReturnsExpected(Color baseColor, Color expected)
         {
@@ -481,7 +481,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { SystemColors.ControlLight, 1.5f, Color.FromArgb(255, 181, 181, 181) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Dark_Color_Float_TestData))]
         private void ControlPaint_Dark_InvokeColorFloat_ReturnsExpected(Color baseColor, float percOfDarkDark, Color expected)
         {
@@ -514,7 +514,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { SystemColors.ControlLightLight, Color.FromArgb(255, 0, 0, 0) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DarkDark_TestData))]
         private void ControlPaint_DarkDark_InvokeColorFloat_ReturnsExpected(Color baseColor, Color expected)
         {
@@ -2038,7 +2038,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { SystemColors.ControlLightLight, Color.FromArgb(255, 255, 255, 255) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Light_Color_TestData))]
         public void ControlPaint_Light_InvokeColor_ReturnsExpected(Color baseColor, Color expected)
         {
@@ -2230,7 +2230,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { SystemColors.ControlLight, 1.5f, Color.FromArgb(255, 247, 247, 247) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Light_Color_Float_TestData))]
         private void ControlPaint_Light_InvokeColorFloat_ReturnsExpected(Color baseColor, float percOfLightLight, Color expected)
         {
@@ -2263,7 +2263,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { SystemColors.ControlLightLight, Color.FromArgb(255, 255, 255, 255) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(LightLight_TestData))]
         public void ControlPaint_LightLight_InvokeColor_ReturnsExpected(Color baseColor, Color expected)
         {

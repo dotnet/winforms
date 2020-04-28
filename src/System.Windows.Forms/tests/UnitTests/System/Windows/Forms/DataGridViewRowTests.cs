@@ -14,10 +14,10 @@ namespace System.Windows.Forms.Tests
 {
     public class DataGridViewRowTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Ctor_Default()
         {
-            var row = new SubDataGridViewRow();
+            using var row = new SubDataGridViewRow();
             Assert.Equal(DataGridViewElementStates.Visible, row.State);
             Assert.Null(row.DataGridView);
 
@@ -49,14 +49,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { secondRow, menu2 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ContextMenu_Get_TestData))]
         public void DataGridViewRow_ContextMenuStrip_Get_ReturnsExpected(DataGridViewRow row, ContextMenuStrip expected)
         {
             Assert.Equal(expected, row.ContextMenuStrip);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_ContextMenuStrip_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -72,12 +72,12 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[1] };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ContextMenuStrip_Set_TestData))]
         public void DataGridViewRow_ContextMenuStrip_Set_GetReturnsExpected(DataGridViewRow row)
         {
             // Set non-null.
-            var menu1 = new ContextMenuStrip();
+            using var menu1 = new ContextMenuStrip();
             row.ContextMenuStrip = menu1;
             Assert.Same(menu1, row.ContextMenuStrip);
 
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(menu1, row.ContextMenuStrip);
 
             // Set different.
-            var menu2 = new ContextMenuStrip();
+            using var menu2 = new ContextMenuStrip();
             row.ContextMenuStrip = menu2;
             Assert.Same(menu2, row.ContextMenuStrip);
 
@@ -95,10 +95,10 @@ namespace System.Windows.Forms.Tests
             Assert.Null(row.ContextMenuStrip);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_ContextMenuStrip_SetWithDataGridView_CallsRowContextMenuStripChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Tests
             dataGridView.RowContextMenuStripChanged += handler;
 
             // Set non-null.
-            var menu1 = new ContextMenuStrip();
+            using var menu1 = new ContextMenuStrip();
             row.ContextMenuStrip = menu1;
             Assert.Same(menu1, row.ContextMenuStrip);
             Assert.Equal(1, callCount);
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var menu2 = new ContextMenuStrip();
+            using var menu2 = new ContextMenuStrip();
             row.ContextMenuStrip = menu2;
             Assert.Same(menu2, row.ContextMenuStrip);
             Assert.Equal(2, callCount);
@@ -140,15 +140,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_ContextMenuStrip_SetShared_Success()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows.SharedRow(1);
 
             // Set non-null.
-            var menu1 = new ContextMenuStrip();
+            using var menu1 = new ContextMenuStrip();
             row.ContextMenuStrip = menu1;
             Assert.Throws<InvalidOperationException>(() => row.ContextMenuStrip);
 
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => row.ContextMenuStrip);
 
             // Set different.
-            var menu2 = new ContextMenuStrip();
+            using var menu2 = new ContextMenuStrip();
             row.ContextMenuStrip = menu2;
             Assert.Throws<InvalidOperationException>(() => row.ContextMenuStrip);
 
@@ -166,11 +166,11 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => row.ContextMenuStrip);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_ContextMenuStrip_Dispose_SetsToNull()
         {
-            var row = new SubDataGridViewRow();
-            var menu = new ContextMenuStrip();
+            using var row = new SubDataGridViewRow();
+            using var menu = new ContextMenuStrip();
             row.ContextMenuStrip = menu;
             Assert.Same(menu, row.ContextMenuStrip);
 
@@ -178,25 +178,25 @@ namespace System.Windows.Forms.Tests
             Assert.Null(row.ContextMenuStrip);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_ContextMenuStrip_ResetThenDispose_Nop()
         {
-            var row = new SubDataGridViewRow();
-            var menu1 = new ContextMenuStrip();
+            using var row = new SubDataGridViewRow();
+            using var menu1 = new ContextMenuStrip();
             row.ContextMenuStrip = menu1;
             Assert.Same(menu1, row.ContextMenuStrip);
 
-            var menu2 = new ContextMenuStrip();
+            using var menu2 = new ContextMenuStrip();
             row.ContextMenuStrip = menu2;
 
             menu1.Dispose();
             Assert.Same(menu2, row.ContextMenuStrip);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Cells_Get_ReturnsSameInstance()
         {
-            var row = new DataGridViewRow();
+            using var row = new DataGridViewRow();
             Assert.Same(row.Cells, row.Cells);
             Assert.Empty(row.Cells);
         }
@@ -218,7 +218,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { bound.Rows[0], boundObject };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DataBoundItem_Get_TestData))]
         public void DataGridViewRow_DataBoundItem_Get_ReturnsExpected(DataGridViewRow row, object expected)
         {
@@ -235,7 +235,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(1) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DefaultCellStyle_Get_TestData))]
         public void DataGridViewRow_DefaultCellStyle_Get_ReturnsSameInstance(DataGridViewRow row)
         {
@@ -263,7 +263,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { templateDataGridView2.RowTemplate, style, style };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DefaultCellStyle_Set_TestData))]
         public void DataGridViewRow_DefaultCellStyle_SetWithNullOldValue_GetReturnsExpected(DataGridViewRow row, DataGridViewCellStyle value, DataGridViewCellStyle expected)
         {
@@ -277,7 +277,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(row.HasDefaultCellStyle);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DefaultCellStyle_Set_TestData))]
         public void DataGridViewRow_DefaultCellStyle_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewRow row, DataGridViewCellStyle value, DataGridViewCellStyle expected)
         {
@@ -292,10 +292,10 @@ namespace System.Windows.Forms.Tests
             Assert.True(row.HasDefaultCellStyle);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_DefaultCellStyle_SetWithDataGridView_CallsRowDefaultCellStyleChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -343,7 +343,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_DefaultCellStyle_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -361,7 +361,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(1), typeof(DataGridViewRowHeaderCell) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DefaultHeaderCellType_Get_TestData))]
         public void DataGridViewRow_DefaultHeaderCellType_Get_ReturnsExpected(DataGridViewRow row, Type expected)
         {
@@ -380,7 +380,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataGridViewRow(), typeof(DataGridViewHeaderCell), typeof(DataGridViewHeaderCell) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DefaultHeaderCellType_Set_TestData))]
         public void DataGridViewRow_DefaultHeaderCellType_Set_GetReturnsExpected(DataGridViewRow row, Type value, Type expected)
         {
@@ -392,7 +392,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, row.DefaultHeaderCellType);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(DataGridViewRowHeaderCell))]
         [InlineData(typeof(DataGridViewColumnHeaderCell))]
         [InlineData(typeof(DataGridViewHeaderCell))]
@@ -410,7 +410,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, row.DefaultHeaderCellType);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(int))]
         public void DataGridViewRow_DefaultHeaderCellType_SetInvalidWithNullOldValue_GetReturnsExpected(Type value)
         {
@@ -418,7 +418,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>("value", () => row.DefaultHeaderCellType = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(null)]
         [InlineData(typeof(int))]
         public void DataGridViewRow_DefaultHeaderCellType_SetInvalidWithNonNullOldValue_GetReturnsExpected(Type value)
@@ -439,14 +439,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0], false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Displayed_Get_TestData))]
         public void DataGridViewRow_Displayed_Get_ReturnsExpected(DataGridViewRow row, bool expected)
         {
             Assert.Equal(expected, row.Displayed);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Displayed_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -463,7 +463,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(1), 0 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DividerHeight_Get_TestData))]
         public void DataGridViewRow_DividerHeight_Get_ReturnsExpected(DataGridViewRow row, int expected)
         {
@@ -482,7 +482,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DividerHeight_Set_TestData))]
         public void DataGridViewRow_DividerHeight_Set_GetReturnsExpected(DataGridViewRow row, int value)
         {
@@ -494,10 +494,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, row.DividerHeight);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_DividerHeight_SetWithDataGridView_CallsRowDividerHeightChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -532,7 +532,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(65537)]
         public void DataGridViewRow_DividerHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
@@ -541,7 +541,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => row.DividerHeight = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_DividerHeight_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -557,7 +557,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0], string.Empty };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ErrorText_Get_TestData))]
         public void DataGridViewRow_ErrorText_Get_ReturnsExpected(DataGridViewRow row, string expected)
         {
@@ -574,7 +574,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { bound };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ErrorText_GetNeedsErrorText_TestData))]
         public void DataGridViewRow_ErrorText_GetNeedsErrorText_CallsRowErrorTextNeeded(DataGridView dataGridView)
         {
@@ -601,7 +601,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_ErrorText_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -620,7 +620,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ErrorText_Set_TestData))]
         public void DataGridViewRow_ErrorText_Set_GetReturnsExpected(DataGridViewRow row, string value, string expected)
         {
@@ -632,7 +632,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(expected, row.ErrorText);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ErrorText_Set_TestData))]
         public void DataGridViewRow_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewRow row, string value, string expected)
         {
@@ -645,10 +645,10 @@ namespace System.Windows.Forms.Tests
             Assert.Same(expected, row.ErrorText);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_ErrorText_SetWithDataGridView_CallsRowErrorTextChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -688,7 +688,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_ErrorText_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -704,14 +704,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0], false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Frozen_Get_TestData))]
         public void DataGridViewRow_Frozen_Get_ReturnsExpected(DataGridViewRow row, bool expected)
         {
             Assert.Equal(expected, row.Frozen);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Frozen_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -727,7 +727,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0] };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Frozen_Set_TestData))]
         public void DataGridViewRow_Frozen_SetGetReturnsExpected(DataGridViewRow row)
         {
@@ -744,10 +744,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(row.Frozen);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Frozen_SetWithDataGridView_CallsRowStateChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -782,7 +782,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Frozen_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -799,7 +799,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(1) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(HeaderCell_Get_TestData))]
         public void DataGridViewRow_HeaderCell_Get_ReturnsExpected(DataGridViewRow row)
         {
@@ -821,7 +821,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(0), cellWithParent };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(HeaderCell_Set_TestData))]
         public void DataGridViewRow_HeaderCell_SetWithoutDataGridView_GetReturnsExpected(DataGridViewRow row, DataGridViewRowHeaderCell value)
         {
@@ -849,7 +849,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(row, row.HeaderCell.OwningRow);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(HeaderCell_Set_TestData))]
         public void DataGridViewRow_HeaderCell_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewRow row, DataGridViewRowHeaderCell value)
         {
@@ -876,10 +876,10 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_HeaderCell_SetWithDataGridView_CallsRowHeaderCellChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -931,7 +931,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(1), Control.DefaultFont.Height + 9 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Height_Get_TestData))]
         public void DataGridViewRow_Height_Get_ReturnsExpected(DataGridViewRow row, int expected)
         {
@@ -958,7 +958,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { bound, 6, 1, 5 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Height_NeedsHeightInfo_TestData))]
         public void DataGridViewRow_Height_NeedsHeightInfo_CallsRowHeightInfoNeeded(DataGridView dataGridView, int expectedHeight, int expectedCallCount, int expectedOriginalHeight)
         {
@@ -1007,7 +1007,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { customAutoSizeRowsModeDataGridView.Rows[0], 5, Control.DefaultFont.Height + 9 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Height_Set_TestData))]
         public void DataGridViewRow_Height_Set_GetReturnsExpected(DataGridViewRow row, int value, int expected)
         {
@@ -1019,10 +1019,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, row.Height);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Height_SetWithDataGridView_CallsRowHeightChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -1057,7 +1057,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(65537)]
         public void DataGridViewRow_Height_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => row.Height = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Height_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -1194,21 +1194,21 @@ namespace System.Windows.Forms.Tests
             };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(InheritedStyle_Get_TestData))]
         public void DataGridViewRow_InheritedStyle_Get_ReturnsExpected(DataGridViewRow row, DataGridViewCellStyle expected)
         {
             Assert.Equal(expected, row.InheritedStyle);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_InheritedStyle_GetWithoutDataGridView_ThrowsInvalidOperationException()
         {
             var row = new DataGridViewRow();
             Assert.Throws<InvalidOperationException>(() => row.InheritedStyle);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_InheritedStyle_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(1), false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(IsNewRow_TestData))]
         public void DataGridViewRow_IsNewRow_Get_ReturnsExpected(DataGridViewRow row, bool expected)
         {
@@ -1242,7 +1242,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(1), 3 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(MinimumHeight_Get_TestData))]
         public void DataGridViewRow_MinimumHeight_Get_ReturnsExpected(DataGridViewRow row, int expected)
         {
@@ -1269,7 +1269,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { bound, 6, 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(MinimumHeight_NeedsHeightInfo_TestData))]
         public void DataGridViewRow_MinimumHeight_NeedsHeightInfo_CallsRowHeightInfoNeeded(DataGridView dataGridView, int expectedMinimumHeight, int expectedCallCount)
         {
@@ -1309,7 +1309,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0], 65536, 65536 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(MinimumHeight_Set_TestData))]
         public void DataGridViewRow_MinimumHeight_Set_GetReturnsExpected(DataGridViewRow row, int value, int expectedHeight)
         {
@@ -1324,10 +1324,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedHeight, row.Height);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_MinimumHeight_SetWithDataGridView_CallsRowMinimumHeightChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
@@ -1375,7 +1375,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Control.DefaultFont.Height + 9, row.Height);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_MinimumHeight_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -1395,14 +1395,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { readOnlyDataGridView.Rows[0], true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ReadOnly_Get_TestData))]
         public void DataGridViewRow_ReadOnly_Get_ReturnsExpected(DataGridViewRow row, bool expected)
         {
             Assert.Equal(expected, row.ReadOnly);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_ReadOnly_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -1422,7 +1422,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { secondRow };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ReadOnly_Set_TestData))]
         public void DataGridViewRow_ReadOnly_Set_GetReturnsExpected(DataGridViewRow row)
         {
@@ -1439,21 +1439,21 @@ namespace System.Windows.Forms.Tests
             Assert.False(row.ReadOnly);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewRow_ReadOnly_SetParentReadOnly_Nop(bool value)
         {
-            var dataGridView = new DataGridView { ColumnCount = 1, ReadOnly = true };
+            using var dataGridView = new DataGridView { ColumnCount = 1, ReadOnly = true };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
             row.ReadOnly = value;
             Assert.True(dataGridView.ReadOnly);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_ReadOnly_SetWithDataGridView_CallsRowStateChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -1488,7 +1488,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_ReadOnly_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -1508,14 +1508,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { nonResizableDataGridView.Rows[0], DataGridViewTriState.False };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Resizable_Get_TestData))]
         public void DataGridViewRow_Resizable_Get_ReturnsExpected(DataGridViewRow row, DataGridViewTriState expected)
         {
             Assert.Equal(expected, row.Resizable);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Resizable_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -1533,7 +1533,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0], DataGridViewTriState.True, DataGridViewTriState.True };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Resizable_Set_TestData))]
         public void DataGridViewRow_Resizable_Set_GetReturnsExpected(DataGridViewRow row, DataGridViewTriState value, DataGridViewTriState expected)
         {
@@ -1545,7 +1545,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, row.Resizable);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Resizable_Set_TestData))]
         public void DataGridViewRow_Resizable_SetWithNonEmptyOldValue_Success(DataGridViewRow row, DataGridViewTriState value, DataGridViewTriState expected)
         {
@@ -1554,10 +1554,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, row.Resizable);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Resizable_SetWithDataGridView_CallsRowStateChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -1592,7 +1592,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewTriState))]
         public void DataGridViewRow_Resizable_SetInvalid_ThrowsInvalidEnumArgumentException(DataGridViewTriState value)
         {
@@ -1609,21 +1609,21 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0], false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Selected_Get_TestData))]
         public void DataGridViewRow_Selected_Get_ReturnsExpected(DataGridViewRow row, bool expected)
         {
             Assert.Equal(expected, row.Selected);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Selected_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
             Assert.Throws<InvalidOperationException>(() => row.Selected);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Selected_SetWithoutDataGridView_ThrowsInvalidOperationException()
         {
             var row = new DataGridViewRow();
@@ -1634,7 +1634,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(row.Selected);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(DataGridViewSelectionMode.CellSelect, false)]
         [InlineData(DataGridViewSelectionMode.FullRowSelect, true)]
         [InlineData(DataGridViewSelectionMode.FullColumnSelect, false)]
@@ -1642,7 +1642,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(DataGridViewSelectionMode.ColumnHeaderSelect, false)]
         public void DataGridViewRow_Selected_SetWithDataGridView_GetReturnsExpected(DataGridViewSelectionMode selectionMode, bool selected)
         {
-            var dataGridView = new DataGridView
+            using var dataGridView = new DataGridView
             {
                 ColumnCount = 1
             };
@@ -1667,10 +1667,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(row.Selected);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Selected_SetMultipleNotMultiSelect_Success()
         {
-            var dataGridView = new DataGridView
+            using var dataGridView = new DataGridView
             {
                 ColumnCount = 1,
                 MultiSelect = false
@@ -1701,10 +1701,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(row2.Selected);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Selected_SetMultipleMultiSelect_Success()
         {
-            var dataGridView = new DataGridView
+            using var dataGridView = new DataGridView
             {
                 ColumnCount = 1,
                 MultiSelect = true
@@ -1735,7 +1735,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(row2.Selected);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Selected_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -1752,14 +1752,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0], DataGridViewElementStates.Visible };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(State_Get_TestData))]
         public void DataGridViewRow_State_Get_ReturnsExpected(DataGridViewRow row, DataGridViewElementStates expected)
         {
             Assert.Equal(expected, row.State);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_State_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -1776,7 +1776,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(1), null };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Tag_Get_TestData))]
         public void DataGridViewRow_Tag_Get_ReturnsExpected(DataGridViewRow row, object expected)
         {
@@ -1793,7 +1793,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(1), "value" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Tag_Set_TestData))]
         public void DataGridViewRow_Tag_Set_GetReturnsExpected(DataGridViewRow row, object value)
         {
@@ -1805,7 +1805,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, row.Tag);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Tag_Set_TestData))]
         public void DataGridViewRow_Tag_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewRow row, object value)
         {
@@ -1827,14 +1827,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0], true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Visible_Get_TestData))]
         public void DataGridViewRow_Visible_Get_ReturnsExpected(DataGridViewRow row, bool expected)
         {
             Assert.Equal(expected, row.Visible);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Visible_GetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -1850,7 +1850,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows[0] };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Visible_Set_TestData))]
         public void DataGridViewRow_Visible_Set_GetReturnsExpected(DataGridViewRow row)
         {
@@ -1867,10 +1867,10 @@ namespace System.Windows.Forms.Tests
             Assert.True(row.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Visible_SetWithDataGridView_CallsRowStateChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
 
@@ -1905,10 +1905,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Visible_SetNewRowIndexDifferent_ThrowsInvalidOperationException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
 
@@ -1919,7 +1919,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(row.Visible);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_Visible_SetShared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -2387,7 +2387,7 @@ namespace System.Windows.Forms.Tests
             };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AdjustRowHeaderBorderStyle_TestData))]
         public void DataGridViewRow_AdjustRowHeaderBorderStyle_Invoke_ReturnsExpected(DataGridViewRow row, DataGridViewAdvancedCellBorderStyle all, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow, bool returnsAdvanced, DataGridViewAdvancedCellBorderStyle expectedLeft, DataGridViewAdvancedCellBorderStyle expectedRight, DataGridViewAdvancedCellBorderStyle expectedTop, DataGridViewAdvancedCellBorderStyle expectedBottom)
         {
@@ -2411,7 +2411,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedBottom, result.Bottom);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Clone_Empty_Success()
         {
             var source = new DataGridViewRow();
@@ -2432,7 +2432,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(row.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Clone_NoDataGridView_Success()
         {
             var menu = new ContextMenuStrip();
@@ -2472,7 +2472,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(row.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Clone_Subclass_Success()
         {
             var menu = new ContextMenuStrip();
@@ -2512,14 +2512,14 @@ namespace System.Windows.Forms.Tests
             Assert.False(row.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Clone_WithDataGridView_Success()
         {
             var menu = new ContextMenuStrip();
             var style = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomRight };
             var cell = new DataGridViewRowHeaderCell();
 
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow source = dataGridView.Rows[0];
             source.ContextMenuStrip = menu;
@@ -2556,52 +2556,52 @@ namespace System.Windows.Forms.Tests
             Assert.False(row.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_CreateCells_InvokeNoColumns_Success()
         {
-            var dataGridView = new DataGridView();
+            using var dataGridView = new DataGridView();
             var row = new DataGridViewRow();
             row.Cells.Add(new SubDataGridViewCell());
             row.CreateCells(dataGridView);
             Assert.Empty(row.Cells);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_CreateCells_InvokeWithColumns_Success()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             var row = new DataGridViewRow();
             row.Cells.Add(new SubDataGridViewCell());
             row.CreateCells(dataGridView);
             Assert.Null(Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(new object[] { new object[0] })]
         [InlineData(new object[] { new object[] { 1, 2, 3 } })]
         public void DataGridViewRow_CreateCells_InvokeNoColumnsWithValues_Success(object[] values)
         {
-            var dataGridView = new DataGridView();
+            using var dataGridView = new DataGridView();
             var row = new DataGridViewRow();
             row.Cells.Add(new SubDataGridViewCell());
             row.CreateCells(dataGridView, values);
             Assert.Empty(row.Cells);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(new object[] { new object[0], null })]
         [InlineData(new object[] { new object[] { 1 }, 1 })]
         [InlineData(new object[] { new object[] { 1, 2, 3 }, 1 })]
         public void DataGridViewRow_CreateCells_InvokeWithValues_Success(object[] values, object expectedValue)
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             var row = new DataGridViewRow();
             row.Cells.Add(new SubDataGridViewCell());
             row.CreateCells(dataGridView, values);
             Assert.Equal(expectedValue, Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_CreateCells_NullDataGridView_ThrowsArgumentNullException()
         {
             var row = new DataGridViewRow();
@@ -2609,20 +2609,20 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("dataGridView", () => row.CreateCells(null, Array.Empty<object>()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_CreateCells_HasDataGridView_ThrowsInvalidOperationException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
             Assert.Throws<InvalidOperationException>(() => row.CreateCells(new DataGridView()));
             Assert.Throws<InvalidOperationException>(() => row.CreateCells(new DataGridView(), Array.Empty<object>()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_CreateCells_ColumnHasNoCellTemplate_ThrowsInvalidOperationException()
         {
-            var dataGridView = new DataGridView();
+            using var dataGridView = new DataGridView();
             dataGridView.Columns.Add("Name", "Text");
             dataGridView.Columns[0].CellTemplate = null;
             var row = new DataGridViewRow();
@@ -2630,21 +2630,21 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => row.CreateCells(dataGridView, Array.Empty<object>()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_CreateCells_NullValues_ThrowsArgumentNullException()
         {
             var row = new DataGridViewRow();
             Assert.Throws<ArgumentNullException>("values", () => row.CreateCells(new DataGridView(), null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_CreateCellsInstance_Invoke_ReturnsEmpty()
         {
             var row = new SubDataGridViewRow();
             Assert.Empty(row.CreateCellsInstance());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Dispose_WithoutContextMenuStrip_Nop()
         {
             var row = new DataGridViewRow();
@@ -2656,7 +2656,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(row.ContextMenuStrip);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Dispose_WithContextMenuStrip_Success()
         {
             var row = new DataGridViewRow
@@ -2681,21 +2681,21 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 3, 4), 1, DataGridViewElementStates.None, new DataGridViewCellStyle { BackColor = Color.Blue, SelectionBackColor = Color.Red }, false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DrawFocus_TestData))]
         public void DataGridViewRow_DrawFocus_Invoke_Success(Rectangle clipBounds, Rectangle bounds, int rowIndex, DataGridViewElementStates rowState, DataGridViewCellStyle cellStyle, bool cellsPaintSelectionBackground)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView { ColumnCount = 1 };
+                using var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
                 DataGridViewRow row = dataGridView.Rows[0];
                 row.DrawFocus(graphics, clipBounds, bounds, rowIndex, rowState, cellStyle, cellsPaintSelectionBackground);
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_DrawFocus_NoDataGridView_ThrowsInvalidOperationException()
         {
             using (var image = new Bitmap(10, 10))
@@ -2706,22 +2706,22 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_DrawFocus_NullGraphics_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
             Assert.Throws<ArgumentNullException>("graphics", () => row.DrawFocus(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 3, 4), -1, DataGridViewElementStates.None, new DataGridViewCellStyle(), true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_DrawFocus_NullCellStyle_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView { ColumnCount = 1 };
+                using var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
                 DataGridViewRow row = dataGridView.Rows[0];
                 Assert.Throws<ArgumentNullException>("cellStyle", () => row.DrawFocus(graphics, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 3, 4), -1, DataGridViewElementStates.None, null, true));
@@ -2746,7 +2746,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { secondRow, 1, menu2 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetContextMenuStrip_TestData))]
         public void DataGridViewRow_GetContextMenuStrip_Invoke_ReturnsExpected(DataGridViewRow row, int rowIndex, ContextMenuStrip expected)
         {
@@ -2763,7 +2763,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { bound };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetContextMenuStrip_NeedsContextMenuStrip_TestData))]
         public void DataGridViewRow_GetContextMenuStrip_VirtualMode_CallsRowContextMenuStripNeeded(DataGridView dataGridView)
         {
@@ -2792,20 +2792,20 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(1)]
         public void DataGridViewRow_GetContextMenuStrip_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             DataGridViewRow row = dataGridView.Rows[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => row.GetContextMenuStrip(rowIndex));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_GetContextMenuStrip_SharedRow_ThrowsInvalidOperationException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<InvalidOperationException>(() => row.GetContextMenuStrip(-1));
@@ -2832,7 +2832,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { bound.Rows[0], 0, "" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetErrorText_TestData))]
         public void DataGridViewRow_GetErrorText_Invoke_ReturnsExpected(DataGridViewRow row, int rowIndex, string expected)
         {
@@ -2849,7 +2849,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { bound };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetErrorText_NeedsErrorText_TestData))]
         public void DataGridViewRow_GetErrorText_NeedsErrorText_CallsRowErrorTextNeeded(DataGridView dataGridView)
         {
@@ -2876,20 +2876,20 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(1)]
         public void DataGridViewRow_GetErrorText_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             DataGridViewRow row = dataGridView.Rows[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => row.GetErrorText(rowIndex));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_GetErrorText_SharedRow_ThrowsInvalidOperationException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<InvalidOperationException>(() => row.GetErrorText(-1));
@@ -2906,14 +2906,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Rows.SharedRow(1), 1, DataGridViewElementStates.Visible };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetState_TestData))]
         public void DataGridViewRow_GetState_Invoke_ReturnsExpected(DataGridViewRow row, int rowIndex, DataGridViewElementStates expected)
         {
             Assert.Equal(expected, row.GetState(rowIndex));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(0)]
         [InlineData(1)]
@@ -2923,12 +2923,12 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>("rowIndex", () => row.GetState(rowIndex));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(1)]
         public void DataGridViewRow_GetState_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             DataGridViewRow row = dataGridView.Rows[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => row.GetState(rowIndex));
         }
@@ -3035,13 +3035,13 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Paint_Invoke_CallsRowPrePaint()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView { ColumnCount = 1 };
+                using var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
                 DataGridViewRow row = dataGridView.Rows[1];
 
@@ -3081,10 +3081,10 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Paint_InvokeNullGraphics_DoesNotCallRowPrePaint()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
 
@@ -3123,13 +3123,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Paint_InvokeWithGraphics_CallsRowPostPaint()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView { ColumnCount = 1 };
+                using var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
                 DataGridViewRow row = dataGridView.Rows[1];
 
@@ -3162,10 +3162,10 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Paint_InvokeNullGraphics_DoesNotCallRowPostPaint()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
 
@@ -3201,41 +3201,41 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Paint_NullGraphicsEmptyRectangle_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<ArgumentNullException>("graphics", () => row.Paint(null, Rectangle.Empty, Rectangle.Empty, 1, DataGridViewElementStates.None, true, true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Paint_NullGraphicsNonEmptyRectangle_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<ArgumentNullException>("graphics", () => row.Paint(null, Rectangle.Empty, new Rectangle(1, 2, 100, 100), 1, DataGridViewElementStates.None, true, true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Paint_NullGraphicsNonEmptyClipRectangle_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<ArgumentNullException>("graphics", () => row.Paint(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 100, 100), 1, DataGridViewElementStates.None, true, true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_Paint_NoDataGridView_ThrowsInvalidOperationException()
         {
             var row = new DataGridViewRow();
             Assert.Throws<InvalidOperationException>(() => row.Paint(null, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(-1)]
         [InlineData(2)]
@@ -3244,7 +3244,7 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView { ColumnCount = 1 };
+                using var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
                 dataGridView.Columns[0].Frozen = true;
                 dataGridView.Columns[0].Visible = true;
@@ -3264,37 +3264,37 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintCells_NullGraphicsEmptyRectangle_Nop()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<ArgumentNullException>("graphics", () => row.PaintCells(null, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintCells_NullGraphicsNonEmptyRectangle_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<ArgumentNullException>("graphics", () => row.PaintCells(null, Rectangle.Empty, new Rectangle(1, 2, 100, 100), 1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintCells_NullGraphicsNoVisibleColumns_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<ArgumentNullException>("graphics", () => row.PaintCells(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 100, 100), -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintCells_NullGraphicsNonEmptyClipRectangle_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             dataGridView.Columns[0].Frozen = true;
@@ -3302,14 +3302,14 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("graphics", () => row.PaintCells(null, new Rectangle(1, 2, 1000, 10000), new Rectangle(1, 2, 1000, 1000), 1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintCells_NoDataGridView_ThrowsInvalidOperationException()
         {
             var row = new DataGridViewRow();
             Assert.Throws<InvalidOperationException>(() => row.PaintCells(null, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(-1)]
         [InlineData(2)]
@@ -3318,7 +3318,7 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView { ColumnCount = 1 };
+                using var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
                 dataGridView.Columns[0].Frozen = true;
                 dataGridView.Columns[0].Visible = true;
@@ -3327,7 +3327,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.None - 1))]
         [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
         public void DataGridViewRow_PaintCells_InvalidPaintParts_ThrowsInvalidEnumArgumentException(DataGridViewPaintParts paintParts)
@@ -3335,7 +3335,7 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView { ColumnCount = 1 };
+                using var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
                 DataGridViewRow row = dataGridView.Rows[1];
                 Assert.Throws<InvalidEnumArgumentException>("paintParts", () => row.PaintHeader(graphics, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true, paintParts));
@@ -3353,50 +3353,50 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintHeader_NullGraphicsEmptyRectangle_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<ArgumentNullException>("graphics", () => row.PaintHeader(null, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintHeader_NullGraphicsNonEmptyRectangle_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<ArgumentNullException>("graphics", () => row.PaintHeader(null, Rectangle.Empty, new Rectangle(1, 2, 100, 100), -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintHeader_NullGraphicsNonEmptyClipRectangle_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<ArgumentNullException>("graphics", () => row.PaintHeader(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 100, 100), 1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintHeader_NullGraphicsRowHeadersNotVisible_ThrowsArgumentNullException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1, RowHeadersVisible = false };
+            using var dataGridView = new DataGridView { ColumnCount = 1, RowHeadersVisible = false };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[1];
             Assert.Throws<ArgumentNullException>("graphics", () => row.PaintHeader(null, new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 100, 100), -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintHeader_NoDataGridView_ThrowsInvalidOperationException()
         {
             var row = new DataGridViewRow();
             Assert.Throws<InvalidOperationException>(() => row.PaintHeader(null, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(2)]
         public void DataGridViewRow_PaintHeader_InvalidRowIndex_ThrowsArgumentOutOfRangeException(int rowIndex)
@@ -3404,27 +3404,27 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView { ColumnCount = 1 };
+                using var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
                 DataGridViewRow row = dataGridView.Rows[1];
                 Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => row.PaintHeader(graphics, new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 100, 100), rowIndex, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_PaintHeader_SharedRowIndex_ThrowsInvalidOperationException()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView { ColumnCount = 1 };
+                using var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
                 DataGridViewRow row = dataGridView.Rows[1];
                 Assert.Throws<InvalidOperationException>(() => row.PaintHeader(graphics, new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 100, 100), -1, DataGridViewElementStates.None, true, true, DataGridViewPaintParts.All));
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.None - 1))]
         [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
         public void DataGridViewRow_PaintHeader_InvalidPaintParts_ThrowsInvalidEnumArgumentException(DataGridViewPaintParts paintParts)
@@ -3432,14 +3432,14 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView { ColumnCount = 1 };
+                using var dataGridView = new DataGridView { ColumnCount = 1 };
                 dataGridView.Rows.Add(new DataGridViewRow());
                 DataGridViewRow row = dataGridView.Rows[1];
                 Assert.Throws<InvalidEnumArgumentException>("paintParts", () => row.PaintHeader(graphics, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, true, true, paintParts));
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(new object[0], true, null)]
         [InlineData(new object[] { 1 }, true, 1)]
         [InlineData(new object[] { 1, 2 }, false, 1)]
@@ -3451,20 +3451,20 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedValue, Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(new object[0], true, null)]
         [InlineData(new object[] { 1 }, true, 1)]
         [InlineData(new object[] { 1, 2 }, false, 1)]
         public void DataGridViewRow_SetValues_HasCellsWithDataGridView_Success(object[] values, bool expectedResult, object expectedValue)
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
             Assert.Equal(expectedResult, row.SetValues(values));
             Assert.Equal(expectedValue, Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_SetValues_CantSet_ReturnsFalse()
         {
             var row = new DataGridViewRow();
@@ -3478,23 +3478,23 @@ namespace System.Windows.Forms.Tests
             protected override bool SetValue(int rowIndex, object value) => false;
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_SetValues_NullValue_ThrowsArgumentNullException()
         {
             var row = new DataGridViewRow();
             Assert.Throws<ArgumentNullException>("values", () => row.SetValues(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRow_SetValues_VirtualDataGridView_ThrowsInvalidOperationException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1, VirtualMode = true };
+            using var dataGridView = new DataGridView { ColumnCount = 1, VirtualMode = true };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewRow row = dataGridView.Rows[0];
             Assert.Throws<InvalidOperationException>(() => row.SetValues(Array.Empty<object>()));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SharedRow_TestData))]
         public void DataGridViewRow_SetValues_Shared_ThrowsInvalidOperationException(DataGridViewRow row)
         {
@@ -3520,7 +3520,7 @@ namespace System.Windows.Forms.Tests
 
             public new bool IsRow => base.IsRow;
 
-            [Fact]
+            [WinFormsFact]
             public void DataGridViewRow_AccessibilityObject_Get_ReturnsSameInstance()
             {
                 Assert.Same(AccessibilityObject, AccessibilityObject);
@@ -3528,7 +3528,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(this, accessibilityObject.Owner);
             }
 
-            [Fact]
+            [WinFormsFact]
             public void DataGridViewRow_CreateAccessibilityInstance_Invoke_ReturnsExpected()
             {
                 DataGridViewRowAccessibleObject accessibilityObject = Assert.IsType<DataGridViewRowAccessibleObject>(CreateAccessibilityInstance());

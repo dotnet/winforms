@@ -10,10 +10,10 @@ namespace System.Windows.Forms.Tests
 
     public class PropertyGridTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void PropertyGrid_Constructor()
         {
-            var pg = new PropertyGrid();
+            using var pg = new PropertyGrid();
 
             Assert.NotNull(pg);
             Assert.Equal(AutoScaleMode.None, pg.AutoScaleMode);

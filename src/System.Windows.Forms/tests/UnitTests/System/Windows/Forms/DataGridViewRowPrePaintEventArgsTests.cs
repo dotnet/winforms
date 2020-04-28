@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataGridView(), graphics, new Rectangle(1, 2, 3, 4), new Rectangle(2, 3, 4, 5), 0, (DataGridViewElementStates)7, "errorText", new DataGridViewCellStyle(), true, true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_DataGridView_Graphics_Rectangle_Rectangle_Int_DataGridViewElementStates_String_DataGridViewCellStyle_Bool_Bool_TestData))]
         public void Ctor_DataGridView_Graphics_Rectangle_Rectangle_Int_DataGridViewElementStates_String_DataGridViewCellStyle_Bool_Bool(DataGridView dataGridView, Graphics graphics, Rectangle clipBounds, Rectangle rowBounds, int rowIndex, DataGridViewElementStates rowState, string errorText, DataGridViewCellStyle inheritedRowStyle, bool isFirstDisplayedRow, bool isLastVisibleRow)
         {
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(DataGridViewPaintParts.All, e.PaintParts);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Ctor_NullDataGridView_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -48,19 +48,21 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Ctor_NullGraphics_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>("graphics", () => new DataGridViewRowPrePaintEventArgs(new DataGridView(), null, Rectangle.Empty, Rectangle.Empty, -2, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false));
+            using var dataGridView = new DataGridView();
+            Assert.Throws<ArgumentNullException>("graphics", () => new DataGridViewRowPrePaintEventArgs(dataGridView, null, Rectangle.Empty, Rectangle.Empty, -2, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Ctor_NullInheritedRowStyle_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                Assert.Throws<ArgumentNullException>("inheritedRowStyle", () => new DataGridViewRowPrePaintEventArgs(new DataGridView(), graphics, Rectangle.Empty, Rectangle.Empty, -2, DataGridViewElementStates.Displayed, null, null, false, false));
+                using var dataGridView = new DataGridView();
+                Assert.Throws<ArgumentNullException>("inheritedRowStyle", () => new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, -2, DataGridViewElementStates.Displayed, null, null, false, false));
             }
         }
 
@@ -71,14 +73,15 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Rectangle(-1, -2, -3, -4) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ClipBounds_TestData))]
         public void ClipBounds_Set_GetReturnsExpected(Rectangle value)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new DataGridViewRowPrePaintEventArgs(new DataGridView(), graphics, Rectangle.Empty, Rectangle.Empty, -2, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false)
+                using var dataGridView = new DataGridView();
+                var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, -2, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false)
                 {
                     ClipBounds = value
                 };
@@ -86,7 +89,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(DataGridViewPaintParts.None)]
         [InlineData(DataGridViewPaintParts.All)]
         public void PaintParts_Set_GetReturnsExpected(DataGridViewPaintParts value)
@@ -94,7 +97,8 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new DataGridViewRowPrePaintEventArgs(new DataGridView(), graphics, Rectangle.Empty, Rectangle.Empty, -2, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false)
+                using var dataGridView = new DataGridView();
+                var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, -2, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false)
                 {
                     PaintParts = value
                 };
@@ -102,32 +106,33 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
         public void PaintParts_SetInvalidValue_ThrowsArgumentException(DataGridViewPaintParts value)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new DataGridViewRowPrePaintEventArgs(new DataGridView(), graphics, Rectangle.Empty, Rectangle.Empty, -2, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
+                using var dataGridView = new DataGridView();
+                var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, -2, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 Assert.Throws<ArgumentException>("value", () => e.PaintParts = value);
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DrawFocus_ValidRowIndex_Success()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 e.DrawFocus(new Rectangle(1, 2, 3, 4), true);
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
         public void DrawFocus_InvalidRowIndex_ThrowsInvalidOperationException(int rowIndex)
@@ -135,27 +140,27 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 Assert.Throws<InvalidOperationException>(() => e.DrawFocus(new Rectangle(1, 2, 3, 4), true));
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PaintCells_ValidRowIndex_Success()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 e.PaintCells(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None);
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
         public void PaintCells_InvalidRowIndex_ThrowsInvalidOperationException(int rowIndex)
@@ -163,27 +168,27 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 Assert.Throws<InvalidOperationException>(() => e.PaintCells(new Rectangle(1, 2, 3, 4), DataGridViewPaintParts.None));
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PaintCellsBackground_ValidRowIndex_Success()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 e.PaintCellsBackground(new Rectangle(1, 2, 3, 4), true);
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
         public void PaintCellsBackground_InvalidRowIndex_ThrowsInvalidOperationException(int rowIndex)
@@ -191,27 +196,27 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 Assert.Throws<InvalidOperationException>(() => e.PaintCellsBackground(new Rectangle(1, 2, 3, 4), true));
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PaintCellsContent_ValidRowIndex_Success()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 e.PaintCellsContent(new Rectangle(1, 2, 3, 4));
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
         public void PaintCellsContent_InvalidRowIndex_ThrowsInvalidOperationException(int rowIndex)
@@ -219,27 +224,27 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 Assert.Throws<InvalidOperationException>(() => e.PaintCellsContent(new Rectangle(1, 2, 3, 4)));
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PaintHeader_ValidRowIndexDataGridViewPaintParts_Success()
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 e.PaintHeader(DataGridViewPaintParts.None);
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void PaintHeader_ValidRowIndexBool_Success(bool paintSelectionBackground)
@@ -247,14 +252,14 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, 0, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 e.PaintHeader(paintSelectionBackground);
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
         public void PaintHeader_InvalidRowIndex_ThrowsInvalidOperationException(int rowIndex)
@@ -262,7 +267,7 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var dataGridView = new DataGridView();
+                using var dataGridView = new DataGridView();
                 dataGridView.Columns.Add("name", "text");
                 var e = new DataGridViewRowPrePaintEventArgs(dataGridView, graphics, Rectangle.Empty, Rectangle.Empty, rowIndex, DataGridViewElementStates.Displayed, null, new DataGridViewCellStyle(), false, false);
                 Assert.Throws<InvalidOperationException>(() => e.PaintHeader(DataGridViewPaintParts.None));

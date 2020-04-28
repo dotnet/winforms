@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.Equal(propertyGrid, accessibleObject.Owner);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.TableItemPatternId)]
         [InlineData((int)UiaCore.UIA.GridItemPatternId)]
         public void GridEntryAccessibleObject_SupportsPattern(int pattern)
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)pattern));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.GridPatternId)]
         [InlineData((int)UiaCore.UIA.TablePatternId)]
         public void PropertyGridAccessibleObject_SupportsPattern(int pattern)

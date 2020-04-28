@@ -38,14 +38,14 @@ namespace System.Windows.Forms.Tests
             }).Dispose();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Application_OpenForms_Get_ReturnsExpected()
         {
             FormCollection forms = Application.OpenForms;
             Assert.Same(forms, Application.OpenForms);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Application_VisualStyleState_Get_ReturnsExpected()
         {
             VisualStyleState state = Application.VisualStyleState;
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(state, Application.VisualStyleState);
         }
 
-        [Theory(Skip = "Deadlock, see: https://github.com/dotnet/winforms/issues/2192")]
+        [WinFormsTheory(Skip = "Deadlock, see: https://github.com/dotnet/winforms/issues/2192")]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(VisualStyleState))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(VisualStyleState))]
         public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState value)

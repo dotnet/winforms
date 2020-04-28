@@ -9,6 +9,7 @@ using Xunit;
 
 namespace System.Resources.Tests
 {
+    // NB: doesn't require thread affinity
     public class ResXFileRef_Converter : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]

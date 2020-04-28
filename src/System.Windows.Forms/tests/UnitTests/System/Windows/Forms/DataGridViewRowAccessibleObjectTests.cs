@@ -8,6 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class DataGridViewRowAccessibleObjectTests : DataGridViewRow, IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
@@ -84,7 +85,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewRowAccessibleObject_Owner_Set_GetReturnsExpected()
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject
             {
                 Owner = owner
@@ -95,7 +96,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewRowAccessibleObject_Owner_SetAlreadyWithOwner_ThrowsInvalidOperationException()
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Owner = owner);
         }
@@ -176,7 +177,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(1)]
         public void DataGridViewRowAccessibleObject_GetChild_NoDataGridView_ReturnsNull(int index)
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
             Assert.Null(accessibleObject.GetChild(index));
         }
@@ -200,7 +201,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewRowAccessibleObject_GetChildCount_NoDataGridView_ReturnsZero()
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
             Assert.Equal(0, accessibleObject.GetChildCount());
         }
@@ -215,7 +216,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewRowAccessibleObject_GetFocused_NoDataGridView_ReturnsNull()
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
             Assert.Null(accessibleObject.GetFocused());
         }
@@ -223,7 +224,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewRowAccessibleObject_GetSelected_Invoke_ReturnsSameInstance()
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
             Assert.Same(accessibleObject.GetSelected(), accessibleObject.GetSelected());
 
@@ -273,7 +274,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleNavigation.Up)]
         public void DataGridViewRowAccessibleObject_Navigate_NoDataGridView_ThrowsNullReferenceException(AccessibleNavigation navigationDirection)
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
             Assert.Null(accessibleObject.Navigate(navigationDirection));
         }
@@ -288,7 +289,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleSelection.TakeFocus)]
         public void DataGridViewRowAccessibleObject_Select_NoDataGridView_Nop(AccessibleSelection flags)
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
             accessibleObject.Select(flags);
         }

@@ -10,26 +10,22 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class ToolStripAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void ToolStripAccessibleObject_Ctor_Default()
         {
-            ToolStrip toolStrip = new ToolStrip();
+            using ToolStrip toolStrip = new ToolStrip();
 
             var accessibleObject = new ToolStrip.ToolStripAccessibleObject(toolStrip);
             Assert.NotNull(accessibleObject.Owner);
             Assert.Equal(AccessibleRole.ToolBar, accessibleObject.Role);
         }
 
-        public static IEnumerable<object[]> ToolStripAccessibleObject_TestData()
+        [WinFormsFact]
+        public void ToolStripAccessibleObject_FragmentNavigate_FirstChild_ThumbButton()
         {
-            ToolStrip toolStrip = new ToolStrip();
-            yield return new object[] { toolStrip.AccessibilityObject };
-        }
+            using ToolStrip toolStrip = new ToolStrip();
+            var accessibleObject = toolStrip.AccessibilityObject;
 
-        [Theory]
-        [MemberData(nameof(ToolStripAccessibleObject_TestData))]
-        public void ToolStripAccessibleObject_FragmentNavigate_FirstChild_ThumbButton(AccessibleObject accessibleObject)
-        {
             UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
             Assert.NotNull(firstChild);
             Assert.Equal(UiaCore.UIA.ThumbControlTypeId, firstChild.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));

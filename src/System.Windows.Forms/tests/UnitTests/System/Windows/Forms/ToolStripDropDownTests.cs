@@ -272,7 +272,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [Fact] // x-thread
         public void ToolStripDropDown_AllowItemReorder_SetWithHandleNonSTAThread_ThrowsInvalidOperationException()
         {
             using var control = new ToolStripDropDown();

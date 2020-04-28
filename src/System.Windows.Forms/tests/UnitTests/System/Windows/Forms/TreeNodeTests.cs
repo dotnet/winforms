@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
 {
     public class TreeNodeTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void TreeNode_Ctor_Default()
         {
             var treeNode = new TreeNode();
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(treeNode.TreeView);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_Ctor_String(string text, string expectedText)
         {
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(treeNode.TreeView);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_BackColor_Set_GetReturnsExpected(Color value)
         {
@@ -105,11 +105,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, treeNode.BackColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_BackColor_SetWithTreeView_GetReturnsExpected(Color value)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             int invalidatedCallCount = 0;
             treeView.Invalidated += (sender, e) => invalidatedCallCount++;
             var treeNode = new TreeNode();
@@ -131,11 +131,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red, 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_SetWithTreeViewWithHandle_TestData))]
         public void TreeNode_BackColor_SetWithTreeViewWithHandle_GetReturnsExpected(Color value, int expectedInvalidatedCallCount)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             int invalidatedCallCount = 0;
             treeView.Invalidated += (sender, e) => invalidatedCallCount++;
             var treeNode = new TreeNode();
@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_SetWithBackColor_TestData))]
         public void TreeNode_BackColor_SetWithBackColor_GetReturnsExpected(Color value)
         {
@@ -176,11 +176,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, treeNode.BackColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_BackColor_SetWithBackColorWithTreeView_GetReturnsExpected(Color value)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             int invalidatedCallCount = 0;
             treeView.Invalidated += (sender, e) => invalidatedCallCount++;
             var treeNode = new TreeNode
@@ -206,11 +206,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Blue, 0 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BackColor_SetWithBackColorWithTreeViewWithHandle_TestData))]
         public void TreeNode_BackColor_SetWithBackColorWithTreeViewWithHandle_GetReturnsExpected(Color value, int expectedInvalidatedCallCount)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             int invalidatedCallCount = 0;
             treeView.Invalidated += (sender, e) => invalidatedCallCount++;
             var treeNode = new TreeNode
@@ -230,10 +230,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TreeNode_Bounds_GetWithTreeView_CreatesHandle()
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             TreeNodeCollection collection = treeView.Nodes;
             TreeNode treeNode = collection.Add("text");
             Assert.False(treeView.Created);
@@ -245,10 +245,10 @@ namespace System.Windows.Forms.Tests
             Assert.True(treeView.Created);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TreeNode_Bounds_GetWithTreeViewDisposed_ReturnsEmpty()
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             TreeNodeCollection collection = treeView.Nodes;
             TreeNode treeNode = collection.Add("text");
             treeView.Dispose();
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(treeView.Created);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TreeNode_Checked_Set_GetReturnsExpected(bool value)
         {
@@ -275,11 +275,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, treeNode.Checked);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TreeNode_Checked_SetWithTreeView_GetReturnsExpected(bool value)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             var treeNode = new TreeNode();
             treeView.Nodes.Add(treeNode);
 
@@ -295,11 +295,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, treeNode.Checked);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TreeNode_Checked_SetWithTreeViewWithHandle_GetReturnsExpected(bool value)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             var treeNode = new TreeNode();
             treeView.Nodes.Add(treeNode);
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
@@ -316,11 +316,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, treeNode.Checked);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TreeNode_Checked_SetWithTreeViewDisposed_GetReturnsExpected(bool value)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             var treeNode = new TreeNode();
             treeView.Nodes.Add(treeNode);
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
@@ -338,7 +338,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, treeNode.Checked);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_ForeColor_Set_GetReturnsExpected(Color value)
         {
@@ -353,11 +353,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, treeNode.ForeColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_ForeColor_SetWithTreeView_GetReturnsExpected(Color value)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             int invalidatedCallCount = 0;
             treeView.Invalidated += (sender, e) => invalidatedCallCount++;
             var treeNode = new TreeNode();
@@ -379,11 +379,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red, 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ForeColor_SetWithTreeViewWithHandle_TestData))]
         public void TreeNode_ForeColor_SetWithTreeViewWithHandle_GetReturnsExpected(Color value, int expectedInvalidatedCallCount)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             int invalidatedCallCount = 0;
             treeView.Invalidated += (sender, e) => invalidatedCallCount++;
             var treeNode = new TreeNode();
@@ -407,7 +407,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ForeColor_SetWithForeColor_TestData))]
         public void TreeNode_ForeColor_SetWithForeColor_GetReturnsExpected(Color value)
         {
@@ -424,11 +424,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, treeNode.ForeColor);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_ForeColor_SetWithForeColorWithTreeView_GetReturnsExpected(Color value)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             int invalidatedCallCount = 0;
             treeView.Invalidated += (sender, e) => invalidatedCallCount++;
             var treeNode = new TreeNode
@@ -454,11 +454,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Blue, 0 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ForeColor_SetWithForeColorWithTreeViewWithHandle_TestData))]
         public void TreeNode_ForeColor_SetWithForeColorWithTreeViewWithHandle_GetReturnsExpected(Color value, int expectedInvalidatedCallCount)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             int invalidatedCallCount = 0;
             treeView.Invalidated += (sender, e) => invalidatedCallCount++;
             var treeNode = new TreeNode
@@ -478,7 +478,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TreeNode_Handle_GetWithoutTreeView_ReturnsExpected()
         {
             var treeNode = new TreeNode();
@@ -487,10 +487,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(handle, treeNode.Handle);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TreeNode_Handle_GetWithTreeView_ReturnsExpected()
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             var treeNode = new TreeNode();
             treeView.Nodes.Add(treeNode);
             IntPtr handle = treeNode.Handle;
@@ -500,10 +500,10 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TreeNode_Handle_GetWithTreeViewDisposed_ReturnsExpected()
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             var treeNode = new TreeNode();
             treeView.Nodes.Add(treeNode);
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);

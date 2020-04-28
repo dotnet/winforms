@@ -11,11 +11,11 @@ namespace System.Windows.Forms.Tests
 {
     public class TreeNodeCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNodeCollection_Add_String_Success(string text, string expectedText)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             TreeNodeCollection collection = treeView.Nodes;
             TreeNode treeNode = collection.Add(text);
             Assert.Same(treeNode, collection[0]);
@@ -58,23 +58,23 @@ namespace System.Windows.Forms.Tests
             Assert.Same(treeView, treeNode.TreeView);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
         public void TreeNodeCollection_Item_GetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             TreeNodeCollection collection = treeView.Nodes;
             collection.Add("text");
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index]);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(1)]
         public void TreeNodeCollection_Item_SetInvalidIndex_ThrowsArgumentOutOfRangeException(int index)
         {
-            var treeView = new TreeView();
+            using var treeView = new TreeView();
             TreeNodeCollection collection = treeView.Nodes;
             collection.Add("text");
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = new TreeNode());

@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { graphics, new ToolStripSeparator(), false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Graphics_ToolStripItem_Bool_TestData))]
         public void Ctor_Graphics_ToolStripItem_Bool(Graphics g, ToolStripSeparator separator, bool vertical)
         {

@@ -8,6 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class SystemInformationTests : IClassFixture<ThreadExceptionFixture>
     {
         private const int LogicalDpi = 96;

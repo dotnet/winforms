@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { graphics, toolStrip.OverflowButton, toolStrip };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Graphics_ToolStripItem_TestData))]
         public void Ctor_Graphics_ToolStripItem(Graphics g, ToolStripItem item, ToolStrip expectedToolStrip)
         {

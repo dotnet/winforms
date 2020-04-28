@@ -10,17 +10,19 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripItemAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItemAccessibleObject_Ctor_ToolStripItem()
         {
-            var item = new SubToolStripItem
+            using var item = new SubToolStripItem
             {
                 AccessibleDefaultActionDescription = "DefaultActionDescription",
                 AccessibleDescription = "Description",
                 AccessibleName = "Name",
                 AccessibleRole = AccessibleRole.MenuBar
             };
+
             var accessibleObject = new ToolStripItem.ToolStripItemAccessibleObject(item);
+
             Assert.Equal(Rectangle.Empty, accessibleObject.Bounds);
             Assert.Equal("DefaultActionDescription", accessibleObject.DefaultAction);
             Assert.Equal("Description", accessibleObject.Description);
@@ -32,7 +34,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleStates.Focusable, accessibleObject.State);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItemAccessibleObject_Ctor_NullOwnerItem_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("ownerItem", () => new ToolStripItem.ToolStripItemAccessibleObject(null));

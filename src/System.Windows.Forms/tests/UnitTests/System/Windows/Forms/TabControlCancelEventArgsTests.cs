@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new TabPage(), 1, true, TabControlAction.Selected };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_TabPage_Int_Bool_TabControlAction_TestData))]
         public void Ctor_TabPage_Int_Bool_TabControlAction(TabPage tabPage, int tabPageIndex, bool cancel, TabControlAction action)
         {

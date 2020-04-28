@@ -8,10 +8,10 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripContainerTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void ToolStripContainer_Constructor()
         {
-            var tsc = new ToolStripContainer();
+            using var tsc = new ToolStripContainer();
 
             Assert.NotNull(tsc);
             Assert.NotNull(tsc.TopToolStripPanel);

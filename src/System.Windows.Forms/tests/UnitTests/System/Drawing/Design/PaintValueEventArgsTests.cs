@@ -9,20 +9,22 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
+    // NB: doesn't require thread affinity
     public class PaintValueEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_ITypeDescriptorContext_Object_Graphics_Rectangle_TestData()
+        public static IEnumerable<object[]> Ctor_ITypeDescriptorContext_Object_Rectangle_TestData()
         {
-            var image = new Bitmap (10, 10);
-            Graphics graphics = Graphics.FromImage(image);
-            yield return new object[] { null, null, graphics, Rectangle.Empty };
-            yield return new object[] { new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object, new object(), graphics, new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { null, null, Rectangle.Empty };
+            yield return new object[] { new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object, new object(), new Rectangle(1, 2, 3, 4) };
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_ITypeDescriptorContext_Object_Graphics_Rectangle_TestData))]
-        public void PaintValueEventArgs_Ctor_ITypeDescriptorContext_Object_Graphics_Rectangle(ITypeDescriptorContext context, object value, Graphics graphics, Rectangle bounds)
+        [MemberData(nameof(Ctor_ITypeDescriptorContext_Object_Rectangle_TestData))]
+        public void PaintValueEventArgs_Ctor_ITypeDescriptorContext_Object_Graphics_Rectangle(ITypeDescriptorContext context, object value, Rectangle bounds)
         {
+            using var image = new Bitmap (10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+
             var e = new PaintValueEventArgs(context, value, graphics, bounds);
             Assert.Same(context, e.Context);
             Assert.Same(value, e.Value);
@@ -30,7 +32,7 @@ namespace System.Drawing.Design.Tests
             Assert.Equal(bounds, e.Bounds);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PaintValueEventArgs_Ctor_NullGraphics_ThrowsArgumentNullException()
         {
             AssertExtensions.Throws<ArgumentNullException>("graphics", () => new PaintValueEventArgs(null, new object(), null, Rectangle.Empty));

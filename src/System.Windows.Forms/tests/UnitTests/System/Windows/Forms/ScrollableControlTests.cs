@@ -2275,11 +2275,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { 0, false, true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SetScrollState_TestData))]
         public void ScrollableControl_SetScrollState_Invoke_GetScrollStateReturnsExpected(int bit, bool value, bool expected)
         {
-            var control = new SubScrollableControl();
+            using var control = new SubScrollableControl();
             control.SetScrollState(bit, value);
             Assert.Equal(expected, control.GetScrollState(bit));
             Assert.False(control.IsHandleCreated);
@@ -2290,11 +2290,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SetScrollState_TestData))]
         public void ScrollableControl_GetScrollState_InvokeWithHandle_GetStyleReturnsExpected(int bit, bool value, bool expected)
         {
-            var control = new SubScrollableControl();
+            using var control = new SubScrollableControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;

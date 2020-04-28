@@ -301,27 +301,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TextBox_PlaceholderText()
         {
-            var tb = new TextBox
+            using var tb = new TextBox
             {
                 PlaceholderText = "Enter your name"
             };
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TextBox_PlaceholderText_DefaultValue()
         {
-            var tb = new TextBox();
+            using var tb = new TextBox();
             Assert.Equal(string.Empty, tb.PlaceholderText);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TextBox_PlaceholderText_When_InAccessibility_Doesnot_Raise_TextChanged()
         {
-            var tb = new SubTextBox();
+            using var tb = new SubTextBox();
             bool eventRaised = false;
             EventHandler handler = (o, e) => eventRaised = true;
             tb.TextChanged += handler;
@@ -373,7 +373,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { tb, msg, true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(TextBox_ShouldRenderPlaceHolderText_TestData))]
         public void TextBox_ShouldRenderPlaceHolderText(TextBox textBox, Message m, bool expected)
         {
@@ -381,10 +381,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, result);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TextBox_PlaceholderText_NullValue_CoercedTo_StringEmpty()
         {
-            var tb = new TextBox()
+            using var tb = new TextBox()
             {
                 PlaceholderText = "Text"
             };
@@ -393,18 +393,18 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(string.Empty, tb.PlaceholderText);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TextBox_PlaceholderText_Overriden()
         {
-            var tb = new SubTextBox();
+            using var tb = new SubTextBox();
 
             Assert.NotNull(tb);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TextBox_PlaceholderTextAlignments()
         {
-            var tb = new TextBox
+            using var tb = new TextBox
             {
                 PlaceholderText = "Enter your name"
             };
@@ -421,10 +421,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TextBox_PlaceholderTextAlignmentsInRightToLeft()
         {
-            var tb = new TextBox
+            using var tb = new TextBox
             {
                 PlaceholderText = "Enter your name",
                 RightToLeft = RightToLeft.Yes

@@ -15,6 +15,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class DataObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         private static readonly string[] s_clipboardFormats =
@@ -1555,7 +1556,7 @@ namespace System.Windows.Forms.Tests
         public void DataObject_SetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
         {
             var dataObject = new DataObject();
-            Assert.Throws<InvalidEnumArgumentException>("format", () => dataObject.SetText("text",  format));
+            Assert.Throws<InvalidEnumArgumentException>("format", () => dataObject.SetText("text", format));
         }
     }
 }

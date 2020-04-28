@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Mock<IWin32Window>(MockBehavior.Strict).Object, new Button(), new Rectangle(-1, -2, -3, -4), "toolTipText", Color.Red, Color.Blue, SystemFonts.DefaultFont };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Graphics_IWin32Window_Control_Rectangle_String_Color_Color_Font_TestData))]
         public void Ctor_Graphics_IWin32Window_Control_Rectangle_String_Color_Color_Font(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
         {
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new SubWin32Window(), new Button(), new Rectangle(1, 2, 3, 4), "tooltipText", Color.Red, Color.Blue, SystemFonts.DefaultFont };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Draw_TestData))]
         public void DrawBackground_Invoke_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
         {
@@ -57,15 +57,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        public static IEnumerable<object[]> DrawText_TestData()
-        {
-            yield return new object[] { "tooltipText", SystemFonts.DefaultFont };
-            yield return new object[] { "tooltipText", null };
-            yield return new object[] { string.Empty, SystemFonts.DefaultFont };
-            yield return new object[] { null, SystemFonts.DefaultFont };
-        }
-
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Draw_TestData))]
         public void DrawText_Invoke_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
         {
@@ -77,7 +69,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Draw_TestData))]
         public void DrawText_InvokeTextFormatFlags_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
         {
@@ -89,7 +81,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Draw_TestData))]
         public void DrawBorder_Invoke_Success(IWin32Window associatedWindow, Control associatedControl, Rectangle bounds, string toolTipText, Color backColor, Color foreColor, Font font)
         {

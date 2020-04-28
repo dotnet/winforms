@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Ctor_String(string text, string expectedText)
         {
@@ -199,7 +199,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { "Text", 1, 2, 3, 4, "Text" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_String_Int_Int_Int_Int_TestData))]
         public void Ctor_String_Int_Int_Int_Int(string text, int left, int top, int width, int height, string expectedText)
         {
@@ -295,7 +295,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Control(), "text", "text" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Control_String_TestData))]
         public void Control_Ctor_Control_String(Control parent, string text, string expectedText)
         {
@@ -391,7 +391,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Control(), "text", 1, 2, 3, 4, "text" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Control_String_Int_Int_Int_Int_TestData))]
         public void Control_Ctor_Control_String_Int_Int_Int_Int(Control parent, string text, int left, int top, int width, int height, string expectedText)
         {

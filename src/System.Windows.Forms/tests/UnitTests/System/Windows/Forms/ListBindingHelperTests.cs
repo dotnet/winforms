@@ -14,6 +14,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class ListBindingHelperTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> GetList_Object_TestData()

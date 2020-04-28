@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Button() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Control_TestData))]
         public void Ctor_Control(Control control)
         {

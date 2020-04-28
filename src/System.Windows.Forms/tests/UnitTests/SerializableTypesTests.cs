@@ -15,6 +15,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.Serialization
 {
+    // NB: doesn't require thread affinity
     public class SerializableTypesTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]

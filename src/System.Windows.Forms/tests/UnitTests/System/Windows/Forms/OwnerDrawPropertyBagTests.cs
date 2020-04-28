@@ -13,10 +13,10 @@ namespace System.Windows.Forms.Tests
 {
     public class OwnerDrawPropertyBagTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void OwnerDrawPropertyBag_Ctor_Default()
         {
-            var treeView = new SubTreeView();
+            using var treeView = new SubTreeView();
             OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
             Assert.Equal(Color.Empty, bag.BackColor);
             Assert.Null(bag.Font);
@@ -24,11 +24,11 @@ namespace System.Windows.Forms.Tests
             Assert.True(bag.IsEmpty());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void OwnerDrawPropertyBag_BackColor_Set_GetReturnsExpected(Color value)
         {
-            var treeView = new SubTreeView();
+            using var treeView = new SubTreeView();
             OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
 
             bag.BackColor = value;
@@ -41,11 +41,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value.IsEmpty, bag.IsEmpty());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
         public void OwnerDrawPropertyBag_Font_Set_GetReturnsExpected(Font value)
         {
-            var treeView = new SubTreeView();
+            using var treeView = new SubTreeView();
             OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
 
             bag.Font = value;
@@ -58,11 +58,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value == null, bag.IsEmpty());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void OwnerDrawPropertyBag_ForeColor_Set_GetReturnsExpected(Color value)
         {
-            var treeView = new SubTreeView();
+            using var treeView = new SubTreeView();
             OwnerDrawPropertyBag bag = treeView.GetItemRenderStyles(null, 0);
 
             bag.ForeColor = value;
@@ -75,10 +75,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value.IsEmpty, bag.IsEmpty());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void OwnerDrawPropertyBag_Copy_CustomValue_ReturnsClone()
         {
-            var treeView = new SubTreeView();
+            using var treeView = new SubTreeView();
             OwnerDrawPropertyBag value = treeView.GetItemRenderStyles(null, 0);
             value.BackColor = Color.Blue;
             value.Font = SystemFonts.MenuFont;
@@ -92,10 +92,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(bag.IsEmpty());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void OwnerDrawPropertyBag_Copy_NullValue_ReturnsDefault()
         {
-            var treeView = new SubTreeView();
+            using var treeView = new SubTreeView();
             OwnerDrawPropertyBag value = treeView.GetItemRenderStyles(null, 0);
             OwnerDrawPropertyBag bag = OwnerDrawPropertyBag.Copy(value);
             Assert.NotSame(value, bag);
@@ -105,10 +105,10 @@ namespace System.Windows.Forms.Tests
             Assert.True(bag.IsEmpty());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void OwnerDrawPropertyBag_Serailize_Deserialize_Success()
         {
-            var treeView = new SubTreeView();
+            using var treeView = new SubTreeView();
             OwnerDrawPropertyBag original = treeView.GetItemRenderStyles(null, 0);
             original.BackColor = Color.Blue;
             original.Font = SystemFonts.MenuFont;

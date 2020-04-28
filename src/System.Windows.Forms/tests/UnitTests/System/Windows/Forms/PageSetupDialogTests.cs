@@ -14,10 +14,10 @@ namespace System.Windows.Forms.Tests
 {
     public class PageSetupDialogTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void PageSetupDialog_Ctor_Default()
         {
-            var dialog = new PageSetupDialog();
+            using var dialog = new PageSetupDialog();
             Assert.True(dialog.AllowMargins);
             Assert.True(dialog.AllowOrientation);
             Assert.True(dialog.AllowPaper);
@@ -35,11 +35,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(dialog.Tag);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_AllowMargins_Set_GetReturnsExpected(bool value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 AllowMargins = value
             };
@@ -54,11 +54,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, dialog.AllowMargins);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_AllowOrientation_Set_GetReturnsExpected(bool value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 AllowOrientation = value
             };
@@ -73,11 +73,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, dialog.AllowOrientation);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_AllowPaper_Set_GetReturnsExpected(bool value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 AllowPaper = value
             };
@@ -92,11 +92,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, dialog.AllowPaper);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_AllowPrinter_Set_GetReturnsExpected(bool value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 AllowPrinter = value
             };
@@ -117,11 +117,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new PrintDocument() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Document_Set_TestData))]
         public void PageSetupDialog_Document_Set_GetReturnsExpected(PrintDocument value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 Document = value
             };
@@ -136,15 +136,15 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value?.PrinterSettings, dialog.PrinterSettings);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PageSetupDialog_Document_SetWithNonNullOldValue_GetReturnsExpected()
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 Document = new PrintDocument()
             };
 
-            var value = new PrintDocument();
+            using var value = new PrintDocument();
             dialog.Document = value;
             Assert.Same(value, dialog.Document);
             Assert.Same(value.DefaultPageSettings, dialog.PageSettings);
@@ -157,11 +157,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value.PrinterSettings, dialog.PrinterSettings);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PageSetupDialog_Document_SetNullWithNonNullOldValue_GetReturnsExpected()
         {
-            var original = new PrintDocument();
-            var dialog = new PageSetupDialog
+            using var original = new PrintDocument();
+            using var dialog = new PageSetupDialog
             {
                 Document = original
             };
@@ -178,11 +178,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(original.PrinterSettings, dialog.PrinterSettings);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_EnableMetric_Set_GetReturnsExpected(bool value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 EnableMetric = value
             };
@@ -209,11 +209,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Margins(0, 0, 0, 1), new Margins(0, 0, 0, 1) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(MinMargins_Set_TestData))]
         public void PageSetupDialog_MinMargins_Set_GetReturnsExpected(Margins value, Margins expected)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 MinMargins = value
             };
@@ -224,10 +224,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, dialog.MinMargins);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PageSetupDialog_MinMargins_ResetValue_Success()
         {
-            var dialog = new PageSetupDialog();
+            using var dialog = new PageSetupDialog();
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PageSetupDialog))[nameof(PageSetupDialog.MinMargins)];
             Assert.False(property.CanResetValue(dialog));
 
@@ -252,11 +252,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Margins(0, 0, 0, 10), true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(MinMargins_ShouldSerializeValue_TestData))]
         public void PageSetupDialog_MinMargins_ShouldSerializeValue_ReturnsExpected(Margins value, bool expected)
         {
-            var dialog = new PageSetupDialog();
+            using var dialog = new PageSetupDialog();
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PageSetupDialog))[nameof(PageSetupDialog.MinMargins)];
             Assert.False(property.ShouldSerializeValue(dialog));
 
@@ -270,11 +270,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new PageSettings() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(PageSettings_Set_TestData))]
         public void PageSetupDialog_PageSettings_Set_GetReturnsExpected(PageSettings value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 PageSettings = value
             };
@@ -287,11 +287,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(dialog.Document);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(PageSettings_Set_TestData))]
         public void PageSetupDialog_PageSettings_SetWithDocument_GetReturnsExpected(PageSettings value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 Document = new PrintDocument(),
                 PageSettings = value
@@ -311,11 +311,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new PrinterSettings() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(PrinterSettings_Set_TestData))]
         public void PageSetupDialog_PrinterSettings_Set_GetReturnsExpected(PrinterSettings value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 PrinterSettings = value
             };
@@ -328,11 +328,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(dialog.Document);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(PrinterSettings_Set_TestData))]
         public void PageSetupDialog_PrinterSettings_SetWithDocument_GetReturnsExpected(PrinterSettings value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 Document = new PrintDocument(),
                 PrinterSettings = value
@@ -346,11 +346,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(dialog.Document);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_ShowHelp_Set_GetReturnsExpected(bool value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 ShowHelp = value
             };
@@ -365,11 +365,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, dialog.ShowHelp);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_ShowNetwork_Set_GetReturnsExpected(bool value)
         {
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 ShowNetwork = value
             };
@@ -384,10 +384,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, dialog.ShowNetwork);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PageSetupDialog_Reset_InvokeDefault_Success()
         {
-            var dialog = new PageSetupDialog();
+            using var dialog = new PageSetupDialog();
             dialog.Reset();
             Assert.True(dialog.AllowMargins);
             Assert.True(dialog.AllowOrientation);
@@ -406,11 +406,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(dialog.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PageSetupDialog_Reset_InvokeComplex_Success()
         {
             var container = new Container();
-            var dialog = new PageSetupDialog
+            using var dialog = new PageSetupDialog
             {
                 AllowMargins = false,
                 AllowOrientation = false,
@@ -442,10 +442,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("tag", dialog.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PageSetupDialog_ShowDialog_InvokeWithoutDocument_ThrowsArgumentException()
         {
-            var dialog = new PageSetupDialog();
+            using var dialog = new PageSetupDialog();
             Assert.Throws<ArgumentException>(null, () => dialog.ShowDialog());
         }
     }

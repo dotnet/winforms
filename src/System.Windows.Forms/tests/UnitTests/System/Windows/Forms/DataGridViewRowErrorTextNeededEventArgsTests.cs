@@ -9,11 +9,11 @@ namespace System.Windows.Forms.Tests
 {
     public class DataGridViewRowErrorTextNeededEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewRowErrorTextNeededEventArgs_ErrorText_Set_GetReturnsExpected(string value)
         {
-            var dataGridView = new DataGridView
+            using var dataGridView = new DataGridView
             {
                 ColumnCount = 1,
                 VirtualMode = true

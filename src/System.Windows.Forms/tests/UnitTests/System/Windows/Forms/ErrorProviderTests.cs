@@ -14,10 +14,10 @@ namespace System.Windows.Forms.Tests
 {
     public class ErrorProviderTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Ctor_Default()
         {
-            var provider = new SubErrorProvider();
+            using var provider = new SubErrorProvider();
             Assert.Equal(250, provider.BlinkRate);
             Assert.Equal(ErrorBlinkStyle.BlinkIfDifferentError, provider.BlinkStyle);
             Assert.True(provider.CanRaiseEvents);
@@ -34,11 +34,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(provider.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Ctor_ContainerControl()
         {
-            var parentControl = new ContainerControl();
-            var provider = new SubErrorProvider(parentControl);
+            using var parentControl = new ContainerControl();
+            using var provider = new SubErrorProvider(parentControl);
             Assert.Equal(250, provider.BlinkRate);
             Assert.Equal(ErrorBlinkStyle.BlinkIfDifferentError, provider.BlinkStyle);
             Assert.True(provider.CanRaiseEvents);
@@ -55,17 +55,17 @@ namespace System.Windows.Forms.Tests
             Assert.Null(provider.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Ctor_NullParentControl_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("parentControl", () => new ErrorProvider((ContainerControl)null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Ctor_IContainer()
         {
-            var container = new Container();
-            var provider = new SubErrorProvider(container);
+            using var container = new Container();
+            using var provider = new SubErrorProvider(container);
             Assert.Equal(250, provider.BlinkRate);
             Assert.Equal(ErrorBlinkStyle.BlinkIfDifferentError, provider.BlinkStyle);
             Assert.True(provider.CanRaiseEvents);
@@ -82,19 +82,19 @@ namespace System.Windows.Forms.Tests
             Assert.Null(provider.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Ctor_NullContainer_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("container", () => new ErrorProvider((IContainer)null));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(0, ErrorBlinkStyle.NeverBlink)]
         [InlineData(1, ErrorBlinkStyle.BlinkIfDifferentError)]
         [InlineData(250, ErrorBlinkStyle.BlinkIfDifferentError)]
         public void ErrorProvider_BlinkRate_Set_GetReturnsExpected(int value, ErrorBlinkStyle expectedBlinkStyle)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 BlinkRate = value
             };
@@ -112,18 +112,18 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedBlinkStyle, provider.BlinkStyle);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_BlinkRate_SetNegative_ThrowsArgumentOutOfRangeException()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => provider.BlinkRate = -1);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ErrorBlinkStyle))]
         public void ErrorProvider_BlinkStyle_Set_GetReturnsExpected(ErrorBlinkStyle value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 BlinkStyle = value
             };
@@ -136,11 +136,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(250, provider.BlinkRate);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ErrorBlinkStyle))]
         public void ErrorProvider_BlinkStyle_SetAlreadyBlink_GetReturnsExpected(ErrorBlinkStyle value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 BlinkStyle = ErrorBlinkStyle.AlwaysBlink
             };
@@ -155,11 +155,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(250, provider.BlinkRate);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ErrorBlinkStyle))]
         public void ErrorProvider_BlinkStyle_SetWithZeroBlinkRate_GetReturnsExpected(ErrorBlinkStyle value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 BlinkRate = 0,
                 BlinkStyle = value
@@ -173,11 +173,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, provider.BlinkRate);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ErrorBlinkStyle))]
         public void ErrorProvider_BlinkStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(ErrorBlinkStyle value)
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             Assert.Throws<InvalidEnumArgumentException>("value", () => provider.BlinkStyle = value);
         }
 
@@ -188,11 +188,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new SubContainerControl() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ContainerControl_TestData))]
         public void ErrorProvider_ContainerControl_Set_GetReturnsExpected(ContainerControl value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = value
             };
@@ -203,11 +203,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, provider.ContainerControl);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ContainerControl_TestData))]
         public void ErrorProvider_ContainerControl_SetWithNonNullOldValue_GetReturnsExpected(ContainerControl value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = new ContainerControl()
             };
@@ -220,11 +220,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, provider.ContainerControl);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ErrorProvider_DataMember_Set_GetReturnsExpected(string value, string expected)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 DataMember = value
             };
@@ -235,11 +235,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, provider.DataMember);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ErrorProvider_DataMember_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 DataMember = "OldMember"
             };
@@ -262,11 +262,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DataMember_SetWithContainerControl_TestData))]
         public void ErrorProvider_DataMember_SetWithContainerControl_GetReturnsExpected(ContainerControl containerControl, string value, string expected)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl,
                 DataMember = value
@@ -288,12 +288,12 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DataMember_SetWithValidDataMemberWithContainerControl_TestData))]
         public void ErrorProvider_DataMember_SetWithValidDataSourceWithContainerControl_ReturnsExpected(ContainerControl containerControl, string dataMember)
         {
             var value = new DataClass();
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl,
                 DataSource = value,
@@ -303,10 +303,10 @@ namespace System.Windows.Forms.Tests
             Assert.Same(dataMember, provider.DataMember);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_DataMember_ShouldSerializeValue_ReturnsExpected()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.DataMember)];
             Assert.False(property.ShouldSerializeValue(provider));
 
@@ -314,10 +314,10 @@ namespace System.Windows.Forms.Tests
             Assert.True(property.ShouldSerializeValue(provider));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_DataMember_CanResetValue_ReturnsExpected()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.DataMember)];
             Assert.False(property.CanResetValue(provider));
 
@@ -335,12 +335,12 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new SubContainerControl() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(NoBindingContextContainerControl_TestData))]
         public void ErrorProvider_DataMember_SetWithInvalidDataSourceWithContainerControl_ReturnsExpected(ContainerControl containerControl)
         {
             var value = new DataClass();
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl,
                 DataSource = value,
@@ -350,12 +350,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("NoSuchValue", provider.DataMember);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_DataMember_SetWithInvalidDataSourceWithContainerControl_ResetsDataMember()
         {
-            var containerControl = new ContainerControl();
+            using var containerControl = new ContainerControl();
             var value = new DataClass();
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl,
                 DataSource = value
@@ -372,11 +372,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataClass() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DataSource_Set_TestData))]
         public void ErrorProvider_DataSource_SetWithNullDataMember_GetReturnsExpected(object value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 DataSource = value
             };
@@ -389,11 +389,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(provider.DataMember);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DataSource_Set_TestData))]
         public void ErrorProvider_DataSource_SetWithEmptyDataMember_GetReturnsExpected(object value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 DataMember = string.Empty,
                 DataSource = value
@@ -407,11 +407,11 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(provider.DataMember);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DataSource_Set_TestData))]
         public void ErrorProvider_DataSource_SetWithNonNullOldValue_GetReturnsExpected(object value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 DataSource = new object()
             };
@@ -434,11 +434,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DataSource_SetWithContainerControl_TestData))]
         public void ErrorProvider_DataSource_SetWithContainerControl_GetReturnsExpected(ContainerControl containerControl, object value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl,
                 DataSource = value
@@ -460,12 +460,12 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DataSource_SetWithValidDataMemberWithContainerControl_TestData))]
         public void ErrorProvider_DataSource_SetWithValidDataMemberWithContainerControl_ReturnsExpected(ContainerControl containerControl, string dataMember)
         {
             var value = new DataClass();
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl,
                 DataMember = dataMember,
@@ -475,12 +475,12 @@ namespace System.Windows.Forms.Tests
             Assert.Same(dataMember, provider.DataMember);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(NoBindingContextContainerControl_TestData))]
         public void ErrorProvider_DataSource_SetWithInvalidDataMemberWithContainerControl_ReturnsExpected(ContainerControl containerControl)
         {
             var value = new DataClass();
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl,
                 DataMember = "NoSuchValue",
@@ -490,12 +490,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("NoSuchValue", provider.DataMember);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_DataSource_SetWithInvalidDataMemberWithContainerControl_ResetsDataMember()
         {
-            var containerControl = new ContainerControl();
+            using var containerControl = new ContainerControl();
             var value = new DataClass();
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl,
                 DataMember = "NoSuchValue",
@@ -505,10 +505,10 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(provider.DataMember);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_DataSource_ShouldSerializeValue_ReturnsExpected()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.DataSource)];
             Assert.False(property.ShouldSerializeValue(provider));
 
@@ -516,10 +516,10 @@ namespace System.Windows.Forms.Tests
             Assert.True(property.ShouldSerializeValue(provider));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_DataSource_CanResetValue_ReturnsExpected()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.DataSource)];
             Assert.False(property.CanResetValue(provider));
 
@@ -533,14 +533,15 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Icon_Set_TestData()
         {
+            // TODO: we're leaking a handle here, see TaskDialogIcon.BitmapToIcon for correct implementation
             yield return new object[] { Icon.FromHandle(new Bitmap(10, 10).GetHicon()) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Icon_Set_TestData))]
         public void ErrorProvider_Icon_Set_GetReturnsExpected(Icon value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 Icon = value
             };
@@ -551,24 +552,26 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, provider.Icon);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Icon_ShouldSerializeValue_ReturnsExpected()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.Icon)];
             Assert.False(property.ShouldSerializeValue(provider));
 
+            // TODO: we're leaking a handle here, see TaskDialogIcon.BitmapToIcon for correct implementation
             provider.Icon = Icon.FromHandle(new Bitmap(10, 10).GetHicon());
             Assert.True(property.ShouldSerializeValue(provider));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Icon_CanResetValue_ReturnsExpected()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ErrorProvider))[nameof(ErrorProvider.Icon)];
             Assert.False(property.CanResetValue(provider));
 
+            // TODO: we're leaking a handle here, see TaskDialogIcon.BitmapToIcon for correct implementation
             provider.Icon = Icon.FromHandle(new Bitmap(10, 10).GetHicon());
             Assert.True(property.CanResetValue(provider));
 
@@ -577,18 +580,18 @@ namespace System.Windows.Forms.Tests
             Assert.Null(provider.DataSource);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Icon_Null_ThrowsArgumentNullException()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             Assert.Throws<ArgumentNullException>("value", () => provider.Icon = null);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ErrorProvider_RightToLeft_Set_GetReturnsExpected(bool value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 RightToLeft = value
             };
@@ -603,10 +606,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, provider.RightToLeft);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_RightToLeft_SetWithHandler_CallsRightToLeftChanged()
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 RightToLeft = true
             };
@@ -658,7 +661,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { mockInvalidHostSite.Object };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Site_Set_TestData))]
         public void ErrorProvider_Site_Set_GetReturnsExpected(ISite value)
         {
@@ -666,7 +669,7 @@ namespace System.Windows.Forms.Tests
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
                 .Returns(null);
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 Site = value
             };
@@ -675,9 +678,13 @@ namespace System.Windows.Forms.Tests
             // Set same.
             provider.Site = value;
             Assert.Same(value, provider.Site);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            provider.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Site_Set_TestData))]
         public void ErrorProvider_Site_SetWithNonNullOldValue_GetReturnsExpected(ISite value)
         {
@@ -685,7 +692,7 @@ namespace System.Windows.Forms.Tests
             mockSite
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
                 .Returns(null);
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 Site = mockSite.Object
             };
@@ -696,6 +703,10 @@ namespace System.Windows.Forms.Tests
             // Set same.
             provider.Site = value;
             Assert.Same(value, provider.Site);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            provider.Site = null;
         }
 
         public static IEnumerable<object[]> Site_SetWithIDesignerHost_TestData()
@@ -707,7 +718,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { containerControl, containerControl };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Site_SetWithIDesignerHost_TestData))]
         public void ErrorProvider_Site_SetWithIDesignerHost_SetsContainerControl(IComponent rootComponent, ContainerControl expected)
         {
@@ -720,7 +731,7 @@ namespace System.Windows.Forms.Tests
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
                 .Returns(mockDesignerHost.Object)
                 .Verifiable();
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 Site = mockSite.Object
             };
@@ -730,13 +741,17 @@ namespace System.Windows.Forms.Tests
             Assert.Same(expected, provider.ContainerControl);
             mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
             mockDesignerHost.Verify(h => h.RootComponent, Times.Once());
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            provider.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ErrorProvider_Tag_Set_GetReturnsExpected(object value)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 Tag = value
             };
@@ -760,11 +775,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BindToDataAndErrors_TestData))]
         public void BindToDataAndErrors_Invoke_SetsDataSourceAndDataMember(ContainerControl containerControl, object newDataSource, string newDataMember)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl
             };
@@ -793,12 +808,12 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataClass(), nameof(DataClass.ListValue) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BindToDataAndErrors_WithBindingContext_TestData))]
         public void BindToDataAndErrors_InvokeValidDataMemberWithBindingContext_SetsDataSourceAndDataMember(object newDataSource, string newDataMember)
         {
-            var containerControl = new ContainerControl();
-            var provider = new ErrorProvider
+            using var containerControl = new ContainerControl();
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl
             };
@@ -812,11 +827,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(newDataMember, provider.DataMember);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void BindToDataAndErrors_InvokeInvalidDataMemberWithBindingContext_ThrowsArgumentException()
         {
-            var containerControl = new ContainerControl();
-            var provider = new ErrorProvider
+            using var containerControl = new ContainerControl();
+            using var provider = new ErrorProvider
             {
                 ContainerControl = containerControl
             };
@@ -840,19 +855,19 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Control(), true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CanExtend_TestData))]
         public void ErrorProvider_CanExtend_Invoke_ReturnsExpected(object extendee, bool expected)
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             Assert.Equal(expected, provider.CanExtend(extendee));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Clear_InvokeMultipleTimesWithItems_Success()
         {
-            var provider = new ErrorProvider();
-            var control = new Control();
+            using var provider = new ErrorProvider();
+            using var control = new Control();
             provider.SetError(control, "error");
             Assert.Equal("error", provider.GetError(control));
 
@@ -863,19 +878,19 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(provider.GetError(control));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Clear_InvokeMultipleTimesWithoutItems_Nop()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             provider.Clear();
             provider.Clear();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Dispose_InvokeWithItems_Clears()
         {
-            var provider = new ErrorProvider();
-            var control = new Control();
+            using var provider = new ErrorProvider();
+            using var control = new Control();
             provider.SetError(control, "error");
             Assert.Equal("error", provider.GetError(control));
 
@@ -888,10 +903,10 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(provider.GetError(control));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_Dispose_InvokeMultipleTimesWithoutItems_Nop()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             provider.Dispose();
             Assert.NotNull(provider.Icon);
 
@@ -899,13 +914,13 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(provider.Icon);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, "")]
         [InlineData(false, "error")]
         public void ErrorProvider_Dispose_InvokeBoolWithItems_ClearsIfDisposing(bool disposing, string expectedError)
         {
-            var provider = new SubErrorProvider();
-            var control = new Control();
+            using var provider = new SubErrorProvider();
+            using var control = new Control();
             provider.SetError(control, "error");
             Assert.Equal("error", provider.GetError(control));
 
@@ -918,11 +933,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedError, provider.GetError(control));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ErrorProvider_Dispose_InvokeBoolMultipleTimesDefault_Nop(bool disposing)
         {
-            var provider = new SubErrorProvider();
+            using var provider = new SubErrorProvider();
             provider.Dispose(disposing);
             Assert.NotNull(provider.Icon);
 
@@ -930,65 +945,65 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(provider.Icon);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_GetError_InvokeWithoutError_ReturnsEmpty()
         {
-            var provider = new ErrorProvider();
-            var control = new Control();
+            using var provider = new ErrorProvider();
+            using var control = new Control();
             Assert.Empty(provider.GetError(control));
 
             // Call again.
             Assert.Empty(provider.GetError(control));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_GetError_NullControl_ThrowsArgumentNullException()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             Assert.Throws<ArgumentNullException>("control", () => provider.GetError(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_GetIconAlignment_InvokeWithoutError_ReturnsMiddleRight()
         {
-            var provider = new ErrorProvider();
-            var control = new Control();
+            using var provider = new ErrorProvider();
+            using var control = new Control();
             Assert.Equal(ErrorIconAlignment.MiddleRight, provider.GetIconAlignment(control));
 
             // Call again.
             Assert.Equal(ErrorIconAlignment.MiddleRight, provider.GetIconAlignment(control));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_GetIconAlignment_NullControl_ThrowsArgumentNullException()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             Assert.Throws<ArgumentNullException>("control", () => provider.GetIconAlignment(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_GetIconPadding_InvokeWithoutError_ReturnsZero()
         {
-            var provider = new ErrorProvider();
-            var control = new Control();
+            using var provider = new ErrorProvider();
+            using var control = new Control();
             Assert.Equal(0, provider.GetIconPadding(control));
 
             // Call again.
             Assert.Equal(0, provider.GetIconPadding(control));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_GetIconPadding_NullControl_ThrowsArgumentNullException()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             Assert.Throws<ArgumentNullException>("control", () => provider.GetIconPadding(null));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ErrorProvider_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
         {
-            var provider = new SubErrorProvider();
+            using var provider = new SubErrorProvider();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1002,10 +1017,10 @@ namespace System.Windows.Forms.Tests
             provider.OnRightToLeftChanged(eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           provider.RightToLeftChanged -= handler;
-           provider.OnRightToLeftChanged(eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            provider.RightToLeftChanged -= handler;
+            provider.OnRightToLeftChanged(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         public static IEnumerable<object[]> SetError_TestData()
@@ -1018,15 +1033,15 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SetError_TestData))]
         public void ErrorProvider_SetError_Invoke_GetErrorReturnsExpected(ErrorBlinkStyle blinkStyle, string value, string expected)
         {
-            var provider = new ErrorProvider
+            using var provider = new ErrorProvider
             {
                 BlinkStyle = blinkStyle
             };
-            var control = new Control();
+            using var control = new Control();
 
             provider.SetError(control, value);
             Assert.Equal(expected, provider.GetError(control));
@@ -1040,20 +1055,20 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(provider.GetError(control));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ErrorProvider_SetError_NullControl_ThrowsArgumentNullException(string value)
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             Assert.Throws<ArgumentNullException>("control", () => provider.SetError(null, value));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ErrorIconAlignment))]
         public void ErrorProvider_SetIconAlignment_Invoke_GetIconAlignmentReturnsExpected(ErrorIconAlignment value)
         {
-            var provider = new ErrorProvider();
-            var control = new Control();
+            using var provider = new ErrorProvider();
+            using var control = new Control();
 
             provider.SetIconAlignment(control, value);
             Assert.Equal(value, provider.GetIconAlignment(control));
@@ -1063,30 +1078,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, provider.GetIconAlignment(control));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ErrorIconAlignment))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ErrorIconAlignment))]
         public void ErrorProvider_SetIconAlignment_NullControl_ThrowsArgumentNullException(ErrorIconAlignment value)
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             Assert.Throws<ArgumentNullException>("control", () => provider.SetIconAlignment(null, value));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ErrorIconAlignment))]
         public void ErrorProvider_SetIconAlignment_InvalidValue_ThrowsInvalidEnumArgumentException(ErrorIconAlignment value)
         {
-            var provider = new ErrorProvider();
-            var control = new Control();
+            using var provider = new ErrorProvider();
+            using var control = new Control();
             Assert.Throws<InvalidEnumArgumentException>("value", () => provider.SetIconAlignment(control, value));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void ErrorProvider_SetIconPadding_Invoke_GetIconPaddingReturnsExpected(int value)
         {
-            var provider = new ErrorProvider();
-            var control = new Control();
+            using var provider = new ErrorProvider();
+            using var control = new Control();
 
             provider.SetIconPadding(control, value);
             Assert.Equal(value, provider.GetIconPadding(control));
@@ -1096,10 +1111,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, provider.GetIconPadding(control));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ErrorProvider_SetIconPadding_NullControl_ThrowsArgumentNullException()
         {
-            var provider = new ErrorProvider();
+            using var provider = new ErrorProvider();
             Assert.Throws<ArgumentNullException>("control", () => provider.SetIconPadding(null, 0));
         }
 
@@ -1116,13 +1131,13 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CallEvents_TestData))]
         public void ErrorProvider_Items_CallEvents_Success(ErrorBlinkStyle blinkStyle, SubControl control, string error, string expected)
         {
             bool originalVisible = control.Visible;
-            var originalParent = new Control();
-            var newParent = new Control();
+            using var originalParent = new Control();
+            using var newParent = new Control();
 
             using (var provider = new ErrorProvider
             {
