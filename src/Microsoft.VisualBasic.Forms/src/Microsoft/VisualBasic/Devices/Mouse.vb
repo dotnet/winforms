@@ -3,11 +3,9 @@
 ' See the LICENSE file in the project root for more information.
 
 Option Strict On
-Option Explicit On 
+Option Explicit On
 
-Imports System.ComponentModel
 Imports System.Windows.Forms
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
@@ -15,8 +13,8 @@ Namespace Microsoft.VisualBasic.Devices
     ''' <summary>
     ''' A wrapper object that acts as a discovery mechanism for finding 
     ''' information about the mouse on your computer such as whether the mouse
-    ''' exists, the number of buttons, wheelscrolls details.
-    ''' 
+    ''' exists, the number of buttons, WheelScrolls details.
+    '''
     ''' This class is a Singleton Class. See Common.Computer for details.
     ''' </summary>
     Public Class Mouse
@@ -28,7 +26,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <value>
         ''' true if the functions of the left and right mouse buttons are swapped. false otherwise. 
         ''' </value>
-        ''' <exception cref="System.InvalidOperationException">If no mouse is installed.</exception>
+        ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
         Public ReadOnly Property ButtonsSwapped() As Boolean
             Get
                 If System.Windows.Forms.SystemInformation.MousePresent Then
@@ -43,7 +41,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Gets a value indicating whether a mouse with a mouse wheel is installed
         ''' </summary>
         ''' <value>true if a mouse with a mouse wheel is installed, false otherwise.</value>
-        ''' <exception cref="System.InvalidOperationException">If no mouse is installed.</exception>
+        ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
         Public ReadOnly Property WheelExists() As Boolean
             Get
                 If System.Windows.Forms.SystemInformation.MousePresent Then
@@ -58,7 +56,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Gets the number of lines to scroll when the mouse wheel is rotated.
         ''' </summary>
         ''' <value>The number of lines to scroll.</value>
-        ''' <exception cref="System.InvalidOperationException">if no mouse is installed or no wheels exists.</exception>
+        ''' <exception cref="InvalidOperationException">if no mouse is installed or no wheels exists.</exception>
         Public ReadOnly Property WheelScrollLines() As Integer
             Get
                 If WheelExists Then

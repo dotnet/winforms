@@ -1,12 +1,10 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
 Option Explicit On
 Option Strict On
 
-Imports System.Collections
-Imports System.Collections.Generic
 Imports System.Threading
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
@@ -22,36 +20,36 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     ''' Note that an instance of this class can only be associated
     ''' with the one item to be stored/retrieved at a time.
     ''' </remarks>
-    <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Never)>
+    <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Public Class ContextValue(Of T)
         Public Sub New()
-            m_ContextKey = System.Guid.NewGuid.ToString
+            _contextKey = System.Guid.NewGuid.ToString
         End Sub
 
         ''' <summary>
         ''' Get the object from the correct thread-appropriate location
         ''' </summary>
-        Public Property Value() As T 'No Synclocks required because we are operating upon instance data and the object is not shared across threads
+        Public Property Value() As T 'No SyncLocks required because we are operating upon instance data and the object is not shared across threads
             Get
                 Dim dictionary As IDictionary = GetDictionary()
-                Return DirectCast(dictionary(m_ContextKey), T) 'Note, IDictionary(key) can return Nothing and that's ok
+                Return DirectCast(dictionary(_contextKey), T) 'Note, IDictionary(key) can return Nothing and that's OK
             End Get
-            Set(ByVal value As T)
+            Set(value As T)
                 Dim dictionary As IDictionary = GetDictionary()
-                dictionary(m_ContextKey) = value
+                dictionary(_contextKey) = value
             End Set
         End Property
 
         Private Shared Function GetDictionary() As IDictionary
-            If s_ThreadLocal Is Nothing Then
-                Interlocked.CompareExchange(s_ThreadLocal, New ThreadLocal(Of IDictionary)(Function() New Dictionary(Of String, T)), Nothing)
+            If s_threadLocal Is Nothing Then
+                Interlocked.CompareExchange(s_threadLocal, New ThreadLocal(Of IDictionary)(Function() New Dictionary(Of String, T)), Nothing)
             End If
-            Return s_ThreadLocal.Value
+            Return s_threadLocal.Value
         End Function
 
-        Private ReadOnly m_ContextKey As String 'An item is stored in the dictionary by a guid which this string maintains
+        Private ReadOnly _contextKey As String 'An item is stored in the dictionary by a GUID which this string maintains
 
-        Private Shared s_ThreadLocal As ThreadLocal(Of IDictionary)
+        Private Shared s_threadLocal As ThreadLocal(Of IDictionary)
 
     End Class 'ContextValue
 

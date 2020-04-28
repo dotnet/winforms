@@ -4,13 +4,12 @@
 Option Explicit On
 Option Strict On
 
-Imports System
 Imports System.Runtime.InteropServices
 Imports Microsoft.Win32.SafeHandles
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
-    <ComponentModel.EditorBrowsableAttribute(ComponentModel.EditorBrowsableState.Never)>
+    <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Friend NotInheritable Class NativeTypes
 
         <StructLayout(LayoutKind.Sequential)>
@@ -50,13 +49,13 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 MyBase.New(True)
             End Sub
 
-            Friend Sub InitialSetHandle(ByVal h As IntPtr)
+            Friend Sub InitialSetHandle(h As IntPtr)
                 Debug.Assert(MyBase.IsInvalid, "Safe handle should only be set once.")
                 MyBase.SetHandle(h)
             End Sub
 
             Protected Overrides Function ReleaseHandle() As Boolean
-                Return NativeMethods.CloseHandle(Me.handle) <> 0
+                Return NativeMethods.CloseHandle(handle) <> 0
             End Function
         End Class
 
@@ -114,20 +113,20 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Friend Sub New()
             End Sub
 
-            Private m_HasBeenDisposed As Boolean ' To detect redundant calls. Default initialize = False.
+            Private _hasBeenDisposed As Boolean ' To detect redundant calls. Default initialize = False.
 
             Protected Overrides Sub Finalize()
                 Dispose(False)
             End Sub
 
             ' IDisposable
-            Private Sub Dispose(ByVal disposing As Boolean)
-                If Not m_HasBeenDisposed Then
+            Private Sub Dispose(disposing As Boolean)
+                If Not _hasBeenDisposed Then
                     If disposing Then
-                        m_HasBeenDisposed = True
+                        _hasBeenDisposed = True
 
                         Const STARTF_USESTDHANDLES As Integer = 256 'Defined in windows.h
-                        If (Me.dwFlags And STARTF_USESTDHANDLES) <> 0 Then
+                        If (dwFlags And STARTF_USESTDHANDLES) <> 0 Then
                             If hStdInput <> IntPtr.Zero AndAlso hStdInput <> NativeTypes.INVALID_HANDLE Then
                                 NativeMethods.CloseHandle(hStdInput)
                                 hStdInput = NativeTypes.INVALID_HANDLE
@@ -150,7 +149,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             ' This code correctly implements the disposable pattern.
             Friend Sub Dispose() Implements IDisposable.Dispose
-                ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+                ' Do not change this code.  Put cleanup code in Dispose(disposing As Boolean) above.
                 Dispose(True)
                 GC.SuppressFinalize(Me)
             End Sub

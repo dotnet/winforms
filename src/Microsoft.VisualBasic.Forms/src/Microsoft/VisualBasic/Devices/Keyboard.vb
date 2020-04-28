@@ -5,10 +5,7 @@
 Option Explicit On
 Option Strict On
 
-Imports System
-Imports System.Diagnostics
 Imports System.Windows.Forms
-Imports System.ComponentModel
 Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Devices
@@ -23,21 +20,23 @@ Namespace Microsoft.VisualBasic.Devices
         ''' Sends keys to the active window as if typed as keyboard with wait = false.
         ''' </summary>
         ''' <param name="keys">A string containing the keys to be sent (typed).</param>
-        Public Sub SendKeys(ByVal keys As String)
+        Public Sub SendKeys(keys As String)
             SendKeys(keys, False)
         End Sub
 
+#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Sends keys to the active window as if typed at keyboard. This overloaded
         ''' version uses the same conventions as the VB6 SendKeys.
         ''' </summary>
         ''' <param name="keys">A string containing the keys to be sent (typed).</param>
         ''' <param name="wait">Wait for messages to be processed before returning.</param>
-        Public Sub SendKeys(ByVal keys As String, ByVal wait As Boolean)
+        Public Sub SendKeys(keys As String, wait As Boolean)
+#Enable Warning CA1822 ' Mark members as static
             If wait Then
-                System.Windows.Forms.SendKeys.SendWait(keys)
+                Windows.Forms.SendKeys.SendWait(keys)
             Else
-                System.Windows.Forms.SendKeys.Send(keys)
+                Windows.Forms.SendKeys.Send(keys)
             End If
         End Sub
 

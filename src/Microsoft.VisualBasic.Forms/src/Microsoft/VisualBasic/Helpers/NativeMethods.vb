@@ -4,7 +4,6 @@
 Option Strict On
 Option Explicit On
 
-Imports System
 Imports System.Text
 Imports System.Runtime.InteropServices
 
@@ -16,51 +15,55 @@ Namespace Microsoft.VisualBasic.CompilerServices
         <PreserveSig()>
         Friend Declare Auto Function _
             WaitForInputIdle _
-                Lib "user32" (ByVal Process As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid, ByVal Milliseconds As Integer) As Integer
+                Lib "user32" (Process As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid, Milliseconds As Integer) As Integer
 
         <PreserveSig()>
         Friend Declare Function _
             GetWindow _
-                Lib "user32" (ByVal hwnd As IntPtr, ByVal wFlag As Integer) As IntPtr
+                Lib "user32" (hwnd As IntPtr, wFlag As Integer) As IntPtr
 
         <PreserveSig()>
         Friend Declare Function _
             GetDesktopWindow _
                 Lib "user32" () As IntPtr
 
+#Disable Warning CA2101 ' Specify marshaling for P/Invoke string arguments
         <DllImport("user32", CharSet:=CharSet.Auto, PreserveSig:=True, SetLastError:=True)>
-        Friend Shared Function GetWindowText(ByVal hWnd As IntPtr, <Out(), MarshalAs(UnmanagedType.LPTStr)> ByVal lpString As StringBuilder, ByVal nMaxCount As Integer) As Integer
+        Friend Shared Function GetWindowText(hWnd As IntPtr, <Out(), MarshalAs(UnmanagedType.LPTStr)> lpString As StringBuilder, nMaxCount As Integer) As Integer
+#Enable Warning CA2101 ' Specify marshaling for P/Invoke string arguments
         End Function
 
         <PreserveSig()>
         Friend Declare Function _
             AttachThreadInput _
-                Lib "user32" (ByVal idAttach As Integer, ByVal idAttachTo As Integer, ByVal fAttach As Integer) As Integer
+                Lib "user32" (idAttach As Integer, idAttachTo As Integer, fAttach As Integer) As Integer
 
         <PreserveSig()>
         Friend Declare Function _
             SetForegroundWindow _
-                Lib "user32" (ByVal hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
+                Lib "user32" (hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
 
         <PreserveSig()>
         Friend Declare Function _
             SetFocus _
-                Lib "user32" (ByVal hwnd As IntPtr) As IntPtr
+                Lib "user32" (hwnd As IntPtr) As IntPtr
 
+#Disable Warning CA2101 ' Specify marshaling for P/Invoke string arguments
         <PreserveSig()>
         Friend Declare Auto Function _
             FindWindow _
-                Lib "user32" (ByVal lpClassName As String, ByVal lpWindowName As String) As IntPtr
+                Lib "user32" (lpClassName As String, lpWindowName As String) As IntPtr
+#Enable Warning CA2101 ' Specify marshaling for P/Invoke string arguments
 
         <PreserveSig()>
         Friend Declare Function _
             CloseHandle _
-                Lib "kernel32" (ByVal hObject As IntPtr) As Integer
+                Lib "kernel32" (hObject As IntPtr) As Integer
 
         <PreserveSig()>
         Friend Declare Function _
             WaitForSingleObject _
-                Lib "kernel32" (ByVal hHandle As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid, ByVal dwMilliseconds As Integer) As Integer
+                Lib "kernel32" (hHandle As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid, dwMilliseconds As Integer) As Integer
 
         <DllImport(
              "kernel32",
@@ -68,7 +71,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
              PreserveSig:=True,
              BestFitMapping:=False,
              ThrowOnUnmappableChar:=True)>
-        Friend Shared Sub GetStartupInfo(<InAttribute(), OutAttribute()> ByVal lpStartupInfo As NativeTypes.STARTUPINFO)
+        Friend Shared Sub GetStartupInfo(<[In](), Out()> lpStartupInfo As NativeTypes.STARTUPINFO)
         End Sub
 
         <DllImport(
@@ -78,24 +81,26 @@ Namespace Microsoft.VisualBasic.CompilerServices
              BestFitMapping:=False,
              ThrowOnUnmappableChar:=True)>
         Friend Shared Function CreateProcess(
-            ByVal lpApplicationName As String,
-            ByVal lpCommandLine As String,
-            ByVal lpProcessAttributes As NativeTypes.SECURITY_ATTRIBUTES,
-            ByVal lpThreadAttributes As NativeTypes.SECURITY_ATTRIBUTES,
-            <MarshalAs(UnmanagedType.Bool)> ByVal bInheritHandles As Boolean,
-            ByVal dwCreationFlags As Integer,
-            ByVal lpEnvironment As IntPtr,
-            ByVal lpCurrentDirectory As String,
-            ByVal lpStartupInfo As NativeTypes.STARTUPINFO,
-            ByVal lpProcessInformation As NativeTypes.PROCESS_INFORMATION) As Integer
+            lpApplicationName As String,
+            lpCommandLine As String,
+            lpProcessAttributes As NativeTypes.SECURITY_ATTRIBUTES,
+            lpThreadAttributes As NativeTypes.SECURITY_ATTRIBUTES,
+            <MarshalAs(UnmanagedType.Bool)> bInheritHandles As Boolean,
+            dwCreationFlags As Integer,
+            lpEnvironment As IntPtr,
+            lpCurrentDirectory As String,
+            lpStartupInfo As NativeTypes.STARTUPINFO,
+            lpProcessInformation As NativeTypes.PROCESS_INFORMATION) As Integer
         End Function
 
+#Disable Warning IDE0049 ' Simplify Names, Justification:=<Types come from Windows Native API>
+#Disable Warning IDE1006 ' Naming Styles, Justification:=<Names come from Windows Native API>
         ''' <summary>
         ''' Contains information about the current state of both physical and virtual memory, including extended memory.
         ''' </summary>
         <StructLayout(LayoutKind.Sequential)>
         Friend Structure MEMORYSTATUSEX
-            'typedef struct _MEMORYSTATUSEX {  
+            'typedef struct _MEMORYSTATUSEX {
             '   DWORD dwLength;                     Size of the structure. Must set before calling GlobalMemoryStatusEx.
             '   DWORD dwMemoryLoad;                 Number between 0 and 100 on current memory utilization.
             '   DWORDLONG ullTotalPhys;             Total size of physical memory.
@@ -116,11 +121,13 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Friend ullTotalVirtual As UInt64
             Friend ullAvailVirtual As UInt64
             Friend ullAvailExtendedVirtual As UInt64
+#Enable Warning IDE1006 ' Naming Styles
 
             Friend Sub Init()
                 dwLength = CType(Marshal.SizeOf(GetType(MEMORYSTATUSEX)), UInt32)
             End Sub
         End Structure
+#Enable Warning IDE0049 ' Simplify Names
 
         ''' <summary>
         ''' Obtains information about the system's current usage of both physical and virtual memory.
@@ -128,7 +135,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="lpBuffer">Pointer to a MEMORYSTATUSEX structure.</param>
         ''' <returns>True if the function succeeds. Otherwise, False.</returns>
         <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, SetLastError:=True)>
-        Friend Shared Function GlobalMemoryStatusEx(ByRef lpBuffer As MEMORYSTATUSEX) As <MarshalAsAttribute(UnmanagedType.Bool)> Boolean
+        Friend Shared Function GlobalMemoryStatusEx(ByRef lpBuffer As MEMORYSTATUSEX) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
 
         ''' <summary>

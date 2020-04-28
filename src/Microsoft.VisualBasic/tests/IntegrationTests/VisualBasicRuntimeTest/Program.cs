@@ -52,22 +52,24 @@ namespace VisualBasicRuntimeTest
                         throw new ArgumentException();
                 }
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
             {
                 Environment.Exit(2);
             }
+#pragma warning restore CA1031 // Do not catch general exception types
         }
 
         private static void Interaction_InputBox(bool useVbHost)
         {
-            var host = useVbHost ? new VbHost() : null;
+            VbHost host = useVbHost ? new VbHost() : null;
             HostServices.VBHost = host;
             Interaction.InputBox(Prompt: "Prompt", Title: "Title");
         }
 
         private static void Interaction_MsgBox(bool useVbHost)
         {
-            var host = useVbHost ? new VbHost() : null;
+            VbHost host = useVbHost ? new VbHost() : null;
             HostServices.VBHost = host;
             Interaction.MsgBox(Prompt: "Message", Buttons: MsgBoxStyle.OkCancel, Title: "Title");
         }
@@ -90,7 +92,7 @@ namespace VisualBasicRuntimeTest
                 }
             };
 
-            application.Run(new string[0]);
+            application.Run(Array.Empty<string>());
             if (!valid)
             {
                 throw new InvalidOperationException();
@@ -99,7 +101,7 @@ namespace VisualBasicRuntimeTest
 
         private static void ProgressDialog_ShowProgressDialog()
         {
-            var dialogType = typeof(ApplicationBase).Assembly.GetType("Microsoft.VisualBasic.MyServices.Internal.ProgressDialog");
+            Type dialogType = typeof(ApplicationBase).Assembly.GetType("Microsoft.VisualBasic.MyServices.Internal.ProgressDialog");
             var dialog = (Form)Activator.CreateInstance(dialogType, nonPublic: true);
 
             var resources = new ResourceManager(dialogType);
@@ -109,21 +111,21 @@ namespace VisualBasicRuntimeTest
                 throw new InvalidOperationException();
             }
 
-            var controlProperty = dialogType.GetProperty("ProgressBarWork", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            PropertyInfo controlProperty = dialogType.GetProperty("ProgressBarWork", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             var control = (Control)controlProperty.GetValue(dialog);
-            var actualValue = control.Location;
+            Point actualValue = control.Location;
             if (actualValue != expectedValue)
             {
                 throw new InvalidOperationException();
             }
 
-            var showMethod = dialogType.GetMethod("ShowProgressDialog");
+            MethodInfo showMethod = dialogType.GetMethod("ShowProgressDialog");
             showMethod.Invoke(dialog, null);
         }
 
         private static void VBInputBox_ShowDialog()
         {
-            var formType = typeof(ApplicationBase).Assembly.GetType("Microsoft.VisualBasic.CompilerServices.VBInputBox");
+            Type formType = typeof(ApplicationBase).Assembly.GetType("Microsoft.VisualBasic.CompilerServices.VBInputBox");
             var form = (Form)Activator.CreateInstance(formType, nonPublic: true);
 
             var resources = new ResourceManager(formType);
@@ -133,9 +135,9 @@ namespace VisualBasicRuntimeTest
                 throw new InvalidOperationException();
             }
 
-            var controlField = formType.GetField("TextBox", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            FieldInfo controlField = formType.GetField("TextBox", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
             var control = (Control)controlField.GetValue(form);
-            var actualValue = control.Location;
+            Point actualValue = control.Location;
             if (actualValue != expectedValue)
             {
                 throw new InvalidOperationException();

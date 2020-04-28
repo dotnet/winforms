@@ -2,18 +2,11 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System
 Imports System.Text
-Imports System.Collections
 Imports System.Threading
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
-Imports System.Runtime.Versioning
-Imports System.Diagnostics
-
 Imports System.Security
-Imports System.Windows.Forms
-Imports Microsoft.Win32
 
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -25,7 +18,7 @@ Namespace Microsoft.VisualBasic
     ' Do not change this API without also updating that dependent module.
     Friend Module _Interaction
 
-        Public Function Shell(ByVal PathName As String, ByVal Style As AppWinStyle, ByVal Wait As Boolean, ByVal Timeout As Integer) As Integer
+        Public Function Shell(PathName As String, Style As AppWinStyle, Wait As Boolean, Timeout As Integer) As Integer
             Dim StartupInfo As New NativeTypes.STARTUPINFO
             Dim ProcessInfo As New NativeTypes.PROCESS_INFORMATION
             Dim ok As Integer
@@ -48,8 +41,8 @@ Namespace Microsoft.VisualBasic
 
                 'We have to have unmanaged permissions to do this, so asking for path permissions would be redundant
                 'Note: We are using the StartupInfo (defined in NativeTypes.StartupInfo) in CreateProcess() even though this version
-                'of the StartupInfo type uses Intptr instead of String because GetStartupInfo() above requires that version so we don't
-                'free the string fields since the API manages it instead.  But its ok here because we are just passing along the memory
+                'of the StartupInfo type uses IntPtr instead of String because GetStartupInfo() above requires that version so we don't
+                'free the string fields since the API manages it instead.  But its OK here because we are just passing along the memory
                 'that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
 
                 RuntimeHelpers.PrepareConstrainedRegions()
@@ -78,7 +71,7 @@ Namespace Microsoft.VisualBasic
                                 'Process ran to completion
                                 Shell = 0
                             Else
-                                'Wait timedout
+                                'Wait timed out
                                 Shell = ProcessInfo.dwProcessId
                             End If
                         Else
@@ -104,7 +97,7 @@ Namespace Microsoft.VisualBasic
             End Try
         End Function
 
-        Public Sub AppActivateByProcessId(ByVal ProcessId As Integer)
+        Public Sub AppActivateByProcessId(ProcessId As Integer)
             'As an optimization, we will only check the UI permission once we actually know we found the app to activate - we'll do that in AppActivateHelper
 
             Dim ProcessIdOwningWindow As Integer
@@ -145,14 +138,14 @@ Namespace Microsoft.VisualBasic
             End If
         End Sub
 
-        Public Sub AppActivateByTitle(ByVal Title As String)
+        Public Sub AppActivateByTitle(Title As String)
             'As an optimization, we will only check the UI permission once we actually know we found the app to activate - we'll do that in AppActivateHelper
             Dim WindowHandle As IntPtr = NativeMethods.FindWindow(Nothing, Title) 'see if we can find the window using an exact match on the title
             Const MAX_TITLE_LENGTH As Integer = 511
 
             '  if no match, search through all parent windows
             If IntPtr.op_Equality(WindowHandle, IntPtr.Zero) Then
-                Dim AppTitle As String = String.Empty
+                Dim AppTitle As String
                 ' Old implementation uses MAX_TITLE_LENGTH characters, INCLUDING NULL character.
                 ' Interop code will extend string builder to handle NULL character.
                 Dim AppTitleBuilder As New StringBuilder(MAX_TITLE_LENGTH)
@@ -204,7 +197,7 @@ Namespace Microsoft.VisualBasic
             End If
         End Sub
 
-        Private Sub AppActivateHelper(ByVal hwndApp As IntPtr)
+        Private Sub AppActivateHelper(hwndApp As IntPtr)
             '  if no window with name (full or truncated) or task id, return an error
             '  if the window is not enabled or not visible, get the first window owned by it that is not enabled or not visible
             Dim hwndOwned As IntPtr
@@ -246,60 +239,62 @@ Namespace Microsoft.VisualBasic
             ' synchronously because we are attached.
             NativeMethods.SetForegroundWindow(hwndApp)
             NativeMethods.SetFocus(hwndApp)
-            ' Unattach ourselves from the window
+            ' Unattached ourselves from the window
             NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 0)
         End Sub
 
         Private NotInheritable Class InputBoxHandler
-            Private m_Prompt As String
-            Private m_Title As String
-            Private m_DefaultResponse As String
-            Private m_XPos As Integer
-            Private m_YPos As Integer
-            Private m_Result As String
-            Private m_ParentWindow As System.Windows.Forms.IWin32Window
-            Private m_Exception As Exception
+            Private ReadOnly _prompt As String
+            Private ReadOnly _title As String
+            Private ReadOnly _defaultResponse As String
+            Private ReadOnly _xPos As Integer
+            Private ReadOnly _yPos As Integer
+            Private _result As String
+            Private ReadOnly _parentWindow As Windows.Forms.IWin32Window
+            Private _exception As Exception
 
-            Sub New(ByVal Prompt As String, ByVal Title As String, ByVal DefaultResponse As String, ByVal XPos As Integer, ByVal YPos As Integer, ByVal ParentWindow As System.Windows.Forms.IWin32Window)
-                m_Prompt = Prompt
-                m_Title = Title
-                m_DefaultResponse = DefaultResponse
-                m_XPos = XPos
-                m_YPos = YPos
-                m_ParentWindow = ParentWindow
+            Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As Windows.Forms.IWin32Window)
+                _prompt = Prompt
+                _title = Title
+                _defaultResponse = DefaultResponse
+                _xPos = XPos
+                _yPos = YPos
+                _parentWindow = ParentWindow
             End Sub
 
-            <STAThread()> Public Sub StartHere()
+            Public Sub StartHere()
                 Try
-                    m_Result = InternalInputBox(m_Prompt, m_Title, m_DefaultResponse, m_XPos, m_YPos, m_ParentWindow)
+                    _result = InternalInputBox(_prompt, _title, _defaultResponse, _xPos, _yPos, _parentWindow)
+#Disable Warning CA1031 ' Do not catch general exception types
                 Catch ex As Exception
-                    m_Exception = ex
+                    _exception = ex
+#Enable Warning CA1031 ' Do not catch general exception types
                 End Try
             End Sub
 
             Public ReadOnly Property Result() As String
                 Get
-                    Return m_Result
+                    Return _result
                 End Get
             End Property
 
             Friend ReadOnly Property Exception As Exception
                 Get
-                    Return m_Exception
+                    Return _exception
                 End Get
             End Property
         End Class
 
-        Public Function InputBox(ByVal Prompt As String, ByVal Title As String, ByVal DefaultResponse As String, ByVal XPos As Integer, ByVal YPos As Integer) As String
-            Dim vbhost As CompilerServices.IVbHost
-            Dim ParentWindow As System.Windows.Forms.IWin32Window = Nothing
+        Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
+            Dim vbhost As IVbHost
+            Dim ParentWindow As Windows.Forms.IWin32Window = Nothing
 
             vbhost = CompilerServices.HostServices.VBHost
             If vbhost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
                 ParentWindow = vbhost.GetParentWindow()
             End If
 
-            If Title.Length = 0 Then
+            If String.IsNullOrEmpty(Title) Then
                 If vbhost Is Nothing Then
                     Title = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
                 Else
@@ -312,7 +307,7 @@ Namespace Microsoft.VisualBasic
             'to display the InputBox
             If System.Threading.Thread.CurrentThread.GetApartmentState() <> Threading.ApartmentState.STA Then
                 Dim InputHandler As New InputBoxHandler(Prompt, Title, DefaultResponse, XPos, YPos, ParentWindow)
-                Dim thread As New Threading.Thread(New Threading.ThreadStart(AddressOf InputHandler.StartHere))
+                Dim thread As New Thread(New ThreadStart(AddressOf InputHandler.StartHere))
                 thread.Start()
                 thread.Join()
 
@@ -326,7 +321,7 @@ Namespace Microsoft.VisualBasic
             End If
         End Function
 
-        Private Function GetTitleFromAssembly(ByVal CallingAssembly As System.Reflection.Assembly) As String
+        Private Function GetTitleFromAssembly(CallingAssembly As Reflection.Assembly) As String
 
             Dim Title As String
 
@@ -354,7 +349,7 @@ Namespace Microsoft.VisualBasic
 
         End Function
 
-        Private Function InternalInputBox(ByVal Prompt As String, ByVal Title As String, ByVal DefaultResponse As String, ByVal XPos As Integer, ByVal YPos As Integer, ByVal ParentWindow As System.Windows.Forms.IWin32Window) As String
+        Private Function InternalInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As Windows.Forms.IWin32Window) As String
             Dim Box As VBInputBox = New VBInputBox(Prompt, Title, DefaultResponse, XPos, YPos)
             Box.ShowDialog(ParentWindow)
 
@@ -362,11 +357,11 @@ Namespace Microsoft.VisualBasic
             Box.Dispose()
         End Function
 
-        Public Function MsgBox(ByVal Prompt As Object, ByVal Buttons As MsgBoxStyle, ByVal Title As Object) As MsgBoxResult
+        Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
-            Dim vbhost As CompilerServices.IVbHost
-            Dim ParentWindow As System.Windows.Forms.IWin32Window = Nothing
+            Dim vbhost As IVbHost
+            Dim ParentWindow As Windows.Forms.IWin32Window = Nothing
 
             vbhost = CompilerServices.HostServices.VBHost
             If Not vbhost Is Nothing Then
@@ -391,7 +386,7 @@ Namespace Microsoft.VisualBasic
                 Throw ex
             Catch ex As OutOfMemoryException
                 Throw ex
-            Catch ex As System.Threading.ThreadAbortException
+            Catch ex As ThreadAbortException
                 Throw ex
             Catch
                 Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
@@ -411,17 +406,17 @@ Namespace Microsoft.VisualBasic
                 Throw ex
             Catch ex As OutOfMemoryException
                 Throw ex
-            Catch ex As System.Threading.ThreadAbortException
+            Catch ex As ThreadAbortException
                 Throw ex
             Catch
                 Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
             Return CType(System.Windows.Forms.MessageBox.Show(ParentWindow, sPrompt, sTitle,
-                 CType(Buttons And &HF, System.Windows.Forms.MessageBoxButtons),
-                 CType(Buttons And &HF0, System.Windows.Forms.MessageBoxIcon),
-                 CType(Buttons And &HF00, System.Windows.Forms.MessageBoxDefaultButton),
-                 CType(Buttons And &HFFFFF000, System.Windows.Forms.MessageBoxOptions)),
+                 CType(Buttons And &HF, Windows.Forms.MessageBoxButtons),
+                 CType(Buttons And &HF0, Windows.Forms.MessageBoxIcon),
+                 CType(Buttons And &HF00, Windows.Forms.MessageBoxDefaultButton),
+                 CType(Buttons And &HFFFFF000, Windows.Forms.MessageBoxOptions)),
                  MsgBoxResult)
         End Function
 
