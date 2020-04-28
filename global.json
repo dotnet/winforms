@@ -14,7 +14,7 @@
     "Microsoft.DotNet.Arcade.Sdk": "5.0.0-beta.20201.2",
     "Microsoft.DotNet.Helix.Sdk": "5.0.0-beta.20201.2",
     "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
-    "Microsoft.NET.Sdk.IL": "5.0.0-preview.5.20227.18"
+    "Microsoft.NET.Sdk.IL": "5.0.0-preview.5.20228.2"
   },
   "native-tools": {
     "dotnet-api-docs_netcoreapp3.0": "0.0.0.1"
