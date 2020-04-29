@@ -177,3 +177,7 @@ end_of_line = lf
 
 [*.{cmd,bat}]
 end_of_line = crlf
+
+
+# .NET diagnostic
+dotnet_diagnostic.RS0041.severity = none
