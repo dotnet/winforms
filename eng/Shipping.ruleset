@@ -178,4 +178,7 @@
     <Rule Id="SA1649" Action="None" />
     <Rule Id="SA1651" Action="None" />
   </Rules>
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.PublicApiAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.PublicApiAnalyzers">
+    <Rule Id="RS0041" Action="None" />
+  </Rules>
 </RuleSet>
