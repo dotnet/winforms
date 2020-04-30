@@ -4365,24 +4365,24 @@ System.Windows.Forms.ListViewAlignment.Left = 1 -> System.Windows.Forms.ListView
 System.Windows.Forms.ListViewAlignment.SnapToGrid = 5 -> System.Windows.Forms.ListViewAlignment
 System.Windows.Forms.ListViewAlignment.Top = 2 -> System.Windows.Forms.ListViewAlignment
 System.Windows.Forms.ListViewGroup
-~System.Windows.Forms.ListViewGroup.Footer.get -> string
-~System.Windows.Forms.ListViewGroup.Footer.set -> void
+System.Windows.Forms.ListViewGroup.Footer.get -> string!
+System.Windows.Forms.ListViewGroup.Footer.set -> void
 System.Windows.Forms.ListViewGroup.FooterAlignment.get -> System.Windows.Forms.HorizontalAlignment
 System.Windows.Forms.ListViewGroup.FooterAlignment.set -> void
-~System.Windows.Forms.ListViewGroup.Header.get -> string
-~System.Windows.Forms.ListViewGroup.Header.set -> void
+System.Windows.Forms.ListViewGroup.Header.get -> string!
+System.Windows.Forms.ListViewGroup.Header.set -> void
 System.Windows.Forms.ListViewGroup.HeaderAlignment.get -> System.Windows.Forms.HorizontalAlignment
 System.Windows.Forms.ListViewGroup.HeaderAlignment.set -> void
-~System.Windows.Forms.ListViewGroup.Items.get -> System.Windows.Forms.ListView.ListViewItemCollection
-~System.Windows.Forms.ListViewGroup.ListView.get -> System.Windows.Forms.ListView
+System.Windows.Forms.ListViewGroup.Items.get -> System.Windows.Forms.ListView.ListViewItemCollection!
+System.Windows.Forms.ListViewGroup.ListView.get -> System.Windows.Forms.ListView?
 System.Windows.Forms.ListViewGroup.ListViewGroup() -> void
-~System.Windows.Forms.ListViewGroup.ListViewGroup(string header) -> void
-~System.Windows.Forms.ListViewGroup.ListViewGroup(string header, System.Windows.Forms.HorizontalAlignment headerAlignment) -> void
-~System.Windows.Forms.ListViewGroup.ListViewGroup(string key, string headerText) -> void
-~System.Windows.Forms.ListViewGroup.Name.get -> string
-~System.Windows.Forms.ListViewGroup.Name.set -> void
-~System.Windows.Forms.ListViewGroup.Tag.get -> object
-~System.Windows.Forms.ListViewGroup.Tag.set -> void
+System.Windows.Forms.ListViewGroup.ListViewGroup(string? header) -> void
+System.Windows.Forms.ListViewGroup.ListViewGroup(string? header, System.Windows.Forms.HorizontalAlignment headerAlignment) -> void
+System.Windows.Forms.ListViewGroup.ListViewGroup(string? key, string? headerText) -> void
+System.Windows.Forms.ListViewGroup.Name.get -> string?
+System.Windows.Forms.ListViewGroup.Name.set -> void
+System.Windows.Forms.ListViewGroup.Tag.get -> object?
+System.Windows.Forms.ListViewGroup.Tag.set -> void
 System.Windows.Forms.ListViewGroupCollection
 ~System.Windows.Forms.ListViewGroupCollection.Add(System.Windows.Forms.ListViewGroup group) -> int
 ~System.Windows.Forms.ListViewGroupCollection.Add(string key, string headerText) -> System.Windows.Forms.ListViewGroup
@@ -9764,7 +9764,7 @@ override System.Windows.Forms.ListView.IsInputKey(System.Windows.Forms.Keys keyD
 ~override System.Windows.Forms.ListView.Text.set -> void
 ~override System.Windows.Forms.ListView.ToString() -> string
 override System.Windows.Forms.ListView.WndProc(ref System.Windows.Forms.Message m) -> void
-~override System.Windows.Forms.ListViewGroup.ToString() -> string
+override System.Windows.Forms.ListViewGroup.ToString() -> string!
 ~override System.Windows.Forms.ListViewItem.ListViewSubItem.ToString() -> string
 ~override System.Windows.Forms.ListViewItem.ToString() -> string
 ~override System.Windows.Forms.ListViewItemConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool

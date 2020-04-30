@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Serialization;
 
@@ -20,12 +19,12 @@ namespace System.Windows.Forms
     [Serializable] // This type is participating in resx serialization scenarios.
     public sealed class ListViewGroup : ISerializable
     {
-        private string _header;
+        private string? _header;
         private HorizontalAlignment _headerAlignment = HorizontalAlignment.Left;
-        private string _footer;
+        private string? _footer;
         private HorizontalAlignment _footerAlignment = HorizontalAlignment.Left;
 
-        private ListView.ListViewItemCollection _items;
+        private ListView.ListViewItemCollection? _items;
 
         private static int s_nextID;
 
@@ -49,7 +48,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a ListViewItem object from a Key and a Name
         /// </summary>
-        public ListViewGroup(string key, string headerText) : this()
+        public ListViewGroup(string? key, string? headerText) : this()
         {
             Name = key;
             _header = headerText;
@@ -58,7 +57,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a ListViewGroup.
         /// </summary>
-        public ListViewGroup(string header)
+        public ListViewGroup(string? header)
         {
             _header = header;
             ID = s_nextID++;
@@ -67,7 +66,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a ListViewGroup.
         /// </summary>
-        public ListViewGroup(string header, HorizontalAlignment headerAlignment) : this(header)
+        public ListViewGroup(string? header, HorizontalAlignment headerAlignment) : this(header)
         {
             _headerAlignment = headerAlignment;
         }
@@ -76,6 +75,7 @@ namespace System.Windows.Forms
         ///  The text displayed in the group header.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
+        [AllowNull]
         public string Header
         {
             get => _header ?? string.Empty;
@@ -120,6 +120,7 @@ namespace System.Windows.Forms
         ///  The text displayed in the group footer.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
+        [AllowNull]
         public string Footer
         {
             get => _footer ?? string.Empty;
@@ -166,20 +167,17 @@ namespace System.Windows.Forms
         ///  The items that belong to this group.
         /// </summary>
         [Browsable(false)]
-        public ListView.ListViewItemCollection Items
-        {
-            get => _items ?? (_items = new ListView.ListViewItemCollection(new ListViewGroupItemCollection(this)));
-        }
+        public ListView.ListViewItemCollection Items => _items ??= new ListView.ListViewItemCollection(new ListViewGroupItemCollection(this));
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ListView ListView { get; internal set; }
+        public ListView? ListView { get; internal set; }
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ListViewGroupNameDescr))]
         [Browsable(true)]
         [DefaultValue("")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [SRCategory(nameof(SR.CatData))]
         [Localizable(false)]
@@ -187,7 +185,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         private void Deserialize(SerializationInfo info, StreamingContext context)
         {
@@ -197,19 +195,19 @@ namespace System.Windows.Forms
             {
                 if (entry.Name == "Header")
                 {
-                    Header = (string)entry.Value;
+                    Header = (string)entry.Value!;
                 }
                 else if (entry.Name == "HeaderAlignment")
                 {
-                    HeaderAlignment = (HorizontalAlignment)entry.Value;
+                    HeaderAlignment = (HorizontalAlignment)entry.Value!;
                 }
                 else if (entry.Name == "Footer")
                 {
-                    Footer = (string)entry.Value;
+                    Footer = (string)entry.Value!;
                 }
                 else if (entry.Name == "FooterAlignment")
                 {
-                    FooterAlignment = (HorizontalAlignment)entry.Value;
+                    FooterAlignment = (HorizontalAlignment)entry.Value!;
                 }
                 else if (entry.Name == "Tag")
                 {
@@ -217,11 +215,11 @@ namespace System.Windows.Forms
                 }
                 else if (entry.Name == "ItemsCount")
                 {
-                    count = (int)entry.Value;
+                    count = (int)entry.Value!;
                 }
                 else if (entry.Name == "Name")
                 {
-                    Name = (string)entry.Value;
+                    Name = (string)entry.Value!;
                 }
             }
             if (count > 0)
@@ -229,7 +227,7 @@ namespace System.Windows.Forms
                 ListViewItem[] items = new ListViewItem[count];
                 for (int i = 0; i < count; i++)
                 {
-                    items[i] = (ListViewItem)info.GetValue("Item" + i, typeof(ListViewItem));
+                    items[i] = (ListViewItem)info.GetValue("Item" + i, typeof(ListViewItem))!;
                 }
                 Items.AddRange(items);
             }
@@ -247,6 +245,11 @@ namespace System.Windows.Forms
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
+            if (info == null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
+
             info.AddValue(nameof(Header), Header);
             info.AddValue(nameof(HeaderAlignment), HeaderAlignment);
             info.AddValue(nameof(Footer), Footer);
