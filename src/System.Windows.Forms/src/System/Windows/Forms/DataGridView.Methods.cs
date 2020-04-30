@@ -5338,12 +5338,63 @@ namespace System.Windows.Forms
                 }
                 if (handle != IntPtr.Zero)
                 {
-                    cachedScrollableRegion = UnsafeNativeMethods.GetRectsFromRegion(handle);
+                    cachedScrollableRegion = GetRectsFromRegion(handle);
 
                     region.ReleaseHrgn(handle);
                 }
             }
             return cachedScrollableRegion;
+        }
+
+        private unsafe static RECT[] GetRectsFromRegion(IntPtr hRgn)
+        {
+            // see how much memory we need to allocate
+            uint regionDataSize = Gdi32.GetRegionData(hRgn, 0, IntPtr.Zero);
+            if (regionDataSize == 0)
+            {
+                return null;
+            }
+
+            IntPtr pBytes = IntPtr.Zero;
+            try
+            {
+                pBytes = Marshal.AllocCoTaskMem((int)regionDataSize);
+                // get the data
+                uint ret = Gdi32.GetRegionData(hRgn, regionDataSize, pBytes);
+                if (ret != regionDataSize)
+                {
+                    return null;
+                }
+
+                // cast to the structure
+                Gdi32.RGNDATAHEADER* pRgnDataHeader = (Gdi32.RGNDATAHEADER*)pBytes;
+                if (pRgnDataHeader->iType != 1)
+                {
+                    return null;
+                }
+
+                // expecting RDH_RECTANGLES
+                var regionRects = new RECT[pRgnDataHeader->nCount];
+
+                Debug.Assert(regionDataSize == pRgnDataHeader->dwSize + pRgnDataHeader->nCount * pRgnDataHeader->nRgnSize);
+                Debug.Assert(sizeof(RECT) == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
+
+                // use the header size as the offset, and cast each rect in.
+                uint rectStart = pRgnDataHeader->dwSize;
+                for (int i = 0; i < pRgnDataHeader->nCount; i++)
+                {
+                    regionRects[i] = *((RECT*)((byte*)pBytes + rectStart + (sizeof(RECT) * i)));
+                }
+
+                return regionRects;
+            }
+            finally
+            {
+                if (pBytes != IntPtr.Zero)
+                {
+                    Marshal.FreeCoTaskMem(pBytes);
+                }
+            }
         }
 
         private void DiscardNewRow()
