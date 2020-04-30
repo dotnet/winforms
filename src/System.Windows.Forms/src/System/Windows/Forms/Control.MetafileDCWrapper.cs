@@ -135,7 +135,7 @@ namespace System.Windows.Forms
                     if (iColors <= 256)
                     {
                         byte[] aj = new byte[sizeof(Gdi32.PALETTEENTRY) * 256];
-                        SafeNativeMethods.GetSystemPaletteEntries(hdcSrc, 0, (int)iColors, aj);
+                        Gdi32.GetSystemPaletteEntries(hdcSrc, 0, (uint)iColors, aj);
 
                         fixed (byte* pcolors = lpbmi.bmiColors)
                         {

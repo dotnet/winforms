@@ -12,9 +12,6 @@ namespace System.Windows.Forms
 {
     internal static class SafeNativeMethods
     {
-        [DllImport(ExternDll.Gdi32)]
-        public static extern int GetSystemPaletteEntries(IntPtr hdc, int iStartIndex, int nEntries, byte[] lppe);
-
         [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int GetBitmapBits(HandleRef hbmp, int cbBuffer, byte[] lpvBits);
 
