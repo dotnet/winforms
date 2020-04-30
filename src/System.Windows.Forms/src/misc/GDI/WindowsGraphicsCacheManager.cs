@@ -2,11 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if WGCM_TEST_SUITE // Enable tracking when built for the test suites.
-#define TRACK_HDC
-#define GDI_FONT_CACHE_TRACK
-#endif
-
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -193,11 +188,6 @@ namespace System.Windows.Forms.Internal
                     WindowsFontCache[t_currentIndex] = newEntry;
                     winFont.OwnedByCacheManager = true;
 
-#if GDI_FONT_CACHE_TRACK
-                    Debug.WriteLine("Removing from cache: " + wfont);
-                    Debug.WriteLine( "Adding to cache: " + winFont );
-#endif
-
                     wfont.OwnedByCacheManager = false;
                     wfont.Dispose();
                 }
@@ -209,9 +199,6 @@ namespace System.Windows.Forms.Internal
 
                     winFont.OwnedByCacheManager = false;
 
-#if GDI_FONT_CACHE_TRACK
-                    Debug.WriteLine("Creating uncached font: " + winFont);
-#endif
                 }
             }
             else
@@ -219,9 +206,6 @@ namespace System.Windows.Forms.Internal
                 winFont.OwnedByCacheManager = true;
                 WindowsFontCache.Add(newEntry);
 
-#if GDI_FONT_CACHE_TRACK
-                Debug.WriteLine( "Adding to cache: " + winFont );
-#endif
             }
             return winFont;
         }
