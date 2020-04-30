@@ -4241,42 +4241,42 @@ System.Windows.Forms.Screen.Bounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.Screen.Primary.get -> bool
 System.Windows.Forms.Screen.WorkingArea.get -> System.Drawing.Rectangle
 System.Windows.Forms.ScrollBar
-System.Windows.Forms.ScrollBar.AutoSizeChanged -> System.EventHandler
-System.Windows.Forms.ScrollBar.BackColorChanged -> System.EventHandler
-System.Windows.Forms.ScrollBar.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.ScrollBar.BackgroundImageLayoutChanged -> System.EventHandler
-System.Windows.Forms.ScrollBar.Click -> System.EventHandler
-System.Windows.Forms.ScrollBar.DoubleClick -> System.EventHandler
-System.Windows.Forms.ScrollBar.FontChanged -> System.EventHandler
-System.Windows.Forms.ScrollBar.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.ScrollBar.AutoSizeChanged -> System.EventHandler?
+System.Windows.Forms.ScrollBar.BackColorChanged -> System.EventHandler?
+System.Windows.Forms.ScrollBar.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.ScrollBar.BackgroundImageLayoutChanged -> System.EventHandler?
+System.Windows.Forms.ScrollBar.Click -> System.EventHandler?
+System.Windows.Forms.ScrollBar.DoubleClick -> System.EventHandler?
+System.Windows.Forms.ScrollBar.FontChanged -> System.EventHandler?
+System.Windows.Forms.ScrollBar.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.ScrollBar.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.ScrollBar.ImeMode.set -> void
-System.Windows.Forms.ScrollBar.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.ScrollBar.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.ScrollBar.LargeChange.get -> int
 System.Windows.Forms.ScrollBar.LargeChange.set -> void
 System.Windows.Forms.ScrollBar.Maximum.get -> int
 System.Windows.Forms.ScrollBar.Maximum.set -> void
 System.Windows.Forms.ScrollBar.Minimum.get -> int
 System.Windows.Forms.ScrollBar.Minimum.set -> void
-System.Windows.Forms.ScrollBar.MouseClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.ScrollBar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.ScrollBar.MouseDown -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.ScrollBar.MouseMove -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.ScrollBar.MouseUp -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.ScrollBar.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.ScrollBar.MouseClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.ScrollBar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.ScrollBar.MouseDown -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.ScrollBar.MouseMove -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.ScrollBar.MouseUp -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.ScrollBar.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.ScrollBar.ScaleScrollBarForDpiChange.get -> bool
 System.Windows.Forms.ScrollBar.ScaleScrollBarForDpiChange.set -> void
-System.Windows.Forms.ScrollBar.Scroll -> System.Windows.Forms.ScrollEventHandler
+System.Windows.Forms.ScrollBar.Scroll -> System.Windows.Forms.ScrollEventHandler?
 System.Windows.Forms.ScrollBar.ScrollBar() -> void
 System.Windows.Forms.ScrollBar.SmallChange.get -> int
 System.Windows.Forms.ScrollBar.SmallChange.set -> void
 System.Windows.Forms.ScrollBar.TabStop.get -> bool
 System.Windows.Forms.ScrollBar.TabStop.set -> void
-System.Windows.Forms.ScrollBar.TextChanged -> System.EventHandler
+System.Windows.Forms.ScrollBar.TextChanged -> System.EventHandler?
 System.Windows.Forms.ScrollBar.UpdateScrollInfo() -> void
 System.Windows.Forms.ScrollBar.Value.get -> int
 System.Windows.Forms.ScrollBar.Value.set -> void
-System.Windows.Forms.ScrollBar.ValueChanged -> System.EventHandler
+System.Windows.Forms.ScrollBar.ValueChanged -> System.EventHandler?
 System.Windows.Forms.ScrollBarRenderer
 System.Windows.Forms.ScrollBars
 System.Windows.Forms.ScrollBars.Both = 3 -> System.Windows.Forms.ScrollBars
@@ -6190,7 +6190,7 @@ System.Windows.Forms.UserControl.Load -> System.EventHandler
 System.Windows.Forms.UserControl.TextChanged -> System.EventHandler
 System.Windows.Forms.UserControl.UserControl() -> void
 System.Windows.Forms.VScrollBar
-System.Windows.Forms.VScrollBar.RightToLeftChanged -> System.EventHandler
+System.Windows.Forms.VScrollBar.RightToLeftChanged -> System.EventHandler?
 System.Windows.Forms.VScrollBar.VScrollBar() -> void
 System.Windows.Forms.VScrollProperties
 System.Windows.Forms.ValidationConstraints
@@ -9889,7 +9889,7 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~System.Windows.Forms.GridItemCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.GridItemCollection.this[int index].get -> System.Windows.Forms.GridItem
 ~System.Windows.Forms.GridItemCollection.this[string label].get -> System.Windows.Forms.GridItem
-~System.Windows.Forms.HScrollProperties.HScrollProperties(System.Windows.Forms.ScrollableControl container) -> void
+System.Windows.Forms.HScrollProperties.HScrollProperties(System.Windows.Forms.ScrollableControl? container) -> void
 ~System.Windows.Forms.HelpProvider.Tag.get -> object
 ~System.Windows.Forms.HelpProvider.Tag.set -> void
 ~System.Windows.Forms.HtmlDocument.ActiveElement.get -> System.Windows.Forms.HtmlElement
@@ -10512,8 +10512,8 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
 ~System.Windows.Forms.SaveFileDialog.OpenFile() -> System.IO.Stream
 ~System.Windows.Forms.Screen.DeviceName.get -> string
-~System.Windows.Forms.ScrollProperties.ParentControl.get -> System.Windows.Forms.ScrollableControl
-~System.Windows.Forms.ScrollProperties.ScrollProperties(System.Windows.Forms.ScrollableControl container) -> void
+System.Windows.Forms.ScrollProperties.ParentControl.get -> System.Windows.Forms.ScrollableControl?
+System.Windows.Forms.ScrollProperties.ScrollProperties(System.Windows.Forms.ScrollableControl? container) -> void
 ~System.Windows.Forms.ScrollableControl.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges
 ~System.Windows.Forms.ScrollableControl.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties
 ~System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control activeControl) -> void
@@ -10962,7 +10962,7 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~System.Windows.Forms.TypeValidationEventArgs.TypeValidationEventArgs(System.Type validatingType, bool isValidInput, object returnValue, string message) -> void
 ~System.Windows.Forms.TypeValidationEventArgs.ValidatingType.get -> System.Type
 ~System.Windows.Forms.UpDownBase.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges
-~System.Windows.Forms.VScrollProperties.VScrollProperties(System.Windows.Forms.ScrollableControl container) -> void
+System.Windows.Forms.VScrollProperties.VScrollProperties(System.Windows.Forms.ScrollableControl? container) -> void
 ~System.Windows.Forms.WebBrowser.Document.get -> System.Windows.Forms.HtmlDocument
 ~System.Windows.Forms.WebBrowser.DocumentStream.get -> System.IO.Stream
 ~System.Windows.Forms.WebBrowser.DocumentStream.set -> void
@@ -11507,7 +11507,7 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~override System.Windows.Forms.GroupBox.Text.get -> string
 ~override System.Windows.Forms.GroupBox.Text.set -> void
 ~override System.Windows.Forms.GroupBox.ToString() -> string
-~override System.Windows.Forms.HScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams
+override System.Windows.Forms.HScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
 ~override System.Windows.Forms.HelpProvider.ToString() -> string
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
@@ -11780,17 +11780,17 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~override System.Windows.Forms.RichTextBox.Text.set -> void
 ~override System.Windows.Forms.Screen.Equals(object obj) -> bool
 ~override System.Windows.Forms.Screen.ToString() -> string
-~override System.Windows.Forms.ScrollBar.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.ScrollBar.BackgroundImage.set -> void
-~override System.Windows.Forms.ScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ScrollBar.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.ScrollBar.Font.set -> void
-~override System.Windows.Forms.ScrollBar.OnEnabledChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ScrollBar.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.ScrollBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
-~override System.Windows.Forms.ScrollBar.Text.get -> string
-~override System.Windows.Forms.ScrollBar.Text.set -> void
-~override System.Windows.Forms.ScrollBar.ToString() -> string
+override System.Windows.Forms.ScrollBar.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ScrollBar.BackgroundImage.set -> void
+override System.Windows.Forms.ScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ScrollBar.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ScrollBar.Font.set -> void
+override System.Windows.Forms.ScrollBar.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ScrollBar.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ScrollBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.ScrollBar.Text.get -> string!
+override System.Windows.Forms.ScrollBar.Text.set -> void
+override System.Windows.Forms.ScrollBar.ToString() -> string!
 ~override System.Windows.Forms.ScrollableControl.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.ScrollableControl.DockPaddingEdges.Equals(object other) -> bool
 ~override System.Windows.Forms.ScrollableControl.DockPaddingEdges.ToString() -> string
@@ -12141,7 +12141,7 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~override System.Windows.Forms.UserControl.OnResize(System.EventArgs e) -> void
 ~override System.Windows.Forms.UserControl.Text.get -> string
 ~override System.Windows.Forms.UserControl.Text.set -> void
-~override System.Windows.Forms.VScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams
+override System.Windows.Forms.VScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
 ~override System.Windows.Forms.WebBrowser.AttachInterfaces(object nativeActiveXObject) -> void
 ~override System.Windows.Forms.WebBrowser.CreateWebBrowserSiteBase() -> System.Windows.Forms.WebBrowserSiteBase
 ~override System.Windows.Forms.WebBrowserBase.BackgroundImage.get -> System.Drawing.Image
@@ -13107,8 +13107,8 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~virtual System.Windows.Forms.RichTextBox.OnProtected(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnSelectionChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnVScroll(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ScrollBar.OnScroll(System.Windows.Forms.ScrollEventArgs se) -> void
-~virtual System.Windows.Forms.ScrollBar.OnValueChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.ScrollBar.OnScroll(System.Windows.Forms.ScrollEventArgs! se) -> void
+virtual System.Windows.Forms.ScrollBar.OnValueChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ScrollableControl.OnScroll(System.Windows.Forms.ScrollEventArgs se) -> void
 ~virtual System.Windows.Forms.ScrollableControl.ScrollToControl(System.Windows.Forms.Control activeControl) -> System.Drawing.Point
 ~virtual System.Windows.Forms.Splitter.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs sevent) -> void

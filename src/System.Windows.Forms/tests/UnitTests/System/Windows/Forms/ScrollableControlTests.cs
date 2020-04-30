@@ -1994,18 +1994,42 @@ namespace System.Windows.Forms.Tests
 
 #pragma warning disable 0618
         [WinFormsFact]
-        public void ScrollableControl_ScaleCore_InvokeWithDockPadding_Success()
+        public void ScrollableControl_Scale_InvokeWithoutPaddingWithDockPadding_Success()
         {
-            using var control = new ScrollableControl
+            using var control = new SubScrollableControl();
+            Assert.Equal(0, control.DockPadding.Left);
+            Assert.Equal(0, control.DockPadding.Top);
+            Assert.Equal(0, control.DockPadding.Right);
+            Assert.Equal(0, control.DockPadding.Bottom);
+            control.Scale(10, 20);
+
+            Assert.Equal(0, control.DockPadding.Left);
+            Assert.Equal(0, control.DockPadding.Top);
+            Assert.Equal(0, control.DockPadding.Right);
+            Assert.Equal(0, control.DockPadding.Bottom);
+            Assert.Equal(Padding.Empty, control.Padding);
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_Scale_InvokeWithoutPaddingWithoutDockPadding_Success()
+        {
+            using var control = new SubScrollableControl();
+            control.Scale(10, 20);
+            Assert.Equal(0, control.DockPadding.Left);
+            Assert.Equal(0, control.DockPadding.Top);
+            Assert.Equal(0, control.DockPadding.Right);
+            Assert.Equal(0, control.DockPadding.Bottom);
+            Assert.Equal(Padding.Empty, control.Padding);
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_Scale_InvokeWithPaddingWithDockPadding_Success()
+        {
+            using var control = new SubScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
-            Assert.Equal(1, control.DockPadding.Left);
-            Assert.Equal(2, control.DockPadding.Top);
-            Assert.Equal(3, control.DockPadding.Right);
-            Assert.Equal(4, control.DockPadding.Bottom);
             control.Scale(10, 20);
-
             Assert.Equal(1, control.DockPadding.Left);
             Assert.Equal(2, control.DockPadding.Top);
             Assert.Equal(3, control.DockPadding.Right);
@@ -2014,15 +2038,85 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ScrollableControl_ScaleCore_InvokeWithoutDockPadding_Success()
+        public void ScrollableControl_Scale_InvokeWithPaddingWithoutDockPadding_Success()
         {
-            using var control = new ScrollableControl();
+            using var control = new SubScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
+            Assert.Equal(1, control.DockPadding.Left);
+            Assert.Equal(2, control.DockPadding.Top);
+            Assert.Equal(3, control.DockPadding.Right);
+            Assert.Equal(4, control.DockPadding.Bottom);
             control.Scale(10, 20);
+            Assert.Equal(1, control.DockPadding.Left);
+            Assert.Equal(2, control.DockPadding.Top);
+            Assert.Equal(3, control.DockPadding.Right);
+            Assert.Equal(4, control.DockPadding.Bottom);
+            Assert.Equal(new Padding(1, 2, 3, 4), control.Padding);
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_ScaleCore_InvokeWithoutPaddingWithDockPadding_Success()
+        {
+            using var control = new SubScrollableControl();
+            Assert.Equal(0, control.DockPadding.Left);
+            Assert.Equal(0, control.DockPadding.Top);
+            Assert.Equal(0, control.DockPadding.Right);
+            Assert.Equal(0, control.DockPadding.Bottom);
+            control.ScaleCore(10, 20);
+
             Assert.Equal(0, control.DockPadding.Left);
             Assert.Equal(0, control.DockPadding.Top);
             Assert.Equal(0, control.DockPadding.Right);
             Assert.Equal(0, control.DockPadding.Bottom);
             Assert.Equal(Padding.Empty, control.Padding);
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_ScaleCore_InvokeWithoutPaddingWithoutDockPadding_Success()
+        {
+            using var control = new SubScrollableControl();
+            control.ScaleCore(10, 20);
+            Assert.Equal(0, control.DockPadding.Left);
+            Assert.Equal(0, control.DockPadding.Top);
+            Assert.Equal(0, control.DockPadding.Right);
+            Assert.Equal(0, control.DockPadding.Bottom);
+            Assert.Equal(Padding.Empty, control.Padding);
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_ScaleCore_InvokeWithPaddingWithDockPadding_Success()
+        {
+            using var control = new SubScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
+            control.ScaleCore(10, 20);
+            Assert.Equal(1, control.DockPadding.Left);
+            Assert.Equal(2, control.DockPadding.Top);
+            Assert.Equal(3, control.DockPadding.Right);
+            Assert.Equal(4, control.DockPadding.Bottom);
+            Assert.Equal(new Padding(1, 2, 3, 4), control.Padding);
+        }
+
+        [WinFormsFact]
+        public void ScrollableControl_ScaleCore_InvokeWithPaddingWithoutDockPadding_Success()
+        {
+            using var control = new SubScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
+            Assert.Equal(1, control.DockPadding.Left);
+            Assert.Equal(2, control.DockPadding.Top);
+            Assert.Equal(3, control.DockPadding.Right);
+            Assert.Equal(4, control.DockPadding.Bottom);
+            control.ScaleCore(10, 20);
+            Assert.Equal(1, control.DockPadding.Left);
+            Assert.Equal(2, control.DockPadding.Top);
+            Assert.Equal(3, control.DockPadding.Right);
+            Assert.Equal(4, control.DockPadding.Bottom);
+            Assert.Equal(new Padding(1, 2, 3, 4), control.Padding);
         }
 #pragma warning restore 0618
 
@@ -2495,6 +2589,8 @@ namespace System.Windows.Forms.Tests
             public new void OnRightToLeftChanged(EventArgs e) => base.OnRightToLeftChanged(e);
 
             public new void OnScroll(ScrollEventArgs se) => base.OnScroll(se);
+
+            public new void ScaleCore(float dx, float dy) => base.ScaleCore(dx, dy);
 
             public new void SetDisplayRectLocation(int x, int y) => base.SetDisplayRectLocation(x, y);
 
