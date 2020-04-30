@@ -1703,95 +1703,88 @@ namespace System.Windows.Forms
         ///  Ensures that the caret is visible in the TextBox window, by scrolling the
         ///  TextBox control surface if necessary.
         /// </summary>
-        public void ScrollToCaret()
+        public unsafe void ScrollToCaret()
         {
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                if (string.IsNullOrEmpty(WindowText))
-                {
-                    // If there is no text, then there is no place to go.
-                    return;
-                }
+                textBoxFlags[scrollToCaretOnHandleCreated] = true;
+                return;
+            }
 
-                bool scrolled = false;
-                object editOle = null;
-                IntPtr editOlePtr = IntPtr.Zero;
-                try
+            if (string.IsNullOrEmpty(WindowText))
+            {
+                // If there is no text, then there is no place to go.
+                return;
+            }
+
+            bool scrolled = false;
+            IntPtr editOlePtr = IntPtr.Zero;
+            try
+            {
+                if (SendMessageW(this, (WM)RichEditMessages.EM_GETOLEINTERFACE, IntPtr.Zero, ref editOlePtr) != IntPtr.Zero)
                 {
-                    if (UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichEditMessages.EM_GETOLEINTERFACE, 0, out editOle) != 0)
+                    IntPtr iTextDocument = IntPtr.Zero;
+                    Guid iiTextDocumentGuid = typeof(Richedit.ITextDocument).GUID;
+
+                    try
                     {
-                        editOlePtr = Marshal.GetIUnknownForObject(editOle);
+                        Marshal.QueryInterface(editOlePtr, ref iiTextDocumentGuid, out iTextDocument);
 
-                        if (editOlePtr != IntPtr.Zero)
+                        if (Marshal.GetObjectForIUnknown(iTextDocument) is Richedit.ITextDocument textDocument)
                         {
-                            IntPtr iTextDocument = IntPtr.Zero;
-                            Guid iiTextDocumentGuid = typeof(Richedit.ITextDocument).GUID;
+                            // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
+                            // much text as possible.
+                            // Here is how we do that:
+                            // 1. We scroll the RichTextBox all the way to the bottom so the last line of text is the last visible line.
+                            // 2. We get the first visible line.
+                            // 3. If the first visible line is smaller than the start of the selection, then we are done:
+                            //      The selection fits inside the RichTextBox display rectangle.
+                            // 4. Otherwise, scroll the selection to the top of the RichTextBox.
+                            GetSelectionStartAndLength(out int selStart, out int selLength);
+                            int selStartLine = GetLineFromCharIndex(selStart);
 
-                            try
+                            // 1. Scroll the RichTextBox all the way to the bottom
+                            Richedit.ITextRange textRange = textDocument.Range(WindowText.Length - 1, WindowText.Length - 1);
+                            textRange.ScrollIntoView(0);   // 0 ==> tomEnd
+
+                            // 2. Get the first visible line.
+                            int firstVisibleLine = unchecked((int)(long)SendMessageW(this, (WM)EM.GETFIRSTVISIBLELINE));
+
+                            // 3. If the first visible line is smaller than the start of the selection, we are done;
+                            if (firstVisibleLine <= selStartLine)
                             {
-                                Marshal.QueryInterface(editOlePtr, ref iiTextDocumentGuid, out iTextDocument);
-
-                                if (Marshal.GetObjectForIUnknown(iTextDocument) is Richedit.ITextDocument textDocument)
-                                {
-                                    // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
-                                    // much text as possible.
-                                    // Here is how we do that:
-                                    // 1. We scroll the RichTextBox all the way to the bottom so the last line of text is the last visible line.
-                                    // 2. We get the first visible line.
-                                    // 3. If the first visible line is smaller than the start of the selection, then we are done:
-                                    //      The selection fits inside the RichTextBox display rectangle.
-                                    // 4. Otherwise, scroll the selection to the top of the RichTextBox.
-                                    GetSelectionStartAndLength(out int selStart, out int selLength);
-                                    int selStartLine = GetLineFromCharIndex(selStart);
-
-                                    // 1. Scroll the RichTextBox all the way to the bottom
-                                    Richedit.ITextRange textRange = textDocument.Range(WindowText.Length - 1, WindowText.Length - 1);
-                                    textRange.ScrollIntoView(0);   // 0 ==> tomEnd
-
-                                    // 2. Get the first visible line.
-                                    int firstVisibleLine = unchecked((int)(long)SendMessageW(this, (WM)EM.GETFIRSTVISIBLELINE));
-
-                                    // 3. If the first visible line is smaller than the start of the selection, we are done;
-                                    if (firstVisibleLine <= selStartLine)
-                                    {
-                                        // we are done
-                                    }
-                                    else
-                                    {
-                                        // 4. Scroll the selection to the top of the RichTextBox
-                                        textRange = textDocument.Range(selStart, selStart + selLength);
-                                        textRange.ScrollIntoView(32);   // 32 ==> tomStart
-                                    }
-
-                                    scrolled = true;
-                                }
+                                // we are done
                             }
-                            finally
+                            else
                             {
-                                if (iTextDocument != IntPtr.Zero)
-                                {
-                                    Marshal.Release(iTextDocument);
-                                }
+                                // 4. Scroll the selection to the top of the RichTextBox
+                                textRange = textDocument.Range(selStart, selStart + selLength);
+                                textRange.ScrollIntoView(32);   // 32 ==> tomStart
                             }
+
+                            scrolled = true;
+                        }
+                    }
+                    finally
+                    {
+                        if (iTextDocument != IntPtr.Zero)
+                        {
+                            Marshal.Release(iTextDocument);
                         }
                     }
                 }
-                finally
+            }
+            finally
+            {
+                if (editOlePtr != IntPtr.Zero)
                 {
-                    if (editOlePtr != IntPtr.Zero)
-                    {
-                        Marshal.Release(editOlePtr);
-                    }
-                }
-
-                if (!scrolled)
-                {
-                    SendMessageW(this, (WM)EM.SCROLLCARET);
+                    Marshal.Release(editOlePtr);
                 }
             }
-            else
+
+            if (!scrolled)
             {
-                textBoxFlags[scrollToCaretOnHandleCreated] = true;
+                SendMessageW(this, (WM)EM.SCROLLCARET);
             }
         }
 
