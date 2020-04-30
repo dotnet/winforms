@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using System.Threading;
 using WFCTestLib.Log;
 using ReflectTools;
@@ -117,8 +118,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
     {
         public static void RaiseMouseClick(int x, int y)
         {
-            POINT previousPosition = new POINT();
-            bool setOldCursorPos = UnsafeNativeMethods.GetPhysicalCursorPos(ref previousPosition);
+            var previousPosition = new Point();
+            BOOL setOldCursorPos = User32.GetPhysicalCursorPos(ref previousPosition);
 
             bool mouseSwapped = User32.GetSystemMetrics(User32.SystemMetric.SM_SWAPBUTTON) != 0;
 
@@ -129,9 +130,9 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Threading.Thread.Sleep(50);
 
             // Set back the mouse position where it was.
-            if (setOldCursorPos)
+            if (setOldCursorPos.IsTrue())
             {
-                SendMouseInput(previousPosition.x, previousPosition.y, User32.MOUSEEVENTF.MOVE | User32.MOUSEEVENTF.ABSOLUTE);
+                SendMouseInput(previousPosition.X, previousPosition.Y, User32.MOUSEEVENTF.MOVE | User32.MOUSEEVENTF.ABSOLUTE);
             }
         }
 
