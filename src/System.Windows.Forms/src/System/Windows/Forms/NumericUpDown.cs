@@ -509,7 +509,7 @@ namespace System.Windows.Forms
             {
                 // Eat this invalid key and beep
                 e.Handled = true;
-                SafeNativeMethods.MessageBeep(0);
+                User32.MessageBeep(User32.MB.OK);
             }
         }
 

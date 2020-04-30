@@ -3455,9 +3455,8 @@ namespace System.Windows.Forms
                                     return;
 
                                 // Beep and disallow change for all other messages
-                                //
                                 default:
-                                    SafeNativeMethods.MessageBeep(0);
+                                    User32.MessageBeep(User32.MB.OK);
                                     break;
                             }
 
