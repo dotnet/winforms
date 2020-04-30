@@ -2662,21 +2662,7 @@ namespace System.Windows.Forms
                         firstDisplayedRowIndex = displayedBandsInfo.FirstDisplayedScrollingRow;
                     }
                 }
-#if FALSE //DEBUG
-                int firstDisplayedRowIndexDbg1 = this.Rows.GetFirstRow(DataGridViewElementStates.Displayed);
 
-                int firstDisplayedRowIndexDbg2 = this.Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
-                if (firstDisplayedRowIndexDbg2 == -1)
-                {
-                    if (this.displayedBandsInfo.FirstDisplayedScrollingRow >= 0)
-                    {
-                        firstDisplayedRowIndexDbg2 = this.displayedBandsInfo.FirstDisplayedScrollingRow;
-                    }
-                }
-
-                Debug.Assert(firstDisplayedRowIndex == firstDisplayedRowIndexDbg1 || !this.Visible || this.displayedBandsInfo.Dirty, "firstDisplayedRowIndex =" + firstDisplayedRowIndex.ToString() + ", firstDisplayedRowIndexDbg1=" + firstDisplayedRowIndexDbg1.ToString());
-                Debug.Assert(firstDisplayedRowIndex == firstDisplayedRowIndexDbg2 || this.displayedBandsInfo.Dirty, "firstDisplayedRowIndex =" + firstDisplayedRowIndex.ToString() + ", firstDisplayedRowIndexDbg2=" + firstDisplayedRowIndexDbg2.ToString());
-#endif
                 return firstDisplayedRowIndex;
             }
         }

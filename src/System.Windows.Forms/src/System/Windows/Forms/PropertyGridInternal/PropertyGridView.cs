@@ -28,21 +28,17 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         protected static readonly Point InvalidPoint = new Point(int.MinValue, int.MinValue);
 
-#if true // RENDERMODE
         public const int RENDERMODE_LEFTDOT = 2;
         public const int RENDERMODE_BOLD = 3;
         public const int RENDERMODE_TRIANGLE = 4;
 
         public static int inheritRenderMode = RENDERMODE_BOLD;
-#endif
 
         public static TraceSwitch GridViewDebugPaint = new TraceSwitch("GridViewDebugPaint", "PropertyGridView: Debug property painting");
 
         private PropertyGrid ownerGrid;                      // the properties window host.
 
-#if true // RENDERMODE
         private const int LEFTDOT_SIZE = 4;
-#endif
         // constants
         private const int EDIT_INDENT = 0;
         private const int OUTLINE_INDENT = 10;
@@ -4992,7 +4988,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             Edit.AccessibleName = gridEntry.Label;
 
-#if true // RENDERMODE
             switch (inheritRenderMode)
             {
                 case RENDERMODE_BOLD:
@@ -5017,7 +5012,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // nothing
                     break;
             }
-#endif
 
             if (GetFlag(FlagIsSplitterMove) || !gridEntry.HasValue || !FocusInside)
             {

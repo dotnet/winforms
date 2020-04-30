@@ -6758,19 +6758,6 @@ namespace System.Windows.Forms
             return brush;
         }
 
-#if DGV_GDI
-        internal WindowsSolidBrush GetCachedWindowsBrush(Color color)
-        {
-            WindowsSolidBrush brush = (WindowsSolidBrush)this.brushes[color];
-            if (brush == null)
-            {
-                brush = new WindowsSolidBrush(color);
-                this.brushes.Add(color, brush);
-            }
-            return brush;
-        }
-#endif // DGV_GDI
-
         internal Pen GetCachedPen(Color color)
         {
             Pen pen = (Pen)pens[color];
@@ -6781,19 +6768,6 @@ namespace System.Windows.Forms
             }
             return pen;
         }
-
-#if DGV_GDI
-        internal WindowsPen GetCachedWindowsPen(Color color)
-        {
-            WindowsPen pen = (WindowsPen)this.pens[color];
-            if (pen == null)
-            {
-                pen = new WindowsPen(color);
-                this.pens.Add(color, pen);
-            }
-            return pen;
-        }
-#endif // DGV_GDI
 
         internal TypeConverter GetCachedTypeConverter(Type type)
         {
@@ -26290,15 +26264,6 @@ namespace System.Windows.Forms
                                 ptAnchorCell.X = columnIndex;
                                 ptAnchorCell.Y = rowIndex;
                             }
-
-#if FALSE
-                            if (this.dataGridViewState2[DATAGRIDVIEWSTATE2_rowsCollectionClearedInSetCell])
-                            {
-                                // DATAGRIDVIEWSTATE2_rowsCollectionClearedInSetCell bit will be cleared while executing the
-                                // "finally" block.
-                                return true;
-                            }
-#endif
 
                             currentCell = CurrentCellInternal;
                             if (currentCell.EnterUnsharesRowInternal(rowIndex, throughMouseClick))

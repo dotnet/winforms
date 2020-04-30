@@ -2932,7 +2932,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             return GetType().FullName + " " + PropertyLabel;
         }
 
-#if !DONT_SUPPORT_ADD_EVENT_HANDLER
         private EventEntry eventList;
 
         protected virtual void AddEventHandler(object key, Delegate handler)
@@ -3032,7 +3031,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 this.handler = handler;
             }
         }
-#endif
 
         [ComVisible(true)]
         public class GridEntryAccessibleObject : AccessibleObject
