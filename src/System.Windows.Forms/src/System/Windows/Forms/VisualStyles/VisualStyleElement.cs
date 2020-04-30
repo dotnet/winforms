@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms.VisualStyles
 {
     /// <summary>
@@ -14,23 +12,23 @@ namespace System.Windows.Forms.VisualStyles
     public class VisualStyleElement
     {
         internal static readonly int Count = 25; //UPDATE THIS WHEN CLASSES ARE ADDED/REMOVED!
-        private readonly string className;
+        private readonly string? className;
         private readonly int part;
         private readonly int state;
 
-        private VisualStyleElement(string className, int part, int state)
+        private VisualStyleElement(string? className, int part, int state)
         {
             this.className = className;
             this.part = part;
             this.state = state;
         }
 
-        public static VisualStyleElement CreateElement(string className, int part, int state)
+        public static VisualStyleElement CreateElement(string? className, int part, int state)
         {
             return new VisualStyleElement(className, part, state);
         }
 
-        public string ClassName
+        public string? ClassName
         {
             get
             {
@@ -62,23 +60,23 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement _default;
+                private static VisualStyleElement? _default;
 
                 public static VisualStyleElement Default => _default ??= new VisualStyleElement(className, part, 5);
             }
@@ -89,35 +87,35 @@ namespace System.Windows.Forms.VisualStyles
                 // in Win10 RS3 a new part was added to BUTTONPARTS enum in vsstyle.h  - BP_RADIOBUTTON_HCDISABLED = 8
                 internal static readonly int HighContrastDisabledPart = 8;
 
-                private static VisualStyleElement uncheckednormal;
+                private static VisualStyleElement? uncheckednormal;
 
                 public static VisualStyleElement UncheckedNormal => uncheckednormal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement uncheckedhot;
+                private static VisualStyleElement? uncheckedhot;
 
                 public static VisualStyleElement UncheckedHot => uncheckedhot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement uncheckedpressed;
+                private static VisualStyleElement? uncheckedpressed;
 
                 public static VisualStyleElement UncheckedPressed => uncheckedpressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement uncheckeddisabled;
+                private static VisualStyleElement? uncheckeddisabled;
 
                 public static VisualStyleElement UncheckedDisabled => uncheckeddisabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement checkednormal;
+                private static VisualStyleElement? checkednormal;
 
                 public static VisualStyleElement CheckedNormal => checkednormal ??= new VisualStyleElement(className, part, 5);
 
-                private static VisualStyleElement checkedhot;
+                private static VisualStyleElement? checkedhot;
 
                 public static VisualStyleElement CheckedHot => checkedhot ??= new VisualStyleElement(className, part, 6);
 
-                private static VisualStyleElement checkedpressed;
+                private static VisualStyleElement? checkedpressed;
 
                 public static VisualStyleElement CheckedPressed => checkedpressed ??= new VisualStyleElement(className, part, 7);
 
-                private static VisualStyleElement checkeddisabled;
+                private static VisualStyleElement? checkeddisabled;
 
                 public static VisualStyleElement CheckedDisabled => checkeddisabled ??= new VisualStyleElement(className, part, 8);
             }
@@ -128,51 +126,51 @@ namespace System.Windows.Forms.VisualStyles
                 // in Win10 RS3 a new part was added to BUTTONPARTS enum in vsstyle.h  - BP_CHECKBOX_HCDISABLED = 9
                 internal static readonly int HighContrastDisabledPart = 9;
 
-                private static VisualStyleElement uncheckednormal;
+                private static VisualStyleElement? uncheckednormal;
 
                 public static VisualStyleElement UncheckedNormal => uncheckednormal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement uncheckedhot;
+                private static VisualStyleElement? uncheckedhot;
 
                 public static VisualStyleElement UncheckedHot => uncheckedhot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement uncheckedpressed;
+                private static VisualStyleElement? uncheckedpressed;
 
                 public static VisualStyleElement UncheckedPressed => uncheckedpressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement uncheckeddisabled;
+                private static VisualStyleElement? uncheckeddisabled;
 
                 public static VisualStyleElement UncheckedDisabled => uncheckeddisabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement checkednormal;
+                private static VisualStyleElement? checkednormal;
 
                 public static VisualStyleElement CheckedNormal => checkednormal ??= new VisualStyleElement(className, part, 5);
 
-                private static VisualStyleElement checkedhot;
+                private static VisualStyleElement? checkedhot;
 
                 public static VisualStyleElement CheckedHot => checkedhot ??= new VisualStyleElement(className, part, 6);
 
-                private static VisualStyleElement checkedpressed;
+                private static VisualStyleElement? checkedpressed;
 
                 public static VisualStyleElement CheckedPressed => checkedpressed ??= new VisualStyleElement(className, part, 7);
 
-                private static VisualStyleElement checkeddisabled;
+                private static VisualStyleElement? checkeddisabled;
 
                 public static VisualStyleElement CheckedDisabled => checkeddisabled ??= new VisualStyleElement(className, part, 8);
 
-                private static VisualStyleElement mixednormal;
+                private static VisualStyleElement? mixednormal;
 
                 public static VisualStyleElement MixedNormal => mixednormal ??= new VisualStyleElement(className, part, 9);
 
-                private static VisualStyleElement mixedhot;
+                private static VisualStyleElement? mixedhot;
 
                 public static VisualStyleElement MixedHot => mixedhot ??= new VisualStyleElement(className, part, 10);
 
-                private static VisualStyleElement mixedpressed;
+                private static VisualStyleElement? mixedpressed;
 
                 public static VisualStyleElement MixedPressed => mixedpressed ??= new VisualStyleElement(className, part, 11);
 
-                private static VisualStyleElement mixeddisabled;
+                private static VisualStyleElement? mixeddisabled;
 
                 public static VisualStyleElement MixedDisabled => mixeddisabled ??= new VisualStyleElement(className, part, 12);
             }
@@ -183,11 +181,11 @@ namespace System.Windows.Forms.VisualStyles
                 // in Win10 RS3 a new part was added to BUTTONPARTS enum in vsstyle.h  - BP_GROUPBOX_HCDISABLED = 10
                 internal static readonly int HighContrastDisabledPart = 10;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 2);
             }
@@ -196,7 +194,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -210,19 +208,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -238,7 +236,7 @@ namespace System.Windows.Forms.VisualStyles
                 //  3 - Window Color (white by default)
                 //  4 - disabled (light gray by default)
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 3);
             }
@@ -254,7 +252,7 @@ namespace System.Windows.Forms.VisualStyles
                 //  3 - pressed (dark blue by default)
                 //  4 - flat (light gray by default)
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 2);
             }
@@ -271,7 +269,7 @@ namespace System.Windows.Forms.VisualStyles
                 //  3 - pressed (arrow with dark blue background by default)
                 //  4 - disabled (transparent background with just light arrow)
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
@@ -288,7 +286,7 @@ namespace System.Windows.Forms.VisualStyles
                 //  3 - pressed (dark blue by default)
                 //  4 - transparent disabled (just light arrow)
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 2);
             }
@@ -302,19 +300,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -323,19 +321,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -344,19 +342,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -365,19 +363,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -391,19 +389,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -412,19 +410,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -433,19 +431,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -454,19 +452,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -480,67 +478,67 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement upnormal;
+                private static VisualStyleElement? upnormal;
 
                 public static VisualStyleElement UpNormal => upnormal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement uphot;
+                private static VisualStyleElement? uphot;
 
                 public static VisualStyleElement UpHot => uphot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement uppressed;
+                private static VisualStyleElement? uppressed;
 
                 public static VisualStyleElement UpPressed => uppressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement updisabled;
+                private static VisualStyleElement? updisabled;
 
                 public static VisualStyleElement UpDisabled => updisabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement downnormal;
+                private static VisualStyleElement? downnormal;
 
                 public static VisualStyleElement DownNormal => downnormal ??= new VisualStyleElement(className, part, 5);
 
-                private static VisualStyleElement downhot;
+                private static VisualStyleElement? downhot;
 
                 public static VisualStyleElement DownHot => downhot ??= new VisualStyleElement(className, part, 6);
 
-                private static VisualStyleElement downpressed;
+                private static VisualStyleElement? downpressed;
 
                 public static VisualStyleElement DownPressed => downpressed ??= new VisualStyleElement(className, part, 7);
 
-                private static VisualStyleElement downdisabled;
+                private static VisualStyleElement? downdisabled;
 
                 public static VisualStyleElement DownDisabled => downdisabled ??= new VisualStyleElement(className, part, 8);
 
-                private static VisualStyleElement leftnormal;
+                private static VisualStyleElement? leftnormal;
 
                 public static VisualStyleElement LeftNormal => leftnormal ??= new VisualStyleElement(className, part, 9);
 
-                private static VisualStyleElement lefthot;
+                private static VisualStyleElement? lefthot;
 
                 public static VisualStyleElement LeftHot => lefthot ??= new VisualStyleElement(className, part, 10);
 
-                private static VisualStyleElement leftpressed;
+                private static VisualStyleElement? leftpressed;
 
                 public static VisualStyleElement LeftPressed => leftpressed ??= new VisualStyleElement(className, part, 11);
 
-                private static VisualStyleElement leftdisabled;
+                private static VisualStyleElement? leftdisabled;
 
                 public static VisualStyleElement LeftDisabled => leftdisabled ??= new VisualStyleElement(className, part, 12);
 
-                private static VisualStyleElement rightnormal;
+                private static VisualStyleElement? rightnormal;
 
                 public static VisualStyleElement RightNormal => rightnormal ??= new VisualStyleElement(className, part, 13);
 
-                private static VisualStyleElement righthot;
+                private static VisualStyleElement? righthot;
 
                 public static VisualStyleElement RightHot => righthot ??= new VisualStyleElement(className, part, 14);
 
-                private static VisualStyleElement rightpressed;
+                private static VisualStyleElement? rightpressed;
 
                 public static VisualStyleElement RightPressed => rightpressed ??= new VisualStyleElement(className, part, 15);
 
-                private static VisualStyleElement rightdisabled;
+                private static VisualStyleElement? rightdisabled;
 
                 public static VisualStyleElement RightDisabled => rightdisabled ??= new VisualStyleElement(className, part, 16);
             }
@@ -549,19 +547,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -570,19 +568,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -591,19 +589,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -612,19 +610,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -633,19 +631,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -654,19 +652,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -675,7 +673,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 8;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -684,7 +682,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 9;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -693,11 +691,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 10;
 
-                private static VisualStyleElement rightalign;
+                private static VisualStyleElement? rightalign;
 
                 public static VisualStyleElement RightAlign => rightalign ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement leftalign;
+                private static VisualStyleElement? leftalign;
 
                 public static VisualStyleElement LeftAlign => leftalign ??= new VisualStyleElement(className, part, 2);
             }
@@ -711,19 +709,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -732,19 +730,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -753,19 +751,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -774,7 +772,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -783,19 +781,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -804,19 +802,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -825,19 +823,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -846,7 +844,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 8;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -855,7 +853,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 9;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -864,7 +862,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 10;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -878,7 +876,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -887,15 +885,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -904,27 +902,27 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement selectednormal;
+                private static VisualStyleElement? selectednormal;
 
                 public static VisualStyleElement SelectedNormal => selectednormal ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement selectedhot;
+                private static VisualStyleElement? selectedhot;
 
                 public static VisualStyleElement SelectedHot => selectedhot ??= new VisualStyleElement(className, part, 5);
 
-                private static VisualStyleElement selectedpressed;
+                private static VisualStyleElement? selectedpressed;
 
                 public static VisualStyleElement SelectedPressed => selectedpressed ??= new VisualStyleElement(className, part, 6);
             }
@@ -933,15 +931,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -950,7 +948,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -959,15 +957,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -976,15 +974,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -993,7 +991,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 8;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1002,7 +1000,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 9;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1011,15 +1009,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 10;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -1028,15 +1026,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 11;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -1045,7 +1043,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 12;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1059,15 +1057,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -1076,15 +1074,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -1093,15 +1091,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -1110,11 +1108,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement sortedup;
+                private static VisualStyleElement? sortedup;
 
                 public static VisualStyleElement SortedUp => sortedup ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement sorteddown;
+                private static VisualStyleElement? sorteddown;
 
                 public static VisualStyleElement SortedDown => sorteddown ??= new VisualStyleElement(className, part, 2);
             }
@@ -1128,23 +1126,23 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement selected;
+                private static VisualStyleElement? selected;
 
                 public static VisualStyleElement Selected => selected ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement selectednotfocus;
+                private static VisualStyleElement? selectednotfocus;
 
                 public static VisualStyleElement SelectedNotFocus => selectednotfocus ??= new VisualStyleElement(className, part, 5);
             }
@@ -1153,7 +1151,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1162,7 +1160,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1171,7 +1169,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1180,7 +1178,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1194,27 +1192,27 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement _checked;
+                private static VisualStyleElement? _checked;
 
                 public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(className, part, 5);
 
-                private static VisualStyleElement hotchecked;
+                private static VisualStyleElement? hotchecked;
 
                 public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
@@ -1223,7 +1221,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1237,15 +1235,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement selected;
+                private static VisualStyleElement? selected;
 
                 public static VisualStyleElement Selected => selected ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement demoted;
+                private static VisualStyleElement? demoted;
 
                 public static VisualStyleElement Demoted => demoted ??= new VisualStyleElement(className, part, 3);
             }
@@ -1254,7 +1252,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1263,7 +1261,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1272,7 +1270,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1281,7 +1279,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1290,7 +1288,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1304,7 +1302,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1313,7 +1311,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1322,7 +1320,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1331,7 +1329,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1345,7 +1343,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1354,7 +1352,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1363,7 +1361,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1372,15 +1370,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -1389,15 +1387,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -1411,7 +1409,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1420,7 +1418,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1429,15 +1427,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -1446,7 +1444,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1455,7 +1453,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1464,7 +1462,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1473,7 +1471,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1483,7 +1481,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 8;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1493,15 +1491,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 9;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -1510,7 +1508,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 10;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1519,7 +1517,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 11;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1531,7 +1529,7 @@ namespace System.Windows.Forms.VisualStyles
 
             public static class Bar
             {
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, 0, 0);
             }
@@ -1540,7 +1538,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1549,7 +1547,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1558,7 +1556,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1572,7 +1570,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1581,7 +1579,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1590,7 +1588,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1604,7 +1602,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
@@ -1618,7 +1616,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1627,7 +1625,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1636,7 +1634,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1645,7 +1643,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1654,7 +1652,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1663,7 +1661,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1672,7 +1670,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1681,7 +1679,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 8;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1694,7 +1692,7 @@ namespace System.Windows.Forms.VisualStyles
             //
             internal static class Bar
             {
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, 0, 0);
             }
@@ -1703,27 +1701,27 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement _checked;
+                private static VisualStyleElement? _checked;
 
                 public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(className, part, 5);
 
-                private static VisualStyleElement hotchecked;
+                private static VisualStyleElement? hotchecked;
 
                 public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
@@ -1732,27 +1730,27 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement _checked;
+                private static VisualStyleElement? _checked;
 
                 public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(className, part, 5);
 
-                private static VisualStyleElement hotchecked;
+                private static VisualStyleElement? hotchecked;
 
                 public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
@@ -1761,27 +1759,27 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement _checked;
+                private static VisualStyleElement? _checked;
 
                 public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(className, part, 5);
 
-                private static VisualStyleElement hotchecked;
+                private static VisualStyleElement? hotchecked;
 
                 public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
@@ -1790,27 +1788,27 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement _checked;
+                private static VisualStyleElement? _checked;
 
                 public static VisualStyleElement Checked => _checked ??= new VisualStyleElement(className, part, 5);
 
-                private static VisualStyleElement hotchecked;
+                private static VisualStyleElement? hotchecked;
 
                 public static VisualStyleElement HotChecked => hotchecked ??= new VisualStyleElement(className, part, 6);
             }
@@ -1819,7 +1817,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1828,7 +1826,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1842,11 +1840,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement link;
+                private static VisualStyleElement? link;
 
                 public static VisualStyleElement Link => link ??= new VisualStyleElement(className, part, 2);
             }
@@ -1855,7 +1853,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1864,11 +1862,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement link;
+                private static VisualStyleElement? link;
 
                 public static VisualStyleElement Link => link ??= new VisualStyleElement(className, part, 2);
             }
@@ -1877,7 +1875,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -1886,15 +1884,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
             }
@@ -1908,7 +1906,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
@@ -1917,7 +1915,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
@@ -1926,23 +1924,23 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement focused;
+                private static VisualStyleElement? focused;
 
                 public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
@@ -1951,23 +1949,23 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement focused;
+                private static VisualStyleElement? focused;
 
                 public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
@@ -1976,23 +1974,23 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement focused;
+                private static VisualStyleElement? focused;
 
                 public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
@@ -2001,23 +1999,23 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement focused;
+                private static VisualStyleElement? focused;
 
                 public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
@@ -2026,23 +2024,23 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement focused;
+                private static VisualStyleElement? focused;
 
                 public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
@@ -2051,23 +2049,23 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 8;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement focused;
+                private static VisualStyleElement? focused;
 
                 public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 5);
             }
@@ -2076,7 +2074,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 9;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
@@ -2085,7 +2083,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 10;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
             }
@@ -2099,23 +2097,23 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement selected;
+                private static VisualStyleElement? selected;
 
                 public static VisualStyleElement Selected => selected ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement selectednotfocus;
+                private static VisualStyleElement? selectednotfocus;
 
                 public static VisualStyleElement SelectedNotFocus => selectednotfocus ??= new VisualStyleElement(className, part, 5);
             }
@@ -2124,11 +2122,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement closed;
+                private static VisualStyleElement? closed;
 
                 public static VisualStyleElement Closed => closed ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement opened;
+                private static VisualStyleElement? opened;
 
                 public static VisualStyleElement Opened => opened ??= new VisualStyleElement(className, part, 2);
             }
@@ -2137,7 +2135,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2151,11 +2149,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement closed;
+                private static VisualStyleElement? closed;
 
                 public static VisualStyleElement Closed => closed ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement opened;
+                private static VisualStyleElement? opened;
 
                 public static VisualStyleElement Opened => opened ??= new VisualStyleElement(className, part, 2);
             }
@@ -2169,31 +2167,31 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement selected;
+                private static VisualStyleElement? selected;
 
                 public static VisualStyleElement Selected => selected ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
 
-                private static VisualStyleElement focused;
+                private static VisualStyleElement? focused;
 
                 public static VisualStyleElement Focused => focused ??= new VisualStyleElement(className, part, 5);
 
-                private static VisualStyleElement _readonly;
+                private static VisualStyleElement? _readonly;
 
                 public static VisualStyleElement ReadOnly => _readonly ??= new VisualStyleElement(className, part, 6);
 
-                private static VisualStyleElement assist;
+                private static VisualStyleElement? assist;
 
                 public static VisualStyleElement Assist => assist ??= new VisualStyleElement(className, part, 7);
             }
@@ -2202,7 +2200,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2216,7 +2214,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2225,7 +2223,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2239,15 +2237,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 1;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
@@ -2256,15 +2254,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 2;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
@@ -2273,15 +2271,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 3;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
@@ -2290,15 +2288,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 4;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
@@ -2307,15 +2305,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 5;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
@@ -2324,15 +2322,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 6;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 3);
             }
@@ -2341,11 +2339,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 7;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
@@ -2354,11 +2352,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 8;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
@@ -2367,11 +2365,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 9;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
@@ -2380,11 +2378,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 10;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
@@ -2393,11 +2391,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 11;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
@@ -2406,11 +2404,11 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 12;
 
-                private static VisualStyleElement active;
+                private static VisualStyleElement? active;
 
                 public static VisualStyleElement Active => active ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement inactive;
+                private static VisualStyleElement? inactive;
 
                 public static VisualStyleElement Inactive => inactive ??= new VisualStyleElement(className, part, 2);
             }
@@ -2419,19 +2417,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 13;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2440,19 +2438,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 14;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2461,19 +2459,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 15;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2482,19 +2480,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 16;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2503,19 +2501,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 17;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2524,19 +2522,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 18;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2545,19 +2543,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 19;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2566,19 +2564,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 20;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2587,19 +2585,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 21;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2608,19 +2606,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 22;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2629,19 +2627,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 23;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2650,19 +2648,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 24;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2671,19 +2669,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 25;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2692,19 +2690,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 26;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2713,19 +2711,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 27;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2734,19 +2732,19 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 28;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 1);
 
-                private static VisualStyleElement hot;
+                private static VisualStyleElement? hot;
 
                 public static VisualStyleElement Hot => hot ??= new VisualStyleElement(className, part, 2);
 
-                private static VisualStyleElement pressed;
+                private static VisualStyleElement? pressed;
 
                 public static VisualStyleElement Pressed => pressed ??= new VisualStyleElement(className, part, 3);
 
-                private static VisualStyleElement disabled;
+                private static VisualStyleElement? disabled;
 
                 public static VisualStyleElement Disabled => disabled ??= new VisualStyleElement(className, part, 4);
             }
@@ -2755,7 +2753,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 29;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2764,7 +2762,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 30;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2773,7 +2771,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 31;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2782,7 +2780,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 32;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2791,7 +2789,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 33;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2801,7 +2799,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 34;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2811,7 +2809,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 35;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2820,7 +2818,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 36;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
@@ -2829,7 +2827,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 private static readonly int part = 37;
 
-                private static VisualStyleElement normal;
+                private static VisualStyleElement? normal;
 
                 public static VisualStyleElement Normal => normal ??= new VisualStyleElement(className, part, 0);
             }
