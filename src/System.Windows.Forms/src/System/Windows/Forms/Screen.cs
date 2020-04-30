@@ -106,7 +106,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets an array of all of the displays on the system.
         /// </summary>
-        public static Screen[] AllScreens
+        public unsafe static Screen[] AllScreens
         {
             get
             {
@@ -115,8 +115,8 @@ namespace System.Windows.Forms
                     if (multiMonitorSupport)
                     {
                         MonitorEnumCallback closure = new MonitorEnumCallback();
-                        NativeMethods.MonitorEnumProc proc = new NativeMethods.MonitorEnumProc(closure.Callback);
-                        SafeNativeMethods.EnumDisplayMonitors(NativeMethods.NullHandleRef, null, proc, IntPtr.Zero);
+                        var proc = new User32.MONITORENUMPROC(closure.Callback);
+                        User32.EnumDisplayMonitors(IntPtr.Zero, null, proc, IntPtr.Zero);
 
                         if (closure.screens.Count > 0)
                         {
@@ -456,10 +456,10 @@ namespace System.Windows.Forms
         {
             public ArrayList screens = new ArrayList();
 
-            public virtual bool Callback(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lparam)
+            public virtual BOOL Callback(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lparam)
             {
                 screens.Add(new Screen(monitor, hdc));
-                return true;
+                return BOOL.TRUE;
             }
         }
     }
