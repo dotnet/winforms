@@ -83,14 +83,10 @@ namespace System.Windows.Forms.Internal
                 return t_measurementGraphics;
             }
         }
-#if OPTIMIZED_MEASUREMENTDC
+
         // in some cases, we dont want to demand create MeasurementGraphics, as creating it has
         // re-entrant side effects.
-        internal static WindowsGraphics? GetCurrentMeasurementGraphics()
-        {
-            return t_measurementGraphics;
-        }
-#endif
+        internal static WindowsGraphics? GetCurrentMeasurementGraphics() => t_measurementGraphics;
 
         /// <summary>
         ///  Get the cached WindowsFont associated with the specified font if one exists, otherwise create one and
@@ -196,16 +192,13 @@ namespace System.Windows.Forms.Internal
                     // do not cache font - caller is ALWAYS responsible for
                     // disposing now.  If it is owned  by the CM, it will not
                     // disposed.
-
                     winFont.OwnedByCacheManager = false;
-
                 }
             }
             else
             {
                 winFont.OwnedByCacheManager = true;
                 WindowsFontCache.Add(newEntry);
-
             }
             return winFont;
         }

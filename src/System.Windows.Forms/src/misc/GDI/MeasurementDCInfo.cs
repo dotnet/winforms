@@ -13,7 +13,6 @@ namespace System.Windows.Forms.Internal
         ///  This prevents unnecessary p/invoke calls to GetCurrentObject, etc
         ///  It has been found to give close to 2x performance when drawing lots of text in rapid succession
         ///  DataGridView with lots of text, etc.
-        ///  To turn it on for your DLL, use the OPTIMIZED_MEASUREMENTDC compiler switch and add this class to the sources.
 
         [ThreadStatic]
         private static CachedInfo? t_cachedMeasurementDCInfo;
@@ -116,4 +115,3 @@ namespace System.Windows.Forms.Internal
         }
     }
 }
-#endif // OPTIMIZED_MEASUREMENTDC

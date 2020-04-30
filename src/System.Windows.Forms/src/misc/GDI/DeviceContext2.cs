@@ -84,7 +84,6 @@ namespace System.Windows.Forms.Internal
         {
             get
             {
-#if OPTIMIZED_MEASUREMENTDC
                 if (MeasurementDCInfo.IsMeasurementDC(this))
                 {
                     WindowsFont? font = MeasurementDCInfo.LastUsedFont;
@@ -104,7 +103,7 @@ namespace System.Windows.Forms.Internal
                         return font;
                     }
                 }
-#endif
+
                 // Returns the currently selected object in the dc.
                 // Note: for common DCs, GetDC assigns default attributes to the DC each time it is retrieved,
                 // the default font is System.
@@ -171,7 +170,6 @@ namespace System.Windows.Forms.Internal
                 }
             }
 
-#if OPTIMIZED_MEASUREMENTDC
             // once we've changed the font, update the last used font.
             if (MeasurementDCInfo.IsMeasurementDC(this))
             {
@@ -185,18 +183,15 @@ namespace System.Windows.Forms.Internal
                     MeasurementDCInfo.Reset();
                 }
             }
-#endif
             return result;
         }
 
         public void ResetFont()
         {
-#if OPTIMIZED_MEASUREMENTDC
             // in this case, GDI will copy back the previously saved font into the DC.
             // we dont actually know what the font is in our measurement DC so
             // we need to clear it off.
             MeasurementDCInfo.ResetIfIsMeasurementDC(Hdc);
-#endif
             Gdi32.SelectObject(new HandleRef(this, Hdc), _hInitialFont);
             ActiveFont = null;
             _hCurrentFont = _hInitialFont;

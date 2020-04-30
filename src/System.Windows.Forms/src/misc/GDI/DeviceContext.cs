@@ -391,13 +391,10 @@ namespace System.Windows.Forms.Internal
                 }
             }
 
-#if OPTIMIZED_MEASUREMENTDC
             // in this case, GDI will copy back the previously saved font into the DC.
             // we dont actually know what the font is in our measurement DC so
             // we need to clear it off.
             MeasurementDCInfo.ResetIfIsMeasurementDC(_hDC);
-#endif
-
         }
 
         /// <summary>
