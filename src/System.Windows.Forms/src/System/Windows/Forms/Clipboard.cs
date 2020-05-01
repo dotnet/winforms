@@ -316,6 +316,11 @@ namespace System.Windows.Forms
 
         public static object GetData(string format)
         {
+            if (string.IsNullOrWhiteSpace(format))
+            {
+                return null;
+            }
+
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null)
             {
@@ -397,6 +402,16 @@ namespace System.Windows.Forms
 
         public static void SetData(string format, object data)
         {
+            if (string.IsNullOrWhiteSpace(format))
+            {
+                if (format == null)
+                {
+                    throw new ArgumentNullException(nameof(format));
+                }
+
+                throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
+            }
+
             // Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
             IDataObject dataObject = new DataObject();
             dataObject.SetData(format, data);
