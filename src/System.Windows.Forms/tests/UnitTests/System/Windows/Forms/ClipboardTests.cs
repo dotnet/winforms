@@ -234,7 +234,7 @@ namespace System.Windows.Forms.Tests
         [StaFact]
         public void Clipboard_SetData_NullFormat_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>("format", () => Clipboard.SetData(format: null, data: new object()));
+            Assert.Throws<ArgumentNullException>(() => Clipboard.SetData(format: null, data: new object()));
         }
 
         [StaTheory]
@@ -243,13 +243,13 @@ namespace System.Windows.Forms.Tests
         [InlineData("\t")]
         public void Clipboard_SetData_EmptyOrWhitespaceFormat_ThrowsArgumentException(string format)
         {
-            Assert.Throws<ArgumentException>("format", () => Clipboard.SetData(format, data: null));
+            Assert.Throws<ArgumentException>(() => Clipboard.SetData(format, data: null));
         }
 
         [Fact]
         public void Clipboard_SetData_NotSta_ThrowsThreadStateException()
         {
-            Assert.Throws<ThreadStateException>("format", () => Clipboard.SetData("format", data: null));
+            Assert.Throws<ThreadStateException>(() => Clipboard.SetData("format", data: null));
         }
 
         [StaTheory]
