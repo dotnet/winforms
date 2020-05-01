@@ -23,9 +23,7 @@ internal partial class Interop
                 Ole32.OLEWHICHMK dwWhichMoniker,
                 IntPtr* ppmk);
 
-            [PreserveSig]
-            HRESULT GetContainer(
-                out IOleContainer container);
+            IOleContainer GetContainer();
 
             [PreserveSig]
             HRESULT ShowObject();

@@ -24,7 +24,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT GetExtendedControl(
-                [MarshalAs(UnmanagedType.IDispatch)] out object ppDisp);
+                IntPtr* ppDisp);
 
             [PreserveSig]
             HRESULT TransformCoords(

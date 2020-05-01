@@ -88,9 +88,14 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT IOleControlSite.GetExtendedControl(out object ppDisp)
+        unsafe HRESULT IOleControlSite.GetExtendedControl(IntPtr* ppDisp)
         {
-            ppDisp = null;
+            if (ppDisp == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *ppDisp = IntPtr.Zero;
             return HRESULT.E_NOTIMPL;
         }
 
@@ -98,7 +103,7 @@ namespace System.Windows.Forms
         {
             if (pPtlHimetric == null || pPtfContainer == null)
             {
-                return HRESULT.E_INVALIDARG;
+                return HRESULT.E_POINTER;
             }
 
             if ((dwFlags & XFORMCOORDS.HIMETRICTOCONTAINER) != 0)
@@ -183,10 +188,9 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        HRESULT IOleClientSite.GetContainer(out IOleContainer container)
+        IOleContainer IOleClientSite.GetContainer()
         {
-            container = Host.GetParentContainer();
-            return HRESULT.S_OK;
+            return Host.GetParentContainer();
         }
 
         unsafe HRESULT IOleClientSite.ShowObject()
