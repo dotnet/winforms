@@ -101,9 +101,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(result, Clipboard.GetAudioStream());
         }
 
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void Clipboard_GetData_InvokeMultipleTimes_Success(string format)
+        [StaTheory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("\t")]
+        public void Clipboard_GetData_NullOrEmptyFormat_Returns_Null(string format)
         {
             object result = Clipboard.GetData(format);
             Assert.Equal(result, Clipboard.GetData(format));
@@ -229,22 +231,25 @@ namespace System.Windows.Forms.Tests
             Assert.True(Clipboard.ContainsData(format));
         }
 
-        [Fact]
+        [StaFact]
         public void Clipboard_SetData_NullFormat_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>("format", () => Clipboard.SetData(null, null));
+            Assert.Throws<ArgumentNullException>(() => Clipboard.SetData(format: null, data: new object()));
         }
 
-        [Fact]
-        public void Clipboard_SetData_EmptyFormat_ThrowsArgumentException()
+        [StaTheory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\t")]
+        public void Clipboard_SetData_EmptyOrWhitespaceFormat_ThrowsArgumentException(string format)
         {
-            Assert.Throws<ArgumentException>("format", () => Clipboard.SetData(string.Empty, null));
+            Assert.Throws<ArgumentException>(() => Clipboard.SetData(format, data: null));
         }
 
         [Fact]
         public void Clipboard_SetData_NotSta_ThrowsThreadStateException()
         {
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetData("format", null));
+            Assert.Throws<ThreadStateException>(() => Clipboard.SetData("format", data: null));
         }
 
         [StaTheory]
