@@ -93,7 +93,7 @@ namespace System.Windows.Forms.VisualStyles
             return IsCombinationDefined(element.ClassName, element.Part);
         }
 
-        internal static bool IsCombinationDefined(string? className, int part)
+        internal static bool IsCombinationDefined(string className, int part)
         {
             bool returnVal = false;
 
@@ -107,11 +107,6 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     throw new InvalidOperationException(SR.VisualStylesDisabledInClientArea);
                 }
-            }
-
-            if (className == null)
-            {
-                throw new ArgumentNullException(nameof(className));
             }
 
             IntPtr hTheme = GetHandle(className, false);
@@ -154,7 +149,7 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///  Constructor takes a VisualStyleElement.
         /// </summary>
-        public VisualStyleRenderer(VisualStyleElement element) : this(element.ClassName!, element.Part, element.State)
+        public VisualStyleRenderer(VisualStyleElement element) : this(element.ClassName, element.Part, element.State)
         {
         }
 
@@ -164,8 +159,12 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public VisualStyleRenderer(string className, int part, int state)
         {
+            if (className == null)
+            {
+                throw new ArgumentNullException(nameof(className));
+            }
             if (!IsCombinationDefined(className, part))
-            { //internally this call takes care of IsSupported.
+            {
                 throw new ArgumentException(SR.VisualStylesInvalidCombination);
             }
 
@@ -244,7 +243,7 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentNullException(nameof(element));
             }
 
-            SetParameters(element.ClassName!, element.Part, element.State);
+            SetParameters(element.ClassName, element.Part, element.State);
         }
 
         /// <summary>
@@ -255,7 +254,7 @@ namespace System.Windows.Forms.VisualStyles
         public void SetParameters(string className, int part, int state)
         {
             if (!IsCombinationDefined(className, part))
-            { //internally this call takes care of IsSupported.
+            {
                 throw new ArgumentException(SR.VisualStylesInvalidCombination);
             }
 

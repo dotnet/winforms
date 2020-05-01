@@ -8321,7 +8321,7 @@ System.Windows.Forms.VisualStyles.VisualStyleElement.Button.GroupBox
 System.Windows.Forms.VisualStyles.VisualStyleElement.Button.PushButton
 System.Windows.Forms.VisualStyles.VisualStyleElement.Button.RadioButton
 System.Windows.Forms.VisualStyles.VisualStyleElement.Button.UserButton
-System.Windows.Forms.VisualStyles.VisualStyleElement.ClassName.get -> string?
+System.Windows.Forms.VisualStyles.VisualStyleElement.ClassName.get -> string!
 System.Windows.Forms.VisualStyles.VisualStyleElement.ComboBox
 System.Windows.Forms.VisualStyles.VisualStyleElement.ComboBox.DropDownButton
 System.Windows.Forms.VisualStyles.VisualStyleElement.ExplorerBar
@@ -11488,7 +11488,7 @@ static System.Windows.Forms.VisualStyles.VisualStyleElement.ComboBox.DropDownBut
 static System.Windows.Forms.VisualStyles.VisualStyleElement.ComboBox.DropDownButton.Hot.get -> System.Windows.Forms.VisualStyles.VisualStyleElement!
 static System.Windows.Forms.VisualStyles.VisualStyleElement.ComboBox.DropDownButton.Normal.get -> System.Windows.Forms.VisualStyles.VisualStyleElement!
 static System.Windows.Forms.VisualStyles.VisualStyleElement.ComboBox.DropDownButton.Pressed.get -> System.Windows.Forms.VisualStyles.VisualStyleElement!
-static System.Windows.Forms.VisualStyles.VisualStyleElement.CreateElement(string? className, int part, int state) -> System.Windows.Forms.VisualStyles.VisualStyleElement!
+static System.Windows.Forms.VisualStyles.VisualStyleElement.CreateElement(string! className, int part, int state) -> System.Windows.Forms.VisualStyles.VisualStyleElement!
 static System.Windows.Forms.VisualStyles.VisualStyleElement.ExplorerBar.HeaderBackground.Normal.get -> System.Windows.Forms.VisualStyles.VisualStyleElement!
 static System.Windows.Forms.VisualStyles.VisualStyleElement.ExplorerBar.HeaderClose.Hot.get -> System.Windows.Forms.VisualStyles.VisualStyleElement!
 static System.Windows.Forms.VisualStyles.VisualStyleElement.ExplorerBar.HeaderClose.Normal.get -> System.Windows.Forms.VisualStyles.VisualStyleElement!

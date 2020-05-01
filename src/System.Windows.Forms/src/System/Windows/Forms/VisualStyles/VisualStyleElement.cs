@@ -12,45 +12,24 @@ namespace System.Windows.Forms.VisualStyles
     public class VisualStyleElement
     {
         internal static readonly int Count = 25; //UPDATE THIS WHEN CLASSES ARE ADDED/REMOVED!
-        private readonly string? className;
-        private readonly int part;
-        private readonly int state;
 
-        private VisualStyleElement(string? className, int part, int state)
+        private VisualStyleElement(string className, int part, int state)
         {
-            this.className = className;
-            this.part = part;
-            this.state = state;
+            ClassName = className ?? throw new ArgumentNullException(nameof(className));
+            Part = part;
+            State = state;
         }
 
-        public static VisualStyleElement CreateElement(string? className, int part, int state)
+        public static VisualStyleElement CreateElement(string className, int part, int state)
         {
             return new VisualStyleElement(className, part, state);
         }
 
-        public string? ClassName
-        {
-            get
-            {
-                return className;
-            }
-        }
+        public string ClassName { get; }
 
-        public int Part
-        {
-            get
-            {
-                return part;
-            }
-        }
+        public int Part { get; }
 
-        public int State
-        {
-            get
-            {
-                return state;
-            }
-        }
+        public int State { get; }
 
         public static class Button
         {

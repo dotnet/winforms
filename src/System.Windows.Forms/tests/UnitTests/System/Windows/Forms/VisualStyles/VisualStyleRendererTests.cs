@@ -117,13 +117,6 @@ namespace System.Windows.Forms.VisualStyles.Tests
             Assert.Throws<ArgumentNullException>("element", () => VisualStyleRenderer.IsElementDefined(null));
         }
 
-        [Fact]
-        public void VisualStyleRenderer_IsElementDefined_NullElementClassName_ThrowsArgumentNullException()
-        {
-            VisualStyleElement element = VisualStyleElement.CreateElement(null, 0, 0);
-            Assert.Throws<ArgumentNullException>("className", () => VisualStyleRenderer.IsElementDefined(element));
-        }
-
         public static IEnumerable<object[]> DrawBackground_IDeviceContext_Rectangle_TestData()
         {
             yield return new object[] { new Rectangle(1, 2, 3, 4) };
@@ -528,13 +521,6 @@ namespace System.Windows.Forms.VisualStyles.Tests
             Assert.Equal(element.State, renderer.State);
             Assert.Equal(0, renderer.LastHResult);
             Assert.NotEqual(IntPtr.Zero, renderer.Handle);
-        }
-
-        [Fact]
-        public void VisualStyleRenderer_SetParameters_NullClassName_ThrowsArgumentNullException()
-        {
-            var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
-            Assert.Throws<ArgumentNullException>("className", () => renderer.SetParameters(null, 0, 0));
         }
 
         [Theory]
