@@ -39,7 +39,6 @@ namespace System.Windows.Forms
             TYMED.TYMED_GDI};
 
         private readonly IDataObject innerData = null;
-        internal bool RestrictedFormats { get; set; }
 
         // We use this to identify that a stream is actually a serialized object.  On read,
         // we don't know if the contents of a stream were saved "raw" or if the stream is really

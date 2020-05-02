@@ -37,14 +37,6 @@ namespace System.Windows.Forms
                 current = 0;
                 if (formats != null)
                 {
-                    if (parent is DataObject dataObject && dataObject.RestrictedFormats)
-                    {
-                        if (!Clipboard.IsFormatValid(formats))
-                        {
-                            throw new Security.SecurityException(SR.ClipboardSecurityException);
-                        }
-                    }
-
                     for (int i = 0; i < formats.Length; i++)
                     {
                         FORMATETC currentFormat = formats[i];
@@ -71,14 +63,6 @@ namespace System.Windows.Forms
 
                 if (formats != null)
                 {
-                    if (parent is DataObject dataObject && dataObject.RestrictedFormats)
-                    {
-                        if (!Clipboard.IsFormatValid(formats))
-                        {
-                            throw new Security.SecurityException(SR.ClipboardSecurityException);
-                        }
-                    }
-
                     for (int i = 0; i < formats.Length; i++)
                     {
                         string format = formats[i];
@@ -110,10 +94,7 @@ namespace System.Windows.Forms
                             temp.tymed = TYMED.TYMED_HGLOBAL;
                         }
 
-                        if (temp.tymed != 0)
-                        {
-                            this.formats.Add(temp);
-                        }
+                        this.formats.Add(temp);
                     }
                 }
             }
