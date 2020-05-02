@@ -190,27 +190,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class NOTIFYICONDATA
-        {
-            public int cbSize = Marshal.SizeOf<NOTIFYICONDATA>();
-            public IntPtr hWnd;
-            public int uID;
-            public Shell32.NIF uFlags;
-            public int uCallbackMessage;
-            public IntPtr hIcon;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string szTip;
-            public int dwState = 0;
-            public int dwStateMask = 0;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-            public string szInfo;
-            public int uTimeoutOrVersion;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-            public string szInfoTitle;
-            public Shell32.NIIF dwInfoFlags;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class OPENFILENAME_I
         {
             public int lStructSize = Marshal.SizeOf<OPENFILENAME_I>(); //ndirect.DllLib.sizeOf(this);

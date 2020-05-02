@@ -42,14 +42,14 @@ namespace System.Windows.Forms
 
         private Icon icon = null;
         private string text = string.Empty;
-        private readonly int id = 0;
+        private readonly uint id = 0;
         private bool added = false;
         private NotifyIconNativeWindow window = null;
         private ContextMenuStrip contextMenuStrip = null;
         private ToolTipIcon balloonTipIcon;
         private string balloonTipText = string.Empty;
         private string balloonTipTitle = string.Empty;
-        private static int nextId = 0;
+        private static uint s_nextId = 0;
         private object userData;
         private bool doubleClick = false; // checks if doubleclick is fired
 
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         /// </summary>
         public NotifyIcon()
         {
-            id = ++nextId;
+            id = ++s_nextId;
             window = new NotifyIconNativeWindow(this);
             UpdateIcon(visible);
         }
@@ -556,7 +556,7 @@ namespace System.Windows.Forms
         ///  to display a balloon ToolTip. If the system minimum timeout is ten seconds, the first
         ///  ToolTip displays for an additional three seconds before being replaced by the second ToolTip.
         /// </summary>
-        public void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon)
+        public unsafe void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon)
         {
             if (timeout < 0)
             {
@@ -582,17 +582,20 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                NativeMethods.NOTIFYICONDATA data = new NativeMethods.NOTIFYICONDATA();
+                var data = new NOTIFYICONDATAW
+                {
+                    cbSize = (uint)sizeof(NOTIFYICONDATAW),
+                    uFlags = NIF.INFO,
+                    uID = id,
+                    uTimeoutOrVersion = (uint)timeout
+                };
                 if (window.Handle == IntPtr.Zero)
                 {
                     window.CreateHandle(new CreateParams());
                 }
                 data.hWnd = window.Handle;
-                data.uID = id;
-                data.uFlags = NIF.INFO;
-                data.uTimeoutOrVersion = timeout;
-                data.szInfoTitle = tipTitle;
-                data.szInfo = tipText;
+                data.InfoTitle = tipTitle;
+                data.Info = tipText;
                 switch (tipIcon)
                 {
                     case ToolTipIcon.Info:
@@ -608,7 +611,7 @@ namespace System.Windows.Forms
                         data.dwInfoFlags = NIIF.NONE;
                         break;
                 }
-                UnsafeNativeMethods.Shell_NotifyIcon(NIM.MODIFY, data);
+                Shell32.Shell_NotifyIconW(NIM.MODIFY, ref data);
             }
         }
 
@@ -635,7 +638,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Updates the icon in the system tray.
         /// </summary>
-        private void UpdateIcon(bool showIconInTray)
+        private unsafe void UpdateIcon(bool showIconInTray)
         {
             lock (syncObj)
             {
@@ -648,10 +651,12 @@ namespace System.Windows.Forms
 
                 window.LockReference(showIconInTray);
 
-                NativeMethods.NOTIFYICONDATA data = new NativeMethods.NOTIFYICONDATA
+                var data = new NOTIFYICONDATAW
                 {
+                    cbSize = (uint)sizeof(NOTIFYICONDATAW),
                     uCallbackMessage = WM_TRAYMOUSEMESSAGE,
-                    uFlags = NIF.MESSAGE
+                    uFlags = NIF.MESSAGE,
+                    uID = id
                 };
                 if (showIconInTray)
                 {
@@ -661,32 +666,29 @@ namespace System.Windows.Forms
                     }
                 }
                 data.hWnd = window.Handle;
-                data.uID = id;
-                data.hIcon = IntPtr.Zero;
-                data.szTip = null;
                 if (icon != null)
                 {
                     data.uFlags |= NIF.ICON;
                     data.hIcon = icon.Handle;
                 }
                 data.uFlags |= NIF.TIP;
-                data.szTip = text;
+                data.Tip = text;
 
                 if (showIconInTray && icon != null)
                 {
                     if (!added)
                     {
-                        UnsafeNativeMethods.Shell_NotifyIcon(NIM.ADD, data);
+                        Shell_NotifyIconW(NIM.ADD, ref data);
                         added = true;
                     }
                     else
                     {
-                        UnsafeNativeMethods.Shell_NotifyIcon(NIM.MODIFY, data);
+                        Shell_NotifyIconW(NIM.MODIFY, ref data);
                     }
                 }
                 else if (added)
                 {
-                    UnsafeNativeMethods.Shell_NotifyIcon(NIM.DELETE, data);
+                    Shell_NotifyIconW(NIM.DELETE, ref data);
                     added = false;
                 }
             }
