@@ -7,7 +7,7 @@ Follow the prerequisites listed at [Building CoreFX on Windows][corefx-windows-i
 ## Building from the command line
 
 * Run `.\build` from the repository root.
-  * Builds the `System.Windows.Forms.sln` using the default config (Debug|Any CPU)
+  * Builds the `Winforms.sln` using the default config (Debug|Any CPU)
 * To specify a config, add `-configuration` followed by the config such as `.\build -configuration Release`
 
 If your build is successful, you should see something like this:
@@ -22,7 +22,7 @@ Note that this does **not** build using your machine-wide installed version of t
 
 ## Building from Visual Studio
 
-* To build from Visual Studio, open System.Windows.Forms.sln in Visual Studio and build how you normally would.
+* To build from Visual Studio, open `Winforms.sln` in Visual Studio and build how you normally would.
 * Visual Studio behaves slightly differently than the command line. It uses the machine-wide installed SDK instead of the one specified in the global.json.
   * Please make sure you have the [latest .Net Core Daily Build][latest-core-build] installed.
 
