@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         ITableItemProvider,
         IGridProvider,
         IGridItemProvider,
-        OleAut32.IEnumVariant,
+        Oleaut32.IEnumVariant,
         Ole32.IOleWindow,
         ILegacyIAccessibleProvider,
         ISelectionProvider,
@@ -41,7 +41,7 @@ namespace System.Windows.Forms
         IRawElementProviderHwndOverride
     {
         private IAccessible publicIAccessible;                      // AccessibleObject as IAccessible
-        private readonly OleAut32.IEnumVariant publicIEnumVariant;  // AccessibleObject as IEnumVariant
+        private readonly Oleaut32.IEnumVariant publicIEnumVariant;  // AccessibleObject as Oleaut32.IEnumVariant
         private readonly Ole32.IOleWindow publicIOleWindow;         // AccessibleObject as IOleWindow
         private readonly IReflect publicIReflect;                   // AccessibleObject as IReflect
 
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
         {
             // Get all the casts done here to catch any issues early
             publicIAccessible = (IAccessible)accessibleImplemention;
-            publicIEnumVariant = (OleAut32.IEnumVariant)accessibleImplemention;
+            publicIEnumVariant = (Oleaut32.IEnumVariant)accessibleImplemention;
             publicIOleWindow = (Ole32.IOleWindow)accessibleImplemention;
             publicIReflect = (IReflect)accessibleImplemention;
             publicIServiceProvider = (Ole32.IServiceProvider)accessibleImplemention;
@@ -191,15 +191,15 @@ namespace System.Windows.Forms
         void IAccessibleInternal.set_accValue(object childID, string newValue)
             => publicIAccessible.set_accValue(childID, newValue);
 
-        HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[] ppEnum)
+        HRESULT Oleaut32.IEnumVariant.Clone(Oleaut32.IEnumVariant[] ppEnum)
             => publicIEnumVariant.Clone(ppEnum);
 
-        unsafe HRESULT OleAut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
+        unsafe HRESULT Oleaut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
             => publicIEnumVariant.Next(celt, rgVar, pCeltFetched);
 
-        HRESULT OleAut32.IEnumVariant.Reset() => publicIEnumVariant.Reset();
+        HRESULT Oleaut32.IEnumVariant.Reset() => publicIEnumVariant.Reset();
 
-        HRESULT OleAut32.IEnumVariant.Skip(uint celt) => publicIEnumVariant.Skip(celt);
+        HRESULT Oleaut32.IEnumVariant.Skip(uint celt) => publicIEnumVariant.Skip(celt);
 
         unsafe HRESULT Ole32.IOleWindow.GetWindow(IntPtr* phwnd)
             => publicIOleWindow.GetWindow(phwnd);

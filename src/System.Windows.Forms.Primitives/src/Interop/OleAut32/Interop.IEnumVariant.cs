@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 internal partial class Interop
 {
-    internal static partial class OleAut32
+    internal static partial class Oleaut32
     {
         [ComImport]
         [Guid("00020404-0000-0000-C000-000000000046")]

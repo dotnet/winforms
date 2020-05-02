@@ -11,8 +11,9 @@ using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using static Interop;
+using static Interop.Ole32;
+using static Interop.Oleaut32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -57,27 +58,27 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Given an Object, this attempts to locate its type ifo
         /// </summary>
-        public static Oleaut32.ITypeInfo FindTypeInfo(object obj, bool wantCoClass)
+        public static ITypeInfo FindTypeInfo(object obj, bool wantCoClass)
         {
-            Oleaut32.ITypeInfo pTypeInfo = null;
+            ITypeInfo pTypeInfo = null;
 
             // This is kind of odd.  What's going on here is that if we want the CoClass (e.g. for
             // the interface name), we need to look for IProvideClassInfo first, then look for the
-            // typeinfo from the IDispatch. In the case of many OleAut32 operations, the CoClass
+            // typeinfo from the IDispatch. In the case of many Oleaut32 operations, the CoClass
             // doesn't have the interface members on it, although in the shell it usually does, so
             // we need to re-order the lookup if we *actually* want the CoClass if it's available.
             for (int i = 0; pTypeInfo == null && i < 2; i++)
             {
                 if (wantCoClass == (i == 0))
                 {
-                    if (obj is Oleaut32.IProvideClassInfo pProvideClassInfo)
+                    if (obj is IProvideClassInfo pProvideClassInfo)
                     {
                         pProvideClassInfo.GetClassInfo(out pTypeInfo);
                     }
                 }
                 else
                 {
-                    if (obj is Oleaut32.IDispatch iDispatch)
+                    if (obj is IDispatch iDispatch)
                     {
                         iDispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out pTypeInfo);
                     }
@@ -136,9 +137,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Retrieve the dispid of the property that we are to use as the name
         ///  member.  In this case, the grid will put parens around the name.
         /// </summary>
-        public unsafe static Ole32.DispatchID GetNameDispId(Oleaut32.IDispatch obj)
+        public unsafe static DispatchID GetNameDispId(IDispatch obj)
         {
-            Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
+            DispatchID dispid = DispatchID.UNKNOWN;
             string[] names = null;
 
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
@@ -153,10 +154,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             else
             {
-                cnd.GetPropertyValue(obj, Ole32.DispatchID.Name, ref succeeded);
+                cnd.GetPropertyValue(obj, DispatchID.Name, ref succeeded);
                 if (succeeded)
                 {
-                    dispid = Ole32.DispatchID.Name;
+                    dispid = DispatchID.Name;
                 }
                 else
                 {
@@ -171,7 +172,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // now get the dispid of the one that worked...
             if (names != null)
             {
-                Ole32.DispatchID pDispid = Ole32.DispatchID.UNKNOWN;
+                DispatchID pDispid = DispatchID.UNKNOWN;
                 Guid g = Guid.Empty;
                 HRESULT hr = obj.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &pDispid);
                 if (hr.Succeeded())
@@ -197,7 +198,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return null;
             }
 
-            Oleaut32.ITypeInfo[] typeInfos = FindTypeInfos(obj, false);
+            ITypeInfo[] typeInfos = FindTypeInfos(obj, false);
 
             // oops, looks like this guy doesn't surface any type info
             // this is okay, so we just say it has no props
@@ -214,7 +215,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             for (int i = 0; i < typeInfos.Length; i++)
             {
-                Oleaut32.ITypeInfo ti = typeInfos[i];
+                ITypeInfo ti = typeInfos[i];
 
                 if (ti == null)
                 {
@@ -246,7 +247,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (!dontProcess)
                 {
-                    props = InternalGetProperties(obj, ti, Ole32.DispatchID.MEMBERID_NIL, ref temp);
+                    props = InternalGetProperties(obj, ti, DispatchID.MEMBERID_NIL, ref temp);
 
                     // only save the default property from the first type Info
                     if (i == 0 && temp != -1)
@@ -280,9 +281,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return new Com2Properties(obj, temp2, defaultProp);
         }
 
-        private unsafe static Guid GetGuidForTypeInfo(Oleaut32.ITypeInfo typeInfo, uint[] versions)
+        private unsafe static Guid GetGuidForTypeInfo(ITypeInfo typeInfo, uint[] versions)
         {
-            Ole32.TYPEATTR* pTypeAttr = null;
+            TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
             if (!hr.Succeeded())
             {
@@ -310,7 +311,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  user defined, which and may be aliased into other type infos.  This function
         ///  will recusively walk the ITypeInfos to resolve the type to a clr Type.
         /// </summary>
-        private unsafe static Type GetValueTypeFromTypeDesc(in Ole32.TYPEDESC typeDesc, Oleaut32.ITypeInfo typeInfo, object[] typeData)
+        private unsafe static Type GetValueTypeFromTypeDesc(in TYPEDESC typeDesc, ITypeInfo typeInfo, object[] typeData)
         {
             uint hreftype;
             HRESULT hr = HRESULT.S_OK;
@@ -320,24 +321,24 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 default:
                     return VTToType(typeDesc.vt);
 
-                case Ole32.VARENUM.UNKNOWN:
-                case Ole32.VARENUM.DISPATCH:
+                case VARENUM.UNKNOWN:
+                case VARENUM.DISPATCH:
                     // get the guid
                     typeData[0] = GetGuidForTypeInfo(typeInfo, null);
 
                     // return the type
                     return VTToType(typeDesc.vt);
 
-                case Ole32.VARENUM.USERDEFINED:
+                case VARENUM.USERDEFINED:
                     // we'll need to recurse into a user defined reference typeinfo
                     Debug.Assert(typeDesc.union.hreftype != 0u, "typeDesc doesn't contain an hreftype!");
                     hreftype = typeDesc.union.hreftype;
                     break;
 
-                case Ole32.VARENUM.PTR:
+                case VARENUM.PTR:
                     // we'll need to recurse into a user defined reference typeinfo
                     Debug.Assert(typeDesc.union.lptdesc != null, "typeDesc doesn't contain an refTypeDesc!");
-                    if (typeDesc.union.lptdesc->vt == Ole32.VARENUM.VARIANT)
+                    if (typeDesc.union.lptdesc->vt == VARENUM.VARIANT)
                     {
                         return VTToType(typeDesc.union.lptdesc->vt);
                     }
@@ -347,7 +348,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // get the reference type info
-            hr = typeInfo.GetRefTypeInfo(hreftype, out Oleaut32.ITypeInfo refTypeInfo);
+            hr = typeInfo.GetRefTypeInfo(hreftype, out ITypeInfo refTypeInfo);
             if (!hr.Succeeded())
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetRefTypeInfoFailed, hr), (int)hr);
@@ -360,7 +361,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // or get a dispatch.
                 if (refTypeInfo != null)
                 {
-                    Ole32.TYPEATTR* pTypeAttr = null;
+                    TYPEATTR* pTypeAttr = null;
                     hr = refTypeInfo.GetTypeAttr(&pTypeAttr);
                     if (!hr.Succeeded())
                     {
@@ -379,16 +380,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         switch (pTypeAttr->typekind)
                         {
-                            case Ole32.TYPEKIND.ENUM:
+                            case TYPEKIND.ENUM:
                                 return ProcessTypeInfoEnum(refTypeInfo);
-                            case Ole32.TYPEKIND.ALIAS:
+                            case TYPEKIND.ALIAS:
                                 // recurse here
                                 return GetValueTypeFromTypeDesc(pTypeAttr->tdescAlias, refTypeInfo, typeData);
-                            case Ole32.TYPEKIND.DISPATCH:
-                                return VTToType(Ole32.VARENUM.DISPATCH);
-                            case Ole32.TYPEKIND.INTERFACE:
-                            case Ole32.TYPEKIND.COCLASS:
-                                return VTToType(Ole32.VARENUM.UNKNOWN);
+                            case TYPEKIND.DISPATCH:
+                                return VTToType(VARENUM.DISPATCH);
+                            case TYPEKIND.INTERFACE:
+                            case TYPEKIND.COCLASS:
+                                return VTToType(VARENUM.UNKNOWN);
                             default:
                                 return null;
                         }
@@ -406,7 +407,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-        private static PropertyDescriptor[] InternalGetProperties(object obj, Oleaut32.ITypeInfo typeInfo, Ole32.DispatchID dispidToGet, ref int defaultIndex)
+        private static PropertyDescriptor[] InternalGetProperties(object obj, ITypeInfo typeInfo, DispatchID dispidToGet, ref int defaultIndex)
         {
             if (typeInfo == null)
             {
@@ -415,7 +416,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Hashtable propInfos = new Hashtable();
 
-            Ole32.DispatchID nameDispID = GetNameDispId((Oleaut32.IDispatch)obj);
+            DispatchID nameDispID = GetNameDispId((IDispatch)obj);
             bool addAboutBox = false;
 
             // properties can live as functions with get_ and put_ or
@@ -504,7 +505,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return props;
         }
 
-        private unsafe static PropInfo ProcessDataCore(Oleaut32.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispid, Ole32.DispatchID nameDispID, in Ole32.TYPEDESC typeDesc, Ole32.VARFLAGS flags)
+        private unsafe static PropInfo ProcessDataCore(ITypeInfo typeInfo, IDictionary propInfoList, DispatchID dispid, DispatchID nameDispID, in TYPEDESC typeDesc, VARFLAGS flags)
         {
             // get the name and the helpstring
             using var nameBstr = new BSTR();
@@ -567,7 +568,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (pi.NonBrowsable)
                 {
-                    flags |= Ole32.VARFLAGS.FNONBROWSABLE;
+                    flags |= VARFLAGS.FNONBROWSABLE;
                 }
 
                 if (pTypeData[0] != null)
@@ -577,27 +578,27 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // check the flags
-            if ((flags & Ole32.VARFLAGS.FREADONLY) != 0)
+            if ((flags & VARFLAGS.FREADONLY) != 0)
             {
                 pi.ReadOnly = PropInfo.ReadOnlyTrue;
             }
 
-            if ((flags & Ole32.VARFLAGS.FHIDDEN) != 0 ||
-                (flags & Ole32.VARFLAGS.FNONBROWSABLE) != 0 ||
+            if ((flags & VARFLAGS.FHIDDEN) != 0 ||
+                (flags & VARFLAGS.FNONBROWSABLE) != 0 ||
                 pi.Name[0] == '_' ||
-                dispid == Ole32.DispatchID.HWND)
+                dispid == DispatchID.HWND)
             {
                 pi.Attributes.Add(new BrowsableAttribute(false));
                 pi.NonBrowsable = true;
             }
 
-            if ((flags & Ole32.VARFLAGS.FUIDEFAULT) != 0)
+            if ((flags & VARFLAGS.FUIDEFAULT) != 0)
             {
                 pi.IsDefault = true;
             }
 
-            if ((flags & Ole32.VARFLAGS.FBINDABLE) != 0 &&
-                (flags & Ole32.VARFLAGS.FDISPLAYBIND) != 0)
+            if ((flags & VARFLAGS.FBINDABLE) != 0 &&
+                (flags & VARFLAGS.FDISPLAYBIND) != 0)
             {
                 pi.Attributes.Add(new BindableAttribute(true));
             }
@@ -614,9 +615,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return pi;
         }
 
-        private unsafe static void ProcessFunctions(Oleaut32.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID, ref bool addAboutBox)
+        private unsafe static void ProcessFunctions(ITypeInfo typeInfo, IDictionary propInfoList, DispatchID dispidToGet, DispatchID nameDispID, ref bool addAboutBox)
         {
-            Ole32.TYPEATTR* pTypeAttr = null;
+            TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
             if (!hr.Succeeded() || pTypeAttr == null)
             {
@@ -630,7 +631,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 for (uint i = 0; i < pTypeAttr->cFuncs; i++)
                 {
-                    Ole32.FUNCDESC* pFuncDesc = null;
+                    FUNCDESC* pFuncDesc = null;
                     hr = typeInfo.GetFuncDesc(i, &pFuncDesc);
                     if (!hr.Succeeded() || pFuncDesc == null)
                     {
@@ -640,20 +641,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        if (pFuncDesc->invkind == Ole32.INVOKEKIND.FUNC ||
-                            (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && pFuncDesc->memid != dispidToGet))
+                        if (pFuncDesc->invkind == INVOKEKIND.FUNC ||
+                            (dispidToGet != DispatchID.MEMBERID_NIL && pFuncDesc->memid != dispidToGet))
                         {
-                            if (pFuncDesc->memid == Ole32.DispatchID.ABOUTBOX)
+                            if (pFuncDesc->memid == DispatchID.ABOUTBOX)
                             {
                                 addAboutBox = true;
                             }
                             continue;
                         }
 
-                        Ole32.TYPEDESC typeDesc;
+                        TYPEDESC typeDesc;
 
                         // is this a get or a put?
-                        isPropGet = (pFuncDesc->invkind == Ole32.INVOKEKIND.PROPERTYGET);
+                        isPropGet = (pFuncDesc->invkind == INVOKEKIND.PROPERTYGET);
 
                         if (isPropGet)
                         {
@@ -680,7 +681,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 typeDesc = pFuncDesc->lprgelemdescParam->tdesc;
                             }
                         }
-                        pi = ProcessDataCore(typeInfo, propInfoList, pFuncDesc->memid, nameDispID, in typeDesc, (Ole32.VARFLAGS)pFuncDesc->wFuncFlags);
+                        pi = ProcessDataCore(typeInfo, propInfoList, pFuncDesc->memid, nameDispID, in typeDesc, (VARFLAGS)pFuncDesc->wFuncFlags);
 
                         // if we got a setmethod, it's not readonly
                         if (pi != null && !isPropGet)
@@ -704,7 +705,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  This converts a type info that describes a IDL defined enum
         ///  into one we can use
         /// </summary>
-        private unsafe static Type ProcessTypeInfoEnum(Oleaut32.ITypeInfo enumTypeInfo)
+        private unsafe static Type ProcessTypeInfoEnum(ITypeInfo enumTypeInfo)
         {
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum entered");
 
@@ -716,7 +717,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                Ole32.TYPEATTR* pTypeAttr = null;
+                TYPEATTR* pTypeAttr = null;
                 HRESULT hr = enumTypeInfo.GetTypeAttr(&pTypeAttr);
                 if (!hr.Succeeded() || pTypeAttr == null)
                 {
@@ -736,13 +737,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     using var enumNameBstr = new BSTR();
                     using var enumHelpStringBstr = new BSTR();
-                    enumTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, &enumNameBstr, &enumHelpStringBstr, null, null);
+                    enumTypeInfo.GetDocumentation(DispatchID.MEMBERID_NIL, &enumNameBstr, &enumHelpStringBstr, null, null);
 
                     // For each item in the enum type info, we just need it's name and value and
                     // helpstring if it's there.
                     for (uint i = 0; i < nItems; i++)
                     {
-                        Ole32.VARDESC* pVarDesc = null;
+                        VARDESC* pVarDesc = null;
                         hr = enumTypeInfo.GetVarDesc(i, &pVarDesc);
                         if (!hr.Succeeded() || pVarDesc == null)
                         {
@@ -752,7 +753,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         try
                         {
-                            if (pVarDesc->varkind != Ole32.VARKIND.CONST || pVarDesc->unionMember == IntPtr.Zero)
+                            if (pVarDesc->varkind != VARKIND.CONST || pVarDesc->unionMember == IntPtr.Zero)
                             {
                                 continue;
                             }
@@ -863,9 +864,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return null;
         }
 
-        private unsafe static void ProcessVariables(Oleaut32.ITypeInfo typeInfo, IDictionary propInfoList, Ole32.DispatchID dispidToGet, Ole32.DispatchID nameDispID)
+        private unsafe static void ProcessVariables(ITypeInfo typeInfo, IDictionary propInfoList, DispatchID dispidToGet, DispatchID nameDispID)
         {
-            Ole32.TYPEATTR* pTypeAttr = null;
+            TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
             if (!hr.Succeeded() || pTypeAttr == null)
             {
@@ -876,7 +877,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 for (uint i = 0; i < pTypeAttr->cVars; i++)
                 {
-                    Ole32.VARDESC* pVarDesc = null;
+                    VARDESC* pVarDesc = null;
                     hr = typeInfo.GetVarDesc(i, &pVarDesc);
                     if (!hr.Succeeded() || pVarDesc == null)
                     {
@@ -886,8 +887,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     try
                     {
-                        if (pVarDesc->varkind == Ole32.VARKIND.CONST ||
-                            (dispidToGet != Ole32.DispatchID.MEMBERID_NIL && pVarDesc->memid != dispidToGet))
+                        if (pVarDesc->varkind == VARKIND.CONST ||
+                            (dispidToGet != DispatchID.MEMBERID_NIL && pVarDesc->memid != dispidToGet))
                         {
                             continue;
                         }
@@ -913,77 +914,77 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private static Type VTToType(Ole32.VARENUM vt)
+        private static Type VTToType(VARENUM vt)
         {
             switch (vt)
             {
-                case Ole32.VARENUM.EMPTY:
-                case Ole32.VARENUM.NULL:
+                case VARENUM.EMPTY:
+                case VARENUM.NULL:
                     return null;
-                case Ole32.VARENUM.I1:
+                case VARENUM.I1:
                     return typeof(sbyte);
-                case Ole32.VARENUM.UI1:
+                case VARENUM.UI1:
                     return typeof(byte);
-                case Ole32.VARENUM.I2:
+                case VARENUM.I2:
                     return typeof(short);
-                case Ole32.VARENUM.UI2:
+                case VARENUM.UI2:
                     return typeof(ushort);
-                case Ole32.VARENUM.I4:
-                case Ole32.VARENUM.INT:
+                case VARENUM.I4:
+                case VARENUM.INT:
                     return typeof(int);
-                case Ole32.VARENUM.UI4:
-                case Ole32.VARENUM.UINT:
+                case VARENUM.UI4:
+                case VARENUM.UINT:
                     return typeof(uint);
-                case Ole32.VARENUM.I8:
+                case VARENUM.I8:
                     return typeof(long);
-                case Ole32.VARENUM.UI8:
+                case VARENUM.UI8:
                     return typeof(ulong);
-                case Ole32.VARENUM.R4:
+                case VARENUM.R4:
                     return typeof(float);
-                case Ole32.VARENUM.R8:
+                case VARENUM.R8:
                     return typeof(double);
-                case Ole32.VARENUM.CY:
+                case VARENUM.CY:
                     return typeof(decimal);
-                case Ole32.VARENUM.DATE:
+                case VARENUM.DATE:
                     return typeof(DateTime);
-                case Ole32.VARENUM.BSTR:
-                case Ole32.VARENUM.LPSTR:
-                case Ole32.VARENUM.LPWSTR:
+                case VARENUM.BSTR:
+                case VARENUM.LPSTR:
+                case VARENUM.LPWSTR:
                     return typeof(string);
-                case Ole32.VARENUM.DISPATCH:
-                    return typeof(Oleaut32.IDispatch);
-                case Ole32.VARENUM.UNKNOWN:
+                case VARENUM.DISPATCH:
+                    return typeof(IDispatch);
+                case VARENUM.UNKNOWN:
                     return typeof(object);
-                case Ole32.VARENUM.ERROR:
-                case Ole32.VARENUM.HRESULT:
+                case VARENUM.ERROR:
+                case VARENUM.HRESULT:
                     return typeof(int);
-                case Ole32.VARENUM.BOOL:
+                case VARENUM.BOOL:
                     return typeof(bool);
-                case Ole32.VARENUM.VARIANT:
+                case VARENUM.VARIANT:
                     return typeof(Com2Variant);
-                case Ole32.VARENUM.CLSID:
+                case VARENUM.CLSID:
                     return typeof(Guid);
-                case Ole32.VARENUM.FILETIME:
-                    return typeof(FILETIME);
-                case Ole32.VARENUM.USERDEFINED:
+                case VARENUM.FILETIME:
+                    return typeof(Runtime.InteropServices.ComTypes.FILETIME);
+                case VARENUM.USERDEFINED:
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, "VT_USERDEFINED"));
-                case Ole32.VARENUM.VOID:
-                case Ole32.VARENUM.PTR:
-                case Ole32.VARENUM.SAFEARRAY:
-                case Ole32.VARENUM.CARRAY:
-                case Ole32.VARENUM.RECORD:
-                case Ole32.VARENUM.BLOB:
-                case Ole32.VARENUM.STREAM:
-                case Ole32.VARENUM.STORAGE:
-                case Ole32.VARENUM.STREAMED_OBJECT:
-                case Ole32.VARENUM.STORED_OBJECT:
-                case Ole32.VARENUM.BLOB_OBJECT:
-                case Ole32.VARENUM.CF:
-                case Ole32.VARENUM.BSTR_BLOB:
-                case Ole32.VARENUM.VECTOR:
-                case Ole32.VARENUM.ARRAY:
-                case Ole32.VARENUM.BYREF:
-                case Ole32.VARENUM.RESERVED:
+                case VARENUM.VOID:
+                case VARENUM.PTR:
+                case VARENUM.SAFEARRAY:
+                case VARENUM.CARRAY:
+                case VARENUM.RECORD:
+                case VARENUM.BLOB:
+                case VARENUM.STREAM:
+                case VARENUM.STORAGE:
+                case VARENUM.STREAMED_OBJECT:
+                case VARENUM.STORED_OBJECT:
+                case VARENUM.BLOB_OBJECT:
+                case VARENUM.CF:
+                case VARENUM.BSTR_BLOB:
+                case VARENUM.VECTOR:
+                case VARENUM.ARRAY:
+                case VARENUM.BYREF:
+                case VARENUM.RESERVED:
                 default:
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, ((int)vt).ToString(CultureInfo.InvariantCulture)));
             }
@@ -1048,7 +1049,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             public string Name { get; set; }
 
-            public Ole32.DispatchID DispId { get; set; } = Ole32.DispatchID.UNKNOWN;
+            public DispatchID DispId { get; set; } = DispatchID.UNKNOWN;
 
             public Type ValueType { get; set; }
 

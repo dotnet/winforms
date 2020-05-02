@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         UiaCore.ITableItemProvider,
         UiaCore.IGridProvider,
         UiaCore.IGridItemProvider,
-        OleAut32.IEnumVariant,
+        Oleaut32.IEnumVariant,
         Ole32.IOleWindow,
         UiaCore.ILegacyIAccessibleProvider,
         UiaCore.ISelectionProvider,
@@ -51,11 +51,11 @@ namespace System.Windows.Forms
         private IAccessible? systemIAccessible = null;
 
         /// <summary>
-        ///  Specifies the <see cref='OleAut32.IEnumVariant'/> used by this
+        ///  Specifies the <see cref='Oleaut32.IEnumVariant'/> used by this
         /// <see cref='AccessibleObject'/> .
         /// </summary>
-        private OleAut32.IEnumVariant? systemIEnumVariant = null;
-        private OleAut32.IEnumVariant? enumVariant = null;
+        private Oleaut32.IEnumVariant? systemIEnumVariant = null;
+        private Oleaut32.IEnumVariant? enumVariant = null;
 
         // IOleWindow interface of the 'inner' system IAccessible object that we are wrapping
         private Ole32.IOleWindow? systemIOleWindow = null;
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private OleAut32.IEnumVariant EnumVariant
+        private Oleaut32.IEnumVariant EnumVariant
         {
             get => enumVariant ?? (enumVariant = new EnumVariantObject(this));
         }
@@ -1798,12 +1798,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Clone this accessible object.
         /// </summary>
-        HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[]? ppEnum) => EnumVariant.Clone(ppEnum);
+        HRESULT Oleaut32.IEnumVariant.Clone(Oleaut32.IEnumVariant[]? ppEnum) => EnumVariant.Clone(ppEnum);
 
         /// <summary>
         ///  Obtain the next n children of this accessible object.
         /// </summary>
-        unsafe HRESULT OleAut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
+        unsafe HRESULT Oleaut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
         {
             return EnumVariant.Next(celt, rgVar, pCeltFetched);
         }
@@ -1811,12 +1811,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Resets the child accessible object enumerator.
         /// </summary>
-        HRESULT OleAut32.IEnumVariant.Reset() => EnumVariant.Reset();
+        HRESULT Oleaut32.IEnumVariant.Reset() => EnumVariant.Reset();
 
         /// <summary>
         ///  Skip the next n child accessible objects
         /// </summary>
-        HRESULT OleAut32.IEnumVariant.Skip(uint celt) => EnumVariant.Skip(celt);
+        HRESULT Oleaut32.IEnumVariant.Skip(uint celt) => EnumVariant.Skip(celt);
 
         /// <summary>
         ///  When overridden in a derived class, navigates to another object.
@@ -1957,7 +1957,7 @@ namespace System.Windows.Forms
                             ref acc);
 
             // Get the IEnumVariant interface
-            Guid IID_IEnumVariant = typeof(OleAut32.IEnumVariant).GUID;
+            Guid IID_IEnumVariant = typeof(Oleaut32.IEnumVariant).GUID;
             object? en = null;
             result = UnsafeNativeMethods.CreateStdAccessibleObject(
                         new HandleRef(this, handle),
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms
             if (acc != null || en != null)
             {
                 systemIAccessible = acc as IAccessible;
-                systemIEnumVariant = en as OleAut32.IEnumVariant;
+                systemIEnumVariant = en as Oleaut32.IEnumVariant;
                 systemIOleWindow = acc as Ole32.IOleWindow;
             }
         }
