@@ -92,45 +92,36 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
         ///  all available type infos will be returned, otherwise the primary one will be alled.
         /// </summary>
-        public static Oleaut32.ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
+        public unsafe static ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
         {
-            Oleaut32.ITypeInfo[] typeInfos = null;
-            int n = 0;
-            Oleaut32.ITypeInfo temp = null;
-
-            if (obj is NativeMethods.IProvideMultipleClassInfo pCI)
+            if (obj is IProvideMultipleClassInfo pCI)
             {
-                if (!pCI.GetMultiTypeInfoCount(ref n).Succeeded() || n == 0)
+                uint n = 0;
+                if (pCI.GetMultiTypeInfoCount(&n).Succeeded() && n > 0)
                 {
-                    n = 0;
-                }
-
-                if (n > 0)
-                {
-                    typeInfos = new Oleaut32.ITypeInfo[n];
-
-                    for (int i = 0; i < n; i++)
+                    var typeInfos = new ITypeInfo[n];
+                    for (uint i = 0; i < n; i++)
                     {
-                        if (pCI.GetInfoOfIndex(i, 1 /*MULTICLASSINFO_GETTYPEINFO*/, ref temp, 0, 0, IntPtr.Zero, IntPtr.Zero).Failed())
+                        if (pCI.GetInfoOfIndex(i, MULTICLASSINFO.GETTYPEINFO, out ITypeInfo result, null, null, null, null).Failed())
                         {
                             continue;
                         }
-                        Debug.Assert(temp != null, "IProvideMultipleClassInfo::GetInfoOfIndex returned S_OK for ITypeInfo index " + i + ", this is a issue in the object that's being browsed, NOT the property browser.");
-                        typeInfos[i] = temp;
+
+                        Debug.Assert(result != null, "IProvideMultipleClassInfo::GetInfoOfIndex returned S_OK for ITypeInfo index " + i + ", this is a issue in the object that's being browsed, NOT the property browser.");
+                        typeInfos[i] = result;
                     }
+
+                    return typeInfos;
                 }
             }
 
-            if (typeInfos == null || typeInfos.Length == 0)
+            ITypeInfo temp = FindTypeInfo(obj, wantCoClass);
+            if (temp != null)
             {
-                temp = FindTypeInfo(obj, wantCoClass);
-                if (temp != null)
-                {
-                    typeInfos = new Oleaut32.ITypeInfo[] { temp };
-                }
+                return new ITypeInfo[] { temp };
             }
 
-            return typeInfos;
+            return null;
         }
 
         /// <summary>

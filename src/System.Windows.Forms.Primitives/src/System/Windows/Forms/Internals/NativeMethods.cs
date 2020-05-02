@@ -343,34 +343,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComImport]
-        [Guid("A7ABA9C1-8983-11cf-8F20-00805F2CD064")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IProvideMultipleClassInfo
-        {
-            // since the inheritance doesn't seem to work...
-            // these are from IProvideClassInfo & IProvideClassInfo2
-            [PreserveSig]
-            void GetClassInfo_Stub();
-            // HRESULT GetClassInfo(out ITypeInfo ppTI);
-
-            [PreserveSig]
-            int GetGUID(int dwGuidKind, [In, Out] ref Guid pGuid);
-
-            [PreserveSig]
-            HRESULT GetMultiTypeInfoCount([In, Out] ref int pcti);
-
-            // we use arrays for most of these since we never use them anyway.
-            [PreserveSig]
-            HRESULT GetInfoOfIndex(int iti, int dwFlags,
-                                [In, Out]
-                                ref Oleaut32.ITypeInfo pTypeInfo,
-                                int pTIFlags,
-                                int pcdispidReserved,
-                                IntPtr piidPrimary,
-                                IntPtr piidSource);
-        }
-
         /// <summary>
         ///  This method takes a file URL and converts it to a local path.  The trick here is that
         ///  if there is a '#' in the path, everything after this is treated as a fragment.  So
