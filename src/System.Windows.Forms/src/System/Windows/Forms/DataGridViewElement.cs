@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -13,7 +11,7 @@ namespace System.Windows.Forms
     /// </summary>
     public class DataGridViewElement
     {
-        private DataGridView _dataGridView;
+        private DataGridView? _dataGridView;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='DataGridViewElement'/> class.
@@ -45,7 +43,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public DataGridView DataGridView
+        public DataGridView? DataGridView
         {
             get => _dataGridView;
             internal set

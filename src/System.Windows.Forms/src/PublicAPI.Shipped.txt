@@ -1773,13 +1773,13 @@ System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders = 
 System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedHeaders = 9 -> System.Windows.Forms.DataGridViewAutoSizeRowsMode
 System.Windows.Forms.DataGridViewAutoSizeRowsMode.None = 0 -> System.Windows.Forms.DataGridViewAutoSizeRowsMode
 System.Windows.Forms.DataGridViewBand
-~System.Windows.Forms.DataGridViewBand.DefaultHeaderCellType.get -> System.Type
-~System.Windows.Forms.DataGridViewBand.DefaultHeaderCellType.set -> void
+System.Windows.Forms.DataGridViewBand.DefaultHeaderCellType.get -> System.Type!
+System.Windows.Forms.DataGridViewBand.DefaultHeaderCellType.set -> void
 System.Windows.Forms.DataGridViewBand.Dispose() -> void
 System.Windows.Forms.DataGridViewBand.HasDefaultCellStyle.get -> bool
 System.Windows.Forms.DataGridViewBand.Index.get -> int
-~System.Windows.Forms.DataGridViewBand.Tag.get -> object
-~System.Windows.Forms.DataGridViewBand.Tag.set -> void
+System.Windows.Forms.DataGridViewBand.Tag.get -> object?
+System.Windows.Forms.DataGridViewBand.Tag.set -> void
 System.Windows.Forms.DataGridViewBindingCompleteEventArgs
 System.Windows.Forms.DataGridViewBindingCompleteEventArgs.DataGridViewBindingCompleteEventArgs(System.ComponentModel.ListChangedType listChangedType) -> void
 System.Windows.Forms.DataGridViewBindingCompleteEventArgs.ListChangedType.get -> System.ComponentModel.ListChangedType
@@ -2198,14 +2198,14 @@ System.Windows.Forms.DataGridViewEditingControlShowingEventArgs
 ~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.DataGridViewEditingControlShowingEventArgs(System.Windows.Forms.Control control, System.Windows.Forms.DataGridViewCellStyle cellStyle) -> void
 System.Windows.Forms.DataGridViewEditingControlShowingEventHandler
 System.Windows.Forms.DataGridViewElement
-~System.Windows.Forms.DataGridViewElement.DataGridView.get -> System.Windows.Forms.DataGridView
+System.Windows.Forms.DataGridViewElement.DataGridView.get -> System.Windows.Forms.DataGridView?
 System.Windows.Forms.DataGridViewElement.DataGridViewElement() -> void
-~System.Windows.Forms.DataGridViewElement.RaiseCellClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~System.Windows.Forms.DataGridViewElement.RaiseCellContentClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~System.Windows.Forms.DataGridViewElement.RaiseCellContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~System.Windows.Forms.DataGridViewElement.RaiseCellValueChanged(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~System.Windows.Forms.DataGridViewElement.RaiseDataError(System.Windows.Forms.DataGridViewDataErrorEventArgs e) -> void
-~System.Windows.Forms.DataGridViewElement.RaiseMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
+System.Windows.Forms.DataGridViewElement.RaiseCellClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+System.Windows.Forms.DataGridViewElement.RaiseCellContentClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+System.Windows.Forms.DataGridViewElement.RaiseCellContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+System.Windows.Forms.DataGridViewElement.RaiseCellValueChanged(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+System.Windows.Forms.DataGridViewElement.RaiseDataError(System.Windows.Forms.DataGridViewDataErrorEventArgs! e) -> void
+System.Windows.Forms.DataGridViewElement.RaiseMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
 System.Windows.Forms.DataGridViewElementStates
 System.Windows.Forms.DataGridViewElementStates.Displayed = 1 -> System.Windows.Forms.DataGridViewElementStates
 System.Windows.Forms.DataGridViewElementStates.Frozen = 2 -> System.Windows.Forms.DataGridViewElementStates
@@ -9085,7 +9085,7 @@ override System.Windows.Forms.DataGridView.WndProc(ref System.Windows.Forms.Mess
 ~override System.Windows.Forms.DataGridViewAdvancedBorderStyle.Equals(object other) -> bool
 override System.Windows.Forms.DataGridViewAdvancedBorderStyle.GetHashCode() -> int
 ~override System.Windows.Forms.DataGridViewAdvancedBorderStyle.ToString() -> string
-~override System.Windows.Forms.DataGridViewBand.ToString() -> string
+override System.Windows.Forms.DataGridViewBand.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewButtonCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewButtonCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DefaultAction.get -> string
@@ -12440,15 +12440,15 @@ virtual System.Windows.Forms.DataGridView.SetSelectedColumnCore(int columnIndex,
 virtual System.Windows.Forms.DataGridView.SetSelectedRowCore(int rowIndex, bool selected) -> void
 ~virtual System.Windows.Forms.DataGridView.Sort(System.Collections.IComparer comparer) -> void
 ~virtual System.Windows.Forms.DataGridView.Sort(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.ComponentModel.ListSortDirection direction) -> void
-~virtual System.Windows.Forms.DataGridViewBand.Clone() -> object
-~virtual System.Windows.Forms.DataGridViewBand.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~virtual System.Windows.Forms.DataGridViewBand.ContextMenuStrip.set -> void
-~virtual System.Windows.Forms.DataGridViewBand.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~virtual System.Windows.Forms.DataGridViewBand.DefaultCellStyle.set -> void
+virtual System.Windows.Forms.DataGridViewBand.Clone() -> object!
+virtual System.Windows.Forms.DataGridViewBand.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+virtual System.Windows.Forms.DataGridViewBand.ContextMenuStrip.set -> void
+virtual System.Windows.Forms.DataGridViewBand.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+virtual System.Windows.Forms.DataGridViewBand.DefaultCellStyle.set -> void
 virtual System.Windows.Forms.DataGridViewBand.Displayed.get -> bool
 virtual System.Windows.Forms.DataGridViewBand.Frozen.get -> bool
 virtual System.Windows.Forms.DataGridViewBand.Frozen.set -> void
-~virtual System.Windows.Forms.DataGridViewBand.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle
+virtual System.Windows.Forms.DataGridViewBand.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
 virtual System.Windows.Forms.DataGridViewBand.ReadOnly.get -> bool
 virtual System.Windows.Forms.DataGridViewBand.ReadOnly.set -> void
 virtual System.Windows.Forms.DataGridViewBand.Resizable.get -> System.Windows.Forms.DataGridViewTriState
