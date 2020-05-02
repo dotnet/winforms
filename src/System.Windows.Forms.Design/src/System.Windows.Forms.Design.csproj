@@ -121,11 +121,11 @@
     <EmbeddedResource Include="Resources\System\WinForms\Design\default.ico">
       <LogicalName>System.Windows.Forms.Design.default</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\WinForms\Design\professional1.ico">
-      <LogicalName>System.Windows.Forms.Design.professional1</LogicalName>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Professional1.ico">
+      <LogicalName>System.Windows.Forms.Design.Professional1</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\WinForms\Design\professional2.ico">
-      <LogicalName>System.Windows.Forms.Design.professional2</LogicalName>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Professional2.ico">
+      <LogicalName>System.Windows.Forms.Design.Professional2</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\WinForms\Design\classic.ico">
       <LogicalName>System.Windows.Forms.Design.classic</LogicalName>
@@ -154,11 +154,11 @@
     <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\DesignerShortcutBox.ico">
       <LogicalName>System.Windows.Forms.Design.Behavior.DesignerShortcutBox</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\leftopen.ico">
-      <LogicalName>System.Windows.Forms.Design.Behavior.leftopen</LogicalName>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\leftOpen.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.leftOpen</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\leftclose.ico">
-      <LogicalName>System.Windows.Forms.Design.Behavior.leftclose</LogicalName>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\leftClose.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.leftClose</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\rightopen.ico">
       <LogicalName>System.Windows.Forms.Design.Behavior.rightopen</LogicalName>
