@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -233,6 +234,7 @@ namespace System.Windows.Forms
         ///  this returns false. If the entry is not found, index will contain
         ///  the insert point at which one would add a new element.
         /// </summary>
+        [MemberNotNullWhen(true, nameof(_intEntries))]
         private bool LocateIntegerEntry(short entryKey, out int index)
         {
             if (_intEntries == null)
@@ -348,6 +350,7 @@ namespace System.Windows.Forms
         ///  this returns false. If the entry is not found, index will contain
         ///  the insert point at which one would add a new element.
         /// </summary>
+        [MemberNotNullWhen(true, nameof(_objEntries))]
         private bool LocateObjectEntry(short entryKey, out int index)
         {
             if (_objEntries != null)
