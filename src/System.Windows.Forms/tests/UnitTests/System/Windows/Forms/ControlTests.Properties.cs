@@ -4815,7 +4815,7 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = parent
             };
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
 
             // Set custom.
             control.Font = font2;

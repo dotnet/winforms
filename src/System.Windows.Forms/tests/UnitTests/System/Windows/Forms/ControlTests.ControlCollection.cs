@@ -569,7 +569,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, enabledChangedCallCount);
             Assert.True(control.Visible);
             Assert.Equal(0, visibleChangedCallCount);
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(0, fontChangedCallCount);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.Equal(0, foreColorChangedCallCount);
@@ -613,7 +613,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, enabledChangedCallCount);
             Assert.True(control.Visible);
             Assert.Equal(0, visibleChangedCallCount);
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(0, fontChangedCallCount);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.Equal(0, foreColorChangedCallCount);
@@ -649,7 +649,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Visible);
             var font = new Font("Arial", 8.25f);
             owner.Font = font;
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             owner.ForeColor = Color.Red;
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             owner.BackColor = Color.Blue;
@@ -798,7 +798,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Visible);
             var font = new Font("Arial", 8.25f);
             owner.Font = font;
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             owner.ForeColor = Color.Red;
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             owner.BackColor = Color.Blue;
@@ -950,7 +950,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Visible);
             var font = new Font("Arial", 8.25f);
             owner.Font = font;
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             owner.ForeColor = Color.Red;
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             owner.BackColor = Color.Blue;
@@ -1022,7 +1022,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.Visible);
             var font = new Font("Arial", 8.25f);
             owner.Font = font;
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             owner.ForeColor = Color.Red;
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             owner.BackColor = Color.Blue;
@@ -2216,7 +2216,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, enabledChangedCallCount);
             Assert.True(control.Visible);
             Assert.Equal(0, visibleChangedCallCount);
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(0, fontChangedCallCount);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.Equal(0, foreColorChangedCallCount);
@@ -2261,7 +2261,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, enabledChangedCallCount);
             Assert.True(control.Visible);
             Assert.Equal(2, visibleChangedCallCount);
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(0, fontChangedCallCount);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.Equal(0, foreColorChangedCallCount);
@@ -2403,7 +2403,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, enabledChangedCallCount);
             Assert.True(control.Visible);
             Assert.Equal(0, visibleChangedCallCount);
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(1, fontChangedCallCount);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.Equal(1, foreColorChangedCallCount);
@@ -2533,7 +2533,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(1, enabledChangedCallCount);
                 Assert.True(control.Visible);
                 Assert.Equal(2, visibleChangedCallCount);
-                Assert.Same(Control.DefaultFont, control.Font);
+                Assert.Equal(Control.DefaultFont, control.Font);
                 Assert.Equal(1, fontChangedCallCount);
                 Assert.Equal(Control.DefaultForeColor, control.ForeColor);
                 Assert.Equal(1, foreColorChangedCallCount);
@@ -2604,7 +2604,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, enabledChangedCallCount);
             Assert.True(control.Visible);
             Assert.Equal(0, visibleChangedCallCount);
-            Assert.Same(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultFont, control.Font);
             Assert.Equal(0, fontChangedCallCount);
             Assert.Equal(Control.DefaultForeColor, control.ForeColor);
             Assert.Equal(0, foreColorChangedCallCount);
@@ -2679,7 +2679,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(1, enabledChangedCallCount);
                 Assert.True(control.Visible);
                 Assert.Equal(2, visibleChangedCallCount);
-                Assert.Same(Control.DefaultFont, control.Font);
+                Assert.Equal(Control.DefaultFont, control.Font);
                 Assert.Equal(1, fontChangedCallCount);
                 Assert.Equal(Control.DefaultForeColor, control.ForeColor);
                 Assert.Equal(1, foreColorChangedCallCount);
