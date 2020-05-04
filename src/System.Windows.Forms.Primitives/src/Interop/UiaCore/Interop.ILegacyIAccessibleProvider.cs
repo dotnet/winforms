@@ -13,7 +13,6 @@ internal static partial class Interop
         [ComImport]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [Guid("E44C3566-915D-4070-99C6-047BFF5A08F5")]
-        [ComVisible(true)]
         public interface ILegacyIAccessibleProvider
         {
             void Select(int flagsSelect);

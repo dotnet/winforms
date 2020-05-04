@@ -13,7 +13,7 @@ internal static partial class Interop
         ///  Implemented by providers which want to provide information about or want to
         ///  reposition contained HWND-based elements.
         /// </summary>
-        [ComVisible(true)]
+        [ComImport]
         [Guid("1d5df27c-8947-4425-b8d9-79787bb460b8")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IRawElementProviderHwndOverride : IRawElementProviderSimple

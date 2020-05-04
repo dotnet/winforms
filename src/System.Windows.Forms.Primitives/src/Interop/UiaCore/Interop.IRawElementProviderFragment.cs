@@ -19,7 +19,6 @@ internal static partial class Interop
         ///  interface, which is derived from this, and has some additional methods.
         /// </summary>
         [ComImport]
-        [ComVisible(true)]
         [Guid("f7063da8-8359-439c-9297-bbc5299a7d87")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IRawElementProviderFragment : IRawElementProviderSimple

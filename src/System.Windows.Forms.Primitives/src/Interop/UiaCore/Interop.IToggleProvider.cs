@@ -10,7 +10,6 @@ internal static partial class Interop
     internal static partial class UiaCore
     {
         [ComImport]
-        [ComVisible(true)]
         [Guid("56D00BD0-C4F4-433C-A836-1A52A57E0892")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IToggleProvider
