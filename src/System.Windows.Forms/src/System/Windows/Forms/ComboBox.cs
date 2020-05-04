@@ -150,8 +150,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoCompleteMode.None, (int)AutoCompleteMode.SuggestAppend))
+                if (value < AutoCompleteMode.None || value > AutoCompleteMode.SuggestAppend)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteMode));
                 }
@@ -455,8 +454,7 @@ namespace System.Windows.Forms
             {
                 if (DrawMode != value)
                 {
-                    //valid values are 0x0 to 0x2.
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)DrawMode.Normal, (int)DrawMode.OwnerDrawVariable))
+                    if (value < DrawMode.Normal || value > DrawMode.OwnerDrawVariable)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DrawMode));
                     }
@@ -589,8 +587,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
+                if (value < FlatStyle.Flat || value > FlatStyle.System)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
@@ -1218,9 +1215,7 @@ namespace System.Windows.Forms
             {
                 if (DropDownStyle != value)
                 {
-                    // verify that 'value' is a valid enum type...
-                    //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ComboBoxStyle.Simple, (int)ComboBoxStyle.DropDownList))
+                    if (value < ComboBoxStyle.Simple || value > ComboBoxStyle.DropDownList)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ComboBoxStyle));
                     }

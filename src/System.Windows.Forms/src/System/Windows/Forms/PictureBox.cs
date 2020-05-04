@@ -134,7 +134,7 @@ namespace System.Windows.Forms
             get => _borderStyle;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
+                if (value < BorderStyle.None || value > BorderStyle.Fixed3D)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
@@ -803,7 +803,7 @@ namespace System.Windows.Forms
             get => _sizeMode;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)PictureBoxSizeMode.Normal, (int)PictureBoxSizeMode.Zoom))
+                if (value < PictureBoxSizeMode.Normal || value > PictureBoxSizeMode.Zoom)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PictureBoxSizeMode));
                 }

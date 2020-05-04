@@ -189,7 +189,7 @@ namespace System.Windows.Forms
             get => _borderStyle;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
+                if (value < BorderStyle.None || value > BorderStyle.Fixed3D)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
@@ -407,7 +407,7 @@ namespace System.Windows.Forms
             get => _upDownEdit.TextAlign;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                if (value < HorizontalAlignment.Left || value > HorizontalAlignment.Center)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
@@ -430,7 +430,7 @@ namespace System.Windows.Forms
             get => _upDownAlign;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)LeftRightAlignment.Left, (int)LeftRightAlignment.Right))
+                if (value < LeftRightAlignment.Left || value > LeftRightAlignment.Right)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LeftRightAlignment));
                 }

@@ -8,6 +8,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
+using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -276,15 +278,16 @@ namespace System.Windows.Forms
             }
             set
             {
+                if (value < FlatStyle.Flat || value > FlatStyle.System)
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
+                }
+
                 if (value == FlatStyle)
                 {
                     return;
                 }
 
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
-                }
                 _flatStyle = value;
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.FlatStyle);
                 Invalidate();
@@ -697,7 +700,7 @@ namespace System.Windows.Forms
             get => _textImageRelation;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TextImageRelation.Overlay, (int)TextImageRelation.TextBeforeImage, 1))
+                if (value < TextImageRelation.Overlay || value > TextImageRelation.TextBeforeImage || BitOperations.PopCount((uint)value) > 1)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextImageRelation));
                 }

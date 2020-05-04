@@ -116,8 +116,7 @@ namespace System.Windows.Forms
             {
                 if (_alignment != value)
                 {
-                    //valid values are 0x0 to 0x3
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabAlignment.Top, (int)TabAlignment.Right))
+                    if (value < TabAlignment.Top || value > TabAlignment.Right)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabAlignment));
                     }
@@ -161,8 +160,7 @@ namespace System.Windows.Forms
             {
                 if (_appearance != value)
                 {
-                    //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabAppearance.Normal, (int)TabAppearance.FlatButtons))
+                    if (value < TabAppearance.Normal || value > TabAppearance.FlatButtons)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabAppearance));
                     }
@@ -418,8 +416,7 @@ namespace System.Windows.Forms
 
             set
             {
-                //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabDrawMode.Normal, (int)TabDrawMode.OwnerDrawFixed))
+                if (value < TabDrawMode.Normal || value > TabDrawMode.OwnerDrawFixed)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabDrawMode));
                 }
@@ -785,8 +782,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabSizeMode.Normal, (int)TabSizeMode.Fixed))
+                if (value < TabSizeMode.Normal || value > TabSizeMode.Fixed)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabSizeMode));
                 }

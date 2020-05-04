@@ -197,7 +197,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive))
+                if (value < AutomationLiveSetting.Off || value > AutomationLiveSetting.Assertive)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
                 }

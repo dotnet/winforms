@@ -72,8 +72,7 @@ namespace System.Windows.Forms
             get { return _borderStyle; }
             set
             {
-                //valid values are 0x0 to 0x6
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelCellBorderStyle.None, (int)TableLayoutPanelCellBorderStyle.OutsetPartial))
+                if (value < TableLayoutPanelCellBorderStyle.None || value > TableLayoutPanelCellBorderStyle.OutsetPartial)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(CellBorderStyle), value));
                 }
@@ -205,8 +204,7 @@ namespace System.Windows.Forms
 
             set
             {
-                //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelGrowStyle.FixedSize, (int)TableLayoutPanelGrowStyle.AddColumns))
+                if (value < TableLayoutPanelGrowStyle.FixedSize || value > TableLayoutPanelGrowStyle.AddColumns)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(GrowStyle), value));
                 }

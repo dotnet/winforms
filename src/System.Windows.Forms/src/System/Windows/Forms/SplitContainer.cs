@@ -249,7 +249,7 @@ namespace System.Windows.Forms
             get => _borderStyle;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
+                if (value < BorderStyle.None || value > BorderStyle.Fixed3D)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
@@ -361,8 +361,7 @@ namespace System.Windows.Forms
 
             set
             {
-                //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FixedPanel.None, (int)FixedPanel.Panel2))
+                if (value < FixedPanel.None || value > FixedPanel.Panel2)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FixedPanel));
                 }
@@ -438,8 +437,7 @@ namespace System.Windows.Forms
             get { return _orientation; }
             set
             {
-                //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)Orientation.Horizontal, (int)Orientation.Vertical))
+                if (value < Orientation.Horizontal || value > Orientation.Vertical)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Orientation));
                 }

@@ -231,7 +231,7 @@ namespace System.Windows.Forms
             get => borderStyle;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
+                if (value < BorderStyle.None || value > BorderStyle.Fixed3D)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
@@ -418,8 +418,7 @@ namespace System.Windows.Forms
 
             set
             {
-                //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DrawMode.Normal, (int)DrawMode.OwnerDrawVariable))
+                if (value < DrawMode.Normal || value > DrawMode.OwnerDrawVariable)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DrawMode));
                 }
@@ -1044,7 +1043,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)SelectionMode.None, (int)SelectionMode.MultiExtended))
+                if (value < SelectionMode.None || value > SelectionMode.MultiExtended)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SelectionMode));
                 }

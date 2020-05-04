@@ -127,7 +127,7 @@ namespace System.Windows.Forms
             get => _blinkRate == 0 ? ErrorBlinkStyle.NeverBlink : _blinkStyle;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ErrorBlinkStyle.BlinkIfDifferentError, (int)ErrorBlinkStyle.NeverBlink))
+                if (value < ErrorBlinkStyle.BlinkIfDifferentError || value > ErrorBlinkStyle.NeverBlink)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ErrorBlinkStyle));
                 }
@@ -1429,7 +1429,7 @@ namespace System.Windows.Forms
                 get => _iconAlignment;
                 set
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ErrorIconAlignment.TopLeft, (int)ErrorIconAlignment.BottomRight))
+                    if (value < ErrorIconAlignment.TopLeft || value > ErrorIconAlignment.BottomRight)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ErrorIconAlignment));
                     }

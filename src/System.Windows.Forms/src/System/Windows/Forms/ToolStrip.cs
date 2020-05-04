@@ -876,8 +876,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripGripStyle.Hidden, (int)ToolStripGripStyle.Visible))
+                if (value < ToolStripGripStyle.Hidden || value > ToolStripGripStyle.Visible)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripGripStyle));
                 }
@@ -1264,8 +1263,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x4
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripLayoutStyle.StackWithOverflow, (int)ToolStripLayoutStyle.Table))
+                if (value < ToolStripLayoutStyle.StackWithOverflow || value > ToolStripLayoutStyle.Table)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripLayoutStyle));
                 }
@@ -1665,8 +1663,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripRenderMode.Custom, (int)ToolStripRenderMode.ManagerRenderMode))
+                if (value < ToolStripRenderMode.Custom || value > ToolStripRenderMode.ManagerRenderMode)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripRenderMode));
                 }
@@ -1816,8 +1813,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripTextDirection.Inherit, (int)ToolStripTextDirection.Vertical270))
+                if (value < ToolStripTextDirection.Inherit || value > ToolStripTextDirection.Vertical270)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripTextDirection));
                 }

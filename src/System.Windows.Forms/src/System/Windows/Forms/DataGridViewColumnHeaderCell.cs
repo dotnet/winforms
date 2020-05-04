@@ -76,7 +76,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)SortOrder.None, (int)SortOrder.Descending))
+                if (value < SortOrder.None || value > SortOrder.Descending)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SortOrder));
                 }

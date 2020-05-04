@@ -312,7 +312,7 @@ namespace System.Windows.Forms.Layout
 
         public static void SetFlowDirection(IArrangedElement container, FlowDirection value)
         {
-            if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlowDirection.LeftToRight, (int)FlowDirection.BottomUp))
+            if (value < FlowDirection.LeftToRight || value > FlowDirection.BottomUp)
             {
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlowDirection));
             }

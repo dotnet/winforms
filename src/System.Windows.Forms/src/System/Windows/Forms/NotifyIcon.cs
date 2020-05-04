@@ -120,8 +120,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolTipIcon.None, (int)ToolTipIcon.Error))
+                if (value < ToolTipIcon.None || value > ToolTipIcon.Error)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolTipIcon));
                 }
@@ -568,8 +567,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(SR.NotifyIconEmptyOrNullTipText);
             }
 
-            //valid values are 0x0 to 0x3
-            if (!ClientUtils.IsEnumValid(tipIcon, (int)tipIcon, (int)ToolTipIcon.None, (int)ToolTipIcon.Error))
+            if (tipIcon < ToolTipIcon.None || tipIcon > ToolTipIcon.Error)
             {
                 throw new InvalidEnumArgumentException(nameof(tipIcon), (int)tipIcon, typeof(ToolTipIcon));
             }

@@ -793,8 +793,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                if (value < HorizontalAlignment.Left || value > HorizontalAlignment.Center)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
@@ -2399,8 +2398,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void LoadFile(string path, RichTextBoxStreamType fileType)
         {
-            //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
+            if (fileType < RichTextBoxStreamType.RichText || fileType > RichTextBoxStreamType.UnicodePlainText)
             {
                 throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
@@ -2425,7 +2423,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(data));
             }
-            if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
+            if (fileType < RichTextBoxStreamType.RichText || fileType > RichTextBoxStreamType.UnicodePlainText)
             {
                 throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }
@@ -2717,8 +2715,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SaveFile(string path, RichTextBoxStreamType fileType)
         {
-            //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
+            if (fileType < RichTextBoxStreamType.RichText || fileType > RichTextBoxStreamType.UnicodePlainText)
             {
                 throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
             }

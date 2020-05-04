@@ -99,8 +99,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripRenderMode.Custom, (int)ToolStripRenderMode.ManagerRenderMode))
+                if (value < ToolStripRenderMode.Custom || value > ToolStripRenderMode.ManagerRenderMode)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripRenderMode));
                 }

@@ -239,8 +239,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, string.Format(CultureInfo.CurrentCulture, "Inside set_ImeModeBase({0}), this = {1}", value, this));
                 Debug.Indent();
 
-                //valid values are -1 to 0xb
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ImeMode.Inherit, (int)ImeMode.OnHalf))
+                if (value < ImeMode.Inherit || value > ImeMode.OnHalf)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ImeMode));
                 }

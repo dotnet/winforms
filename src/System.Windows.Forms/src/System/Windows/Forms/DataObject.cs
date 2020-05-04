@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
@@ -279,8 +280,7 @@ namespace System.Windows.Forms
 
         public virtual bool ContainsText(TextDataFormat format)
         {
-            //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
+            if (format < TextDataFormat.Text || format > TextDataFormat.CommaSeparatedValue)
             {
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
@@ -315,8 +315,7 @@ namespace System.Windows.Forms
 
         public virtual string GetText(TextDataFormat format)
         {
-            //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
+            if (format < TextDataFormat.Text || format > TextDataFormat.CommaSeparatedValue)
             {
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
@@ -379,8 +378,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(textData));
             }
 
-            //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
+            if (format < TextDataFormat.Text || format > TextDataFormat.CommaSeparatedValue)
             {
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }

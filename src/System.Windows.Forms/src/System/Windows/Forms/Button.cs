@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
+                if (value < AutoSizeMode.GrowAndShrink || value > AutoSizeMode.GrowOnly)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DialogResult.None, (int)DialogResult.No))
+                if (value < DialogResult.None || value > DialogResult.No)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DialogResult));
                 }

@@ -271,8 +271,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)LinkBehavior.SystemDefault, (int)LinkBehavior.NeverUnderline))
+                if (value < LinkBehavior.SystemDefault || value > LinkBehavior.NeverUnderline)
                 {
                     throw new InvalidEnumArgumentException(nameof(LinkBehavior), (int)value, typeof(LinkBehavior));
                 }
@@ -895,8 +894,7 @@ namespace System.Windows.Forms
 
             set
             {
-                //valid values are 0x0 to 0x7
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DialogResult.None, (int)DialogResult.No))
+                if (value < DialogResult.None || value > DialogResult.No)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DialogResult));
                 }

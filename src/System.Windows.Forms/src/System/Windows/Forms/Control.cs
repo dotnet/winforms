@@ -625,8 +625,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are -1 to 0x40
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AccessibleRole.Default, (int)AccessibleRole.OutlineButton))
+                if (value < AccessibleRole.Default || value > AccessibleRole.OutlineButton)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AccessibleRole));
                 }
@@ -1018,7 +1017,7 @@ namespace System.Windows.Forms
                 if (BackgroundImageLayout != value)
                 {
                     // Valid values are 0x0 to 0x4
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ImageLayout.None, (int)ImageLayout.Zoom))
+                    if (value < ImageLayout.None || value > ImageLayout.Zoom)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ImageLayout));
                     }
@@ -3237,8 +3236,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x2.
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit))
+                if (value < RightToLeft.No || value > RightToLeft.Inherit)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RightToLeft));
                 }

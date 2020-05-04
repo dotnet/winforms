@@ -229,8 +229,7 @@ namespace System.Windows.Forms
             get => base.SelectionMode;
             set
             {
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)SelectionMode.None, (int)SelectionMode.MultiExtended))
+                if (value < SelectionMode.None || value > SelectionMode.MultiExtended)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SelectionMode));
                 }
@@ -904,7 +903,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             // valid values are 0-2 inclusive.
-            if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
+            if (value < CheckState.Unchecked || value > CheckState.Indeterminate)
             {
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
             }
@@ -1061,7 +1060,7 @@ namespace System.Windows.Forms
                 //validate the enum that's passed in here
                 //
                 // Valid values are 0-2 inclusive.
-                if (!ClientUtils.IsEnumValid(check, (int)check, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
+                if (check < CheckState.Unchecked || check > CheckState.Indeterminate)
                 {
                     throw new InvalidEnumArgumentException(nameof(check), (int)check, typeof(CheckState));
                 }

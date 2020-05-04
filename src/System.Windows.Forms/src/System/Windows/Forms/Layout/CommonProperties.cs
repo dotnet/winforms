@@ -562,7 +562,7 @@ namespace System.Windows.Forms.Layout
 
             // If we are anchored we return DefaultDock
             value = mode == DockAnchorMode.Dock ? value : DefaultDock;
-            Debug.Assert(ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill), "Illegal value returned form xGetDock.");
+            Debug.Assert(Enum.IsDefined(typeof(DockStyle), value), "Illegal value returned form xGetDock.");
 
             Debug.Assert(mode == DockAnchorMode.Dock || value == DefaultDock,
                 "xGetDock needs to return the DefaultDock style when not docked.");
@@ -595,7 +595,7 @@ namespace System.Windows.Forms.Layout
         internal static void xSetDock(IArrangedElement element, DockStyle value)
         {
             Debug.Assert(value != xGetDock(element), "PERF: Caller should guard against setting Dock to original value.");
-            Debug.Assert(ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill), "Illegal value passed to xSetDock.");
+            Debug.Assert(Enum.IsDefined(typeof(DockStyle), value), "Illegal value passed to xSetDock.");
 
             BitVector32 state = GetLayoutState(element);
 

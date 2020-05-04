@@ -340,7 +340,7 @@ namespace System.Windows.Forms
                                              MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton,
                                              MessageBoxOptions options, bool showHelp)
         {
-            if (!ClientUtils.IsEnumValid(buttons, (int)buttons, (int)MessageBoxButtons.OK, (int)MessageBoxButtons.RetryCancel))
+            if (buttons < MessageBoxButtons.OK || buttons > MessageBoxButtons.RetryCancel)
             {
                 throw new InvalidEnumArgumentException(nameof(buttons), (int)buttons, typeof(MessageBoxButtons));
             }

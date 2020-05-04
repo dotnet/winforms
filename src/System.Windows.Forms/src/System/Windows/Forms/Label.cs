@@ -213,7 +213,7 @@ namespace System.Windows.Forms
             get => (BorderStyle)_labelState[s_stateBorderStyle];
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
+                if (value < BorderStyle.None || value > BorderStyle.Fixed3D)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
@@ -325,8 +325,7 @@ namespace System.Windows.Forms
             get => (FlatStyle)_labelState[s_stateFlatStyle];
             set
             {
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
+                if (value < FlatStyle.Flat || value > FlatStyle.System)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
@@ -593,7 +592,7 @@ namespace System.Windows.Forms
             get => _liveSetting;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive))
+                if (value < AutomationLiveSetting.Off || value > AutomationLiveSetting.Assertive)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
                 }

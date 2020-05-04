@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
@@ -551,8 +552,7 @@ namespace System.Windows.Forms
 
             set
             {
-                //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)LeftRightAlignment.Left, (int)LeftRightAlignment.Right))
+                if (value < LeftRightAlignment.Left || value > LeftRightAlignment.Right)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LeftRightAlignment));
                 }
@@ -603,8 +603,7 @@ namespace System.Windows.Forms
 
             set
             {
-                //valid values are 0x1, 0x2,0x4,0x8. max number of bits on at a time is 1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DateTimePickerFormat.Long, (int)DateTimePickerFormat.Custom, /*maxNumberOfBitsOn*/1))
+                if (value < DateTimePickerFormat.Long || value > DateTimePickerFormat.Custom  || BitOperations.PopCount((uint)value) > 1)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DateTimePickerFormat));
                 }

@@ -71,7 +71,7 @@ namespace System.Windows.Forms
             get => GetAutoSizeMode();
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
+                if (value < AutoSizeMode.GrowAndShrink || value > AutoSizeMode.GrowOnly)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
                 }
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
             {
                 if (_borderStyle != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
+                    if (value < BorderStyle.None || value > BorderStyle.Fixed3D)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                     }

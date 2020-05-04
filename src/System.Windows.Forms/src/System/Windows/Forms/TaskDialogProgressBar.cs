@@ -75,11 +75,7 @@ namespace System.Windows.Forms
             get => _state;
             set
             {
-                if (!ClientUtils.IsEnumValid(
-                    value,
-                    (int)value,
-                    (int)TaskDialogProgressBarState.Normal,
-                    (int)TaskDialogProgressBarState.None))
+                if (value < TaskDialogProgressBarState.Normal || value > TaskDialogProgressBarState.None)
                 {
                     throw new InvalidEnumArgumentException(
                         nameof(value),

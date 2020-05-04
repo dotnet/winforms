@@ -669,7 +669,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void SetDisplayMode(DisplayMode mode)
         {
-            if (!ClientUtils.IsEnumValid(mode, (int)mode, (int)DisplayMode.Hexdump, (int)DisplayMode.Auto))
+            if (mode < DisplayMode.Hexdump || mode > DisplayMode.Auto)
             {
                 throw new InvalidEnumArgumentException("mode", (int)mode, typeof(DisplayMode));
             }

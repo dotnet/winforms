@@ -245,8 +245,7 @@ namespace System.Windows.Forms
 
             set
             {
-                //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ItemActivation.Standard, (int)ItemActivation.TwoClick))
+                if (value < ItemActivation.Standard || value > ItemActivation.TwoClick)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ItemActivation));
                 }
@@ -441,7 +440,7 @@ namespace System.Windows.Forms
             get => borderStyle;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
+                if (value < BorderStyle.None || value > BorderStyle.Fixed3D)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
                 }
@@ -1053,8 +1052,7 @@ namespace System.Windows.Forms
             get { return headerStyle; }
             set
             {
-                //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ColumnHeaderStyle.None, (int)ColumnHeaderStyle.Clickable))
+                if (value < ColumnHeaderStyle.None || value > ColumnHeaderStyle.Clickable)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ColumnHeaderStyle));
                 }
@@ -1573,8 +1571,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)SortOrder.None, (int)SortOrder.Descending))
+                if (value < SortOrder.None || value > SortOrder.Descending)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SortOrder));
                 }
@@ -1896,8 +1893,7 @@ namespace System.Windows.Forms
 
                 FlipViewToLargeIconAndSmallIcon = false;
 
-                //valid values are 0x0 to 0x4
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)View.LargeIcon, (int)View.Tile))
+                if (value < View.LargeIcon || value > View.Tile)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(View));
                 }
@@ -3630,8 +3626,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
-            //valid values are 0x0 to 0x3
-            if (!ClientUtils.IsEnumValid(portion, (int)portion, (int)ItemBoundsPortion.Entire, (int)ItemBoundsPortion.ItemOnly))
+            if (portion < ItemBoundsPortion.Entire || portion > ItemBoundsPortion.ItemOnly)
             {
                 throw new InvalidEnumArgumentException(nameof(portion), (int)portion, typeof(ItemBoundsPortion));
             }
@@ -3706,8 +3701,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(subItemIndex), subItemIndex, string.Format(SR.InvalidArgument, nameof(subItemIndex), subItemIndex));
             }
-            //valid values are 0x0 to 0x3
-            if (!ClientUtils.IsEnumValid(portion, (int)portion, (int)ItemBoundsPortion.Entire, (int)ItemBoundsPortion.ItemOnly))
+            if (portion < ItemBoundsPortion.Entire || portion > ItemBoundsPortion.ItemOnly)
             {
                 throw new InvalidEnumArgumentException(nameof(portion), (int)portion, typeof(ItemBoundsPortion));
             }
@@ -5251,8 +5245,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, string.Format(SR.InvalidArgument, nameof(columnIndex), columnIndex));
             }
 
-            //valid values are 0x0 to 0x2
-            if (!ClientUtils.IsEnumValid(headerAutoResize, (int)headerAutoResize, (int)ColumnHeaderAutoResizeStyle.None, (int)ColumnHeaderAutoResizeStyle.ColumnContent))
+            if (headerAutoResize < ColumnHeaderAutoResizeStyle.None || headerAutoResize > ColumnHeaderAutoResizeStyle.ColumnContent)
             {
                 throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
             }

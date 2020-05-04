@@ -510,7 +510,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public bool GetBoolean(BooleanProperty prop)
         {
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)BooleanProperty.Transparent, (int)BooleanProperty.SourceShrink))
+            if (prop < BooleanProperty.Transparent || prop > BooleanProperty.SourceShrink)
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(BooleanProperty));
 
             BOOL val = BOOL.FALSE;
@@ -523,8 +523,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Color GetColor(ColorProperty prop)
         {
-            // Valid values are 0xed9 to 0xeef
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)ColorProperty.BorderColor, (int)ColorProperty.AccentColorHint))
+            if (prop < ColorProperty.BorderColor || prop > ColorProperty.AccentColorHint)
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(ColorProperty));
 
             int color = 0;
@@ -537,8 +536,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public int GetEnumValue(EnumProperty prop)
         {
-            // Valid values are 0xfa1 to 0xfaf
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)EnumProperty.BackgroundType, (int)EnumProperty.TrueSizeScalingType))
+            if (prop < EnumProperty.BackgroundType || prop > EnumProperty.TrueSizeScalingType)
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(EnumProperty));
 
             int val = 0;
@@ -551,8 +549,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe string GetFilename(FilenameProperty prop)
         {
-            // Valid values are 0xbb9 to 0xbc0
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)FilenameProperty.ImageFile, (int)FilenameProperty.GlyphImageFile))
+            if (prop < FilenameProperty.ImageFile || prop > FilenameProperty.GlyphImageFile)
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FilenameProperty));
 
             Span<char> filename = stackalloc char[512];
@@ -572,8 +569,14 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            if (!ClientUtils.IsEnumValid_NotSequential(prop, (int)prop, (int)FontProperty.TextFont, (int)FontProperty.GlyphFont))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FontProperty));
+            switch (prop)
+            {
+                case FontProperty.TextFont:
+                case FontProperty.GlyphFont:
+                    break;
+                default:
+                    throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FontProperty));
+            }
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeFont(this, hdc, Part, State, (int)prop, out User32.LOGFONTW logfont);
@@ -605,8 +608,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public int GetInteger(IntegerProperty prop)
         {
-            // Valid values are 0x961 to 0x978
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)IntegerProperty.ImageCount, (int)IntegerProperty.MinDpi5))
+            if (prop < IntegerProperty.ImageCount || prop > IntegerProperty.MinDpi5)
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(IntegerProperty));
 
             int val = 0;
@@ -628,8 +630,7 @@ namespace System.Windows.Forms.VisualStyles
 
         internal unsafe Size GetPartSize(Gdi32.HDC dc, ThemeSizeType type, IntPtr hwnd = default)
         {
-            // Valid values are 0x0 to 0x2
-            if (!ClientUtils.IsEnumValid(type, (int)type, (int)ThemeSizeType.Minimum, (int)ThemeSizeType.Draw))
+            if (type < ThemeSizeType.Minimum || type > ThemeSizeType.Draw)
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
 
             if (DpiHelper.IsPerMonitorV2Awareness && hwnd != IntPtr.Zero)
@@ -655,8 +656,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            // Valid values are 0x0 to 0x2
-            if (!ClientUtils.IsEnumValid(type, (int)type, (int)ThemeSizeType.Minimum, (int)ThemeSizeType.Draw))
+            if (type < ThemeSizeType.Minimum || type > ThemeSizeType.Draw)
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
 
             using var hdc = new DeviceContextHdcScope(dc);
@@ -670,8 +670,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Point GetPoint(PointProperty prop)
         {
-            //valid values are 0xd49 to 0xd50
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)PointProperty.Offset, (int)PointProperty.MinSize5))
+            if (prop < PointProperty.Offset || prop > PointProperty.MinSize5)
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(PointProperty));
 
             _lastHResult = GetThemePosition(this, Part, State, (int)prop, out Point point);
@@ -686,8 +685,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            // Valid values are 0xe11 to 0xe13
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)MarginProperty.SizingMargins, (int)MarginProperty.CaptionMargins))
+            if (prop < MarginProperty.SizingMargins || prop > MarginProperty.CaptionMargins)
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(MarginProperty));
 
             using var hdc = new DeviceContextHdcScope(dc);
@@ -701,8 +699,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe string GetString(StringProperty prop)
         {
-            // Valid values are 0xc81 to 0xc81
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)StringProperty.Text, (int)StringProperty.Text))
+            if (prop < StringProperty.Text || prop > StringProperty.Text)
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(StringProperty));
 
             Span<char> aString = stackalloc char[512];

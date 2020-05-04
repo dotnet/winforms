@@ -757,7 +757,7 @@ namespace System.Windows.Forms.Layout
 
             if (GetDock(element) != value)
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill))
+                if (value < DockStyle.None || value > DockStyle.Fill)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DockStyle));
                 }

@@ -412,8 +412,7 @@ namespace System.Windows.Forms
 
             set
             {
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)MaskFormat.ExcludePromptAndLiterals, (int)MaskFormat.IncludePromptAndLiterals))
+                if (value < MaskFormat.ExcludePromptAndLiterals || value > MaskFormat.IncludePromptAndLiterals)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MaskFormat));
                 }
@@ -531,8 +530,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)InsertKeyMode.Default, (int)InsertKeyMode.Overwrite))
+                if (value < InsertKeyMode.Default || value > InsertKeyMode.Overwrite)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(InsertKeyMode));
                 }
@@ -1262,8 +1260,7 @@ namespace System.Windows.Forms
                 if (textAlign != value)
                 {
                     //verify that 'value' is a valid enum type...
-                    //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                    if (value < HorizontalAlignment.Left || value > HorizontalAlignment.Center)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                     }
@@ -1325,8 +1322,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)MaskFormat.ExcludePromptAndLiterals, (int)MaskFormat.IncludePromptAndLiterals))
+                if (value < MaskFormat.ExcludePromptAndLiterals || value > MaskFormat.IncludePromptAndLiterals)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MaskFormat));
                 }

@@ -236,7 +236,7 @@ namespace System.Windows.Forms
 
         public static bool ContainsText(TextDataFormat format)
         {
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
+            if (format < TextDataFormat.Text || format > TextDataFormat.CommaSeparatedValue)
             {
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
@@ -308,7 +308,7 @@ namespace System.Windows.Forms
 
         public static string GetText(TextDataFormat format)
         {
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
+            if (format < TextDataFormat.Text || format > TextDataFormat.CommaSeparatedValue)
             {
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }
@@ -419,7 +419,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(text));
             }
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
+            if (format < TextDataFormat.Text || format > TextDataFormat.CommaSeparatedValue)
             {
                 throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
             }

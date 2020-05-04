@@ -142,7 +142,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewImageCellLayout.NotSet, (int)DataGridViewImageCellLayout.Zoom))
+                if (value < DataGridViewImageCellLayout.NotSet || value > DataGridViewImageCellLayout.Zoom)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewImageCellLayout));
                 }

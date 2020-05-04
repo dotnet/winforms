@@ -120,7 +120,7 @@ namespace System.Windows.Forms
             get => _headerAlignment;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                if (value < HorizontalAlignment.Left || value > HorizontalAlignment.Center)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
@@ -171,7 +171,7 @@ namespace System.Windows.Forms
             get => _footerAlignment;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                if (value < HorizontalAlignment.Left || value > HorizontalAlignment.Center)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
             get => _collapsedState;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ListViewGroupCollapsedState.Default, (int)ListViewGroupCollapsedState.Collapsed))
+                if (value < ListViewGroupCollapsedState.Default || value > ListViewGroupCollapsedState.Collapsed)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ListViewGroupCollapsedState));
                 }

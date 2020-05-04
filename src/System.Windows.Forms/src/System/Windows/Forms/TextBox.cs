@@ -122,7 +122,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoCompleteMode.None, (int)AutoCompleteMode.SuggestAppend))
+                if (value < AutoCompleteMode.None || value > AutoCompleteMode.SuggestAppend)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteMode));
                 }
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
             {
                 if (characterCasing != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)CharacterCasing.Normal, (int)CharacterCasing.Lower))
+                    if (value < CharacterCasing.Normal || value > CharacterCasing.Lower)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CharacterCasing));
                     }
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
             {
                 if (scrollBars != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ScrollBars.None, (int)ScrollBars.Both))
+                    if (value < ScrollBars.None || value > ScrollBars.Both)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ScrollBars));
                     }
@@ -454,7 +454,7 @@ namespace System.Windows.Forms
             {
                 if (textAlign != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                    if (value < HorizontalAlignment.Left || value > HorizontalAlignment.Center)
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                     }

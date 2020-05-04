@@ -346,7 +346,7 @@ namespace System.Windows.Forms
             set
             {
                 // valid values are 0x0 to 0x2.
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                if (value < HorizontalAlignment.Left || value > HorizontalAlignment.Center)
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
