@@ -21,10 +21,10 @@ namespace System.Windows.Forms
         // WARNING: ThreadStatic initialization happens only on the first thread at class CTOR time.
         // use InitializeThread mechanism to initialize ThreadStatic members
         [ThreadStatic]
-        private static ClientUtils.WeakRefCollection t_toolStripWeakArrayList;
+        private static WeakRefCollection t_toolStripWeakArrayList;
 
         [ThreadStatic]
-        private static ClientUtils.WeakRefCollection t_toolStripPanelWeakArrayList;
+        private static WeakRefCollection t_toolStripPanelWeakArrayList;
 
         [ThreadStatic]
         private static bool t_initialized;
@@ -136,8 +136,8 @@ namespace System.Windows.Forms
 
         internal static int CurrentDpi { get; set; } = DpiHelper.DeviceDpi;
 
-        internal static ClientUtils.WeakRefCollection ToolStrips
-            => t_toolStripWeakArrayList ??= new ClientUtils.WeakRefCollection();
+        internal static WeakRefCollection ToolStrips
+            => t_toolStripWeakArrayList ??= new WeakRefCollection();
 
         /// <summary>Static events only!!!</summary>
         private static void AddEventHandler(int key, Delegate value)
@@ -621,8 +621,8 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static ClientUtils.WeakRefCollection ToolStripPanels
-            => t_toolStripPanelWeakArrayList ??= new ClientUtils.WeakRefCollection();
+        internal static WeakRefCollection ToolStripPanels
+            => t_toolStripPanelWeakArrayList ??= new WeakRefCollection();
 
         internal static ToolStripPanel ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
         {

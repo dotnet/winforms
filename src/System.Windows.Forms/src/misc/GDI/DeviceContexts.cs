@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Internal
     internal static class DeviceContexts
     {
         [ThreadStatic]
-        private static ClientUtils.WeakRefCollection activeDeviceContexts;
+        private static WeakRefCollection activeDeviceContexts;
 
         /// <summary>
         ///  WindowsGraphicsCacheManager needs to track DeviceContext objects so it can ask them
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Internal
         {
             if (activeDeviceContexts == null)
             {
-                activeDeviceContexts = new ClientUtils.WeakRefCollection
+                activeDeviceContexts = new WeakRefCollection
                 {
                     RefCheckThreshold = 20
                 };
