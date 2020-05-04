@@ -216,6 +216,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, control.ImageIndex);
         }
 
+        [WinFormsFact]
+        public void Label_SupportsUiaProviders_returns_true()
+        {
+            using var label = new Label();
+            Assert.True(label.SupportsUiaProviders);
+        }
+
         public class SubLabel : Label
         {
             public new bool CanEnableIme => base.CanEnableIme;
