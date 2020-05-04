@@ -31,7 +31,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Items))]
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [SRDescription(nameof(SR.DescriptionListView))]
-    public class ListView : Control
+    public partial class ListView : Control
     {
         //members
         private const int MASK_HITTESTFLAG = 0x00F7;
@@ -9460,44 +9460,6 @@ namespace System.Windows.Forms
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new ListViewAccessibleObject(this);
-        }
-
-        internal class ListViewAccessibleObject : ControlAccessibleObject
-        {
-            private readonly ListView owner;
-
-            internal ListViewAccessibleObject(ListView owner) : base(owner)
-            {
-                this.owner = owner;
-            }
-
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (owner != null)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ItemStatusPropertyId)
-                {
-                    switch (owner.Sorting)
-                    {
-                        case SortOrder.None:
-                            return SR.NotSortedAccessibleStatus;
-                        case SortOrder.Ascending:
-                            return SR.SortedAscendingAccessibleStatus;
-                        case SortOrder.Descending:
-                            return SR.SortedDescendingAccessibleStatus;
-                    }
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
         }
     }
 }

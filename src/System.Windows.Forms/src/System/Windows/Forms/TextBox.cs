@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     [ComVisible(true)]
     [Designer("System.Windows.Forms.Design.TextBoxDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionTextBox))]
-    public class TextBox : TextBoxBase
+    public partial class TextBox : TextBoxBase
     {
         private static readonly object EVENT_TEXTALIGNCHANGED = new object();
 
@@ -274,23 +274,6 @@ namespace System.Windows.Forms
             get
             {
                 return PasswordChar != '\0';
-            }
-        }
-
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return base.CreateAccessibilityInstance();
-        }
-
-        private class TextBoxAccessibleObject : ControlAccessibleObject
-        {
-            public TextBoxAccessibleObject(TextBox owner) : base(owner)
-            {
-            }
-
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                return base.FragmentNavigate(direction);
             }
         }
 
@@ -998,5 +981,8 @@ namespace System.Windows.Forms
 
             public bool ShouldRenderPlaceHolderText(in Message m) => _textBox.ShouldRenderPlaceHolderText(m);
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+           => new TextBoxAccessibleObject(this);
     }
 }

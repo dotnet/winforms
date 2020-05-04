@@ -22,7 +22,7 @@ namespace System.Windows.Forms
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [SRDescription(nameof(SR.DescriptionButton))]
     [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
-    public class Button : ButtonBase, IButtonControl
+    public partial class Button : ButtonBase, IButtonControl
     {
         /// <summary>
         ///  The dialog result that will be sent to the parent dialog form when
@@ -86,18 +86,6 @@ namespace System.Windows.Forms
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
                     }
                 }
-            }
-        }
-
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ButtonAccessibleObject(this);
-        }
-
-        private class ButtonAccessibleObject : ControlAccessibleObject
-        {
-            public ButtonAccessibleObject(Button owner) : base(owner)
-            {
             }
         }
 
@@ -399,5 +387,8 @@ namespace System.Windows.Forms
                     break;
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+           => new ButtonAccessibleObject(this);
     }
 }

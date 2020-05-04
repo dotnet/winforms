@@ -25,7 +25,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Text))]
     [Designer("System.Windows.Forms.Design.GroupBoxDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionGroupBox))]
-    public class GroupBox : Control
+    public partial class GroupBox : Control
     {
         int fontHeight = -1;
         Font cachedFont;
@@ -752,42 +752,6 @@ namespace System.Windows.Forms
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new GroupBoxAccessibleObject(this);
-        }
-
-        [ComVisible(true)]
-        internal class GroupBoxAccessibleObject : ControlAccessibleObject
-        {
-            internal GroupBoxAccessibleObject(GroupBox owner) : base(owner)
-            {
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    return AccessibleRole.Grouping;
-                }
-            }
-
-            internal override bool IsIAccessibleExSupported() => true;
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.GroupControlTypeId;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return true;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
         }
     }
 }

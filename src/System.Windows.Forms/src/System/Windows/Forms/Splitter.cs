@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Dock))]
     [SRDescription(nameof(SR.DescriptionSplitter))]
     [Designer("System.Windows.Forms.Design.SplitterDesigner, " + AssemblyRef.SystemDesign)]
-    public class Splitter : Control
+    public partial class Splitter : Control
     {
         private const int DRAW_START = 1;
         private const int DRAW_MOVE = 2;
@@ -970,6 +970,9 @@ namespace System.Windows.Forms
             string s = base.ToString();
             return s + ", MinExtra: " + MinExtra.ToString(CultureInfo.CurrentCulture) + ", MinSize: " + MinSize.ToString(CultureInfo.CurrentCulture);
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+           => new SplitterAccessibleObject(this);
 
         /// <summary>
         ///  Return value holder...

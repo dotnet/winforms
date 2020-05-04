@@ -6617,4 +6617,7 @@ Stack trace where the illegal operation occurred was:
   <data name="ErrorProviderDefaultAccessibleName" xml:space="preserve">
     <value>Error provider</value>
   </data>
+  <data name="AccessibleActionDoubleClick" xml:space="preserve">
+    <value>Double Click</value>
+  </data>
 </root>
