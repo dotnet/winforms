@@ -38,5 +38,11 @@ namespace System.Windows.Forms
         public static bool IsWindows8_1OrGreater
             => s_versionInfo.dwMajorVersion >= 10
                 || (s_versionInfo.dwMajorVersion == 6 && s_versionInfo.dwMinorVersion == 3);
+
+        /// <summary>
+        ///  Is Windows 8 or later.
+        /// </summary>
+        public static bool IsWindows8OrGreater
+            => s_versionInfo.dwMajorVersion >= 8;
     }
 }
