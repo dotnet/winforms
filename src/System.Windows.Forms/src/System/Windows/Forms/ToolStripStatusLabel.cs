@@ -96,21 +96,21 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                                             (int)value,
-                                             (int)Border3DStyle.Adjust,
-                                             (int)Border3DStyle.Bump,
-                                             (int)Border3DStyle.Etched,
-                                             (int)Border3DStyle.Flat,
-                                             (int)Border3DStyle.Raised,
-                                             (int)Border3DStyle.RaisedInner,
-                                             (int)Border3DStyle.RaisedOuter,
-                                             (int)Border3DStyle.Sunken,
-                                             (int)Border3DStyle.SunkenInner,
-                                             (int)Border3DStyle.SunkenOuter
-                                                ))
+                switch (borderStyle)
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Border3DStyle));
+                    case Border3DStyle.Adjust:
+                    case Border3DStyle.Bump:
+                    case Border3DStyle.Etched:
+                    case Border3DStyle.Flat:
+                    case Border3DStyle.Raised:
+                    case Border3DStyle.RaisedInner:
+                    case Border3DStyle.RaisedOuter:
+                    case Border3DStyle.Sunken:
+                    case Border3DStyle.SunkenInner:
+                    case Border3DStyle.SunkenOuter:
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Border3DStyle));
                 }
 
                 if (borderStyle != value)

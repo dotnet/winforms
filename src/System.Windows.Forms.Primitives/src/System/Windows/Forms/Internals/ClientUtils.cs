@@ -42,32 +42,6 @@ namespace System.Windows.Forms
             return valid;
         }
 
-        // Useful for cases where you have discontiguous members of the enum.
-        // Valid example: AutoComplete source.
-        // if (!ClientUtils.IsEnumValid(value, AutoCompleteSource.None,
-        //                                            AutoCompleteSource.AllSystemSources
-        //                                            AutoCompleteSource.AllUrl,
-        //                                            AutoCompleteSource.CustomSource,
-        //                                            AutoCompleteSource.FileSystem,
-        //                                            AutoCompleteSource.FileSystemDirectories,
-        //                                            AutoCompleteSource.HistoryList,
-        //                                            AutoCompleteSource.ListItems,
-        //                                            AutoCompleteSource.RecentlyUsedList))
-        //
-        // PERF tip: put the default value in the enum towards the front of the argument list.
-        public static bool IsEnumValid_NotSequential(Enum enumValue, int value, params int[] enumValues)
-        {
-            Debug.Assert(Enum.GetValues(enumValue.GetType()).Length == enumValues.Length, "Not all the enum members were passed in.");
-            for (int i = 0; i < enumValues.Length; i++)
-            {
-                if (enumValues[i] == value)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         private enum CharType
         {
             None,
@@ -119,38 +93,6 @@ namespace System.Windows.Forms
             }
             System.Diagnostics.Debug.Assert(newmask == mask, "Mask not valid in IsEnumValid!");
         }
-
-        private static void Debug_NonSequentialEnumIsDefinedCheck(Enum value, int minVal, int maxVal, int maxBitsOn, bool isValid) {
-               Type t = value.GetType();
-               int actualMinimum = int.MaxValue;
-               int actualMaximum = int.MinValue;
-               int checkedValue = Convert.ToInt32(value, CultureInfo.InvariantCulture);
-               int maxBitsFound = 0;
-               bool foundValue = false;
-            foreach (int iVal in Enum.GetValues(t)){
-                actualMinimum = Math.Min(actualMinimum, iVal);
-                   actualMaximum = Math.Max(actualMaximum, iVal);
-                   maxBitsFound = Math.Max(maxBitsFound, BitOperations.PopCount((uint)iVal));
-                   if (checkedValue == iVal) {
-                       foundValue = true;
-                   }
-               }
-               if (minVal != actualMinimum) {
-                    // put string allocation in the IF block so the common case doesnt build up the string.
-                   System.Diagnostics.Debug.Fail( "Minimum passed in is not the actual minimum for the enum.  Consider changing the parameters or using a different function.");
-               }
-               if (maxVal != actualMaximum) {
-                    // put string allocation in the IF block so the common case doesnt build up the string.
-                   System.Diagnostics.Debug.Fail("Maximum passed in is not the actual maximum for the enum.  Consider changing the parameters or using a different function.");
-               }
-
-               if (maxBitsFound != maxBitsOn) {
-                   System.Diagnostics.Debug.Fail("Incorrect usage of IsEnumValid function. The bits set to 1 in this enum was found to be: " + maxBitsFound.ToString(CultureInfo.InvariantCulture) + "this does not match what's passed in: " + maxBitsOn.ToString(CultureInfo.InvariantCulture));
-               }
-               if (foundValue != isValid) {
-                    System.Diagnostics.Debug.Fail(string.Format(CultureInfo.InvariantCulture, "Returning {0} but we actually {1} found the value in the enum! Consider using a different overload to IsValidEnum.", isValid, ((foundValue) ? "have" : "have not")));
-               }
-           }
 #endif
     }
 }

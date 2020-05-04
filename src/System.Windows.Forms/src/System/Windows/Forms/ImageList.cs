@@ -96,16 +96,16 @@ namespace System.Windows.Forms
             get => _colorDepth;
             set
             {
-                // ColorDepth is not conitguous - list the members instead.
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                                                     (int)value,
-                                                    (int)ColorDepth.Depth4Bit,
-                                                    (int)ColorDepth.Depth8Bit,
-                                                    (int)ColorDepth.Depth16Bit,
-                                                    (int)ColorDepth.Depth24Bit,
-                                                    (int)ColorDepth.Depth32Bit))
+                switch (value)
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ColorDepth));
+                    case ColorDepth.Depth4Bit:
+                    case ColorDepth.Depth8Bit:
+                    case ColorDepth.Depth16Bit:
+                    case ColorDepth.Depth24Bit:
+                    case ColorDepth.Depth32Bit:
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ColorDepth));
                 }
 
                 if (_colorDepth == value)

@@ -280,16 +280,17 @@ namespace System.Windows.Forms
 
             set
             {
-                // using this as ListViewAlignment has discontiguous values.
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                                                (int)value,
-                                                (int)ListViewAlignment.Default,
-                                                (int)ListViewAlignment.Top,
-                                                (int)ListViewAlignment.Left,
-                                                (int)ListViewAlignment.SnapToGrid))
+                switch (value)
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ListViewAlignment));
+                    case ListViewAlignment.Default:
+                    case ListViewAlignment.Top:
+                    case ListViewAlignment.Left:
+                    case ListViewAlignment.SnapToGrid:
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ListViewAlignment));
                 }
+
                 if (alignStyle != value)
                 {
                     alignStyle = value;

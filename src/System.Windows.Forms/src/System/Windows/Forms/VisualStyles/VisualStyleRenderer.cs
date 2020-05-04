@@ -307,8 +307,16 @@ namespace System.Windows.Forms.VisualStyles
             if (!ClientUtils.IsEnumValid_Masked(edges, (int)edges, (uint)(Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal)))
                 throw new InvalidEnumArgumentException(nameof(edges), (int)edges, typeof(Edges));
 
-            if (!ClientUtils.IsEnumValid_NotSequential(style, (int)style, (int)EdgeStyle.Raised, (int)EdgeStyle.Sunken, (int)EdgeStyle.Etched, (int)EdgeStyle.Bump))
-                throw new InvalidEnumArgumentException(nameof(style), (int)style, typeof(EdgeStyle));
+            switch (style)
+            {
+                case EdgeStyle.Raised:
+                case EdgeStyle.Sunken:
+                case EdgeStyle.Etched:
+                case EdgeStyle.Bump:
+                    break;
+                default:
+                    throw new InvalidEnumArgumentException(nameof(style), (int)style, typeof(EdgeStyle));
+            }
 
             if (!ClientUtils.IsEnumValid_Masked(effects, (int)effects, (uint)(EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono)))
                 throw new InvalidEnumArgumentException(nameof(effects), (int)effects, typeof(EdgeEffects));

@@ -191,18 +191,20 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid_NotSequential(value, (int)value,
-                                                    (int)AutoCompleteSource.None,
-                                                    (int)AutoCompleteSource.AllSystemSources,
-                                                    (int)AutoCompleteSource.AllUrl,
-                                                    (int)AutoCompleteSource.CustomSource,
-                                                    (int)AutoCompleteSource.FileSystem,
-                                                    (int)AutoCompleteSource.FileSystemDirectories,
-                                                    (int)AutoCompleteSource.HistoryList,
-                                                    (int)AutoCompleteSource.ListItems,
-                                                    (int)AutoCompleteSource.RecentlyUsedList))
+                switch (value)
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteSource));
+                    case AutoCompleteSource.None:
+                    case AutoCompleteSource.AllSystemSources:
+                    case AutoCompleteSource.AllUrl:
+                    case AutoCompleteSource.CustomSource:
+                    case AutoCompleteSource.FileSystem:
+                    case AutoCompleteSource.FileSystemDirectories:
+                    case AutoCompleteSource.HistoryList:
+                    case AutoCompleteSource.ListItems:
+                    case AutoCompleteSource.RecentlyUsedList:
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteSource));
                 }
 
                 if (DropDownStyle == ComboBoxStyle.DropDownList &&

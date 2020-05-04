@@ -722,19 +722,18 @@ namespace System.Windows.Forms
             }
             set
             {
-                // we could be more clever here, but it doesnt seem like this would get set enough
-                // to warrant a clever bitmask.
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                    (int)value,
-                    (int)RichTextBoxScrollBars.Both,
-                    (int)RichTextBoxScrollBars.None,
-                    (int)RichTextBoxScrollBars.Horizontal,
-                    (int)RichTextBoxScrollBars.Vertical,
-                    (int)RichTextBoxScrollBars.ForcedHorizontal,
-                    (int)RichTextBoxScrollBars.ForcedVertical,
-                    (int)RichTextBoxScrollBars.ForcedBoth))
+                switch (value)
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RichTextBoxScrollBars));
+                    case RichTextBoxScrollBars.Both:
+                    case RichTextBoxScrollBars.None:
+                    case RichTextBoxScrollBars.Horizontal:
+                    case RichTextBoxScrollBars.Vertical:
+                    case RichTextBoxScrollBars.ForcedHorizontal:
+                    case RichTextBoxScrollBars.ForcedVertical:
+                    case RichTextBoxScrollBars.ForcedBoth:
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RichTextBoxScrollBars));
                 }
 
                 if (value != ScrollBars)
