@@ -109,20 +109,12 @@ namespace System.Windows.Forms.Tests
             ArgumentException ex = Assert.Throws<ArgumentException>(() => box.SelectionMode = expected);
         }
 
-        /// <summary>
-        ///  Data for the SelectionModeGetSetInvalid test
-        /// </summary>
-        public static TheoryData<SelectionMode> SelectionModeGetSetInvalidData =>
-            CommonTestHelper.GetEnumTheoryDataInvalid<SelectionMode>();
-
         [WinFormsTheory]
-        [MemberData(nameof(SelectionModeGetSetInvalidData))]
-        public void CheckedListBox_CheckStateGetSetInvalid(SelectionMode expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SelectionMode))]
+        public void CheckedListBox_SelectionMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(SelectionMode value)
         {
-            using var box = new CheckedListBox();
-
-            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SelectionMode = expected);
-            Assert.Equal("value", ex.ParamName);
+            using var control = new CheckedListBox();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.SelectionMode = value);
         }
 
         /// <summary>
@@ -276,39 +268,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("index", ex.ParamName);
         }
 
-        /// <summary>
-        ///  Data for the SetItemCheckState test
-        /// </summary>
-        public static TheoryData<CheckState> SetItemCheckStateData =>
-            CommonTestHelper.GetEnumTheoryData<CheckState>();
-
         [WinFormsTheory]
-        [MemberData(nameof(SetItemCheckStateData))]
-        public void CheckedListBox_SetItemCheckState(CheckState expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
+        public void CheckedListBox_SetItemCheckState_Invoke_GetReturnsExpected(CheckState value)
         {
-            using var box = new CheckedListBox();
-            box.Items.Add(new CheckBox(), false);
+            using var control = new CheckedListBox();
+            control.Items.Add(new CheckBox(), false);
 
-            box.SetItemCheckState(0, expected);
+            control.SetItemCheckState(0, value);
+            Assert.Equal(value, control.GetItemCheckState(0));
+            Assert.False(control.IsHandleCreated);
 
-            Assert.Equal(expected, box.GetItemCheckState(0));
+            // Set same.
+            control.SetItemCheckState(0, value);
+            Assert.Equal(value, control.GetItemCheckState(0));
+            Assert.False(control.IsHandleCreated);
         }
 
-        /// <summary>
-        ///  Data for the SetItemCheckStateInvalid test
-        /// </summary>
-        public static TheoryData<CheckState> SetItemCheckStateInvalidData =>
-            CommonTestHelper.GetEnumTheoryDataInvalid<CheckState>();
-
         [WinFormsTheory]
-        [MemberData(nameof(SetItemCheckStateInvalidData))]
-        public void CheckedListBox_SetItemCheckStateInvalid(CheckState expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(CheckState))]
+        public void CheckedListBox_SetItemCheckState_InvokeInvalidValue_ThrowsInvalidEnumArgumentException(CheckState value)
         {
-            using var box = new CheckedListBox();
-            box.Items.Add(new CheckBox(), false);
-
-            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SetItemCheckState(0, expected));
-            Assert.Equal("value", ex.ParamName);
+            using var control = new CheckedListBox();
+            control.Items.Add(new CheckBox(), false);
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.SetItemCheckState(0, value));
         }
 
         [WinFormsTheory]
