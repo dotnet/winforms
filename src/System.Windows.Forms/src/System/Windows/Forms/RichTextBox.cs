@@ -2972,7 +2972,7 @@ namespace System.Windows.Forms
             else
             {
                 // Encode using the default code page.
-                encodedBytes = CodePagesEncodingProvider.Instance.GetEncoding(0).GetBytes(str);
+                encodedBytes = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetBytes(str);
             }
 
             editStream = new MemoryStream(encodedBytes.Length);
@@ -3005,7 +3005,7 @@ namespace System.Windows.Forms
                     editStream.Read(bytes, (int)streamStart, SZ_RTF_TAG.Length);
 
                     // Encode using the default encoding.
-                    string str = CodePagesEncodingProvider.Instance.GetEncoding(0).GetString(bytes);
+                    string str = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetString(bytes);
                     if (!SZ_RTF_TAG.Equals(str))
                     {
                         throw new ArgumentException(SR.InvalidFileFormat);
@@ -3098,7 +3098,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // Convert from the current code page
-                    result = CodePagesEncodingProvider.Instance.GetEncoding(0).GetString(bytes, 0, bytes.Length);
+                    result = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetString(bytes, 0, bytes.Length);
                 }
 
                 // Trimming off a null char is usually a sign of incorrect marshalling.
@@ -3660,33 +3660,33 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.VSCROLL:
-                {
-                    base.WndProc(ref m);
-                    User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParam);
-                    if (loWord == User32.SBV.THUMBTRACK)
                     {
-                        OnVScroll(EventArgs.Empty);
+                        base.WndProc(ref m);
+                        User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParam);
+                        if (loWord == User32.SBV.THUMBTRACK)
+                        {
+                            OnVScroll(EventArgs.Empty);
+                        }
+                        else if (loWord == User32.SBV.THUMBPOSITION)
+                        {
+                            OnVScroll(EventArgs.Empty);
+                        }
+                        break;
                     }
-                    else if (loWord == User32.SBV.THUMBPOSITION)
-                    {
-                        OnVScroll(EventArgs.Empty);
-                    }
-                    break;
-                }
                 case User32.WM.HSCROLL:
-                {
-                    base.WndProc(ref m);
-                    User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParam);
-                    if (loWord == User32.SBH.THUMBTRACK)
                     {
-                        OnHScroll(EventArgs.Empty);
+                        base.WndProc(ref m);
+                        User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParam);
+                        if (loWord == User32.SBH.THUMBTRACK)
+                        {
+                            OnHScroll(EventArgs.Empty);
+                        }
+                        else if (loWord == User32.SBH.THUMBPOSITION)
+                        {
+                            OnHScroll(EventArgs.Empty);
+                        }
+                        break;
                     }
-                    else if (loWord == User32.SBH.THUMBPOSITION)
-                    {
-                        OnHScroll(EventArgs.Empty);
-                    }
-                    break;
-                }
                 default:
                     base.WndProc(ref m);
                     break;
