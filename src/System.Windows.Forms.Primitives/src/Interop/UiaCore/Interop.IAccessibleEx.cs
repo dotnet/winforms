@@ -11,7 +11,6 @@ internal static partial class Interop
     internal static partial class UiaCore
     {
         [ComImport]
-        [ComVisible(true)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [Guid("F8B80ADA-2C44-48D0-89BE-5FF23C9CD875")]
         public unsafe interface IAccessibleEx

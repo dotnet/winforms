@@ -10,7 +10,6 @@ internal static partial class Interop
     internal static partial class UiaCore
     {
         [ComImport]
-        [ComVisible(true)]
         [Guid("D6DD68D1-86FD-4332-8666-9ABEDEA2D24C")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IRawElementProviderSimple

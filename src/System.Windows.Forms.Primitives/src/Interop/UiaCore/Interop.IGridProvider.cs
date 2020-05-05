@@ -10,7 +10,6 @@ internal static partial class Interop
     internal static partial class UiaCore
     {
         [ComImport]
-        [ComVisible(true)]
         [Guid("b17d6187-0907-464b-a168-0ef17a1572b1")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IGridProvider

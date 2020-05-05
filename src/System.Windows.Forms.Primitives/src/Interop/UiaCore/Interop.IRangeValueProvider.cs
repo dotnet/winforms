@@ -10,7 +10,6 @@ internal static partial class Interop
     internal static partial class UiaCore
     {
         [ComImport]
-        [ComVisible(true)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [Guid("36dc7aef-33e6-4691-afe1-2be7274b3d33")]
         public interface IRangeValueProvider

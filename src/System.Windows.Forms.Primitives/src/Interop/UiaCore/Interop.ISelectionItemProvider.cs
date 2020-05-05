@@ -16,7 +16,6 @@ internal static partial class Interop
         /// </summary>
         [ComImport]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [ComVisible(true)]
         [Guid("2acad808-b2d4-452d-a407-91ff1ad167b2")]
         public interface ISelectionItemProvider
         {

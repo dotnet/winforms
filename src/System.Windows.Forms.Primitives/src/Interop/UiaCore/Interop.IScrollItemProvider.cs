@@ -14,7 +14,6 @@ internal static partial class Interop
         ///  This allows them to be scrolled into view using known API's based on the control in question.
         /// </summary>
         [ComImport]
-        [ComVisible(true)]
         [Guid("2360c714-4bf1-4b26-ba65-9b21316127eb")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IScrollItemProvider

@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Mshtml
     {
-        [ComVisible(true)]
+        [ComImport]
         [Guid("FECEAAA2-8405-11CF-8BA1-00AA00476DA6")]
         [InterfaceType(ComInterfaceType.InterfaceIsDual)]
         public interface IOmHistory

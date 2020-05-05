@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
@@ -12,8 +11,6 @@ internal static partial class Interop
         /// <summary>
         ///  Logical structure change flags
         /// </summary>
-        [ComVisible(true)]
-        [Guid("e4cfef41-071d-472c-a65c-c14f59ea81eb")]
         public enum StructureChangeType
         {
             /// <summary>
