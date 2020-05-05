@@ -10,39 +10,26 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class ComboBoxAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_ComboBox_TestData()
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_Ctor_Default()
         {
-            yield return new object[] { new ComboBox() };
-        }
-
-        [Theory]
-        [MemberData(nameof(Ctor_ComboBox_TestData))]
-        public void ComboBoxAccessibleObject_Ctor_Default(ComboBox owner)
-        {
-            var accessibleObject = new ComboBox.ComboBoxAccessibleObject(owner);
+            using var control = new ComboBox();
+            var accessibleObject = new ComboBox.ComboBoxAccessibleObject(control);
             Assert.NotNull(accessibleObject.Owner);
             Assert.Equal(AccessibleRole.ComboBox, accessibleObject.Role);
         }
 
-        public static IEnumerable<object[]> ComboBoxAccessibleObject_TestData()
+        [WinFormsTheory]
+        [InlineData(ComboBoxStyle.DropDown)]
+        [InlineData(ComboBoxStyle.DropDownList)]
+        public void ComboBoxAccessibleObject_ExpandCollapse_Set_CollapsedState(ComboBoxStyle comboBoxStyle)
         {
-            ComboBox dropDownComboBox = new ComboBox
+            using var control = new ComboBox
             {
-                DropDownStyle = ComboBoxStyle.DropDown
+                DropDownStyle = comboBoxStyle
             };
-            yield return new object[] { dropDownComboBox.AccessibilityObject };
+            var accessibleObject = control.AccessibilityObject;
 
-            ComboBox dropDownListComboBox = new ComboBox
-            {
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-            yield return new object[] { dropDownListComboBox.AccessibilityObject };
-        }
-
-        [Theory]
-        [MemberData(nameof(ComboBoxAccessibleObject_TestData))]
-        public void ComboBoxAccessibleObject_ExpandCollapse_Set_CollapsedState(AccessibleObject accessibleObject)
-        {
             accessibleObject.Expand();
             Assert.NotEqual(AccessibleStates.Collapsed, accessibleObject.State & AccessibleStates.Collapsed);
             Assert.Equal(AccessibleStates.Expanded, accessibleObject.State & AccessibleStates.Expanded);
@@ -52,23 +39,30 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.NotEqual(AccessibleStates.Expanded, accessibleObject.State & AccessibleStates.Expanded);
         }
 
-        [Theory]
-        [MemberData(nameof(ComboBoxAccessibleObject_TestData))]
-        public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_NotNull(AccessibleObject accessibleObject)
+        [WinFormsTheory]
+        [InlineData(ComboBoxStyle.DropDown)]
+        [InlineData(ComboBoxStyle.DropDownList)]
+        public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_NotNull(ComboBoxStyle comboBoxStyle)
         {
+            using var control = new ComboBox
+            {
+                DropDownStyle = comboBoxStyle
+            };
+            var accessibleObject = control.AccessibilityObject;
+
             UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
             Assert.NotNull(firstChild);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData("Test text")]
         [InlineData(null)]
         public void ComboBoxEditAccessibleObject_NameNotNull(string name)
         {
-            ComboBox comboBox = new ComboBox();
-            comboBox.AccessibleName = name;
-            comboBox.CreateControl(false);
-            object editAccessibleName = comboBox.ChildEditAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+            using var control = new ComboBox();
+            control.AccessibleName = name;
+            control.CreateControl(false);
+            object editAccessibleName = control.ChildEditAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
             Assert.NotNull(editAccessibleName);
         }
     }

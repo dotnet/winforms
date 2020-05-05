@@ -8,14 +8,14 @@ namespace System.Windows.Forms.Tests
 {
     public class DataGridViewRowHeightInfoNeededEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1, 3)]
         [InlineData(3, 3)]
         [InlineData(6, 6)]
         [InlineData(65536, 65536)]
         public void DataGridViewRowHeightInfoNeededEventArgs_Height_Set_GetReturnsExpected(int value, int expected)
         {
-            var dataGridView = new DataGridView
+            using var dataGridView = new DataGridView
             {
                 ColumnCount = 1,
                 VirtualMode = true
@@ -35,11 +35,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(65537)]
         public void Height_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
-            var dataGridView = new DataGridView
+            using var dataGridView = new DataGridView
             {
                 ColumnCount = 1,
                 VirtualMode = true
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(2, 10)]
         [InlineData(3, 10)]
         [InlineData(10, 10)]
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(65537, 65537)]
         public void MinimumHeight_Set_GetReturnsExpected(int value, int expectedHeight)
         {
-            var dataGridView = new DataGridView
+            using var dataGridView = new DataGridView
             {
                 ColumnCount = 1,
                 VirtualMode = true
@@ -89,13 +89,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
         public void MinimumHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
-            var dataGridView = new DataGridView
+            using var dataGridView = new DataGridView
             {
                 ColumnCount = 1,
                 VirtualMode = true

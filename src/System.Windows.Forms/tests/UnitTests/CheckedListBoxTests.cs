@@ -11,10 +11,10 @@ namespace System.Windows.Forms.Tests
 {
     public class CheckedListBoxTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void CheckedListBox_Constructor()
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
 
             Assert.NotNull(box);
         }
@@ -25,11 +25,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<bool> CheckOnClickData =>
             CommonTestHelper.GetBoolTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CheckOnClickData))]
         public void CheckedListBox_CheckOnClick(bool expected)
         {
-            var box = new CheckedListBox
+            using var box = new CheckedListBox
             {
                 CheckOnClick = expected
             };
@@ -37,20 +37,20 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, box.CheckOnClick);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void CheckedListBox_CheckedIndexCollectionNotNull()
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
 
             CheckedListBox.CheckedIndexCollection collection = box.CheckedIndices;
 
             Assert.NotNull(collection);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void CheckedListBox_CheckedItemCollectionNotNull()
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
 
             CheckedListBox.CheckedItemCollection collection = box.CheckedItems;
 
@@ -63,11 +63,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<string> DisplayMemberData =>
             CommonTestHelper.GetStringTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DisplayMemberData))]
         public void CheckedListBox_DisplayMember(string expected)
         {
-            var box = new CheckedListBox
+            using var box = new CheckedListBox
             {
                 DisplayMember = expected
             };
@@ -75,22 +75,22 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, box.DisplayMember);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void CheckedListBox_DrawModeReturnsNormalOnly()
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
 
             DrawMode result = box.DrawMode;
 
             Assert.Equal(DrawMode.Normal, result);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(SelectionMode.None)]
         [InlineData(SelectionMode.One)]
         public void CheckedListBox_SelectionModeGetSet(SelectionMode expected)
         {
-            var box = new CheckedListBox
+            using var box = new CheckedListBox
             {
                 SelectionMode = expected
             };
@@ -98,12 +98,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, box.SelectionMode);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(SelectionMode.MultiSimple)]
         [InlineData(SelectionMode.MultiExtended)]
         public void CheckedListBox_SelectionModeGetSetInvalidFromEnum(SelectionMode expected)
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
 
             ArgumentException ex = Assert.Throws<ArgumentException>(() => box.SelectionMode = expected);
         }
@@ -114,11 +114,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<SelectionMode> SelectionModeGetSetInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<SelectionMode>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SelectionModeGetSetInvalidData))]
         public void CheckedListBox_CheckStateGetSetInvalid(SelectionMode expected)
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
 
             InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SelectionMode = expected);
             Assert.Equal("value", ex.ParamName);
@@ -130,11 +130,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<bool> ThreeDCheckBoxesData =>
             CommonTestHelper.GetBoolTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ThreeDCheckBoxesData))]
         public void CheckedListBox_ThreeDCheckBoxes(bool expected)
         {
-            var box = new CheckedListBox
+            using var box = new CheckedListBox
             {
                 ThreeDCheckBoxes = expected
             };
@@ -148,11 +148,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<string> ValueMemberData =>
             CommonTestHelper.GetStringTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ValueMemberData))]
         public void CheckedListBox_ValueMember(string expected)
         {
-            var box = new CheckedListBox
+            using var box = new CheckedListBox
             {
                 ValueMember = expected
             };
@@ -251,25 +251,25 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(1)]
         [InlineData(-1)]
         [InlineData(int.MaxValue)]
         public void CheckedListBox_GetItemCheckStateOutOfRange(int index)
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
 
             ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(() => box.GetItemCheckState(index));
             Assert.Equal("index", ex.ParamName);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(1)]
         [InlineData(-1)]
         [InlineData(int.MaxValue)]
         public void CheckedListBox_SetItemCheckStateOutOfRange(int index)
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
 
             ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(() => box.SetItemCheckState(index, CheckState.Checked));
             Assert.Equal("index", ex.ParamName);
@@ -281,11 +281,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<CheckState> SetItemCheckStateData =>
             CommonTestHelper.GetEnumTheoryData<CheckState>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SetItemCheckStateData))]
         public void CheckedListBox_SetItemCheckState(CheckState expected)
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);
 
             box.SetItemCheckState(0, expected);
@@ -299,23 +299,23 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<CheckState> SetItemCheckStateInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<CheckState>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SetItemCheckStateInvalidData))]
         public void CheckedListBox_SetItemCheckStateInvalid(CheckState expected)
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);
 
             InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.SetItemCheckState(0, expected));
             Assert.Equal("value", ex.ParamName);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, CheckState.Checked)]
         [InlineData(false, CheckState.Unchecked)]
         public void CheckedListBox_SetItemChecked(bool send, CheckState expected)
         {
-            var box = new CheckedListBox();
+            using var box = new CheckedListBox();
             box.Items.Add(new CheckBox(), false);
 
             box.SetItemChecked(0, send);

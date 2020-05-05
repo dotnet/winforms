@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Tests
             };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Graphics_ToolStrip_TestData))]
         public void Ctor_Graphics_ToolStrip(Graphics g, ToolStrip toolStrip)
         {

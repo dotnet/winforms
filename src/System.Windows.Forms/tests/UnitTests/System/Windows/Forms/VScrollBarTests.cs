@@ -141,12 +141,12 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RightToLeft))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void VScrollBar_RightToLeft_Set_GetReturnsNo(RightToLeft value)
         {
-            var control = new SubVScrollBar
+            using var control = new SubVScrollBar
             {
                 RightToLeft = value
             };
@@ -157,10 +157,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.No, control.RightToLeft);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void VScrollBar_RightToLeft_SetWithHandler_DoesNotCallRightToLeftChanged()
         {
-            var control = new SubVScrollBar();
+            using var control = new SubVScrollBar();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {

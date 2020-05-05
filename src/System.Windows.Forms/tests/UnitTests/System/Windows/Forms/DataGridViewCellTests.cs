@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests
 {
     public class DataGridViewCellTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_Ctor_Default()
         {
             var cell = new SubDataGridViewCell();
@@ -56,12 +56,12 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Columns[0].HeaderCell };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ContextMenuStrip_Set_TestData))]
         public void DataGridViewCell_ContextMenuStrip_SetWithoutDataGridView_GetReturnsExpected(DataGridViewCell cell)
         {
             // Set non-null.
-            var menu1 = new ContextMenuStrip();
+            using var menu1 = new ContextMenuStrip();
             cell.ContextMenuStrip = menu1;
             Assert.Same(menu1, cell.ContextMenuStrip);
 
@@ -70,7 +70,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(menu1, cell.ContextMenuStrip);
 
             // Set different.
-            var menu2 = new ContextMenuStrip();
+            using var menu2 = new ContextMenuStrip();
             cell.ContextMenuStrip = menu2;
             Assert.Same(menu2, cell.ContextMenuStrip);
 
@@ -79,10 +79,10 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.ContextMenuStrip);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ContextMenuStrip_SetWithDataGridView_CallsCellContextMenuStripChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewCell cell = dataGridView.Rows[0].Cells[0];
 
@@ -97,7 +97,7 @@ namespace System.Windows.Forms.Tests
             dataGridView.CellContextMenuStripChanged += handler;
 
             // Set non-null.
-            var menu1 = new ContextMenuStrip();
+            using var menu1 = new ContextMenuStrip();
             cell.ContextMenuStrip = menu1;
             Assert.Same(menu1, cell.ContextMenuStrip);
             Assert.Equal(1, callCount);
@@ -108,7 +108,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var menu2 = new ContextMenuStrip();
+            using var menu2 = new ContextMenuStrip();
             cell.ContextMenuStrip = menu2;
             Assert.Same(menu2, cell.ContextMenuStrip);
             Assert.Equal(2, callCount);
@@ -125,11 +125,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ContextMenuStrip_Dispose_SetsToNull()
         {
             var cell = new SubDataGridViewCell();
-            var menu = new ContextMenuStrip();
+            using var menu = new ContextMenuStrip();
             cell.ContextMenuStrip = menu;
             Assert.Same(menu, cell.ContextMenuStrip);
 
@@ -137,15 +137,15 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.ContextMenuStrip);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ContextMenuStrip_ResetThenDispose_Nop()
         {
             var cell = new SubDataGridViewCell();
-            var menu1 = new ContextMenuStrip();
+            using var menu1 = new ContextMenuStrip();
             cell.ContextMenuStrip = menu1;
             Assert.Same(menu1, cell.ContextMenuStrip);
 
-            var menu2 = new ContextMenuStrip();
+            using var menu2 = new ContextMenuStrip();
             cell.ContextMenuStrip = menu2;
 
             menu1.Dispose();
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Columns[0].HeaderCell, false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Displayed_Get_TestData))]
         public void DataGridViewCell_Displayed_Get_ReturnsExpected(DataGridViewCell cell, bool expected)
         {
@@ -198,17 +198,17 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { cell, "value" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(EditedFormattedValue_Get_TestData))]
         public void DataGridViewCell_EditedFormattedValue_Get_ReturnsExpected(DataGridViewCell cell, object expected)
         {
             Assert.Equal(expected, cell.EditedFormattedValue);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_EditedFormattedValue_GetSharedRow_ThrowsArgumentOutOfRangeException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewCell cell = dataGridView.Rows.SharedRow(1).Cells[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.EditedFormattedValue);
@@ -222,17 +222,17 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Columns[0].HeaderCell, Rectangle.Empty };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ErrorIconBounds_Get_TestData))]
         public void DataGridViewCell_ErrorIconBounds_Get_ReturnsExpected(DataGridViewCell cell, Rectangle expected)
         {
             Assert.Equal(expected, cell.ErrorIconBounds);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ErrorIconBounds_GetSharedRow_ThrowsArgumentOutOfRangeException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewCell cell = dataGridView.Rows.SharedRow(1).Cells[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.ErrorIconBounds);
@@ -250,7 +250,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { column.HeaderCell };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(NoDataGridView_TestData))]
         public void DataGridViewCell_ErrorIconBounds_GetNoDataGridView_ThrowsInvalidOperationException(DataGridViewCell cell)
         {
@@ -275,7 +275,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { dataGridView.Columns[0].HeaderCell, string.Empty };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ErrorText_Get_TestData))]
         public void DataGridViewCell_ErrorText_Get_ReturnsExpected(DataGridViewCell cell, string expected)
         {
@@ -292,7 +292,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { bound };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ErrorText_GetNeedsErrorText_TestData))]
         public void DataGridViewCell_ErrorText_GetNeedsErrorText_CallsCellErrorTextNeeded(DataGridView dataGridView)
         {
@@ -341,7 +341,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ErrorText_Set_TestData))]
         public void DataGridViewCell_ErrorText_Set_GetReturnsExpected(DataGridViewCell cell, string value, string expected)
         {
@@ -353,7 +353,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(expected, cell.ErrorText);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ErrorText_Set_TestData))]
         public void DataGridViewCell_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewCell cell, string value, string expected)
         {
@@ -366,10 +366,10 @@ namespace System.Windows.Forms.Tests
             Assert.Same(expected, cell.ErrorText);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ErrorText_SetWithDataGridView_CallsCellErrorTextChanged()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             DataGridViewCell cell = dataGridView.Rows[0].Cells[0];
 
             int callCount = 0;
@@ -430,17 +430,17 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { cell, "value" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(FormattedValue_Get_TestData))]
         public void DataGridViewCell_FormattedValue_Get_ReturnsExpected(DataGridViewCell cell, object expected)
         {
             Assert.Equal(expected, cell.FormattedValue);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_FormattedValue_GetSharedRow_ThrowsArgumentOutOfRangeException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewCell cell = dataGridView.Rows.SharedRow(1).Cells[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.FormattedValue);
@@ -491,7 +491,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { frozenDataGridView.Rows[0].Cells[0], true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Frozen_Get_TestData))]
         public void DataGridViewCell_Frozen_Get_ReturnsExpected(DataGridViewCell cell, bool expected)
         {
@@ -560,33 +560,33 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { nonResizableDataGridViewRow.Cells[1], DataGridViewElementStates.Visible | DataGridViewElementStates.ResizableSet };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(InheritedState_Get_TestData))]
         public void DataGridViewCell_InheritedState_Get_ReturnsExpected(DataGridViewCell cell, DataGridViewElementStates expected)
         {
             Assert.Equal(expected, cell.InheritedState);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_InheritedState_GetSharedRow_ThrowsArgumentOutOfRangeException()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewCell cell = dataGridView.Rows.SharedRow(1).Cells[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.InheritedState);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_InheritedStyle_NoDataGridView_ThrowsInvalidOperationException()
         {
             var cell = new SubDataGridViewCell();
             Assert.Throws<InvalidOperationException>(() => cell.InheritedStyle);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_IsInEditMode_GetSharedRow_ThrowsInvalidOperationExceptio()
         {
-            var dataGridView = new DataGridView { ColumnCount = 1 };
+            using var dataGridView = new DataGridView { ColumnCount = 1 };
             dataGridView.Rows.Add(new DataGridViewRow());
             DataGridViewCell cell = dataGridView.Rows.SharedRow(1).Cells[0];
             Assert.Throws<InvalidOperationException>(() => cell.IsInEditMode);
@@ -635,14 +635,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { readOnlyDataGridView.Rows[0].Cells[0], true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ReadOnly_Get_TestData))]
         public void DataGridViewCell_ReadOnly_Get_ReturnsExpected(DataGridViewCell cell, bool expected)
         {
             Assert.Equal(expected, cell.ReadOnly);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ReadOnly_SetWithoutOwningRow_ThrowsInvalidOperationException()
         {
             var cell = new SubDataGridViewCell();
@@ -673,7 +673,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { resizableCell, true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Resizable_TestData))]
         public void DataGridViewCell_Resizable_Get_ReturnsExpected(DataGridViewCell cell, bool expected)
         {
@@ -690,14 +690,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { cell, false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Selected_TestData))]
         public void DataGridViewCell_Selected_Get_ReturnsExpected(DataGridViewCell cell, bool expected)
         {
             Assert.Equal(expected, cell.Selected);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_Selected_SetNoDataGridView_ThrowsInvalidOperationException()
         {
             var cell = new SubDataGridViewCell();
@@ -708,7 +708,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(cell.Selected);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_Style_Get_ReturnsSameInstance()
         {
             var cell = new SubDataGridViewCell();
@@ -724,7 +724,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { style, style };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Style_TestData))]
         public void DataGridViewCell_Style_SetWithoutDataGrid_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
         {
@@ -741,7 +741,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(cell.HasStyle);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Style_TestData))]
         public void DataGridViewCell_Style_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
         {
@@ -759,7 +759,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(cell.HasStyle);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewCell_Tag_Set_GetReturnsExpected(object value)
         {
@@ -774,7 +774,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, cell.Tag);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewCell_Tag_SetWithNonNullOldValue_GetReturnsExpected(object value)
         {
@@ -790,7 +790,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, cell.Tag);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_Set_GetReturnsExpected(string value, string expected)
         {
@@ -805,7 +805,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cell.ToolTipText);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
@@ -827,7 +827,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new SubDataGridViewCell(), "value" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Value_TestData))]
         public void DataGridViewCell_Value_SetWithoutDataGridView_GetReturnsExpected(DataGridViewCell cell, object value)
         {
@@ -843,7 +843,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.FormattedValueType);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Value_TestData))]
         public void DataGridViewCell_Value_SetWithNonNullOldValue_GetReturnsExpected(DataGridViewCell cell, object value)
         {
@@ -861,7 +861,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.FormattedValueType);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithoutDataGridView_GetReturnsExpected(Type value)
         {
@@ -878,7 +878,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, cell.FormattedValueType);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithNonNullOldValue_GetReturnsExpected(Type value)
         {
@@ -911,14 +911,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { invisibleCell, false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Visible_TestData))]
         public void DataGridViewCell_Visible_Get_ReturnsExpected(DataGridViewCell cell, bool expected)
         {
             Assert.Equal(expected, cell.Visible);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, true, true, true, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single)]
         [InlineData(true, true, false, true, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single)]
         [InlineData(false, true, true, true, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single)]
@@ -939,7 +939,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedBottom, dataGridViewAdvancedBorderStylePlaceholder.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(DataGridViewAdvancedCellBorderStyle.None)]
         [InlineData(DataGridViewAdvancedCellBorderStyle.Inset)]
         [InlineData(DataGridViewAdvancedCellBorderStyle.InsetDouble)]
@@ -957,7 +957,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(dataGridViewAdvancedBorderStyleInput, cell.AdjustCellBorderStyle(dataGridViewAdvancedBorderStyleInput, dataGridViewAdvancedBorderStylePlaceholder, true, true, true, true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_AdjustCellBorderStyle_NullDataGridViewAdvancedBorderStyleInput_ThrowsArgumentNullException()
         {
             var cell = new SubDataGridViewCell();
@@ -965,7 +965,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("dataGridViewAdvancedBorderStyleInput", () => cell.AdjustCellBorderStyle(null, dataGridViewAdvancedBorderStylePlaceholder, true, true, true, true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_AdjustCellBorderStyle_AllNotSetWithoutDataGridView_ReturnsExpected()
         {
             var cell = new SubDataGridViewCell();
@@ -989,7 +989,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new DataGridViewAdvancedBorderStyle { Left = DataGridViewAdvancedCellBorderStyle.Inset, Right = DataGridViewAdvancedCellBorderStyle.Outset } };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AdjustCellBorderStyle_NullDataGridViewAdvancedBorderStylePlaceholder_TestData))]
         public void DataGridViewCell_AdjustCellBorderStyle_NullDataGridViewAdvancedBorderStylePlaceholder_ThrowsArgumentNullException(DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput)
         {
@@ -1081,28 +1081,28 @@ namespace System.Windows.Forms.Tests
             };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BorderWidths_TestData))]
         public void DataGridViewCell_BorderWidths_Invoke_ReturnsExpected(SubDataGridViewCell cell, DataGridViewAdvancedBorderStyle advancedBorderStyle, Rectangle expected)
         {
             Assert.Equal(expected, cell.BorderWidths(advancedBorderStyle));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_BorderWidths_NullAdvancedBorderStyleInput_ThrowsArgumentNullException()
         {
             var cell = new SubDataGridViewCell();
             Assert.Throws<ArgumentNullException>("advancedBorderStyle", () => cell.BorderWidths(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ClickUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.ClickUnsharesRow(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_Clone_NonEmpty_Success()
         {
             var source = new SubDataGridViewCell
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(cell.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_Clone_Empty_Success()
         {
             var source = new SubDataGridViewCell();
@@ -1186,28 +1186,28 @@ namespace System.Windows.Forms.Tests
             Assert.False(cell.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ContentClickUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.ContentClickUnsharesRow(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ContentDoubleClickUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.ContentDoubleClickUnsharesRow(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_DetachEditingControl_SetNoDataGridView_ThrowsInvalidOperationException()
         {
             var cell = new SubDataGridViewCell();
             Assert.Throws<InvalidOperationException>(() => cell.DetachEditingControl());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_Dispose_WithoutContextMenuStrip_Nop()
         {
             var cell = new SubDataGridViewCell();
@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.ContextMenuStrip);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_Dispose_WithContextMenuStrip_Success()
         {
             var cell = new SubDataGridViewCell
@@ -1234,14 +1234,14 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(cell.ContextMenuStrip);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_DoubleClickUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.DoubleClickUnsharesRow(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_EnterUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
@@ -1262,7 +1262,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetClipboardContent_TestData))]
         public void DataGridViewCell_GetClipboardContent_Invoke_ReturnsExpected(SubDataGridViewCell cell, int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format, object expected)
         {
@@ -1282,14 +1282,14 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetContentBounds_TestData))]
         public void DataGridViewCell_GetContentBounds_InvokePublic_ReturnsEmpty(DataGridViewCell cell, int rowIndex)
         {
             Assert.Equal(Rectangle.Empty, cell.GetContentBounds(rowIndex));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_GetContentBounds_InvokeProtected_ReturnsEmpty()
         {
             var cell = new SubDataGridViewCell();
@@ -1309,14 +1309,14 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetEditedFormattedValue_TestData))]
         public void DataGridViewCell_GetEditedFormattedValue_Invoke_ReturnsExpected(DataGridViewCell cell, int rowIndex, DataGridViewDataErrorContexts context, object expected)
         {
             Assert.Equal(expected, cell.GetEditedFormattedValue(rowIndex, context));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_GetErrorIconBounds_InvokeProtected_ReturnsEmpty()
         {
             var cell = new SubDataGridViewCell();
@@ -1338,7 +1338,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetErrorText_TestData))]
         public void DataGridViewCell_GetErrorText_Invoke_ReturnsExpected(DataGridViewCell cell, int rowIndex, string expected)
         {
@@ -1359,7 +1359,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetFormattedValue_TestData))]
         public void DataGridViewCell_GetFormattedValue_Invoke_ReturnsExpected(SubDataGridViewCell cell, object value, int rowIndex, DataGridViewCellStyle cellStyle, TypeConverter valueTypeConverter, TypeConverter formattedValueTypeConverter, DataGridViewDataErrorContexts context, object expected)
         {
@@ -1391,7 +1391,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetInheritedContextMenuStrip_TestData))]
         public void DataGridViewCell_GetInheritedContextMenuStrip_Invoke_ReturnsExpected(DataGridViewCell cell, int rowIndex, ContextMenuStrip expected)
         {
@@ -1418,14 +1418,14 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { resizableCell, -1, DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetInheritedState_TestData))]
         public void DataGridViewCell_GetInheritedState_Invoke_ReturnsExpected(DataGridViewCell cell, int rowIndex, DataGridViewElementStates expected)
         {
             Assert.Equal(expected, cell.GetInheritedState(rowIndex));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(0)]
         public void DataGridViewCell_GetInheritedState_InvalidRowIndexNoDataGridView_ThrowsArgumentException(int rowIndex)
@@ -1434,24 +1434,24 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>(null, () => cell.GetInheritedState(rowIndex));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_GetInheritedState_ColorNoDataGridView_ThrowsInvalidOperationException()
         {
             var cell = new SubDataGridViewCell();
             Assert.Throws<InvalidOperationException>(() => cell.GetInheritedStyle(new DataGridViewCellStyle(), -1, true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_GetInheritedStyle_NoDataGridView_ThrowsInvalidOperationException()
         {
             var cell = new SubDataGridViewCell();
             Assert.Throws<InvalidOperationException>(() => cell.GetInheritedStyle(new DataGridViewCellStyle(), -1, true));
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void DataGridViewCell_GetNeighboringToolsRectangles_ReturnsCorrectRectangles()
         {
-            DataGridView dataGridView = new DataGridView();
+            using var dataGridView = new DataGridView();
             dataGridView.Size = new Size(600, 200);
             dataGridView.CreateControl();
 
@@ -1497,7 +1497,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(neighbors33.Contains(dataGridView.Rows[2].Cells[2].AccessibilityObject.Bounds));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_GetPreferredSize_Invoke_ReturnsExpected()
         {
             var cell = new SubDataGridViewCell();
@@ -1517,7 +1517,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetSize_TestData))]
         public void DataGridViewCell_GetSize_Invoke_ReturnsExpected(SubDataGridViewCell cell, int rowIndex, Size expected)
         {
@@ -1537,56 +1537,56 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetValue_TestData))]
         public void DataGridViewCell_GetValue_Invoke_ReturnsExpected(SubDataGridViewCell cell, int rowIndex, object expected)
         {
             Assert.Equal(expected, cell.GetValue(rowIndex));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_InitializeEditingControl_SetNoDataGridView_ThrowsInvalidOperationException()
         {
             var cell = new SubDataGridViewCell();
             Assert.Throws<InvalidOperationException>(() => cell.InitializeEditingControl(-1, null, null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_KeyDownUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.KeyDownUnsharesRow(null, -1));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_KeyEntersEditMode_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.KeyEntersEditMode(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_KeyPressUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.KeyPressUnsharesRow(null, -1));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_KeyUpUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.KeyUpUnsharesRow(null, -1));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_LeaveUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.LeaveUnsharesRow(-1, true));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataGridViewCell_MeasureTextHeight_NullOrEmptyText_ReturnsExpected(string text)
         {
@@ -1602,7 +1602,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData("a", false)]
         [InlineData("truncate_me", true)]
         public void DataGridViewCell_MeasureTextHeight_NonEmptyText_ReturnsExpected(string text, bool expectedWidthTruncated)
@@ -1619,7 +1619,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MeasureTextHeight_NullGraphics_ThrowsArgumentNullException()
         {
             bool widthTruncated = true;
@@ -1628,7 +1628,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(widthTruncated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MeasureTextHeight_NullFont_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -1641,7 +1641,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(0)]
         [InlineData(-1)]
         public void DataGridViewCell_MeasureTextHeight_InvalidMaxWidth_ThrowsArgumentOutOfRangeException(int maxWidth)
@@ -1656,7 +1656,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((TextFormatFlags)(-1))]
         public void DataGridViewCell_MeasureTextHeight_InvalidFlags_ThrowsInvalidEnumArgumentException(TextFormatFlags flags)
         {
@@ -1670,7 +1670,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataGridViewCell_MeasureTextPreferredSize_NullOrEmptyText_ReturnsExpected(string text)
         {
@@ -1681,7 +1681,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData("a", TextFormatFlags.Default)]
         [InlineData("truncate_me", TextFormatFlags.Default)]
         [InlineData("truncate_me\r\nnew\rn\nnew", TextFormatFlags.Default)]
@@ -1697,13 +1697,13 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MeasureTextPreferredSize_NullGraphics_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("graphics", () => DataGridViewCell.MeasureTextPreferredSize(null, "text", SystemFonts.DefaultFont, 0.2f, TextFormatFlags.Default));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MeasureTextPreferredSize_NullFont_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -1713,7 +1713,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(0)]
         [InlineData(-1)]
         public void DataGridViewCell_MeasureTextPreferredSize_InvalidMaxHeight_ThrowsArgumentOutOfRangeException(float maxRatio)
@@ -1725,7 +1725,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((TextFormatFlags)(-1))]
         public void DataGridViewCell_MeasureTextPreferredSize_InvalidFlags_ThrowsInvalidEnumArgumentException(TextFormatFlags flags)
         {
@@ -1736,7 +1736,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataGridViewCell_MeasureTextSize_NullOrEmptyText_ReturnsExpected(string text)
         {
@@ -1747,7 +1747,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData("a", TextFormatFlags.Default)]
         [InlineData("truncate_me", TextFormatFlags.Default)]
         [InlineData("truncate_me\r\nnew\rn\nnew", TextFormatFlags.Default)]
@@ -1763,13 +1763,13 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MeasureTextSize_NullGraphics_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("graphics", () => DataGridViewCell.MeasureTextSize(null, "text", SystemFonts.DefaultFont, TextFormatFlags.Default));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MeasureTextSize_NullFont_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -1779,7 +1779,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((TextFormatFlags)(-1))]
         public void DataGridViewCell_MeasureTextSize_InvalidFlags_ThrowsInvalidEnumArgumentException(TextFormatFlags flags)
         {
@@ -1790,7 +1790,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataGridViewCell_MeasureTextWidth_NullOrEmptyText_ReturnsExpected(string text)
         {
@@ -1801,7 +1801,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData("a", TextFormatFlags.Default)]
         [InlineData("truncate_me", TextFormatFlags.Default)]
         [InlineData("truncate_me\r\nnew\rn\nnew", TextFormatFlags.Default)]
@@ -1817,13 +1817,13 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MeasureTextWidth_NullGraphics_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("graphics", () => DataGridViewCell.MeasureTextWidth(null, "text", SystemFonts.DefaultFont, 10, TextFormatFlags.Default));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MeasureTextWidth_NullFont_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -1833,7 +1833,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(0)]
         [InlineData(-1)]
         public void DataGridViewCell_MeasureTextWidth_InvalidMaxHeight_ThrowsArgumentOutOfRangeException(int maxHeight)
@@ -1845,7 +1845,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((TextFormatFlags)(-1))]
         public void DataGridViewCell_MeasureTextWidth_InvalidFlags_ThrowsInvalidEnumArgumentException(TextFormatFlags flags)
         {
@@ -1856,77 +1856,77 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MouseClickUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.MouseClickUnsharesRow(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MouseDoubleClickUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.MouseDoubleClickUnsharesRow(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MouseDownUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.MouseDownUnsharesRow(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MouseEnterUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.MouseEnterUnsharesRow(-1));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MouseLeaveUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.MouseLeaveUnsharesRow(-1));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MouseMoveUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.MouseMoveUnsharesRow(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_MouseUpUnsharesRow_Invoke_ReturnsFalse()
         {
             var cell = new SubDataGridViewCell();
             Assert.False(cell.MouseUpUnsharesRow(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnClick_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnClick(null);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnContentClick_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnContentClick(null);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnContentDoubleClick_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnContentDoubleClick(null);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnDataGridViewChanged_InvokeWithoutStyle_Nop()
         {
             var cell = new SubDataGridViewCell();
@@ -1934,7 +1934,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(DataGridViewCellStyleScopes.Cell, cell.Style.Scope);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnDataGridViewChanged_InvokeWithStyle_SetsScopeToNone()
         {
             var cell = new SubDataGridViewCell
@@ -1946,105 +1946,105 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(DataGridViewCellStyleScopes.None, cell.Style.Scope);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnDoubleClick_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnDoubleClick(null);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnEnter_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnEnter(-1, true);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnKeyDown_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnKeyDown(null, -1);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnKeyPress_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnKeyPress(null, -1);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnKeyUp_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnKeyUp(null, -1);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnLeave_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnLeave(-1, true);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnMouseClick_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnMouseClick(null);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnMouseDoubleClick_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnMouseDoubleClick(null);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnMouseDown_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnMouseDown(null);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnMouseEnter_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnMouseEnter(-1);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnMouseLeave_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnMouseLeave(-1);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnMouseMove_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnMouseMove(null);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_OnMouseUp_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.OnMouseUp(null);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_Paint_Invoke_Nop()
         {
             var cell = new SubDataGridViewCell();
             cell.Paint(null, Rectangle.Empty, Rectangle.Empty, -1, DataGridViewElementStates.None, null, null, null, null, null, DataGridViewPaintParts.All);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_PaintBorder_NoDataGridView_Nop()
         {
             using (var image = new Bitmap(10, 10))
@@ -2055,14 +2055,14 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_PaintBorder_NullGraphics_ThrowsArgumentNullException()
         {
             var cell = new SubDataGridViewCell();
             Assert.Throws<ArgumentNullException>("graphics", () => cell.PaintBorder(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 3, 4), new DataGridViewCellStyle(), new DataGridViewAdvancedBorderStyle()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_PaintBorder_NullCellStyle_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -2073,7 +2073,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataGridViewCell_PaintErrorIcon_InvokeNullOrEmptyText_Success(string errorText)
         {
@@ -2085,7 +2085,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewCell_PaintErrorIcon_NoDataGridView_Nop(string errorText)
         {
@@ -2097,7 +2097,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1, 100, "errorText")]
         [InlineData(0, 100, "errorText")]
         [InlineData(19, 100, "errorText")]
@@ -2172,7 +2172,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { typeof(int), typeof(CheckState), CheckState.Checked, new DataGridViewCellStyle(), null, new EnumConverter(typeof(CheckState)), 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ParseFormattedValue_TestData))]
         public void DataGridViewCell_ParseFormattedValue_Invoke_ReturnsExpected(Type valueType, Type formattedValueType, object formattedValue, DataGridViewCellStyle cellStyle, TypeConverter formattedValueTypeConverter, TypeConverter valueTypeConverter, object expected)
         {
@@ -2187,28 +2187,28 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cell.ParseFormattedValue(formattedValue, cellStyle, formattedValueTypeConverter, valueTypeConverter));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ParseFormattedValue_NullCellStyle_ThrowsArgumentNullException()
         {
             var cell = new SubDataGridViewCell();
             Assert.Throws<ArgumentNullException>("cellStyle", () => cell.ParseFormattedValue(1, null, new Int32Converter(), new Int32Converter()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ParseFormattedValue_NullValueTypeAndFormattedValueType_ThrowsFormatException()
         {
             var cell = new SubDataGridViewCell();
             Assert.Throws<FormatException>(() => cell.ParseFormattedValue(1, new DataGridViewCellStyle(), new Int32Converter(), new Int32Converter()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ParseFormattedValue_NullValueType_ThrowsFormatException()
         {
             var cell = new CustomFormattedValueType { FormattedValueTypeResult = typeof(int) };
             Assert.Throws<FormatException>(() => cell.ParseFormattedValue(1, new DataGridViewCellStyle(), new Int32Converter(), new Int32Converter()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_ParseFormattedValue_NullFormattedValueType_ThrowsFormatException()
         {
             var cell = new CustomFormattedValueType { ValueType = typeof(int) };
@@ -2222,7 +2222,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { typeof(int), typeof(string), "Invalid", new DataGridViewCellStyle(), null, null };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ParseFormattedValue_CantConvert_TestData))]
         public void DataGridViewCell_ParseFormattedValue_CantConvert_ThrowsFormatException(Type valueType, Type formattedValueType, object formattedValue, DataGridViewCellStyle cellStyle, TypeConverter formattedValueTypeConverter, TypeConverter valueTypeConverter)
         {
@@ -2234,7 +2234,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<FormatException>(() => cell.ParseFormattedValue(formattedValue, cellStyle, formattedValueTypeConverter, valueTypeConverter));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(null)]
         [InlineData(1)]
         public void DataGridViewCell_ParseFormattedValue_InvalidFormattedValue_ThrowsArgumentException(object formattedValue)
@@ -2254,14 +2254,14 @@ namespace System.Windows.Forms.Tests
             public override Type FormattedValueType => FormattedValueTypeResult;
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_PositionEditingControl_NoDataGridView_ThrowsInvalidOperationException()
         {
             var cell = new SubDataGridViewCell();
             Assert.Throws<InvalidOperationException>(() => cell.PositionEditingControl(true, true, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 3, 4), new DataGridViewCellStyle(), true, true, true, true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewCell_PositionEditingPanel_NoDataGridView_ThrowsInvalidOperationException()
         {
             var cell = new SubDataGridViewCell();
@@ -2277,7 +2277,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SetValue_TestData))]
         public void DataGridViewCell_SetValue_WithoutDataGridView_GetReturnsExpected(SubDataGridViewCell cell, int rowIndex, object value)
         {
@@ -2299,7 +2299,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { cell, "DataGridViewCell { ColumnIndex=-1, RowIndex=-1 }" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ToString_TestData))]
         public void DataGridViewCell_ToString_Invoke_ReturnsExpected(DataGridViewCell cell, string expected)
         {
@@ -2431,7 +2431,7 @@ namespace System.Windows.Forms.Tests
 
             public new bool SetValue(int rowIndex, object value) => base.SetValue(rowIndex, value);
 
-            [Fact]
+            [WinFormsFact]
             public void DataGridViewCell_AccessibilityObject_Get_ReturnsSameInstance()
             {
                 Assert.Same(AccessibilityObject, AccessibilityObject);
@@ -2439,7 +2439,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(this, accessibilityObject.Owner);
             }
 
-            [Fact]
+            [WinFormsFact]
             public void DataGridViewCell_CreateAccessibilityInstance_Invoke_ReturnsExpected()
             {
                 DataGridViewCellAccessibleObject accessibilityObject = Assert.IsType<DataGridViewCellAccessibleObject>(CreateAccessibilityInstance());

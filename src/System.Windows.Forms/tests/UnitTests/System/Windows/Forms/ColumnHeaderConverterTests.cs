@@ -5,13 +5,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Drawing;
-using System.Globalization;
 using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class ColumnHeaderConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         public static TheoryData<Type, bool> CanConvertFromData =>
@@ -104,10 +103,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(arguments, descriptor.Arguments);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ColumnHeaderConverter_ConvertTo_NoPublicDefaultConstructor_ThrowsArgumentException()
         {
-            var value = new PrivateDefaultConstructor(-1);
+            using var value = new PrivateDefaultConstructor(-1);
             var converter = new ColumnHeaderConverter();
             Assert.Throws<ArgumentException>(null, () => converter.ConvertTo(value, typeof(InstanceDescriptor)));
         }
@@ -151,11 +150,11 @@ namespace System.Windows.Forms.Tests
             Assert.True(converter.GetPropertiesSupported(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ColumnHeaderConverter_GetProperties_Invoke_ReturnsExpected()
         {
             var converter = new ColumnHeaderConverter();
-            var item = new ColumnHeader();
+            using var item = new ColumnHeader();
             Assert.Equal(TypeDescriptor.GetProperties(item, null).Count, converter.GetProperties(null, item, null).Count);
         }
 

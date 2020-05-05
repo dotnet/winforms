@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Tests
         const User32.WM TestMessageId2 = (User32.WM)0x442;
         const User32.WM TestMessageId3 = (User32.WM)0x443;
 
-        [Fact]
+        [StaFact]
         public void ThreadContext_EmptyProcessFiltersWorks()
         {
             // Test that no filters at all does not throw, and that returns false from translation
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(threadContext.PreTranslateMessage(ref msg));
         }
 
-        [Fact]
+        [StaFact]
         public void ThreadContext_WrongProcessFiltersPassesThrough()
         {
             // Test that a filter for the wrong ID returns false, but does get called
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Tests
             mockContext.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
         }
 
-        [Fact]
+        [StaFact]
         public void ThreadContext_CorrectProcessFiltersProcesses()
         {
             // Test that a filter with the correct ID returns true
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Tests
             mockContext.Verify(c => c.PreFilterMessage(ref It.Ref<Message>.IsAny), Times.Exactly(1));
         }
 
-        [Fact]
+        [StaFact]
         public void ThreadContext_MultipleProcessFiltersProcesses()
         {
             // Test that multiple filters work

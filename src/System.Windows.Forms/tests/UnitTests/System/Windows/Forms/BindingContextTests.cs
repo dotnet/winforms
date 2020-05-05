@@ -11,6 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class BindingContextTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
@@ -389,14 +390,12 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { context, 1, "Property", false };
         }
 
-        // This is failing sporadically, breaking random builds. Disabling it to allow code to flow.
-        // Issue is tracked at https://github.com/dotnet/winforms/issues/1031
-        // [Theory]
-        // [MemberData(nameof(Contains_DataSourceDataMember_TestData))]
-        // public void BindingContext_Contains_DataSourceDataMember_ReturnsExpected(BindingContext context, object dataSource, string dataMember, bool expected)
-        // {
-        //     Assert.Equal(expected, context.Contains(dataSource, dataMember));
-        // }
+        [Theory(Skip = "Flaky test, see: https://github.com/dotnet/winforms/issues/1031")]
+        [MemberData(nameof(Contains_DataSourceDataMember_TestData))]
+        public void BindingContext_Contains_DataSourceDataMember_ReturnsExpected(BindingContext context, object dataSource, string dataMember, bool expected)
+        {
+            Assert.Equal(expected, context.Contains(dataSource, dataMember));
+        }
 
         [Fact]
         public void BindingContext_Contains_NullDataSource_ThrowsArgumentNullException()

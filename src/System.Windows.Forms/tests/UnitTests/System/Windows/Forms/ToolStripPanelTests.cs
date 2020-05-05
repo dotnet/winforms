@@ -163,11 +163,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(panel.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void AutoScroll_Set_GetReturnsExpected(bool value)
         {
-            var panel = new ToolStripPanel
+            using var panel = new ToolStripPanel
             {
                 AutoScroll = value
             };
@@ -178,11 +178,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, panel.AutoScroll);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
         public void AutoScrollMargin_Set_GetReturnsExpected(Size value)
         {
-            var panel = new ToolStripPanel
+            using var panel = new ToolStripPanel
             {
                 AutoScrollMargin = value
             };
@@ -193,19 +193,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, panel.AutoScrollMargin);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
         public void AutoScrollMargin_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
         {
-            var panel = new ToolStripPanel();
+            using var panel = new ToolStripPanel();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => panel.AutoScrollMargin = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
         public void AutoScrollMinSize_Set_GetReturnsExpected(Size value)
         {
-            var panel = new ToolStripPanel
+            using var panel = new ToolStripPanel
             {
                 AutoScrollMinSize = value
             };
@@ -282,11 +282,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
         public void RowMargin_Set_GetReturnsExpected(Padding value)
         {
-            var panel = new ToolStripPanel
+            using var panel = new ToolStripPanel
             {
                 RowMargin = value
             };

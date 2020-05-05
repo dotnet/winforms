@@ -115,13 +115,13 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(BorderStyle.None, 0x56000000, 0)]
         [InlineData(BorderStyle.FixedSingle, 0x56800000, 0)]
         [InlineData(BorderStyle.Fixed3D, 0x56000000, 0x200)]
         public void PictureBox_CreateParams_Get_ReturnsExpected(BorderStyle borderStyle, int expectedStyle, int expectedExStyle)
         {
-            var control = new SubPictureBox
+            using var control = new SubPictureBox
             {
                 BorderStyle = borderStyle
             };
@@ -140,11 +140,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(createParams, control.CreateParams);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
         public void PictureBox_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 BorderStyle = value
             };
@@ -155,11 +155,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, pictureBox.BorderStyle);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
         public void PictureBox_BorderStyle_SetWithHandle_GetReturnsExpected(BorderStyle value)
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, pictureBox.Handle);
 
             pictureBox.BorderStyle = value;
@@ -170,19 +170,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, pictureBox.BorderStyle);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
         public void PictureBox_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.Throws<InvalidEnumArgumentException>("value", () => pictureBox.BorderStyle = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_CausesValidation_Set_GetReturnsExpected(bool value)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 CausesValidation = value
             };
@@ -197,10 +197,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, control.CausesValidation);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_CausesValidation_SetWithHandler_CallsCausesValidationChanged()
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 CausesValidation = true
             };
@@ -235,7 +235,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_Enabled_Set_GetReturnsExpected(bool value)
         {
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Enabled);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_Enabled_SetWithHandle_GetReturnsExpected(bool value)
         {
@@ -273,7 +273,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Enabled);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Enabled_SetWithHandler_CallsEnabledChanged()
         {
             var control = new Control
@@ -311,11 +311,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_ErrorImage_Set_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 ErrorImage = value
             };
@@ -328,11 +328,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_ErrorImage_SetWithNonNullOldValue_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 ErrorImage = new Bitmap(10, 10)
             };
@@ -347,11 +347,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_ErrorImage_SetWithHandle_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, pictureBox.Handle);
 
             pictureBox.ErrorImage = value;
@@ -364,11 +364,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_ErrorImage_SetWithNonNullOldValueWithHandle_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 ErrorImage = new Bitmap(10, 10)
             };
@@ -384,12 +384,12 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_ErrorImage_ResetValue_Success()
         {
-            var image = new Bitmap(10, 10);
+            using var image = new Bitmap(10, 10);
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PictureBox))[nameof(PictureBox.ErrorImage)];
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.False(property.CanResetValue(pictureBox));
 
             pictureBox.ErrorImage = image;
@@ -401,12 +401,12 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.CanResetValue(pictureBox));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_ErrorImage_ShouldSerializeValue_Success()
         {
-            var image = new Bitmap(10, 10);
+            using var image = new Bitmap(10, 10);
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PictureBox))[nameof(PictureBox.ErrorImage)];
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.False(property.ShouldSerializeValue(pictureBox));
 
             pictureBox.ErrorImage = image;
@@ -418,11 +418,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.ShouldSerializeValue(pictureBox));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
         public void PictureBox_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 ForeColor = value
             };
@@ -433,10 +433,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.ForeColor);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_ForeColor_SetWithHandler_CallsForeColorChanged()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -529,11 +529,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_Image_Set_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 Image = value
             };
@@ -544,11 +544,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_Image_SetWithNonNullOldValue_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 Image = new Bitmap(10, 10)
             };
@@ -561,11 +561,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_Image_SetWithHandle_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, pictureBox.Handle);
 
             pictureBox.Image = value;
@@ -576,11 +576,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_Image_SetWithNonNullOldValueWithHandle_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 Image = new Bitmap(10, 10)
             };
@@ -594,12 +594,12 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, pictureBox.Image);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Image_ResetValue_Success()
         {
-            var image = new Bitmap(10, 10);
+            using var image = new Bitmap(10, 10);
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PictureBox))[nameof(PictureBox.Image)];
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.False(property.CanResetValue(pictureBox));
 
             pictureBox.Image = image;
@@ -611,12 +611,12 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.CanResetValue(pictureBox));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Image_ShouldSerializeValue_Success()
         {
-            var image = new Bitmap(10, 10);
+            using var image = new Bitmap(10, 10);
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PictureBox))[nameof(PictureBox.Image)];
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.False(property.ShouldSerializeValue(pictureBox));
 
             pictureBox.Image = image;
@@ -628,11 +628,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.ShouldSerializeValue(pictureBox));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void PictureBox_ImageLocation_Set_GetReturnsExpected(string value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 ImageLocation = value
             };
@@ -645,14 +645,14 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         [InlineData("bitmaps/nature24bits.jpg")]
         [InlineData("  ")]
         public void PictureBox_ImageLocation_SetWithImage_GetReturnsExpected(string value)
         {
-            var image = new Bitmap(10, 10);
-            var pictureBox = new PictureBox
+            using var image = new Bitmap(10, 10);
+            using var pictureBox = new PictureBox
             {
                 Image = image,
                 ImageLocation = value
@@ -666,11 +666,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(image, pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void PictureBox_ImageLocation_SetWithHandle_GetReturnsExpected(string value)
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, pictureBox.Handle);
 
             pictureBox.ImageLocation = value;
@@ -683,10 +683,10 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_ImageLocation_Set_CallsInvalidated()
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 ImageLocation = null
             };
@@ -715,10 +715,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, invalidatedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_ImageLocation_SetValidWithWaitOnLoadTrueLocal_GetReturnsExpected()
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = true
             };
@@ -733,12 +733,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(PathImageLocation, pictureBox.ImageLocation);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_ImageLocation_SetValidWithWaitOnLoadTrueUri_GetReturnsExpected()
         {
             try
             {
-                var pictureBox = new PictureBox
+                using var pictureBox = new PictureBox
                 {
                     WaitOnLoad = true
                 };
@@ -758,11 +758,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void PictureBox_ImageLocation_SetNullOrEmptyWithWaitOnLoadTrue_GetReturnsExpected(string value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = true
             };
@@ -777,12 +777,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, pictureBox.ImageLocation);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData("NoSuchValue")]
         [InlineData("  ")]
         public void PictureBox_ImageLocation_SetInvalidWithWaitOnLoadTrue_ThrowsFileNotFoundException(string value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = true
             };
@@ -799,19 +799,16 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ImageLocation_SetInvalidWithWaitOnLoadTrueDesignMode_TestData()
         {
-            Image image1 = new Bitmap(10, 10);
-            Image image2 = new Bitmap(10, 10);
-
             foreach (string value in new string[] { " ", "NoSuchImage" })
             {
                 yield return new object[] { null, null, value };
-                yield return new object[] { image1, image2, value };
-                yield return new object[] { image1, null, value };
-                yield return new object[] { null, image2, value };
+                yield return new object[] { new Bitmap(10, 10), new Bitmap(10, 10), value };
+                yield return new object[] { new Bitmap(10, 10), null, value };
+                yield return new object[] { null, new Bitmap(10, 10), value };
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ImageLocation_SetInvalidWithWaitOnLoadTrueDesignMode_TestData))]
         public void PictureBox_ImageLocation_SetInvalidWithWaitOnLoadTrueDesignMode_GetReturnsExpected(Image initialImage, Image errorImage, string value)
         {
@@ -838,9 +835,13 @@ namespace System.Windows.Forms.Tests
             pictureBox.ImageLocation = value;
             Assert.Same(pictureBox.ErrorImage, pictureBox.Image);
             Assert.Equal(value, pictureBox.ImageLocation);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            pictureBox.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void PictureBox_ImageLocation_SetNullOrEmptyWithError_ResetsImage(string value)
         {
@@ -851,7 +852,7 @@ namespace System.Windows.Forms.Tests
             mockSite
                 .Setup(s => s.DesignMode)
                 .Returns(true);
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = true,
                 Site = mockSite.Object
@@ -863,15 +864,19 @@ namespace System.Windows.Forms.Tests
             pictureBox.ImageLocation = value;
             Assert.Equal(value, pictureBox.ImageLocation);
             Assert.Null(pictureBox.Image);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            pictureBox.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         [InlineData("  ")]
         [InlineData("bitmaps/nature24bits.jpg")]
         public void PictureBox_ImageLocation_SetInitializing_GetReturnsExpected(string value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = true
             };
@@ -905,7 +910,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ImeMode.OnHalf, ImeMode.On };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ImeMode_Set_TestData))]
         public void PictureBox_ImeMode_Set_GetReturnsExpected(ImeMode value, ImeMode expected)
         {
@@ -922,7 +927,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ImeMode_Set_TestData))]
         public void PictureBox_ImeMode_SetWithHandle_GetReturnsExpected(ImeMode value, ImeMode expected)
         {
@@ -951,7 +956,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_ImeMode_SetWithHandler_DoesNotCallImeModeChanged()
         {
             using var control = new PictureBox();
@@ -986,7 +991,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void PictureBox_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
@@ -994,11 +999,11 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImeMode = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_InitialImage_Set_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 InitialImage = value
             };
@@ -1011,11 +1016,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_InitialImage_SetWithNonNullOldValue_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 InitialImage = new Bitmap(10, 10)
             };
@@ -1030,11 +1035,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_InitialImage_SetWithHandle_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, pictureBox.Handle);
 
             pictureBox.InitialImage = value;
@@ -1047,11 +1052,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
         public void PictureBox_InitialImage_SetWithNonNullOldValueWithHandle_GetReturnsExpected(Image value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 InitialImage = new Bitmap(10, 10)
             };
@@ -1067,12 +1072,12 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_InitialImage_ResetValue_Success()
         {
-            var image = new Bitmap(10, 10);
+            using var image = new Bitmap(10, 10);
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PictureBox))[nameof(PictureBox.InitialImage)];
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.False(property.CanResetValue(pictureBox));
 
             pictureBox.InitialImage = image;
@@ -1084,12 +1089,12 @@ namespace System.Windows.Forms.Tests
             Assert.False(property.CanResetValue(pictureBox));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_InitialImage_ShouldSerializeValue_Success()
         {
-            var image = new Bitmap(10, 10);
+            using var image = new Bitmap(10, 10);
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PictureBox))[nameof(PictureBox.InitialImage)];
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.False(property.ShouldSerializeValue(pictureBox));
 
             pictureBox.InitialImage = image;
@@ -1273,11 +1278,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { PictureBoxSizeMode.Zoom, false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SizeMode_Set_TestData))]
         public void PictureBox_SizeMode_Set_GetReturnsExpected(PictureBoxSizeMode value, bool expectedAutoSize)
         {
-            var pictureBox = new SubPictureBox
+            using var pictureBox = new SubPictureBox
             {
                 SizeMode = value
             };
@@ -1292,11 +1297,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedAutoSize, pictureBox.GetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(SizeMode_Set_TestData))]
         public void PictureBox_SizeMode_SetWithHandle_GetReturnsExpected(PictureBoxSizeMode value, bool expectedAutoSize)
         {
-            var pictureBox = new SubPictureBox();
+            using var pictureBox = new SubPictureBox();
             Assert.NotEqual(IntPtr.Zero, pictureBox.Handle);
 
             pictureBox.SizeMode = value;
@@ -1311,10 +1316,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedAutoSize, pictureBox.GetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_SizeMode_Set_CallsInvalidated()
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 SizeMode = PictureBoxSizeMode.Normal
             };
@@ -1333,10 +1338,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, invalidatedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_SizeMode_SetWithHandler_CallsSizeModeChanged()
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 SizeMode = PictureBoxSizeMode.Normal
             };
@@ -1371,11 +1376,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(PictureBoxSizeMode))]
         public void PictureBox_SizeMode_SetInvalid_ThrowsInvalidEnumArgumentException(PictureBoxSizeMode value)
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             Assert.Throws<InvalidEnumArgumentException>("value", () => pictureBox.SizeMode = value);
         }
 
@@ -1619,11 +1624,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_Visible_Set_GetReturnsExpected(bool value)
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 Visible = value
             };
@@ -1638,11 +1643,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, control.Visible);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_Visible_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             control.Visible = value;
@@ -1657,10 +1662,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Visible_SetWithHandler_CallsVisibleChanged()
         {
-            var control = new PictureBox
+            using var control = new PictureBox
             {
                 Visible = true
             };
@@ -1695,11 +1700,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_WaitOnLoad_Set_GetReturnsExpected(bool value)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = value
             };
@@ -1714,19 +1719,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, pictureBox.WaitOnLoad);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_BeginInit_InvokeMultipleTimes_Success()
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             ISupportInitialize supportInitialize = pictureBox;
             supportInitialize.BeginInit();
             supportInitialize.BeginInit();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_BeginInit_EndInitValidImageWaitOnLoadTrue_SetsImage()
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = true
             };
@@ -1742,11 +1747,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void PictureBox_BeginInit_EndInitNullOrEmptyImageWaitOnLoadTrue_DoesNotSetImage(string imageLocation)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = true
             };
@@ -1762,10 +1767,10 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_BeginInit_EndInitWaitOnLoadFalse_DoesNotSetImage()
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = false
             };
@@ -1781,13 +1786,13 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         [InlineData("bitmaps/nature24bits.jpg")]
         [InlineData("  ")]
         public void PictureBox_EndInit_InvokeMultipleTimes_Nop(string imageLocation)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 ImageLocation = imageLocation
             };
@@ -1804,13 +1809,13 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         [InlineData("bitmaps/nature24bits.jpg")]
         [InlineData("  ")]
         public void PictureBox_EndInit_InvokeMultipleTimesWaitOnLoad_DoesNotLoadImage(string imageLocation)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 ImageLocation = imageLocation
             };
@@ -1831,18 +1836,18 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_CancelAsync_InvokeWithoutStarting_Nop()
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             pictureBox.CancelAsync();
             pictureBox.CancelAsync();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Dispose_Success()
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             pictureBox.Dispose();
             pictureBox.Dispose();
         }
@@ -1891,12 +1896,12 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.GetTopLevel());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData("NoSuchImage")]
         [InlineData("  ")]
         public void PictureBox_Load_InvalidUrl_ThrowsException(string value)
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
 
             Assert.ThrowsAny<Exception>(() => pictureBox.Load(value));
             Assert.Equal(value, pictureBox.ImageLocation);
@@ -1908,13 +1913,13 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData("NoSuchImage")]
         [InlineData("  ")]
         public void PictureBox_Load_InvalidUrlWithImage_ThrowsException(string value)
         {
-            var image = new Bitmap(10, 10);
-            var pictureBox = new PictureBox
+            using var image = new Bitmap(10, 10);
+            using var pictureBox = new PictureBox
             {
                 Image = image
             };
@@ -1929,10 +1934,10 @@ namespace System.Windows.Forms.Tests
             Assert.Same(image, pictureBox.Image);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Load_Url_CallsInvalidated()
         {
-            var pictureBox = new PictureBox();
+            using var pictureBox = new PictureBox();
             int invalidatedCallCount = 0;
             pictureBox.Invalidated += (sender, e) => invalidatedCallCount++;
             Assert.NotEqual(IntPtr.Zero, pictureBox.Handle);
@@ -1968,10 +1973,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(6, invalidatedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Load_UrlValidWithWaitOnLoadTrueLocal_GetReturnsExpected()
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = true
             };
@@ -1986,12 +1991,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Load_UrlValidWithWaitOnLoadTrueUri_GetReturnsExpected()
         {
             try
             {
-                var pictureBox = new PictureBox
+                using var pictureBox = new PictureBox
                 {
                     WaitOnLoad = true
                 };
@@ -2011,7 +2016,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ImageLocation_SetInvalidWithWaitOnLoadTrueDesignMode_TestData))]
         public void PictureBox_Load_UrlInvalidWithWaitOnLoadTrueDesignMode_GetReturnsExpected(Image initialImage, Image errorImage, string value)
         {
@@ -2022,7 +2027,7 @@ namespace System.Windows.Forms.Tests
             mockSite
                 .Setup(s => s.DesignMode)
                 .Returns(true);
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 InitialImage = initialImage,
                 ErrorImage = errorImage,
@@ -2038,9 +2043,13 @@ namespace System.Windows.Forms.Tests
             pictureBox.Load(value);
             Assert.Same(pictureBox.ErrorImage, pictureBox.Image);
             Assert.Equal(value, pictureBox.ImageLocation);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            pictureBox.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void PictureBox_Load_UrlNullOrEmptyWithError_ResetsImage(string value)
         {
@@ -2051,7 +2060,7 @@ namespace System.Windows.Forms.Tests
             mockSite
                 .Setup(s => s.DesignMode)
                 .Returns(true);
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = true,
                 Site = mockSite.Object
@@ -2063,12 +2072,16 @@ namespace System.Windows.Forms.Tests
             pictureBox.ImageLocation = value;
             Assert.Equal(value, pictureBox.ImageLocation);
             Assert.Null(pictureBox.Image);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            pictureBox.Site = null;
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_Load_UrlInitializing_GetReturnsExpected()
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 WaitOnLoad = true
             };
@@ -2084,11 +2097,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(110, 100), pictureBox.Image.Size);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void PictureBox_Load_InvokeWithoutImageLocation_ThrowsInvalidOperationException(string imageLocation)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 ImageLocation = imageLocation
             };
@@ -2096,11 +2109,11 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => pictureBox.Load(imageLocation));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void PictureBox_LoadAsync_InvokeWithoutImageLocation_ThrowsInvalidOperationException(string imageLocation)
         {
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 ImageLocation = imageLocation
             };
@@ -2108,11 +2121,11 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => pictureBox.LoadAsync(imageLocation));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PictureBox_OnEnabledChanged_Invoke_CallsEnabledChanged(EventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2132,11 +2145,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PictureBox_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2273,11 +2286,11 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
         public void PictureBox_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             KeyEventHandler handler = (sender, e) =>
             {
@@ -2297,11 +2310,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
         public void PictureBox_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             KeyPressEventHandler handler = (sender, e) =>
             {
@@ -2321,11 +2334,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
         public void PictureBox_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             KeyEventHandler handler = (sender, e) =>
             {
@@ -2345,11 +2358,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PictureBox_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2375,11 +2388,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new AsyncCompletedEventArgs(null, false, null) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnLoadCompleted_TestData))]
         public void PictureBox_OnLoadCompleted_Invoke_CallsLoadCompleted(AsyncCompletedEventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             AsyncCompletedEventHandler handler = (sender, e) =>
             {
@@ -2405,11 +2418,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ProgressChangedEventArgs(0, null) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnLoadProgressChanged_TestData))]
         public void PictureBox_OnLoadProgressChanged_Invoke_CallsLoadProgressChanged(ProgressChangedEventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             ProgressChangedEventHandler handler = (sender, e) =>
             {
@@ -2429,11 +2442,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
         public void PictureBox_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             PaintEventHandler handler = (sender, e) =>
             {
@@ -2464,12 +2477,12 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnPaint_Image_TestData))]
         public void PictureBox_OnPaint_InvokeWithValidImage_CallsLoad(PictureBoxSizeMode sizeMode, PaintEventArgs eventArgs)
         {
-            var image = new Bitmap(10, 10);
-            var pictureBox = new SubPictureBox
+            using var image = new Bitmap(10, 10);
+            using var pictureBox = new SubPictureBox
             {
                 SizeMode = sizeMode,
                 Image = image
@@ -2480,11 +2493,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(image, pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnPaint_Image_TestData))]
         public void PictureBox_OnPaint_InvokeWithValidImageLocationWaitOnLoadTrue_CallsLoad(PictureBoxSizeMode sizeMode, PaintEventArgs eventArgs)
         {
-            var pictureBox = new SubPictureBox
+            using var pictureBox = new SubPictureBox
             {
                 SizeMode = sizeMode,
                 ImageLocation = PathImageLocation
@@ -2507,11 +2520,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnPaint_NullOrEmptyImageLocation_TestData))]
         public void PictureBox_OnPaint_InvokeWithNullOrEmptyImageLocationWaitOnLoadTrue_CallsLoad(string imageLocation, PaintEventArgs eventArgs)
         {
-            var pictureBox = new SubPictureBox
+            using var pictureBox = new SubPictureBox
             {
                 ImageLocation = imageLocation
             };
@@ -2536,11 +2549,11 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnPaint_InvalidImageLocation_TestData))]
         public void PictureBox_OnPaint_InvokeWithInvalidImageLocationWaitOnLoadTrue_CallsLoad(PictureBoxSizeMode sizeMode, string imageLocation, PaintEventArgs eventArgs)
         {
-            var pictureBox = new SubPictureBox
+            using var pictureBox = new SubPictureBox
             {
                 SizeMode = sizeMode,
                 ImageLocation = imageLocation
@@ -2554,11 +2567,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(pictureBox.ErrorImage, pictureBox.Image);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
         public void PictureBox_OnPaint_InvokeWithImage_CallsPaint(PaintEventArgs eventArgs)
         {
-            var control = new SubPictureBox
+            using var control = new SubPictureBox
             {
                 Image = new Bitmap(10, 10)
             };
@@ -2581,11 +2594,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PictureBox_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2755,11 +2768,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PictureBox_OnSizeModeChanged_Invoke_CallsSizeModeChanged(EventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2779,11 +2792,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PictureBox_OnVisibleChanged_Invoke_CallsVisibleChanged(EventArgs eventArgs)
         {
-            var control = new SubPictureBox();
+            using var control = new SubPictureBox();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -2803,10 +2816,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void PictureBox_ToString_Invoke_ReturnsExpected()
         {
-            var control = new PictureBox();
+            using var control = new PictureBox();
             Assert.Equal("System.Windows.Forms.PictureBox, SizeMode: Normal", control.ToString());
         }
 

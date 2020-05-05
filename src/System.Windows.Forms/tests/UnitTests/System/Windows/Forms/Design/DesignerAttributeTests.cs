@@ -12,6 +12,7 @@ using Xunit.Abstractions;
 
 namespace System.Windows.Forms.Design.Tests
 {
+    // NB: doesn't require thread affinity
     public class DesignerAttributeTests : IClassFixture<ThreadExceptionFixture>
     {
         private const string AssemblyRef_SystemWinforms = "System.Windows.Forms, Version=" + FXAssembly.Version + ", Culture=neutral, PublicKeyToken=" + AssemblyRef.MicrosoftPublicKey;

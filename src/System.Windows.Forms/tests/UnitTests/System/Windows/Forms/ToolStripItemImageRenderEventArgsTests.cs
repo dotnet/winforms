@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests
             };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Graphics_ToolStripItem_Rectangle_TestData))]
         public void ToolStripItemImageRenderEventArgs_Ctor_Graphics_ToolStripItem_Rectangle(Graphics g, ToolStripItem item, Rectangle imageRectangle, Image expectedImage)
         {
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(expectedImage, e.Image);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripItemImageRenderEventArgs_Ctor_Graphics_ToolStripItem_Rectangle_MirroredImage()
         {
             using (var image = new Bitmap(10, 10))
@@ -77,23 +77,32 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_Image_Rectangle_TestData()
+        [WinFormsFact]
+        public void ToolStripItemImageRenderEventArgs_Ctor_nulls()
         {
-            var image = new Bitmap(10, 10);
-            var otherImage = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
+            var e = new ToolStripItemImageRenderEventArgs(null, null, null, Rectangle.Empty);
 
-            yield return new object[] { null, null, null, Rectangle.Empty };
-            yield return new object[] { graphics, new ToolStripButton(), otherImage, new Rectangle(1, 2, 3, 4) };
-            yield return new object[] { graphics, new ToolStripButton() { Image = image }, otherImage, new Rectangle(1, 2, 3, 4) };
+            Assert.Null(e.Graphics);
+            Assert.Null(e.Item);
+            Assert.Null(e.Image);
+            Assert.Equal(Rectangle.Empty, e.ImageRectangle);
         }
 
-        [Theory]
-        [MemberData(nameof(Ctor_Graphics_ToolStripItem_Image_Rectangle_TestData))]
-        public void ToolStripItemImageRenderEventArgs_Ctor_Graphics_ToolStripItem_Image_Rectangle(Graphics g, ToolStripItem item, Image image, Rectangle imageRectangle)
+        public static IEnumerable<object[]> Ctor_ToolStripItem_Image_Rectangle_TestData()
         {
-            var e = new ToolStripItemImageRenderEventArgs(g, item, image, imageRectangle);
-            Assert.Equal(g, e.Graphics);
+            yield return new object[] { new ToolStripButton(), new Bitmap(10, 10), new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new ToolStripButton() { Image = new Bitmap(10, 10) }, new Bitmap(10, 10), new Rectangle(1, 2, 3, 4) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Ctor_ToolStripItem_Image_Rectangle_TestData))]
+        public void ToolStripItemImageRenderEventArgs_Ctor_ToolStripItem_Image_Rectangle(ToolStripItem item, Image image, Rectangle imageRectangle)
+        {
+            using Graphics graphics = Graphics.FromImage(image);
+
+            var e = new ToolStripItemImageRenderEventArgs(graphics, item, image, imageRectangle);
+
+            Assert.Equal(graphics, e.Graphics);
             Assert.Equal(item, e.Item);
             Assert.Equal(image, e.Image);
             Assert.Equal(imageRectangle, e.ImageRectangle);

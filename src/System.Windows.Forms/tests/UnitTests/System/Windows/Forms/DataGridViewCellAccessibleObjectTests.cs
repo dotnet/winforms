@@ -8,6 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class DataGridViewCellAccessibleObjectTests : DataGridViewCell, IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
@@ -120,7 +121,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellAccessibleObject_Owner_Set_GetReturnsExpected()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject
             {
                 Owner = owner
@@ -131,7 +132,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellAccessibleObject_Owner_SetAlreadyWithOwner_ThrowsInvalidOperationException()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Owner = owner);
         }
@@ -170,7 +171,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellAccessibleObject_State_NoDataGridView_ReturnsExpected()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             Assert.Equal(AccessibleStates.Focusable | AccessibleStates.Selectable, accessibleObject.State);
         }
@@ -204,7 +205,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellAccessibleObject_DoDefaultAction_NoDataGridView_ThrowsInvalidOperationException()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             Assert.Throws<InvalidOperationException>(() => accessibleObject.DoDefaultAction());
         }
@@ -219,7 +220,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellAccessibleObject_GetChild_NoDataGridView_ReturnsNull()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             Assert.Null(accessibleObject.GetChild(-1));
         }
@@ -234,7 +235,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellAccessibleObject_GetChildCount_NoDataGridView_ReturnsZero()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             Assert.Equal(0, accessibleObject.GetChildCount());
         }
@@ -282,7 +283,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleSelection.RemoveSelection)]
         public void DataGridViewCellAccessibleObject_Select_NothingToDo_Nop(AccessibleSelection flags)
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             accessibleObject.Select(flags);
         }
@@ -301,7 +302,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleSelection.TakeSelection | AccessibleSelection.RemoveSelection)]
         public void DataGridViewCellAccessibleObject_Select_HasSelectionFlagsWithoutDataGridView_ThrowsInvalidOperationException(AccessibleSelection flags)
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Select(flags));
         }
@@ -310,7 +311,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleSelection.TakeFocus)]
         public void DataGridViewCellAccessibleObject_Select_HasFocusFlagsWithoutDataGridView_ThrowsInvalidOperationException(AccessibleSelection flags)
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             accessibleObject.Select(flags);
         }

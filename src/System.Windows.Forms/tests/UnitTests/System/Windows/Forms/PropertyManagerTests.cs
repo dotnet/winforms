@@ -12,6 +12,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class PropertyManagerTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
@@ -150,41 +151,39 @@ namespace System.Windows.Forms.Tests
             mockDataSource.Verify(o => o.EndEdit(), Times.Exactly(2));
         }
 
-        // Commented out because this test is failing after an arcade update. Needs to be investigated.
-        // Tracked in the following issue: https://github.com/dotnet/winforms/issues/1030
-        // [Theory]
-        // [InlineData(true, 0)]
-        // [InlineData(false, 1)]
-        // public void PropertyManager_EndCurrentEdit_IEditableObjectCurrentNotSuccess_DoesNotCallEndEdit(bool cancel, int expectedCallCount)
-        // {
-        //     int callCount = 0;
-        //     var dataSource = new EditableDataSource
-        //     {
-        //         EndEditHandler = () =>
-        //         {
-        //             callCount++;
-        //         }
-        //     };
+        [WinFormsTheory(Skip = "Flaky test, see: https://github.com/dotnet/winforms/issues/1030")]
+        [InlineData(true, 0)]
+        [InlineData(false, 1)]
+        public void PropertyManager_EndCurrentEdit_IEditableObjectCurrentNotSuccess_DoesNotCallEndEdit(bool cancel, int expectedCallCount)
+        {
+            int callCount = 0;
+            var dataSource = new EditableDataSource
+            {
+                EndEditHandler = () =>
+                {
+                    callCount++;
+                }
+            };
 
-        //     var manager = new PropertyManager(dataSource);
-        //     var control = new SubControl { Visible = true };
-        //     control.CreateControl();
-        //     var controlBindings = new ControlBindingsCollection(control);
-        //     var cancelBinding = new Binding("Value", dataSource, "Property", true);
-        //     BindingCompleteEventHandler bindingCompleteHandler = (sender, e) =>
-        //     {
-        //         e.Cancel = cancel;
-        //     };
+            var manager = new PropertyManager(dataSource);
+            using var control = new SubControl { Visible = true };
+            control.CreateControl();
+            var controlBindings = new ControlBindingsCollection(control);
+            var cancelBinding = new Binding("Value", dataSource, "Property", true);
+            BindingCompleteEventHandler bindingCompleteHandler = (sender, e) =>
+            {
+                e.Cancel = cancel;
+            };
 
-        //     cancelBinding.BindingComplete += bindingCompleteHandler;
-        //     controlBindings.Add(cancelBinding);
-        //     manager.Bindings.Add(cancelBinding);
-        //     manager.EndCurrentEdit();
-        //     Assert.Equal(expectedCallCount, callCount);
+            cancelBinding.BindingComplete += bindingCompleteHandler;
+            controlBindings.Add(cancelBinding);
+            manager.Bindings.Add(cancelBinding);
+            manager.EndCurrentEdit();
+            Assert.Equal(expectedCallCount, callCount);
 
-        //     manager.EndCurrentEdit();
-        //     Assert.Equal(expectedCallCount * 2, callCount);
-        // }
+            manager.EndCurrentEdit();
+            Assert.Equal(expectedCallCount * 2, callCount);
+        }
 
         [Fact]
         public void PropertyManager_EndCurrentEdit_NonNullCurrent_Nop()

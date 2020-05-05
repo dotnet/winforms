@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FileDialogCustomPlacesCollectionTests : IClassFixture<ThreadExceptionFixture>
+    public class FileDialogCustomPlacesCollectionTests
     {
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]

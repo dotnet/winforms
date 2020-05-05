@@ -598,7 +598,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripItem_AllowDrop_SetWithOwnerWithHandle_GetReturnsExpected(bool value)
         {
@@ -737,7 +737,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, item.AllowDrop);
         }
 
-        [Fact]
+        [Fact] // x-thread
         public void Control_AllowDrop_SetWithParentWithHandleNonSTAThread_ThrowsInvalidOperationException()
         {
             using var parent = new ToolStrip();

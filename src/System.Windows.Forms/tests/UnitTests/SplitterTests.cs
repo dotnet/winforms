@@ -8,10 +8,10 @@ namespace System.Windows.Forms.Tests
 {
     public class SplitterTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void SplitterTest_Constructor()
         {
-            var s = new Splitter();
+            using var s = new Splitter();
 
             Assert.NotNull(s);
             Assert.False(s.TabStop);

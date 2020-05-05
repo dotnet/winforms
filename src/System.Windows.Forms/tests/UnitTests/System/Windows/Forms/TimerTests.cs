@@ -11,10 +11,10 @@ namespace System.Windows.Forms.Tests
 {
     public class TimerTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void Timer_Ctor_Default()
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             Assert.Null(timer.Container);
             Assert.False(timer.DesignMode);
             Assert.False(timer.Enabled);
@@ -23,11 +23,11 @@ namespace System.Windows.Forms.Tests
             Assert.Null(timer.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Timer_Ctor_IContainer()
         {
-            var container = new Container();
-            var timer = new SubTimer(container);
+            using var container = new Container();
+            using var timer = new SubTimer(container);
             Assert.Same(container, timer.Container);
             Assert.False(timer.DesignMode);
             Assert.False(timer.Enabled);
@@ -36,17 +36,17 @@ namespace System.Windows.Forms.Tests
             Assert.Null(timer.Tag);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Timer_Ctor_NullContainer_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("container", () => new Timer(null));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Enabled_Set_GetReturnsExpected(bool value)
         {
-            var timer = new Timer
+            using var timer = new Timer
             {
                 Enabled = value
             };
@@ -57,11 +57,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, timer.Enabled);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Enabled_SetDesignMode_GetReturnsExpected(bool value)
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.DesignMode)
@@ -75,13 +75,17 @@ namespace System.Windows.Forms.Tests
             // Set same.
             timer.Enabled = value;
             Assert.Equal(value, timer.Enabled);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            timer.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Enabled_SetDesignModeAfterEnabling_GetReturnsExpected(bool value)
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.DesignMode)
@@ -101,14 +105,18 @@ namespace System.Windows.Forms.Tests
             // Set same.
             timer.Enabled = value;
             Assert.Equal(value, timer.Enabled);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            timer.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(1)]
         [InlineData(100)]
         public void Timer_Interval_Set_GetReturnsExpected(int value)
         {
-            var timer = new Timer
+            using var timer = new Timer
             {
                 Interval = value
             };
@@ -119,12 +127,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, timer.Interval);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(1)]
         [InlineData(100)]
         public void Timer_Interval_SetStarted_GetReturnsExpected(int value)
         {
-            var timer = new Timer();
+            using var timer = new Timer();
             timer.Start();
 
             timer.Interval = value;
@@ -135,12 +143,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, timer.Interval);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(1)]
         [InlineData(100)]
         public void Timer_Interval_SetStopped_GetReturnsExpected(int value)
         {
-            var timer = new Timer();
+            using var timer = new Timer();
             timer.Start();
             timer.Stop();
 
@@ -152,12 +160,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, timer.Interval);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(1)]
         [InlineData(100)]
         public void Timer_Interval_SetDesignMode_GetReturnsExpected(int value)
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.DesignMode)
@@ -171,14 +179,18 @@ namespace System.Windows.Forms.Tests
             // Set same.
             timer.Interval = value;
             Assert.Equal(value, timer.Interval);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            timer.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(1)]
         [InlineData(100)]
         public void Timer_Interval_SetDesignModeAfterEnabling_GetReturnsExpected(int value)
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.DesignMode)
@@ -198,22 +210,26 @@ namespace System.Windows.Forms.Tests
             // Set same.
             timer.Interval = value;
             Assert.Equal(value, timer.Interval);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            timer.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(0)]
         [InlineData(-1)]
         public void Timer_Interval_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
-            var timer = new Timer();
+            using var timer = new Timer();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => timer.Interval = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Timer_Tag_Set_GetReturnsExpected(object value)
         {
-            var timer = new Timer
+            using var timer = new Timer
             {
                 Tag = value
             };
@@ -224,11 +240,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, timer.Tag);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Timer_Tag_SetDesignMode_GetReturnsExpected(object value)
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.DesignMode)
@@ -242,13 +258,17 @@ namespace System.Windows.Forms.Tests
             // Set same.
             timer.Tag = value;
             Assert.Same(value, timer.Tag);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            timer.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Start_Stop_Success(bool designMode)
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.DesignMode)
@@ -263,13 +283,17 @@ namespace System.Windows.Forms.Tests
             // Stop.
             timer.Stop();
             Assert.False(timer.Enabled);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            timer.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Start_MultipleTimes_Success(bool designMode)
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.DesignMode)
@@ -284,13 +308,17 @@ namespace System.Windows.Forms.Tests
             // Start again.
             timer.Start();
             Assert.True(timer.Enabled);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            timer.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Stop_Restart_Success(bool designMode)
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.DesignMode)
@@ -313,13 +341,17 @@ namespace System.Windows.Forms.Tests
             // Stop again.
             timer.Stop();
             Assert.False(timer.Enabled);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            timer.Site = null;
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Stop_MultipleTimes_Success(bool designMode)
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.DesignMode)
@@ -338,12 +370,16 @@ namespace System.Windows.Forms.Tests
             // Stop again.
             timer.Stop();
             Assert.False(timer.Enabled);
+
+            // NB: disposing the component with strictly mocked object causes tests to fail
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            timer.Site = null;
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Timer_OnTick_Invoke_CallsTick()
         {
-            var timer = new SubTimer();
+            using var timer = new SubTimer();
             var eventArgs = new EventArgs();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -364,10 +400,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Timer_Dispose_NotStarted_Succcess()
         {
-            var timer = new Timer();
+            using var timer = new Timer();
             timer.Dispose();
             Assert.False(timer.Enabled);
 
@@ -376,10 +412,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(timer.Enabled);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Timer_Dispose_Started_Succcess()
         {
-            var timer = new Timer();
+            using var timer = new Timer();
             timer.Start();
 
             timer.Dispose();
@@ -390,10 +426,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(timer.Enabled);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Timer_Dispose_Stopped_Succcess()
         {
-            var timer = new Timer();
+            using var timer = new Timer();
             timer.Start();
             timer.Stop();
 
@@ -405,10 +441,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(timer.Enabled);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Timer_ToString_Invoke_ReturnsExpected()
         {
-            var timer = new Timer();
+            using var timer = new Timer();
             Assert.Equal("System.Windows.Forms.Timer, Interval: 100", timer.ToString());
         }
 

@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.NotNull(lastChild);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.IsGridPatternAvailablePropertyId)]
         [InlineData((int)UiaCore.UIA.IsTablePatternAvailablePropertyId)]
         public void DataGridViewAccessibleObject_Pattern_IsAvailable(int propertyId)
@@ -245,7 +245,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.True((bool)isOffscreen); // Out of the visible area
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.TablePatternId)]
         [InlineData((int)UiaCore.UIA.GridPatternId)]
         public void DataGridViewAccessibleObject_IsPatternSupported(int patternId)
@@ -255,7 +255,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void DataGridViewAccessibleObject_Cell_IsReadOnly_ReturnsCorrectValue(bool isReadOnly)
@@ -278,7 +278,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void DataGridViewAccessibleObject_Row_IsReadOnly_ReturnsCorrectValue(bool isReadOnly)
@@ -301,7 +301,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void DataGridViewAccessibleObject_Grid_IsReadOnly_ReturnsCorrectValue(bool isReadOnly)

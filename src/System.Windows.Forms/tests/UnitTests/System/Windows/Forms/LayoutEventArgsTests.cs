@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new SubComponent(), "affectedProperty" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_IComponent_String_TestData))]
         public void Ctor_IComponent_String(IComponent affectedComponent, string affectedProperty)
         {
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Control(), "affectedProperty" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Control_String_TestData))]
         public void Ctor_Control_String(Control affectedControl, string affectedProperty)
         {

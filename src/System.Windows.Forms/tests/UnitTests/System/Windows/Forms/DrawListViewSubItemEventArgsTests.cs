@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Rectangle(1, 2, 3, 4), new ListViewItem(), new ListViewItem.ListViewSubItem(), 1, 2, new ColumnHeader(), ListViewItemStates.Checked };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates_TestData))]
         public void DrawListViewSubItemEventArgs_Ctor_Graphics_ListViewItem_Rectangle_Int_ListViewItemStates(Rectangle bounds, ListViewItem item, ListViewItem.ListViewSubItem subItem, int itemIndex, int columnIndex, ColumnHeader header, ListViewItemStates itemState)
         {
@@ -41,13 +41,13 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DrawListViewSubItemEventArgs_Ctor_NullGraphics_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("graphics", () => new DrawListViewSubItemEventArgs(null, new Rectangle(1, 2, 3, 4), new ListViewItem(), new ListViewItem.ListViewSubItem(), -1, 0, new ColumnHeader(), ListViewItemStates.Default));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DrawListViewSubItemEventArgs_Ctor_NullItemIndexNegativeOne_ThrowsArgumentNullException()
         {
             using (var image = new Bitmap(10, 10))
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(0)]
         public void DrawListViewSubItemEventArgs_Ctor_NullSubItemIndexNotNegativeOne_ThrowsArgumentNullException(int itemIndex)
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DrawListViewSubItemEventArgs_DrawDefault_Set_GetReturnsExpected(bool value)
         {
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Rectangle(1, 2, 3, 4), null, new ListViewItem.ListViewSubItem(), 0, new ColumnHeader(), ListViewItemStates.Focused };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Draw_TestData))]
         public void DrawListViewSubItemEventArgs_DrawBackground_HasGraphics_Success(Rectangle bounds, ListViewItem item, ListViewItem.ListViewSubItem subItem, int itemIndex, ColumnHeader header, ListViewItemStates itemState)
         {
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Draw_TestData))]
         public void DrawListViewSubItemEventArgs_DrawFocusRectangle_HasGraphics_Success(Rectangle bounds, ListViewItem item, ListViewItem.ListViewSubItem subItem, int itemIndex, ColumnHeader header, ListViewItemStates itemState)
         {
@@ -144,48 +144,5 @@ namespace System.Windows.Forms.Tests
                 e.DrawFocusRectangle(new Rectangle(1, 2, 3, 4));
             }
         }
-
-/*
-        public static IEnumerable<object[]> _TestData()
-        {
-
-        }
-
-        public static IEnumerable<object[]> DrawText_HasGraphicsWithoutFlags_TestData()
-        {
-            yield return new object[] { -1, HorizontalAlignment.Left };
-            yield return new object[] { -1, HorizontalAlignment.Center };
-            yield return new object[] { -1, HorizontalAlignment.Right };
-            yield return new object[] { 1, HorizontalAlignment.Left };
-            yield return new object[] { 1, HorizontalAlignment.Center };
-            yield return new object[] { 1, HorizontalAlignment.Right };
-        }
-
-        [Theory]
-        [MemberData(nameof(DrawText_HasGraphicsWithoutFlags_TestData))]
-        public void DrawListViewSubItemEventArgs_DrawText_HasGraphicsWithoutFlags_Success(int itemIndex, HorizontalAlignment textAlign)
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var header = new ColumnHeader { TextAlign = textAlign };
-                var e = new DrawListViewSubItemEventArgs(graphics, new Rectangle(1, 2, 3, 4), new ListViewItem(), new ListViewItem.ListViewSubItem(), itemIndex, 0, header, ListViewItemStates.Checked);
-                e.DrawText();
-            }
-        }
-
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(1)]
-        public void DrawListViewSubItemEventArgs_DrawText_HasGraphicsWithFlags_Success(int itemIndex)
-        {
-            using (var image = new Bitmap(10, 10))
-            using (Graphics graphics = Graphics.FromImage(image))
-            {
-                var e = new DrawListViewSubItemEventArgs(graphics, new Rectangle(1, 2, 3, 4), new ListViewItem(), new ListViewItem.ListViewSubItem(), itemIndex, 0, new ColumnHeader(), ListViewItemStates.Checked);
-                e.DrawText(TextFormatFlags.Bottom);
-            }
-        }
- */
     }
 }

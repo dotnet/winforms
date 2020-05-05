@@ -1112,7 +1112,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>(null, () => collection.Add(control));
         }
 
-        [Fact]
+        [Fact] // cross-thread access
         public void ControlCollection_Add_DifferentThreadValueOwner_ThrowsArgumentException()
         {
             Control owner = null;
@@ -1124,12 +1124,12 @@ namespace System.Windows.Forms.Tests
             thread.Start();
             thread.Join();
 
-            var control = new Control();
+            using var control = new Control();
             var collection = new Control.ControlCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.Add(control));
         }
 
-        [Fact]
+        [Fact] // cross-thread access
         public void ControlCollection_Add_DifferentThreadValueControl_ThrowsArgumentException()
         {
             Control control = null;
@@ -1141,7 +1141,7 @@ namespace System.Windows.Forms.Tests
             thread.Start();
             thread.Join();
 
-            var owner = new Control();
+            using var owner = new Control();
             var collection = new Control.ControlCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.Add(control));
         }

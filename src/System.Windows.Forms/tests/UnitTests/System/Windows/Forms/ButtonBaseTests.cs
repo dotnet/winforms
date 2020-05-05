@@ -141,11 +141,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextImageRelation))]
         public void ToolStripItem_TextImageRelation_Set_GetReturnsExpected(TextImageRelation value)
         {
-            var button = new SubButtonBase
+            using var button = new SubButtonBase
             {
                 TextImageRelation = value
             };
@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, button.TextImageRelation);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextImageRelation))]
         [InlineData((TextImageRelation)3)]
         [InlineData((TextImageRelation)5)]
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Tests
         [InlineData((TextImageRelation)7)]
         public void ButtonBase_TextImageRelation_SetInvalid_ThrowsInvalidEnumArgumentException(TextImageRelation value)
         {
-            var button = new SubButtonBase();
+            using var button = new SubButtonBase();
             Assert.Throws<InvalidEnumArgumentException>("value", () => button.TextImageRelation = value);
         }
 

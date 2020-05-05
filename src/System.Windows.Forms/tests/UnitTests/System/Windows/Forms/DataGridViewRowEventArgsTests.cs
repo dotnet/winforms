@@ -6,12 +6,13 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class DataGridViewRowEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Ctor_DataGridViewRow()
         {
-            var dataGridViewRow = new DataGridViewRow();
+            using var dataGridViewRow = new DataGridViewRow();
             var e = new DataGridViewRowEventArgs(dataGridViewRow);
             Assert.Equal(dataGridViewRow, e.Row);
         }

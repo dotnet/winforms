@@ -8,6 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class DrawItemEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Graphics_Font_Rectangle_Int_DrawItemState_TestData()
@@ -39,20 +40,20 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_Graphics_Font_Rectangle_Int_DrawItemState_Color_Color_TestData()
         {
-            var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
-
-            yield return new object[] { graphics, null, Rectangle.Empty, -2, (DrawItemState)(DrawItemState.None - 1), Color.Empty, Color.Empty };
-            yield return new object[] { graphics, SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), -1, DrawItemState.None, Color.Red, Color.Blue };
-            yield return new object[] { graphics, SystemFonts.DefaultFont, new Rectangle(-1, 2, -3, -4), 0, DrawItemState.Selected, Color.Red, Color.Blue };
-            yield return new object[] { graphics, SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Focus, Color.Red, Color.Blue };
-            yield return new object[] { graphics, SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Focus | DrawItemState.NoFocusRect, Color.Red, Color.Blue };
+            yield return new object[] { null, Rectangle.Empty, -2, (DrawItemState)(DrawItemState.None - 1), Color.Empty, Color.Empty };
+            yield return new object[] { SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), -1, DrawItemState.None, Color.Red, Color.Blue };
+            yield return new object[] { SystemFonts.DefaultFont, new Rectangle(-1, 2, -3, -4), 0, DrawItemState.Selected, Color.Red, Color.Blue };
+            yield return new object[] { SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Focus, Color.Red, Color.Blue };
+            yield return new object[] { SystemFonts.DefaultFont, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Focus | DrawItemState.NoFocusRect, Color.Red, Color.Blue };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_Graphics_Font_Rectangle_Int_DrawItemState_Color_Color_TestData))]
-        public void DrawItemEventArgs_Ctor_Graphics_Font_Rectangle_Int_DrawItemState_Color_Color(Graphics graphics, Font font, Rectangle rect, int index, DrawItemState state, Color foreColor, Color backColor)
+        public void DrawItemEventArgs_Ctor_Graphics_Font_Rectangle_Int_DrawItemState_Color_Color(Font font, Rectangle rect, int index, DrawItemState state, Color foreColor, Color backColor)
         {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+
             var e = new DrawItemEventArgs(graphics, font, rect, index, state, foreColor, backColor);
             Assert.Equal(graphics, e.Graphics);
             Assert.Equal(font, e.Font);
@@ -77,13 +78,13 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Rectangle(1, 2, 3, 4), DrawItemState.Focus };
             yield return new object[] { new Rectangle(1, 2, 3, 4), DrawItemState.Focus | DrawItemState.Selected };
             yield return new object[] { new Rectangle(1, 2, 3, 4), DrawItemState.Focus | DrawItemState.NoFocusRect };
-            yield return new object[] { new Rectangle(1, 2, 3, 4), DrawItemState.Focus | DrawItemState.NoFocusRect  | DrawItemState.Selected };
+            yield return new object[] { new Rectangle(1, 2, 3, 4), DrawItemState.Focus | DrawItemState.NoFocusRect | DrawItemState.Selected };
             yield return new object[] { new Rectangle(-1, -2, -3, -4), DrawItemState.None };
             yield return new object[] { new Rectangle(-1, -2, -3, -4), DrawItemState.Selected };
             yield return new object[] { new Rectangle(-1, -2, -3, -4), DrawItemState.Focus };
             yield return new object[] { new Rectangle(-1, -2, -3, -4), DrawItemState.Focus | DrawItemState.Selected };
             yield return new object[] { new Rectangle(-1, -2, -3, -4), DrawItemState.Focus | DrawItemState.NoFocusRect };
-            yield return new object[] { new Rectangle(-1, -2, -3, -4), DrawItemState.Focus | DrawItemState.NoFocusRect  | DrawItemState.Selected };
+            yield return new object[] { new Rectangle(-1, -2, -3, -4), DrawItemState.Focus | DrawItemState.NoFocusRect | DrawItemState.Selected };
         }
 
         [Theory]

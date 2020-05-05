@@ -10,10 +10,10 @@ namespace System.Windows.Forms.Tests
 {
     public class FolderBrowserDialogTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void FolderBrowserDialog_Ctor_Default()
         {
-            var dialog = new FolderBrowserDialog();
+            using var dialog = new FolderBrowserDialog();
             Assert.True(dialog.AutoUpgradeEnabled);
             Assert.Null(dialog.Container);
             Assert.Empty(dialog.Description);
@@ -25,11 +25,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(dialog.UseDescriptionForTitle);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void FolderBrowserDialog_AutoUpgradeEnabled_Set_GetReturnsExpected(bool value)
         {
-            var dialog = new FolderBrowserDialog
+            using var dialog = new FolderBrowserDialog
             {
                 AutoUpgradeEnabled = value
             };
@@ -44,11 +44,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, dialog.AutoUpgradeEnabled);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void FolderBrowserDialog_Description_Set_GetReturnsExpected(string value)
         {
-            var dialog = new FolderBrowserDialog
+            using var dialog = new FolderBrowserDialog
             {
                 Description = value
             };
@@ -59,12 +59,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? string.Empty, dialog.Description);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(Environment.SpecialFolder.Desktop)]
         [InlineData(Environment.SpecialFolder.StartMenu)]
         public void FolderBrowserDialog_RootFolder_Set_GetReturnsExpected(Environment.SpecialFolder value)
         {
-            var dialog = new FolderBrowserDialog
+            using var dialog = new FolderBrowserDialog
             {
                 RootFolder = value
             };
@@ -75,19 +75,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, dialog.RootFolder);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(Environment.SpecialFolder))]
         public void FolderBrowserDialog_RootFolder_SetInvalid_ThrowsInvalidEnumArgumentException(Environment.SpecialFolder value)
         {
-            var dialog = new FolderBrowserDialog();
+            using var dialog = new FolderBrowserDialog();
             Assert.Throws<InvalidEnumArgumentException>("value", () => dialog.RootFolder = value);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void FolderBrowserDialog_SelectedPath_Set_GetReturnsExpected(string value)
         {
-            var dialog = new FolderBrowserDialog
+            using var dialog = new FolderBrowserDialog
             {
                 SelectedPath = value
             };
@@ -98,11 +98,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value ?? string.Empty, dialog.SelectedPath);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void FolderBrowserDialog_ShowNewFolderButton_Set_GetReturnsExpected(bool value)
         {
-            var dialog = new FolderBrowserDialog
+            using var dialog = new FolderBrowserDialog
             {
                 ShowNewFolderButton = value
             };
@@ -117,11 +117,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, dialog.ShowNewFolderButton);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void FolderBrowserDialog_UseDescriptionForTitle_Set_GetReturnsExpected(bool value)
         {
-            var dialog = new FolderBrowserDialog
+            using var dialog = new FolderBrowserDialog
             {
                 UseDescriptionForTitle = value
             };
@@ -136,10 +136,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, dialog.UseDescriptionForTitle);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void FolderBrowserDialog_Reset_Invoke_Success()
         {
-            var dialog = new FolderBrowserDialog
+            using var dialog = new FolderBrowserDialog
             {
                 AutoUpgradeEnabled = false,
                 Description = "A description",
@@ -162,10 +162,10 @@ namespace System.Windows.Forms.Tests
             Assert.True(dialog.UseDescriptionForTitle);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void FolderBrowserDialog_HelpRequest_AddRemove_Success()
         {
-            var dialog = new FolderBrowserDialog();
+            using var dialog = new FolderBrowserDialog();
             int callCount = 0;
             EventHandler handler = (sender, e) => callCount++;
 

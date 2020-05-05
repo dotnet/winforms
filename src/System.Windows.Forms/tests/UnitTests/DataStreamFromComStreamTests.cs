@@ -9,6 +9,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
+    // NB: doesn't require thread affinity
     public class DataStreamFromComStreamTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory,

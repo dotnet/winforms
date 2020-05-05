@@ -80,7 +80,7 @@ namespace System.Windows.Forms.Tests
         /*[Fact]
         public void Form_ActiveFormNotSetActive()
         {
-            var form = new Form();
+            using var form = new Form();
 
             form.Visible = true;
             form.Active = false;
@@ -387,11 +387,11 @@ namespace System.Windows.Forms.Tests
 
 #pragma warning disable 0618
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_AutoScale_Set_GetReturnsExpected(bool value)
         {
-            var form = new Form
+            using var form = new Form
             {
                 AutoScale = value
             };
@@ -404,11 +404,11 @@ namespace System.Windows.Forms.Tests
 
 #pragma warning restore 0618
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void Form_AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
         {
-            var form = new Form
+            using var form = new Form
             {
                 AutoScaleMode = value
             };
@@ -419,11 +419,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, form.AutoScaleMode);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_AutoScroll_Set_GetReturnsExpected(bool value)
         {
-            var form = new Form
+            using var form = new Form
             {
                 AutoScroll = value
             };
@@ -434,11 +434,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, form.AutoScroll);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Form_AutoSizeSet_GetReturnsExpected(bool value)
         {
-            var form = new Form
+            using var form = new Form
             {
                 AutoSize = value
             };

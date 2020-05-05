@@ -8,10 +8,10 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class DataGridViewRowsAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void DataGridViewRowsAccessibleObject_Ctor_Default()
         {
-            DataGridView dataGridView = new DataGridView
+            using DataGridView dataGridView = new DataGridView
             {
                 RowCount = 5,
                 Height = 87

@@ -10,20 +10,20 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripItemTextRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_String_Rectangle_Color_Font_TextFormatFlags_TestData()
+        public static IEnumerable<object[]> Ctor_ToolStripItem_String_Rectangle_Color_Font_TextFormatFlags_TestData()
         {
-            var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
-
-            yield return new object[] { graphics, new ToolStripButton(), null, Rectangle.Empty, Color.Empty, null, (TextFormatFlags)(TextFormatFlags.Top - 1) };
-            yield return new object[] { graphics, new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, TextFormatFlags.Top };
-            yield return new object[] { graphics, new ToolStripButton() { RightToLeft = RightToLeft.Yes }, "text", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, TextFormatFlags.Bottom };
+            yield return new object[] { new ToolStripButton(), null, Rectangle.Empty, Color.Empty, null, (TextFormatFlags)(TextFormatFlags.Top - 1) };
+            yield return new object[] { new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, TextFormatFlags.Top };
+            yield return new object[] { new ToolStripButton() { RightToLeft = RightToLeft.Yes }, "text", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, TextFormatFlags.Bottom };
         }
 
-        [Theory]
-        [MemberData(nameof(Ctor_Graphics_ToolStripItem_String_Rectangle_Color_Font_TextFormatFlags_TestData))]
-        public void Ctor_Graphics_ToolStripItem_String_Rectangle_Color_Font_TextFormatFlags(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format)
+        [WinFormsTheory]
+        [MemberData(nameof(Ctor_ToolStripItem_String_Rectangle_Color_Font_TextFormatFlags_TestData))]
+        public void Ctor_ToolStripItem_String_Rectangle_Color_Font_TextFormatFlags(ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format)
         {
+            using var image = new Bitmap(10, 10);
+            using Graphics g = Graphics.FromImage(image);
+
             var e = new ToolStripItemTextRenderEventArgs(g, item, text, textRectangle, textColor, textFont, format);
             Assert.Equal(g, e.Graphics);
             Assert.Equal(item, e.Item);
@@ -35,21 +35,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(item.TextDirection, e.TextDirection);
         }
 
-        public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_String_Rectangle_Color_Font_ContentAlignment_TestData()
+        public static IEnumerable<object[]> Ctor_ToolStripItem_String_Rectangle_Color_Font_ContentAlignment_TestData()
         {
-            var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
-
-            yield return new object[] { graphics, new ToolStripButton(), null, Rectangle.Empty, Color.Empty, null, (ContentAlignment)(ContentAlignment.TopLeft - 1), TextFormatFlags.Default | TextFormatFlags.Top | TextFormatFlags.HidePrefix };
-            yield return new object[] { graphics, new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.MiddleCenter, TextFormatFlags.Default | TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
-            yield return new object[] { graphics, new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.BottomRight, TextFormatFlags.Default | TextFormatFlags.Bottom | TextFormatFlags.Right | TextFormatFlags.HidePrefix };
-            yield return new object[] { graphics, new ToolStripButton() { RightToLeft = RightToLeft.Yes }, "text", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, (ContentAlignment)(-1), TextFormatFlags.Default | TextFormatFlags.Bottom | TextFormatFlags.Right | TextFormatFlags.RightToLeft | TextFormatFlags.HidePrefix };
+            yield return new object[] { new ToolStripButton(), null, Rectangle.Empty, Color.Empty, null, (ContentAlignment)(ContentAlignment.TopLeft - 1), TextFormatFlags.Default | TextFormatFlags.Top | TextFormatFlags.HidePrefix };
+            yield return new object[] { new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.MiddleCenter, TextFormatFlags.Default | TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.HidePrefix };
+            yield return new object[] { new ToolStripButton(), "", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, ContentAlignment.BottomRight, TextFormatFlags.Default | TextFormatFlags.Bottom | TextFormatFlags.Right | TextFormatFlags.HidePrefix };
+            yield return new object[] { new ToolStripButton() { RightToLeft = RightToLeft.Yes }, "text", new Rectangle(1, 2, 3, 4), Color.Red, SystemFonts.DefaultFont, (ContentAlignment)(-1), TextFormatFlags.Default | TextFormatFlags.Bottom | TextFormatFlags.Right | TextFormatFlags.RightToLeft | TextFormatFlags.HidePrefix };
         }
 
-        [Theory]
-        [MemberData(nameof(Ctor_Graphics_ToolStripItem_String_Rectangle_Color_Font_ContentAlignment_TestData))]
-        public void Ctor_Graphics_ToolStripItem_String_Rectangle_Color_Font_ContentAlignment(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, ContentAlignment textAlign, TextFormatFlags expectedTextFormat)
+        [WinFormsTheory]
+        [MemberData(nameof(Ctor_ToolStripItem_String_Rectangle_Color_Font_ContentAlignment_TestData))]
+        public void Ctor_ToolStripItem_String_Rectangle_Color_Font_ContentAlignment(ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, ContentAlignment textAlign, TextFormatFlags expectedTextFormat)
         {
+            using var image = new Bitmap(10, 10);
+            using Graphics g = Graphics.FromImage(image);
+
             var e = new ToolStripItemTextRenderEventArgs(g, item, text, textRectangle, textColor, textFont, textAlign);
             Assert.Equal(g, e.Graphics);
             Assert.Equal(item, e.Item);
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(TextColor_TestData))]
         public void TextColor_Set_GetReturnsExpected(Color value)
         {

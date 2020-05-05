@@ -150,11 +150,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<Appearance> AppearanceGetSetData =>
             CommonTestHelper.GetEnumTheoryData<Appearance>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AppearanceGetSetData))]
         public void CheckBox_AutoSizeModeGetSet(Appearance expected)
         {
-            var box = new CheckBox
+            using var box = new CheckBox
             {
                 Appearance = expected
             };
@@ -168,11 +168,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<Appearance> AppearanceGetSetInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<Appearance>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AppearanceGetSetInvalidData))]
         public void CheckBox_AppearanceGetSetInvalid(Appearance expected)
         {
-            var box = new CheckBox();
+            using var box = new CheckBox();
 
             InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.Appearance = expected);
             Assert.Equal("value", ex.ParamName);
@@ -184,11 +184,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<bool> AutoCheckData =>
             CommonTestHelper.GetBoolTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AutoCheckData))]
         public void CheckBox_AutoCheck(bool expected)
         {
-            var box = new CheckBox
+            using var box = new CheckBox
             {
                 AutoCheck = expected
             };
@@ -202,11 +202,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<ContentAlignment> ContentAlignmentGetSetData =>
             CommonTestHelper.GetEnumTheoryData<ContentAlignment>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ContentAlignmentGetSetData))]
         public void CheckBox_ContentAlignmentGetSet(ContentAlignment expected)
         {
-            var box = new CheckBox
+            using var box = new CheckBox
             {
                 CheckAlign = expected,
                 TextAlign = expected
@@ -222,22 +222,22 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<ContentAlignment> ContentAlignmentGetSetInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<ContentAlignment>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ContentAlignmentGetSetInvalidData))]
         public void CheckBox_ContentAlignmentGetSetInvalid(ContentAlignment expected)
         {
-            var box = new CheckBox();
+            using var box = new CheckBox();
 
             InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckAlign = expected);
             Assert.Equal("value", ex.ParamName);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, CheckState.Checked)]
         [InlineData(false, CheckState.Unchecked)]
         public void CheckBox_CheckedGetSet(bool sent, CheckState expected)
         {
-            var box = new CheckBox
+            using var box = new CheckBox
             {
                 Checked = sent
             };
@@ -295,11 +295,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<CheckState> CheckStateGetSetData =>
             CommonTestHelper.GetEnumTheoryData<CheckState>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CheckStateGetSetData))]
         public void CheckBox_CheckStateGetSet(CheckState expected)
         {
-            var box = new CheckBox
+            using var box = new CheckBox
             {
                 CheckState = expected
             };
@@ -313,11 +313,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<CheckState> CheckStateGetSetInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<CheckState>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CheckStateGetSetInvalidData))]
         public void CheckBox_CheckStateGetSetInvalid(CheckState expected)
         {
-            var box = new CheckBox();
+            using var box = new CheckBox();
 
             InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => box.CheckState = expected);
             Assert.Equal("value", ex.ParamName);
@@ -329,11 +329,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<bool> ThreeStateData =>
             CommonTestHelper.GetBoolTheoryData();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ThreeStateData))]
         public void CheckBox_ThreeState(bool expected)
         {
-            var box = new CheckBox
+            using var box = new CheckBox
             {
                 ThreeState = expected
             };
@@ -341,30 +341,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, box.ThreeState);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void CheckBox_CreateFlatAdapter()
         {
-            var box = new CheckBox();
+            using var box = new CheckBox();
 
             ButtonInternal.ButtonBaseAdapter buttonBaseAdptr = box.CreateFlatAdapter();
 
             Assert.NotNull(buttonBaseAdptr);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void CheckBox_CreatePopupAdapter()
         {
-            var box = new CheckBox();
+            using var box = new CheckBox();
 
             ButtonInternal.ButtonBaseAdapter checkBoxPopupAdptr = box.CreatePopupAdapter();
 
             Assert.NotNull(checkBoxPopupAdptr);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void CheckBox_CreateStandardAdapter()
         {
-            var box = new CheckBox();
+            using var box = new CheckBox();
 
             ButtonInternal.ButtonBaseAdapter checkBoxSndAdptr = box.CreateStandardAdapter();
 
@@ -416,10 +416,10 @@ namespace System.Windows.Forms.Tests
         }
 
         // the zero here may be an issue with cultural variance
-        [Fact]
+        [WinFormsFact]
         public void CheckBox_ToStringTest()
         {
-            var box = new CheckBox();
+            using var box = new CheckBox();
             var expected = "System.Windows.Forms.CheckBox, CheckState: 0";
 
             var actual = box.ToString();

@@ -11,6 +11,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
 {
+    // NB: doesn't require thread affinity
     public class PropertyTabTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]

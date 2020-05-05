@@ -38,11 +38,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { (AccessibleEvents)int.MaxValue, int.MaxValue };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_TestData))]
         public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntWithoutHandle_Nop(AccessibleEvents accEvent, int childID)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.AccessibilityNotifyClients(accEvent, childID);
             Assert.False(control.IsHandleCreated);
 
@@ -51,11 +51,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_TestData))]
         public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntWithHandle_Success(AccessibleEvents accEvent, int childID)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             control.AccessibilityNotifyClients(accEvent, childID);
@@ -85,11 +85,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { (AccessibleEvents)int.MaxValue, int.MinValue, int.MaxValue };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_Int_TestData))]
         public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntIntWithoutHandle_Nop(AccessibleEvents accEvent, int objectID, int childID)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.AccessibilityNotifyClients(accEvent, objectID, childID);
             Assert.False(control.IsHandleCreated);
 
@@ -98,11 +98,11 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AccessibilityNotifyClients_AccessibleEvents_Int_Int_TestData))]
         public void Control_AccessibilityNotifyClients_InvokeAccessibleEventsIntIntWithHandle_Success(AccessibleEvents accEvent, int objectID, int childID)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             control.AccessibilityNotifyClients(accEvent, objectID, childID);
@@ -403,10 +403,10 @@ namespace System.Windows.Forms.Tests
             Assert.NotSame(control.AccessibilityObject, instance);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_CreateControl_Invoke_Success()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             Assert.True(control.GetStyle(ControlStyles.UserPaint));
 
             control.CreateControl();
@@ -424,10 +424,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(handle1, handle2);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_CreateControl_InvokeNoUserPaint_Success()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.SetStyle(ControlStyles.UserPaint, false);
             Assert.False(control.GetStyle(ControlStyles.UserPaint));
 
@@ -443,11 +443,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Region(new Rectangle(1, 2, 3, 4)) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CreateControl_Region_TestData))]
         public void Control_CreateControl_InvokeWithRegion_Success(Region region)
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 Region = region
             };
@@ -459,11 +459,11 @@ namespace System.Windows.Forms.Tests
             Assert.Same(region, control.Region);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_CreateControl_InvokeWithText_Success(string text, string expectedText)
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 Text = text
             };
@@ -478,7 +478,7 @@ namespace System.Windows.Forms.Tests
         [StaFact]
         public void Control_CreateControl_InvokeAllowDrop_Success()
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 AllowDrop = true
             };
@@ -490,11 +490,11 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.AllowDrop);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_CreateControl_InvokeWithParent_Success()
         {
-            var parent = new Control();
-            var control = new SubControl
+            using var parent = new Control();
+            using var control = new SubControl
             {
                 Parent = parent
             };
@@ -506,11 +506,11 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_CreateControl_InvokeWithHandleWithText_Success(string text, string expectedText)
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 Text = text
             };
@@ -534,11 +534,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedText, control.Text);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_CreateControl_InvokeWithChildren_Success()
         {
-            var parent = new SubControl();
-            var control = new SubControl
+            using var parent = new SubControl();
+            using var control = new SubControl
             {
                 Parent = parent
             };
@@ -562,10 +562,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_CreateControl_InvokeWithHandler_CallsHandleCreated()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -589,10 +589,10 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<Win32Exception>(() => control.CreateControl());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_CreateControl_InvokeDisposed_ThrowsObjectDisposedException()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.Dispose();
             Assert.Throws<ObjectDisposedException>(() => control.CreateControl());
         }
@@ -680,7 +680,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Control_CreateHandle_InvokeWithParent_Success()
         {
-            var parent = new Control();
+            using var parent = new Control();
             using var control = new SubControl
             {
                 Parent = parent
@@ -696,7 +696,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Control_CreateHandle_InvokeWithChildren_Success()
         {
-            var parent = new SubControl();
+            using var parent = new SubControl();
             using var control = new SubControl
             {
                 Parent = parent
@@ -810,10 +810,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.Contains(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_DestroyHandle_InvokeWithHandle_Success()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             IntPtr handle1 = control.Handle;
             Assert.True(control.Created);
             Assert.True(control.IsHandleCreated);
@@ -852,11 +852,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Region(new Rectangle(1, 2, 3, 4)) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CreateHandle_Region_TestData))]
         public void Control_DestroyHandle_InvokeWithRegion_Success(Region region)
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 Region = region
             };
@@ -883,7 +883,7 @@ namespace System.Windows.Forms.Tests
         [StaFact]
         public void Control_DestroyHandle_InvokeWithHandleAllowDrop_Success()
         {
-            var control = new SubControl
+            using var control = new SubControl
             {
                 AllowDrop = true
             };
@@ -907,19 +907,19 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.AllowDrop);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_DestroyHandle_InvokeWithoutHandle_Nop()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.DestroyHandle();
             Assert.False(control.Created);
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_DestroyHandle_InvokeWithHandler_CallsHandleDestroyed()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1797,11 +1797,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<DragDropEffects> DoDragDropData =>
             CommonTestHelper.GetEnumTheoryData<DragDropEffects>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DoDragDropData))]
         public void Control_DoDragDrop(DragDropEffects expected)
         {
-            var cont = new Control();
+            using var cont = new Control();
             var mock = new Mock<IDataObject>(MockBehavior.Strict);
 
             DragDropEffects ret = cont.DoDragDrop(mock.Object, expected);
@@ -1910,19 +1910,19 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>(null, () => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_FindFormWithParent_ReturnsForm()
         {
-            var control = new Control();
+            using var control = new Control();
             var form = new Form();
             control.Parent = form;
             Assert.Equal(form, control.FindForm());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_FindFormWithoutParent_ReturnsNull()
         {
-            var control = new Control();
+            using var control = new Control();
             Assert.Null(control.FindForm());
         }
 
@@ -2062,11 +2062,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<GetChildAtPointSkip> GetChildAtPointNullData =>
             CommonTestHelper.GetEnumTheoryData<GetChildAtPointSkip>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetChildAtPointNullData))]
         public void Control_GetChildAtPointNull(GetChildAtPointSkip skip)
         {
-            var cont = new Control();
+            using var cont = new Control();
 
             Control ret = cont.GetChildAtPoint(new Point(5, 5), skip);
 
@@ -2079,11 +2079,11 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<GetChildAtPointSkip> GetChildAtPointInvalidData =>
             CommonTestHelper.GetEnumTheoryDataInvalid<GetChildAtPointSkip>();
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetChildAtPointInvalidData))]
         public void Control_GetChildAtPointInvalid(GetChildAtPointSkip skip)
         {
-            var cont = new Control();
+            using var cont = new Control();
 
             // act & assert
             InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.GetChildAtPoint(new Point(5, 5), skip));
@@ -2194,19 +2194,19 @@ namespace System.Windows.Forms.Tests
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_GetNextControl()
         {
-            var cont = new Control();
-            var first = new Control
+            using var cont = new Control();
+            using var first = new Control
             {
                 TabIndex = 0
             };
-            var second = new Control
+            using var second = new Control
             {
                 TabIndex = 1
             };
-            var third = new Control
+            using var third = new Control
             {
                 TabIndex = 2
             };
@@ -2222,19 +2222,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(second, cont.GetNextControl(first, true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_GetNextControlReverse()
         {
-            var cont = new Control();
-            var first = new Control
+            using var cont = new Control();
+            using var first = new Control
             {
                 TabIndex = 0
             };
-            var second = new Control
+            using var second = new Control
             {
                 TabIndex = 1
             };
-            var third = new Control
+            using var third = new Control
             {
                 TabIndex = 2
             };
@@ -2250,19 +2250,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(first, cont.GetNextControl(second, false));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_GetNextControlNoNext()
         {
-            var cont = new Control();
-            var first = new Control
+            using var cont = new Control();
+            using var first = new Control
             {
                 TabIndex = 0
             };
-            var second = new Control
+            using var second = new Control
             {
                 TabIndex = 1
             };
-            var third = new Control
+            using var third = new Control
             {
                 TabIndex = 2
             };
@@ -2278,19 +2278,19 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cont.GetNextControl(third, true));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_GetNextControlNoNextReverse()
         {
-            var cont = new Control();
-            var first = new Control
+            using var cont = new Control();
+            using var first = new Control
             {
                 TabIndex = 0
             };
-            var second = new Control
+            using var second = new Control
             {
                 TabIndex = 1
             };
-            var third = new Control
+            using var third = new Control
             {
                 TabIndex = 2
             };
@@ -2853,10 +2853,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.GetTopLevel());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_Hide_Invoke_SetsInvisible()
         {
-            var control = new Control
+            using var control = new Control
             {
                 Visible = true
             };
@@ -2868,10 +2868,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.Visible);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_Hide_InvokeWithHandler_CallsVisibleChanged()
         {
-            var control = new Control
+            using var control = new Control
             {
                 Visible = true
             };
@@ -6017,10 +6017,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_RecreateHandle_InvokeWithHandle_Success()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             IntPtr handle1 = control.Handle;
             Assert.NotEqual(IntPtr.Zero, handle1);
             Assert.True(control.IsHandleCreated);
@@ -6039,10 +6039,10 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_RecreateHandle_InvokeWithoutHandle_Nop()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.RecreateHandle();
             Assert.False(control.IsHandleCreated);
 
@@ -9711,7 +9711,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(SetStyle_TestData))]
         public void Control_SetStyle_Invoke_GetStyleReturnsExpected(ControlStyles flag, bool value, bool expected)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             control.SetStyle(flag, value);
             Assert.Equal(expected, control.GetStyle(flag));
             Assert.False(control.IsHandleCreated);
@@ -9725,7 +9725,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(SetStyle_TestData))]
         public void Control_SetStyle_InvokeWithHandle_GetStyleReturnsExpected(ControlStyles flag, bool value, bool expected)
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -9894,7 +9894,7 @@ namespace System.Windows.Forms.Tests
 
             public new Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified) => base.GetScaledBounds(bounds, factor, specified);
 
-            public new void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) => base.SetBoundsCore(x, y, width, height, specified);            public new void SetClientSizeCore(int width, int height) => base.SetClientSizeCore(width, height);
+            public new void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) => base.SetBoundsCore(x, y, width, height, specified); public new void SetClientSizeCore(int width, int height) => base.SetClientSizeCore(width, height);
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
@@ -10031,10 +10031,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_ToString_Invoke_ReturnsExpected()
         {
-            var control = new Control();
+            using var control = new Control();
             Assert.Equal("System.Windows.Forms.Control", control.ToString());
         }
 
@@ -11826,10 +11826,10 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_UpdateStyles_InvokeWithoutHandle_Success()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -11851,10 +11851,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Control_UpdateStyles_InvokeWithHandle_Success()
         {
-            var control = new SubControl();
+            using var control = new SubControl();
             IntPtr handle = control.Handle;
             Assert.NotEqual(IntPtr.Zero, handle);
             int callCount = 0;

@@ -182,7 +182,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { null, null }));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.IsGridPatternAvailablePropertyId)]
         [InlineData((int)UiaCore.UIA.IsTablePatternAvailablePropertyId)]
         public void PropertyGridViewAccessibleObject_Pattern_IsAvailable(int propertyId)
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.True((bool)accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.TablePatternId)]
         [InlineData((int)UiaCore.UIA.GridPatternId)]
         public void PropertyGridViewAccessibleObject_IsPatternSupported(int patternId)
@@ -264,7 +264,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.NotNull(accessibleObject.Parent);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData("Some test text")]
         [InlineData("")]
         public void PropertyGridView_GridViewListBoxAccessibleObject_Name_ReturnsDeterminedName(string name)

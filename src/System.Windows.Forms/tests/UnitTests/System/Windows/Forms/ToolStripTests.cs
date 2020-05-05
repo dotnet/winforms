@@ -502,7 +502,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Fact]
+        [Fact] // x-thread
         public void ToolStrip_AllowDrop_SetWithHandleNonSTAThread_ThrowsInvalidOperationException()
         {
             using var control = new ToolStrip();
@@ -614,7 +614,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [Fact]
+        [Fact] // x-thread
         public void ToolStrip_AllowItemReorder_SetWithHandleNonSTAThread_ThrowsInvalidOperationException()
         {
             using var control = new ToolStrip();
@@ -4289,7 +4289,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ToolStrip_CreateLayoutSettings_InvokeTable_ReturnsExpected()
         {
-            var toolStrip = new SubToolStrip();
+            using var toolStrip = new SubToolStrip();
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.CreateLayoutSettings(ToolStripLayoutStyle.Table));
             Assert.Equal(0, settings.ColumnCount);
             Assert.Empty(settings.ColumnStyles);
@@ -4307,7 +4307,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(ToolStripLayoutStyle.VerticalStackWithOverflow)]
         public void ToolStrip_CreateLayoutSettings_InvalidLayoutStyle_ReturnsNull(ToolStripLayoutStyle layoutStyle)
         {
-            var toolStrip = new SubToolStrip();
+            using var toolStrip = new SubToolStrip();
             Assert.Null(toolStrip.CreateLayoutSettings(layoutStyle));
         }
 
@@ -4730,7 +4730,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ArrowDirection))]
         public void ToolStrip_GetNextItem_NoItems_ReturnsNull(ArrowDirection direction)
         {
-            var toolStrip = new ToolStrip();
+            using var toolStrip = new ToolStrip();
             Assert.Null(toolStrip.GetNextItem(new SubToolStripItem(), direction));
             Assert.Null(toolStrip.GetNextItem(null, direction));
         }
@@ -4739,7 +4739,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ArrowDirection))]
         public void ToolStrip_GetNextItem_InvalidDirection_ThrowsInvalidEnumArgumentException(ArrowDirection direction)
         {
-            var toolStrip = new ToolStrip();
+            using var toolStrip = new ToolStrip();
             Assert.Throws<InvalidEnumArgumentException>("direction", () => toolStrip.GetNextItem(new SubToolStripItem(), direction));
             Assert.Throws<InvalidEnumArgumentException>("direction", () => toolStrip.GetNextItem(null, direction));
         }
