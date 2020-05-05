@@ -356,9 +356,9 @@ System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.set -> void
 System.Windows.Forms.AxHost
 System.Windows.Forms.AxHost.AboutBoxDelegate
 System.Windows.Forms.AxHost.ActiveXInvokeKind
-~System.Windows.Forms.AxHost.ActiveXInvokeKind.MethodInvoke = 0 -> System.Windows.Forms.AxHost.ActiveXInvokeKind
-~System.Windows.Forms.AxHost.ActiveXInvokeKind.PropertyGet = 1 -> System.Windows.Forms.AxHost.ActiveXInvokeKind
-~System.Windows.Forms.AxHost.ActiveXInvokeKind.PropertySet = 2 -> System.Windows.Forms.AxHost.ActiveXInvokeKind
+System.Windows.Forms.AxHost.ActiveXInvokeKind.MethodInvoke = 0 -> System.Windows.Forms.AxHost.ActiveXInvokeKind
+System.Windows.Forms.AxHost.ActiveXInvokeKind.PropertyGet = 1 -> System.Windows.Forms.AxHost.ActiveXInvokeKind
+System.Windows.Forms.AxHost.ActiveXInvokeKind.PropertySet = 2 -> System.Windows.Forms.AxHost.ActiveXInvokeKind
 System.Windows.Forms.AxHost.AxComponentEditor
 System.Windows.Forms.AxHost.AxComponentEditor.AxComponentEditor() -> void
 ~System.Windows.Forms.AxHost.AxHost(string clsid) -> void
@@ -2944,8 +2944,8 @@ System.Windows.Forms.FolderBrowserDialog.AutoUpgradeEnabled.set -> void
 ~System.Windows.Forms.FolderBrowserDialog.Description.set -> void
 System.Windows.Forms.FolderBrowserDialog.FolderBrowserDialog() -> void
 System.Windows.Forms.FolderBrowserDialog.HelpRequest -> System.EventHandler
-~System.Windows.Forms.FolderBrowserDialog.RootFolder.get -> System.Environment.SpecialFolder
-~System.Windows.Forms.FolderBrowserDialog.RootFolder.set -> void
+System.Windows.Forms.FolderBrowserDialog.RootFolder.get -> System.Environment.SpecialFolder
+System.Windows.Forms.FolderBrowserDialog.RootFolder.set -> void
 ~System.Windows.Forms.FolderBrowserDialog.SelectedPath.get -> string
 ~System.Windows.Forms.FolderBrowserDialog.SelectedPath.set -> void
 System.Windows.Forms.FolderBrowserDialog.ShowNewFolderButton.get -> bool
@@ -4731,23 +4731,23 @@ System.Windows.Forms.MonthCalendar.FirstDayOfWeek.get -> System.Windows.Forms.Da
 System.Windows.Forms.MonthCalendar.FirstDayOfWeek.set -> void
 ~System.Windows.Forms.MonthCalendar.GetDisplayRange(bool visible) -> System.Windows.Forms.SelectionRange
 System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.CalendarBackground = 6 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.Date = 7 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.DayOfWeek = 10 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.NextMonthButton = 4 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.NextMonthDate = 8 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.Nowhere = 0 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.PrevMonthButton = 5 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.PrevMonthDate = 9 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.TitleBackground = 1 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.TitleMonth = 2 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.TitleYear = 3 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.TodayLink = 12 -> System.Windows.Forms.MonthCalendar.HitArea
-~System.Windows.Forms.MonthCalendar.HitArea.WeekNumbers = 11 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.CalendarBackground = 6 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.Date = 7 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.DayOfWeek = 10 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.NextMonthButton = 4 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.NextMonthDate = 8 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.Nowhere = 0 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.PrevMonthButton = 5 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.PrevMonthDate = 9 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.TitleBackground = 1 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.TitleMonth = 2 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.TitleYear = 3 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.TodayLink = 12 -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitArea.WeekNumbers = 11 -> System.Windows.Forms.MonthCalendar.HitArea
 ~System.Windows.Forms.MonthCalendar.HitTest(System.Drawing.Point point) -> System.Windows.Forms.MonthCalendar.HitTestInfo
 ~System.Windows.Forms.MonthCalendar.HitTest(int x, int y) -> System.Windows.Forms.MonthCalendar.HitTestInfo
 System.Windows.Forms.MonthCalendar.HitTestInfo
-~System.Windows.Forms.MonthCalendar.HitTestInfo.HitArea.get -> System.Windows.Forms.MonthCalendar.HitArea
+System.Windows.Forms.MonthCalendar.HitTestInfo.HitArea.get -> System.Windows.Forms.MonthCalendar.HitArea
 System.Windows.Forms.MonthCalendar.HitTestInfo.Point.get -> System.Drawing.Point
 System.Windows.Forms.MonthCalendar.HitTestInfo.Time.get -> System.DateTime
 System.Windows.Forms.MonthCalendar.ImeMode.get -> System.Windows.Forms.ImeMode
