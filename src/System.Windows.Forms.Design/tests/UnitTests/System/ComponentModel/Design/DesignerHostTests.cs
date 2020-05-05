@@ -479,7 +479,7 @@ namespace System.ComponentModel.Design.Tests
                 .Returns(mockExtenderProviderService.Object)
                 .Verifiable();
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
 
             host.Container.Add(component);
@@ -617,7 +617,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(INameCreationService)))
                 .Returns(mockNameCreationService.Object);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
 
@@ -673,7 +673,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(INameCreationService)))
                 .Returns(mockNameCreationService.Object);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
 
             host.Container.Add(component);
@@ -708,7 +708,7 @@ namespace System.ComponentModel.Design.Tests
                 .Returns(mockNameCreationService.Object)
                 .Verifiable();
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component1 = new RootDesignerComponent();
             host.Container.Add(component1, name);
@@ -762,7 +762,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(INameCreationService)))
                 .Returns(null);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component1 = new RootDesignerComponent();
             host.Container.Add(component1, "name1");
@@ -809,7 +809,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(INameCreationService)))
                 .Returns(null);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component, "name1");
@@ -854,7 +854,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(INameCreationService)))
                 .Returns(null);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             host.Container.Add(component, "name1");
             Assert.Equal("name1", component.Site.Name);
@@ -1043,7 +1043,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(object)))
                 .Returns(otherService);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component);
@@ -1076,7 +1076,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IServiceContainer)))
                 .Returns(otherContainer);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component);
@@ -1106,7 +1106,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(object)))
                 .Returns(otherService);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component);
@@ -1140,7 +1140,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(object)))
                 .Returns(otherService);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component);
@@ -1178,7 +1178,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IServiceContainer)))
                 .Returns(otherContainer);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component);
@@ -1213,7 +1213,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(object)))
                 .Returns(otherService);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component);
@@ -1409,7 +1409,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(INameCreationService)))
                 .Returns(mockNameCreationService.Object);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component, "oldName");
@@ -1452,7 +1452,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(int)))
                 .Returns(service);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component);
@@ -1477,7 +1477,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(int)))
                 .Returns(service);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component);
@@ -1518,7 +1518,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(int)))
                 .Returns(service);
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             using var component = new RootDesignerComponent();
             host.Container.Add(component);
@@ -2291,7 +2291,7 @@ namespace System.ComponentModel.Design.Tests
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
                 .Returns(null);
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             surface.BeginLoad(loader);
 
             IDesignerLoaderHost2 host = surface.Host;
@@ -2303,7 +2303,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var service = new object();
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             Assert.Null(host.GetService(typeof(IMultitargetHelperService)));
         }
@@ -2317,7 +2317,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(int)))
                 .Returns(service)
                 .Verifiable();
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             Assert.Same(service, host.GetService(typeof(int)));
             mockServiceProvider.Verify(p => p.GetService(typeof(int)), Times.Once());
@@ -2442,7 +2442,7 @@ namespace System.ComponentModel.Design.Tests
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
                 .Returns(mockDesignerEventService.Object);
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
 
             int activatedCallCount = 0;
@@ -2665,7 +2665,7 @@ namespace System.ComponentModel.Design.Tests
                 .Returns(mockExtenderProviderService.Object)
                 .Verifiable();
 
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
 
             host.Container.Add(component);

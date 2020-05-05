@@ -615,27 +615,25 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(component.Site.Name);
         }
 
-        // Commenting out failing test
-        // Tracked by https://github.com/dotnet/winforms/issues/1151
-        // [Fact]
-        // public void SiteNestedContainer_Add_Unloading_Nop()
-        // {
-        //     using var surface = new SubDesignSurface();
-        //     IDesignerLoaderHost2 host = surface.Host;
-        //     surface.BeginLoad(typeof(RootDesignerComponent));
-        //     using var owningComponent = new Component();
-        //     INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
+         [Fact(Skip = "Unstable test. See https://github.com/dotnet/winforms/issues/1151")]
+         public void SiteNestedContainer_Add_Unloading_Nop()
+         {
+            using var surface = new SubDesignSurface();
+            IDesignerLoaderHost2 host = surface.Host;
+            surface.BeginLoad(typeof(RootDesignerComponent));
+            using var owningComponent = new Component();
+            using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
 
-        //     var component = new DisposingDesignerComponent();
-        //     container.Add(component);
-        //     int callCount = 0;
-        //     DisposingDesigner.Disposed += (sender, e) =>
-        //     {
-        //         callCount++;
-        //     };
-        //     surface.Dispose();
-        //     Assert.Equal(0, callCount);
-        // }
+            var component = new DisposingDesignerComponent();
+            container.Add(component);
+            int callCount = 0;
+            DisposingDesigner.Disposed += (sender, e) =>
+            {
+                callCount++;
+            };
+            surface.Dispose();
+            Assert.Equal(0, callCount);
+        }
 
         [Fact]
         public void SiteNestedContainer_Remove_Invoke_Success()

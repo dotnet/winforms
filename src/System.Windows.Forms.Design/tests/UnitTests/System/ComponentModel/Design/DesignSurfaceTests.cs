@@ -412,7 +412,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(BeginLoad_TestData))]
         public void DesignSurface_BeginLoad_Invoke_Success(IServiceProvider parentProvider)
         {
-            using var surface = new SubDesignSurface(parentProvider);
+            var surface = new SubDesignSurface(parentProvider);
             IDesignerLoaderHost2 host = surface.Host;
             var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
             mockLoader
@@ -620,7 +620,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
                 .Returns(null)
                 .Verifiable();
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IExtenderListService defaultProviderService = (IExtenderListService)surface.GetService(typeof(IExtenderListService));
             IDesignerLoaderHost2 host = surface.Host;
 
@@ -659,7 +659,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
                 .Returns(null)
                 .Verifiable();
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IExtenderListService defaultProviderService = (IExtenderListService)surface.GetService(typeof(IExtenderListService));
             surface.ServiceContainer.RemoveService(typeof(IExtenderProviderService));
             IDesignerLoaderHost2 host = surface.Host;
@@ -704,7 +704,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
                 .Returns(null)
                 .Verifiable();
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IExtenderListService defaultProviderService = (IExtenderListService)surface.GetService(typeof(IExtenderListService));
             surface.ServiceContainer.RemoveService(typeof(IExtenderProviderService));
             IDesignerLoaderHost2 host = surface.Host;
@@ -731,7 +731,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_BeginLoad_InvokeWithoutIDesignerEventServiceWithActivated_CallsHandler()
         {
-            using var surface = new SubDesignSurface();
+            var surface = new SubDesignSurface();
             int callCount = 0;
             IDesignerLoaderHost2 host = surface.Host;
             host.Activated += (sender, e) =>
@@ -764,7 +764,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
                 .Returns(mockDesignerEventService.Object)
                 .Verifiable();
-            using var surface = new SubDesignSurface(mockServiceProvider.Object);
+            var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             int callCount = 0;
             host.Activated += (sender, e) =>
