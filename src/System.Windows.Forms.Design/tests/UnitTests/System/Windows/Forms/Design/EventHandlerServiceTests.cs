@@ -2,31 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.Diagnostics;
-using WinForms.Common.Tests;
 using Xunit;
-using static System.Windows.Forms.Design.EventHandlerService;
 
 namespace System.Windows.Forms.Design.Tests
 {
     public class EventHandlerServiceTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
-        public void ctor_should_create_object()
-        {
-            var service = new EventHandlerService(null);
-
-            Assert.NotNull(service);
-        }
-
-        [Fact]
         public void ctor_should_set_FocusWindow()
         {
             var service = new EventHandlerService(null);
             Assert.Null(service.FocusWindow);
 
-            var focusWnd = new Control();
+            using var focusWnd = new Control();
             service = new EventHandlerService(focusWnd);
             Assert.Same(focusWnd, service.FocusWindow);
         }
@@ -40,72 +28,66 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Fact]
-        public void GetHandler_should_return_null_if_lastHandlerType_null()
+        public void GetHandler_should_return_null_if_no_handlers()
         {
             var service = new EventHandlerService(null);
 
             Assert.Null(service.GetHandler(typeof(object)));
         }
 
+        private class A { }
+        private class B : A { }
+
         [Fact]
-        public void GetHandler_should_return_lastHandlerType_if_matches()
+        public void GetHandler_should_return_last_inserted_handler_of_type()
         {
             var service = new EventHandlerService(null);
-            var handler = new Button();
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            service.GetTestAccessor().LastHandler = handler;
+            service.PushHandler(new A());
 
-            Assert.Same(handler, service.GetHandler(typeof(Button)));
+            object second = new A();
+            service.PushHandler(second);
+
+            Assert.Same(second, service.GetHandler(typeof(A)));
         }
 
         [Fact]
-        public void GetHandler_should_return_handler_from_stack_if_found()
+        public void GetHandler_should_not_remove_from_handlers()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            var stackHead = CreateStack();
-            var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
+            A a = new A();
+            service.PushHandler(a);
 
-            var foundHandler = service.GetHandler(handler.GetType());
-
-            Assert.Same(handler, foundHandler);
+            var foundHandler = service.GetHandler(typeof(A));
+            Assert.Same(a, foundHandler);
+            foundHandler = service.GetHandler(typeof(A));
+            Assert.Same(a, foundHandler);
         }
 
         [Fact]
-        public void GetHandler_should_set_lastHandlerType_if_handler_found_on_stack()
+        public void GetHandler_should_return_derived_handler_if_found()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            service.GetTestAccessor().HandlerHead = CreateStack();
+            A a = new A();
+            service.PushHandler(a);
+            B b = new B();
+            service.PushHandler(b);
 
-            var foundHandler = service.GetHandler(typeof(TextBox));
+            var foundHandler = service.GetHandler(typeof(A));
 
-            Assert.Same(typeof(TextBox), service.GetTestAccessor().LastHandlerType);
+            Assert.Same(b, foundHandler);
         }
 
         [Fact]
-        public void GetHandler_should_set_lastHandler_if_handler_found_on_stack()
+        public void GetHandler_should_return_null_if_handler_type_not_found()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            var stackHead = CreateStack();
-            var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
+            service.PushHandler("Handler");
 
-            var foundHandler = service.GetHandler(handler.GetType());
-
-            Assert.Same(handler, service.GetTestAccessor().LastHandler);
-        }
-
-        [Fact]
-        public void GetHandler_should_return_null_if_handler_not_found_on_stack()
-        {
-            var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            service.GetTestAccessor().HandlerHead = CreateStack();
-
-            Assert.Null(service.GetHandler(typeof(ComboBox)));
+            // PopHandler asserts when an item isn't found
+            using (new NoAssertContext())
+            {
+                Assert.Null(service.GetHandler(typeof(int)));
+            }
         }
 
         [Fact]
@@ -127,87 +109,41 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void PopHandler_should_not_pop_if_handler_not_found_on_stack()
         {
-            // we expect to hit Debug.Assert and unless we clear listeners we will crash to xUnit runner:
-            //  "The active test run was aborted. Reason: Test host process crashed : Assertion Failed"
+            var service = new EventHandlerService(null);
+            A a = new A();
+            service.PushHandler(a);
+
+            // PopHandler asserts when an item isn't found
             using (new NoAssertContext())
             {
-                var service = new EventHandlerService(null);
-                service.GetTestAccessor().LastHandlerType = typeof(Button);
-                var stackHead = CreateStack();
-                service.GetTestAccessor().HandlerHead = stackHead;
-
-                service.PopHandler(typeof(ComboBox));
-
-                var depth = 0;
-                for (HandlerEntry entry = service.GetTestAccessor().HandlerHead; entry != null; entry = entry.next)
-                {
-                    depth++;
-                }
-
-                Assert.Equal(3, depth);
+                service.PopHandler(new B());
             }
+
+            Assert.Same(a, service.GetHandler(typeof(A)));
         }
 
         [Fact]
         public void PopHandler_should_pop_if_handler_found_on_stack()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            var stackHead = CreateStack();
-            var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
-
-            service.PopHandler(handler);
-
-            var depth = 0;
-            for (HandlerEntry entry = service.GetTestAccessor().HandlerHead; entry != null; entry = entry.next)
-            {
-                depth++;
-            }
-
-            Assert.Equal(1, depth);
-        }
-
-        [Fact]
-        public void PopHandler_should_set_lastHandler_null_if_handler_found_on_stack()
-        {
-            var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            var stackHead = CreateStack();
-            var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
-
-            service.PopHandler(handler);
-
-            Assert.Null(service.GetTestAccessor().LastHandler);
-        }
-
-        [Fact]
-        public void PopHandler_should_set_lastHandlerType_null_if_handler_found_on_stack()
-        {
-            var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            var stackHead = CreateStack();
-            var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
-
-            service.PopHandler(handler);
-
-            Assert.Null(service.GetTestAccessor().LastHandlerType);
+            A a = new A();
+            service.PushHandler(a);
+            service.PopHandler(a);
+            Assert.Null(service.GetHandler(typeof(A)));
         }
 
         [Fact]
         public void PopHandler_should_raise_changedEvent_if_handler_found_on_stack()
         {
             var service = new EventHandlerService(null);
-            service.GetTestAccessor().LastHandlerType = typeof(Button);
-            var stackHead = CreateStack();
-            var handler = stackHead.next.handler;
-            service.GetTestAccessor().HandlerHead = stackHead;
+
+            A a = new A();
+            service.PushHandler(a);
+
             int callCount = 0;
             service.EventHandlerChanged += (s, e) => { callCount++; };
 
-            service.PopHandler(handler);
+            service.PopHandler(a);
 
             Assert.Equal(1, callCount);
         }
@@ -224,56 +160,26 @@ namespace System.Windows.Forms.Design.Tests
         public void PushHandler_should_set_handlerHead_to_new_handler()
         {
             var service = new EventHandlerService(null);
-            var handler = new Label();
 
-            service.PushHandler(handler);
+            A a1 = new A();
+            service.PushHandler(a1);
+            A a2 = new A();
+            service.PushHandler(a2);
 
-            Assert.Same(handler, service.GetTestAccessor().HandlerHead.handler);
-        }
-
-        [Fact]
-        public void PushHandler_should_set_lastHandlerType_to_new_handler()
-        {
-            var service = new EventHandlerService(null);
-            var handler = new Label();
-
-            service.PushHandler(handler);
-
-            Assert.Same(handler.GetType(), service.GetTestAccessor().LastHandlerType);
-        }
-
-        [Fact]
-        public void PushHandler_should_set_lastHandler_to_new_handler()
-        {
-            var service = new EventHandlerService(null);
-            var handler = new Label();
-
-            service.PushHandler(handler);
-
-            Assert.Same(handler, service.GetTestAccessor().LastHandler);
+            Assert.Same(a2, service.GetHandler(typeof(A)));
         }
 
         [Fact]
         public void PushHandler_should_raise_changedEvent_for_new_handler()
         {
             var service = new EventHandlerService(null);
-            var handler = new Label();
+            var a = new A();
             int callCount = 0;
             service.EventHandlerChanged += (s, e) => { callCount++; };
 
-            service.PushHandler(handler);
+            service.PushHandler(a);
 
             Assert.Equal(1, callCount);
-        }
-
-        private HandlerEntry CreateStack()
-        {
-            var item1 = new HandlerEntry(new Button { Text = "I'm a button" }, null);
-            var handler = new TextBox { Text = "I'm a textbox" };
-            var item2 = new HandlerEntry(handler, item1);
-            var item3 = new HandlerEntry(new Label { Text = "I'm a label" }, item2);
-
-            return item3;
         }
     }
 }
