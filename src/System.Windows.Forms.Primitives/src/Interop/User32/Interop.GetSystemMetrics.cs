@@ -112,7 +112,6 @@ internal static partial class Interop
             }
             else
             {
-                Debug.Fail("GetSystemMetricsForDpi() is not available on this OS");
                 return GetSystemMetrics(nIndex);
             }
         }
