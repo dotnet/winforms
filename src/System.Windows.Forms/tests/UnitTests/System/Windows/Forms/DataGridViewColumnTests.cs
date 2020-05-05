@@ -684,12 +684,12 @@ namespace System.Windows.Forms.Tests
 
             // Set different.
             column.DataPropertyName = "text";
-            Assert.Same("text", column.DataPropertyName);
+            Assert.Equal("text", column.DataPropertyName);
             Assert.Equal(1, callCount);
 
             // Set same.
             column.DataPropertyName = "text";
-            Assert.Same("text", column.DataPropertyName);
+            Assert.Equal("text", column.DataPropertyName);
             Assert.Equal(1, callCount);
 
             // Set different.
@@ -700,7 +700,7 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.ColumnDataPropertyNameChanged -= handler;
             column.DataPropertyName = "text";
-            Assert.Same("text", column.DataPropertyName);
+            Assert.Equal("text", column.DataPropertyName);
             Assert.Equal(2, callCount);
         }
 

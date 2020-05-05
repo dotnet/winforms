@@ -1834,12 +1834,12 @@ namespace System.Windows.Forms.Tests
 
             // Set different.
             control.Text = "text";
-            Assert.Same("text", control.Text);
+            Assert.Equal("text", control.Text);
             Assert.Equal(1, callCount);
 
             // Set same.
             control.Text = "text";
-            Assert.Same("text", control.Text);
+            Assert.Equal("text", control.Text);
             Assert.Equal(1, callCount);
 
             // Set different.
@@ -1850,7 +1850,7 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.TextChanged -= handler;
             control.Text = "text";
-            Assert.Same("text", control.Text);
+            Assert.Equal("text", control.Text);
             Assert.Equal(2, callCount);
         }
 

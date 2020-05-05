@@ -7988,7 +7988,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
 
@@ -8045,7 +8045,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
 
@@ -8094,7 +8094,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("MaximumSize", e.AffectedProperty);
+                Assert.Equal("MaximumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
@@ -8149,7 +8149,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("MaximumSize", e.AffectedProperty);
+                Assert.Equal("MaximumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
@@ -8301,7 +8301,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("MaximumSize", e.AffectedProperty);
+                Assert.Equal("MaximumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
@@ -8368,7 +8368,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("MaximumSize", e.AffectedProperty);
+                Assert.Equal("MaximumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
@@ -8522,7 +8522,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
 
@@ -8569,7 +8569,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
 
@@ -8622,7 +8622,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
 
@@ -8653,7 +8653,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
 
@@ -8685,7 +8685,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
 
@@ -8732,7 +8732,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
             int parentLayoutCallCount = 0;
@@ -8740,7 +8740,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("MinimumSize", e.AffectedProperty);
+                Assert.Equal("MinimumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
@@ -8793,7 +8793,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
             int parentLayoutCallCount = 0;
@@ -8801,7 +8801,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("MinimumSize", e.AffectedProperty);
+                Assert.Equal("MinimumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
@@ -8852,7 +8852,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -8912,7 +8912,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -8978,7 +8978,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -9038,7 +9038,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
             int parentLayoutCallCount = 0;
@@ -9046,7 +9046,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("MinimumSize", e.AffectedProperty);
+                Assert.Equal("MinimumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
@@ -9126,7 +9126,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
             int parentLayoutCallCount = 0;
@@ -9134,7 +9134,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("MinimumSize", e.AffectedProperty);
+                Assert.Equal("MinimumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
@@ -9427,7 +9427,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Padding", e.AffectedProperty);
+                Assert.Equal("Padding", e.AffectedProperty);
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
@@ -9525,7 +9525,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Padding", e.AffectedProperty);
+                Assert.Equal("Padding", e.AffectedProperty);
                 parentLayoutCallCount++;
             };
             parent.Layout += parentHandler;
@@ -11970,12 +11970,12 @@ namespace System.Windows.Forms.Tests
 
             // Set different.
             control.Text = "text";
-            Assert.Same("text", control.Text);
+            Assert.Equal("text", control.Text);
             Assert.Equal(1, callCount);
 
             // Set same.
             control.Text = "text";
-            Assert.Same("text", control.Text);
+            Assert.Equal("text", control.Text);
             Assert.Equal(1, callCount);
 
             // Set different.
@@ -11986,7 +11986,7 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.TextChanged -= handler;
             control.Text = "text";
-            Assert.Same("text", control.Text);
+            Assert.Equal("text", control.Text);
             Assert.Equal(2, callCount);
         }
 

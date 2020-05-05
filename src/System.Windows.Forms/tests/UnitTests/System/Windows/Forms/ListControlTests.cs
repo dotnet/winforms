@@ -1281,19 +1281,19 @@ namespace System.Windows.Forms.Tests
 
             // Set different.
             control.DisplayMember = "Value1";
-            Assert.Same("Value1", control.DisplayMember);
+            Assert.Equal("Value1", control.DisplayMember);
             Assert.Equal(1, displayMemberCallCount);
             Assert.Equal(0, dataSourceCallCount);
 
             // Set same.
             control.DisplayMember = "Value1";
-            Assert.Same("Value1", control.DisplayMember);
+            Assert.Equal("Value1", control.DisplayMember);
             Assert.Equal(1, displayMemberCallCount);
             Assert.Equal(0, dataSourceCallCount);
 
             // Set different.
             control.DisplayMember = "Value2";
-            Assert.Same("Value2", control.DisplayMember);
+            Assert.Equal("Value2", control.DisplayMember);
             Assert.Equal(2, displayMemberCallCount);
             Assert.Equal(0, dataSourceCallCount);
 
@@ -1546,17 +1546,17 @@ namespace System.Windows.Forms.Tests
 
             // Set different.
             control.FormatString = "Value1";
-            Assert.Same("Value1", control.FormatString);
+            Assert.Equal("Value1", control.FormatString);
             Assert.Equal(1, callCount);
 
             // Set same.
             control.FormatString = "Value1";
-            Assert.Same("Value1", control.FormatString);
+            Assert.Equal("Value1", control.FormatString);
             Assert.Equal(1, callCount);
 
             // Set different.
             control.FormatString = "Value2";
-            Assert.Same("Value2", control.FormatString);
+            Assert.Equal("Value2", control.FormatString);
             Assert.Equal(2, callCount);
 
             // Set null.
@@ -1874,19 +1874,19 @@ namespace System.Windows.Forms.Tests
 
             // Set different.
             control.ValueMember = "Value1";
-            Assert.Same("Value1", control.ValueMember);
+            Assert.Equal("Value1", control.ValueMember);
             Assert.Equal(1, valueMemberCallCount);
             Assert.Equal(1, selectedValueCallCount);
 
             // Set same.
             control.ValueMember = "Value1";
-            Assert.Same("Value1", control.ValueMember);
+            Assert.Equal("Value1", control.ValueMember);
             Assert.Equal(1, valueMemberCallCount);
             Assert.Equal(1, selectedValueCallCount);
 
             // Set different.
             control.ValueMember = "Value2";
-            Assert.Same("Value2", control.ValueMember);
+            Assert.Equal("Value2", control.ValueMember);
             Assert.Equal(2, valueMemberCallCount);
             Assert.Equal(2, selectedValueCallCount);
 

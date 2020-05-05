@@ -592,12 +592,12 @@ namespace System.Windows.Forms.Tests
             };
             dataGridView.RowErrorTextNeeded += handler;
 
-            Assert.Same("errorText2", row.ErrorText);
+            Assert.Equal("errorText2", row.ErrorText);
             Assert.Equal(1, callCount);
 
             // Remove the handler.
             dataGridView.RowErrorTextNeeded -= handler;
-            Assert.Same("errorText1", row.ErrorText);
+            Assert.Equal("errorText1", row.ErrorText);
             Assert.Equal(1, callCount);
         }
 
@@ -2867,12 +2867,12 @@ namespace System.Windows.Forms.Tests
             };
             dataGridView.RowErrorTextNeeded += handler;
 
-            Assert.Same("errorText2", row.GetErrorText(0));
+            Assert.Equal("errorText2", row.GetErrorText(0));
             Assert.Equal(1, callCount);
 
             // Remove the handler.
             dataGridView.RowErrorTextNeeded -= handler;
-            Assert.Same("errorText1", row.GetErrorText(0));
+            Assert.Equal("errorText1", row.GetErrorText(0));
             Assert.Equal(1, callCount);
         }
 

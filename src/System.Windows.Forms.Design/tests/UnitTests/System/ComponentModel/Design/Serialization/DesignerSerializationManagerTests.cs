@@ -1935,7 +1935,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var instance2 = new object();
             iManager.SetName(instance2, "OtherName");
             Assert.Same(instance2, iManager.GetInstance("OtherName"));
-            Assert.Same("OtherName", iManager.GetName(instance2));
+            Assert.Equal("OtherName", iManager.GetName(instance2));
         }
 
         [Fact]

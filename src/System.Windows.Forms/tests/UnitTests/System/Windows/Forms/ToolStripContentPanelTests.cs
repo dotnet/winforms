@@ -1075,7 +1075,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(control, sender);
                 Assert.Same(control, e.AffectedControl);
-                Assert.Same("Bounds", e.AffectedProperty);
+                Assert.Equal("Bounds", e.AffectedProperty);
                 layoutCallCount++;
             };
 
