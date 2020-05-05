@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -3018,7 +3018,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { singleHorizontalBorderAddedDisplayedDataGridView.Rows[1], new Rectangle(1, 2, 100, 100), new Rectangle(1, 2, 1000, 1000), 1, DataGridViewElementStates.Displayed | DataGridViewElementStates.Displayed, true, false, DataGridViewPaintParts.All };
         }
 
-        [Theory]
+        [WinFormsTheory(Skip = "Deadlock, see: https://github.com/dotnet/winforms/issues/3209")]
         [MemberData(nameof(Paint_TestData))]
         public void DataGridViewRow_Paint_Invoke_Success(DataGridViewRow row, Rectangle clipBounds, Rectangle rowBounds, int rowIndex, DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow, DataGridViewPaintParts unused)
         {
@@ -3253,7 +3253,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory(Skip = "Deadlock, see: https://github.com/dotnet/winforms/issues/3209")]
         [MemberData(nameof(Paint_TestData))]
         public void DataGridViewRow_PaintCells_Invoke_Success(DataGridViewRow row, Rectangle clipBounds, Rectangle rowBounds, int rowIndex, DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow, DataGridViewPaintParts paintParts)
         {
@@ -3342,7 +3342,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory(Skip = "Deadlock, see: https://github.com/dotnet/winforms/issues/3209")]
         [MemberData(nameof(Paint_TestData))]
         public void DataGridViewRow_PaintHeader_Invoke_Success(DataGridViewRow row, Rectangle clipBounds, Rectangle rowBounds, int rowIndex, DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow, DataGridViewPaintParts paintParts)
         {
