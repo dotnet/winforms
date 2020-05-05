@@ -11,6 +11,7 @@ using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
+using static Interop.UiaCore;
 using static Interop.User32;
 
 namespace System.Windows.Forms.Tests
@@ -1813,13 +1814,17 @@ namespace System.Windows.Forms.Tests
             control.Click += handler;
             control.OnClick(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.Click -= handler;
             control.OnClick(eventArgs);
             Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1849,7 +1854,9 @@ namespace System.Windows.Forms.Tests
             control.OnClick(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(DialogResult.Yes, form.DialogResult);
-            Assert.False(control.IsHandleCreated);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(control.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
             Assert.False(form.IsHandleCreated);
 
@@ -1858,7 +1865,9 @@ namespace System.Windows.Forms.Tests
             control.OnClick(eventArgs);
             Assert.Equal(1, callCount);
             Assert.Equal(DialogResult.Yes, form.DialogResult);
-            Assert.False(control.IsHandleCreated);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(control.IsHandleCreated);
             Assert.False(parent.IsHandleCreated);
             Assert.False(form.IsHandleCreated);
         }
@@ -2994,13 +3003,17 @@ namespace System.Windows.Forms.Tests
             control.Click += handler;
             control.PerformClick();
             Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(control.IsHandleCreated);
 
             // Remove handler.
             control.Click -= handler;
             control.PerformClick();
             Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -3165,7 +3178,9 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expectedClickCallCount != 0, control.ProcessMnemonic(charCode));
             Assert.Equal(expectedClickCallCount, clickCallCount);
-            Assert.False(control.IsHandleCreated);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.Equal(expectedClickCallCount != 0, control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -3203,6 +3218,24 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new Button();
             Assert.Equal("System.Windows.Forms.Button, Text: ", control.ToString());
+        }
+
+        [WinFormsFact]
+        public void Button_RaiseAutomationEvent_Invoke_Success()
+        {
+            using var button = new TestButton();
+            Assert.False(button.IsHandleCreated);
+
+            var accessibleObject = (SubButtonAccessibleObject)button.AccessibilityObject;
+            Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
+            Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+
+            button.PerformClick();
+
+            Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
+            Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(button.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -3463,7 +3496,9 @@ namespace System.Windows.Forms.Tests
                 control.WndProc(ref m);
                 Assert.Equal(expectedResult, m.Result);
                 Assert.Equal(expectedCallCount, callCount);
-                Assert.False(control.IsHandleCreated);
+
+                // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+                Assert.Equal(expectedCallCount > 0, control.IsHandleCreated);
             }
         }
 
@@ -3602,6 +3637,39 @@ namespace System.Windows.Forms.Tests
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
+        }
+
+        private class TestButton : Button
+        {
+            protected override AccessibleObject CreateAccessibilityInstance()
+            {
+                return new SubButtonAccessibleObject(this);
+            }
+        }
+
+        private class SubButtonAccessibleObject : Button.ButtonAccessibleObject
+        {
+            public SubButtonAccessibleObject(Button owner) : base(owner)
+            {
+                RaiseAutomationEventCallsCount = 0;
+                RaiseAutomationPropertyChangedEventCallsCount = 0;
+            }
+
+            public int RaiseAutomationEventCallsCount { get; private set; }
+
+            public int RaiseAutomationPropertyChangedEventCallsCount { get; private set; }
+
+            internal override bool RaiseAutomationEvent(UIA eventId)
+            {
+                RaiseAutomationEventCallsCount++;
+                return base.RaiseAutomationEvent(eventId);
+            }
+
+            internal override bool RaiseAutomationPropertyChangedEvent(UIA propertyId, object oldValue, object newValue)
+            {
+                RaiseAutomationPropertyChangedEventCallsCount++;
+                return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
+            }
         }
     }
 }
