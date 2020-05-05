@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,6 +8,7 @@ using System.IO;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
+using static Interop.User32;
 
 namespace System.Windows.Forms.IntegrationTests.Common
 {
@@ -243,10 +244,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// </summary>
         /// <param name="process">The process to send the Enter key to</param>
         /// <returns>Whether or not the Enter key was pressed on the process</returns>
-        /// <seealso cref="PressOnProcess(Process, string)"/>
-        public static bool PressEnterOnProcess(Process process)
+        /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
+        public static bool SendEnterKeyToProcess(Process process, bool switchToMainWindow = true)
         {
-            return PressOnProcess(process, "~");
+            return SendKeysToProcess(process, "~", switchToMainWindow);
         }
 
         /// <summary>
@@ -254,10 +255,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// </summary>
         /// <param name="process">The process to send the Tab key to</param>
         /// <returns>Whether or not the Tab key was pressed on the process</returns>
-        /// <seealso cref="PressOnProcess(Process, string)"/>
-        public static bool PressTabOnProcess(Process process)
+        /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
+        public static bool SendTabKeyToProcess(Process process, bool switchToMainWindow = true)
         {
-            return PressOnProcess(process, "{TAB}");
+            return SendKeysToProcess(process, "{TAB}", switchToMainWindow);
         }
 
         /// <summary>
@@ -265,10 +266,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// </summary>
         /// <param name="process">The process to send the Right key to</param>
         /// <returns>Whether or not the Right key was pressed on the process</returns>
-        /// <seealso cref="PressOnProcess(Process, string)"/>
-        public static bool PressRightOnProcess(Process process)
+        /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
+        public static bool SendRightArrowKeyToProcess(Process process, bool switchToMainWindow = true)
         {
-            return PressOnProcess(process, "{RIGHT}");
+            return SendKeysToProcess(process, "{RIGHT}", switchToMainWindow);
         }
 
         /// <summary>
@@ -276,10 +277,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// </summary>
         /// <param name="process">The process to send the Down key to</param>
         /// <returns>Whether or not the Down key was pressed on the process</returns>
-        /// <seealso cref="PressOnProcess(Process, string)"/>
-        public static bool PressDownOnProcess(Process process)
+        /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
+        public static bool SendDownArrowKeyToProcess(Process process, bool switchToMainWindow = true)
         {
-            return PressOnProcess(process, "{DOWN}");
+            return SendKeysToProcess(process, "{DOWN}", switchToMainWindow);
         }
 
         /// <summary>
@@ -287,10 +288,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// </summary>
         /// <param name="process">The process to send the Left key to</param>
         /// <returns>Whether or not the Left key was pressed on the process</returns>
-        /// <seealso cref="PressOnProcess(Process, string)"/>
-        public static bool PressLeftOnProcess(Process process)
+        /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
+        public static bool SendLeftArrowKeyToProcess(Process process, bool switchToMainWindow = true)
         {
-            return PressOnProcess(process, "{LEFT}");
+            return SendKeysToProcess(process, "{LEFT}", switchToMainWindow);
         }
 
         /// <summary>
@@ -298,10 +299,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// </summary>
         /// <param name="process">The process to send the Up key to</param>
         /// <returns>Whether or not the Up key was pressed on the process</returns>
-        /// <seealso cref="PressOnProcess(Process, string)"/>
-        public static bool PressUpOnProcess(Process process)
+        /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
+        public static bool SendUpArrowKeyToProcess(Process process, bool switchToMainWindow = true)
         {
-            return PressOnProcess(process, "{UP}");
+            return SendKeysToProcess(process, "{UP}");
         }
 
         /// <summary>
@@ -311,13 +312,13 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// <param name="times">The number of times to press tab in a row</param>
         /// <remarks>Throws an ArgumentException if number of times is zero; this is unlikely to be intended.</remarks>
         /// <returns>Whether or not the Tab key(s) were pressed on the process</returns>
-        /// <seealso cref="PressOnProcess(Process, string)"/>
-        public static bool PressTabsOnProcess(Process process, MainFormControlsTabOrder times)
+        /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
+        public static bool SendTabKeysToProcess(Process process, MainFormControlsTabOrder times, bool switchToMainWindow = true)
         {
-            return PressTabsOnProcess(process, (int)times);
+            return SendTabKeysToProcess(process, (int)times, switchToMainWindow);
         }
 
-        public static bool PressTabsOnProcess(Process process, int times)
+        public static bool SendTabKeysToProcess(Process process, int times, bool switchToMainWindow = true)
         {
             if (times == 0)
             {
@@ -330,7 +331,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 keys += "{TAB}";
             }
 
-            return PressOnProcess(process, keys);
+            return SendKeysToProcess(process, keys, switchToMainWindow);
         }
 
         /// <summary>
@@ -370,11 +371,11 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// <remarks>Throws an ArgumentException if the given key(s) is null or the empty string.</remarks>
         /// <returns>Whether or not the key(s) were pressed on the process</returns>
         /// <seealso cref="System.Diagnostics.Process.MainWindowHandle"/>
-        /// <seealso cref="ExternalTestHelpers.TrySetForegroundWindow(IntPtr)"/>
-        /// <seealso cref="ExternalTestHelpers.TryGetForegroundWindow()"/>
+        /// <seealso cref="SetForegroundWindow(IntPtr)"/>
+        /// <seealso cref="GetForegroundWindow()"/>
         /// <seealso cref="System.Windows.Forms.SendKeys.SendWait(string)"/>
         /// <seealso cref="System.Threading.Thread.Sleep(int)"/>
-        internal static bool PressOnProcess(Process process, string keys)
+        internal static bool SendKeysToProcess(Process process, string keys, bool switchToMainWindow = true)
         {
             if (null == process)
             {
@@ -391,10 +392,25 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 throw new ArgumentException(nameof(keys) + " must not be null or empty.");
             }
 
-            IntPtr handle = process.MainWindowHandle;
-            ExternalTestHelpers.TrySetForegroundWindow(handle);
+            IntPtr mainWindowHandle = process.MainWindowHandle;
 
-            if (handle.Equals(ExternalTestHelpers.TryGetForegroundWindow()))
+            if (switchToMainWindow)
+            {
+                SetForegroundWindow(mainWindowHandle);
+            }
+
+            IntPtr foregroundWindow = GetForegroundWindow();
+
+            string windowTitle = GetWindowText(foregroundWindow);
+
+            if (GetWindowThreadProcessId(foregroundWindow, out uint processId) == 0 ||
+                processId != process.Id)
+            {
+                Debug.WriteLine($"ForegroundWindow doesn't belong the test process! The current window is {windowTitle}.");
+            }
+
+            if ((switchToMainWindow && mainWindowHandle.Equals(foregroundWindow)) ||
+                (!switchToMainWindow && foregroundWindow != IntPtr.Zero))
             {
                 SendKeys.SendWait(keys);
 
@@ -404,7 +420,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
             }
             else
             {
-                Debug.Assert(true, "Given process could not be made to be the ForegroundWindow");
+                Debug.Assert(true, $"Given process could not be made to be the ForegroundWindow. The current window is {windowTitle}.");
 
                 return false;
             }
