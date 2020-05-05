@@ -109,7 +109,6 @@ namespace System.Windows.Forms.IntegrationTests
             Process process = TestHelpers.StartProcess(_exePath);
             TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.PropertyGridButton);
             TestHelpers.SendEnterKeyToProcess(process);
-
             TestHelpers.SendTabKeyToProcess(process, switchToMainWindow: false);
             TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false); // once
             TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false); // twice
