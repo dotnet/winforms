@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Header))]
     [Serializable] // This type is participating in resx serialization scenarios.
-    public sealed class ListViewGroup : ISerializable
+    public sealed partial class ListViewGroup : ISerializable
     {
         private string? _header;
         private HorizontalAlignment _headerAlignment = HorizontalAlignment.Left;
@@ -34,6 +34,7 @@ namespace System.Windows.Forms
         private static int s_nextHeader = 1;
 
         private ListViewGroupImageIndexer? _imageIndexer;
+        private AccessibleObject? _accessibilityObject;
 
         /// <summary>
         ///  Creates a ListViewGroup.
@@ -74,6 +75,19 @@ namespace System.Windows.Forms
         public ListViewGroup(string? header, HorizontalAlignment headerAlignment) : this(header)
         {
             _headerAlignment = headerAlignment;
+        }
+
+        internal AccessibleObject? AccessibilityObject
+        {
+            get
+            {
+                if (_accessibilityObject is null)
+                {
+                    _accessibilityObject = new ListViewGroupAccessibleObject(this, IsDefault);
+                }
+
+                return _accessibilityObject;
+            }
         }
 
         /// <summary>
@@ -169,6 +183,21 @@ namespace System.Windows.Forms
 
                 _footerAlignment = value;
                 UpdateListView();
+            }
+        }
+
+        internal bool Focused { get; set; }
+
+        private bool IsDefault
+        {
+            get
+            {
+                if (ListView is null || ListView.Groups.Contains(this))
+                {
+                    return false;
+                }
+
+                return true;
             }
         }
 

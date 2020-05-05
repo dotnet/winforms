@@ -6719,4 +6719,10 @@ Stack trace where the illegal operation occurred was:
   <data name="ConstructorArgumentInvalidValueType" xml:space="preserve">
     <value>Argument '{0}' cannot be converted to type '{1}'.</value> 
   </data>
+  <data name="AccessibleActionDoubleClick" xml:space="preserve">
+    <value>Double Click</value>
+  </data>
+  <data name="ListViewFocusedGroupDescription" xml:space="preserve">
+    <value>The ListView group that currently has the user focus.</value>
+  </data>
 </root>

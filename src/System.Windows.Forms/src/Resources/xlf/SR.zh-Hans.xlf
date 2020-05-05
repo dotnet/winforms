@@ -192,6 +192,11 @@
         <target state="translated">折叠</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="new">Double Click</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">展开</target>
@@ -6339,6 +6344,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">仅当 ListView 在 SMALLICON 或 LARGEICON 视图中时才支持 FindNearestItem。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewFocusedGroupDescription">
+        <source>The ListView group that currently has the user focus.</source>
+        <target state="new">The ListView group that currently has the user focus.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewFocusedItemDescr">

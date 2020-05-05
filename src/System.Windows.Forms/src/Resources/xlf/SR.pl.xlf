@@ -192,6 +192,11 @@
         <target state="translated">Zwiń</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="new">Double Click</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">Rozwiń</target>
@@ -6339,6 +6344,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="ListViewFindNearestItemWorksOnlyInIconView">
         <source>FindNearestItem is supported only when the ListView is in SMALLICON or LARGEICON view.</source>
         <target state="translated">Element FindNearestItem jest obsługiwany tylko wtedy, gdy element ListView jest w widoku SMALLICON lub LARGEICON.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewFocusedGroupDescription">
+        <source>The ListView group that currently has the user focus.</source>
+        <target state="new">The ListView group that currently has the user focus.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewFocusedItemDescr">
