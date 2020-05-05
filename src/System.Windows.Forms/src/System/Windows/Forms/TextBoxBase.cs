@@ -845,13 +845,7 @@ namespace System.Windows.Forms
         ///  MaskedTextBox and is false by default so RichTextBox that doesn't support Password doesn't
         ///  have to care about this.
         /// </summary>
-        virtual internal bool PasswordProtect
-        {
-            get
-            {
-                return false;
-            }
-        }
+        virtual private protected bool PasswordProtect => false;
 
         /// <summary>
         ///  Returns the preferred
@@ -1835,7 +1829,7 @@ namespace System.Windows.Forms
         ///  But if you do have it cached, please pass it in. This will avoid
         ///  the expensive call to the TextLength property.
         /// </summary>
-        internal virtual void SelectInternal(int start, int length, int textLen)
+        private protected virtual void SelectInternal(int start, int length, int textLen)
         {
             //if our handle is created - send message...
             if (IsHandleCreated)

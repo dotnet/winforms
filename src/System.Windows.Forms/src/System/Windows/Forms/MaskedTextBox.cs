@@ -896,17 +896,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines if the control is in password protect mode.
         /// </summary>
-        internal override bool PasswordProtect
-        {
-            get
-            {
-                if (maskedTextProvider != null) // could be queried during object construction.
-                {
-                    return maskedTextProvider.IsPassword;
-                }
-                return base.PasswordProtect;
-            }
-        }
+        private protected override bool PasswordProtect
+            => maskedTextProvider?.IsPassword ?? base.PasswordProtect;
 
         /// <summary>
         ///  Specifies the prompt character to be used in the formatted string for unsupplied characters.

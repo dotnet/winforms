@@ -805,8 +805,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the WM_KEYDOWN message.
         /// </summary>
-        //added to handle keyboard events
-        //
+
         private void WmKeyDown(ref Message msg)
         {
             Keys keyData = (Keys)((int)msg.WParam | (int)ModifierKeys);
@@ -942,8 +941,6 @@ namespace System.Windows.Forms
                 case User32.WM.HSCROLL:
                     WmHScroll(ref m);
                     break;
-                //added case to handle keyboard events
-                //
                 case User32.WM.KEYDOWN:
                     WmKeyDown(ref m);
                     break;
@@ -984,20 +981,6 @@ namespace System.Windows.Forms
         private Color GetBackColor(bool isHighContract)
         {
             return (isHighContract && !ShouldSerializeBackColor()) ? SystemColors.ControlDark : BackColor;
-        }
-
-        internal TestAccessor GetTestAccessor() => new TestAccessor(this);
-
-        internal readonly struct TestAccessor
-        {
-            private readonly PrintPreviewControl _control;
-
-            public TestAccessor(PrintPreviewControl control)
-            {
-                _control = control;
-            }
-
-            public Color GetBackColor(bool isHighContrast) => _control.GetBackColor(isHighContrast);
         }
     }
 }

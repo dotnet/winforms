@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Tests
                 control.BackColor = Color.FromArgb(customBackColorArgb);
             }
 
-            int actualBackColorArgb = control.GetTestAccessor().GetBackColor(isHighContrast).ToArgb();
+            int actualBackColorArgb = control.TestAccessor().Dynamic.GetBackColor(isHighContrast).ToArgb();
             Assert.Equal(expectedBackColorArgb, actualBackColorArgb);
 
             // Default AppWorkSpace color in HC theme does not allow to follow HC standards.
