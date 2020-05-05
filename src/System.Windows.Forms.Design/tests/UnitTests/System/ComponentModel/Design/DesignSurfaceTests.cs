@@ -16,7 +16,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_Ctor_Default()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.NotNull(surface.ComponentContainer);
             Assert.Empty(surface.ComponentContainer.Components);
             Assert.False(surface.DtelLoading);
@@ -55,7 +55,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(Ctor_IServiceProvider_TestData))]
         public void DesignSurface_Ctor_IServiceProvider(IServiceProvider parentProvider)
         {
-            var surface = new SubDesignSurface(parentProvider);
+            using var surface = new SubDesignSurface(parentProvider);
             Assert.NotNull(surface.ComponentContainer);
             Assert.Empty(surface.ComponentContainer.Components);
             Assert.False(surface.DtelLoading);
@@ -77,7 +77,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_Ctor_Type()
         {
-            var surface = new SubDesignSurface(typeof(RootDesignerComponent));
+            using var surface = new SubDesignSurface(typeof(RootDesignerComponent));
             Assert.NotNull(surface.ComponentContainer);
             Assert.Single(surface.ComponentContainer.Components);
             Assert.False(surface.DtelLoading);
@@ -99,7 +99,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_Ctor_IServiceProvider_Type_NullParentProvider()
         {
-            var surface = new SubDesignSurface(null, typeof(RootDesignerComponent));
+            using var surface = new SubDesignSurface(null, typeof(RootDesignerComponent));
             Assert.NotNull(surface.ComponentContainer);
             Assert.Single(surface.ComponentContainer.Components);
             Assert.False(surface.DtelLoading);
@@ -146,7 +146,7 @@ namespace System.ComponentModel.Design.Tests
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(ContainerFilterService)))
                 .Returns(null);
-            var surface = new SubDesignSurface(mockServiceProvider.Object, typeof(RootDesignerComponent));
+            using var surface = new SubDesignSurface(mockServiceProvider.Object, typeof(RootDesignerComponent));
             Assert.NotNull(surface.ComponentContainer);
             Assert.Single(surface.ComponentContainer.Components);
             Assert.False(surface.DtelLoading);
@@ -176,7 +176,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ComponentContainer_GetDisposed_ThrowsObjectDisposedException()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             surface.Dispose();
             Assert.Throws<ObjectDisposedException>(() => surface.ComponentContainer);
         }
@@ -185,7 +185,7 @@ namespace System.ComponentModel.Design.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignSurface_DtelLoading_Set_GetReturnsExpected(bool value)
         {
-            var surface = new DesignSurface()
+            using var surface = new DesignSurface()
             {
                 DtelLoading = value
             };
@@ -203,7 +203,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ServiceContainer_Get_ReturnsSame()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.NotNull(container);
             Assert.Same(container, surface.ServiceContainer);
@@ -212,7 +212,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ServiceContainer_GetISelectionService_ReturnsExpected()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             ISelectionService service = Assert.IsAssignableFrom<ISelectionService>(container.GetService(typeof(ISelectionService)));
             Assert.Null(service.PrimarySelection);
@@ -222,7 +222,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ServiceContainer_GetIExtenderProviderService_ReturnsExpected()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.IsAssignableFrom<IExtenderProviderService>(container.GetService(typeof(IExtenderProviderService)));
         }
@@ -230,7 +230,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ServiceContainer_GetIExtenderListService_ReturnsExpected()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.IsAssignableFrom<IExtenderListService>(container.GetService(typeof(IExtenderListService)));
             Assert.IsAssignableFrom<IExtenderProviderService>(container.GetService(typeof(IExtenderListService)));
@@ -239,7 +239,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ServiceContainer_GetITypeDescriptorFilterService_ReturnsExpected()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.IsAssignableFrom<ITypeDescriptorFilterService>(container.GetService(typeof(ITypeDescriptorFilterService)));
         }
@@ -247,7 +247,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ServiceContainer_GetIReferenceService_ReturnsExpected()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.IsAssignableFrom<IReferenceService>(container.GetService(typeof(IReferenceService)));
         }
@@ -255,7 +255,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ServiceContainer_GetDesignSurfaceService_ReturnsExpected()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.Same(surface, container.GetService(typeof(DesignSurface)));
         }
@@ -263,7 +263,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ServiceContainer_GetInstanceTypeService_ReturnsExpected()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.Same(container, container.GetService(container.GetType()));
         }
@@ -280,7 +280,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(ServiceContainer_FixedService_TestData))]
         public void DesignSurface_ServiceContainer_GetFixedService_ReturnsExpected(Type serviceType)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.Same(surface.Host, container.GetService(serviceType));
         }
@@ -289,7 +289,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(ServiceContainer_FixedService_TestData))]
         public void DesignSurface_ServiceContainer_RemoveFixedService_ThrowsInvalidOperationException(Type serviceType)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.Throws<InvalidOperationException>(() => container.RemoveService(serviceType));
         }
@@ -303,7 +303,7 @@ namespace System.ComponentModel.Design.Tests
         [InlineData(typeof(DesignSurface))]
         public void DesignSurface_ServiceContainer_RemoveNonFixedServiceType_ThrowsArgumentNullException(Type serviceType)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.NotNull(container.GetService(serviceType));
             container.RemoveService(serviceType);
@@ -317,7 +317,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ServiceContainer_RemoveNullServiceType_ThrowsArgumentNullException()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.Throws<ArgumentNullException>("serviceType", () => container.RemoveService(null));
         }
@@ -325,7 +325,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_ServiceContainer_GetDisposed_ThrowsObjectDisposedException()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             surface.Dispose();
             Assert.Throws<ObjectDisposedException>(() => surface.ServiceContainer);
         }
@@ -335,7 +335,7 @@ namespace System.ComponentModel.Design.Tests
         [InlineData(typeof(EmptySupportedTechnologiesRootDesignerComponent))]
         public void DesignSurface_View_GetWithInvalidSupportedTechnologies_ThrowsNotSupportedException(Type rootComponentType)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             surface.BeginLoad(rootComponentType);
             Assert.Throws<NotSupportedException>(() => surface.View);
         }
@@ -343,7 +343,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_View_GetDisposed_ThrowsObjectDisposedException()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             surface.Dispose();
             Assert.Throws<ObjectDisposedException>(() => surface.View);
         }
@@ -412,7 +412,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(BeginLoad_TestData))]
         public void DesignSurface_BeginLoad_Invoke_Success(IServiceProvider parentProvider)
         {
-            var surface = new SubDesignSurface(parentProvider);
+            using var surface = new SubDesignSurface(parentProvider);
             IDesignerLoaderHost2 host = surface.Host;
             var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
             mockLoader
@@ -620,7 +620,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
                 .Returns(null)
                 .Verifiable();
-            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            using var surface = new SubDesignSurface(mockServiceProvider.Object);
             IExtenderListService defaultProviderService = (IExtenderListService)surface.GetService(typeof(IExtenderListService));
             IDesignerLoaderHost2 host = surface.Host;
 
@@ -659,7 +659,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
                 .Returns(null)
                 .Verifiable();
-            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            using var surface = new SubDesignSurface(mockServiceProvider.Object);
             IExtenderListService defaultProviderService = (IExtenderListService)surface.GetService(typeof(IExtenderListService));
             surface.ServiceContainer.RemoveService(typeof(IExtenderProviderService));
             IDesignerLoaderHost2 host = surface.Host;
@@ -704,7 +704,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
                 .Returns(null)
                 .Verifiable();
-            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            using var surface = new SubDesignSurface(mockServiceProvider.Object);
             IExtenderListService defaultProviderService = (IExtenderListService)surface.GetService(typeof(IExtenderListService));
             surface.ServiceContainer.RemoveService(typeof(IExtenderProviderService));
             IDesignerLoaderHost2 host = surface.Host;
@@ -731,7 +731,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_BeginLoad_InvokeWithoutIDesignerEventServiceWithActivated_CallsHandler()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             int callCount = 0;
             IDesignerLoaderHost2 host = surface.Host;
             host.Activated += (sender, e) =>
@@ -764,7 +764,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(IDesignerEventService)))
                 .Returns(mockDesignerEventService.Object)
                 .Verifiable();
-            var surface = new SubDesignSurface(mockServiceProvider.Object);
+            using var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
             int callCount = 0;
             host.Activated += (sender, e) =>
@@ -793,7 +793,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_BeginLoad_DisposeInLoading_DoesCallFlush()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             int loadingCallCount = 0;
             surface.Loading += (sender, e) =>
             {
@@ -831,7 +831,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_BeginLoad_DisposeInBeginLoad_DoesCallFlush()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             int loadingCallCount = 0;
             surface.Loading += (sender, e) =>
             {
@@ -875,7 +875,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_BeginLoad_DisposeInBeginLoadThrowsException_DoesCallFlush()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             int loadingCallCount = 0;
             surface.Loading += (sender, e) =>
             {
@@ -921,7 +921,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_BeginLoad_NullLoader_ThrowsArgumentNullException()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             Assert.Throws<ArgumentNullException>("loader", () => surface.BeginLoad((DesignerLoader)null));
         }
 
@@ -943,7 +943,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_BeginLoad_NullRootComponentType_ThrowsArgumentNullException()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             Assert.Throws<ArgumentNullException>("rootComponentType", () => surface.BeginLoad((Type)null));
         }
 
@@ -967,7 +967,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_BeginLoad_Disposed_ThrowsObjectDisposedException()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             surface.Dispose();
             var mockLoader = new Mock<DesignerLoader>(MockBehavior.Strict);
             Assert.Throws<ObjectDisposedException>(() => surface.BeginLoad(typeof(RootDesignerComponent)));
@@ -977,8 +977,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateDesigner_InvokeNoDesigner_ReturnsExpected()
         {
-            var surface = new DesignSurface();
-            var component = new Component();
+            using var surface = new SubDesignSurface();
+            using var component = new Component();
             Assert.Null(surface.CreateDesigner(component, rootDesigner: true));
             Assert.Null(surface.CreateDesigner(component, rootDesigner: false));
         }
@@ -986,8 +986,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateDesigner_InvokeIDesigner_ReturnsExpected()
         {
-            var surface = new DesignSurface();
-            var component = new DesignerComponent();
+            using var surface = new SubDesignSurface();
+            using var component = new DesignerComponent();
             Assert.Null(surface.CreateDesigner(component, rootDesigner: true));
             Assert.IsType<ComponentDesigner>(surface.CreateDesigner(component, rootDesigner: false));
         }
@@ -995,8 +995,8 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateDesigner_InvokeIRootDesigner_ReturnsExpected()
         {
-            var surface = new DesignSurface();
-            var component = new RootDesignerComponent();
+            using var surface = new SubDesignSurface();
+            using var component = new RootDesignerComponent();
             Assert.IsType<RootComponentDesigner>(surface.CreateDesigner(component, rootDesigner: true));
             Assert.Null(surface.CreateDesigner(component, rootDesigner: false));
         }
@@ -1004,7 +1004,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateDesigner_NullComponent_ThrowsArgumentNullException()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.Throws<ArgumentNullException>("component", () => surface.CreateDesigner(null, true));
             Assert.Throws<ArgumentNullException>("component", () => surface.CreateDesigner(null, false));
         }
@@ -1012,7 +1012,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateDesigner_Disposed_ThrowsObjectDisposedException()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             surface.Dispose();
             Assert.Throws<ObjectDisposedException>(() => surface.CreateDesigner(new Component(), true));
             Assert.Throws<ObjectDisposedException>(() => surface.CreateDesigner(new Component(), false));
@@ -1022,7 +1022,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateComponent_IComponentWithPublicDefaultConstructor_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             ComponentWithPublicConstructor instance = Assert.IsType<ComponentWithPublicConstructor>(surface.CreateComponent(typeof(ComponentWithPublicConstructor)));
             Assert.Null(instance.Container);
         }
@@ -1030,7 +1030,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateComponent_IComponentWithPrivateDefaultConstructor_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             ComponentWithPrivateDefaultConstructor instance = Assert.IsType<ComponentWithPrivateDefaultConstructor>(surface.CreateComponent(typeof(ComponentWithPrivateDefaultConstructor)));
             Assert.Null(instance.Container);
         }
@@ -1038,7 +1038,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateComponent_IComponentWithIContainerConstructor_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             ComponentWithIContainerConstructor instance = Assert.IsType<ComponentWithIContainerConstructor>(surface.CreateComponent(typeof(ComponentWithIContainerConstructor)));
             Assert.Same(surface.ComponentContainer, instance.Container);
         }
@@ -1048,7 +1048,7 @@ namespace System.ComponentModel.Design.Tests
         [InlineData(typeof(ClassWithPrivateDefaultConstructor))]
         public void DesignSurface_CreateComponent_NonIComponent_ReturnsNull(Type type)
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.Null(surface.CreateComponent(type));
         }
 
@@ -1059,14 +1059,14 @@ namespace System.ComponentModel.Design.Tests
         [InlineData(typeof(ComponentWithNoMatchingConstructor))]
         public void DesignSurface_CreateComponent_TypeWithNoMatchingConstructor_ThrowsMissingMethodException(Type type)
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.Throws<MissingMethodException>(() => surface.CreateComponent(type));
         }
 
         [Fact]
         public void DesignSurface_CreateComponent_NullType_ThrowsArgumentNullException()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.Throws<ArgumentNullException>("type", () => surface.CreateComponent(null));
         }
 #pragma warning restore 0618
@@ -1074,21 +1074,21 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateInstance_NonIComponentWithPublicDefaultConstructor_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.IsType<ClassWithPublicConstructor>(surface.CreateInstance(typeof(ClassWithPublicConstructor)));
         }
 
         [Fact]
         public void DesignSurface_CreateInstance_NonIComponentWithPrivateDefaultConstructor_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.IsType<ClassWithPrivateDefaultConstructor>(surface.CreateInstance(typeof(ClassWithPrivateDefaultConstructor)));
         }
 
         [Fact]
         public void DesignSurface_CreateInstance_IComponentWithPublicDefaultConstructor_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             ComponentWithPublicConstructor instance = Assert.IsType<ComponentWithPublicConstructor>(surface.CreateInstance(typeof(ComponentWithPublicConstructor)));
             Assert.Null(instance.Container);
         }
@@ -1096,7 +1096,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateInstance_IComponentWithPrivateDefaultConstructor_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             ComponentWithPrivateDefaultConstructor instance = Assert.IsType<ComponentWithPrivateDefaultConstructor>(surface.CreateInstance(typeof(ComponentWithPrivateDefaultConstructor)));
             Assert.Null(instance.Container);
         }
@@ -1104,7 +1104,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateInstance_IComponentWithIContainerConstructor_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             ComponentWithIContainerConstructor instance = Assert.IsType<ComponentWithIContainerConstructor>(surface.CreateInstance(typeof(ComponentWithIContainerConstructor)));
             Assert.Same(surface.ComponentContainer, instance.Container);
         }
@@ -1116,23 +1116,23 @@ namespace System.ComponentModel.Design.Tests
         [InlineData(typeof(ComponentWithNoMatchingConstructor))]
         public void DesignSurface_CreateInstance_TypeWithNoMatchingConstructor_ThrowsMissingMethodException(Type type)
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.Throws<MissingMethodException>(() => surface.CreateInstance(type));
         }
 
         [Fact]
         public void DesignSurface_CreateInstance_NullType_ThrowsArgumentNullException()
         {
-            var surface = new DesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.Throws<ArgumentNullException>("type", () => surface.CreateInstance(null));
         }
 
         [Fact]
         public void DesignSurface_CreateNestedContainer_InvokeObject_ReturnsExpected()
         {
-            var surface = new DesignSurface();
-            var ownerComponent = new Component();
-            INestedContainer container = surface.CreateNestedContainer(ownerComponent);
+            using var surface = new DesignSurface();
+            using var ownerComponent = new Component();
+            using INestedContainer container = surface.CreateNestedContainer(ownerComponent);
             Assert.Empty(container.Components);
             Assert.Same(ownerComponent, container.Owner);
         }
@@ -1141,9 +1141,9 @@ namespace System.ComponentModel.Design.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
         public void DesignSurface_CreateNestedContainer_InvokeObjectString_ReturnsExpected(string containerName)
         {
-            var surface = new DesignSurface();
-            var ownerComponent = new Component();
-            INestedContainer container = surface.CreateNestedContainer(ownerComponent, containerName);
+            using var surface = new DesignSurface();
+            using var ownerComponent = new Component();
+            using INestedContainer container = surface.CreateNestedContainer(ownerComponent, containerName);
             Assert.Empty(container.Components);
             Assert.Same(ownerComponent, container.Owner);
         }
@@ -1151,7 +1151,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateNestedContainer_NullOwningComponent_ThrowsArgumentNullException()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             Assert.Throws<ArgumentNullException>("owningComponent", () => surface.CreateNestedContainer(null));
             Assert.Throws<ArgumentNullException>("owningComponent", () => surface.CreateNestedContainer(null, "name"));
         }
@@ -1159,7 +1159,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_CreateNestedContainer_Disposed_ThrowsObjectDisposedException()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             surface.Dispose();
             Assert.Throws<ObjectDisposedException>(() => surface.CreateNestedContainer(null, "name"));
         }
@@ -1167,7 +1167,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_Dispose_InvokeMultipleTimes_Success()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             surface.Dispose();
             surface.Dispose();
         }
@@ -1175,7 +1175,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_Dispose_Invoke_RemovesDesignSurfaceService()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.Same(surface, container.GetService(typeof(DesignSurface)));
 
@@ -1228,7 +1228,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void Dispose_InvokeWithDisposed_CallsHandler()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             surface.Dispose();
 
             int callCount = 0;
@@ -1258,7 +1258,7 @@ namespace System.ComponentModel.Design.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignSurface_Dispose_InvokeDisposingMultipleTimes_Success(bool disposing)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             surface.Dispose(disposing);
             surface.Dispose(disposing);
         }
@@ -1266,7 +1266,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_Dispose_InvokeDisposing_RemovesDesignSurfaceService()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.Same(surface, container.GetService(typeof(DesignSurface)));
 
@@ -1277,7 +1277,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_Dispose_InvokeNotDisposing_DoesNotRemoveDesignSurfaceService()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ServiceContainer container = surface.ServiceContainer;
             Assert.Same(surface, container.GetService(typeof(DesignSurface)));
 
@@ -1374,7 +1374,7 @@ namespace System.ComponentModel.Design.Tests
         [InlineData(false, 0)]
         public void Dispose_InvokeDisposingWithDisposed_CallsHandler(bool disposing, int expectedCallCount)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             surface.Dispose();
 
             int callCount = 0;
@@ -1424,7 +1424,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_Flush_InvokeWithHostWithoutLoader_Nop()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             surface.Flush();
 
             // Flush again.
@@ -1434,7 +1434,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_Flush_InvokeDisposed_Nop()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             surface.Dispose();
             surface.Flush();
 
@@ -1445,7 +1445,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_Flush_InvokeWithFlushed_CallsHandler()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             int callCount = 0;
             surface.Flushed += (sender, e) =>
             {
@@ -1476,7 +1476,7 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(int)))
                 .Returns(service)
                 .Verifiable();
-            var surface = new DesignSurface(mockServiceProvider.Object);
+            using var surface = new DesignSurface(mockServiceProvider.Object);
             Assert.Same(service, surface.GetService(typeof(int)));
             mockServiceProvider.Verify(p => p.GetService(typeof(int)), Times.Once());
         }
@@ -1484,7 +1484,7 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_GetService_GetISelectionService_ReturnsExpected()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             ISelectionService service = Assert.IsAssignableFrom<ISelectionService>(surface.GetService(typeof(ISelectionService)));
             Assert.Null(service.PrimarySelection);
             Assert.Equal(0, service.SelectionCount);
@@ -1493,14 +1493,14 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_GetService_GetIExtenderProviderService_ReturnsExpected()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.IsAssignableFrom<IExtenderProviderService>(surface.GetService(typeof(IExtenderProviderService)));
         }
 
         [Fact]
         public void DesignSurface_GetService_GetIExtenderListService_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             Assert.IsAssignableFrom<IExtenderListService>(surface.GetService(typeof(IExtenderListService)));
             Assert.IsAssignableFrom<IExtenderProviderService>(surface.GetService(typeof(IExtenderListService)));
         }
@@ -1508,28 +1508,28 @@ namespace System.ComponentModel.Design.Tests
         [Fact]
         public void DesignSurface_GetService_GetITypeDescriptorFilterService_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             Assert.IsAssignableFrom<ITypeDescriptorFilterService>(surface.GetService(typeof(ITypeDescriptorFilterService)));
         }
 
         [Fact]
         public void DesignSurface_GetService_GetIReferenceService_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             Assert.IsAssignableFrom<IReferenceService>(surface.GetService(typeof(IReferenceService)));
         }
 
         [Fact]
         public void DesignSurface_GetService_GetDesignSurfaceService_ReturnsExpected()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             Assert.Same(surface, surface.GetService(typeof(DesignSurface)));
         }
 
         [Fact]
         public void DesignSurface_GetService_GetInstanceTypeService_ReturnsExpected()
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.Same(surface.ServiceContainer, surface.GetService(surface.ServiceContainer.GetType()));
         }
 
@@ -1538,7 +1538,7 @@ namespace System.ComponentModel.Design.Tests
         [InlineData(typeof(ServiceContainer))]
         public void DesignSurface_GetService_IServiceContainer_ReturnsExpected(Type serviceType)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.Same(surface.ServiceContainer, surface.GetService(serviceType));
         }
 
@@ -1546,14 +1546,14 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(ServiceContainer_FixedService_TestData))]
         public void DesignSurface_GetService_GetFixedService_ReturnsExpected(Type serviceType)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             Assert.Same(surface.Host, surface.GetService(serviceType));
         }
 
         [Fact]
         public void DesignSurface_GetService_InvokeWithoutServiceProvider_ReturnsNull()
         {
-            var surface = new DesignSurface();
+            using var surface = new DesignSurface();
             Assert.Null(surface.GetService(typeof(int)));
         }
 
@@ -1561,7 +1561,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(ServiceContainer_FixedService_TestData))]
         public void DesignSurface_GetService_Disposed_ReturnsNull(Type serviceType)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
             surface.Dispose();
             Assert.Null(surface.GetService(serviceType));
         }
@@ -1570,7 +1570,7 @@ namespace System.ComponentModel.Design.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnLoading_Invoke_Success(EventArgs eventArgs)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
 
             // No handler.
             surface.OnLoading(eventArgs);
@@ -1604,7 +1604,7 @@ namespace System.ComponentModel.Design.Tests
         [MemberData(nameof(LoadedEventArgs_TestData))]
         public void DesignSurface_OnLoaded_Invoke_Success(LoadedEventArgs eventArgs)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
 
             // No handler.
             surface.OnLoaded(eventArgs);
@@ -1632,7 +1632,7 @@ namespace System.ComponentModel.Design.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnUnloaded_Invoke_Success(EventArgs eventArgs)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
 
             // No handler.
             surface.OnUnloaded(eventArgs);
@@ -1660,7 +1660,7 @@ namespace System.ComponentModel.Design.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnUnloading_Invoke_Success(EventArgs eventArgs)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
 
             // No handler.
             surface.OnUnloading(eventArgs);
@@ -1688,7 +1688,7 @@ namespace System.ComponentModel.Design.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnViewActivate_Invoke_Success(EventArgs eventArgs)
         {
-            var surface = new SubDesignSurface();
+            using var surface = new SubDesignSurface();
 
             // No handler.
             surface.OnViewActivate(eventArgs);
@@ -1733,6 +1733,14 @@ namespace System.ComponentModel.Design.Tests
             public new ServiceContainer ServiceContainer => base.ServiceContainer;
 
             public IDesignerLoaderHost2 Host => Assert.IsAssignableFrom<IDesignerLoaderHost2>(ComponentContainer);
+
+#pragma warning disable 0618
+            public new IComponent CreateComponent(Type componentType) => base.CreateComponent(componentType);
+#pragma warning restore 0618
+
+            public new IDesigner CreateDesigner(IComponent component, bool rootDesigner) => base.CreateDesigner(component, rootDesigner);
+
+            public new object CreateInstance(Type type) => base.CreateInstance(type);
 
             public new void Dispose(bool disposing) => base.Dispose(disposing);
 
