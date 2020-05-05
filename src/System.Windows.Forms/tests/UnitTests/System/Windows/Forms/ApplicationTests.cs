@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
 {
     public class ApplicationTests : IClassFixture<ThreadExceptionFixture>
     {
-        [WinFormsFact]
+        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
         public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
         {
             RemoteExecutor.Invoke(() =>
@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Tests
             }).Dispose();
         }
 
-        [WinFormsFact]
+        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
         public void Application_EnableVisualStyles_InvokeAfterGettingRenderWithVisualStyles_Success()
         {
             // This is not a recommended scenario per https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.application.enablevisualstyles
@@ -53,21 +53,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(state, Application.VisualStyleState);
         }
 
-        [WinFormsTheory(Skip = "Deadlock, see: https://github.com/dotnet/winforms/issues/2192")]
+        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(VisualStyleState))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(VisualStyleState))]
-        public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState value)
+        public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState valueParam)
         {
-            VisualStyleState state = Application.VisualStyleState;
-            try
+            // This needs to be in RemoteExecutor.Invoke because changing Application.VisualStyleState
+            // sends WM_THEMECHANGED to all controls, which can cause a deadlock if another test fails.
+            RemoteExecutor.Invoke((valueString) =>
             {
-                Application.VisualStyleState = value;
-                Assert.Equal(value, Application.VisualStyleState);
-            }
-            finally
-            {
-                Application.VisualStyleState = state;
-            }
+                VisualStyleState value = Enum.Parse<VisualStyleState>(valueString);
+                VisualStyleState state = Application.VisualStyleState;
+                try
+                {
+                    Application.VisualStyleState = value;
+                    Assert.Equal(value, Application.VisualStyleState);
+                }
+                finally
+                {
+                    Application.VisualStyleState = state;
+                }
+            }, valueParam.ToString());
         }
     }
 }
