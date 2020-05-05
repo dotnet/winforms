@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using Moq;
 using Xunit;
 
@@ -28,6 +29,7 @@ namespace System.Windows.Forms.Tests
             ICollection context = new BindingContext();
             Assert.False(context.IsSynchronized);
             Assert.Same(context, context.SyncRoot);
+            Assert.Equal(0, context.Count);
             Assert.Empty(context);
         }
 
@@ -58,17 +60,17 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BindingContext_Add_NullDataSource_ThrowsArgumentNullException()
         {
-            var context = new BindingContext();
-            var source = new BindingSource();
+            var context = new SubBindingContext();
+            using var source = new BindingSource();
             Assert.Throws<ArgumentNullException>("dataSource", () => context.Add(null, source.CurrencyManager));
         }
 
         [Fact]
         public void BindingContext_Add_Invoke_GetReturnsExpected()
         {
-            var context = new BindingContext();
-            var source1 = new BindingSource();
-            var source2 = new BindingSource();
+            var context = new SubBindingContext();
+            using var source1 = new BindingSource();
+            using var source2 = new BindingSource();
             var dataSource = new DataSource();
             context.Add(dataSource, source1.CurrencyManager);
             Assert.Single(context);
@@ -88,9 +90,9 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BindingContext_Add_InvokeMultiple_Success()
         {
-            var context = new BindingContext();
-            var source1 = new BindingSource();
-            var source2 = new BindingSource();
+            var context = new SubBindingContext();
+            using var source1 = new BindingSource();
+            using var source2 = new BindingSource();
             var dataSource1 = new DataSource();
             var dataSource2 = new DataSource();
             context.Add(dataSource1, source1.CurrencyManager);
@@ -104,7 +106,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BindingContext_Add_NullListManager_ThrowsArgumentNullException()
         {
-            var context = new BindingContext();
+            var context = new SubBindingContext();
             Assert.Throws<ArgumentNullException>("listManager", () => context.Add(1, null));
         }
 
@@ -112,8 +114,8 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_AddCore_Invoke_GetReturnsExpected()
         {
             var context = new SubBindingContext();
-            var source1 = new BindingSource();
-            var source2 = new BindingSource();
+            using var source1 = new BindingSource();
+            using var source2 = new BindingSource();
             var dataSource = new DataSource();
             context.AddCore(dataSource, source1.CurrencyManager);
             Assert.Single(context);
@@ -134,8 +136,8 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_AddCore_InvokeMultiple_Success()
         {
             var context = new SubBindingContext();
-            var source1 = new BindingSource();
-            var source2 = new BindingSource();
+            using var source1 = new BindingSource();
+            using var source2 = new BindingSource();
             var dataSource1 = new DataSource();
             var dataSource2 = new DataSource();
             context.AddCore(dataSource1, source1.CurrencyManager);
@@ -150,7 +152,7 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_AddCore_NullDataSource_ThrowsArgumentNullException()
         {
             var context = new SubBindingContext();
-            var source = new BindingSource();
+            using var source = new BindingSource();
             Assert.Throws<ArgumentNullException>("dataSource", () => context.AddCore(null, source.CurrencyManager));
         }
 
@@ -164,8 +166,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BindingContext_CopyTo_Invoke_Success()
         {
-            var context = new BindingContext();
-            var source = new BindingSource();
+            var context = new SubBindingContext();
+            using var source = new BindingSource();
             var dataSource = new DataSource();
             context.Add(dataSource, source.CurrencyManager);
 
@@ -238,10 +240,10 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BindingContext_Remove_Invoke_Success()
         {
-            var context = new BindingContext();
-            var source1 = new BindingSource();
+            var context = new SubBindingContext();
+            using var source1 = new BindingSource();
             var dataSource1 = new DataSource();
-            var source2 = new BindingSource();
+            using var source2 = new BindingSource();
             var dataSource2 = new DataSource();
             context.Add(dataSource1, source1.CurrencyManager);
             context.Add(dataSource2, source2.CurrencyManager);
@@ -272,9 +274,9 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_RemoveCore_Invoke_Success()
         {
             var context = new SubBindingContext();
-            var source1 = new BindingSource();
+            using var source1 = new BindingSource();
             var dataSource1 = new DataSource();
-            var source2 = new BindingSource();
+            using var source2 = new BindingSource();
             var dataSource2 = new DataSource();
             context.Add(dataSource1, source1.CurrencyManager);
             context.Add(dataSource2, source2.CurrencyManager);
@@ -304,7 +306,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BindingContext_Clear_Empty_Success()
         {
-            var context = new BindingContext();
+            var context = new SubBindingContext();
             context.Clear();
             Assert.Empty(context);
 
@@ -316,8 +318,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BindingContext_Clear_NotEmpty_Success()
         {
-            var context = new BindingContext();
-            var source = new BindingSource();
+            var context = new SubBindingContext();
+            using var source = new BindingSource();
             context.Add(new DataSource(), source.CurrencyManager);
 
             // Clear again.
@@ -344,7 +346,7 @@ namespace System.Windows.Forms.Tests
         public void BindingContext_ClearCore_NotEmpty_Success()
         {
             var context = new SubBindingContext();
-            var source = new BindingSource();
+            using var source = new BindingSource();
             context.Add(new DataSource(), source.CurrencyManager);
 
             // Clear again.
@@ -358,8 +360,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BindingContext_Contains_DataSource_ReturnsExpected()
         {
-            var context = new BindingContext();
-            var source = new BindingSource();
+            var context = new SubBindingContext();
+            using var source = new BindingSource();
             var dataSource = new DataSource();
             context.Add(dataSource, source.CurrencyManager);
             Assert.True(context.Contains(dataSource));
@@ -370,31 +372,25 @@ namespace System.Windows.Forms.Tests
             Assert.False(context.Contains(1, string.Empty));
         }
 
-        public static IEnumerable<object[]> Contains_DataSourceDataMember_TestData()
+        [Fact]
+        public void BindingContext_Contains_DataSourceDataMember_ReturnsExpected()
         {
-            var context = new BindingContext();
-            var source = new BindingSource();
+            var context = new SubBindingContext();
+            using var source = new BindingSource();
             var dataSource1 = new DataSource();
             var dataSource2 = new DataSource();
             context.Add(dataSource1, source.CurrencyManager);
             Assert.NotNull(context[dataSource2, "Property"]);
 
-            yield return new object[] { context, dataSource1, string.Empty, true };
-            yield return new object[] { context, dataSource1, null, true };
-            yield return new object[] { context, dataSource1, "Property", false };
-            yield return new object[] { context, dataSource2, "Property", true };
-            yield return new object[] { context, dataSource2, "property", true };
-            yield return new object[] { context, dataSource2, "NoSuchProperty", false };
-            yield return new object[] { context, dataSource2, string.Empty, true };
-            yield return new object[] { context, dataSource2, null, true };
-            yield return new object[] { context, 1, "Property", false };
-        }
-
-        [Theory(Skip = "Flaky test, see: https://github.com/dotnet/winforms/issues/1031")]
-        [MemberData(nameof(Contains_DataSourceDataMember_TestData))]
-        public void BindingContext_Contains_DataSourceDataMember_ReturnsExpected(BindingContext context, object dataSource, string dataMember, bool expected)
-        {
-            Assert.Equal(expected, context.Contains(dataSource, dataMember));
+            Assert.True(context.Contains(dataSource1, null));
+            Assert.True(context.Contains(dataSource1, string.Empty));
+            Assert.False(context.Contains(dataSource1, "Property"));
+            Assert.True(context.Contains(dataSource2, null));
+            Assert.True(context.Contains(dataSource2, string.Empty));
+            Assert.True(context.Contains(dataSource2, "Property"));
+            Assert.True(context.Contains(dataSource2, "property"));
+            Assert.False(context.Contains(dataSource2, "NoSuchProperty"));
+            Assert.False(context.Contains(1, "Property"));
         }
 
         [Fact]
@@ -539,8 +535,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BindingContext_Item_GetWithAddedDataSourceWithDataMember_ThrowsArgumentException()
         {
-            var context = new BindingContext();
-            var source = new BindingSource();
+            var context = new SubBindingContext();
+            using var source = new BindingSource();
             var dataSource = new DataSource();
             context.Add(dataSource, source.CurrencyManager);
             Assert.Throws<ArgumentException>(null, () => context[dataSource, "Property"]);
@@ -768,12 +764,12 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void BindingContext_KeyEquals_Invoke_ReturnsExpected()
         {
-            var context1 = new BindingContext();
-            var context2 = new BindingContext();
-            var context3 = new BindingContext();
-            var context4 = new BindingContext();
-            var source1 = new BindingSource();
-            var source2 = new BindingSource();
+            var context1 = new SubBindingContext();
+            var context2 = new SubBindingContext();
+            var context3 = new SubBindingContext();
+            var context4 = new SubBindingContext();
+            using var source1 = new BindingSource();
+            using var source2 = new BindingSource();
             var dataSource1 = new DataSource();
             var dataSource2 = new DataSource();
 
@@ -977,7 +973,8 @@ namespace System.Windows.Forms.Tests
                 if (e.Action == CollectionChangeAction.Remove)
                 {
                     Assert.Null(binding.BindingManagerBase);
-                    oldManager.Bindings.Add(binding);
+                    MethodInfo m = oldManager.Bindings.GetType().GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
+                    m.Invoke(oldManager.Bindings, new object[] { binding });
                     Assert.NotNull(binding.BindingManagerBase);
                     callCount++;
                 }
@@ -1004,7 +1001,8 @@ namespace System.Windows.Forms.Tests
                 if (e.Action == CollectionChangeAction.Remove)
                 {
                     Assert.Null(binding.BindingManagerBase);
-                    oldManager.Bindings.Add(binding);
+                    MethodInfo m = oldManager.Bindings.GetType().GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
+                    m.Invoke(oldManager.Bindings, new object[] { binding });
                     Assert.NotNull(binding.BindingManagerBase);
                     callCount++;
                 }
@@ -1046,25 +1044,19 @@ namespace System.Windows.Forms.Tests
 
         private class SubBindingContext : BindingContext
         {
-            public new void AddCore(object dataSource, BindingManagerBase listManager)
-            {
-                base.AddCore(dataSource, listManager);
-            }
+            public new void Add(object dataSource, BindingManagerBase listManager) => base.Add(dataSource, listManager);
 
-            public new void RemoveCore(object dataSource)
-            {
-                base.RemoveCore(dataSource);
-            }
+            public new void AddCore(object dataSource, BindingManagerBase listManager) => base.AddCore(dataSource, listManager);
 
-            public new void ClearCore()
-            {
-                base.ClearCore();
-            }
+            public new void Remove(object dataSource) => base.Remove(dataSource);
 
-            public new void OnCollectionChanged(CollectionChangeEventArgs ccevent)
-            {
-                base.OnCollectionChanged(ccevent);
-            }
+            public new void RemoveCore(object dataSource) => base.RemoveCore(dataSource);
+
+            public new void Clear() => base.Clear();
+
+            public new void ClearCore() => base.ClearCore();
+
+            public new void OnCollectionChanged(CollectionChangeEventArgs ccevent) => base.OnCollectionChanged(ccevent);
         }
     }
 }
