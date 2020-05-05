@@ -1800,10 +1800,10 @@ namespace System.Windows.Forms.Layout.Tests
             }
         }
 
-        [WinFormsTheory (Skip = "Expected Exception has changed to System.Runtime.Serialization.SerializationException") ]
+        [WinFormsTheory]
         [InlineData(typeof(NullStringConverter))]
         [InlineData(typeof(EmptyStringConverter))]
-        public void TableLayoutSettings_Serialize_InvalidStringConverter_DeserializeThrowsTargetInvocationException(Type type)
+        public void TableLayoutSettings_Serialize_InvalidStringConverter_DeserializeThrowsSerializationException(Type type)
         {
             using var control = new TableLayoutPanel();
             TableLayoutSettings settings = control.LayoutSettings;
@@ -1814,8 +1814,7 @@ namespace System.Windows.Forms.Layout.Tests
                 formatter.Serialize(stream, settings);
                 stream.Seek(0, SeekOrigin.Begin);
 
-                TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => formatter.Deserialize(stream));
-                Assert.IsType<SerializationException>(ex.InnerException);
+                Assert.Throws<SerializationException>(() => formatter.Deserialize(stream));
             }
         }
 
