@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
@@ -13,13 +11,13 @@ namespace System.Windows.Forms
     public static class ProfessionalColors
     {
         [ThreadStatic]
-        private static ProfessionalColorTable t_professionalColorTable;
+        private static ProfessionalColorTable? t_professionalColorTable;
 
         [ThreadStatic]
-        private static string t_colorScheme;
+        private static string? t_colorScheme;
 
         [ThreadStatic]
-        private static object t_colorFreshnessKey;
+        private static object? t_colorFreshnessKey;
 
         internal static ProfessionalColorTable ColorTable => t_professionalColorTable ??= new ProfessionalColorTable();
 
@@ -29,11 +27,11 @@ namespace System.Windows.Forms
             SetScheme();
         }
 
-        internal static string ColorScheme => t_colorScheme;
+        internal static string? ColorScheme => t_colorScheme;
 
         // internal object used between professional color tables
         // to identify when a userpreferencechanged has occurred
-        internal static object ColorFreshnessKey => t_colorFreshnessKey;
+        internal static object? ColorFreshnessKey => t_colorFreshnessKey;
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedHighlightDescr))]
         public static Color ButtonSelectedHighlight => ColorTable.ButtonSelectedHighlight;
@@ -203,7 +201,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientEndDescr))]
         public static Color OverflowButtonGradientEnd => ColorTable.OverflowButtonGradientEnd;
 
-        private static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+        private static void OnUserPreferenceChanged(object? sender, UserPreferenceChangedEventArgs e)
         {
             SetScheme();
             if (e.Category == UserPreferenceCategory.Color)

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
@@ -12,10 +10,10 @@ namespace System.Windows.Forms
 {
     public class ProfessionalColorTable
     {
-        private Dictionary<KnownColors, Color> _professionalRGB;
+        private Dictionary<KnownColors, Color>? _professionalRGB;
         private bool _usingSystemColors;
         private bool _useSystemColors;
-        private string _lastKnownColorScheme = string.Empty;
+        private string? _lastKnownColorScheme = string.Empty;
 
         private const string OliveColorScheme = "HomeStead";
         private const string NormalColorScheme = "NormalColor";
@@ -26,7 +24,7 @@ namespace System.Windows.Forms
         private const string RoyaleFileName = "royale.msstyles";
         private const string AeroFileName = "aero.msstyles";
 
-        private object _colorFreshnessKey;
+        private object? _colorFreshnessKey;
 
         public ProfessionalColorTable()
         {
@@ -302,7 +300,7 @@ namespace System.Windows.Forms
 
         // this particular method gets us closer to office by increasing the resolution.
 
-        private static Color GetAlphaBlendedColorHighRes(Graphics graphics, Color src, Color dest, int alpha)
+        private static Color GetAlphaBlendedColorHighRes(Graphics? graphics, Color src, Color dest, int alpha)
         {
             int sum;
             int nPart2;
