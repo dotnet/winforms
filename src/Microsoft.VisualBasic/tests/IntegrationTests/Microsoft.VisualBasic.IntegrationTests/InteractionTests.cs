@@ -63,7 +63,7 @@ namespace Microsoft.VisualBasic.IntegrationTests
             Process process = StartTestProcess("Interaction.MsgBox");
             try
             {
-                TestHelpers.PressEnterOnProcess(process);
+                TestHelpers.SendEnterKeyToProcess(process);
             }
             catch (ArgumentException)
             {
@@ -78,7 +78,7 @@ namespace Microsoft.VisualBasic.IntegrationTests
             Process process = StartTestProcess("Interaction.MsgBox_VbHost");
             try
             {
-                TestHelpers.PressEnterOnProcess(process);
+                TestHelpers.SendEnterKeyToProcess(process);
             }
             catch (ArgumentException)
             {
