@@ -1357,7 +1357,7 @@ namespace System.ComponentModel.Design.Tests
             {
                 Assert.Same(host, sender);
                 Assert.Same(component, e.Component);
-                Assert.Same("oldName", e.OldName);
+                Assert.Equal("oldName", e.OldName);
                 Assert.Same(value ?? string.Empty, e.NewName);
                 callCount++;
             };

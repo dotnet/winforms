@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(dialog.Events);
             Assert.Same(dialog.Events, dialog.Events);
             Assert.False(dialog.FixedPitchOnly);
-            Assert.Same(Control.DefaultFont, dialog.Font);
+            Assert.Equal(Control.DefaultFont, dialog.Font);
             Assert.False(dialog.FontMustExist);
             Assert.Equal(0, dialog.MaxSize);
             Assert.Equal(0, dialog.MinSize);
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(dialog.Events);
             Assert.Same(dialog.Events, dialog.Events);
             Assert.False(dialog.FixedPitchOnly);
-            Assert.Same(Control.DefaultFont, dialog.Font);
+            Assert.Equal(Control.DefaultFont, dialog.Font);
             Assert.False(dialog.FontMustExist);
             Assert.Equal(0, dialog.MaxSize);
             Assert.Equal(0, dialog.MinSize);
@@ -617,7 +617,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(dialog.Events);
             Assert.Same(dialog.Events, dialog.Events);
             Assert.False(dialog.FixedPitchOnly);
-            Assert.Same(Control.DefaultFont, dialog.Font);
+            Assert.Equal(Control.DefaultFont, dialog.Font);
             Assert.False(dialog.FontMustExist);
             Assert.Equal(0, dialog.MaxSize);
             Assert.Equal(0, dialog.MinSize);

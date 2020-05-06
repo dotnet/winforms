@@ -311,12 +311,12 @@ namespace System.Windows.Forms.Tests
             };
             dataGridView.CellErrorTextNeeded += handler;
 
-            Assert.Same("errorText2", cell.ErrorText);
+            Assert.Equal("errorText2", cell.ErrorText);
             Assert.Equal(1, callCount);
 
             // Remove the handler.
             dataGridView.CellErrorTextNeeded -= handler;
-            Assert.Same("errorText1", cell.ErrorText);
+            Assert.Equal("errorText1", cell.ErrorText);
             Assert.Equal(1, callCount);
         }
 
