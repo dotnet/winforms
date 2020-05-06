@@ -837,6 +837,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_SIZEMODECHANGED, value);
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new bool TabStop
