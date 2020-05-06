@@ -833,12 +833,12 @@ namespace System.Windows.Forms
 
         UiaCore.IRawElementProviderSimple[] UiaCore.ILegacyIAccessibleProvider.GetSelection()
         {
-            if (!(GetSelected() is UiaCore.IRawElementProviderSimple selected))
+            if (GetSelected() is UiaCore.IRawElementProviderSimple selected)
             {
-                return Array.Empty<UiaCore.IRawElementProviderSimple>();
+                return new UiaCore.IRawElementProviderSimple[] { selected };
             }
 
-            return new UiaCore.IRawElementProviderSimple[] { selected };
+            return Array.Empty<UiaCore.IRawElementProviderSimple>();
         }
 
         void UiaCore.ILegacyIAccessibleProvider.Select(int flagsSelect) => Select((AccessibleSelection)flagsSelect);
