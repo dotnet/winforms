@@ -11069,13 +11069,13 @@ static System.Windows.Forms.Cursors.SizeWE.get -> System.Windows.Forms.Cursor!
 static System.Windows.Forms.Cursors.UpArrow.get -> System.Windows.Forms.Cursor!
 static System.Windows.Forms.Cursors.VSplit.get -> System.Windows.Forms.Cursor!
 static System.Windows.Forms.Cursors.WaitCursor.get -> System.Windows.Forms.Cursor!
-static System.Windows.Forms.DataFormats.GetFormat(int id) -> System.Windows.Forms.DataFormats.Format
-static System.Windows.Forms.DataFormats.GetFormat(string format) -> System.Windows.Forms.DataFormats.Format
-static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
-static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
-static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
-static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
-static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
+~static System.Windows.Forms.DataFormats.GetFormat(int id) -> System.Windows.Forms.DataFormats.Format
+~static System.Windows.Forms.DataFormats.GetFormat(string format) -> System.Windows.Forms.DataFormats.Format
+~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
+~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
+~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
+~static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
+~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
 static System.Windows.Forms.DateTimePicker.MaximumDateTime.get -> System.DateTime
 static System.Windows.Forms.DateTimePicker.MinimumDateTime.get -> System.DateTime
 ~static System.Windows.Forms.FeatureSupport.GetVersionPresent(string featureClassName, string featureConstName) -> System.Version
