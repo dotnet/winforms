@@ -1613,7 +1613,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Color.FromArgb(unchecked((int)0xFF010203)), original.GetPixel(1, 2));
         }
 
-        [WinFormsFact(Skip = "Expected Exception is COMException - not TargetInvocationException")]
+        [WinFormsFact]
         public void AxHost_GetIPictureDispFromPicture_InvokeEnhancedMetafile_Roundtrips()
         {
             var original = new Metafile("bitmaps/milkmateya01.emf");
@@ -1632,8 +1632,7 @@ namespace System.Windows.Forms.Tests
             Ole32.IPictureDisp iPictureDisp = (Ole32.IPictureDisp)disp;
             Assert.NotNull(iPictureDisp);
             Assert.NotEqual(0, iPictureDisp.Handle);
-            TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => iPictureDisp.hPal);
-            Assert.IsType<COMException>(ex.InnerException);
+            Assert.Throws<COMException>(() => iPictureDisp.hPal);
             Assert.Equal(4, iPictureDisp.Type);
             Assert.Equal(19972, iPictureDisp.Width);
             Assert.Equal(28332, iPictureDisp.Height);
