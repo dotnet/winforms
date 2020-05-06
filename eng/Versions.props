@@ -62,7 +62,7 @@
   </PropertyGroup>
   <!-- External Analyzers -->
   <PropertyGroup>
-    <MicrosoftCodeAnalysisPublicApiAnalyzers>3.0.0</MicrosoftCodeAnalysisPublicApiAnalyzers>
+    <MicrosoftCodeAnalysisPublicApiAnalyzers>3.3.0-beta1.final</MicrosoftCodeAnalysisPublicApiAnalyzers>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>

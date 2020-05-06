@@ -735,12 +735,12 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListViewGroup_ISerializableGetObjectData_NullInfo_ThrowsNullReferenceException()
+        public void ListViewGroup_ISerializableGetObjectData_NullInfo_ThrowsArgumentNullException()
         {
             var group = new ListViewGroup();
             ISerializable iSerializable = group;
             var context = new StreamingContext();
-            Assert.Throws<NullReferenceException>(() => iSerializable.GetObjectData(null, context));
+            Assert.Throws<ArgumentNullException>("info", () => iSerializable.GetObjectData(null, context));
         }
     }
 }
