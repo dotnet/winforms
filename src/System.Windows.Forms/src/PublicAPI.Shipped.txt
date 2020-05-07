@@ -277,14 +277,14 @@ System.Windows.Forms.Application
 System.Windows.Forms.Application.MessageLoopCallback
 System.Windows.Forms.ApplicationContext
 System.Windows.Forms.ApplicationContext.ApplicationContext() -> void
-~System.Windows.Forms.ApplicationContext.ApplicationContext(System.Windows.Forms.Form mainForm) -> void
+System.Windows.Forms.ApplicationContext.ApplicationContext(System.Windows.Forms.Form? mainForm) -> void
 System.Windows.Forms.ApplicationContext.Dispose() -> void
 System.Windows.Forms.ApplicationContext.ExitThread() -> void
-~System.Windows.Forms.ApplicationContext.MainForm.get -> System.Windows.Forms.Form
-~System.Windows.Forms.ApplicationContext.MainForm.set -> void
-~System.Windows.Forms.ApplicationContext.Tag.get -> object
-~System.Windows.Forms.ApplicationContext.Tag.set -> void
-System.Windows.Forms.ApplicationContext.ThreadExit -> System.EventHandler
+System.Windows.Forms.ApplicationContext.MainForm.get -> System.Windows.Forms.Form?
+System.Windows.Forms.ApplicationContext.MainForm.set -> void
+System.Windows.Forms.ApplicationContext.Tag.get -> object?
+System.Windows.Forms.ApplicationContext.Tag.set -> void
+System.Windows.Forms.ApplicationContext.ThreadExit -> System.EventHandler?
 System.Windows.Forms.ApplicationContext.~ApplicationContext() -> void
 System.Windows.Forms.ArrangeDirection
 System.Windows.Forms.ArrangeDirection.Down = 4 -> System.Windows.Forms.ArrangeDirection
@@ -12007,7 +12007,7 @@ virtual System.Windows.Forms.AccessibleObject.State.get -> System.Windows.Forms.
 ~virtual System.Windows.Forms.AccessibleObject.Value.set -> void
 virtual System.Windows.Forms.ApplicationContext.Dispose(bool disposing) -> void
 virtual System.Windows.Forms.ApplicationContext.ExitThreadCore() -> void
-~virtual System.Windows.Forms.ApplicationContext.OnMainFormClosed(object sender, System.EventArgs e) -> void
+virtual System.Windows.Forms.ApplicationContext.OnMainFormClosed(object? sender, System.EventArgs! e) -> void
 virtual System.Windows.Forms.AxHost.AttachInterfaces() -> void
 ~virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object
 virtual System.Windows.Forms.AxHost.CreateSink() -> void
