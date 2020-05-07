@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -28,7 +26,8 @@ namespace System.Windows.Forms.VisualStyles
         private static readonly int numberOfPossibleClasses = VisualStyleElement.Count; //used as size for themeHandles
 
         [ThreadStatic]
-        private static Hashtable themeHandles = null; //per-thread cache of ThemeHandle objects.
+        private static Hashtable? themeHandles; // per-thread cache of ThemeHandle objects.
+
         [ThreadStatic]
         private static long threadCacheVersion = 0;
 
@@ -110,11 +109,6 @@ namespace System.Windows.Forms.VisualStyles
                 }
             }
 
-            if (className == null)
-            {
-                throw new ArgumentNullException(nameof(className));
-            }
-
             IntPtr hTheme = GetHandle(className, false);
 
             if (hTheme != IntPtr.Zero)
@@ -134,7 +128,7 @@ namespace System.Windows.Forms.VisualStyles
             //if the combo isn't defined, check the validity of our theme handle cache
             if (!returnVal)
             {
-                using (ThemeHandle tHandle = ThemeHandle.Create(className, false))
+                using (ThemeHandle? tHandle = ThemeHandle.Create(className, false))
                 {
                     if (tHandle != null)
                     {
@@ -165,8 +159,12 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public VisualStyleRenderer(string className, int part, int state)
         {
+            if (className == null)
+            {
+                throw new ArgumentNullException(nameof(className));
+            }
             if (!IsCombinationDefined(className, part))
-            { //internally this call takes care of IsSupported.
+            {
                 throw new ArgumentException(SR.VisualStylesInvalidCombination);
             }
 
@@ -256,7 +254,7 @@ namespace System.Windows.Forms.VisualStyles
         public void SetParameters(string className, int part, int state)
         {
             if (!IsCombinationDefined(className, part))
-            { //internally this call takes care of IsSupported.
+            {
                 throw new ArgumentException(SR.VisualStylesInvalidCombination);
             }
 
@@ -289,7 +287,7 @@ namespace System.Windows.Forms.VisualStyles
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 if (IntPtr.Zero != hWnd)
                 {
-                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd))
+                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd)!)
                     {
                         RECT rect  = bounds;
                         lastHResult = UxTheme.DrawThemeBackground(hTheme, hdc, part, state, ref rect, null);
@@ -331,7 +329,7 @@ namespace System.Windows.Forms.VisualStyles
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 if (IntPtr.Zero != hWnd)
                 {
-                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd))
+                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd)!)
                     {
                         RECT rect = bounds;
                         RECT clipRect = clipRectangle;
@@ -468,7 +466,7 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///  [See win32 equivalent.]
         /// </summary>
-        public void DrawText(IDeviceContext dc, Rectangle bounds, string textToDraw)
+        public void DrawText(IDeviceContext dc, Rectangle bounds, string? textToDraw)
         {
             DrawText(dc, bounds, textToDraw, false);
         }
@@ -476,7 +474,7 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///  [See win32 equivalent.]
         /// </summary>
-        public void DrawText(IDeviceContext dc, Rectangle bounds, string textToDraw, bool drawDisabled)
+        public void DrawText(IDeviceContext dc, Rectangle bounds, string? textToDraw, bool drawDisabled)
         {
             DrawText(dc, bounds, textToDraw, drawDisabled, TextFormatFlags.HorizontalCenter);
         }
@@ -484,7 +482,7 @@ namespace System.Windows.Forms.VisualStyles
         /// <summary>
         ///  [See win32 equivalent.]
         /// </summary>
-        public void DrawText(IDeviceContext dc, Rectangle bounds, string textToDraw, bool drawDisabled, TextFormatFlags flags)
+        public void DrawText(IDeviceContext dc, Rectangle bounds, string? textToDraw, bool drawDisabled, TextFormatFlags flags)
         {
             if (dc == null)
             {
@@ -561,7 +559,7 @@ namespace System.Windows.Forms.VisualStyles
         ///  rectangle. Return null if the region cannot be created.
         ///  [See win32 equivalent.]
         /// </summary>
-        public Region GetBackgroundRegion(IDeviceContext dc, Rectangle bounds)
+        public Region? GetBackgroundRegion(IDeviceContext dc, Rectangle bounds)
         {
             if (dc == null)
             {
@@ -662,7 +660,7 @@ namespace System.Windows.Forms.VisualStyles
         ///  [See win32 equivalent.]
         ///  Returns null if the returned font was not true type, since GDI+ does not support it.
         /// </summary>
-        public Font GetFont(IDeviceContext dc, FontProperty prop)
+        public Font? GetFont(IDeviceContext dc, FontProperty prop)
         {
             if (dc == null)
             {
@@ -683,28 +681,26 @@ namespace System.Windows.Forms.VisualStyles
                 lastHResult = UxTheme.GetThemeFont(new HandleRef(this, Handle), hdc, part, state, (int)prop, ref logfont);
             }
 
-            Font font = null;
-
-            //check for a failed HR.
-            if (lastHResult.Succeeded())
+            // Check for a failed HR.
+            if (!lastHResult.Succeeded())
             {
-                try
-                {
-                    font = Font.FromLogFont(logfont);
-                }
-                catch (Exception e)
-                {
-                    if (ClientUtils.IsSecurityOrCriticalException(e))
-                    {
-                        throw;
-                    }
-
-                    //Looks like the font was not true type
-                    font = null;
-                }
+                return null;
             }
 
-            return font;
+            try
+            {
+                return Font.FromLogFont(logfont);
+            }
+            catch (Exception e)
+            {
+                if (ClientUtils.IsSecurityOrCriticalException(e))
+                {
+                    throw;
+                }
+
+                // Looks like the font was not true type
+                return null;
+            }
         }
 
         /// <summary>
@@ -749,7 +745,7 @@ namespace System.Windows.Forms.VisualStyles
                 HandleRef hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 if (DpiHelper.IsPerMonitorV2Awareness && (IntPtr.Zero != hWnd))
                 {
-                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd))
+                    using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd)!)
                     {
                         lastHResult = SafeNativeMethods.GetThemePartSize(new HandleRef(this, hTheme.Handle), hdc, part, state, null, type, out Size size);
                         return size;
@@ -947,9 +943,12 @@ namespace System.Windows.Forms.VisualStyles
             {
                 throw new ArgumentNullException(nameof(g));
             }
+            if (region == null)
+            {
+                throw new ArgumentNullException(nameof(region));
+            }
 
             IntPtr hRgn = region.GetHrgn(g);
-
             return HitTestBackground(g, backgroundRectangle, hRgn, pt, options);
         }
 
@@ -1024,7 +1023,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         private static void RefreshCache()
         {
-            ThemeHandle tHandle = null;
+            ThemeHandle? tHandle = null;
 
             if (themeHandles != null)
             {
@@ -1033,7 +1032,7 @@ namespace System.Windows.Forms.VisualStyles
 
                 foreach (string className in classNames)
                 {
-                    tHandle = (ThemeHandle)themeHandles[className];
+                    tHandle = (ThemeHandle?)themeHandles[className];
                     if (tHandle != null)
                     {
                         tHandle.Dispose();
@@ -1064,8 +1063,6 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         private static IntPtr GetHandle(string className, bool throwExceptionOnFail)
         {
-            ThemeHandle tHandle;
-
             if (themeHandles == null)
             {
                 CreateThemeHandleHashtable();
@@ -1077,21 +1074,20 @@ namespace System.Windows.Forms.VisualStyles
                 threadCacheVersion = globalCacheVersion;
             }
 
-            if (!themeHandles.Contains(className))
-            { // see if it is already in cache
-                tHandle = ThemeHandle.Create(className, throwExceptionOnFail);
+            if (!themeHandles!.Contains(className))
+            {
+                // See if it is already in cache
+                ThemeHandle? tHandle = ThemeHandle.Create(className, throwExceptionOnFail);
                 if (tHandle == null)
                 {
                     return IntPtr.Zero;
                 }
+
                 themeHandles.Add(className, tHandle);
-            }
-            else
-            {
-                tHandle = (ThemeHandle)themeHandles[className];
+                return tHandle.Handle;
             }
 
-            return tHandle.Handle;
+            return ((ThemeHandle)themeHandles[className]!).Handle;
         }
 
         // This wrapper class is needed for safely cleaning up TLS cache of handles.
@@ -1104,12 +1100,12 @@ namespace System.Windows.Forms.VisualStyles
 
             public IntPtr Handle { get; private set; }
 
-            public static ThemeHandle Create(string className, bool throwExceptionOnFail)
+            public static ThemeHandle? Create(string className, bool throwExceptionOnFail)
             {
                 return Create(className, throwExceptionOnFail, IntPtr.Zero);
             }
 
-            internal static ThemeHandle Create(string className, bool throwExceptionOnFail, IntPtr hWndRef)
+            internal static ThemeHandle? Create(string className, bool throwExceptionOnFail, IntPtr hWndRef)
             {
                 // HThemes require an HWND when display scaling is different between monitors.
                 IntPtr hTheme = IntPtr.Zero;
