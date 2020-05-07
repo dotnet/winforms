@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms.Internal
 {
     /// <summary>
@@ -14,7 +12,7 @@ namespace System.Windows.Forms.Internal
     internal static class DeviceContexts
     {
         [ThreadStatic]
-        private static WeakRefCollection activeDeviceContexts;
+        private static WeakRefCollection? t_activeDeviceContexts;
 
         /// <summary>
         ///  WindowsGraphicsCacheManager needs to track DeviceContext objects so it can ask them
@@ -22,22 +20,19 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         internal static void AddDeviceContext(DeviceContext dc)
         {
-            if (activeDeviceContexts == null)
+            t_activeDeviceContexts ??= new WeakRefCollection
             {
-                activeDeviceContexts = new WeakRefCollection
-                {
-                    RefCheckThreshold = 20
-                };
-            }
+                RefCheckThreshold = 20
+            };
 
-            if (!activeDeviceContexts.Contains(dc))
+            if (!t_activeDeviceContexts.Contains(dc))
             {
                 dc.Disposing += new EventHandler(OnDcDisposing);
-                activeDeviceContexts.Add(dc);
+                t_activeDeviceContexts.Add(dc);
             }
         }
 
-        private static void OnDcDisposing(object sender, EventArgs e)
+        private static void OnDcDisposing(object? sender, EventArgs e)
         {
             if (sender is DeviceContext dc)
             {
@@ -48,23 +43,19 @@ namespace System.Windows.Forms.Internal
 
         internal static void RemoveDeviceContext(DeviceContext dc)
         {
-            if (activeDeviceContexts == null)
-            {
-                return;
-            }
-            activeDeviceContexts.RemoveByHashCode(dc);
+            t_activeDeviceContexts?.RemoveByHashCode(dc);
         }
 
-        internal static bool IsFontInUse(WindowsFont wf)
+        internal static bool IsFontInUse(WindowsFont? wf)
         {
             if (wf == null)
             {
                 return false;
             }
 
-            for (int i = 0; i < activeDeviceContexts.Count; i++)
+            for (int i = 0; i < t_activeDeviceContexts.Count; i++)
             {
-                if (activeDeviceContexts[i] is DeviceContext dc && (dc.ActiveFont == wf || dc.IsFontOnContextStack(wf)))
+                if (t_activeDeviceContexts[i] is DeviceContext dc && (dc.ActiveFont == wf || dc.IsFontOnContextStack(wf)))
                 {
                     return true;
                 }

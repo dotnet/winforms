@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -16,7 +14,7 @@ namespace System.Windows.Forms.Internal
     /// </summary>
     internal sealed partial class WindowsRegion : MarshalByRefObject, ICloneable, IDisposable
     {
-        private IntPtr nativeHandle; // The hRegion, this class always takes ownership of the hRegion.
+        private IntPtr _nativeHandle; // The hRegion, this class always takes ownership of the hRegion.
         private bool ownHandle;
 
 #if GDI_FINALIZATION_WATCH
@@ -45,13 +43,13 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public static WindowsRegion FromHregion(IntPtr hRegion, bool takeOwnership)
         {
-            WindowsRegion wr = new WindowsRegion();
+            var wr = new WindowsRegion();
 
             // Note: Passing IntPtr.Zero for hRegion is ok.  GDI+ infinite regions will have hRegion == null.
             // GDI's SelectClipRgn interprets null region handle as resetting the clip region (all region will be available for painting).
             if (hRegion != IntPtr.Zero)
             {
-                wr.nativeHandle = hRegion;
+                wr._nativeHandle = hRegion;
 
                 if (takeOwnership)
                 {
@@ -103,28 +101,25 @@ namespace System.Windows.Forms.Internal
 
         private void CreateRegion(Rectangle rect)
         {
-            Debug.Assert(nativeHandle == IntPtr.Zero, "nativeHandle should be null, we're leaking handle");
-            nativeHandle = Gdi32.CreateRectRgn(rect.X, rect.Y, rect.Right, rect.Bottom);
+            Debug.Assert(_nativeHandle == IntPtr.Zero, "_nativeHandle should be null, we're leaking handle");
+            _nativeHandle = Gdi32.CreateRectRgn(rect.X, rect.Y, rect.Right, rect.Bottom);
             ownHandle = true;
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        public void Dispose() => Dispose(true);
 
         public void Dispose(bool disposing)
         {
-            if (nativeHandle != IntPtr.Zero)
+            if (_nativeHandle != IntPtr.Zero)
             {
                 DbgUtil.AssertFinalization(this, disposing);
 
                 if (ownHandle)
                 {
-                    Gdi32.DeleteObject(nativeHandle);
+                    Gdi32.DeleteObject(_nativeHandle);
                 }
 
-                nativeHandle = IntPtr.Zero;
+                _nativeHandle = IntPtr.Zero;
 
                 if (disposing)
                 {
@@ -133,29 +128,14 @@ namespace System.Windows.Forms.Internal
             }
         }
 
-        ~WindowsRegion()
-        {
-            Dispose(false);
-        }
+        ~WindowsRegion() => Dispose(false);
 
         /// <summary>
         ///  The native region handle.
         /// </summary>
-        public IntPtr HRegion
-        {
-            get
-            {
-                return nativeHandle;
-            }
-        }
+        public IntPtr HRegion => _nativeHandle;
 
-        public bool IsInfinite
-        {
-            get
-            {
-                return nativeHandle == IntPtr.Zero;
-            }
-        }
+        public bool IsInfinite => _nativeHandle == IntPtr.Zero;
 
         /// <summary>
         ///  A rectangle representing the window region set with the SetWindowRgn function.
@@ -168,7 +148,7 @@ namespace System.Windows.Forms.Internal
             }
 
             var rect = new RECT();
-            Gdi32.GetRgnBox(new HandleRef(this, nativeHandle), ref rect);
+            Gdi32.GetRgnBox(new HandleRef(this, _nativeHandle), ref rect);
             return new Rectangle(new Point(rect.left, rect.top), rect.Size);
         }
     }

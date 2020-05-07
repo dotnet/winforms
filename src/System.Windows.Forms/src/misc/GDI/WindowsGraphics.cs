@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 //#define GDI_FINALIZATION_WATCH
 
 // THIS PARTIAL CLASS CONTAINS THE BASE METHODS FOR CREATING AND DISPOSING A WINDOWSGRAPHICS AS WELL
@@ -31,20 +29,17 @@ namespace System.Windows.Forms.Internal
     internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         private bool _disposeDc;
-        private Graphics _graphics; // cached when initialized FromGraphics to be able to call g.ReleaseHdc from Dispose.
+        private Graphics? _graphics; // cached when initialized FromGraphics to be able to call g.ReleaseHdc from Dispose.
 
 #if GDI_FINALIZATION_WATCH
         private string AllocationSite = DbgUtil.StackTrace;
 #endif
-
-        // Construction/destruction API
 
         public WindowsGraphics(DeviceContext dc)
         {
             Debug.Assert(dc != null, "null dc!");
             DeviceContext = dc;
             DeviceContext.SaveHdc();
-            //this.disposeDc = false; // the dc is not owned by this object.
         }
 
         /// <summary>
@@ -55,23 +50,19 @@ namespace System.Windows.Forms.Internal
         public static WindowsGraphics CreateMeasurementWindowsGraphics()
         {
             DeviceContext dc = DeviceContext.FromCompatibleDC(IntPtr.Zero);
-            WindowsGraphics wg = new WindowsGraphics(dc)
+            return new WindowsGraphics(dc)
             {
                 _disposeDc = true // we create it, we dispose it.
             };
-
-            return wg;
         }
 
         public static WindowsGraphics FromHwnd(IntPtr hWnd)
         {
             DeviceContext dc = DeviceContext.FromHwnd(hWnd);
-            WindowsGraphics wg = new WindowsGraphics(dc)
+            return new WindowsGraphics(dc)
             {
                 _disposeDc = true // we create it, we dispose it.
             };
-
-            return wg;
         }
 
         public static WindowsGraphics FromHdc(IntPtr hDc)
@@ -106,16 +97,15 @@ namespace System.Windows.Forms.Internal
         ///  Please note that this only applies the HDC created graphics, for Bitmap derived graphics, GetHdc creates a new DIBSection and
         ///  things get a lot more complicated.
         /// </summary>
-        public static WindowsGraphics FromGraphics(Graphics g)
-            => FromGraphics(g, ApplyGraphicsProperties.All);
+        public static WindowsGraphics FromGraphics(Graphics g) => FromGraphics(g, ApplyGraphicsProperties.All);
 
         public static WindowsGraphics FromGraphics(Graphics g, ApplyGraphicsProperties properties)
         {
-            WindowsRegion wr = null;
-            float[] elements = null;
+            WindowsRegion? wr = null;
+            float[]? elements = null;
 
-            Region clipRgn = null;
-            Matrix worldTransf = null;
+            Region? clipRgn = null;
+            Matrix? worldTransf = null;
 
             if ((properties & ApplyGraphicsProperties.TranslateTransform) != 0 || (properties & ApplyGraphicsProperties.Clipping) != 0)
             {
@@ -175,10 +165,7 @@ namespace System.Windows.Forms.Internal
             return wg;
         }
 
-        ~WindowsGraphics()
-        {
-            Dispose(false);
-        }
+        ~WindowsGraphics() => Dispose(false);
 
         public DeviceContext DeviceContext { get; private set; }
 
@@ -224,7 +211,7 @@ namespace System.Windows.Forms.Internal
                 }
                 finally
                 {
-                    DeviceContext = null;
+                    DeviceContext = null!;
                 }
             }
         }

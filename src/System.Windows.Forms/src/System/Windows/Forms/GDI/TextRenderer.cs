@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.Internal;
 using static Interop;
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
     /// </summary>
     public static class TextRenderer
     {
-        public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor)
+        public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor)
         {
             if (dc == null)
             {
@@ -28,13 +26,9 @@ namespace System.Windows.Forms
 
             try
             {
-                using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                {
-                    using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                    {
-                        wg.DrawText(text, wf, pt, foreColor);
-                    }
-                }
+                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+                wg.DrawText(text, wf, pt, foreColor);
             }
             finally
             {
@@ -42,7 +36,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor, Color backColor)
+        public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor, Color backColor)
         {
             if (dc == null)
             {
@@ -55,13 +49,9 @@ namespace System.Windows.Forms
 
             try
             {
-                using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                {
-                    using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                    {
-                        wg.DrawText(text, wf, pt, foreColor, backColor);
-                    }
-                }
+                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+                wg.DrawText(text, wf, pt, foreColor, backColor);
             }
             finally
             {
@@ -69,7 +59,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor, TextFormatFlags flags)
+        public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor, TextFormatFlags flags)
         {
             if (dc == null)
             {
@@ -78,16 +68,12 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, flags))
-            {
-                using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                {
-                    wgr.WindowsGraphics.DrawText(text, wf, pt, foreColor, GetTextFormatFlags(flags));
-                }
-            }
+            using var wgr = new WindowsGraphicsWrapper(dc, flags);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            wgr.WindowsGraphics.DrawText(text, wf, pt, foreColor, GetTextFormatFlags(flags));
         }
 
-        public static void DrawText(IDeviceContext dc, string text, Font font, Point pt, Color foreColor, Color backColor, TextFormatFlags flags)
+        public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor, Color backColor, TextFormatFlags flags)
         {
             if (dc == null)
             {
@@ -96,16 +82,12 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, flags))
-            {
-                using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                {
-                    wgr.WindowsGraphics.DrawText(text, wf, pt, foreColor, backColor, GetTextFormatFlags(flags));
-                }
-            }
+            using var wgr = new WindowsGraphicsWrapper(dc, flags);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            wgr.WindowsGraphics.DrawText(text, wf, pt, foreColor, backColor, GetTextFormatFlags(flags));
         }
 
-        public static void DrawText(IDeviceContext dc, string text, Font font, Rectangle bounds, Color foreColor)
+        public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor)
         {
             if (dc == null)
             {
@@ -118,13 +100,9 @@ namespace System.Windows.Forms
 
             try
             {
-                using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                {
-                    using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                    {
-                        wg.DrawText(text, wf, bounds, foreColor);
-                    }
-                }
+                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+                wg.DrawText(text, wf, bounds, foreColor);
             }
             finally
             {
@@ -132,7 +110,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public static void DrawText(IDeviceContext dc, string text, Font font, Rectangle bounds, Color foreColor, Color backColor)
+        public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor, Color backColor)
         {
             if (dc == null)
             {
@@ -145,13 +123,9 @@ namespace System.Windows.Forms
 
             try
             {
-                using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                {
-                    using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                    {
-                        wg.DrawText(text, wf, bounds, foreColor, backColor);
-                    }
-                }
+                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+                wg.DrawText(text, wf, bounds, foreColor, backColor);
             }
             finally
             {
@@ -159,7 +133,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public static void DrawText(IDeviceContext dc, string text, Font font, Rectangle bounds, Color foreColor, TextFormatFlags flags)
+        public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor, TextFormatFlags flags)
         {
             if (dc == null)
             {
@@ -168,16 +142,12 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, flags))
-            {
-                using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                {
-                    wgr.WindowsGraphics.DrawText(text, wf, bounds, foreColor, GetTextFormatFlags(flags));
-                }
-            }
+            using var wgr = new WindowsGraphicsWrapper(dc, flags);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            wgr.WindowsGraphics.DrawText(text, wf, bounds, foreColor, GetTextFormatFlags(flags));
         }
 
-        public static void DrawText(IDeviceContext dc, string text, Font font, Rectangle bounds, Color foreColor, Color backColor, TextFormatFlags flags)
+        public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor, Color backColor, TextFormatFlags flags)
         {
             if (dc == null)
             {
@@ -186,13 +156,9 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, flags))
-            {
-                using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                {
-                    wgr.WindowsGraphics.DrawText(text, wf, bounds, foreColor, backColor, GetTextFormatFlags(flags));
-                }
-            }
+            using var wgr = new WindowsGraphicsWrapper(dc, flags);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            wgr.WindowsGraphics.DrawText(text, wf, bounds, foreColor, backColor, GetTextFormatFlags(flags));
         }
 
         private static User32.DT GetTextFormatFlags(TextFormatFlags flags)
@@ -208,47 +174,39 @@ namespace System.Windows.Forms
             return windowsGraphicsSupportedFlags;
         }
 
-        ///  MeasureText wrappers.
-
-        public static Size MeasureText(string text, Font font)
+        public static Size MeasureText(string? text, Font? font)
         {
             if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }
 
-            using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font))
-            {
-                return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf);
-            }
+            WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
+            return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf);
         }
 
-        public static Size MeasureText(string text, Font font, Size proposedSize)
+        public static Size MeasureText(string? text, Font? font, Size proposedSize)
         {
             if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }
 
-            using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font))
-            {
-                return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, WindowsGraphicsCacheManager.GetWindowsFont(font), proposedSize);
-            }
+            WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
+            return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, WindowsGraphicsCacheManager.GetWindowsFont(font), proposedSize);
         }
 
-        public static Size MeasureText(string text, Font font, Size proposedSize, TextFormatFlags flags)
+        public static Size MeasureText(string? text, Font? font, Size proposedSize, TextFormatFlags flags)
         {
             if (string.IsNullOrEmpty(text))
             {
                 return Size.Empty;
             }
-            using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font))
-            {
-                return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
-            }
+            WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
+            return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
         }
 
-        public static Size MeasureText(IDeviceContext dc, string text, Font font)
+        public static Size MeasureText(IDeviceContext dc, string? text, Font? font)
         {
             if (dc == null)
             {
@@ -265,13 +223,9 @@ namespace System.Windows.Forms
 
             try
             {
-                using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                {
-                    using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                    {
-                        return wg.MeasureText(text, wf);
-                    }
-                }
+                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+                return wg.MeasureText(text, wf);
             }
             finally
             {
@@ -279,7 +233,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public static Size MeasureText(IDeviceContext dc, string text, Font font, Size proposedSize)
+        public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize)
         {
             if (dc == null)
             {
@@ -296,13 +250,9 @@ namespace System.Windows.Forms
 
             try
             {
-                using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                {
-                    using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                    {
-                        return wg.MeasureText(text, wf, proposedSize);
-                    }
-                }
+                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+                return wg.MeasureText(text, wf, proposedSize);
             }
             finally
             {
@@ -310,7 +260,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public static Size MeasureText(IDeviceContext dc, string text, Font font, Size proposedSize, TextFormatFlags flags)
+        public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize, TextFormatFlags flags)
         {
             if (dc == null)
             {
@@ -323,13 +273,9 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using (WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper(dc, flags))
-            {
-                using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality))
-                {
-                    return wgr.WindowsGraphics.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
-                }
-            }
+            using var wgr = new WindowsGraphicsWrapper(dc, flags);
+            using var wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            return wgr.WindowsGraphics.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
         }
 
         internal static Color DisabledTextColor(Color backColor)

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -46,9 +44,7 @@ namespace System.Windows.Forms.Internal
             }
         }
 
-        ///  Drawing methods.
-
-        private void DrawEllipse(WindowsPen pen, WindowsBrush brush,
+        private void DrawEllipse(WindowsPen? pen, WindowsBrush? brush,
             int nLeftRect,  // x-coord of upper-left corner of rectangle
             int nTopRect,   // y-coord of upper-left corner of rectangle
             int nRightRect, // x-coord of lower-right corner of rectangle
@@ -75,52 +71,50 @@ namespace System.Windows.Forms.Internal
         public void DrawAndFillEllipse(WindowsPen pen, WindowsBrush brush, Rectangle bounds)
             => DrawEllipse(pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
 
-        ///  Text rendering methods
-
         /// <summary>
         ///  Draws the text at the specified point, using the given Font and foreColor.
         ///  CR/LF are honored.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor)
+        public void DrawText(string? text, WindowsFont? font, Point pt, Color foreColor)
             => DrawText(text, font, pt, foreColor, Color.Empty, User32.DT.DEFAULT);
 
         /// <summary>
         ///  Draws the text at the specified point, using the given Font, foreColor and backColor.
         ///  CR/LF are honored.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor)
+        public void DrawText(string? text, WindowsFont? font, Point pt, Color foreColor, Color backColor)
             =>  DrawText(text, font, pt, foreColor, backColor, User32.DT.DEFAULT);
 
         /// <summary>
         ///  Draws the text at the specified point, using the given Font and foreColor, and according to the
         ///  specified flags.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, User32.DT flags)
+        public void DrawText(string? text, WindowsFont? font, Point pt, Color foreColor, User32.DT flags)
             => DrawText(text, font, pt, foreColor, Color.Empty, flags);
 
         /// <summary>
         ///  Draws the text at the specified point, using the given Font, foreColor and backColor, and according
         ///  to the specified flags.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Point pt, Color foreColor, Color backColor, User32.DT flags)
+        public void DrawText(string? text, WindowsFont? font, Point pt, Color foreColor, Color backColor, User32.DT flags)
             =>  DrawText(text, font, new Rectangle(pt, MaxSize), foreColor, backColor, flags);
 
         /// <summary>
         ///  Draws the text centered in the given rectangle and using the given Font and foreColor.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor)
+        public void DrawText(string? text, WindowsFont? font, Rectangle bounds, Color foreColor)
             => DrawText(text, font, bounds, foreColor, Color.Empty);
 
         /// <summary>
         ///  Draws the text centered in the given rectangle and using the given Font, foreColor and backColor.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor)
+        public void DrawText(string? text, WindowsFont? font, Rectangle bounds, Color foreColor, Color backColor)
             => DrawText(text, font, bounds, foreColor, backColor, User32.DT.CENTER | User32.DT.VCENTER);
 
         /// <summary>
         ///  Draws the text in the given bounds, using the given Font and foreColor, and according to the specified flags.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color color, User32.DT flags)
+        public void DrawText(string? text, WindowsFont? font, Rectangle bounds, Color color, User32.DT flags)
             => DrawText(text, font, bounds, color, Color.Empty, flags);
 
         /// <summary>
@@ -131,7 +125,7 @@ namespace System.Windows.Forms.Internal
         ///
         ///  If foreColor and/or backColor are Color.Empty, the hdc current text and/or background color are used.
         /// </summary>
-        public void DrawText(string text, WindowsFont font, Rectangle bounds, Color foreColor, Color backColor, User32.DT flags)
+        public void DrawText(string? text, WindowsFont? font, Rectangle bounds, Color foreColor, Color backColor, User32.DT flags)
         {
             if (string.IsNullOrEmpty(text) || foreColor == Color.Transparent)
             {
@@ -201,12 +195,12 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Calculates the spacing required for drawing text w/o clipping parts of a glyph.
         /// </summary>
-        public float GetOverhangPadding(WindowsFont font)
+        public float GetOverhangPadding(WindowsFont? font)
         {
             // Some parts of a glyphs may be clipped depending on the font & font style, GDI+ adds 1/6 of tmHeight
             // to each size of the text bounding box when drawing text to account for that; we do it here as well.
 
-            WindowsFont tmpfont = font;
+            WindowsFont? tmpfont = font;
 
             if (tmpfont == null)
             {
@@ -226,7 +220,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Get the bounding box internal text padding to be used when drawing text.
         /// </summary>
-        public User32.DRAWTEXTPARAMS GetTextMargins(WindowsFont font)
+        public User32.DRAWTEXTPARAMS GetTextMargins(WindowsFont? font)
         {
             // DrawText(Ex) adds a small space at the beginning of the text bounding box but not at the end,
             // this is more noticeable when the font has the italic style.  We compensate with this factor.
@@ -270,7 +264,7 @@ namespace System.Windows.Forms.Internal
         ///  which computes the width and height of the text ignoring TAB\CR\LF characters.
         ///  A text extent is the distance between the beginning of the space and a character that will fit in the space.
         /// </summary>
-        public Size GetTextExtent(string text, WindowsFont font)
+        public Size GetTextExtent(string? text, WindowsFont? font)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -299,7 +293,7 @@ namespace System.Windows.Forms.Internal
         ///  Returns the Size in logical units of the given text using the given Font.
         ///  CR/LF/TAB are taken into account.
         /// </summary>
-        public Size MeasureText(string text, WindowsFont font)
+        public Size MeasureText(string? text, WindowsFont? font)
             => MeasureText(text, font, MaxSize, User32.DT.BOTTOM);
 
         /// <summary>
@@ -307,7 +301,7 @@ namespace System.Windows.Forms.Internal
         ///  as the text bounding box (see overload below for more info).
         ///  TAB/CR/LF are taken into account.
         /// </summary>
-        public Size MeasureText(string text, WindowsFont font, Size proposedSize)
+        public Size MeasureText(string? text, WindowsFont? font, Size proposedSize)
             =>  MeasureText(text, font, proposedSize, User32.DT.BOTTOM);
 
         /// <summary>
@@ -326,7 +320,7 @@ namespace System.Windows.Forms.Internal
         ///  - This function assumes that the text is horizontal, that is, that the escapement is always 0. This is true for both
         ///  the horizontal and vertical measurements of the text.  The application must convert it explicitly.
         /// </summary>
-        public Size MeasureText(string text, WindowsFont font, Size proposedSize, User32.DT flags)
+        public Size MeasureText(string? text, WindowsFont? font, Size proposedSize, User32.DT flags)
         {
             Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0, "Some custom flags were left over and are not GDI compliant!");
 

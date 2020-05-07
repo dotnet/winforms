@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
@@ -204,7 +202,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Returns a value indicating whether the specified object is a WindowsFont equivalent to this object.
         /// </summary>
-        public override bool Equals(object font)
+        public override bool Equals(object? font)
         {
             if (!(font is WindowsFont winFont))
             {
@@ -388,7 +386,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Attempts to match the TextRenderingHint of the specified Graphics object with a LOGFONT.lfQuality value.
         /// </summary>
-        public static Gdi32.QUALITY WindowsFontQualityFromTextRenderingHint(Graphics g)
+        public static Gdi32.QUALITY WindowsFontQualityFromTextRenderingHint(Graphics? g)
         {
             if (g == null)
             {
