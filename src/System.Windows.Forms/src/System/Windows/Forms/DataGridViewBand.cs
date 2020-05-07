@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace System.Windows.Forms
@@ -40,7 +39,7 @@ namespace System.Windows.Forms
         internal int CachedThickness { get; set; }
 
         [DefaultValue(null)]
-        public virtual ContextMenuStrip ContextMenuStrip
+        public virtual ContextMenuStrip? ContextMenuStrip
         {
             get
             {
@@ -54,12 +53,12 @@ namespace System.Windows.Forms
             set => ContextMenuStripInternal = value;
         }
 
-        internal ContextMenuStrip ContextMenuStripInternal
+        internal ContextMenuStrip? ContextMenuStripInternal
         {
-            get => (ContextMenuStrip)Properties.GetObject(s_propContextMenuStrip);
+            get => (ContextMenuStrip?)Properties.GetObject(s_propContextMenuStrip);
             set
             {
-                ContextMenuStrip oldValue = (ContextMenuStrip)Properties.GetObject(s_propContextMenuStrip);
+                ContextMenuStrip? oldValue = (ContextMenuStrip?)Properties.GetObject(s_propContextMenuStrip);
                 if (oldValue != value)
                 {
                     EventHandler disposedHandler = new EventHandler(DetachContextMenuStrip);
@@ -80,11 +79,12 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
+        [AllowNull]
         public virtual DataGridViewCellStyle DefaultCellStyle
         {
             get
             {
-                DataGridViewCellStyle style = (DataGridViewCellStyle)Properties.GetObject(s_propDefaultCellStyle);
+                DataGridViewCellStyle? style = (DataGridViewCellStyle?)Properties.GetObject(s_propDefaultCellStyle);
                 if (style == null)
                 {
                     style = new DataGridViewCellStyle();
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                DataGridViewCellStyle style = null;
+                DataGridViewCellStyle? style = null;
                 if (HasDefaultCellStyle)
                 {
                     style = DefaultCellStyle;
@@ -122,7 +122,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Type type = (Type)Properties.GetObject(s_propDefaultHeaderCellType);
+                Type? type = (Type?)Properties.GetObject(s_propDefaultHeaderCellType);
                 if (type != null)
                 {
                     return type;
@@ -262,16 +262,17 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [AllowNull]
         protected DataGridViewHeaderCell HeaderCellCore
         {
             get
             {
-                DataGridViewHeaderCell headerCell = (DataGridViewHeaderCell)Properties.GetObject(s_propHeaderCell);
+                DataGridViewHeaderCell? headerCell = (DataGridViewHeaderCell?)Properties.GetObject(s_propHeaderCell);
                 if (headerCell == null)
                 {
                     Type cellType = DefaultHeaderCellType;
 
-                    headerCell = (DataGridViewHeaderCell)Activator.CreateInstance(cellType);
+                    headerCell = (DataGridViewHeaderCell)Activator.CreateInstance(cellType)!;
                     headerCell.DataGridView = DataGridView;
                     if (IsRow)
                     {
@@ -280,13 +281,13 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        DataGridViewColumn dataGridViewColumn = this as DataGridViewColumn;
+                        DataGridViewColumn? dataGridViewColumn = this as DataGridViewColumn;
                         headerCell.OwningColumn = dataGridViewColumn;
                         // Set the headerCell in the property store before setting the SortOrder.
                         Properties.SetObject(s_propHeaderCell, headerCell);
                         if (DataGridView != null && DataGridView.SortedColumn == dataGridViewColumn)
                         {
-                            DataGridViewColumnHeaderCell dataGridViewColumnHeaderCell = headerCell as DataGridViewColumnHeaderCell;
+                            DataGridViewColumnHeaderCell? dataGridViewColumnHeaderCell = headerCell as DataGridViewColumnHeaderCell;
                             Debug.Assert(dataGridViewColumnHeaderCell != null);
                             dataGridViewColumnHeaderCell.SortGlyphDirection = DataGridView.SortOrder;
                         }
@@ -297,7 +298,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                DataGridViewHeaderCell headerCell = (DataGridViewHeaderCell)Properties.GetObject(s_propHeaderCell);
+                DataGridViewHeaderCell? headerCell = (DataGridViewHeaderCell?)Properties.GetObject(s_propHeaderCell);
                 if (value != null || Properties.ContainsObject(s_propHeaderCell))
                 {
                     if (headerCell != null)
@@ -364,7 +365,7 @@ namespace System.Windows.Forms
         public int Index { get; internal set; } = -1;
 
         [Browsable(false)]
-        public virtual DataGridViewCellStyle InheritedStyle => null;
+        public virtual DataGridViewCellStyle? InheritedStyle => null;
 
         protected bool IsRow => this is DataGridViewRow;
 
@@ -465,9 +466,9 @@ namespace System.Windows.Forms
                         {
                             if (IsRow)
                             {
-                                foreach (DataGridViewCell dataGridViewCell in ((DataGridViewRow)this).Cells)
+                                foreach (DataGridViewCell? dataGridViewCell in ((DataGridViewRow)this).Cells)
                                 {
-                                    if (dataGridViewCell.ReadOnly)
+                                    if (dataGridViewCell!.ReadOnly)
                                     {
                                         dataGridViewCell.ReadOnlyInternal = false;
                                     }
@@ -620,7 +621,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public object Tag
+        public object? Tag
         {
             get => Properties.GetObject(s_propUserData);
             set
@@ -754,11 +755,8 @@ namespace System.Windows.Forms
 
         public virtual object Clone()
         {
-            DataGridViewBand band = (DataGridViewBand)Activator.CreateInstance(GetType());
-            if (band != null)
-            {
-                CloneInternal(band);
-            }
+            DataGridViewBand band = (DataGridViewBand)Activator.CreateInstance(GetType())!;
+            CloneInternal(band);
             return band;
         }
 
@@ -789,7 +787,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DetachContextMenuStrip(object sender, EventArgs e)
+        private void DetachContextMenuStrip(object? sender, EventArgs e)
         {
             ContextMenuStripInternal = null;
         }
@@ -804,7 +802,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                ContextMenuStrip contextMenuStrip = (ContextMenuStrip)ContextMenuStripInternal;
+                ContextMenuStrip? contextMenuStrip = ContextMenuStripInternal;
                 if (contextMenuStrip != null)
                 {
                     contextMenuStrip.Disposed -= new EventHandler(DetachContextMenuStrip);
