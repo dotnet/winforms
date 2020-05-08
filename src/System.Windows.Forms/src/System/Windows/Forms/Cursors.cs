@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -13,34 +11,34 @@ namespace System.Windows.Forms
     /// </summary>
     public static class Cursors
     {
-        private static Cursor s_appStarting;
-        private static Cursor s_arrow;
-        private static Cursor s_cross;
-        private static Cursor s_defaultCursor;
-        private static Cursor s_iBeam;
-        private static Cursor s_no;
-        private static Cursor s_sizeAll;
-        private static Cursor s_sizeNESW;
-        private static Cursor s_sizeNS;
-        private static Cursor s_sizeNWSE;
-        private static Cursor s_sizeWE;
-        private static Cursor s_upArrow;
-        private static Cursor s_wait;
-        private static Cursor s_help;
-        private static Cursor s_hSplit;
-        private static Cursor s_vSplit;
-        private static Cursor s_noMove2D;
-        private static Cursor s_noMoveHoriz;
-        private static Cursor s_noMoveVert;
-        private static Cursor s_panEast;
-        private static Cursor s_panNE;
-        private static Cursor s_panNorth;
-        private static Cursor s_panNW;
-        private static Cursor s_panSE;
-        private static Cursor s_panSouth;
-        private static Cursor s_panSW;
-        private static Cursor s_panWest;
-        private static Cursor s_hand;
+        private static Cursor? s_appStarting;
+        private static Cursor? s_arrow;
+        private static Cursor? s_cross;
+        private static Cursor? s_defaultCursor;
+        private static Cursor? s_iBeam;
+        private static Cursor? s_no;
+        private static Cursor? s_sizeAll;
+        private static Cursor? s_sizeNESW;
+        private static Cursor? s_sizeNS;
+        private static Cursor? s_sizeNWSE;
+        private static Cursor? s_sizeWE;
+        private static Cursor? s_upArrow;
+        private static Cursor? s_wait;
+        private static Cursor? s_help;
+        private static Cursor? s_hSplit;
+        private static Cursor? s_vSplit;
+        private static Cursor? s_noMove2D;
+        private static Cursor? s_noMoveHoriz;
+        private static Cursor? s_noMoveVert;
+        private static Cursor? s_panEast;
+        private static Cursor? s_panNE;
+        private static Cursor? s_panNorth;
+        private static Cursor? s_panNW;
+        private static Cursor? s_panSE;
+        private static Cursor? s_panSouth;
+        private static Cursor? s_panSW;
+        private static Cursor? s_panWest;
+        private static Cursor? s_hand;
 
         public static Cursor AppStarting => s_appStarting ??= new Cursor(User32.CursorResourceId.IDC_APPSTARTING);
 
