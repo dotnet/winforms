@@ -67,25 +67,25 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
     <!-- Arcade -->
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="5.0.0-beta.20228.4">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="5.0.0-beta.20256.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>590a102630c7efc7ca6f652f7c6c47dee4c4086c</Sha>
+      <Sha>8547938aefa24475a04877285553f0b2663ae249</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.GenFacades" Version="5.0.0-beta.20228.4">
+    <Dependency Name="Microsoft.DotNet.GenFacades" Version="5.0.0-beta.20256.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>590a102630c7efc7ca6f652f7c6c47dee4c4086c</Sha>
+      <Sha>8547938aefa24475a04877285553f0b2663ae249</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="5.0.0-beta.20228.4">
+    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="5.0.0-beta.20256.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>590a102630c7efc7ca6f652f7c6c47dee4c4086c</Sha>
+      <Sha>8547938aefa24475a04877285553f0b2663ae249</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.RemoteExecutor" Version="5.0.0-beta.20228.4">
+    <Dependency Name="Microsoft.DotNet.RemoteExecutor" Version="5.0.0-beta.20256.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>590a102630c7efc7ca6f652f7c6c47dee4c4086c</Sha>
+      <Sha>8547938aefa24475a04877285553f0b2663ae249</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="5.0.0-beta.20228.4">
+    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="5.0.0-beta.20256.5">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>590a102630c7efc7ca6f652f7c6c47dee4c4086c</Sha>
+      <Sha>8547938aefa24475a04877285553f0b2663ae249</Sha>
     </Dependency>
     <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="5.0.0-preview.5.20253.7">
       <Uri>https://github.com/dotnet/runtime</Uri>
