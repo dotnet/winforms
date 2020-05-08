@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using Microsoft.Win32;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -171,6 +172,26 @@ namespace System.Windows.Forms.Tests
             // Set different.
             table.UseSystemColors = !value;
             Assert.Equal(!value, table.UseSystemColors);
+        }
+
+        [WinFormsTheory]
+        [InlineData(UserPreferenceCategory.Color)]
+        [InlineData(UserPreferenceCategory.Accessibility)]
+        [InlineData(UserPreferenceCategory.Desktop)]
+        [InlineData(UserPreferenceCategory.Icon)]
+        [InlineData(UserPreferenceCategory.Mouse)]
+        [InlineData(UserPreferenceCategory.Keyboard)]
+        [InlineData(UserPreferenceCategory.Menu)]
+        [InlineData(UserPreferenceCategory.Power)]
+        [InlineData(UserPreferenceCategory.Screensaver)]
+        [InlineData(UserPreferenceCategory.Window)]
+        public void ProfessionalColorTable_ChangeUserPreferences_GetColor_ReturnsExpected(UserPreferenceCategory category)
+        {
+            // Simulate a SystemEvents.UserPreferenceChanged event.
+            var table = new ProfessionalColorTable();
+            Color color = table.ButtonSelectedHighlight;
+            SystemEventsHelper.SendMessageOnUserPreferenceChanged(category);
+            Assert.Equal(color, table.ButtonSelectedHighlight);
         }
     }
 }

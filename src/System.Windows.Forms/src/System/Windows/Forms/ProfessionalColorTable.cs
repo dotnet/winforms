@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
@@ -12,21 +10,21 @@ namespace System.Windows.Forms
 {
     public class ProfessionalColorTable
     {
-        private Dictionary<KnownColors, Color> professionalRGB = null;
-        private bool usingSystemColors = false;
-        private bool useSystemColors = false;
-        private string lastKnownColorScheme = string.Empty;
+        private Dictionary<KnownColors, Color>? _professionalRGB;
+        private bool _usingSystemColors;
+        private bool _useSystemColors;
+        private string? _lastKnownColorScheme = string.Empty;
 
-        private const string oliveColorScheme = "HomeStead";
-        private const string normalColorScheme = "NormalColor";
-        private const string silverColorScheme = "Metallic";
-        private const string royaleColorScheme = "Royale";  // sometimes returns NormalColor, sometimes returns Royale.
+        private const string OliveColorScheme = "HomeStead";
+        private const string NormalColorScheme = "NormalColor";
+        private const string SilverColorScheme = "Metallic";
+        private const string RoyaleColorScheme = "Royale";  // sometimes returns NormalColor, sometimes returns Royale.
 
-        private const string lunaFileName = "luna.msstyles";
-        private const string royaleFileName = "royale.msstyles";
-        private const string aeroFileName = "aero.msstyles";
+        private const string LunaFileName = "luna.msstyles";
+        private const string RoyaleFileName = "royale.msstyles";
+        private const string AeroFileName = "aero.msstyles";
 
-        private object colorFreshnessKey = null;
+        private object? _colorFreshnessKey;
 
         public ProfessionalColorTable()
         {
@@ -39,465 +37,250 @@ namespace System.Windows.Forms
                 if (UseSystemColors)
                 {
                     // someone has turned off theme support for the color table.
-                    if (!usingSystemColors || professionalRGB == null)
+                    if (!_usingSystemColors || _professionalRGB == null)
                     {
-                        if (professionalRGB == null)
-                        {
-                            professionalRGB = new Dictionary<KnownColors, Color>((int)KnownColors.lastKnownColor);
-                        }
-                        InitSystemColors(ref professionalRGB);
+                        _professionalRGB ??= new Dictionary<KnownColors, Color>((int)KnownColors.lastKnownColor);
+                        InitSystemColors(ref _professionalRGB);
                     }
                 }
                 else if (ToolStripManager.VisualStylesEnabled)
                 {
                     // themes are on and enabled in the manager
-                    if (usingSystemColors || professionalRGB == null)
+                    if (_usingSystemColors || _professionalRGB == null)
                     {
-                        if (professionalRGB == null)
-                        {
-                            professionalRGB = new Dictionary<KnownColors, Color>((int)KnownColors.lastKnownColor);
-                        }
-                        InitThemedColors(ref professionalRGB);
+                        _professionalRGB ??= new Dictionary<KnownColors, Color>((int)KnownColors.lastKnownColor);
+                        InitThemedColors(ref _professionalRGB);
                     }
                 }
                 else
                 {
                     // themes are off.
-                    if (!usingSystemColors || professionalRGB == null)
+                    if (!_usingSystemColors || _professionalRGB == null)
                     {
-                        if (professionalRGB == null)
-                        {
-                            professionalRGB = new Dictionary<KnownColors, Color>((int)KnownColors.lastKnownColor);
-                        }
-                        InitSystemColors(ref professionalRGB);
+                        _professionalRGB ??= new Dictionary<KnownColors, Color>((int)KnownColors.lastKnownColor);
+                        InitSystemColors(ref _professionalRGB);
                     }
                 }
-                return professionalRGB;
+
+                return _professionalRGB;
             }
         }
 
-        /// <summary> when this is specified, professional colors picks from SystemColors rather than colors
-        ///  that match the current theme.  If theming is not turned on, we'll fall back to SystemColors.
+        /// <summary>
+        ///  When this is specified, professional colors picks from SystemColors
+        ///  rather than colors that match the current theme. If theming is not
+        ///  turned on, we'll fall back to SystemColors.
         /// </summary>
         public bool UseSystemColors
         {
-            get
-            {
-                return useSystemColors;
-            }
+            get => _useSystemColors;
             set
             {
-                if (useSystemColors != value)
+                if (_useSystemColors == value)
                 {
-                    useSystemColors = value;
-                    ResetRGBTable();
+                    return;
                 }
+
+                _useSystemColors = value;
+                ResetRGBTable();
             }
         }
 
-        internal Color FromKnownColor(KnownColors color)
+        private Color FromKnownColor(KnownColors color)
         {
-            if (ProfessionalColors.ColorFreshnessKey != colorFreshnessKey || ProfessionalColors.ColorScheme != lastKnownColorScheme)
+            if (ProfessionalColors.ColorFreshnessKey != _colorFreshnessKey || ProfessionalColors.ColorScheme != _lastKnownColorScheme)
             {
                 ResetRGBTable();
             }
-            colorFreshnessKey = ProfessionalColors.ColorFreshnessKey;
-            lastKnownColorScheme = ProfessionalColors.ColorScheme;
+
+            _colorFreshnessKey = ProfessionalColors.ColorFreshnessKey;
+            _lastKnownColorScheme = ProfessionalColors.ColorScheme;
 
             return (Color)ColorTable[color];
         }
 
         private void ResetRGBTable()
         {
-            if (professionalRGB != null)
-            {
-                professionalRGB.Clear();
-            }
-            professionalRGB = null;
+            _professionalRGB?.Clear();
+            _professionalRGB = null;
         }
-
-        #region Colors
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedHighlightDescr))]
-        public virtual Color ButtonSelectedHighlight
-        {
-            get { return FromKnownColor(KnownColors.ButtonSelectedHighlight); }
-        }
+        public virtual Color ButtonSelectedHighlight => FromKnownColor(KnownColors.ButtonSelectedHighlight);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedHighlightBorderDescr))]
-        public virtual Color ButtonSelectedHighlightBorder
-        {
-            get { return ButtonPressedBorder; }
-        }
+        public virtual Color ButtonSelectedHighlightBorder => ButtonPressedBorder;
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedHighlightDescr))]
-        public virtual Color ButtonPressedHighlight
-        {
-            get { return FromKnownColor(KnownColors.ButtonPressedHighlight); }
-        }
+        public virtual Color ButtonPressedHighlight => FromKnownColor(KnownColors.ButtonPressedHighlight);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedHighlightBorderDescr))]
-        public virtual Color ButtonPressedHighlightBorder
-        {
-            get { return SystemColors.Highlight; }
-        }
+        public virtual Color ButtonPressedHighlightBorder => SystemColors.Highlight;
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedHighlightDescr))]
-        public virtual Color ButtonCheckedHighlight
-        {
-            get { return FromKnownColor(KnownColors.ButtonCheckedHighlight); }
-        }
+        public virtual Color ButtonCheckedHighlight => FromKnownColor(KnownColors.ButtonCheckedHighlight);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedHighlightBorderDescr))]
-        public virtual Color ButtonCheckedHighlightBorder
-        {
-            get { return SystemColors.Highlight; }
-        }
+        public virtual Color ButtonCheckedHighlightBorder => SystemColors.Highlight;
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedBorderDescr))]
-        public virtual Color ButtonPressedBorder
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBCtlBdrMouseOver); }
-        }
+        public virtual Color ButtonPressedBorder => FromKnownColor(KnownColors.msocbvcrCBCtlBdrMouseOver);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedBorderDescr))]
-        public virtual Color ButtonSelectedBorder
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBCtlBdrMouseOver); }
-        }
+        public virtual Color ButtonSelectedBorder => FromKnownColor(KnownColors.msocbvcrCBCtlBdrMouseOver);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientBeginDescr))]
-        public virtual Color ButtonCheckedGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradSelectedBegin); }
-        }
+        public virtual Color ButtonCheckedGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradSelectedBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientMiddleDescr))]
-        public virtual Color ButtonCheckedGradientMiddle
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradSelectedMiddle); }
-        }
+        public virtual Color ButtonCheckedGradientMiddle => FromKnownColor(KnownColors.msocbvcrCBGradSelectedMiddle);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonCheckedGradientEndDescr))]
-        public virtual Color ButtonCheckedGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradSelectedEnd); }
-        }
+        public virtual Color ButtonCheckedGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradSelectedEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedGradientBeginDescr))]
-        public virtual Color ButtonSelectedGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverBegin); }
-        }
+        public virtual Color ButtonSelectedGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMouseOverBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedGradientMiddleDescr))]
-        public virtual Color ButtonSelectedGradientMiddle
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverMiddle); }
-        }
+        public virtual Color ButtonSelectedGradientMiddle => FromKnownColor(KnownColors.msocbvcrCBGradMouseOverMiddle);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonSelectedGradientEndDescr))]
-        public virtual Color ButtonSelectedGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverEnd); }
-        }
+        public virtual Color ButtonSelectedGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradMouseOverEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientBeginDescr))]
-        public virtual Color ButtonPressedGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseDownBegin); }
-        }
+        public virtual Color ButtonPressedGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMouseDownBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientMiddleDescr))]
-        public virtual Color ButtonPressedGradientMiddle
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseDownMiddle); }
-        }
+        public virtual Color ButtonPressedGradientMiddle => FromKnownColor(KnownColors.msocbvcrCBGradMouseDownMiddle);
 
         [SRDescription(nameof(SR.ProfessionalColorsButtonPressedGradientEndDescr))]
-        public virtual Color ButtonPressedGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseDownEnd); }
-        }
+        public virtual Color ButtonPressedGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradMouseDownEnd);
         [SRDescription(nameof(SR.ProfessionalColorsCheckBackgroundDescr))]
-        public virtual Color CheckBackground
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelected); }
-        }
+        public virtual Color CheckBackground => FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelected);
 
         [SRDescription(nameof(SR.ProfessionalColorsCheckSelectedBackgroundDescr))]
-        public virtual Color CheckSelectedBackground
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelectedMouseOver); }
-        }
+        public virtual Color CheckSelectedBackground => FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelectedMouseOver);
 
         [SRDescription(nameof(SR.ProfessionalColorsCheckPressedBackgroundDescr))]
-        public virtual Color CheckPressedBackground
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelectedMouseOver); }
-        }
+        public virtual Color CheckPressedBackground => FromKnownColor(KnownColors.msocbvcrCBCtlBkgdSelectedMouseOver);
 
         [SRDescription(nameof(SR.ProfessionalColorsGripDarkDescr))]
-        public virtual Color GripDark
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBDragHandle); }
-        }
+        public virtual Color GripDark => FromKnownColor(KnownColors.msocbvcrCBDragHandle);
 
         [SRDescription(nameof(SR.ProfessionalColorsGripLightDescr))]
-        public virtual Color GripLight
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBDragHandleShadow); }
-        }
+        public virtual Color GripLight => FromKnownColor(KnownColors.msocbvcrCBDragHandleShadow);
 
         [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientBeginDescr))]
-        public virtual Color ImageMarginGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradVertBegin); }
-        }
+        public virtual Color ImageMarginGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradVertBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientMiddleDescr))]
-        public virtual Color ImageMarginGradientMiddle
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradVertMiddle); }
-        }
+        public virtual Color ImageMarginGradientMiddle => FromKnownColor(KnownColors.msocbvcrCBGradVertMiddle);
 
         [SRDescription(nameof(SR.ProfessionalColorsImageMarginGradientEndDescr))]
-        public virtual Color ImageMarginGradientEnd
-        {
-            get { return (usingSystemColors) ? SystemColors.Control : FromKnownColor(KnownColors.msocbvcrCBGradVertEnd); }
-        }
+        public virtual Color ImageMarginGradientEnd => (_usingSystemColors) ? SystemColors.Control : FromKnownColor(KnownColors.msocbvcrCBGradVertEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientBeginDescr))]
-        public virtual Color ImageMarginRevealedGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedBegin); }
-        }
+        public virtual Color ImageMarginRevealedGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientMiddleDescr))]
-        public virtual Color ImageMarginRevealedGradientMiddle
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedMiddle); }
-        }
+        public virtual Color ImageMarginRevealedGradientMiddle => FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedMiddle);
 
         [SRDescription(nameof(SR.ProfessionalColorsImageMarginRevealedGradientEndDescr))]
-        public virtual Color ImageMarginRevealedGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedEnd); }
-        }
+        public virtual Color ImageMarginRevealedGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuStripGradientBeginDescr))]
-        public virtual Color MenuStripGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
-        }
+        public virtual Color MenuStripGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuStripGradientEndDescr))]
-        public virtual Color MenuStripGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
-        }
+        public virtual Color MenuStripGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedDescr))]
-        public virtual Color MenuItemSelected
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdMouseOver); }
-        }
+        public virtual Color MenuItemSelected => FromKnownColor(KnownColors.msocbvcrCBCtlBkgdMouseOver);
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemBorderDescr))]
-        public virtual Color MenuItemBorder
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBCtlBdrSelected); }
-        }
+        public virtual Color MenuItemBorder => FromKnownColor(KnownColors.msocbvcrCBCtlBdrSelected);
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuBorderDescr))]
-        public virtual Color MenuBorder
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBMenuBdrOuter); }
-        }
+        public virtual Color MenuBorder => FromKnownColor(KnownColors.msocbvcrCBMenuBdrOuter);
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedGradientBeginDescr))]
-        public virtual Color MenuItemSelectedGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverBegin); }
-        }
+        public virtual Color MenuItemSelectedGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMouseOverBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemSelectedGradientEndDescr))]
-        public virtual Color MenuItemSelectedGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMouseOverEnd); }
-        }
+        public virtual Color MenuItemSelectedGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradMouseOverEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemPressedGradientBeginDescr))]
-        public virtual Color MenuItemPressedGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuTitleBkgdBegin); }
-        }
+        public virtual Color MenuItemPressedGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMenuTitleBkgdBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemPressedGradientMiddleDescr))]
-        public virtual Color MenuItemPressedGradientMiddle
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedMiddle); }
-        }
+        public virtual Color MenuItemPressedGradientMiddle => FromKnownColor(KnownColors.msocbvcrCBGradMenuIconBkgdDroppedMiddle);
 
         [SRDescription(nameof(SR.ProfessionalColorsMenuItemPressedGradientEndDescr))]
-        public virtual Color MenuItemPressedGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMenuTitleBkgdEnd); }
-        }
+        public virtual Color MenuItemPressedGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradMenuTitleBkgdEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsRaftingContainerGradientBeginDescr))]
-        public virtual Color RaftingContainerGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
-        }
+        public virtual Color RaftingContainerGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsRaftingContainerGradientEndDescr))]
-        public virtual Color RaftingContainerGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
-        }
+        public virtual Color RaftingContainerGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsSeparatorDarkDescr))]
-        public virtual Color SeparatorDark
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBSplitterLine); }
-        }
+        public virtual Color SeparatorDark => FromKnownColor(KnownColors.msocbvcrCBSplitterLine);
 
         [SRDescription(nameof(SR.ProfessionalColorsSeparatorLightDescr))]
-        public virtual Color SeparatorLight
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBSplitterLineLight); }
-        }
+        public virtual Color SeparatorLight => FromKnownColor(KnownColors.msocbvcrCBSplitterLineLight);
 
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientBeginDescr))]
-        public virtual Color StatusStripGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
-        }
+        public virtual Color StatusStripGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientEndDescr))]
-        public virtual Color StatusStripGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
-        }
+        public virtual Color StatusStripGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsToolStripBorderDescr))]
-        public virtual Color ToolStripBorder
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBShadow); }
-        }
+        public virtual Color ToolStripBorder => FromKnownColor(KnownColors.msocbvcrCBShadow);
 
         [SRDescription(nameof(SR.ProfessionalColorsToolStripDropDownBackgroundDescr))]
-        public virtual Color ToolStripDropDownBackground
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBMenuBkgd); }
-        }
+        public virtual Color ToolStripDropDownBackground => FromKnownColor(KnownColors.msocbvcrCBMenuBkgd);
 
         [SRDescription(nameof(SR.ProfessionalColorsToolStripGradientBeginDescr))]
-        public virtual Color ToolStripGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradVertBegin); }
-        }
+        public virtual Color ToolStripGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradVertBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsToolStripGradientMiddleDescr))]
-        public virtual Color ToolStripGradientMiddle
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradVertMiddle); }
-        }
+        public virtual Color ToolStripGradientMiddle => FromKnownColor(KnownColors.msocbvcrCBGradVertMiddle);
 
         [SRDescription(nameof(SR.ProfessionalColorsToolStripGradientEndDescr))]
-        public virtual Color ToolStripGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradVertEnd); }
-        }
+        public virtual Color ToolStripGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradVertEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsToolStripContentPanelGradientBeginDescr))]
-        public virtual Color ToolStripContentPanelGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
-        }
+        public virtual Color ToolStripContentPanelGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsToolStripContentPanelGradientEndDescr))]
-        public virtual Color ToolStripContentPanelGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
-        }
+        public virtual Color ToolStripContentPanelGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsToolStripPanelGradientBeginDescr))]
-        public virtual Color ToolStripPanelGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin); }
-        }
+        public virtual Color ToolStripPanelGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsToolStripPanelGradientEndDescr))]
-        public virtual Color ToolStripPanelGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd); }
-        }
+        public virtual Color ToolStripPanelGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzEnd);
 
         [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientBeginDescr))]
-        public virtual Color OverflowButtonGradientBegin
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradOptionsBegin); }
-        }
+        public virtual Color OverflowButtonGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradOptionsBegin);
 
         [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientMiddleDescr))]
-        public virtual Color OverflowButtonGradientMiddle
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradOptionsMiddle); }
-        }
+        public virtual Color OverflowButtonGradientMiddle => FromKnownColor(KnownColors.msocbvcrCBGradOptionsMiddle);
 
         [SRDescription(nameof(SR.ProfessionalColorsOverflowButtonGradientEndDescr))]
-        public virtual Color OverflowButtonGradientEnd
-        {
-            get { return FromKnownColor(KnownColors.msocbvcrCBGradOptionsEnd); }
-        }
-        #endregion Colors
+        public virtual Color OverflowButtonGradientEnd => FromKnownColor(KnownColors.msocbvcrCBGradOptionsEnd);
 
-        #region NotDirectlyExposed
-        //
-
-        internal Color ComboBoxButtonGradientBegin
-        {
-            get { return MenuItemPressedGradientBegin; }
-        }
-        internal Color ComboBoxButtonGradientEnd
-        {
-            get { return MenuItemPressedGradientEnd; }
-        }
-        internal Color ComboBoxButtonSelectedGradientBegin
-        {
-            get { return MenuItemSelectedGradientBegin; }
-        }
-        internal Color ComboBoxButtonSelectedGradientEnd
-        {
-            get { return MenuItemSelectedGradientEnd; }
-        }
-        internal Color ComboBoxButtonPressedGradientBegin
-        {
-            get { return ButtonPressedGradientBegin; }
-        }
-        internal Color ComboBoxButtonPressedGradientEnd
-        {
-            get { return ButtonPressedGradientEnd; }
-        }
-        internal Color ComboBoxButtonOnOverflow
-        {
-            get { return ToolStripDropDownBackground; }
-        }
-        internal Color ComboBoxBorder
-        {
-            get { return ButtonSelectedHighlightBorder; }
-        }
-        internal Color TextBoxBorder
-        {
-            get { return ButtonSelectedHighlightBorder; }
-        }
-        #endregion
-
-        /*  public virtual Color ControlLight {
-              get { return FromKnownColor(KnownColors.msocbvcrCBCtlBkgdLight); }
-          } */
+        internal Color ComboBoxButtonGradientBegin => MenuItemPressedGradientBegin;
+        internal Color ComboBoxButtonGradientEnd => MenuItemPressedGradientEnd;
+        internal Color ComboBoxButtonSelectedGradientBegin => MenuItemSelectedGradientBegin;
+        internal Color ComboBoxButtonSelectedGradientEnd => MenuItemSelectedGradientEnd;
+        internal Color ComboBoxButtonPressedGradientBegin => ButtonPressedGradientBegin;
+        internal Color ComboBoxButtonPressedGradientEnd => ButtonPressedGradientEnd;
+        internal Color ComboBoxButtonOnOverflow => ToolStripDropDownBackground;
+        internal Color ComboBoxBorder => ButtonSelectedHighlightBorder;
+        internal Color TextBoxBorder => ButtonSelectedHighlightBorder;
 
         private static Color GetAlphaBlendedColor(Graphics g, Color src, Color dest, int alpha)
         {
@@ -515,16 +298,14 @@ namespace System.Windows.Forms
             }
         }
 
-        // this particular method gets us closer to office by increasing the resolution...
+        // this particular method gets us closer to office by increasing the resolution.
 
-        private static Color GetAlphaBlendedColorHighRes(Graphics graphics, Color src, Color dest, int alpha)
+        private static Color GetAlphaBlendedColorHighRes(Graphics? graphics, Color src, Color dest, int alpha)
         {
             int sum;
             int nPart2;
-            int r, g, b;
 
             int nPart1 = alpha;
-
             if (nPart1 < 100)
             {
                 nPart2 = 100 - nPart1;
@@ -538,19 +319,16 @@ namespace System.Windows.Forms
 
             // By adding on sum/2 before dividing by sum, we properly round the value,
             // rather than truncating it, while doing integer math.
-
-            r = (nPart1 * src.R + nPart2 * dest.R + sum / 2) / sum;
-            g = (nPart1 * src.G + nPart2 * dest.G + sum / 2) / sum;
-            b = (nPart1 * src.B + nPart2 * dest.B + sum / 2) / sum;
+            int r = (nPart1 * src.R + nPart2 * dest.R + sum / 2) / sum;
+            int g = (nPart1 * src.G + nPart2 * dest.G + sum / 2) / sum;
+            int b = (nPart1 * src.B + nPart2 * dest.B + sum / 2) / sum;
 
             if (graphics == null)
             {
                 return Color.FromArgb(r, g, b);
             }
-            else
-            {
-                return graphics.GetNearestColor(Color.FromArgb(r, g, b));
-            }
+
+            return graphics.GetNearestColor(Color.FromArgb(r, g, b));
         }
 
         private void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
@@ -574,9 +352,10 @@ namespace System.Windows.Forms
                 rgbTable[ProfessionalColorTable.KnownColors.ButtonSelectedHighlight] = SystemColors.ControlLight;
             }
         }
-        internal void InitSystemColors(ref Dictionary<KnownColors, Color> rgbTable)
+
+        private void InitSystemColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
-            usingSystemColors = true;
+            _usingSystemColors = true;
 
             InitCommonColors(ref rgbTable);
 
@@ -659,7 +438,6 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgd] = empty;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdLight] = window;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdMouseDown] = highlight;
-            //            rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdMouseOver]         = (lowResolution) ? SystemColors.ControlLight : highlight;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdMouseOver] = window;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlText] = controlText;
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlTextDisabled] = buttonShadow;
@@ -878,7 +656,7 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = buttonFace;
         }
 
-        internal void InitOliveLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private void InitOliveLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(81, 94, 51);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(81, 94, 51);
@@ -1124,7 +902,7 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = Color.FromArgb(217, 217, 167);
         }
 
-        internal void InitSilverLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private void InitSilverLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(173, 174, 193);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterFloating] = Color.FromArgb(122, 121, 153);
@@ -1580,43 +1358,43 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrPubWebDocScratchPageBkgd] = Color.FromArgb(193, 210, 238); // msocbvcrPubWebDocScratchPageBkgd
         }
 
-        internal void InitThemedColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private void InitThemedColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             string colorScheme = VisualStyleInformation.ColorScheme;
             string themeFileName = System.IO.Path.GetFileName(VisualStyleInformation.ThemeFilename);
             bool initializedTable = false;
 
             // VS compares the filename of the theme to determine luna v. royale.
-            if (string.Equals(lunaFileName, themeFileName, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(LunaFileName, themeFileName, StringComparison.OrdinalIgnoreCase))
             {
                 // once we know it's luna we've got to pick between
                 // normal (blue) homestead (olive) and metallic (silver)
-                if (colorScheme == normalColorScheme)
+                if (colorScheme == NormalColorScheme)
                 {
                     InitBlueLunaColors(ref rgbTable);
-                    usingSystemColors = false;
+                    _usingSystemColors = false;
                     initializedTable = true;
                 }
-                else if (colorScheme == oliveColorScheme)
+                else if (colorScheme == OliveColorScheme)
                 {
                     InitOliveLunaColors(ref rgbTable);
-                    usingSystemColors = false;
+                    _usingSystemColors = false;
                     initializedTable = true;
                 }
-                else if (colorScheme == silverColorScheme)
+                else if (colorScheme == SilverColorScheme)
                 {
                     InitSilverLunaColors(ref rgbTable);
-                    usingSystemColors = false;
+                    _usingSystemColors = false;
                     initializedTable = true;
                 }
             }
-            else if (string.Equals(aeroFileName, themeFileName, StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(AeroFileName, themeFileName, StringComparison.OrdinalIgnoreCase))
             {
                 // On Vista running Aero theme, Office looks like it's using SystemColors
                 // With the exception of the MenuItemSelected Color for MenuStrip items that
                 // are contained in DropDowns.  We're going to copy their behavior
                 InitSystemColors(ref rgbTable);
-                usingSystemColors = true;
+                _usingSystemColors = true;
                 initializedTable = true;
 
                 // Exception to SystemColors, use the ButtonSelectedHighlight color otherwise
@@ -1626,14 +1404,14 @@ namespace System.Windows.Forms
                 // CheckedBackground of ToolStripMenuItem
                 rgbTable[KnownColors.msocbvcrCBCtlBkgdSelected] = rgbTable[KnownColors.msocbvcrCBCtlBkgdMouseOver];
             }
-            else if (string.Equals(royaleFileName, themeFileName, StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(RoyaleFileName, themeFileName, StringComparison.OrdinalIgnoreCase))
             {
                 // once we know it's royale (TabletPC/MCE) we know about two color scheme names
                 // which should do exactly the same thing
-                if (colorScheme == normalColorScheme || colorScheme == royaleColorScheme)
+                if (colorScheme == NormalColorScheme || colorScheme == RoyaleColorScheme)
                 {
                     InitRoyaleColors(ref rgbTable);
-                    usingSystemColors = false;
+                    _usingSystemColors = false;
                     initializedTable = true;
                 }
             }
@@ -1641,15 +1419,14 @@ namespace System.Windows.Forms
             if (!initializedTable)
             {
                 // unknown color scheme - bailing
-
                 InitSystemColors(ref rgbTable);
-                usingSystemColors = true;
+                _usingSystemColors = true;
             }
 
             InitCommonColors(ref rgbTable);
         }
 
-        internal void InitBlueLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
+        private void InitBlueLunaColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(196, 205, 218);
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = Color.FromArgb(196, 205, 218);
@@ -1895,7 +1672,7 @@ namespace System.Windows.Forms
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrXLFormulaBarBkgd] = Color.FromArgb(158, 190, 245);
         }
 
-        internal enum KnownColors
+        private enum KnownColors
         {
             msocbvcrCBBdrOuterDocked,
             msocbvcrCBBdrOuterFloating,
