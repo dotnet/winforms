@@ -31,6 +31,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(100, column.FillWeight);
             Assert.False(column.Frozen);
             Assert.True(column.HasDefaultCellStyle);
+            Assert.IsType<DataGridViewColumnHeaderCell>(column.HeaderCell);
+            Assert.Same(column.HeaderCell, column.HeaderCell);
+            Assert.IsType<DataGridViewColumnHeaderCell>(column.HeaderCellCore);
+            Assert.Same(column.HeaderCellCore, column.HeaderCellCore);
             Assert.Empty(column.HeaderText);
             Assert.Equal(column.Index, column.Index);
             Assert.Equal(DataGridViewAutoSizeColumnMode.NotSet, column.InheritedAutoSizeMode);
@@ -79,7 +83,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(column.Frozen);
             Assert.True(column.HasDefaultCellStyle);
             Assert.Empty(column.HeaderText);
-            Assert.Equal(column.Index, column.Index);
+            Assert.Equal(-1, column.Index);
             Assert.Equal(DataGridViewAutoSizeColumnMode.NotSet, column.InheritedAutoSizeMode);
             Assert.Same(column.DefaultCellStyle, column.InheritedStyle);
             Assert.False(column.IsDataBound);
@@ -258,9 +262,10 @@ namespace System.Windows.Forms.Tests
             {
                 ColumnHeadersVisible = false
             };
+            using var cellTemplate = new SubDataGridViewCell();
             using var column = new DataGridViewColumn
             {
-                CellTemplate = new SubDataGridViewCell()
+                CellTemplate = cellTemplate
             };
             control.Columns.Add(column);
 
@@ -441,9 +446,10 @@ namespace System.Windows.Forms.Tests
             {
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             };
+            using var cellTemplate = new SubDataGridViewCell();
             using var column = new DataGridViewColumn
             {
-                CellTemplate = new SubDataGridViewCell()
+                CellTemplate = cellTemplate
             };
             control.Columns.Add(column);
 
@@ -551,6 +557,28 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, column.ContextMenuStrip);
         }
 
+        [WinFormsTheory]
+        [MemberData(nameof(ContextMenuStrip_Set_TestData))]
+        public void DataGridViewColumn_ContextMenuStrip_SetWithDataGridView_GetReturnsExpected(ContextMenuStrip value)
+        {
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            control.Columns.Add(column);
+
+            column.ContextMenuStrip = value;
+            Assert.Same(value, column.ContextMenuStrip);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            column.ContextMenuStrip = value;
+            Assert.Same(value, column.ContextMenuStrip);
+            Assert.False(control.IsHandleCreated);
+        }
+
         [WinFormsFact]
         public void DataGridViewColumn_ContextMenuStrip_SetDisposeNew_RemovesContextMenuStrip()
         {
@@ -586,20 +614,21 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewColumn_ContextMenuStrip_SetWithHandler_CallsContextMenuStripChanged()
         {
-            using var dataGridView = new DataGridView();
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
             using var column = new DataGridViewColumn
             {
-                CellTemplate = new SubDataGridViewCell()
+                CellTemplate = cellTemplate
             };
-            dataGridView.Columns.Add(column);
+            control.Columns.Add(column);
             int callCount = 0;
             DataGridViewColumnEventHandler handler = (sender, e) =>
             {
-                Assert.Same(dataGridView, sender);
+                Assert.Same(control, sender);
                 Assert.Same(column, e.Column);
                 callCount++;
             };
-            dataGridView.ColumnContextMenuStripChanged += handler;
+            control.ColumnContextMenuStripChanged += handler;
 
             // Set different.
             using var menu1 = new ContextMenuStrip();
@@ -624,7 +653,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, callCount);
 
             // Remove handler.
-            dataGridView.ColumnContextMenuStripChanged -= handler;
+            control.ColumnContextMenuStripChanged -= handler;
             column.ContextMenuStrip = menu1;
             Assert.Same(menu1, column.ContextMenuStrip);
             Assert.Equal(3, callCount);
@@ -634,7 +663,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewColumn_DataPropertyName_SetWithoutDataGridView_GetReturnsExpected(string value, string expected)
         {
-            var column = new DataGridViewColumn
+            using var column = new DataGridViewColumn
             {
                 DataPropertyName = value
             };
@@ -650,27 +679,31 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewColumn_DataPropertyName_SetWithDataGridView_GetReturnsExpected(string value, string expected)
         {
             using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
             using var column = new DataGridViewColumn
             {
-                CellTemplate = new SubDataGridViewCell()
+                CellTemplate = cellTemplate
             };
             control.Columns.Add(column);
 
             column.DataPropertyName = value;
             Assert.Equal(expected, column.DataPropertyName);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             column.DataPropertyName = value;
             Assert.Equal(expected, column.DataPropertyName);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
         public void DataGridViewColumn_DataPropertyName_SetWithHandler_CallsColumnDataPropertyNameChanged()
         {
             using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
             using var column = new DataGridViewColumn
             {
-                CellTemplate = new SubDataGridViewCell()
+                CellTemplate = cellTemplate
             };
             control.Columns.Add(column);
             int callCount = 0;
@@ -754,24 +787,78 @@ namespace System.Windows.Forms.Tests
             Assert.True(column.HasDefaultCellStyle);
         }
 
+        [WinFormsTheory]
+        [MemberData(nameof(DefaultCellStyle_Set_TestData))]
+        public void DataGridViewColumn_DefaultCellStyle_SetWithDataGridView_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
+        {
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            control.Columns.Add(column);
+            column.DefaultCellStyle = value;
+
+            Assert.Equal(expected, column.DefaultCellStyle);
+            Assert.True(column.HasDefaultCellStyle);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            column.DefaultCellStyle = value;
+            Assert.Equal(expected, column.DefaultCellStyle);
+            Assert.True(column.HasDefaultCellStyle);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DefaultCellStyle_Set_TestData))]
+        public void DataGridViewColumn_DefaultCellStyle_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(DataGridViewCellStyle value, DataGridViewCellStyle expected)
+        {
+            var oldValue = new DataGridViewCellStyle
+            {
+                Alignment = DataGridViewContentAlignment.MiddleCenter
+            };
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate,
+                DefaultCellStyle = oldValue
+            };
+            control.Columns.Add(column);
+
+            column.DefaultCellStyle = value;
+            Assert.Equal(expected, column.DefaultCellStyle);
+            Assert.True(column.HasDefaultCellStyle);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            column.DefaultCellStyle = value;
+            Assert.Equal(expected, column.DefaultCellStyle);
+            Assert.True(column.HasDefaultCellStyle);
+            Assert.False(control.IsHandleCreated);
+        }
+
         [WinFormsFact]
         public void DataGridViewColumn_DefaultCellStyle_SetWithDataGridView_CallsColumnDefaultCellStyleChanged()
         {
-            using var dataGridView = new DataGridView();
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
             using var column = new DataGridViewColumn
             {
-                CellTemplate = new SubDataGridViewCell()
+                CellTemplate = cellTemplate
             };
-            dataGridView.Columns.Add(column);
+            control.Columns.Add(column);
 
             int callCount = 0;
             DataGridViewColumnEventHandler handler = (sender, e) =>
             {
-                Assert.Same(dataGridView, sender);
+                Assert.Same(control, sender);
                 Assert.Same(column, e.Column);
                 callCount++;
             };
-            dataGridView.ColumnDefaultCellStyleChanged += handler;
+            control.ColumnDefaultCellStyleChanged += handler;
 
             var style1 = new DataGridViewCellStyle
             {
@@ -819,11 +906,248 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(5, callCount);
 
             // Remove handler.
-            dataGridView.ColumnDefaultCellStyleChanged -= handler;
+            control.ColumnDefaultCellStyleChanged -= handler;
             column.DefaultCellStyle = style1;
             Assert.Equal(style1, column.DefaultCellStyle);
             Assert.True(column.HasDefaultCellStyle);
             Assert.Equal(5, callCount);
+        }
+
+        public static IEnumerable<object[]> DefaultHeaderCellType_Set_TestData()
+        {
+            yield return new object[] { null, typeof(DataGridViewColumnHeaderCell) };
+            yield return new object[] { typeof(DataGridViewRowHeaderCell), typeof(DataGridViewRowHeaderCell) };
+            yield return new object[] { typeof(DataGridViewColumnHeaderCell), typeof(DataGridViewColumnHeaderCell) };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DefaultHeaderCellType_Set_TestData))]
+        public void DataGridViewColumn_DefaultHeaderCellType_Set_GetReturnsExpected(Type value, Type expected)
+        {
+            using var column = new DataGridViewColumn
+            {
+                DefaultHeaderCellType = value
+            };
+            Assert.Equal(expected, column.DefaultHeaderCellType);
+
+            // Set same.
+            column.DefaultHeaderCellType = value;
+            Assert.Equal(expected, column.DefaultHeaderCellType);
+        }
+
+        [WinFormsTheory]
+        [InlineData(typeof(DataGridViewRowHeaderCell))]
+        [InlineData(typeof(DataGridViewColumnHeaderCell))]
+        [InlineData(typeof(DataGridViewHeaderCell))]
+        public void DataGridViewColumn_DefaultHeaderCellType_SetWithNonNullOldValue_GetReturnsExpected(Type value)
+        {
+            using var column = new SubDataGridViewColumn
+            {
+                DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell)
+            };
+            column.DefaultHeaderCellType = value;
+            Assert.Equal(value, column.DefaultHeaderCellType);
+
+            // Set same.
+            column.DefaultHeaderCellType = value;
+            Assert.Equal(value, column.DefaultHeaderCellType);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DefaultHeaderCellType_Set_TestData))]
+        public void DataGridViewColumn_DefaultHeaderCellType_SetWithDataGridView_GetReturnsExpected(Type value, Type expected)
+        {
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            control.Columns.Add(column);
+
+            column.DefaultHeaderCellType = value;
+            Assert.Equal(expected, column.DefaultHeaderCellType);
+
+            // Set same.
+            column.DefaultHeaderCellType = value;
+            Assert.Equal(expected, column.DefaultHeaderCellType);
+        }
+
+        [WinFormsTheory]
+        [InlineData(typeof(DataGridViewRowHeaderCell))]
+        [InlineData(typeof(DataGridViewColumnHeaderCell))]
+        [InlineData(typeof(DataGridViewHeaderCell))]
+        public void DataGridViewColumn_DefaultHeaderCellType_SetWithDataGridViewNonNullOldValue_GetReturnsExpected(Type value)
+        {
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            control.Columns.Add(column);
+            column.DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell);
+
+            column.DefaultHeaderCellType = value;
+            Assert.Equal(value, column.DefaultHeaderCellType);
+
+            // Set same.
+            column.DefaultHeaderCellType = value;
+            Assert.Equal(value, column.DefaultHeaderCellType);
+        }
+
+        [WinFormsTheory]
+        [InlineData(typeof(int))]
+        public void DataGridViewColumn_DefaultHeaderCellType_SetInvalidWithNullOldValue_GetReturnsExpected(Type value)
+        {
+            using var column = new DataGridViewRow();
+            Assert.Throws<ArgumentException>("value", () => column.DefaultHeaderCellType = value);
+        }
+
+        [WinFormsTheory]
+        [InlineData(null)]
+        [InlineData(typeof(int))]
+        public void DataGridViewColumn_DefaultHeaderCellType_SetInvalidWithNonNullOldValue_GetReturnsExpected(Type value)
+        {
+            using var column = new DataGridViewColumn
+            {
+                DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell)
+            };
+            Assert.Throws<ArgumentException>("value", () => column.DefaultHeaderCellType = value);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewColumn_Displayed_Get_ReturnsExpected()
+        {
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            control.Columns.Add(column);
+            Assert.False(column.Displayed);
+        }
+
+        public static IEnumerable<object[]> DividerWidth_Set_TestData()
+        {
+            yield return new object[] { 0 };
+            yield return new object[] { 1 };
+            yield return new object[] { 65536 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DividerWidth_Set_TestData))]
+        public void DataGridViewColumn_DividerWidth_Set_GetReturnsExpected(int value)
+        {
+            using var column = new DataGridViewColumn
+            {
+                DividerWidth = value
+            };
+            Assert.Equal(value, column.DividerWidth);
+
+            // Set same.
+            column.DividerWidth = value;
+            Assert.Equal(value, column.DividerWidth);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DividerWidth_Set_TestData))]
+        public void DataGridViewColumn_DividerWidth_SetWithDataGridView_GetReturnsExpected(int value)
+        {
+            using var control = new DataGridView
+            {
+                ColumnCount = 1,
+                RowCount = 1
+            };
+            DataGridViewColumn column = control.Columns[0];
+
+            column.DividerWidth = value;
+            Assert.Equal(value, column.DividerWidth);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            column.DividerWidth = value;
+            Assert.Equal(value, column.DividerWidth);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewColumn_DividerWidth_SetWithDataGridView_CallsColumnDividerWidthChanged()
+        {
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            control.Columns.Add(column);
+
+            int callCount = 0;
+            DataGridViewColumnEventHandler handler = (sender, e) =>
+            {
+                callCount++;
+                Assert.Same(control, sender);
+                Assert.Same(column, e.Column);
+            };
+            control.ColumnDividerWidthChanged += handler;
+
+            // Set non-zero.
+            column.DividerWidth = 4;
+            Assert.Equal(4, column.DividerWidth);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            column.DividerWidth = 4;
+            Assert.Equal(4, column.DividerWidth);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            column.DividerWidth = 3;
+            Assert.Equal(3, column.DividerWidth);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.ColumnDividerWidthChanged -= handler;
+            column.DividerWidth = 4;
+            Assert.Equal(4, column.DividerWidth);
+            Assert.Equal(2, callCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(65537)]
+        public void DataGridViewColumn_DividerWidth_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
+        {
+            using var column = new DataGridViewColumn();
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => column.DividerWidth = value);
+        }
+
+        [WinFormsTheory]
+        [InlineData(DataGridViewElementStates.None, false)]
+        [InlineData(DataGridViewElementStates.Frozen, true)]
+        [InlineData(DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly, true)]
+        [InlineData(DataGridViewElementStates.Frozen | DataGridViewElementStates.Selected, true)]
+        public void DataGridViewColumn_Frozen_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state, bool expected)
+        {
+            using var row = new CustomStateDataGridViewColumn
+            {
+                StateResult = state
+            };
+            Assert.Equal(expected, row.Frozen);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewColumn_Frozen_GetWithDataGridView_ReturnsExpected()
+        {
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            control.Columns.Add(column);
+            Assert.False(control.Columns[0].Frozen);
         }
 
         public static IEnumerable<object[]> Frozen_Set_TestData()
@@ -888,7 +1212,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Frozen_SetWithDataGridView_TestData))]
         public void DataGridViewColumn_Frozen_SetWithDataGridView_GetReturnsExpected(bool visible, DataGridViewAutoSizeColumnMode autoSizeMode, bool value, DataGridViewAutoSizeColumnMode expectedAutoSizeMode1, DataGridViewAutoSizeColumnMode expectedAutoSizeMode2)
         {
-            using var dataGridView = new DataGridView
+            using var control = new DataGridView
             {
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader
             };
@@ -898,7 +1222,7 @@ namespace System.Windows.Forms.Tests
                 AutoSizeMode = autoSizeMode,
                 CellTemplate = new SubDataGridViewCell()
             };
-            dataGridView.Columns.Add(column);
+            control.Columns.Add(column);
 
             column.Frozen = value;
             Assert.Equal(value, column.Frozen);
@@ -919,7 +1243,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewColumn_Frozen_SetWithPreviousColumns_SetsToFrozen(bool previousVisible)
         {
-            using var dataGridView = new DataGridView();
+            using var control = new DataGridView();
             using var column1 = new DataGridViewColumn
             {
                 CellTemplate = new SubDataGridViewCell()
@@ -937,10 +1261,10 @@ namespace System.Windows.Forms.Tests
             {
                 CellTemplate = new SubDataGridViewCell()
             };
-            dataGridView.Columns.Add(column1);
-            dataGridView.Columns.Add(column2);
-            dataGridView.Columns.Add(column3);
-            dataGridView.Columns.Add(column4);
+            control.Columns.Add(column1);
+            control.Columns.Add(column2);
+            control.Columns.Add(column3);
+            control.Columns.Add(column4);
 
             // Freeze middle.
             column3.Frozen = true;
@@ -981,42 +1305,44 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewColumn_Frozen_SetWithDataGridView_CallsColumnStateChanged()
         {
-            using var dataGridView = new DataGridView();
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
             using var column = new DataGridViewColumn
             {
-                CellTemplate = new SubDataGridViewCell()
+                CellTemplate = cellTemplate,
+                Frozen = true
             };
-            dataGridView.Columns.Add(column);
+            control.Columns.Add(column);
 
             int callCount = 0;
             DataGridViewColumnStateChangedEventHandler handler = (sender, e) =>
             {
                 callCount++;
-                Assert.Same(dataGridView, sender);
+                Assert.Same(control, sender);
                 Assert.Same(column, e.Column);
                 Assert.Equal(DataGridViewElementStates.Frozen, e.StateChanged);
             };
-            dataGridView.ColumnStateChanged += handler;
-
-            // Set true.
-            column.Frozen = true;
-            Assert.True(column.Frozen);
-            Assert.Equal(1, callCount);
-
-            // Set same.
-            column.Frozen = true;
-            Assert.True(column.Frozen);
-            Assert.Equal(1, callCount);
+            control.ColumnStateChanged += handler;
 
             // Set different.
             column.Frozen = false;
             Assert.False(column.Frozen);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            column.Frozen = false;
+            Assert.False(column.Frozen);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            column.Frozen = true;
+            Assert.True(column.Frozen);
             Assert.Equal(2, callCount);
 
             // Remove handler.
-            dataGridView.ColumnStateChanged -= handler;
-            column.Frozen = true;
-            Assert.True(column.Frozen);
+            control.ColumnStateChanged -= handler;
+            column.Frozen = false;
+            Assert.False(column.Frozen);
             Assert.Equal(2, callCount);
         }
 
@@ -1058,12 +1384,44 @@ namespace System.Windows.Forms.Tests
             {
                 AutoSizeColumnsMode = mode
             };
+            using var cellTemplate = new SubDataGridViewCell();
             using var column = new DataGridViewColumn
             {
-                CellTemplate = new SubDataGridViewCell()
+                CellTemplate = cellTemplate
             };
             control.Columns.Add(column);
             Assert.Equal(expected, column.InheritedAutoSizeMode);
+        }
+
+        [WinFormsTheory]
+        [InlineData(DataGridViewElementStates.None, false)]
+        [InlineData(DataGridViewElementStates.ReadOnly, true)]
+        [InlineData(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Visible, true)]
+        [InlineData(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected, true)]
+        public void DataGridViewColumn_ReadOnly_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state, bool expected)
+        {
+            using var column = new CustomStateDataGridViewColumn
+            {
+                StateResult = state
+            };
+            Assert.Equal(expected, column.ReadOnly);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DataGridViewRow_ReadOnly_GetWithDataGridView_ReturnsExpected(bool dataGridViewReadOnly)
+        {
+            using var control = new DataGridView
+            {
+                ReadOnly = dataGridViewReadOnly
+            };
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            control.Columns.Add(column);
+            Assert.Equal(dataGridViewReadOnly, column.ReadOnly);
         }
 
         [WinFormsTheory]
@@ -1075,14 +1433,17 @@ namespace System.Windows.Forms.Tests
                 ReadOnly = value
             };
             Assert.Equal(value, column.ReadOnly);
+            Assert.Equal(value, (column.State & DataGridViewElementStates.ReadOnly) != 0);
 
             // Set same.
             column.ReadOnly = value;
             Assert.Equal(value, column.ReadOnly);
+            Assert.Equal(value, (column.State & DataGridViewElementStates.ReadOnly) != 0);
 
             // Set different.
             column.ReadOnly = !value;
             Assert.Equal(!value, column.ReadOnly);
+            Assert.Equal(!value, (column.State & DataGridViewElementStates.ReadOnly) != 0);
         }
 
         [WinFormsTheory]
@@ -1090,50 +1451,52 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false)]
         [InlineData(false, true)]
         [InlineData(false, false)]
-        public void DataGridViewColumn_ReadOnly_SetWithDataGridView_GetReturnsExpected(bool dataGridViewReadOnly, bool value)
+        public void DataGridViewColumn_ReadOnly_SetWithDataGridView_GetReturnsExpected(bool controlReadOnly, bool value)
         {
-            using var dataGridView = new DataGridView();
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
             using var column = new DataGridViewColumn
             {
-                CellTemplate = new SubDataGridViewCell()
+                CellTemplate = cellTemplate
             };
-            dataGridView.Columns.Add(column);
-            dataGridView.ReadOnly = dataGridViewReadOnly;
+            control.Columns.Add(column);
+            control.ReadOnly = controlReadOnly;
 
             column.ReadOnly = value;
-            Assert.Equal(dataGridViewReadOnly || value, column.ReadOnly);
+            Assert.Equal(controlReadOnly || value, column.ReadOnly);
 
             // Set same.
             column.ReadOnly = value;
-            Assert.Equal(dataGridViewReadOnly || value, column.ReadOnly);
+            Assert.Equal(controlReadOnly || value, column.ReadOnly);
 
             // Set different.
             column.ReadOnly = !value;
-            Assert.Equal(dataGridViewReadOnly || !value, column.ReadOnly);
+            Assert.Equal(controlReadOnly || !value, column.ReadOnly);
 
-            dataGridView.ReadOnly = false;
-            Assert.Equal(!dataGridViewReadOnly && !value, column.ReadOnly);
+            control.ReadOnly = false;
+            Assert.Equal(!controlReadOnly && !value, column.ReadOnly);
         }
 
         [WinFormsFact]
         public void DataGridViewColumn_ReadOnly_SetWithDataGridView_CallsColumnStateChanged()
         {
-            using var dataGridView = new DataGridView();
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
             using var column = new DataGridViewColumn
             {
-                CellTemplate = new SubDataGridViewCell()
+                CellTemplate = cellTemplate
             };
-            dataGridView.Columns.Add(column);
+            control.Columns.Add(column);
 
             int callCount = 0;
             DataGridViewColumnStateChangedEventHandler handler = (sender, e) =>
             {
                 callCount++;
-                Assert.Same(dataGridView, sender);
+                Assert.Same(control, sender);
                 Assert.Same(column, e.Column);
                 Assert.Equal(DataGridViewElementStates.ReadOnly, e.StateChanged);
             };
-            dataGridView.ColumnStateChanged += handler;
+            control.ColumnStateChanged += handler;
 
             // Set true.
             column.ReadOnly = true;
@@ -1151,9 +1514,236 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
 
             // Remove handler.
-            dataGridView.ColumnStateChanged -= handler;
+            control.ColumnStateChanged -= handler;
             column.ReadOnly = true;
             Assert.True(column.ReadOnly);
+            Assert.Equal(2, callCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(DataGridViewElementStates.None, false)]
+        [InlineData(DataGridViewElementStates.Visible, true)]
+        [InlineData(DataGridViewElementStates.Visible | DataGridViewElementStates.ReadOnly, true)]
+        [InlineData(DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, true)]
+        public void DataGridViewColumn_Visible_GetWithCustomState_ReturnsExpected(DataGridViewElementStates state, bool expected)
+        {
+            using var row = new CustomStateDataGridViewColumn
+            {
+                StateResult = state
+            };
+            Assert.Equal(expected, row.Visible);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DataGridViewColumn_Visible_GetWithDataGridView_ReturnsExpected(bool visible)
+        {
+            using var control = new DataGridView
+            {
+                Visible = visible
+            };
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            control.Columns.Add(column);
+            Assert.True(control.Columns[0].Visible);
+        }
+
+        public static IEnumerable<object[]> Visible_Set_TestData()
+        {
+            foreach (DataGridViewAutoSizeColumnMode autoSizeMode in Enum.GetValues(typeof(DataGridViewAutoSizeColumnMode)))
+            {
+                foreach (bool frozen in new bool[] { true, false })
+                {
+                    yield return new object[] { autoSizeMode, frozen, true };
+                    yield return new object[] { autoSizeMode, frozen, false };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Visible_Set_TestData))]
+        public void DataGridViewColumn_Visible_Set_GetReturnsExpected(DataGridViewAutoSizeColumnMode autoSizeMode, bool frozen, bool value)
+        {
+            using var column = new DataGridViewColumn
+            {
+                AutoSizeMode = autoSizeMode,
+                Frozen = frozen,
+                Visible = value
+            };
+            Assert.Equal(value, column.Visible);
+            Assert.Equal(autoSizeMode, column.AutoSizeMode);
+
+            // Set same.
+            column.Visible = value;
+            Assert.Equal(value, column.Visible);
+            Assert.Equal(autoSizeMode, column.AutoSizeMode);
+
+            // Set different.
+            column.Visible = !value;
+            Assert.Equal(!value, column.Visible);
+            Assert.Equal(autoSizeMode, column.AutoSizeMode);
+        }
+
+        public static IEnumerable<object[]> Visible_SetWithDataGridView_TestData()
+        {
+            foreach (bool visible in new bool[] { true, false })
+            {
+                foreach (bool columnHeadersVisible in new bool[] { true, false })
+                {
+                    foreach (DataGridViewAutoSizeColumnMode autoSizeMode in Enum.GetValues(typeof(DataGridViewAutoSizeColumnMode)))
+                    {
+                        if (!columnHeadersVisible && autoSizeMode == DataGridViewAutoSizeColumnMode.ColumnHeader)
+                        {
+                            continue;
+                        }
+
+                        yield return new object[] { visible, columnHeadersVisible, autoSizeMode, true, autoSizeMode, autoSizeMode };
+                        yield return new object[] { visible, columnHeadersVisible, autoSizeMode, false, autoSizeMode, autoSizeMode };
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Visible_SetWithDataGridView_TestData))]
+        public void DataGridViewColumn_Visible_SetWithDataGridView_GetReturnsExpected(bool visible, bool columnHeadersVisible, DataGridViewAutoSizeColumnMode autoSizeMode, bool value, DataGridViewAutoSizeColumnMode expectedAutoSizeMode1, DataGridViewAutoSizeColumnMode expectedAutoSizeMode2)
+        {
+            using var control = new DataGridView
+            {
+                Visible = visible,
+                ColumnHeadersVisible = columnHeadersVisible,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader
+            };
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                AutoSizeMode = autoSizeMode,
+                CellTemplate = cellTemplate
+            };
+            control.Columns.Add(column);
+
+            column.Visible = value;
+            Assert.Equal(value, column.Visible);
+            Assert.Equal(expectedAutoSizeMode1, column.AutoSizeMode);
+
+            // Set same.
+            column.Visible = value;
+            Assert.Equal(value, column.Visible);
+            Assert.Equal(expectedAutoSizeMode1, column.AutoSizeMode);
+
+            // Set different.
+            column.Visible = !value;
+            Assert.Equal(!value, column.Visible);
+            Assert.Equal(expectedAutoSizeMode2, column.AutoSizeMode);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DataGridViewColumn_Visible_SetWithPreviousColumns_SetsToVisible(bool previousVisible)
+        {
+            using var control = new DataGridView();
+            using var column1 = new DataGridViewColumn
+            {
+                CellTemplate = new SubDataGridViewCell()
+            };
+            using var column2 = new DataGridViewColumn
+            {
+                CellTemplate = new SubDataGridViewCell(),
+                Visible = previousVisible
+            };
+            using var column3 = new DataGridViewColumn
+            {
+                CellTemplate = new SubDataGridViewCell()
+            };
+            using var column4 = new DataGridViewColumn
+            {
+                CellTemplate = new SubDataGridViewCell()
+            };
+            control.Columns.Add(column1);
+            control.Columns.Add(column2);
+            control.Columns.Add(column3);
+            control.Columns.Add(column4);
+
+            // Freeze middle.
+            column3.Visible = true;
+            Assert.True(column1.Visible);
+            Assert.Equal(previousVisible, column2.Visible);
+            Assert.True(column3.Visible);
+            Assert.True(column4.Visible);
+
+            // Freeze again.
+            column3.Visible = true;
+            Assert.True(column1.Visible);
+            Assert.Equal(previousVisible, column2.Visible);
+            Assert.True(column3.Visible);
+            Assert.True(column4.Visible);
+
+            // Freeze later.
+            column4.Visible = true;
+            Assert.True(column1.Visible);
+            Assert.Equal(previousVisible, column2.Visible);
+            Assert.True(column3.Visible);
+            Assert.True(column4.Visible);
+
+            // Unfreeze middle.
+            column3.Visible = false;
+            Assert.True(column1.Visible);
+            Assert.Equal(previousVisible, column2.Visible);
+            Assert.False(column3.Visible);
+            Assert.True(column4.Visible);
+
+            // Unfreeze first.
+            column1.Visible = false;
+            Assert.False(column1.Visible);
+            Assert.Equal(previousVisible, column2.Visible);
+            Assert.False(column3.Visible);
+            Assert.True(column4.Visible);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewColumn_Visible_SetWithDataGridView_CallsColumnStateChanged()
+        {
+            using var control = new DataGridView();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate,
+                Visible = true
+            };
+            control.Columns.Add(column);
+
+            int callCount = 0;
+            DataGridViewColumnStateChangedEventHandler handler = (sender, e) =>
+            {
+                callCount++;
+                Assert.Same(control, sender);
+                Assert.Same(column, e.Column);
+                Assert.Equal(DataGridViewElementStates.Visible, e.StateChanged);
+            };
+            control.ColumnStateChanged += handler;
+
+            // Set different.
+            column.Visible = false;
+            Assert.False(column.Visible);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            column.Visible = false;
+            Assert.False(column.Visible);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            column.Visible = true;
+            Assert.True(column.Visible);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.ColumnStateChanged -= handler;
+            column.Visible = false;
+            Assert.False(column.Visible);
             Assert.Equal(2, callCount);
         }
 
@@ -1197,17 +1787,28 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("autoSizeColumnMode", () => column.GetPreferredWidth(autoSizeColumnMode, fixedHeight: false));
         }
 
-        public static IEnumerable<object[]> ToString_TestData()
+        [WinFormsFact]
+        public void DataGridViewColumn_ToString_Invoke_ReturnsExpected()
         {
-            yield return new object[] { new DataGridViewColumn(), "DataGridViewColumn { Name=, Index=-1 }" };
-            yield return new object[] { new DataGridViewColumn { Name = "name" }, "DataGridViewColumn { Name=name, Index=-1 }" };
+            using var column = new DataGridViewColumn();
+            Assert.Equal("DataGridViewColumn { Name=, Index=-1 }", column.ToString());
         }
 
-        [WinFormsTheory]
-        [MemberData(nameof(ToString_TestData))]
-        public void DataGridViewColumn_ToString_Invoke_ReturnsExpected(DataGridViewColumn column, string expected)
+        [WinFormsFact]
+        public void DataGridViewColumn_ToString_InvokeWithName_ReturnsExpected()
         {
-            Assert.Equal(expected, column.ToString());
+            using var column = new DataGridViewColumn
+            {
+                Name = "name"
+            };
+            Assert.Equal("DataGridViewColumn { Name=name, Index=-1 }", column.ToString());
+        }
+
+        private class CustomStateDataGridViewColumn : DataGridViewColumn
+        {
+            public DataGridViewElementStates StateResult { get; set; }
+
+            public override DataGridViewElementStates State => StateResult;
         }
 
         private class SubDataGridViewCell : DataGridViewCell
