@@ -1701,14 +1701,11 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "Should only call native methods if handle is created");
 
             // Clear the selection state.
-            //
             int cnt = Items.Count;
             for (int i = 0; i < cnt; i++)
             {
                 SelectedItems.SetSelected(i, false);
             }
-
-            int[] result = null;
 
             switch (selectionMode)
             {
@@ -1716,7 +1713,7 @@ namespace System.Windows.Forms
                     int index = unchecked((int)(long)SendMessageW(this, (WM)LB.GETCURSEL));
                     if (index >= 0)
                     {
-                        result = new int[] { index };
+                        SelectedItems.SetSelected(index, true);
                     }
 
                     break;
@@ -1726,23 +1723,19 @@ namespace System.Windows.Forms
                     int count = unchecked((int)(long)SendMessageW(this, (WM)LB.GETSELCOUNT));
                     if (count > 0)
                     {
-                        result = new int[count];
+                        var result = new int[count];
                         fixed (int* pResult = result)
                         {
                             SendMessageW(this, (WM)LB.GETSELITEMS, (IntPtr)count, (IntPtr)pResult);
                         }
-                    }
-                    break;
-            }
 
-            // Now set the selected state on the appropriate items.
-            //
-            if (result != null)
-            {
-                foreach (int i in result)
-                {
-                    SelectedItems.SetSelected(i, true);
-                }
+                        foreach (int i in result)
+                        {
+                            SelectedItems.SetSelected(i, true);
+                        }
+                    }
+
+                    break;
             }
         }
 
