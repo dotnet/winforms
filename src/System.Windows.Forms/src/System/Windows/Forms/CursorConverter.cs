@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -19,7 +21,7 @@ namespace System.Windows.Forms
     /// </summary>
     public class CursorConverter : TypeConverter
     {
-        private StandardValuesCollection? values;
+        private StandardValuesCollection values;
 
         /// <summary>
         ///  Determines if this converter can convert an object in the given source
@@ -63,8 +65,8 @@ namespace System.Windows.Forms
                     PropertyInfo prop = props[i];
                     if (string.Equals(prop.Name, text, StringComparison.OrdinalIgnoreCase))
                     {
-                        object[]? tempIndex = null;
-                        return prop.GetValue(null, tempIndex)!;
+                        object[] tempIndex = null;
+                        return prop.GetValue(null, tempIndex);
                     }
                 }
             }
@@ -97,8 +99,8 @@ namespace System.Windows.Forms
                     for (int i = 0; i < props.Length; i++)
                     {
                         PropertyInfo prop = props[i];
-                        object[]? tempIndex = null;
-                        Cursor c = (Cursor)prop.GetValue(null, tempIndex)!;
+                        object[] tempIndex = null;
+                        Cursor c = (Cursor)prop.GetValue(null, tempIndex);
                         if (c == cursor)
                         {
                             if (ReferenceEquals(c, value))
@@ -171,7 +173,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < props.Length; i++)
                 {
                     PropertyInfo prop = props[i];
-                    object[]? tempIndex = null;
+                    object[] tempIndex = null;
                     Debug.Assert(prop.GetValue(null, tempIndex) != null, "Property " + prop.Name + " returned NULL");
                     list.Add(prop.GetValue(null, tempIndex));
                 }
