@@ -35,9 +35,6 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Null(service.GetHandler(typeof(object)));
         }
 
-        private class A { }
-        private class B : A { }
-
         [Fact]
         public void GetHandler_should_return_last_inserted_handler_of_type()
         {
@@ -181,5 +178,8 @@ namespace System.Windows.Forms.Design.Tests
 
             Assert.Equal(1, callCount);
         }
+
+        private class A { }
+        private class B : A { }
     }
 }

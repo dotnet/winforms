@@ -845,7 +845,7 @@ namespace System.Windows.Forms
         ///  MaskedTextBox and is false by default so RichTextBox that doesn't support Password doesn't
         ///  have to care about this.
         /// </summary>
-        virtual private protected bool PasswordProtect => false;
+        private protected virtual bool PasswordProtect => false;
 
         /// <summary>
         ///  Returns the preferred

@@ -91,10 +91,6 @@ namespace System.Windows.Forms.Design
                 _lastHandlerType = null;
                 OnEventHandlerChanged(EventArgs.Empty);
             }
-            else
-            {
-                Debug.Assert(_handlers.Count == 0, "Failed to locate handler to remove from list.");
-            }
         }
 
         /// <summary>

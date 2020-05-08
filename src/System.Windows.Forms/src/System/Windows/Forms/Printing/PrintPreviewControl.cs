@@ -805,7 +805,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the WM_KEYDOWN message.
         /// </summary>
-
         private void WmKeyDown(ref Message msg)
         {
             Keys keyData = (Keys)((int)msg.WParam | (int)ModifierKeys);

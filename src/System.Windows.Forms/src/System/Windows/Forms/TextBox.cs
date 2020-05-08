@@ -289,7 +289,6 @@ namespace System.Windows.Forms
                 }
 
                 // Translate for Rtl if necessary
-
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
 
                 // WS_EX_RIGHT overrides the ES_XXXX alignment styles
