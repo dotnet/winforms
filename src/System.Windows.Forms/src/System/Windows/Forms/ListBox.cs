@@ -1621,9 +1621,10 @@ namespace System.Windows.Forms
         internal string NativeGetItemText(int index)
         {
             int len = unchecked((int)(long)SendMessageW(this, (WM)LB.GETTEXTLEN, (IntPtr)index));
-            StringBuilder sb = new StringBuilder(len + 1);
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)LB.GETTEXT, index, sb);
-            return sb.ToString();
+            return string.Create(len + 1, this, (span, listBox) =>
+            {
+                SendMessageW(listBox, (WM)LB.GETTEXT, (IntPtr)index, ref span[0]);
+            });
         }
 
         /// <summary>

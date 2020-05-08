@@ -1097,7 +1097,7 @@ namespace System.Drawing.Design
                 }
             }
 
-            protected override IntPtr HookProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
+            protected unsafe override IntPtr HookProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
             {
                 switch ((WM)msg)
                 {
@@ -1127,14 +1127,16 @@ namespace System.Drawing.Design
                         switch (PARAM.LOWORD(wParam))
                         {
                             case (int)COLOR.ADD:
-                                byte red, green, blue;
-                                bool[] err = new bool[1];
-                                red = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, (int)COLOR.RED, err, false);
-                                Debug.Assert(!err[0], "Couldn't find dialog member COLOR_RED");
-                                green = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, (int)COLOR.GREEN, err, false);
-                                Debug.Assert(!err[0], "Couldn't find dialog member COLOR_GREEN");
-                                blue = (byte)UnsafeNativeMethods.GetDlgItemInt(hwnd, (int)COLOR.BLUE, err, false);
-                                Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
+                                BOOL err = BOOL.FALSE;
+                                byte red = (byte)User32.GetDlgItemInt(hwnd, (int)COLOR.RED, &err, BOOL.FALSE);
+                                Debug.Assert(err.IsFalse(), "Couldn't find dialog member COLOR_RED");
+
+                                byte green = (byte)User32.GetDlgItemInt(hwnd, (int)COLOR.GREEN, &err, BOOL.FALSE);
+                                Debug.Assert(err.IsFalse(), "Couldn't find dialog member COLOR_GREEN");
+
+                                byte blue = (byte)User32.GetDlgItemInt(hwnd, (int)COLOR.BLUE, &err, BOOL.FALSE);
+                                Debug.Assert(err.IsFalse(), "Couldn't find dialog member COLOR_BLUE");
+
                                 Color = Color.FromArgb(red, green, blue);
                                 PostMessageW(hwnd, WM.COMMAND, PARAM.FromLowHigh((int)ID.OK, 0), GetDlgItem(hwnd, (DialogItemID)ID.OK));
                                 break;

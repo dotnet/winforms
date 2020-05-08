@@ -2358,9 +2358,10 @@ namespace System.Windows.Forms
         private string NativeGetItemText(int index)
         {
             int len = unchecked((int)(long)SendMessageW(this, (WM)CB.GETLBTEXTLEN, (IntPtr)index));
-            StringBuilder sb = new StringBuilder(len + 1);
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (int)CB.GETLBTEXT, index, sb);
-            return sb.ToString();
+            return string.Create(len + 1, this, (span, comboBox) =>
+            {
+                SendMessageW(comboBox, (WM)CB.GETLBTEXT, (IntPtr)index, ref span[0]);
+            });
         }
 
         /// <summary>

@@ -343,8 +343,6 @@ namespace System.Windows.Forms
             }
         }
 
-        public delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
-
         [ComImport]
         [Guid("A7ABA9C1-8983-11cf-8F20-00805F2CD064")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
