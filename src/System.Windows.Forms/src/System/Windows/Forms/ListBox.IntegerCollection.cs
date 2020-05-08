@@ -19,7 +19,7 @@ namespace System.Windows.Forms
 
             public IntegerCollection(ListBox owner)
             {
-                this.owner = owner;
+                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
             /// <summary>
@@ -286,6 +286,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (index < 0 || index >= count)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    }
+
                     return innerArray[index];
                 }
                 set
@@ -320,6 +325,11 @@ namespace System.Windows.Forms
 
             public void CopyTo(Array destination, int index)
             {
+                if (destination == null)
+                {
+                    throw new ArgumentNullException(nameof(destination));
+                }
+
                 int cnt = Count;
                 for (int i = 0; i < cnt; i++)
                 {
