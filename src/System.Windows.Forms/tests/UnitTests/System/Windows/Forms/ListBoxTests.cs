@@ -5808,6 +5808,95 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ListBox_RefreshItems_InvokeEmpty_Success()
+        {
+            using var control = new SubListBox();
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListBox_RefreshItems_InvokeNotEmpty_Success()
+        {
+            using var control = new SubListBox();
+            control.Items.Add("item1");
+            control.Items.Add("item2");
+
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListBox_RefreshItems_InvokeEmptyWithHandle_Success()
+        {
+            using var control = new SubListBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Empty(control.Items);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ListBox_RefreshItems_InvokeNotEmptyWithHandle_Success()
+        {
+            using var control = new SubListBox();
+            control.Items.Add("item1");
+            control.Items.Add("item2");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.RefreshItems();
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void ListBox_ResetBackColor_Invoke_Success()
         {
             using var control = new ListBox();
@@ -5843,6 +5932,74 @@ namespace System.Windows.Forms.Tests
             // Reset again.
             control.ResetForeColor();
             Assert.Equal(SystemColors.WindowText, control.ForeColor);
+        }
+
+        public static IEnumerable<object[]> SetItemsCore_TestData()
+        {
+            yield return new object[] { new object[] { "item1", "item2", "item3" } };
+            yield return new object[] { new object[0] };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetItemsCore_TestData))]
+        public void ListBox_SetItemsCore_Invoke_Success(object[] value)
+        {
+            using var control = new SubListBox();
+            control.SetItemsCore(value);
+            Assert.Equal(value, control.Items.Cast<object>());
+            Assert.False(control.IsHandleCreated);
+
+            // Call again.
+            control.SetItemsCore(value);
+            Assert.Equal(value, control.Items.Cast<object>());
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(SetItemsCore_TestData))]
+        public void ListBox_SetItemsCore_InvokeWithHandle_Success(object[] value)
+        {
+            using var control = new SubListBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.SetItemsCore(value);
+            Assert.Equal(value, control.Items.Cast<object>());
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Call again.
+            control.SetItemsCore(value);
+            Assert.Equal(value, control.Items.Cast<object>());
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void ListBox_SetItemsCore_NullValueEmpty_ThrowsArgumentNullException()
+        {
+            using var control = new SubListBox();
+            Assert.Throws<ArgumentNullException>("value", () => control.SetItemsCore(null));
+            Assert.Empty(control.Items);
+        }
+
+        [WinFormsFact]
+        public void ListBox_SetItemsCore_NullValueNotEmpty_ThrowsArgumentNullException()
+        {
+            using var control = new SubListBox();
+            control.Items.Add("item1");
+            control.Items.Add("item2");
+            Assert.Throws<ArgumentNullException>("value", () => control.SetItemsCore(null));
+            Assert.Equal(new object[] { "item1", "item2" }, control.Items.Cast<object>());
         }
 
         [WinFormsFact]

@@ -32,6 +32,11 @@ namespace System.Windows.Forms
             /// </summary>
             public ObjectCollection(ListBox owner, ObjectCollection value) : this(owner)
             {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 AddRange(value);
             }
 
@@ -40,6 +45,11 @@ namespace System.Windows.Forms
             /// </summary>
             public ObjectCollection(ListBox owner, object[] value) : this(owner)
             {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 AddRange(value);
             }
 
@@ -194,22 +204,30 @@ namespace System.Windows.Forms
 
             public void AddRange(ObjectCollection value)
             {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 owner.CheckNoDataSource();
                 AddRangeInternal((ICollection)value);
             }
 
             public void AddRange(object[] items)
             {
+                if (items == null)
+                {
+                    throw new ArgumentNullException(nameof(items));
+                }
+
                 owner.CheckNoDataSource();
                 AddRangeInternal((ICollection)items);
             }
 
             internal void AddRangeInternal(ICollection items)
             {
-                if (items == null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                Debug.Assert(items != null);
+
                 owner.BeginUpdate();
                 try
                 {

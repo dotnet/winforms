@@ -61,11 +61,31 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxObjectCollection_Ctor_NullItems_ThrowsArgumentNullException()
+        public void ListBoxObjectCollection_Ctor_OwnerHasDataSource_ThrowsArgumentException()
+        {
+            using var owner = new ListBox
+            {
+                DataSource = new object[0]
+            };
+            using var otherOwner = new ListBox();
+            var otherCollection = new ListBox.ObjectCollection(otherOwner);
+
+            var emptyCollection = new ListBox.ObjectCollection(owner);
+            Assert.Empty(emptyCollection);
+            Assert.Equal(0, emptyCollection.Count);
+            Assert.Empty(emptyCollection);
+            Assert.Empty(owner.Items);
+            Assert.False(emptyCollection.IsReadOnly);
+            Assert.Throws<ArgumentException>(null, () => new ListBox.ObjectCollection(owner, new object[0]));
+            Assert.Throws<ArgumentException>(null, () => new ListBox.ObjectCollection(owner, otherCollection));
+        }
+
+        [WinFormsFact]
+        public void ListBoxObjectCollection_Ctor_NullValue_ThrowsArgumentNullException()
         {
             using var owner = new ListBox();
-            Assert.Throws<ArgumentNullException>("items", () => new ListBox.ObjectCollection(owner, (object[])null));
-            Assert.Throws<ArgumentNullException>("items", () => new ListBox.ObjectCollection(owner, (ListBox.ObjectCollection)null));
+            Assert.Throws<ArgumentNullException>("value", () => new ListBox.ObjectCollection(owner, (object[])null));
+            Assert.Throws<ArgumentNullException>("value", () => new ListBox.ObjectCollection(owner, (ListBox.ObjectCollection)null));
         }
 
         [WinFormsFact]
@@ -3506,7 +3526,7 @@ namespace System.Windows.Forms.Tests
             using var owner = new ListBox();
             var collection = new ListBox.ObjectCollection(owner);
             Assert.Throws<ArgumentNullException>("items", () => collection.AddRange((object[])null));
-            Assert.Throws<ArgumentNullException>("items", () => collection.AddRange((ListBox.ObjectCollection)null));
+            Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((ListBox.ObjectCollection)null));
         }
 
         [WinFormsFact]
