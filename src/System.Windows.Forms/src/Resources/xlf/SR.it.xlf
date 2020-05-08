@@ -10866,11 +10866,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Generato quando viene eseguito il download di un file.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">L'aggiunta di un controllo WebBrowser in Internet Explorer non è supportata.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
         <source>Determines whether the Web browser control operates in offline mode.</source>
         <target state="translated">Determina se il controllo del browser Web funziona in modalità offline.</target>

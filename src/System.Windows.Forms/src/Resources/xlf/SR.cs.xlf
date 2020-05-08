@@ -10866,11 +10866,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Vyvolá se při stahování souboru.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">Přidání ovládacího prvku WebBrowser v aplikaci Internet Explorer není podporováno.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
         <source>Determines whether the Web browser control operates in offline mode.</source>
         <target state="translated">Určuje, zda ovládací prvek WebBrowser funguje v režimu offline.</target>

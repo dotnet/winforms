@@ -47,10 +47,6 @@ namespace System.Windows.Forms
             private static Point s_logPixels = Point.Empty;
             private static Ole32.OLEVERB[] s_axVerbs;
 
-            private static int s_globalActiveXCount = 0;
-            private static bool s_checkedIE;
-            private static bool s_isIE;
-
             private readonly Control _control;
             private readonly IWindowTarget _controlWindowTarget;
             private IntPtr _clipRegion;
@@ -241,47 +237,6 @@ namespace System.Windows.Forms
             ///  when we are UI active
             /// </summary>
             internal IntPtr HWNDParent { get; private set; }
-
-            /// <summary>
-            ///  Returns true if this app domain is running inside of IE.  The
-            ///  control must be sited for this to succeed (it will assert and
-            ///  return false if the control is not sited).
-            /// </summary>
-            internal bool IsIE
-            {
-                get
-                {
-                    if (!s_checkedIE)
-                    {
-                        if (_clientSite == null)
-                        {
-                            Debug.Fail("Do not reference IsIE property unless control is sited.");
-                            return false;
-                        }
-
-                        // First, is this a managed EXE?  If so, it will correctly shut down
-                        // the runtime.
-                        if (Assembly.GetEntryAssembly() == null)
-                        {
-                            // Now check for IHTMLDocument2
-                            if (_clientSite.GetContainer(out Ole32.IOleContainer container).Succeeded() && container is Mshtml.IHTMLDocument)
-                            {
-                                s_isIE = true;
-                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:IsIE running under IE");
-                            }
-
-                            if (container != null && Marshal.IsComObject(container))
-                            {
-                                Marshal.ReleaseComObject(container);
-                            }
-                        }
-
-                        s_checkedIE = true;
-                    }
-
-                    return s_isIE;
-                }
-            }
 
             /// <summary>
             ///  Retrieves the number of logical pixels per inch on the
@@ -1944,28 +1899,6 @@ namespace System.Windows.Forms
             {
                 if (_clientSite != null)
                 {
-                    if (value == null)
-                    {
-                        s_globalActiveXCount--;
-
-                        if (s_globalActiveXCount == 0 && IsIE)
-                        {
-                            // This the last ActiveX control and we are
-                            // being hosted in IE.  Use private reflection
-                            // to ask SystemEvents to shutdown.  This is to
-                            // prevent a crash.
-
-                            MethodInfo method = typeof(SystemEvents).GetMethod("Shutdown",
-                                                                                BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
-                                                                                null, Array.Empty<Type>(), Array.Empty<ParameterModifier>());
-                            Debug.Assert(method != null, "No Shutdown method on SystemEvents");
-                            if (method != null)
-                            {
-                                method.Invoke(null, null);
-                            }
-                        }
-                    }
-
                     if (Marshal.IsComObject(_clientSite))
                     {
                         Marshal.FinalReleaseComObject(_clientSite);
@@ -1983,53 +1916,25 @@ namespace System.Windows.Forms
                     _control.Site = null;
                 }
 
-                // Get the ambient properties that effect us...
+                // Get the ambient properties that effect us.
                 object obj = new object();
                 if (GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
                 {
                     _activeXState[s_uiDead] = (bool)obj;
                 }
 
-                if (_control is IButtonControl && GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
+                if (_control is IButtonControl buttonControl && GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
                 {
-                    ((IButtonControl)_control).NotifyDefault((bool)obj);
+                    buttonControl.NotifyDefault((bool)obj);
                 }
 
-                if (_clientSite == null)
+                if (_clientSite == null && _accelTable != IntPtr.Zero)
                 {
-                    if (_accelTable != IntPtr.Zero)
-                    {
-                        User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
-                        _accelTable = IntPtr.Zero;
-                        _accelCount = -1;
-                    }
-
-                    if (IsIE)
-                    {
-                        _control.Dispose();
-                    }
+                    User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
+                    _accelTable = IntPtr.Zero;
+                    _accelCount = -1;
                 }
-                else
-                {
-                    s_globalActiveXCount++;
 
-                    if (s_globalActiveXCount == 1 && IsIE)
-                    {
-                        // This the first ActiveX control and we are
-                        // being hosted in IE.  Use private reflection
-                        // to ask SystemEvents to start.  Startup will only
-                        // restart system events if we previously shut it down.
-                        // This is to prevent a crash.
-                        MethodInfo method = typeof(SystemEvents).GetMethod("Startup",
-                                                                            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
-                                                                            null, Array.Empty<Type>(), Array.Empty<ParameterModifier>());
-                        Debug.Assert(method != null, "No Startup method on SystemEvents");
-                        if (method != null)
-                        {
-                            method.Invoke(null, null);
-                        }
-                    }
-                }
                 _control.OnTopMostActiveXParentChanged(EventArgs.Empty);
             }
 

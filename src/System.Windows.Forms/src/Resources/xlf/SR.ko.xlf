@@ -10866,11 +10866,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">파일을 다운로드할 때 발생합니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">Internet Explorer에서는 WebBrowser 컨트롤을 추가할 수 없습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
         <source>Determines whether the Web browser control operates in offline mode.</source>
         <target state="translated">웹 브라우저 컨트롤이 오프라인 모드에서 작동하는지 여부를 결정합니다.</target>

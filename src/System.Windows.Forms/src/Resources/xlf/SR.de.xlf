@@ -10866,11 +10866,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Tritt ein, wenn ein Dateidownload stattfindet.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">Das Hinzufügen eines WebBrowser-Steuerelements wird nicht unterstützt.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
         <source>Determines whether the Web browser control operates in offline mode.</source>
         <target state="translated">Bestimmt, ob das Webbrowser-Steuerelement im Offlinemodus arbeitet.</target>

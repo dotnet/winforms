@@ -10866,11 +10866,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Dosya indirme oluştuğunda gerçekleşir.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">Internet Explorer'a WebBrowser denetimi eklenmesi desteklenmiyor.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
         <source>Determines whether the Web browser control operates in offline mode.</source>
         <target state="translated">Web tarayıcısı denetiminin çevrimdışı modda çalışıp çalışmadığını belirler.</target>

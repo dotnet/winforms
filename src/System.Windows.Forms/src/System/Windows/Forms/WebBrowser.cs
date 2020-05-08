@@ -28,8 +28,6 @@ namespace System.Windows.Forms
     [Designer("System.Windows.Forms.Design.WebBrowserDesigner, " + AssemblyRef.SystemDesign)]
     public class WebBrowser : WebBrowserBase
     {
-        private static bool createdInIE;
-
         // Reference to the native ActiveX control's IWebBrowser2
         // Do not reference this directly. Use the AxIWebBrowser2
         // property instead.
@@ -61,8 +59,6 @@ namespace System.Windows.Forms
         /// </summary>
         public WebBrowser() : base("8856f961-340a-11d0-a96b-00c04fd705a2")
         {
-            CheckIfCreatedInIE();
-
             webBrowserState = new Collections.Specialized.BitVector32(WEBBROWSERSTATE_isWebBrowserContextMenuEnabled |
                     WEBBROWSERSTATE_webBrowserShortcutsEnabled | WEBBROWSERSTATE_scrollbarsEnabled);
             AllowNavigation = true;
@@ -1154,24 +1150,6 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override void OnTopMostActiveXParentChanged(EventArgs e)
-        {
-            if (TopMostParent.IsIEParent)
-            {
-                WebBrowser.createdInIE = true;
-                CheckIfCreatedInIE();
-            }
-            else
-            {
-                WebBrowser.createdInIE = false;
-                base.OnTopMostActiveXParentChanged(e);
-            }
-        }
-
-        //
-        // protected virtuals:
-        //
-
         /// <summary>
         ///  Raises the <see cref='CanGoBackChanged'/> event.
         /// </summary>
@@ -1286,26 +1264,6 @@ namespace System.Windows.Forms
             }
         }
         #endregion
-
-        //
-        // Private methods:
-        //
-        private void CheckIfCreatedInIE()
-        {
-            if (WebBrowser.createdInIE)
-            {
-                if (ParentInternal != null)
-                {
-                    ParentInternal.Controls.Remove(this);
-                    Dispose();
-                }
-                else
-                {
-                    Dispose();
-                    throw new NotSupportedException(SR.WebBrowserInIENotSupported);
-                }
-            }
-        }
 
         private string ReadyNavigateToUrl(string urlString)
         {
