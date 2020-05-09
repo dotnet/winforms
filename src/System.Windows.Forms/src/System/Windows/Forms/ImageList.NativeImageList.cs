@@ -19,19 +19,13 @@ namespace System.Windows.Forms
 
             internal NativeImageList(IntPtr himl)
             {
-                this._himl = himl;
+                _himl = himl;
 #if DEBUG
                 _callStack = Environment.StackTrace;
 #endif
             }
 
-            public IntPtr Handle
-            {
-                get
-                {
-                    return _himl;
-                }
-            }
+            public IntPtr Handle => _himl;
 
             public void Dispose()
             {
@@ -48,10 +42,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            ~NativeImageList()
-            {
-                Dispose(false);
-            }
+            ~NativeImageList() => Dispose(false);
         }
     }
 }

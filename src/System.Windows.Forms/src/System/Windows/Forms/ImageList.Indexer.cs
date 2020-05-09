@@ -8,9 +8,11 @@ namespace System.Windows.Forms
 {
     public sealed partial class ImageList
     {
-        // This class is for classes that want to support both an ImageIndex
-        // and ImageKey.  We want to toggle between using keys or indexes.
-        // Default is to use the integer index.
+        /// <summary>
+        ///  This class is for classes that want to support both an ImageIndex
+        ///  and ImageKey. We want to toggle between using keys or indexes.
+        ///  Default is to use the integer index.
+        /// </summary>
         internal class Indexer
         {
             private string _key = string.Empty;
@@ -21,7 +23,7 @@ namespace System.Windows.Forms
 
             public virtual string Key
             {
-                get { return _key; }
+                get => _key;
                 set
                 {
                     _index = -1;
@@ -32,7 +34,7 @@ namespace System.Windows.Forms
 
             public virtual int Index
             {
-                get { return _index; }
+                get => _index;
                 set
                 {
                     _key = string.Empty;

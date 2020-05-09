@@ -11,7 +11,9 @@ namespace System.Windows.Forms
 {
     public sealed partial class ImageList
     {
-        // An image before we add it to the image list, along with a few details about how to add it.
+        /// <summary>
+        ///  An image before we add it to the image list, along with a few details about how to add it.
+        /// </summary>
         private class Original
         {
             internal object _image;
@@ -20,15 +22,13 @@ namespace System.Windows.Forms
 
             internal int _nImages = 1;
 
-            internal Original(object image, OriginalOptions options)
-            : this(image, options, Color.Transparent)
+            internal Original(object image, OriginalOptions options) : this(image, options, Color.Transparent)
             {
             }
 
-            internal Original(object image, OriginalOptions options, int nImages)
-            : this(image, options, Color.Transparent)
+            internal Original(object image, OriginalOptions options, int nImages) : this(image, options, Color.Transparent)
             {
-                this._nImages = nImages;
+                _nImages = nImages;
             }
 
             internal Original(object image, OriginalOptions options, Color customTransparentColor)
@@ -37,13 +37,13 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.ImageListEntryType);
                 }
-                this._image = image;
-                this._options = options;
-                this._customTransparentColor = customTransparentColor;
+
+                _image = image;
+                _options = options;
+                _customTransparentColor = customTransparentColor;
                 if ((options & OriginalOptions.CustomTransparentColor) == 0)
                 {
-                    Debug.Assert(customTransparentColor.Equals(Color.Transparent),
-                                 "Specified a custom transparent color then told us to ignore it");
+                    Debug.Assert(customTransparentColor.Equals(Color.Transparent), "Specified a custom transparent color then told us to ignore it");
                 }
             }
         }

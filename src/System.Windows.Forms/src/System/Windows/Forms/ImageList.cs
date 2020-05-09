@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  The ImageList is an object that stores a collection of Images, most
     ///  commonly used by other controls, such as the ListView, TreeView, or
-    ///  Toolbar.  You can add either bitmaps or Icons to the ImageList, and the
+    ///  Toolbar. You can add either bitmaps or Icons to the ImageList, and the
     ///  other controls will be able to use the Images as they desire.
     /// </summary>
     [Designer("System.Windows.Forms.Design.ImageListDesigner, " + AssemblyRef.SystemDesign)]
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
     public sealed partial class ImageList : Component, IHandle
     {
         private static readonly Color s_fakeTransparencyColor = Color.FromArgb(0x0d, 0x0b, 0x0c);
-        private static Size s_defaultImageSize = new Size(16, 16);
+        private static readonly Size s_defaultImageSize = new Size(16, 16);
 
         private const int InitialCapacity = 4;
         private const int GrowBy = 4;
@@ -43,27 +43,27 @@ namespace System.Windows.Forms
 
         private NativeImageList _nativeImageList;
 
-        private ColorDepth _colorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+        private ColorDepth _colorDepth = ColorDepth.Depth8Bit;
         private Size _imageSize = s_defaultImageSize;
 
         private ImageCollection _imageCollection;
 
         // The usual handle virtualization problem, with a new twist: image
-        // lists are lossy.  At runtime, we delay handle creation as long as possible, and store
-        // away the original images until handle creation (and hope no one disposes of the images!).  At design time, we keep the originals around indefinitely.
+        // lists are lossy. At runtime, we delay handle creation as long as possible, and store
+        // away the original images until handle creation (and hope no one disposes of the images!). At design time, we keep the originals around indefinitely.
         // This variable will become null when the original images are lost.
-        private IList /* of Original */ _originals = new ArrayList();
-        private EventHandler _recreateHandler = null;
-        private EventHandler _changeHandler = null;
+        private IList _originals = new ArrayList();
+        private EventHandler _recreateHandler;
+        private EventHandler _changeHandler;
 
-        private bool _inAddRange = false;
+        private bool _inAddRange;
 
         /// <summary>
         ///  Creates a new ImageList Control with a default image size of 16x16
         ///  pixels
         /// </summary>
         public ImageList()
-        { // DO NOT DELETE -- AUTOMATION BP 1
+        {
             if (!s_isScalingInitialized)
             {
                 if (DpiHelper.IsScalingRequired)
@@ -96,10 +96,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ImageListColorDepthDescr))]
         public ColorDepth ColorDepth
         {
-            get
-            {
-                return _colorDepth;
-            }
+            get => _colorDepth;
             set
             {
                 // ColorDepth is not conitguous - list the members instead.
@@ -114,25 +111,22 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ColorDepth));
                 }
 
-                if (_colorDepth != value)
+                if (_colorDepth == value)
                 {
-                    _colorDepth = value;
-                    PerformRecreateHandle(nameof(ColorDepth));
+                    return;
                 }
+
+                _colorDepth = value;
+                PerformRecreateHandle(nameof(ColorDepth));
             }
         }
 
-        private bool ShouldSerializeColorDepth()
-        {
-            return (Images.Count == 0);
-        }
-        private void ResetColorDepth()
-        {
-            ColorDepth = ColorDepth.Depth8Bit;
-        }
+        private bool ShouldSerializeColorDepth() => Images.Count == 0;
+
+        private void ResetColorDepth() => ColorDepth = ColorDepth.Depth8Bit;
 
         /// <summary>
-        ///  The handle of the ImageList object.  This corresponds to a win32
+        ///  The handle of the ImageList object. This corresponds to a win32
         ///  HIMAGELIST Handle.
         /// </summary>
         [Browsable(false)]
@@ -158,28 +152,14 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ImageListHandleCreatedDescr))]
-        public bool HandleCreated
-        {
-            get { return _nativeImageList != null; }
-        }
+        public bool HandleCreated => _nativeImageList != null;
 
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(null)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ImageListImagesDescr))]
         [MergableProperty(false)]
-        public ImageCollection Images
-        {
-            get
-            {
-                if (_imageCollection == null)
-                {
-                    _imageCollection = new ImageCollection(this);
-                }
-
-                return _imageCollection;
-            }
-        }
+        public ImageCollection Images => _imageCollection ??= new ImageCollection(this);
 
         /// <summary>
         ///  Returns the size of the images in the ImageList
@@ -189,10 +169,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ImageListSizeDescr))]
         public Size ImageSize
         {
-            get
-            {
-                return _imageSize;
-            }
+            get => _imageSize;
             set
             {
                 if (value.IsEmpty)
@@ -201,9 +178,8 @@ namespace System.Windows.Forms
                 }
 
                 // ImageList appears to consume an exponential amount of memory
-                // based on image size x bpp.  Restrict this to a reasonable maximum
+                // based on image size x bpp. Restrict this to a reasonable maximum
                 // to keep people's systems from crashing.
-                //
                 if (value.Width <= 0 || value.Width > s_maxImageWidth)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, "ImageSize.Width", value.Width, 1, s_maxImageWidth));
@@ -222,10 +198,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShouldSerializeImageSize()
-        {
-            return (Images.Count == 0);
-        }
+        private bool ShouldSerializeImageSize() => Images.Count == 0;
 
         /// <summary>
         ///  Returns an ImageListStreamer, or null if the image list is empty.
@@ -308,11 +281,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ImageListTransparentColorDescr))]
         public Color TransparentColor { get; set; } = Color.Transparent;
 
-        // Whether to use the transparent color, or rely on alpha instead
-        private bool UseTransparentColor
-        {
-            get { return TransparentColor.A > 0; }
-        }
+        private bool UseTransparentColor => TransparentColor.A > 0;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -328,9 +297,6 @@ namespace System.Windows.Forms
             add => _changeHandler += value;
             remove => _changeHandler -= value;
         }
-
-        //Creates a bitmap from the original image source..
-        //
 
         private Bitmap CreateBitmap(Original original, out bool ownsBitmap)
         {
@@ -397,6 +363,7 @@ namespace System.Windows.Forms
 
                 ownsBitmap = true;
             }
+
             return bitmap;
         }
 
@@ -452,7 +419,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Creates the underlying HIMAGELIST handle, and sets up all the
-        ///  appropriate values with it.  Inheriting classes overriding this method
+        ///  appropriate values with it. Inheriting classes overriding this method
         ///  should not forget to call base.createHandle();
         /// </summary>
         private void CreateHandle()
@@ -559,8 +526,10 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 DestroyHandle();
             }
+
             base.Dispose(disposing);
         }
 
@@ -568,23 +537,17 @@ namespace System.Windows.Forms
         ///  Draw the image indicated by the given index on the given Graphics
         ///  at the given location.
         /// </summary>
-        public void Draw(Graphics g, Point pt, int index)
-        {
-            Draw(g, pt.X, pt.Y, index);
-        }
+        public void Draw(Graphics g, Point pt, int index) => Draw(g, pt.X, pt.Y, index);
 
         /// <summary>
         ///  Draw the image indicated by the given index on the given Graphics
         ///  at the given location.
         /// </summary>
-        public void Draw(Graphics g, int x, int y, int index)
-        {
-            Draw(g, x, y, _imageSize.Width, _imageSize.Height, index);
-        }
+        public void Draw(Graphics g, int x, int y, int index) => Draw(g, x, y, _imageSize.Width, _imageSize.Height, index);
 
         /// <summary>
         ///  Draw the image indicated by the given index using the location, size
-        ///  and raster op code specified.  The image is stretched or compressed as
+        ///  and raster op code specified. The image is stretched or compressed as
         ///  necessary to fit the bounds provided.
         /// </summary>
         public void Draw(Graphics g, int x, int y, int width, int height, int index)
@@ -673,7 +636,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns the image specified by the given index.  The bitmap returned is a
+        ///  Returns the image specified by the given index. The bitmap returned is a
         ///  copy of the original image.
         /// </summary>
         // NOTE: forces handle creation, so doesn't return things from the original list
@@ -726,6 +689,7 @@ namespace System.Windows.Forms
                             {
                                 tmpBitmap.UnlockBits(bmpData);
                             }
+
                             tmpBitmap.Dispose();
                         }
                         if (result != null && targetData != null)
@@ -737,7 +701,8 @@ namespace System.Windows.Forms
             }
 
             if (result == null)
-            { // paint with the mask but no alpha...
+            {
+                // Paint with the mask but no alpha.
                 result = new Bitmap(_imageSize.Width, _imageSize.Height);
 
                 Graphics graphics = Graphics.FromImage(result);
@@ -769,42 +734,21 @@ namespace System.Windows.Forms
                 }
             }
 
-            // gpr: See Icon for description of fakeTransparencyColor
+            // See Icon for description of fakeTransparencyColor
             if (result.RawFormat.Guid != ImageFormat.Icon.Guid)
             {
                 result.MakeTransparent(s_fakeTransparencyColor);
             }
+
             return result;
         }
-
-#if DEBUG_ONLY_APIS
-        public Bitmap DebugOnly_GetMasterImage() {
-            if (Images.Empty)
-                return null;
-
-            return Image.FromHBITMAP(GetImageInfo(0).hbmImage);
-        }
-
-        public Bitmap DebugOnly_GetMasterMask() {
-            if (Images.Empty)
-                return null;
-
-            return Image.FromHBITMAP(GetImageInfo(0).hbmMask);
-        }
-#endif // DEBUG_ONLY_APIS
 
         /// <summary>
         ///  Called when the Handle property changes.
         /// </summary>
-        private void OnRecreateHandle(EventArgs eventargs)
-        {
-            _recreateHandler?.Invoke(this, eventargs);
-        }
+        private void OnRecreateHandle(EventArgs eventargs) => _recreateHandler?.Invoke(this, eventargs);
 
-        private void OnChangeHandle(EventArgs eventargs)
-        {
-            _changeHandler?.Invoke(this, eventargs);
-        }
+        private void OnChangeHandle(EventArgs eventargs) => _changeHandler?.Invoke(this, eventargs);
 
         // PerformRecreateHandle doesn't quite do what you would suspect.
         // Any existing images in the imagelist will NOT be copied to the
@@ -836,7 +780,8 @@ namespace System.Windows.Forms
 
             if (_originals == null || Images.Empty)
             {
-                _originals = new ArrayList(); // spoof it into thinking this is the first CreateHandle
+                // spoof it into thinking this is the first CreateHandle
+                _originals = new ArrayList();
             }
 
             DestroyHandle();
@@ -844,20 +789,11 @@ namespace System.Windows.Forms
             OnRecreateHandle(EventArgs.Empty);
         }
 
-        private void ResetImageSize()
-        {
-            ImageSize = s_defaultImageSize;
-        }
+        private void ResetImageSize() => ImageSize = s_defaultImageSize;
 
-        private void ResetTransparentColor()
-        {
-            TransparentColor = Color.LightGray;
-        }
+        private void ResetTransparentColor() => TransparentColor = Color.LightGray;
 
-        private bool ShouldSerializeTransparentColor()
-        {
-            return !TransparentColor.Equals(Color.LightGray);
-        }
+        private bool ShouldSerializeTransparentColor() => !TransparentColor.Equals(Color.LightGray);
 
         /// <summary>
         ///  Returns a string representation for this control.
@@ -869,10 +805,8 @@ namespace System.Windows.Forms
             {
                 return s + " Images.Count: " + Images.Count.ToString(CultureInfo.CurrentCulture) + ", ImageSize: " + ImageSize.ToString();
             }
-            else
-            {
-                return s;
-            }
+
+            return s;
         }
     }
 }

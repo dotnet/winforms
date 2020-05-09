@@ -31,7 +31,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  Returns the keys in the image list - images without keys return String.Empty.
-                    /// </summary>
+            /// </summary>
             public StringCollection Keys
             {
                 get
@@ -60,10 +60,7 @@ namespace System.Windows.Forms
 
             internal void ResetKeys()
             {
-                if (_imageInfoCollection != null)
-                {
-                    _imageInfoCollection.Clear();
-                }
+                _imageInfoCollection?.Clear();
 
                 for (int i = 0; i < Count; i++)
                 {
@@ -104,48 +101,18 @@ namespace System.Windows.Forms
                 }
             }
 
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            object ICollection.SyncRoot => this;
 
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool ICollection.IsSynchronized => false;
 
-            bool IList.IsFixedSize
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool IList.IsFixedSize => false;
 
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            public bool IsReadOnly => false;
 
             /// <summary>
             ///  Determines if the ImageList has any images, without forcing a handle creation.
             /// </summary>
-            public bool Empty
-            {
-                get
-                {
-                    return Count == 0;
-                }
-            }
+            public bool Empty => Count == 0;
 
             [Browsable(false)]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -172,14 +139,12 @@ namespace System.Windows.Forms
                         throw new ArgumentNullException(nameof(value));
                     }
 
-                    if (!(value is Bitmap))
+                    if (!(value is Bitmap bitmap))
                     {
                         throw new ArgumentException(SR.ImageListBitmap);
                     }
 
                     AssertInvariant();
-                    Bitmap bitmap = (Bitmap)value;
-
                     bool ownsImage = false;
                     if (_owner.UseTransparentColor && bitmap.RawFormat.Guid != ImageFormat.Icon.Guid)
                     {
@@ -223,20 +188,15 @@ namespace System.Windows.Forms
 
             object IList.this[int index]
             {
-                get
-                {
-                    return this[index];
-                }
+                get => this[index];
                 set
                 {
-                    if (value is Image)
+                    if (!(value is Image image))
                     {
-                        this[index] = (Image)value;
+                        throw new ArgumentException(SR.ImageListBadImage, nameof(value));
                     }
-                    else
-                    {
-                        throw new ArgumentException(SR.ImageListBadImage, "value");
-                    }
+
+                    this[index] = (Image)value;
                 }
             }
 
@@ -248,21 +208,19 @@ namespace System.Windows.Forms
                 get
                 {
                     // We do not support null and empty string as valid keys.
-                    if ((key == null) || (key.Length == 0))
+                    if (string.IsNullOrEmpty(key))
                     {
                         return null;
                     }
 
                     // Search for the key in our collection
                     int index = IndexOfKey(key);
-                    if (IsValidIndex(index))
-                    {
-                        return this[index];
-                    }
-                    else
+                    if (!IsValidIndex(index))
                     {
                         return null;
                     }
+
+                    return this[index];
                 }
             }
 
@@ -274,13 +232,13 @@ namespace System.Windows.Forms
                 Debug.Assert((Count == _imageInfoCollection.Count), "The count of these two collections should be equal.");
 
                 // Store off the name.
-                ImageInfo imageInfo = new ImageInfo
+                var imageInfo = new ImageInfo
                 {
                     Name = key
                 };
 
                 // Add the image to the IList
-                Original original = new Original(image, OriginalOptions.Default);
+                var original = new Original(image, OriginalOptions.Default);
                 Add(original, imageInfo);
             }
 
@@ -292,27 +250,25 @@ namespace System.Windows.Forms
                 Debug.Assert((Count == _imageInfoCollection.Count), "The count of these two collections should be equal.");
 
                 // Store off the name.
-                ImageInfo imageInfo = new ImageInfo
+                var imageInfo = new ImageInfo
                 {
                     Name = key
                 };
 
                 // Add the image to the IList
-                Original original = new Original(icon, OriginalOptions.Default);
+                var original = new Original(icon, OriginalOptions.Default);
                 Add(original, imageInfo);
             }
 
             int IList.Add(object value)
             {
-                if (value is Image)
+                if (!(value is Image image))
                 {
-                    Add((Image)value);
-                    return Count - 1;
+                    throw new ArgumentException(SR.ImageListBadImage, nameof(value));
                 }
-                else
-                {
-                    throw new ArgumentException(SR.ImageListBadImage, "value");
-                }
+
+                Add((Image)value);
+                return Count - 1;
             }
 
             public void Add(Icon value)
@@ -321,8 +277,9 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
-                Add(new Original(value.Clone(), OriginalOptions.OwnsImage), null); // WHY WHY WHY do we clone here...
-                // changing it now is a breaking change, so we have to keep track of this specific icon and dispose that
+
+                // Don't clone it now is a breaking change, so we have to keep track of this specific icon and dispose that
+                Add(new Original(value.Clone(), OriginalOptions.OwnsImage), null);
             }
 
             /// <summary>
@@ -334,7 +291,8 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
-                Original original = new Original(value, OriginalOptions.Default);
+
+                var original = new Original(value, OriginalOptions.Default);
                 Add(original, null);
             }
 
@@ -349,8 +307,8 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
-                Original original = new Original(value, OriginalOptions.CustomTransparentColor,
-                                                 transparentColor);
+
+                var original = new Original(value, OriginalOptions.CustomTransparentColor, transparentColor);
                 return Add(original, null);
             }
 
@@ -411,11 +369,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (imageInfo == null)
-                    {
-                        imageInfo = new ImageInfo();
-                    }
-
+                    imageInfo ??= new ImageInfo();
                     _imageInfoCollection.Add(imageInfo);
                 }
 
@@ -433,17 +387,19 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(images));
                 }
+
                 _owner._inAddRange = true;
                 foreach (Image image in images)
                 {
                     Add(image);
                 }
+
                 _owner._inAddRange = false;
                 _owner.OnChangeHandle(EventArgs.Empty);
             }
 
             /// <summary>
-            ///  Add an image strip the given image to the ImageList.  A strip is a single Image
+            ///  Add an image strip the given image to the ImageList. A strip is a single Image
             ///  which is treated as multiple images arranged side-by-side.
             /// </summary>
             public int AddStrip(Image value)
@@ -454,20 +410,19 @@ namespace System.Windows.Forms
                 }
 
                 // strip width must be a positive multiple of image list width
-                //
                 if (value.Width == 0 || (value.Width % _owner.ImageSize.Width) != 0)
                 {
-                    throw new ArgumentException(SR.ImageListStripBadWidth, "value");
+                    throw new ArgumentException(SR.ImageListStripBadWidth, nameof(value));
                 }
 
                 if (value.Height != _owner.ImageSize.Height)
                 {
-                    throw new ArgumentException(SR.ImageListImageTooShort, "value");
+                    throw new ArgumentException(SR.ImageListImageTooShort, nameof(value));
                 }
 
                 int nImages = value.Width / _owner.ImageSize.Width;
 
-                Original original = new Original(value, OriginalOptions.ImageStrip, nImages);
+                var original = new Original(value, OriginalOptions.ImageStrip, nImages);
 
                 return Add(original, null);
             }
@@ -494,47 +449,34 @@ namespace System.Windows.Forms
             }
 
             [EditorBrowsable(EditorBrowsableState.Never)]
-            public bool Contains(Image image)
-            {
-                throw new NotSupportedException();
-            }
+            public bool Contains(Image image) => throw new NotSupportedException();
 
-            bool IList.Contains(object image)
+            bool IList.Contains(object value)
             {
-                if (image is Image)
-                {
-                    return Contains((Image)image);
-                }
-                else
+                if (!(value is Image image))
                 {
                     return false;
                 }
+
+                return Contains(image);
             }
 
             /// <summary>
             ///  Returns true if the collection contains an item with the specified key, false otherwise.
             /// </summary>
-            public bool ContainsKey(string key)
-            {
-                return IsValidIndex(IndexOfKey(key));
-            }
+            public bool ContainsKey(string key) => IsValidIndex(IndexOfKey(key));
 
             [EditorBrowsable(EditorBrowsableState.Never)]
-            public int IndexOf(Image image)
-            {
-                throw new NotSupportedException();
-            }
+            public int IndexOf(Image image) => throw new NotSupportedException();
 
-            int IList.IndexOf(object image)
+            int IList.IndexOf(object value)
             {
-                if (image is Image)
-                {
-                    return IndexOf((Image)image);
-                }
-                else
+                if (!(value is Image image))
                 {
                     return -1;
                 }
+
+                return IndexOf(image);
             }
 
             /// <summary>
@@ -543,50 +485,44 @@ namespace System.Windows.Forms
             /// </summary>
             public int IndexOfKey(string key)
             {
-                // Step 0 - Arg validation
-                if ((key == null) || (key.Length == 0))
+                if (string.IsNullOrEmpty(key))
                 {
-                    return -1; // we dont support empty or null keys.
+                    // We dont support empty or null keys.
+                    return -1;
                 }
 
-                // step 1 - check the last cached item
+                // Check the last cached item
                 if (IsValidIndex(_lastAccessedIndex))
                 {
                     if ((_imageInfoCollection[_lastAccessedIndex] != null) &&
-                        (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)_imageInfoCollection[_lastAccessedIndex]).Name, key, /* ignoreCase = */ true)))
+                        (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)_imageInfoCollection[_lastAccessedIndex]).Name, key, ignoreCase: true)))
                     {
                         return _lastAccessedIndex;
                     }
                 }
 
-                // step 2 - search for the item
+                // Search for the item
                 for (int i = 0; i < Count; i++)
                 {
                     if ((_imageInfoCollection[i] != null) &&
-                            (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)_imageInfoCollection[i]).Name, key, /* ignoreCase = */ true)))
+                            (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)_imageInfoCollection[i]).Name, key, ignoreCase: true)))
                     {
                         _lastAccessedIndex = i;
                         return i;
                     }
                 }
 
-                // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
+                // We didn't find it. Invalidate the last accessed index and return -1.
                 _lastAccessedIndex = -1;
                 return -1;
             }
 
-            void IList.Insert(int index, object value)
-            {
-                throw new NotSupportedException();
-            }
+            void IList.Insert(int index, object value) => throw new NotSupportedException();
 
             /// <summary>
             ///  Determines if the index is valid for the collection.
             /// </summary>
-            private bool IsValidIndex(int index)
-            {
-                return ((index >= 0) && (index < Count));
-            }
+            private bool IsValidIndex(int index) => index >= 0 && index < Count;
 
             void ICollection.CopyTo(Array dest, int index)
             {
@@ -612,16 +548,13 @@ namespace System.Windows.Forms
             }
 
             [EditorBrowsable(EditorBrowsableState.Never)]
-            public void Remove(Image image)
-            {
-                throw new NotSupportedException();
-            }
+            public void Remove(Image image) => throw new NotSupportedException();
 
-            void IList.Remove(object image)
+            void IList.Remove(object value)
             {
-                if (image is Image)
+                if (value is Image image)
                 {
-                    Remove((Image)image);
+                    Remove(image);
                     _owner.OnChangeHandle(EventArgs.Empty);
                 }
             }
@@ -639,13 +572,11 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.ImageListRemoveFailed);
                 }
-                else
+
+                if ((_imageInfoCollection != null) && (index >= 0 && index < _imageInfoCollection.Count))
                 {
-                    if ((_imageInfoCollection != null) && (index >= 0 && index < _imageInfoCollection.Count))
-                    {
-                        _imageInfoCollection.RemoveAt(index);
-                        _owner.OnChangeHandle(EventArgs.Empty);
-                    }
+                    _imageInfoCollection.RemoveAt(index);
+                    _owner.OnChangeHandle(EventArgs.Empty);
                 }
             }
 
@@ -668,7 +599,7 @@ namespace System.Windows.Forms
             {
                 if (!IsValidIndex(index))
                 {
-                    throw new IndexOutOfRangeException(); //
+                    throw new IndexOutOfRangeException();
                 }
 
                 if (_imageInfoCollection[index] == null)
@@ -681,17 +612,8 @@ namespace System.Windows.Forms
 
             internal class ImageInfo
             {
-                private string name;
-                public ImageInfo()
-                {
-                }
-
-                public string Name
-                {
-                    get { return name; }
-                    set { name = value; }
-                }
+                public string Name { get; set; }
             }
-        } // end class ImageCollection
+        }
     }
 }

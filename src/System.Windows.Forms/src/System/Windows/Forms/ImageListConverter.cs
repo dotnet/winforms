@@ -15,13 +15,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets a value indicating
-        ///  whether this object supports properties using the
+        ///  Gets a value indicating whether this object supports properties using the
         ///  specified context.
         /// </summary>
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
+        public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
     }
 }
