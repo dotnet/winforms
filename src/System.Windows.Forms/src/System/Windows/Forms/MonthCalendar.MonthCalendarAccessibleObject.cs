@@ -719,7 +719,9 @@ namespace System.Windows.Forms
 
                 UiaCore.IRawElementProviderSimple[] headers =
                     new UiaCore.IRawElementProviderSimple[MonthCalendarAccessibleObject.MAX_DAYS];
-                AccessibleObject headerRowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, this, -1);
+
+                AccessibleObject bodyAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody, this, -1);
+                AccessibleObject headerRowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, bodyAccessibleObject, -1);
 
                 if (headerRowAccessibleObject == null)
                 {
