@@ -1054,7 +1054,7 @@ namespace System.ComponentModel.Design
                         {
                             return false;
                         }
-                        throw ce;
+                        throw;
                     }
                 }
                 return true;

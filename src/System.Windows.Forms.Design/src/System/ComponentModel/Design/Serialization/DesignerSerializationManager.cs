@@ -263,7 +263,7 @@ namespace System.ComponentModel.Design.Serialization
                         // First, just try to create the object directly with the arguments.  generaly this should work.
                         instance = TypeDescriptor.CreateInstance(provider, type, null, argArray);
                     }
-                    catch (MissingMethodException mmex)
+                    catch (MissingMethodException)
                     {
                         // okay, the create failed because the argArray didn't match the types of ctors that are available.  don't panic, we're tough.  we'll try to coerce the types to match the ctor.
                         Type[] types = new Type[argArray.Length];
@@ -321,7 +321,7 @@ namespace System.ComponentModel.Design.Serialization
                         // we still failed...rethrow the original exception.
                         if (instance == null)
                         {
-                            throw mmex;
+                            throw;
                         }
                     }
                 }

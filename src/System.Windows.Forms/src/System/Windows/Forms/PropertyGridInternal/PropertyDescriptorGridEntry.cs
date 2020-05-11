@@ -737,7 +737,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return oldValue;
                         }
-                        throw coEx;
+                        throw;
                     }
                 }
 

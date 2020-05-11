@@ -647,7 +647,7 @@ namespace System.Windows.Forms
                                 {
                                     return HRESULT.S_OK;
                                 }
-                                throw coEx;
+                                throw;
                             }
 
                             // Now notify the change service that the change was successful.
@@ -659,7 +659,7 @@ namespace System.Windows.Forms
                 catch (Exception t)
                 {
                     Debug.Fail(t.ToString());
-                    throw t;
+                    throw;
                 }
                 finally
                 {

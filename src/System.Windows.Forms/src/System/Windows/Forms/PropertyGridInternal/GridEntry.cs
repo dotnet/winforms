@@ -2510,7 +2510,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return false;
                     }
-                    throw coEx;
+                    throw;
                 }
             }
             return true;

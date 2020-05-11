@@ -1740,31 +1740,24 @@ namespace System.Windows.Forms.Design
                         Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
                         // Get an Lresult for the accessibility Object for this control
                         IntPtr punkAcc;
-                        try
+                        IAccessible iacc = (IAccessible)AccessibilityObject;
+                        if (iacc == null)
                         {
-                            IAccessible iacc = (IAccessible)AccessibilityObject;
-                            if (iacc == null)
-                            {
-                                // Accessibility is not supported on this control
-                                m.Result = (IntPtr)0;
-                            }
-                            else
-                            {
-                                // Obtain the Lresult
-                                punkAcc = Marshal.GetIUnknownForObject(iacc);
-                                try
-                                {
-                                    m.Result = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParam, punkAcc);
-                                }
-                                finally
-                                {
-                                    Marshal.Release(punkAcc);
-                                }
-                            }
+                            // Accessibility is not supported on this control
+                            m.Result = (IntPtr)0;
                         }
-                        catch (Exception e)
+                        else
                         {
-                            throw e;
+                            // Obtain the Lresult
+                            punkAcc = Marshal.GetIUnknownForObject(iacc);
+                            try
+                            {
+                                m.Result = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParam, punkAcc);
+                            }
+                            finally
+                            {
+                                Marshal.Release(punkAcc);
+                            }
                         }
                     }
                     else

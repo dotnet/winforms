@@ -3630,7 +3630,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
-                                        throw coEx;
+                                        throw;
                                     }
 
                                     try

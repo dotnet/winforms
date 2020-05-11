@@ -375,7 +375,7 @@ namespace System.Windows.Forms
                             {
                                 return;
                             }
-                            throw coEx;
+                            throw;
                         }
 
                         // Now notify the change service that the change was successful.

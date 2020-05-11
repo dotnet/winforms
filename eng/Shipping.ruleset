@@ -239,7 +239,7 @@
     <Rule Id="CA2007" Action="None" />             <!-- Consider calling ConfigureAwait on the awaited task -->
     <Rule Id="CA2010" Action="None" />             <!-- Always consume the value returned by methods marked with PreserveSigAttribute -->
     <Rule Id="CA2101" Action="None" />             <!-- Specify marshaling for P/Invoke string arguments -->
-    <Rule Id="CA2200" Action="None" />             <!-- Rethrow to preserve stack details. -->
+    <Rule Id="CA2200" Action="Warning" />          <!-- Rethrow to preserve stack details. -->
     <Rule Id="CA2208" Action="None" />             <!-- Instantiate argument exceptions correctly -->
     <Rule Id="CA2211" Action="None" />             <!-- Non-constant fields should not be visible -->
     <Rule Id="CA2213" Action="None" />             <!-- Disposable fields should be disposed -->

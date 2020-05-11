@@ -206,7 +206,7 @@ namespace System.Windows.Forms.Design
                             {
                                 return false;
                             }
-                            throw coEx;
+                            throw;
                         }
                         catch
                         {
@@ -501,7 +501,7 @@ namespace System.Windows.Forms.Design
                         return false;
                     }
 
-                    throw chkex;
+                    throw;
                 }
             }
             return true;

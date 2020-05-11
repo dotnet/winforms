@@ -383,11 +383,11 @@ Namespace Microsoft.VisualBasic
                     sPrompt = DirectCast(Conversions.ChangeType(Prompt, GetType(String)), String)
                 End If
             Catch ex As StackOverflowException
-                Throw ex
+                Throw
             Catch ex As OutOfMemoryException
-                Throw ex
+                Throw
             Catch ex As ThreadAbortException
-                Throw ex
+                Throw
             Catch
                 Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
             End Try
@@ -403,11 +403,11 @@ Namespace Microsoft.VisualBasic
                     sTitle = CStr(Title) 'allows the title to be an expression, e.g. msgbox(prompt, Title:=1+5)
                 End If
             Catch ex As StackOverflowException
-                Throw ex
+                Throw
             Catch ex As OutOfMemoryException
-                Throw ex
+                Throw
             Catch ex As ThreadAbortException
-                Throw ex
+                Throw
             Catch
                 Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try

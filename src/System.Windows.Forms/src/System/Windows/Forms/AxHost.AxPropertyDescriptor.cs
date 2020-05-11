@@ -210,7 +210,7 @@ namespace System.Windows.Forms
                         owner.RefreshAllProperties = true;
                         SetFlag(FlagGettterThrew, true);
                     }
-                    throw e;
+                    throw;
                 }
                 finally
                 {
