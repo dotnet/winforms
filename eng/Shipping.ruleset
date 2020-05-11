@@ -212,7 +212,7 @@
     <Rule Id="CA1507" Action="None" />             <!-- Use nameof to express symbol names -->
     <Rule Id="CA1707" Action="None" />             <!-- Identifiers should not contain underscores -->
     <Rule Id="CA1710" Action="None" />             <!-- Identifiers should have correct suffix -->
-    <Rule Id="CA1712" Action="None" />             <!-- Do not prefix enum values with type name -->
+    <Rule Id="CA1712" Action="Warning" />          <!-- Do not prefix enum values with type name -->
     <Rule Id="CA1714" Action="None" />             <!-- Flags enums should have plural names -->
     <Rule Id="CA1715" Action="None" />             <!-- Identifiers should have correct prefix -->
     <Rule Id="CA1716" Action="None" />             <!-- Identifiers should not match keywords -->

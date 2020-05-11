@@ -179,7 +179,7 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        comStream.Commit(Ole32.STGC.STGC_DEFAULT);
+                        comStream.Commit(Ole32.STGC.DEFAULT);
                     }
                     catch (Exception)
                     {

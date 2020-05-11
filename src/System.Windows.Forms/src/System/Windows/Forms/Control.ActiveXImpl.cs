@@ -1041,7 +1041,7 @@ namespace System.Windows.Forms
                     stream = stg.OpenStream(
                         GetStreamName(),
                         IntPtr.Zero,
-                        STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
+                        STGM.READ | STGM.SHARE_EXCLUSIVE,
                         0);
                 }
                 catch (COMException e) when (e.ErrorCode == (int)HRESULT.STG_E_FILENOTFOUND)
@@ -1051,7 +1051,7 @@ namespace System.Windows.Forms
                     stream = stg.OpenStream(
                         GetType().FullName,
                         IntPtr.Zero,
-                        STGM.STGM_READ | STGM.STGM_SHARE_EXCLUSIVE,
+                        STGM.READ | STGM.SHARE_EXCLUSIVE,
                         0);
                 }
 
@@ -1761,7 +1761,7 @@ namespace System.Windows.Forms
             {
                 IStream stream = stg.CreateStream(
                     GetStreamName(),
-                    STGM.STGM_WRITE | STGM.STGM_SHARE_EXCLUSIVE | STGM.STGM_CREATE,
+                    STGM.WRITE | STGM.SHARE_EXCLUSIVE | STGM.CREATE,
                     0,
                     0);
                 Debug.Assert(stream != null, "Stream should be non-null, or an exception should have been thrown.");

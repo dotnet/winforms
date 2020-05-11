@@ -179,7 +179,7 @@ namespace System.Windows.Forms
                     {
                         storage = Ole32.StgCreateDocfileOnILockBytes(
                             iLockBytes,
-                            Ole32.STGM.STGM_CREATE | Ole32.STGM.STGM_READWRITE | Ole32.STGM.STGM_SHARE_EXCLUSIVE,
+                            Ole32.STGM.CREATE | Ole32.STGM.READWRITE | Ole32.STGM.SHARE_EXCLUSIVE,
                             0);
                     }
                     else
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
                         storage = Ole32.StgOpenStorageOnILockBytes(
                             iLockBytes,
                             null,
-                            Ole32.STGM.STGM_READWRITE | Ole32.STGM.STGM_SHARE_EXCLUSIVE,
+                            Ole32.STGM.READWRITE | Ole32.STGM.SHARE_EXCLUSIVE,
                             IntPtr.Zero,
                             0);
                     }
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
                 {
                     buffer = null;
                     ms = null;
-                    iLockBytes.Stat(out Ole32.STATSTG stat, Ole32.STATFLAG.STATFLAG_NONAME);
+                    iLockBytes.Stat(out Ole32.STATSTG stat, Ole32.STATFLAG.NONAME);
                     length = (int)stat.cbSize;
                     buffer = new byte[length];
                     IntPtr hglobal = Ole32.GetHGlobalFromILockBytes(iLockBytes);

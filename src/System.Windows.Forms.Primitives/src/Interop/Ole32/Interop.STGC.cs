@@ -11,11 +11,11 @@ internal static partial class Interop
         [Flags]
         public enum STGC : uint
         {
-            STGC_DEFAULT = 0x0,
-            STGC_OVERWRITE = 0x1,
-            STGC_ONLYIFCURRENT = 0x2,
-            STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE = 0x4,
-            STGC_CONSOLIDATE = 0x8
+            DEFAULT = 0x0,
+            OVERWRITE = 0x1,
+            ONLYIFCURRENT = 0x2,
+            DANGEROUSLYCOMMITMERELYTODISKCACHE = 0x4,
+            CONSOLIDATE = 0x8
         }
     }
 }
