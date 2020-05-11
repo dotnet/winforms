@@ -174,7 +174,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, table.UseSystemColors);
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "Deadlocks under x86, see: https://github.com/dotnet/winforms/issues/3254")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3254")]
         [InlineData(UserPreferenceCategory.Color)]
         [InlineData(UserPreferenceCategory.Accessibility)]
         [InlineData(UserPreferenceCategory.Desktop)]
