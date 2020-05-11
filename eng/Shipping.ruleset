@@ -183,7 +183,7 @@
   <Rules AnalyzerId="Microsoft.CodeAnalysis.FxCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FxCopAnalyzers">
     <Rule Id="CA1001" Action="None" />             <!-- Types that own disposable fields should be disposable -->
     <Rule Id="CA1010" Action="None" />             <!-- Collections should implement generic interface -->
-    <Rule Id="CA1018" Action="None" />             <!-- Mark attributes with AttributeUsageAttribute -->
+    <Rule Id="CA1018" Action="Warning" />          <!-- Mark attributes with AttributeUsageAttribute -->
     <Rule Id="CA1030" Action="None" />             <!-- Use events where appropriate -->
     <Rule Id="CA1031" Action="None" />             <!-- Do not catch general exception types -->
     <Rule Id="CA1032" Action="None" />             <!-- Implement standard exception constructors -->
