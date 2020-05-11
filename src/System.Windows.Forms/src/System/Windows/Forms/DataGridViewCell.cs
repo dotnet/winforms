@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1245,16 +1245,6 @@ namespace System.Windows.Forms
 
                 if (AccessibleRestructuringNeeded)
                 {
-                    if (dgv.EditingControl is DataGridViewTextBoxEditingControl)
-                    {
-                        dgv.TextBoxControlWasDetached = true;
-                    }
-
-                    if (dgv.EditingControl is DataGridViewComboBoxEditingControl)
-                    {
-                        dgv.ComboBoxControlWasDetached = true;
-                    }
-
                     dgv.EditingControlAccessibleObject.SetParent(null);
                     AccessibilityObject.SetDetachableChild(null);
 
@@ -2679,18 +2669,6 @@ namespace System.Windows.Forms
             }
             Debug.Assert(dgv.EditingControl.ParentInternal == dgv.EditingPanel);
             Debug.Assert(dgv.EditingPanel.ParentInternal == dgv);
-
-            if (AccessibleRestructuringNeeded &&
-                ((dgv.ComboBoxControlWasDetached && dgv.EditingControl is DataGridViewComboBoxEditingControl) ||
-                (dgv.TextBoxControlWasDetached && dgv.EditingControl is DataGridViewTextBoxEditingControl)))
-            {
-                // Recreate control handle is necessary for cases when the same control was detached and then
-                // reattached to clear accessible hierarchy cache and not announce previous editing cell.
-                dgv.EditingControl.RecreateHandleCore();
-
-                dgv.ComboBoxControlWasDetached = false;
-                dgv.TextBoxControlWasDetached = false;
-            }
         }
 
         protected virtual bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)
