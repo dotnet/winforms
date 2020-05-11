@@ -172,7 +172,7 @@ namespace System.Windows.Forms.Internal
             try
             {
                 err = Marshal.GetLastWin32Error();
-                uint retVal = Kernel32.FormatMessage(
+                uint retVal = Kernel32.FormatMessageW(
                     Kernel32.FormatMessageOptions.IGNORE_INSERTS | Kernel32.FormatMessageOptions.FROM_SYSTEM,
                     IntPtr.Zero,
                     (uint)err,
