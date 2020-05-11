@@ -21,13 +21,13 @@ namespace System.Windows.Forms
         [Editor("System.Windows.Forms.Design.ImageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         public sealed class ImageCollection : IList
         {
-            private readonly ImageList owner;
-            private readonly ArrayList imageInfoCollection = new ArrayList();
+            private readonly ImageList _owner;
+            private readonly ArrayList _imageInfoCollection = new ArrayList();
 
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
             ///  issues by holding on to extra references.
-            private int lastAccessedIndex = -1;
+            private int _lastAccessedIndex = -1;
 
             /// <summary>
             ///  Returns the keys in the image list - images without keys return String.Empty.
@@ -39,9 +39,9 @@ namespace System.Windows.Forms
                     // pass back a copy of the current state.
                     StringCollection keysCollection = new StringCollection();
 
-                    for (int i = 0; i < imageInfoCollection.Count; i++)
+                    for (int i = 0; i < _imageInfoCollection.Count; i++)
                     {
-                        if ((imageInfoCollection[i] is ImageInfo image) && (image.Name != null) && (image.Name.Length != 0))
+                        if ((_imageInfoCollection[i] is ImageInfo image) && (image.Name != null) && (image.Name.Length != 0))
                         {
                             keysCollection.Add(image.Name);
                         }
@@ -55,27 +55,27 @@ namespace System.Windows.Forms
             }
             internal ImageCollection(ImageList owner)
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             internal void ResetKeys()
             {
-                if (imageInfoCollection != null)
+                if (_imageInfoCollection != null)
                 {
-                    imageInfoCollection.Clear();
+                    _imageInfoCollection.Clear();
                 }
 
                 for (int i = 0; i < Count; i++)
                 {
-                    imageInfoCollection.Add(new ImageInfo());
+                    _imageInfoCollection.Add(new ImageInfo());
                 }
             }
 
             [Conditional("DEBUG")]
             private void AssertInvariant()
             {
-                Debug.Assert(owner != null, "ImageCollection has no owner (ImageList)");
-                Debug.Assert((owner.originals == null) == (owner.HandleCreated), " Either we should have the original images, or the handle should be created");
+                Debug.Assert(_owner != null, "ImageCollection has no owner (ImageList)");
+                Debug.Assert((_owner._originals == null) == (_owner.HandleCreated), " Either we should have the original images, or the handle should be created");
             }
 
             [Browsable(false)]
@@ -83,20 +83,20 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Debug.Assert(owner != null, "ImageCollection has no owner (ImageList)");
+                    Debug.Assert(_owner != null, "ImageCollection has no owner (ImageList)");
 
-                    if (owner.HandleCreated)
+                    if (_owner.HandleCreated)
                     {
-                        return ComCtl32.ImageList.GetImageCount(owner);
+                        return ComCtl32.ImageList.GetImageCount(_owner);
                     }
                     else
                     {
                         int count = 0;
-                        foreach (Original original in owner.originals)
+                        foreach (Original original in _owner._originals)
                         {
                             if (original != null)
                             {
-                                count += original.nImages;
+                                count += original._nImages;
                             }
                         }
                         return count;
@@ -158,7 +158,7 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    return owner.GetBitmap(index);
+                    return _owner.GetBitmap(index);
                 }
                 set
                 {
@@ -181,13 +181,13 @@ namespace System.Windows.Forms
                     Bitmap bitmap = (Bitmap)value;
 
                     bool ownsImage = false;
-                    if (owner.UseTransparentColor && bitmap.RawFormat.Guid != ImageFormat.Icon.Guid)
+                    if (_owner.UseTransparentColor && bitmap.RawFormat.Guid != ImageFormat.Icon.Guid)
                     {
                         // Since there's no ImageList_ReplaceMasked, we need to generate
                         // a transparent bitmap
                         Bitmap source = bitmap;
                         bitmap = (Bitmap)bitmap.Clone();
-                        bitmap.MakeTransparent(owner.transparentColor);
+                        bitmap.MakeTransparent(_owner.TransparentColor);
                         ownsImage = true;
                     }
 
@@ -198,7 +198,7 @@ namespace System.Windows.Forms
                         bool ok;
                         try
                         {
-                            ok = ComCtl32.ImageList.Replace(owner, index, hBitmap, hMask).IsTrue();
+                            ok = ComCtl32.ImageList.Replace(_owner, index, hBitmap, hMask).IsTrue();
                         }
                         finally
                         {
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Add(string key, Image image)
             {
-                Debug.Assert((Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
+                Debug.Assert((Count == _imageInfoCollection.Count), "The count of these two collections should be equal.");
 
                 // Store off the name.
                 ImageInfo imageInfo = new ImageInfo
@@ -289,7 +289,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Add(string key, Icon icon)
             {
-                Debug.Assert((Count == imageInfoCollection.Count), "The count of these two collections should be equal.");
+                Debug.Assert((Count == _imageInfoCollection.Count), "The count of these two collections should be equal.");
 
                 // Store off the name.
                 ImageInfo imageInfo = new ImageInfo
@@ -356,7 +356,7 @@ namespace System.Windows.Forms
 
             private int Add(Original original, ImageInfo imageInfo)
             {
-                if (original == null || original.image == null)
+                if (original == null || original._image == null)
                 {
                     throw new ArgumentNullException(nameof(original));
                 }
@@ -365,32 +365,32 @@ namespace System.Windows.Forms
 
                 AssertInvariant();
 
-                if (original.image is Bitmap)
+                if (original._image is Bitmap)
                 {
-                    if (owner.originals != null)
+                    if (_owner._originals != null)
                     {
-                        index = owner.originals.Add(original);
+                        index = _owner._originals.Add(original);
                     }
 
-                    if (owner.HandleCreated)
+                    if (_owner.HandleCreated)
                     {
-                        Bitmap bitmapValue = owner.CreateBitmap(original, out bool ownsBitmap);
-                        index = owner.AddToHandle(bitmapValue);
+                        Bitmap bitmapValue = _owner.CreateBitmap(original, out bool ownsBitmap);
+                        index = _owner.AddToHandle(bitmapValue);
                         if (ownsBitmap)
                         {
                             bitmapValue.Dispose();
                         }
                     }
                 }
-                else if (original.image is Icon)
+                else if (original._image is Icon)
                 {
-                    if (owner.originals != null)
+                    if (_owner._originals != null)
                     {
-                        index = owner.originals.Add(original);
+                        index = _owner._originals.Add(original);
                     }
-                    if (owner.HandleCreated)
+                    if (_owner.HandleCreated)
                     {
-                        index = owner.AddIconToHandle(original, (Icon)original.image);
+                        index = _owner.AddIconToHandle(original, (Icon)original._image);
                         // NOTE: if we own the icon (it's been created by us) this WILL dispose the icon to avoid a GDI leak
                         // **** original.image is NOT LONGER VALID AFTER THIS POINT ***
                     }
@@ -402,11 +402,11 @@ namespace System.Windows.Forms
 
                 // update the imageInfoCollection
                 // support AddStrip
-                if ((original.options & OriginalOptions.ImageStrip) != 0)
+                if ((original._options & OriginalOptions.ImageStrip) != 0)
                 {
-                    for (int i = 0; i < original.nImages; i++)
+                    for (int i = 0; i < original._nImages; i++)
                     {
-                        imageInfoCollection.Add(new ImageInfo());
+                        _imageInfoCollection.Add(new ImageInfo());
                     }
                 }
                 else
@@ -416,12 +416,12 @@ namespace System.Windows.Forms
                         imageInfo = new ImageInfo();
                     }
 
-                    imageInfoCollection.Add(imageInfo);
+                    _imageInfoCollection.Add(imageInfo);
                 }
 
-                if (!owner.inAddRange)
+                if (!_owner._inAddRange)
                 {
-                    owner.OnChangeHandle(EventArgs.Empty);
+                    _owner.OnChangeHandle(EventArgs.Empty);
                 }
 
                 return index;
@@ -433,13 +433,13 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(images));
                 }
-                owner.inAddRange = true;
+                _owner._inAddRange = true;
                 foreach (Image image in images)
                 {
                     Add(image);
                 }
-                owner.inAddRange = false;
-                owner.OnChangeHandle(EventArgs.Empty);
+                _owner._inAddRange = false;
+                _owner.OnChangeHandle(EventArgs.Empty);
             }
 
             /// <summary>
@@ -455,17 +455,17 @@ namespace System.Windows.Forms
 
                 // strip width must be a positive multiple of image list width
                 //
-                if (value.Width == 0 || (value.Width % owner.ImageSize.Width) != 0)
+                if (value.Width == 0 || (value.Width % _owner.ImageSize.Width) != 0)
                 {
                     throw new ArgumentException(SR.ImageListStripBadWidth, "value");
                 }
 
-                if (value.Height != owner.ImageSize.Height)
+                if (value.Height != _owner.ImageSize.Height)
                 {
                     throw new ArgumentException(SR.ImageListImageTooShort, "value");
                 }
 
-                int nImages = value.Width / owner.ImageSize.Width;
+                int nImages = value.Width / _owner.ImageSize.Width;
 
                 Original original = new Original(value, OriginalOptions.ImageStrip, nImages);
 
@@ -478,19 +478,19 @@ namespace System.Windows.Forms
             public void Clear()
             {
                 AssertInvariant();
-                if (owner.originals != null)
+                if (_owner._originals != null)
                 {
-                    owner.originals.Clear();
+                    _owner._originals.Clear();
                 }
 
-                imageInfoCollection.Clear();
+                _imageInfoCollection.Clear();
 
-                if (owner.HandleCreated)
+                if (_owner.HandleCreated)
                 {
-                    ComCtl32.ImageList.Remove(owner, -1);
+                    ComCtl32.ImageList.Remove(_owner, -1);
                 }
 
-                owner.OnChangeHandle(EventArgs.Empty);
+                _owner.OnChangeHandle(EventArgs.Empty);
             }
 
             [EditorBrowsable(EditorBrowsableState.Never)]
@@ -550,28 +550,28 @@ namespace System.Windows.Forms
                 }
 
                 // step 1 - check the last cached item
-                if (IsValidIndex(lastAccessedIndex))
+                if (IsValidIndex(_lastAccessedIndex))
                 {
-                    if ((imageInfoCollection[lastAccessedIndex] != null) &&
-                        (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)imageInfoCollection[lastAccessedIndex]).Name, key, /* ignoreCase = */ true)))
+                    if ((_imageInfoCollection[_lastAccessedIndex] != null) &&
+                        (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)_imageInfoCollection[_lastAccessedIndex]).Name, key, /* ignoreCase = */ true)))
                     {
-                        return lastAccessedIndex;
+                        return _lastAccessedIndex;
                     }
                 }
 
                 // step 2 - search for the item
                 for (int i = 0; i < Count; i++)
                 {
-                    if ((imageInfoCollection[i] != null) &&
-                            (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)imageInfoCollection[i]).Name, key, /* ignoreCase = */ true)))
+                    if ((_imageInfoCollection[i] != null) &&
+                            (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)_imageInfoCollection[i]).Name, key, /* ignoreCase = */ true)))
                     {
-                        lastAccessedIndex = i;
+                        _lastAccessedIndex = i;
                         return i;
                     }
                 }
 
                 // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-                lastAccessedIndex = -1;
+                _lastAccessedIndex = -1;
                 return -1;
             }
 
@@ -593,7 +593,7 @@ namespace System.Windows.Forms
                 AssertInvariant();
                 for (int i = 0; i < Count; ++i)
                 {
-                    dest.SetValue(owner.GetBitmap(i), index++);
+                    dest.SetValue(_owner.GetBitmap(i), index++);
                 }
             }
 
@@ -605,7 +605,7 @@ namespace System.Windows.Forms
                 Image[] images = new Image[Count];
                 for (int i = 0; i < images.Length; ++i)
                 {
-                    images[i] = owner.GetBitmap(i);
+                    images[i] = _owner.GetBitmap(i);
                 }
 
                 return images.GetEnumerator();
@@ -622,7 +622,7 @@ namespace System.Windows.Forms
                 if (image is Image)
                 {
                     Remove((Image)image);
-                    owner.OnChangeHandle(EventArgs.Empty);
+                    _owner.OnChangeHandle(EventArgs.Empty);
                 }
             }
 
@@ -634,17 +634,17 @@ namespace System.Windows.Forms
                 }
 
                 AssertInvariant();
-                bool ok = ComCtl32.ImageList.Remove(owner, index).IsTrue();
+                bool ok = ComCtl32.ImageList.Remove(_owner, index).IsTrue();
                 if (!ok)
                 {
                     throw new InvalidOperationException(SR.ImageListRemoveFailed);
                 }
                 else
                 {
-                    if ((imageInfoCollection != null) && (index >= 0 && index < imageInfoCollection.Count))
+                    if ((_imageInfoCollection != null) && (index >= 0 && index < _imageInfoCollection.Count))
                     {
-                        imageInfoCollection.RemoveAt(index);
-                        owner.OnChangeHandle(EventArgs.Empty);
+                        _imageInfoCollection.RemoveAt(index);
+                        _owner.OnChangeHandle(EventArgs.Empty);
                     }
                 }
             }
@@ -671,12 +671,12 @@ namespace System.Windows.Forms
                     throw new IndexOutOfRangeException(); //
                 }
 
-                if (imageInfoCollection[index] == null)
+                if (_imageInfoCollection[index] == null)
                 {
-                    imageInfoCollection[index] = new ImageInfo();
+                    _imageInfoCollection[index] = new ImageInfo();
                 }
 
-                ((ImageInfo)imageInfoCollection[index]).Name = name;
+                ((ImageInfo)_imageInfoCollection[index]).Name = name;
             }
 
             internal class ImageInfo

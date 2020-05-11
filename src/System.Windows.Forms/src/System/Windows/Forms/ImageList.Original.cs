@@ -14,11 +14,11 @@ namespace System.Windows.Forms
         // An image before we add it to the image list, along with a few details about how to add it.
         private class Original
         {
-            internal object image;
-            internal OriginalOptions options;
-            internal Color customTransparentColor = Color.Transparent;
+            internal object _image;
+            internal OriginalOptions _options;
+            internal Color _customTransparentColor = Color.Transparent;
 
-            internal int nImages = 1;
+            internal int _nImages = 1;
 
             internal Original(object image, OriginalOptions options)
             : this(image, options, Color.Transparent)
@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             internal Original(object image, OriginalOptions options, int nImages)
             : this(image, options, Color.Transparent)
             {
-                this.nImages = nImages;
+                this._nImages = nImages;
             }
 
             internal Original(object image, OriginalOptions options, Color customTransparentColor)
@@ -37,9 +37,9 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.ImageListEntryType);
                 }
-                this.image = image;
-                this.options = options;
-                this.customTransparentColor = customTransparentColor;
+                this._image = image;
+                this._options = options;
+                this._customTransparentColor = customTransparentColor;
                 if ((options & OriginalOptions.CustomTransparentColor) == 0)
                 {
                     Debug.Assert(customTransparentColor.Equals(Color.Transparent),

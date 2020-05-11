@@ -13,36 +13,31 @@ namespace System.Windows.Forms
         // Default is to use the integer index.
         internal class Indexer
         {
-            private string key = string.Empty;
-            private int index = -1;
-            private bool useIntegerIndex = true;
-            private ImageList imageList = null;
+            private string _key = string.Empty;
+            private int _index = -1;
+            private bool _useIntegerIndex = true;
 
-            public virtual ImageList ImageList
-            {
-                get { return imageList; }
-                set { imageList = value; }
-            }
+            public virtual ImageList ImageList { get; set; }
 
             public virtual string Key
             {
-                get { return key; }
+                get { return _key; }
                 set
                 {
-                    index = -1;
-                    key = (value ?? string.Empty);
-                    useIntegerIndex = false;
+                    _index = -1;
+                    _key = (value ?? string.Empty);
+                    _useIntegerIndex = false;
                 }
             }
 
             public virtual int Index
             {
-                get { return index; }
+                get { return _index; }
                 set
                 {
-                    key = string.Empty;
-                    index = value;
-                    useIntegerIndex = true;
+                    _key = string.Empty;
+                    _index = value;
+                    _useIntegerIndex = true;
                 }
             }
 
@@ -50,7 +45,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (useIntegerIndex)
+                    if (_useIntegerIndex)
                     {
                         return Index;
                     }

@@ -12,16 +12,16 @@ namespace System.Windows.Forms
     {
         internal class NativeImageList : IDisposable, IHandle
         {
-            private IntPtr himl;
+            private IntPtr _himl;
 #if DEBUG
-            private readonly string callStack;
+            private readonly string _callStack;
 #endif
 
             internal NativeImageList(IntPtr himl)
             {
-                this.himl = himl;
+                this._himl = himl;
 #if DEBUG
-                callStack = Environment.StackTrace;
+                _callStack = Environment.StackTrace;
 #endif
             }
 
@@ -29,7 +29,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return himl;
+                    return _himl;
                 }
             }
 
@@ -41,10 +41,10 @@ namespace System.Windows.Forms
 
             public void Dispose(bool disposing)
             {
-                if (himl != IntPtr.Zero)
+                if (_himl != IntPtr.Zero)
                 {
-                    ComCtl32.ImageList.Destroy(himl);
-                    himl = IntPtr.Zero;
+                    ComCtl32.ImageList.Destroy(_himl);
+                    _himl = IntPtr.Zero;
                 }
             }
 
