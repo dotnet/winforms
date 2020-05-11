@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
 
             Span<byte> output = stackalloc byte[16];
 
-            int currentCodePage = CodePagesEncodingProvider.Instance.GetEncoding(0).CodePage;
+            int currentCodePage = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).CodePage;
 
             // The non-lossy conversion of nbsp only works single byte Windows code pages (e.g. not Japanese).
             if (currentCodePage >= 1250 && currentCodePage <= 1258)

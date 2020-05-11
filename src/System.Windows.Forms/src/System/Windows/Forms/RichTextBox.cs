@@ -3093,7 +3093,7 @@ namespace System.Windows.Forms
             else
             {
                 // Encode using the default code page.
-                encodedBytes = CodePagesEncodingProvider.Instance.GetEncoding(0).GetBytes(str);
+                encodedBytes = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetBytes(str);
             }
 
             editStream = new MemoryStream(encodedBytes.Length);
@@ -3127,7 +3127,7 @@ namespace System.Windows.Forms
                     editStream.Read(bytes, (int)streamStart, SZ_RTF_TAG.Length);
 
                     // Encode using the default encoding.
-                    string str = CodePagesEncodingProvider.Instance.GetEncoding(0).GetString(bytes);
+                    string str = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetString(bytes);
                     if (!SZ_RTF_TAG.Equals(str))
                     {
                         throw new ArgumentException(SR.InvalidFileFormat);
@@ -3229,7 +3229,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // Convert from the current code page
-                    result = CodePagesEncodingProvider.Instance.GetEncoding(0).GetString(bytes, 0, bytes.Length);
+                    result = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetString(bytes, 0, bytes.Length);
                 }
 
 
