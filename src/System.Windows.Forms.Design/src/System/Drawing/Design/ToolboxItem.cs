@@ -21,9 +21,6 @@ namespace System.Drawing.Design
     {
         private static readonly TraceSwitch s_toolboxItemPersist = new TraceSwitch("ToolboxPersisting", "ToolboxItem: write data");
 
-        private static readonly object s_eventComponentsCreated = new object();
-        private static readonly object s_eventComponentsCreating = new object();
-
         private static bool s_isScalingInitialized = false;
         private const int ICON_DIMENSION = 16;
         private static int s_iconWidth = ICON_DIMENSION;

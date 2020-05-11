@@ -165,12 +165,10 @@ namespace System.Windows.Forms
         private static readonly object s_layoutEvent = new object();
         private static readonly object s_gotFocusEvent = new object();
         private static readonly object s_lostFocusEvent = new object();
-        private static readonly object s_enabledChangedEvent = new object();
         private static readonly object s_enterEvent = new object();
         private static readonly object s_leaveEvent = new object();
         private static readonly object s_handleCreatedEvent = new object();
         private static readonly object s_handleDestroyedEvent = new object();
-        private static readonly object s_visibleChangedEvent = new object();
         private static readonly object s_controlAddedEvent = new object();
         private static readonly object s_controlRemovedEvent = new object();
         private static readonly object s_changeUICuesEvent = new object();
@@ -270,12 +268,10 @@ namespace System.Windows.Forms
         private static readonly int s_accessibleNameProperty = PropertyStore.CreateKey();
         private static readonly int s_accessibleRoleProperty = PropertyStore.CreateKey();
 
-        private static readonly int s_paintingExceptionProperty = PropertyStore.CreateKey();
         private static readonly int s_activeXImplProperty = PropertyStore.CreateKey();
         private static readonly int s_controlVersionInfoProperty = PropertyStore.CreateKey();
         private static readonly int s_backgroundImageLayoutProperty = PropertyStore.CreateKey();
 
-        private static readonly int s_accessibleHelpProviderProperty = PropertyStore.CreateKey();
         private static readonly int s_contextMenuStripProperty = PropertyStore.CreateKey();
         private static readonly int s_autoScrollOffsetProperty = PropertyStore.CreateKey();
         private static readonly int s_useCompatibleTextRenderingProperty = PropertyStore.CreateKey();

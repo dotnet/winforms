@@ -108,7 +108,6 @@ namespace System.Windows.Forms
         private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
         private static readonly int s_accessibleNameProperty = PropertyStore.CreateKey();
         private static readonly int s_accessibleRoleProperty = PropertyStore.CreateKey();
-        private static readonly int s_accessibleHelpProviderProperty = PropertyStore.CreateKey();
 
         private static readonly int s_accessibleDefaultActionDescriptionProperty = PropertyStore.CreateKey();
         private static readonly int s_accessibleDescriptionProperty = PropertyStore.CreateKey();

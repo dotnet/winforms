@@ -21,7 +21,6 @@ namespace System.ComponentModel.Design.Serialization
         private IDictionary _nameTable;
         private Dictionary<string, OrderedCodeStatementCollection> _statementTable;
         private static readonly Attribute[] s_designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
-        private static readonly Attribute[] s_runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly object s_initMethodKey = new object();
         private static TypeCodeDomSerializer s_default;
 

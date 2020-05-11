@@ -2988,7 +2988,6 @@ namespace System.Windows.Forms
         {
             private const int ShadowAdj = -333;
             private const int HilightAdj = 500;
-            private const int WatermarkAdj = -50;
 
             private const int Range = 240;
             private const int HLSMax = Range;

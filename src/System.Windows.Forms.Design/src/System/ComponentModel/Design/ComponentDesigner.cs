@@ -24,8 +24,6 @@ namespace System.ComponentModel.Design
         ShadowPropertyCollection _shadowProperties;
         bool _settingsKeyExplicitlySet = false;
 
-        private static readonly CodeMarkers s_codemarkers = CodeMarkers.Instance;
-
         private protected const string SettingsKeyName = "SettingsKey";
 
         /// <summary>

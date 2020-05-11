@@ -28,7 +28,6 @@ namespace System.Windows.Forms
         private static readonly object EventRenderImageMargin = new object();
         private static readonly object EventRenderBorder = new object();
         private static readonly object EventRenderArrow = new object();
-        private static readonly object EventRenderStatusStripPanelBackground = new object();
         private static readonly object EventRenderToolStripStatusLabelBackground = new object();
         private static readonly object EventRenderSeparator = new object();
         private static readonly object EventRenderItemCheck = new object();

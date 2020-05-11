@@ -51,10 +51,6 @@ namespace System.Windows.Forms
         //
         private const int PRIMARY_MONITOR = unchecked((int)0xBAADF00D);
 
-        private const int MONITOR_DEFAULTTONULL = 0x00000000;
-        private const int MONITOR_DEFAULTTOPRIMARY = 0x00000001;
-        private const int MONITOR_DEFAULTTONEAREST = 0x00000002;
-
         private static readonly bool multiMonitorSupport = (User32.GetSystemMetrics(User32.SystemMetric.SM_CMONITORS) != 0);
         private static Screen[] screens;
 

@@ -21,7 +21,6 @@ namespace System.Windows.Forms
             private readonly ToolStripItem _ownerItem;
             private ButtonBaseAdapter.LayoutData _layoutData;
             private const int BorderWidth = 2;
-            private const int BorderHeight = 3;
             private readonly static Size s_invalidSize = new Size(int.MinValue, int.MinValue);
 
             private Size _lastPreferredSize = s_invalidSize;

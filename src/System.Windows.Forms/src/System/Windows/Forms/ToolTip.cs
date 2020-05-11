@@ -31,7 +31,6 @@ namespace System.Windows.Forms
         private const int AutoPopRatio = 10;
 
         private const int BalloonOffsetX = 10;
-        private const int BaloonOffsetY = 8;
 
         private const int LocationIndexTop = 0;
         private const int LocationIndexRight = 1;

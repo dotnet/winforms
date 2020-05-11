@@ -77,8 +77,6 @@ namespace System.Windows.Forms
         [ThreadStatic]
         private static Image t_defaultErrorImageForThread = null;
 
-        private static readonly object s_defaultInitialImageKey = new object();
-        private static readonly object s_defaultErrorImageKey = new object();
         private static readonly object s_loadCompletedKey = new object();
         private static readonly object s_loadProgressChangedKey = new object();
 

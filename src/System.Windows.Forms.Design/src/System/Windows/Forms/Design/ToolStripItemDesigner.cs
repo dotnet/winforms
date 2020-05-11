@@ -17,7 +17,6 @@ namespace System.Windows.Forms.Design
 {
     internal class ToolStripItemDesigner : ComponentDesigner
     {
-        private const int GLYPHBORDER = 1;
         private const int GLYPHINSET = 2;
         // Cached in value of the TemplateNode (which is the InSitu Editor)
         private ToolStripTemplateNode _editorNode;
@@ -29,7 +28,6 @@ namespace System.Windows.Forms.Design
         private ISelectionService selSvc = null;
         //ToolStripItems Visibility needs to be WYSIWYG.
         private bool currentVisible = false;
-        private Rectangle lastInsertionMarkRect = Rectangle.Empty;
         // Required to remove Body Glyphs ....
         internal ControlBodyGlyph bodyGlyph = null;
         //bool which is set if we Add Dummy Item
