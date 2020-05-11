@@ -1241,7 +1241,6 @@ namespace System.Windows.Forms
 
         internal int GetHeight(int rowIndex)
         {
-            Debug.Assert(rowIndex >= -1);
             GetHeightInfo(rowIndex, out int height, out int minimumHeight);
             return height;
         }

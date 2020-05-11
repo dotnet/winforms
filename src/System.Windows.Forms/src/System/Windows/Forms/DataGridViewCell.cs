@@ -191,8 +191,6 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert((State & DataGridViewElementStates.Displayed) == 0);
-
                 if (DataGridView == null)
                 {
                     // No detached element is displayed.
@@ -340,8 +338,6 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert((State & DataGridViewElementStates.Frozen) == 0);
-
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
@@ -596,7 +592,6 @@ namespace System.Windows.Forms
         {
             set
             {
-                Debug.Assert(value != ReadOnly);
                 if (value)
                 {
                     State = State | DataGridViewElementStates.ReadOnly;
@@ -615,8 +610,6 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert((State & DataGridViewElementStates.Resizable) == 0);
-
                 if (OwningRow != null && (OwningRow.DataGridView == null || RowIndex >= 0) && OwningRow.Resizable == DataGridViewTriState.True)
                 {
                     return true;
@@ -895,8 +888,6 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert((State & DataGridViewElementStates.Visible) == 0);
-
                 if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
