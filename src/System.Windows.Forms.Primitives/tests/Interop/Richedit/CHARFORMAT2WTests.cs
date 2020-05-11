@@ -7,18 +7,18 @@ using static Interop.Richedit;
 
 namespace System.Windows.Forms.Tests.Interop.Richedit
 {
-    public class CHARFORMATWTests : IClassFixture<ThreadExceptionFixture>
+    public class CHARFORMAT2WTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public unsafe void CharFormat_Size()
         {
-            Assert.Equal(92, sizeof(CHARFORMATW));
+            Assert.Equal(116, sizeof(CHARFORMAT2W));
         }
 
         [Fact]
         public unsafe void CharFormat_FaceName()
         {
-            CHARFORMATW charFormat = default;
+            CHARFORMAT2W charFormat = default;
             charFormat.FaceName = "TwoFace";
             Assert.Equal("TwoFace", charFormat.FaceName.ToString());
 

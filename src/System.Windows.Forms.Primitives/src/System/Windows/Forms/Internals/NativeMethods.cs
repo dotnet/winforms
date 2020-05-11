@@ -256,31 +256,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 4)]
-        public class CHARFORMAT2A
-        {
-            public int cbSize = Marshal.SizeOf<CHARFORMAT2A>();
-            public Richedit.CFM dwMask;
-            public Richedit.CFE dwEffects;
-            public int yHeight = 0;
-            public int yOffset = 0;
-            public int crTextColor = 0;
-            public byte bCharSet = 0;
-            public byte bPitchAndFamily = 0;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            public byte[] szFaceName = new byte[32];
-            public short wWeight = 0;
-            public short sSpacing = 0;
-            public int crBackColor = 0;
-            public int lcid = 0;
-            public int dwReserved = 0;
-            public short sStyle = 0;
-            public short wKerning = 0;
-            public byte bUnderlineType = 0;
-            public byte bAnimation = 0;
-            public byte bRevAuthor = 0;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public class ENLINK
         {
