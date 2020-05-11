@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using Microsoft.DotNet.RemoteExecutor;
 using Microsoft.Win32;
 using WinForms.Common.Tests;
 using Xunit;
@@ -174,7 +175,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, table.UseSystemColors);
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "Deadlocks under x86, see: https://github.com/dotnet/winforms/issues/3254, RemoteExecute crash with AbandonedMutexException,see: https://github.com/dotnet/arcade/issues/5325")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3254")]
+        [ActiveIssue("https://github.com/dotnet/arcade/issues/5325")]
         [InlineData(UserPreferenceCategory.Color)]
         [InlineData(UserPreferenceCategory.Accessibility)]
         [InlineData(UserPreferenceCategory.Desktop)]
@@ -187,11 +190,17 @@ namespace System.Windows.Forms.Tests
         [InlineData(UserPreferenceCategory.Window)]
         public void ProfessionalColorTable_ChangeUserPreferences_GetColor_ReturnsExpected(UserPreferenceCategory category)
         {
-            // Simulate a SystemEvents.UserPreferenceChanged event.
-            var table = new ProfessionalColorTable();
-            Color color = table.ButtonSelectedHighlight;
-            SystemEventsHelper.SendMessageOnUserPreferenceChanged(category);
-            Assert.Equal(color, table.ButtonSelectedHighlight);
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
+            {
+                // Simulate a SystemEvents.UserPreferenceChanged event.
+                var table = new ProfessionalColorTable();
+                Color color = table.ButtonSelectedHighlight;
+                SystemEventsHelper.SendMessageOnUserPreferenceChanged(category);
+                Assert.Equal(color, table.ButtonSelectedHighlight);
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
     }
 }
