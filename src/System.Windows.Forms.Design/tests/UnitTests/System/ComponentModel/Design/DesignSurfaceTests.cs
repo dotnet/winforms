@@ -13,7 +13,7 @@ namespace System.ComponentModel.Design.Tests
 {
     public class DesignSurfaceTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Ctor_Default()
         {
             using var surface = new SubDesignSurface();
@@ -51,7 +51,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { mockServiceProvider.Object };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_IServiceProvider_TestData))]
         public void DesignSurface_Ctor_IServiceProvider(IServiceProvider parentProvider)
         {
@@ -74,7 +74,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<InvalidOperationException>(() => surface.View);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Ctor_Type()
         {
             using var surface = new SubDesignSurface(typeof(RootDesignerComponent));
@@ -96,7 +96,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(RootComponentDesigner.View, surface.View);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Ctor_IServiceProvider_Type_NullParentProvider()
         {
             using var surface = new SubDesignSurface(null, typeof(RootDesignerComponent));
@@ -118,7 +118,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(RootComponentDesigner.View, surface.View);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Ctor_IServiceProvider_Type_CustomParentProvider()
         {
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
@@ -165,7 +165,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(RootComponentDesigner.View, surface.View);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Ctor_NullRootComponentType_ThrowsArgumentNullException()
         {
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
@@ -173,7 +173,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("rootComponentType", () => new DesignSurface(mockServiceProvider.Object, (Type)null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ComponentContainer_GetDisposed_ThrowsObjectDisposedException()
         {
             using var surface = new DesignSurface();
@@ -181,7 +181,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ObjectDisposedException>(() => surface.ComponentContainer);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignSurface_DtelLoading_Set_GetReturnsExpected(bool value)
         {
@@ -200,7 +200,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(!value, surface.DtelLoading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ServiceContainer_Get_ReturnsSame()
         {
             using var surface = new SubDesignSurface();
@@ -209,7 +209,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(container, surface.ServiceContainer);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ServiceContainer_GetISelectionService_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -219,7 +219,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, service.SelectionCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ServiceContainer_GetIExtenderProviderService_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -227,7 +227,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.IsAssignableFrom<IExtenderProviderService>(container.GetService(typeof(IExtenderProviderService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ServiceContainer_GetIExtenderListService_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -236,7 +236,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.IsAssignableFrom<IExtenderProviderService>(container.GetService(typeof(IExtenderListService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ServiceContainer_GetITypeDescriptorFilterService_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -244,7 +244,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.IsAssignableFrom<ITypeDescriptorFilterService>(container.GetService(typeof(ITypeDescriptorFilterService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ServiceContainer_GetIReferenceService_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -252,7 +252,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.IsAssignableFrom<IReferenceService>(container.GetService(typeof(IReferenceService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ServiceContainer_GetDesignSurfaceService_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -260,7 +260,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(surface, container.GetService(typeof(DesignSurface)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ServiceContainer_GetInstanceTypeService_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -276,7 +276,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { typeof(IDesignerLoaderHost2) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ServiceContainer_FixedService_TestData))]
         public void DesignSurface_ServiceContainer_GetFixedService_ReturnsExpected(Type serviceType)
         {
@@ -285,7 +285,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(surface.Host, container.GetService(serviceType));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ServiceContainer_FixedService_TestData))]
         public void DesignSurface_ServiceContainer_RemoveFixedService_ThrowsInvalidOperationException(Type serviceType)
         {
@@ -294,7 +294,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<InvalidOperationException>(() => container.RemoveService(serviceType));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(ISelectionService))]
         [InlineData(typeof(IExtenderProviderService))]
         [InlineData(typeof(IExtenderListService))]
@@ -314,7 +314,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(container.GetService(serviceType));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ServiceContainer_RemoveNullServiceType_ThrowsArgumentNullException()
         {
             using var surface = new SubDesignSurface();
@@ -322,7 +322,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("serviceType", () => container.RemoveService(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_ServiceContainer_GetDisposed_ThrowsObjectDisposedException()
         {
             using var surface = new SubDesignSurface();
@@ -330,7 +330,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ObjectDisposedException>(() => surface.ServiceContainer);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(NullSupportedTechnologiesRootDesignerComponent))]
         [InlineData(typeof(EmptySupportedTechnologiesRootDesignerComponent))]
         public void DesignSurface_View_GetWithInvalidSupportedTechnologies_ThrowsNotSupportedException(Type rootComponentType)
@@ -340,7 +340,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<NotSupportedException>(() => surface.View);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_View_GetDisposed_ThrowsObjectDisposedException()
         {
             using var surface = new DesignSurface();
@@ -348,7 +348,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ObjectDisposedException>(() => surface.View);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_View_GetWithExceptionLoadErrors_ThrowsInvalidOperationException()
         {
             var exception = new Exception();
@@ -370,7 +370,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new object[] { null } };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(View_GetLoadError_TestData))]
         public void DesignSurface_View_GetWithLoadErrors_ThrowsInvalidOperationException(object[] errorCollection)
         {
@@ -408,7 +408,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { mockServiceProvider.Object };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BeginLoad_TestData))]
         public void DesignSurface_BeginLoad_Invoke_Success(IServiceProvider parentProvider)
         {
@@ -429,7 +429,7 @@ namespace System.ComponentModel.Design.Tests
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_ThrowsException_SetsLoadErrors()
         {
             var exception = new Exception();
@@ -448,7 +448,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(exception, Assert.Single(surface.LoadErrors));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DesignSurface_BeginLoad_ThrowsExceptionWithoutMessage_SetsLoadErrors(string message)
         {
@@ -475,7 +475,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(surface.Host.Loading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_ThrowsTargetInvocationException_SetsLoadErrors()
         {
             var exception = new Exception();
@@ -494,7 +494,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(surface.Host.Loading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_InvokeWithLoading_CallsHandler()
         {
             var surface = new SubDesignSurface();
@@ -544,7 +544,7 @@ namespace System.ComponentModel.Design.Tests
             mockLoader.Verify(l => l.BeginLoad(host), Times.Exactly(2));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_InvokeErrorWithUnloading_CallsHandler()
         {
             var surface = new SubDesignSurface();
@@ -607,7 +607,7 @@ namespace System.ComponentModel.Design.Tests
             mockLoader.Verify(l => l.BeginLoad(host), Times.Exactly(2));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_InvokeDefaultIExtenderProvider_Success()
         {
             var mockExtenderProviderService = new Mock<IExtenderProviderService>(MockBehavior.Strict);
@@ -643,7 +643,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(mockExtenderProvider.Object, Assert.Single(defaultProviderService.GetExtenderProviders()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_InvokeValidIExtenderProvider_CallsAddExtenderProvider()
         {
             var mockExtenderProviderService = new Mock<IExtenderProviderService>(MockBehavior.Strict);
@@ -691,7 +691,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new object() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(BeginLoad_InvalidIExtenderProvider_TestData))]
         public void DesignSurface_BeginLoad_InvokeInvalidIExtenderProvider_Success(object service)
         {
@@ -728,7 +728,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Empty(defaultProviderService.GetExtenderProviders());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_InvokeWithoutIDesignerEventServiceWithActivated_CallsHandler()
         {
             var surface = new SubDesignSurface();
@@ -755,7 +755,7 @@ namespace System.ComponentModel.Design.Tests
             mockLoader.Verify(l => l.BeginLoad(host), Times.Exactly(2));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_InvokeWithIDesignerEventServiceWithActivated_DoesNotCallHandler()
         {
             var mockDesignerEventService = new Mock<IDesignerEventService>(MockBehavior.Strict);
@@ -790,7 +790,7 @@ namespace System.ComponentModel.Design.Tests
             mockServiceProvider.Verify(p => p.GetService(typeof(IDesignerEventService)), Times.Once());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_DisposeInLoading_DoesCallFlush()
         {
             using var surface = new SubDesignSurface();
@@ -828,7 +828,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, flushedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_DisposeInBeginLoad_DoesCallFlush()
         {
             using var surface = new SubDesignSurface();
@@ -872,7 +872,7 @@ namespace System.ComponentModel.Design.Tests
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_DisposeInBeginLoadThrowsException_DoesCallFlush()
         {
             using var surface = new SubDesignSurface();
@@ -918,14 +918,14 @@ namespace System.ComponentModel.Design.Tests
             mockLoader.Verify(l => l.BeginLoad(host), Times.Once());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_NullLoader_ThrowsArgumentNullException()
         {
             using var surface = new DesignSurface();
             Assert.Throws<ArgumentNullException>("loader", () => surface.BeginLoad((DesignerLoader)null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_InvokeType_Success()
         {
             var surface = new SubDesignSurface();
@@ -940,14 +940,14 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(RootComponentDesigner.View, surface.View);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_NullRootComponentType_ThrowsArgumentNullException()
         {
             using var surface = new DesignSurface();
             Assert.Throws<ArgumentNullException>("rootComponentType", () => surface.BeginLoad((Type)null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_AlreadyCalled_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -964,7 +964,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<InvalidOperationException>(() => surface.BeginLoad(otherMockLoader.Object));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_BeginLoad_Disposed_ThrowsObjectDisposedException()
         {
             using var surface = new DesignSurface();
@@ -974,7 +974,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ObjectDisposedException>(() => surface.BeginLoad(mockLoader.Object));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateDesigner_InvokeNoDesigner_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -983,7 +983,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(surface.CreateDesigner(component, rootDesigner: false));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateDesigner_InvokeIDesigner_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -992,7 +992,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.IsType<ComponentDesigner>(surface.CreateDesigner(component, rootDesigner: false));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateDesigner_InvokeIRootDesigner_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -1001,7 +1001,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(surface.CreateDesigner(component, rootDesigner: false));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateDesigner_NullComponent_ThrowsArgumentNullException()
         {
             using var surface = new SubDesignSurface();
@@ -1009,7 +1009,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("component", () => surface.CreateDesigner(null, false));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateDesigner_Disposed_ThrowsObjectDisposedException()
         {
             using var surface = new SubDesignSurface();
@@ -1019,7 +1019,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
 #pragma warning disable 0618
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateComponent_IComponentWithPublicDefaultConstructor_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -1027,7 +1027,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(instance.Container);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateComponent_IComponentWithPrivateDefaultConstructor_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -1035,7 +1035,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(instance.Container);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateComponent_IComponentWithIContainerConstructor_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -1043,7 +1043,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(surface.ComponentContainer, instance.Container);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(ClassWithPublicConstructor))]
         [InlineData(typeof(ClassWithPrivateDefaultConstructor))]
         public void DesignSurface_CreateComponent_NonIComponent_ReturnsNull(Type type)
@@ -1052,7 +1052,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(surface.CreateComponent(type));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(ClassWithIContainerConstructor))]
         [InlineData(typeof(ClassWithNoMatchingConstructor))]
         [InlineData(typeof(ComponentWithPrivateIContainerConstructor))]
@@ -1063,7 +1063,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<MissingMethodException>(() => surface.CreateComponent(type));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateComponent_NullType_ThrowsArgumentNullException()
         {
             using var surface = new SubDesignSurface();
@@ -1071,21 +1071,21 @@ namespace System.ComponentModel.Design.Tests
         }
 #pragma warning restore 0618
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateInstance_NonIComponentWithPublicDefaultConstructor_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
             Assert.IsType<ClassWithPublicConstructor>(surface.CreateInstance(typeof(ClassWithPublicConstructor)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateInstance_NonIComponentWithPrivateDefaultConstructor_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
             Assert.IsType<ClassWithPrivateDefaultConstructor>(surface.CreateInstance(typeof(ClassWithPrivateDefaultConstructor)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateInstance_IComponentWithPublicDefaultConstructor_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -1093,7 +1093,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(instance.Container);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateInstance_IComponentWithPrivateDefaultConstructor_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -1101,7 +1101,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(instance.Container);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateInstance_IComponentWithIContainerConstructor_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -1109,7 +1109,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(surface.ComponentContainer, instance.Container);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(ClassWithIContainerConstructor))]
         [InlineData(typeof(ClassWithNoMatchingConstructor))]
         [InlineData(typeof(ComponentWithPrivateIContainerConstructor))]
@@ -1120,14 +1120,14 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<MissingMethodException>(() => surface.CreateInstance(type));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateInstance_NullType_ThrowsArgumentNullException()
         {
             using var surface = new SubDesignSurface();
             Assert.Throws<ArgumentNullException>("type", () => surface.CreateInstance(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateNestedContainer_InvokeObject_ReturnsExpected()
         {
             using var surface = new DesignSurface();
@@ -1137,7 +1137,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(ownerComponent, container.Owner);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
         public void DesignSurface_CreateNestedContainer_InvokeObjectString_ReturnsExpected(string containerName)
         {
@@ -1148,7 +1148,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(ownerComponent, container.Owner);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateNestedContainer_NullOwningComponent_ThrowsArgumentNullException()
         {
             using var surface = new DesignSurface();
@@ -1156,7 +1156,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("owningComponent", () => surface.CreateNestedContainer(null, "name"));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_CreateNestedContainer_Disposed_ThrowsObjectDisposedException()
         {
             using var surface = new DesignSurface();
@@ -1164,7 +1164,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ObjectDisposedException>(() => surface.CreateNestedContainer(null, "name"));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Dispose_InvokeMultipleTimes_Success()
         {
             using var surface = new DesignSurface();
@@ -1172,7 +1172,7 @@ namespace System.ComponentModel.Design.Tests
             surface.Dispose();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Dispose_Invoke_RemovesDesignSurfaceService()
         {
             using var surface = new SubDesignSurface();
@@ -1183,7 +1183,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(container.GetService(typeof(DesignSurface)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Dispose_InvokeHasLoader_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1200,7 +1200,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.True(host.Loading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Dispose_InvokeHasHostWithTransactions_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1225,7 +1225,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal("Transaction1", host.TransactionDescription);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Dispose_InvokeWithDisposed_CallsHandler()
         {
             using var surface = new DesignSurface();
@@ -1254,7 +1254,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignSurface_Dispose_InvokeDisposingMultipleTimes_Success(bool disposing)
         {
@@ -1263,7 +1263,7 @@ namespace System.ComponentModel.Design.Tests
             surface.Dispose(disposing);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Dispose_InvokeDisposing_RemovesDesignSurfaceService()
         {
             using var surface = new SubDesignSurface();
@@ -1274,7 +1274,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(container.GetService(typeof(DesignSurface)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Dispose_InvokeNotDisposing_DoesNotRemoveDesignSurfaceService()
         {
             using var surface = new SubDesignSurface();
@@ -1285,7 +1285,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(surface, container.GetService(typeof(DesignSurface)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Dispose_InvokeDisposingHasLoader_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1302,7 +1302,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.True(host.Loading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Dispose_InvokeNotDisposingHasLoader_Nop()
         {
             var surface = new SubDesignSurface();
@@ -1319,7 +1319,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.True(host.Loading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Dispose_InvokeDisposingHasHostWithTransactions_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1344,7 +1344,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal("Transaction1", host.TransactionDescription);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Dispose_InvokeNotDisposingHasHostWithTransactions_Nop()
         {
             var surface = new SubDesignSurface();
@@ -1369,7 +1369,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal("Transaction1", host.TransactionDescription);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]
         public void Dispose_InvokeDisposingWithDisposed_CallsHandler(bool disposing, int expectedCallCount)
@@ -1400,7 +1400,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(expectedCallCount * 2, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Flush_InvokeWithHostWithLoader_CallsLoaderFlush()
         {
             var surface = new SubDesignSurface();
@@ -1421,7 +1421,7 @@ namespace System.ComponentModel.Design.Tests
             mockLoader.Verify(l => l.Flush(), Times.Exactly(2));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Flush_InvokeWithHostWithoutLoader_Nop()
         {
             using var surface = new DesignSurface();
@@ -1431,7 +1431,7 @@ namespace System.ComponentModel.Design.Tests
             surface.Flush();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Flush_InvokeDisposed_Nop()
         {
             using var surface = new DesignSurface();
@@ -1442,7 +1442,7 @@ namespace System.ComponentModel.Design.Tests
             surface.Flush();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_Flush_InvokeWithFlushed_CallsHandler()
         {
             using var surface = new DesignSurface();
@@ -1467,7 +1467,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(3, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_GetService_InvokeWithServiceProvider_ReturnsExpected()
         {
             var service = new object();
@@ -1481,7 +1481,7 @@ namespace System.ComponentModel.Design.Tests
             mockServiceProvider.Verify(p => p.GetService(typeof(int)), Times.Once());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_GetService_GetISelectionService_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -1490,14 +1490,14 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, service.SelectionCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_GetService_GetIExtenderProviderService_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
             Assert.IsAssignableFrom<IExtenderProviderService>(surface.GetService(typeof(IExtenderProviderService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_GetService_GetIExtenderListService_ReturnsExpected()
         {
             using var surface = new DesignSurface();
@@ -1505,35 +1505,35 @@ namespace System.ComponentModel.Design.Tests
             Assert.IsAssignableFrom<IExtenderProviderService>(surface.GetService(typeof(IExtenderListService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_GetService_GetITypeDescriptorFilterService_ReturnsExpected()
         {
             using var surface = new DesignSurface();
             Assert.IsAssignableFrom<ITypeDescriptorFilterService>(surface.GetService(typeof(ITypeDescriptorFilterService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_GetService_GetIReferenceService_ReturnsExpected()
         {
             using var surface = new DesignSurface();
             Assert.IsAssignableFrom<IReferenceService>(surface.GetService(typeof(IReferenceService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_GetService_GetDesignSurfaceService_ReturnsExpected()
         {
             using var surface = new DesignSurface();
             Assert.Same(surface, surface.GetService(typeof(DesignSurface)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_GetService_GetInstanceTypeService_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
             Assert.Same(surface.ServiceContainer, surface.GetService(surface.ServiceContainer.GetType()));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(IServiceContainer))]
         [InlineData(typeof(ServiceContainer))]
         public void DesignSurface_GetService_IServiceContainer_ReturnsExpected(Type serviceType)
@@ -1542,7 +1542,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(surface.ServiceContainer, surface.GetService(serviceType));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ServiceContainer_FixedService_TestData))]
         public void DesignSurface_GetService_GetFixedService_ReturnsExpected(Type serviceType)
         {
@@ -1550,14 +1550,14 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(surface.Host, surface.GetService(serviceType));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignSurface_GetService_InvokeWithoutServiceProvider_ReturnsNull()
         {
             using var surface = new DesignSurface();
             Assert.Null(surface.GetService(typeof(int)));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ServiceContainer_FixedService_TestData))]
         public void DesignSurface_GetService_Disposed_ReturnsNull(Type serviceType)
         {
@@ -1566,7 +1566,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(surface.GetService(serviceType));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnLoading_Invoke_Success(EventArgs eventArgs)
         {
@@ -1600,7 +1600,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new LoadedEventArgs(false, null) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(LoadedEventArgs_TestData))]
         public void DesignSurface_OnLoaded_Invoke_Success(LoadedEventArgs eventArgs)
         {
@@ -1628,7 +1628,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnUnloaded_Invoke_Success(EventArgs eventArgs)
         {
@@ -1656,7 +1656,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnUnloading_Invoke_Success(EventArgs eventArgs)
         {
@@ -1684,7 +1684,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnViewActivate_Invoke_Success(EventArgs eventArgs)
         {

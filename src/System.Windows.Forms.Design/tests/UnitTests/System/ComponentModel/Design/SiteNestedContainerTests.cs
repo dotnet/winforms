@@ -63,7 +63,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { CreateSite("ownerName"), "containerName", "componentName", "ownerName.containerName.componentName" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(CreateNestedContainer_TestData))]
         public void SiteNestedContainer_Add_Component_Success(ISite ownerSite, string containerName, string componentName, string expectedFullName)
         {
@@ -150,7 +150,7 @@ namespace System.ComponentModel.Design.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Add_ComponentParentProvider_TestData))]
         public void SiteNestedContainer_Add_ComponentWithRootDesigner_Success(IServiceProvider parentProvider)
         {
@@ -207,7 +207,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(component4.Site.Name);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Add_InvalidNameCreationServiceParentProvider_TestData))]
         public void SiteNestedContainer_Add_ComponentStringWithRootDesigner_Success(IServiceProvider parentProvider)
         {
@@ -282,7 +282,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { notInheritedComponent, 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Add_IExtenderProviderServiceWithoutDefault_TestData))]
         public void SiteNestedContainer_Add_IExtenderProviderServiceWithoutDefault_Success(Component component, int expectedCallCount)
         {
@@ -349,7 +349,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { notInheritedComponent, true };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Add_IExtenderProviderServiceWithDefault_TestData))]
         public void SiteNestedContainer_Add_IExtenderProviderServiceWithDefault_DoesNotCallGetService(Component component, bool throws)
         {
@@ -443,7 +443,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { invalidMockServiceProvider };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
         public void SiteNestedContainer_Add_InvalidIExtenderProviderServiceWithoutDefault_CallsParentGetService(Mock<IServiceProvider> mockParentProvider)
         {
@@ -458,7 +458,7 @@ namespace System.ComponentModel.Design.Tests
             mockParentProvider?.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Once());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
         public void SiteNestedContainer_Add_InvalidIExtenderProviderServiceWithDefault_DoesNotCallParentGetService(Mock<IServiceProvider> mockParentProvider)
         {
@@ -472,7 +472,7 @@ namespace System.ComponentModel.Design.Tests
             mockParentProvider?.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Never());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Add_IComponentWithComponentAddingAndAdded_CallsHandler()
         {
             using var surface = new SubDesignSurface();
@@ -521,7 +521,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(2, componentAddedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Add_NullComponent_ThrowsArgumentNullException()
         {
             using var surface = new DesignSurface();
@@ -536,7 +536,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new DesignerComponent() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Add_NoRootDesigner_TestData))]
         public void SiteNestedContainer_Add_NoRootDesigner_ThrowsException(IComponent component)
         {
@@ -548,7 +548,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Empty(container.Components);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Add_CyclicRootDesigner_ThrowsException()
         {
             using var surface = new SubDesignSurface();
@@ -562,7 +562,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<Exception>(() => container.Add(new RootDesignerComponent(), host.RootComponentClassName));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Add_NonInitializingRootDesigner_ThrowsInvalidOperationException()
         {
             using var surface = new DesignSurface();
@@ -573,7 +573,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<InvalidOperationException>(() => container.Add(component, "name"));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Add_ThrowingInitializingRootDesigner_RethrowsException()
         {
             using var surface = new DesignSurface();
@@ -589,7 +589,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(component.Site);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Add_CheckoutExceptionThrowingInitializingRootDesigner_RethrowsException()
         {
             using var surface = new DesignSurface();
@@ -635,7 +635,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Remove_Invoke_Success()
         {
             using var surface = new SubDesignSurface();
@@ -695,7 +695,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { notInheritedComponent, 1, 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Remove_IExtenderProviderServiceWithoutDefault_TestData))]
         public void SiteNestedContainer_Remove_IExtenderProviderServiceWithoutDefault_Success(Component component, int expectedAddCallCount, int expectedRemoveCallCount)
         {
@@ -760,7 +760,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { notInheritedComponent };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Remove_IExtenderProviderServiceWithDefault_TestData))]
         public void SiteNestedContainer_Remove_IExtenderProviderServiceWithDefault_Success(Component component)
         {
@@ -807,7 +807,7 @@ namespace System.ComponentModel.Design.Tests
             mockExtenderProviderService.Verify(s => s.RemoveExtenderProvider(component as IExtenderProvider), Times.Never());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
         public void SiteNestedContainer_Remove_InvalidIExtenderProviderServiceWithoutDefault_CallsParentGetService(Mock<IServiceProvider> mockParentProvider)
         {
@@ -826,7 +826,7 @@ namespace System.ComponentModel.Design.Tests
             mockParentProvider?.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Exactly(2));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
         public void SiteNestedContainer_Remove_InvalidIExtenderProviderServiceWithDefault_DoesNotCallParentGetService(Mock<IServiceProvider> mockParentProvider)
         {
@@ -844,12 +844,14 @@ namespace System.ComponentModel.Design.Tests
             mockParentProvider?.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Never());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Remove_ComponentNotInContainerNonEmpty_Nop()
         {
             using var surface = new DesignSurface();
-            using INestedContainer container1 = surface.CreateNestedContainer(new Component(), "containerName");
-            using INestedContainer container2 = surface.CreateNestedContainer(new Component(), "containerName");
+            using var component1 = new Component();
+            using INestedContainer container1 = surface.CreateNestedContainer(component1, "containerName");
+            using var component2 = new Component();
+            using INestedContainer container2 = surface.CreateNestedContainer(component2, "containerName");
 
             var otherComponent = new RootDesignerComponent();
             using var component = new RootDesignerComponent();
@@ -861,12 +863,14 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(component, Assert.Single(container2.Components));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Remove_ComponentNotInContainerEmpty_Nop()
         {
             using var surface = new DesignSurface();
-            using INestedContainer container1 = surface.CreateNestedContainer(new Component(), "containerName");
-            using INestedContainer container2 = surface.CreateNestedContainer(new Component(), "containerName");
+            using var component1 = new Component();
+            using INestedContainer container1 = surface.CreateNestedContainer(component1, "containerName");
+            using var component2 = new Component();
+            using INestedContainer container2 = surface.CreateNestedContainer(component2, "containerName");
 
             var otherComponent = new RootDesignerComponent();
             container1.Add(otherComponent);
@@ -876,7 +880,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Empty(container2.Components);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Remove_InvokeWithComponentRemoved_CallsHandler()
         {
             using var surface = new SubDesignSurface();
@@ -944,7 +948,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(1, componentRemovedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Remove_SetSiteToNullInComponentRemoving_Success()
         {
             using var surface = new SubDesignSurface();
@@ -968,7 +972,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(component.Site);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Remove_SiteHasDictionary_DoesNotClearDictionary()
         {
             using var surface = new SubDesignSurface();
@@ -985,7 +989,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal("value", service.GetValue("key"));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void SiteNestedContainer_Remove_NullComponent_ThrowsArgumentNullException()
         {
             using var surface = new DesignSurface();

@@ -15,7 +15,7 @@ namespace System.ComponentModel.Design.Tests
 {
     public class DesignerHostTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_CanReloadWithErrors_Set_GetReturnsExpected(bool value)
         {
@@ -33,7 +33,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(!value, host.CanReloadWithErrors);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Container_Get_ReturnsHost()
         {
             var surface = new SubDesignSurface();
@@ -41,7 +41,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(host, host.Container);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_IgnoreErrorsDuringReload_Set_GetReturnsExpected(bool value)
         {
@@ -59,7 +59,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.IgnoreErrorsDuringReload);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_IgnoreErrorsDuringReload_SetWithCanReloadWithErrors_GetReturnsExpected(bool value)
         {
@@ -79,7 +79,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(!value, host.IgnoreErrorsDuringReload);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_InTransaction_GetWithoutTransactions_ReturnsFalse()
         {
             var surface = new SubDesignSurface();
@@ -87,7 +87,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.InTransaction);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IsClosingTransaction_GetWithoutTransaction_ReturnsFalse()
         {
             using var surface = new SubDesignSurface();
@@ -95,7 +95,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(hostTransactionState.IsClosingTransaction);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Loading_GetWithoutComponent_ReturnsFalse()
         {
             var surface = new SubDesignSurface();
@@ -103,7 +103,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.Loading);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_Loading_GetWithLoader_ReturnsExpected(bool loading)
         {
@@ -124,7 +124,7 @@ namespace System.ComponentModel.Design.Tests
             mockLoader.Verify(l => l.Loading, Times.Once());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_RootComponent_GetWithoutComponent_ReturnsNull()
         {
             var surface = new SubDesignSurface();
@@ -132,7 +132,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.RootComponent);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_RootComponentClassName_GetWithoutComponent_ReturnsNull()
         {
             var surface = new SubDesignSurface();
@@ -140,7 +140,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.RootComponentClassName);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_TransactionDescription_GetWithoutTransactions_ReturnsNull()
         {
             var surface = new SubDesignSurface();
@@ -148,7 +148,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.TransactionDescription);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Activate_Invoke_CallsViewActivated()
         {
             using var surface = new SubDesignSurface();
@@ -167,7 +167,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, activatedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Activate_InvokeDisposed_Nop()
         {
             using var surface = new SubDesignSurface();
@@ -252,7 +252,7 @@ namespace System.ComponentModel.Design.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Add_ComponentParentProvider_TestData))]
         public void DesignerHost_Add_ComponentWithRootDesigner_Success(IServiceProvider parentProvider, string expectedName)
         {
@@ -307,7 +307,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(expectedName, component4.Site.Name);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Add_InvalidNameCreationServiceParentProvider_TestData))]
         public void DesignerHost_Add_ComponentStringWithRootDesigner_Success(IServiceProvider parentProvider)
         {
@@ -380,7 +380,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { notInheritedComponent, 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Add_IExtenderProviderServiceWithoutDefault_TestData))]
         public void DesignerHost_Add_IExtenderProviderServiceWithoutDefault_Success(Component component, int expectedCallCount)
         {
@@ -451,7 +451,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { notInheritedComponent };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Add_IExtenderProviderServiceWithDefault_TestData))]
         public void DesignerHost_Add_IExtenderProviderServiceWithDefault_DoesNotCallGetService(Component component)
         {
@@ -546,7 +546,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { invalidMockServiceProvider };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
         public void DesignerHost_Add_InvalidIExtenderProviderServiceWithoutDefault_CallsParentGetService(Mock<IServiceProvider> mockParentProvider)
         {
@@ -560,7 +560,7 @@ namespace System.ComponentModel.Design.Tests
             mockParentProvider?.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Once());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
         public void DesignerHost_Add_InvalidIExtenderProviderServiceWithDefault_DoesNotCallParentGetService(Mock<IServiceProvider> mockParentProvider)
         {
@@ -573,7 +573,7 @@ namespace System.ComponentModel.Design.Tests
             mockParentProvider?.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Never());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_SameComponent_Success()
         {
             var surface = new SubDesignSurface();
@@ -595,7 +595,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal("name", component.Site.Name);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_ComponentWithNameCreationServiceWithoutName_CallsCreateName()
         {
             var mockNameCreationService = new Mock<INameCreationService>(MockBehavior.Strict);
@@ -630,7 +630,7 @@ namespace System.ComponentModel.Design.Tests
             mockNameCreationService.Verify(s => s.CreateName(host.Container, typeof(RootDesignerComponent)), Times.Once());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_ComponentWithNameCreationServiceWithCustomReflectionType_CallsCreateName()
         {
             using var component = new CustomTypeDescriptionProviderComponent();
@@ -685,7 +685,7 @@ namespace System.ComponentModel.Design.Tests
             mockNameCreationService.Verify(s => s.CreateName(host.Container, typeof(RootDesignerComponent)), Times.Once());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
         public void DesignerHost_Add_ComponentWithNameCreationServiceWithName_CallsValidateName(string name)
         {
@@ -724,7 +724,7 @@ namespace System.ComponentModel.Design.Tests
             mockServiceProvider.Verify(p => p.GetService(typeof(INameCreationService)), Times.Exactly(2));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_ComponentWithTypeDescriptionProviderServiceWithoutProjectTargetFrameworkAttribute_AddsProvider()
         {
             ICustomTypeDescriptor descriptor = TypeDescriptor.GetProvider(typeof(RootDesignerComponent)).GetTypeDescriptor(typeof(RootDesignerComponent));
@@ -786,7 +786,7 @@ namespace System.ComponentModel.Design.Tests
             mockTypeDescriptionProvider.Verify(p => p.IsSupportedType(typeof(int)), Times.Exactly(2));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_ComponentWithNullTypeDescriptionProviderService_Success()
         {
             var mockTypeDescriptionProviderService = new Mock<TypeDescriptionProviderService>(MockBehavior.Strict);
@@ -818,7 +818,7 @@ namespace System.ComponentModel.Design.Tests
             mockTypeDescriptionProviderService.Verify(s => s.GetProvider(component), Times.Once());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_ComponentWithTypeDescriptionProviderServiceWithProjectTargetFrameworkAttribute_DoesNotAddProvider()
         {
             using var component = new RootDesignerComponent();
@@ -862,7 +862,7 @@ namespace System.ComponentModel.Design.Tests
             mockTypeDescriptionProviderService.Verify(s => s.GetProvider(component), Times.Never());
         }
 
-        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
+        [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
         public void DesignerHost_Add_DuringUnload_ThrowsException()
         {
             var surface = new SubDesignSurface();
@@ -885,7 +885,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.Loading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIDictionaryServiceGetKey_NoDictionary_ReturnsNull()
         {
             var surface = new SubDesignSurface();
@@ -898,7 +898,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(service.GetKey(new object()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIDictionaryServiceGetKey_NoSuchKeyWithDictionary_ReturnsNull()
         {
             var surface = new SubDesignSurface();
@@ -917,7 +917,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(service.GetKey(new object()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIDictionaryServiceGetValue_NoDictionary_ReturnsNull()
         {
             var surface = new SubDesignSurface();
@@ -929,7 +929,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(service.GetValue(new object()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIDictionaryServiceGetValue_NoSuchValueWithDictionary_ReturnsNull()
         {
             var surface = new SubDesignSurface();
@@ -947,7 +947,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(service.GetValue(new object()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIDictionaryServiceGetValue_NullValueNoDictionary_ReturnsNull()
         {
             var surface = new SubDesignSurface();
@@ -959,7 +959,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("key", () => service.GetValue(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIDictionaryServiceGetValue_NullValueWithDictionary_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
@@ -977,7 +977,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("key", () => service.GetValue(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIDictionaryServiceSetValue_Invoke_GetKeyValueReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -1013,7 +1013,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(service.GetValue(key1));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIDictionaryServiceSetValue_NullKey_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
@@ -1024,7 +1024,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("key", () => service.SetValue(null, new object()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIServiceContainerAddService_InvokeObject_ReturnsExpected()
         {
             var service = new object();
@@ -1053,7 +1053,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(otherService, surface.GetService(typeof(object)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIServiceContainerAddService_InvokeObjectPromote_ReturnsExpected()
         {
             var service = new object();
@@ -1087,7 +1087,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(service, otherContainer.GetService(typeof(object)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIServiceContainerAddService_InvokeObjectNoPromote_ReturnsExpected()
         {
             var service = new object();
@@ -1116,7 +1116,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(otherService, surface.GetService(typeof(object)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIServiceContainerAddService_InvokeServiceCreatorCallback_ReturnsExpected()
         {
             var service = new object();
@@ -1150,7 +1150,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(otherService, surface.GetService(typeof(object)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIServiceContainerAddService_InvokeServiceCreatorCallbackPromote_ReturnsExpected()
         {
             var service = new object();
@@ -1189,7 +1189,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(service, otherContainer.GetService(typeof(object)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentIServiceContainerAddService_InvokeServiceCreatorCallbackNoPromote_ReturnsExpected()
         {
             var service = new object();
@@ -1238,7 +1238,7 @@ namespace System.ComponentModel.Design.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AddComponentISiteName_Set_TestData))]
         public void DesignerHost_AddComponentISiteName_SetRootComponent_GetReturnsExpected(IServiceProvider parentProvider, string oldName, string value, string expectedName)
         {
@@ -1256,7 +1256,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(expectedName, host.RootComponentClassName);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentISiteName_SetDifferentCase_GetReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -1271,7 +1271,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal("NAME", component.Site.Name);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DesignerHost_AddComponentISiteName_SetWithMultipleComponents_GetReturnsExpected(string value)
         {
@@ -1321,7 +1321,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { "namespace.oldName", "name", "oldName", "oldName", "oldName" };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(AddComponentISiteName_SetWithNamespaceInRootComponentClassName_TestData))]
         public void DesignerHost_AddComponentISiteName_SetWithNamespaceInRootComponentClassName_GetReturnsExpected(string oldRootComponentClassName, string oldName, string value, string expectedName, string expectedRootComponentClassName)
         {
@@ -1344,7 +1344,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(component, host.RootComponent);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DesignerHost_AddComponentISiteName_SetNameWithComponentRename_CallsHandler(string value)
         {
@@ -1381,7 +1381,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(null, "", 1)]
         [InlineData("", "", 1)]
         [InlineData("newName", "newName", 1)]
@@ -1421,7 +1421,7 @@ namespace System.ComponentModel.Design.Tests
             mockNameCreationService.Verify(s => s.ValidateName(expectedName), Times.Exactly(expectedCallCount));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentISiteName_SetSameAsOtherComponent_GetReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -1434,7 +1434,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<Exception>(() => component1.Site.Name = "NAME2");
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentISiteGetService_Invoke_ReturnsExpected()
         {
             var service = new object();
@@ -1459,7 +1459,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(service, component.Site.GetService(typeof(int)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentISiteGetService_InvokeWithNestedContainer_ReturnsService()
         {
             var service = new object();
@@ -1487,7 +1487,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(nestedContainer, component.Site.GetService(typeof(INestedContainer)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentISiteGetService_INestedContainer_ReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -1500,7 +1500,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(component, container.Owner);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentISiteGetServiceINestedContainerGetService_Invoke_ReturnsExpected()
         {
             var service = new object();
@@ -1528,7 +1528,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(service, nestedComponent.Site.GetService(typeof(int)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentISiteGetService_IDictionaryService_ReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -1538,7 +1538,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(component.Site, component.Site.GetService(typeof(IDictionaryService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentISiteGetService_IServiceContainerReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -1548,7 +1548,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(surface.ServiceContainer, component.Site.GetService(typeof(IServiceContainer)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentISiteGetService_IContainerReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -1558,7 +1558,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(host, component.Site.GetService(typeof(IContainer)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddComponentISiteGetService_NullServiceType_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
@@ -1568,7 +1568,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("service", () => component.Site.GetService(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_IComponentWithComponentAddingAndAdded_CallsHandler()
         {
             var surface = new SubDesignSurface();
@@ -1615,7 +1615,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(1, componentAddedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_NullComponent_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
@@ -1630,7 +1630,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new DesignerComponent() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Add_NoRootDesigner_TestData))]
         public void DesignerHost_Add_NoRootDesigner_ThrowsException(IComponent component)
         {
@@ -1641,7 +1641,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Empty(host.Container.Components);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_CyclicRootDesigner_ThrowsException()
         {
             var surface = new SubDesignSurface();
@@ -1653,7 +1653,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<Exception>(() => host.Container.Add(new RootDesignerComponent(), host.RootComponentClassName));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_NonInitializingRootDesigner_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1663,7 +1663,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<InvalidOperationException>(() => host.Container.Add(component, "name"));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_ThrowingInitializingRootDesigner_RethrowsException()
         {
             var surface = new SubDesignSurface();
@@ -1678,7 +1678,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(component.Site);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Add_CheckoutExceptionThrowingInitializingRootDesigner_RethrowsException()
         {
             var surface = new SubDesignSurface();
@@ -1703,7 +1703,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal("name", component.Site.Name);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddService_InvokeObject_GetServiceReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -1716,7 +1716,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(service, host.GetService(typeof(object)));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_AddService_InvokeObjectBool_GetServiceReturnsExpected(bool promote)
         {
@@ -1730,7 +1730,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(service, host.GetService(typeof(object)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddService_InvokeCallback_GetServiceReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -1744,7 +1744,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(service, host.GetService(typeof(object)));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_AddService_InvokeObjectCallback_GetServiceReturnsExpected(bool promote)
         {
@@ -1759,7 +1759,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(service, host.GetService(typeof(object)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_AddService_InvokeDisposed_ThrowsObjectDisposedException()
         {
             var surface = new SubDesignSurface();
@@ -1774,7 +1774,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ObjectDisposedException>(() => host.AddService(typeof(object), callback, false));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Dispose_Invoke_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1783,7 +1783,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<InvalidOperationException>(() => disposable.Dispose());
         }
 
-        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
+        [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
         public void DesignerHost_Add_DesignerDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1798,7 +1798,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.Loading);
         }
 
-        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1151")]
+        [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1151")]
         public void DesignerHost_Add_ComponentDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1813,7 +1813,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.Loading);
         }
 
-        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
+        [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
         public void DesignerHost_Add_RootDesignerDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1826,7 +1826,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.Loading);
         }
 
-        [Fact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
+        [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
         public void DesignerHost_Add_RootComponentDisposeThrowsDuringUnloadingDispose_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -1838,7 +1838,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.False(host.Loading);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_CreateComponent_NullComponentType_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
@@ -1846,7 +1846,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("componentType", () => host.CreateComponent(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_CreateTransaction_Invoke_ReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -1868,7 +1868,7 @@ namespace System.ComponentModel.Design.Tests
             transaction2.Cancel();
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(null, "No Description Available")]
         [InlineData("", "")]
         [InlineData("Description", "Description")]
@@ -1893,7 +1893,7 @@ namespace System.ComponentModel.Design.Tests
             transaction2.Cancel();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_CreateTransaction_InvokeWithTransactionOpeningAndTransactionOpened_CallsHandlers()
         {
             var surface = new SubDesignSurface();
@@ -1939,7 +1939,7 @@ namespace System.ComponentModel.Design.Tests
             transaction1.Cancel();
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_CreateTransaction_Cancel_Success()
         {
             var surface = new SubDesignSurface();
@@ -1981,7 +1981,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.TransactionDescription);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_CreateTransaction_CancelWithTransactionClosingAndTransactionClosed_CallsHandlers()
         {
             var surface = new SubDesignSurface();
@@ -2042,7 +2042,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(2, closedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_CreateTransaction_CancelNested_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -2052,7 +2052,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<InvalidOperationException>(() => transaction1.Cancel());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_CreateTransaction_Commit_Success()
         {
             var surface = new SubDesignSurface();
@@ -2094,7 +2094,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.TransactionDescription);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_CreateTransaction_CommitWithTransactionClosingAndTransactionClosed_CallsHandlers()
         {
             var surface = new SubDesignSurface();
@@ -2155,7 +2155,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(2, closedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_CreateTransaction_CommitNested_ThrowsInvalidOperationException()
         {
             var surface = new SubDesignSurface();
@@ -2197,7 +2197,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { "baseClassName", false, new object[] { null } };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(DesignerHost_EndLoad_TestData))]
         public void DesignerHost_EndLoad_NotCalledBeginLoad_Success(string baseClassName, bool successful, ICollection errorCollection)
         {
@@ -2211,7 +2211,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(baseClassName, host.RootComponentClassName);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_GetComponents_Invoke_ReturnsFiltered()
         {
             var collection = new ComponentCollection(new Component[] { new Component() });
@@ -2227,7 +2227,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(collection, surface.ComponentContainer.Components);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_GetDesigner_InvokeNonEmpty_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -2239,7 +2239,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.GetDesigner(new RootDesignerComponent()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_GetDesigner_InvokeEmpty_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -2248,7 +2248,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.GetDesigner(new RootDesignerComponent()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_GetDesigner_NullComponent_ThrowsArgumentNullException()
         {
             using var surface = new SubDesignSurface();
@@ -2283,7 +2283,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { mockInvalidServiceProviderLoader.Object, o };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetService_InvalidLoader_TestData))]
         public void DesignerHost_GetService_IMultitargetHelperServiceWithLoader_ReturnsExpected(DesignerLoader loader, object expected)
         {
@@ -2298,7 +2298,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(expected, host.GetService(typeof(IMultitargetHelperService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_GetServiceIMultitargetHelperServiceWithoutLoader_ReturnsNull()
         {
             var service = new object();
@@ -2308,7 +2308,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.GetService(typeof(IMultitargetHelperService)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_GetService_InvokeWithServiceProvider_ReturnsExpected()
         {
             var service = new object();
@@ -2323,7 +2323,7 @@ namespace System.ComponentModel.Design.Tests
             mockServiceProvider.Verify(p => p.GetService(typeof(int)), Times.Once());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_GetService_InvokeWithoutServiceProvider_ReturnsNull()
         {
             var surface = new SubDesignSurface();
@@ -2331,7 +2331,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.GetService(typeof(int)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_GetService_IContainer_ReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -2339,7 +2339,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(host, host.GetService(typeof(IContainer)));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(typeof(IServiceContainer))]
         [InlineData(typeof(ServiceContainer))]
         public void DesignerHost_GetService_IServiceContainer_ReturnsExpected(Type serviceType)
@@ -2349,7 +2349,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(surface.ServiceContainer, host.GetService(serviceType));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_GetService_NullType_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
@@ -2357,7 +2357,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("service", () => host.GetService(null));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData("", null)]
         [InlineData("", typeof(int))]
         [InlineData("typeName", null)]
@@ -2389,7 +2389,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new object() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(GetType_InvalidTypeResolutionService_TestData))]
         public void DesignerHost_GetType_InvokeWithInvalidTypeResolutionService_ReturnsExpected(object service)
         {
@@ -2404,7 +2404,7 @@ namespace System.ComponentModel.Design.Tests
             mockServiceProvider.Verify(p => p.GetService(typeof(ITypeResolutionService)), Times.Once());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_GetType_NullTypeName_ThrowsArgumentNullException()
         {
             using var surface = new SubDesignSurface();
@@ -2433,7 +2433,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new ActiveDesignerEventArgs(null, null), 0, 0, 0 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ChangeActiveDesigner_TestData))]
         public void DesignerHost_ChangeActiveDesigner_Invoke_Success(ActiveDesignerEventArgs eventArgs, int expectedActivatedCallCount, int expectedDeactivatedCallCount, int expectedFlushCount)
         {
@@ -2503,7 +2503,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(expectedFlushCount, flushCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Remove_Invoke_Success()
         {
             var surface = new SubDesignSurface();
@@ -2567,7 +2567,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { notInheritedComponent, 1, 1 };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Remove_IExtenderProviderServiceWithoutDefault_TestData))]
         public void DesignerHost_Remove_IExtenderProviderServiceWithoutDefault_Success(Component component, int expectedAddCallCount, int expectedRemoveCallCount)
         {
@@ -2637,7 +2637,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { notInheritedComponent };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Remove_IExtenderProviderServiceWithDefault_TestData))]
         public void DesignerHost_Remove_IExtenderProviderServiceWithDefault_Success(Component component)
         {
@@ -2689,7 +2689,7 @@ namespace System.ComponentModel.Design.Tests
             mockExtenderProviderService.Verify(s => s.RemoveExtenderProvider(component as IExtenderProvider), Times.Never());
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
         public void DesignerHost_Remove_InvalidIExtenderProviderServiceWithoutDefault_CallsParentGetService(Mock<IServiceProvider> mockParentProvider)
         {
@@ -2707,7 +2707,7 @@ namespace System.ComponentModel.Design.Tests
             mockParentProvider?.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Exactly(2));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
         public void DesignerHost_Remove_InvalidIExtenderProviderServiceWithDefault_DoesNotCallParentGetService(Mock<IServiceProvider> mockParentProvider)
         {
@@ -2724,7 +2724,7 @@ namespace System.ComponentModel.Design.Tests
             mockParentProvider?.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Never());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Remove_ComponentNotInContainerNonEmpty_Nop()
         {
             using var surface1 = new SubDesignSurface();
@@ -2742,7 +2742,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Same(component, Assert.Single(host2.Container.Components));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Remove_ComponentNotInContainerEmpty_Nop()
         {
             using var surface1 = new SubDesignSurface();
@@ -2758,7 +2758,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Empty(host2.Container.Components);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void Remove_InvokeWithComponentRemoved_CallsHandler()
         {
             var surface = new SubDesignSurface();
@@ -2824,7 +2824,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(1, componentRemovedCallCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Remove_SetSiteToNullInComponentRemoving_Success()
         {
             var surface = new SubDesignSurface();
@@ -2846,7 +2846,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(component.Site);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Remove_SiteHasDictionary_ClearsDictionary()
         {
             var surface = new SubDesignSurface();
@@ -2862,7 +2862,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(service.GetValue("key"));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_Remove_NullComponent_ThrowsArgumentNullException()
         {
             var surface = new SubDesignSurface();
@@ -2870,7 +2870,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ArgumentNullException>("component", () => host.Container.Remove(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_RemoveService_Invoke_GetServiceReturnsExpected()
         {
             var surface = new SubDesignSurface();
@@ -2883,7 +2883,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.GetService(typeof(object)));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_RemoveService_InvokeBool_GetServiceReturnsExpected(bool promote)
         {
@@ -2897,7 +2897,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(host.GetService(typeof(object)));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_RemoveService_InvokeDisposed_ThrowsObjectDisposedException()
         {
             var surface = new SubDesignSurface();
@@ -2915,7 +2915,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new object(), TypeDescriptor.GetProperties(typeof(string))[0] };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnComponentChanging_TestData))]
         public void DesignerHost_IComponentChangeServiceOnComponentChanging_Invoke_CallsComponentChanging(object component, MemberDescriptor member)
         {
@@ -2948,7 +2948,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnComponentChanging_TestData))]
         public void DesignerHost_IComponentChangeServiceOnComponentChanging_InvokeLoading_DoesNotCallHandler(object component, MemberDescriptor member)
         {
@@ -2985,7 +2985,7 @@ namespace System.ComponentModel.Design.Tests
             yield return new object[] { new object(), TypeDescriptor.GetProperties(typeof(string))[0], new object(), new object() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnComponentChanged_TestData))]
         public void DesignerHost_IComponentChangeServiceOnComponentChanged_Invoke_CallsComponentChanged(object component, MemberDescriptor member, object oldValue, object newValue)
         {
@@ -3020,7 +3020,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(2, callCount);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(OnComponentChanged_TestData))]
         public void DesignerHost_IComponentChangeServiceOnComponentChanged_InvokeLoading_DoesNotCallHandler(object component, MemberDescriptor member, object oldValue, object newValue)
         {
@@ -3051,7 +3051,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(0, callCount);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IReflect_UnderlyingSystemType_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
@@ -3059,7 +3059,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(typeof(IDesignerHost), reflect.UnderlyingSystemType);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IReflect_GetField_Success()
         {
             using var surface = new SubDesignSurface();
@@ -3067,7 +3067,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(typeof(IDesignerHost).GetField(nameof(IDesignerHost.Activate)), reflect.GetField(nameof(IDesignerHost.Activate), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IReflect_GetFields_Success()
         {
             using var surface = new SubDesignSurface();
@@ -3075,7 +3075,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(typeof(IDesignerHost).GetFields(), reflect.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IReflect_GetMember_Success()
         {
             using var surface = new SubDesignSurface();
@@ -3083,7 +3083,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(typeof(IDesignerHost).GetMember(nameof(IDesignerHost.Container)), reflect.GetMember(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IReflect_GetMembers_Success()
         {
             using var surface = new SubDesignSurface();
@@ -3091,7 +3091,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(typeof(IDesignerHost).GetMembers(), reflect.GetMembers(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IReflect_GetMethod_Success()
         {
             using var surface = new SubDesignSurface();
@@ -3100,7 +3100,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(typeof(IDesignerHost).GetMethod(nameof(IDesignerHost.Activate)), reflect.GetMethod(nameof(IDesignerHost.Activate), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, Array.Empty<Type>(), Array.Empty<ParameterModifier>()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IReflect_GetMethods_Success()
         {
             using var surface = new SubDesignSurface();
@@ -3108,7 +3108,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(typeof(IDesignerHost).GetMethods(), reflect.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IReflect_GetProperty_Success()
         {
             using var surface = new SubDesignSurface();
@@ -3117,7 +3117,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(typeof(IDesignerHost).GetProperty(nameof(IDesignerHost.Container)), reflect.GetProperty(nameof(IDesignerHost.Container), BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public, null, typeof(IContainer), Array.Empty<Type>(), Array.Empty<ParameterModifier>()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IReflect_GetProperties_Success()
         {
             using var surface = new SubDesignSurface();
@@ -3125,7 +3125,7 @@ namespace System.ComponentModel.Design.Tests
             Assert.Equal(typeof(IDesignerHost).GetProperties(), reflect.GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DesignerHost_IReflect_InvokeMember_ReturnsExpected()
         {
             using var surface = new SubDesignSurface();
