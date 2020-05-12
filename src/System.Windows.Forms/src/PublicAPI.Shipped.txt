@@ -10061,20 +10061,20 @@ System.Windows.Forms.HScrollProperties.HScrollProperties(System.Windows.Forms.Sc
 ~System.Windows.Forms.ImageList.Tag.get -> object
 ~System.Windows.Forms.ImageList.Tag.set -> void
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.InputLanguage.Culture.get -> System.Globalization.CultureInfo
-~System.Windows.Forms.InputLanguage.LayoutName.get -> string
-~System.Windows.Forms.InputLanguageChangedEventArgs.Culture.get -> System.Globalization.CultureInfo
-~System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage
-~System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguageChangedEventArgs(System.Globalization.CultureInfo culture, byte charSet) -> void
-~System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguageChangedEventArgs(System.Windows.Forms.InputLanguage inputLanguage, byte charSet) -> void
-~System.Windows.Forms.InputLanguageChangingEventArgs.Culture.get -> System.Globalization.CultureInfo
-~System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage
-~System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguageChangingEventArgs(System.Globalization.CultureInfo culture, bool sysCharSet) -> void
-~System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguageChangingEventArgs(System.Windows.Forms.InputLanguage inputLanguage, bool sysCharSet) -> void
-~System.Windows.Forms.InputLanguageCollection.Contains(System.Windows.Forms.InputLanguage value) -> bool
-~System.Windows.Forms.InputLanguageCollection.CopyTo(System.Windows.Forms.InputLanguage[] array, int index) -> void
-~System.Windows.Forms.InputLanguageCollection.IndexOf(System.Windows.Forms.InputLanguage value) -> int
-~System.Windows.Forms.InputLanguageCollection.this[int index].get -> System.Windows.Forms.InputLanguage
+System.Windows.Forms.InputLanguage.Culture.get -> System.Globalization.CultureInfo!
+System.Windows.Forms.InputLanguage.LayoutName.get -> string!
+System.Windows.Forms.InputLanguageChangedEventArgs.Culture.get -> System.Globalization.CultureInfo!
+System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage?
+System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguageChangedEventArgs(System.Globalization.CultureInfo! culture, byte charSet) -> void
+System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguageChangedEventArgs(System.Windows.Forms.InputLanguage! inputLanguage, byte charSet) -> void
+System.Windows.Forms.InputLanguageChangingEventArgs.Culture.get -> System.Globalization.CultureInfo!
+System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage?
+System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguageChangingEventArgs(System.Globalization.CultureInfo! culture, bool sysCharSet) -> void
+System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguageChangingEventArgs(System.Windows.Forms.InputLanguage! inputLanguage, bool sysCharSet) -> void
+System.Windows.Forms.InputLanguageCollection.Contains(System.Windows.Forms.InputLanguage? value) -> bool
+System.Windows.Forms.InputLanguageCollection.CopyTo(System.Windows.Forms.InputLanguage![]! array, int index) -> void
+System.Windows.Forms.InputLanguageCollection.IndexOf(System.Windows.Forms.InputLanguage? value) -> int
+System.Windows.Forms.InputLanguageCollection.this[int index].get -> System.Windows.Forms.InputLanguage!
 ~System.Windows.Forms.ItemCheckedEventArgs.Item.get -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ItemCheckedEventArgs.ItemCheckedEventArgs(System.Windows.Forms.ListViewItem item) -> void
 ~System.Windows.Forms.ItemDragEventArgs.Item.get -> object
@@ -11524,7 +11524,7 @@ override System.Windows.Forms.HScrollBar.CreateParams.get -> System.Windows.Form
 ~override System.Windows.Forms.ImageKeyConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext context) -> bool
 ~override System.Windows.Forms.ImageKeyConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
 ~override System.Windows.Forms.ImageList.ToString() -> string
-~override System.Windows.Forms.InputLanguage.Equals(object value) -> bool
+override System.Windows.Forms.InputLanguage.Equals(object? value) -> bool
 ~override System.Windows.Forms.KeysConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
 ~override System.Windows.Forms.KeysConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.KeysConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
@@ -12311,11 +12311,11 @@ override System.Windows.Forms.VScrollBar.CreateParams.get -> System.Windows.Form
 ~static System.Windows.Forms.HtmlWindow.operator !=(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator ==(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
 ~static System.Windows.Forms.ImeModeConversion.ImeModeConversionBits.get -> System.Collections.Generic.Dictionary<System.Windows.Forms.ImeMode, System.Windows.Forms.ImeModeConversion>
-~static System.Windows.Forms.InputLanguage.CurrentInputLanguage.get -> System.Windows.Forms.InputLanguage
-~static System.Windows.Forms.InputLanguage.CurrentInputLanguage.set -> void
-~static System.Windows.Forms.InputLanguage.DefaultInputLanguage.get -> System.Windows.Forms.InputLanguage
-~static System.Windows.Forms.InputLanguage.FromCulture(System.Globalization.CultureInfo culture) -> System.Windows.Forms.InputLanguage
-~static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.Windows.Forms.InputLanguageCollection
+static System.Windows.Forms.InputLanguage.CurrentInputLanguage.get -> System.Windows.Forms.InputLanguage!
+static System.Windows.Forms.InputLanguage.CurrentInputLanguage.set -> void
+static System.Windows.Forms.InputLanguage.DefaultInputLanguage.get -> System.Windows.Forms.InputLanguage!
+static System.Windows.Forms.InputLanguage.FromCulture(System.Globalization.CultureInfo! culture) -> System.Windows.Forms.InputLanguage?
+static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.Windows.Forms.InputLanguageCollection!
 ~static System.Windows.Forms.ListBindingHelper.GetList(object dataSource, string dataMember) -> object
 ~static System.Windows.Forms.ListBindingHelper.GetList(object list) -> object
 ~static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object dataSource, string dataMember, System.ComponentModel.PropertyDescriptor[] listAccessors) -> System.ComponentModel.PropertyDescriptorCollection

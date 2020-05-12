@@ -15,6 +15,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { CultureInfo.InvariantCulture, true };
             yield return new object[] { new CultureInfo("en"), false };
+            yield return new object[] { new UnknownKeyboardCultureInfo(), false };
         }
 
         [Theory]
@@ -60,6 +61,15 @@ namespace System.Windows.Forms.Tests
         public void Ctor_NullInputLanguage_ThrowsNullReferenceException()
         {
             Assert.Throws<ArgumentNullException>("inputLanguage", () => new InputLanguageChangingEventArgs((InputLanguage)null, true));
+        }
+
+        private class UnknownKeyboardCultureInfo : CultureInfo
+        {
+            public UnknownKeyboardCultureInfo() : base("en-US")
+            {
+            }
+
+            public override int KeyboardLayoutId => int.MaxValue;
         }
     }
 }
