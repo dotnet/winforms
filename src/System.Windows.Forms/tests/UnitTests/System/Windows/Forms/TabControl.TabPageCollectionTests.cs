@@ -1220,6 +1220,64 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void TabPageCollection_CopyTo_InvokeNullGetItemsEmpty_Success()
+        {
+            using var owner = new NullGetItemsTabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            iList.CopyTo(null, 0);
+
+            var array = new object[] { 1, 2, 3, 4 };
+            iList.CopyTo(array, 1);
+            Assert.Equal(new object[] { 1, 2, 3, 4 }, array);
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_CopyTo_InvokeInvalidGetItemsEmpty_Success()
+        {
+            using var owner = new InvalidGetItemsTabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            iList.CopyTo(null, 0);
+
+            var array = new object[] { 1, 2, 3, 4 };
+            iList.CopyTo(array, 1);
+            Assert.Equal(new object[] { 1, 2, 3, 4 }, array);
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_CopyTo_InvokeNullGetItemsNotEmpty_Success()
+        {
+            using var owner = new NullGetItemsTabControl();
+            using var child1 = new TabPage();
+            using var child2 = new TabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            iList.Add(child1);
+            iList.Add(child2);
+
+            var array = new object[] { 1, 2, 3, 4 };
+            Assert.Throws<ArgumentNullException>("sourceArray", () => iList.CopyTo(array, 1));
+            Assert.Equal(new object[] { 1, 2, 3, 4 }, array);
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_CopyTo_InvokeInvalidGetItemsNotEmpty_Success()
+        {
+            using var owner = new InvalidGetItemsTabControl();
+            using var child1 = new TabPage();
+            using var child2 = new TabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            iList.Add(child1);
+            iList.Add(child2);
+
+            var array = new object[] { 1, 2, 3, 4 };
+            Assert.Throws<InvalidCastException>(() => iList.CopyTo(array, 1));
+            Assert.Equal(new object[] { 1, 2, 3, 4 }, array);
+        }
+
+        [WinFormsFact]
         public void TabPageCollection_Clear_InvokeEmpty_Success()
         {
             using var owner = new TabControl();
@@ -1720,6 +1778,35 @@ namespace System.Windows.Forms.Tests
 
             collection.Add(child1);
             Assert.Throws<InvalidOperationException>(() => enumerator.Current);
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_GetEnumerator_InvokeNullGetItems_ReturnsExpected()
+        {
+            using var owner = new NullGetItemsTabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            IEnumerator enumerator = collection.GetEnumerator();
+            for (int i = 0; i < 2; i++)
+            {
+                Assert.Throws<InvalidOperationException>(() => enumerator.Current);
+
+                Assert.False(enumerator.MoveNext());
+                Assert.Throws<InvalidOperationException>(() => enumerator.Current);
+
+                // Call again.
+                Assert.False(enumerator.MoveNext());
+                Assert.Throws<InvalidOperationException>(() => enumerator.Current);
+
+                enumerator.Reset();
+            }
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_GetEnumerator_InvokeInvalidGetItems_ReturnsExpected()
+        {
+            using var owner = new InvalidGetItemsTabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            Assert.Throws<InvalidCastException>(() => collection.GetEnumerator());
         }
 
         [WinFormsFact]
@@ -2871,6 +2958,229 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, "key", "text"));
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, "key", "text", 1));
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.Insert(index, "key", "text", "imageKey"));
+            Assert.Same(child, Assert.Single(collection));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Add_TestData))]
+        public void TabPageCollection_IListInsert_InvokeValueWithoutHandleOwnerWithoutHandle_Success(TabAppearance appearance)
+        {
+            using var owner = new TabControl
+            {
+                Appearance = appearance,
+                Bounds = new Rectangle(0, 0, 400, 300)
+            };
+            using var value1 = new TabPage();
+            using var value2 = new TabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+
+            int layoutCallCount1 = 0;
+            value1.Layout += (sender, e) => layoutCallCount1++;
+            int layoutCallCount2 = 0;
+            value2.Layout += (sender, e) => layoutCallCount2++;
+            int parentLayoutCallCount = 0;
+            var events = new List<LayoutEventArgs>();
+            void parentHandler(object sender, LayoutEventArgs e)
+            {
+                Assert.Same(owner, sender);
+                events.Add(e);
+                parentLayoutCallCount++;
+            }
+            owner.Layout += parentHandler;
+
+            try
+            {
+                // Add first.
+                iList.Insert(0, value1);
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Same(value1, Assert.Single(owner.Controls));
+                Assert.Same(owner, value1.Parent);
+                Assert.False(value1.Visible);
+                Assert.Equal(new Rectangle(0, 0, 200, 100), value1.Bounds);
+                Assert.Null(value1.Site);
+                Assert.Equal(-1, owner.SelectedIndex);
+                Assert.Equal(0, layoutCallCount1);
+                Assert.Equal(2, parentLayoutCallCount);
+                Assert.Same(value1, events[0].AffectedControl);
+                Assert.Same("Parent", events[0].AffectedProperty);
+                Assert.Same(value1, events[1].AffectedControl);
+                Assert.Same("Visible", events[1].AffectedProperty);
+                Assert.False(value1.IsHandleCreated);
+                Assert.False(owner.IsHandleCreated);
+
+                // Add another.
+                iList.Insert(0, value2);
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
+                Assert.Same(owner, value1.Parent);
+                Assert.False(value1.Visible);
+                Assert.Equal(new Rectangle(0, 0, 200, 100), value1.Bounds);
+                Assert.Null(value1.Site);
+                Assert.Same(owner, value2.Parent);
+                Assert.False(value2.Visible);
+                Assert.Equal(new Rectangle(0, 0, 200, 100), value2.Bounds);
+                Assert.Null(value2.Site);
+                Assert.Equal(-1, owner.SelectedIndex);
+                Assert.Equal(0, layoutCallCount1);
+                Assert.Equal(0, layoutCallCount2);
+                Assert.Equal(5, parentLayoutCallCount);
+                Assert.Same(value1, events[0].AffectedControl);
+                Assert.Same("Parent", events[0].AffectedProperty);
+                Assert.Same(value1, events[1].AffectedControl);
+                Assert.Same("Visible", events[1].AffectedProperty);
+                Assert.Same(value2, events[2].AffectedControl);
+                Assert.Same("Parent", events[2].AffectedProperty);
+                Assert.Same(value2, events[3].AffectedControl);
+                Assert.Same("Visible", events[3].AffectedProperty);
+                Assert.Same(value2, events[4].AffectedControl);
+                Assert.Same("ChildIndex", events[4].AffectedProperty);
+                Assert.False(value1.IsHandleCreated);
+                Assert.False(value2.IsHandleCreated);
+                Assert.False(owner.IsHandleCreated);
+
+                // Add again.
+                iList.Insert(2, value1);
+                Assert.Empty(collection);
+                Assert.Empty(owner.TabPages);
+                Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
+                Assert.Same(owner, value1.Parent);
+                Assert.False(value1.Visible);
+                Assert.Same(owner, value2.Parent);
+                Assert.Equal(new Rectangle(0, 0, 200, 100), value1.Bounds);
+                Assert.Null(value1.Site);
+                Assert.False(value2.Visible);
+                Assert.Equal(new Rectangle(0, 0, 200, 100), value2.Bounds);
+                Assert.Null(value2.Site);
+                Assert.Equal(-1, owner.SelectedIndex);
+                Assert.Equal(0, layoutCallCount1);
+                Assert.Equal(7, parentLayoutCallCount);
+                Assert.Same(value1, events[0].AffectedControl);
+                Assert.Same("Parent", events[0].AffectedProperty);
+                Assert.Same(value1, events[1].AffectedControl);
+                Assert.Same("Visible", events[1].AffectedProperty);
+                Assert.Same(value2, events[2].AffectedControl);
+                Assert.Same("Parent", events[2].AffectedProperty);
+                Assert.Same(value2, events[3].AffectedControl);
+                Assert.Same("Visible", events[3].AffectedProperty);
+                Assert.Same(value2, events[4].AffectedControl);
+                Assert.Same("ChildIndex", events[4].AffectedProperty);
+                Assert.Same(value1, events[5].AffectedControl);
+                Assert.Same("ChildIndex", events[5].AffectedProperty);
+                Assert.Same(value1, events[6].AffectedControl);
+                Assert.Same("ChildIndex", events[6].AffectedProperty);
+                Assert.False(value1.IsHandleCreated);
+                Assert.False(value2.IsHandleCreated);
+                Assert.False(owner.IsHandleCreated);
+            }
+            finally
+            {
+                owner.Layout -= parentHandler;
+            }
+        }
+
+        public static IEnumerable<object[]> IListInsert_InvalidValue_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { new object() };
+            yield return new object[] { new Control() };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(IListInsert_InvalidValue_TestData))]
+        public void TabPageCollection_IListInsert_NotTabPage_ThrowsArgumentException(object value)
+        {
+            using var owner = new TabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            Assert.Throws<ArgumentException>(null, () => iList.Insert(0, value));
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_IListInsert_NegativeIndexEmpty_ThrowsArgumentOutOfRangeException()
+        {
+            using var owner = new TabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            using var value = new TabPage();
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => iList.Insert(-1, value));
+            Assert.Empty(collection);
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_IListInsert_NegativeIndexEmptyWithHandle_ThrowsArgumentOutOfRangeException()
+        {
+            using var owner = new TabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            using var value = new TabPage();
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => iList.Insert(-1, value));
+            Assert.Empty(collection);
+        }
+
+        [WinFormsTheory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void TabPageCollection_IListInsert_InvalidIndexEmpty_Nop(int index)
+        {
+            using var owner = new TabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            using var value = new TabPage();
+            iList.Insert(index, value);
+            Assert.Empty(collection);
+        }
+
+        [WinFormsTheory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void TabPageCollection_IListInsert_InvalidIndexEmptyWithHandle_Nop(int index)
+        {
+            using var owner = new TabControl();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            using var value = new TabPage();
+            iList.Insert(index, value);
+            Assert.Same(value, Assert.Single(collection));
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void TabPageCollection_IListInsert_InvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
+        {
+            using var owner = new TabControl();
+            using var child = new TabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            collection.Add(child);
+            using var value = new TabPage();
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => iList.Insert(index, value));
+            Assert.Same(child, Assert.Single(collection));
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        public void TabPageCollection_IListInsert_InvalidIndexNotEmptyWithHandle_ThrowsArgumentOutOfRangeException(int index)
+        {
+            using var owner = new TabControl();
+            using var child = new TabPage();
+            var collection = new TabControl.TabPageCollection(owner);
+            IList iList = collection;
+            collection.Add(child);
+            Assert.NotEqual(IntPtr.Zero, owner.Handle);
+
+            using var value = new TabPage();
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => iList.Insert(index, value));
             Assert.Same(child, Assert.Single(collection));
         }
 
@@ -4583,6 +4893,16 @@ namespace System.Windows.Forms.Tests
             // Call again.
             collection.RemoveByKey(key);
             Assert.Equal(new TabPage[] { child1, child2, child3 }, collection.Cast<TabPage>());
+        }
+
+        private class NullGetItemsTabControl : TabControl
+        {
+            protected override object[] GetItems() => null;
+        }
+
+        private class InvalidGetItemsTabControl : TabControl
+        {
+            protected override object[] GetItems() => new object[] { 1 };
         }
 
         private class NullTextTabPage : TabPage
