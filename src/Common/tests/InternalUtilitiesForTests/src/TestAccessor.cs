@@ -97,23 +97,36 @@ namespace System
                 result = null;
 
                 MethodInfo methodInfo = null;
+                Type type = s_type;
 
-                try
+                do
                 {
-                    methodInfo = s_type.GetMethod(
-                        binder.Name,
-                        BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-                }
-                catch (AmbiguousMatchException)
-                {
-                    // More than one match for the name, specify the arguments
-                    methodInfo = s_type.GetMethod(
-                        binder.Name,
-                        BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
-                        binder: null,
-                        args.Select(a => a.GetType()).ToArray(),
-                        modifiers: null);
-                }
+                    try
+                    {
+                        methodInfo = type.GetMethod(
+                            binder.Name,
+                            BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                    }
+                    catch (AmbiguousMatchException)
+                    {
+                        // More than one match for the name, specify the arguments
+                        methodInfo = type.GetMethod(
+                            binder.Name,
+                            BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
+                            binder: null,
+                            args.Select(a => a.GetType()).ToArray(),
+                            modifiers: null);
+                    }
+
+                    if (methodInfo != null || type == typeof(object))
+                    {
+                        // Found something, or already at the top of the type heirarchy
+                        break;
+                    }
+
+                    // Walk up the heirarchy
+                    type = type.BaseType;
+                } while (true);
 
                 if (methodInfo == null)
                     return false;
@@ -124,18 +137,11 @@ namespace System
 
             public override bool TrySetMember(SetMemberBinder binder, object value)
             {
-                FieldInfo fieldInfo = GetFieldInfo(binder.Name);
-                if (fieldInfo != null)
-                {
-                    fieldInfo.SetValue(_instance, value);
-                    return true;
-                }
-
-                PropertyInfo propertyInfo = GetPropertyInfo(binder.Name);
-                if (propertyInfo == null)
+                MemberInfo info = GetFieldOrPropertyInfo(binder.Name);
+                if (info == null)
                     return false;
 
-                propertyInfo.SetValue(_instance, value);
+                SetValue(info, value);
                 return true;
             }
 
@@ -143,30 +149,63 @@ namespace System
             {
                 result = null;
 
-                FieldInfo fieldInfo = GetFieldInfo(binder.Name);
-                if (fieldInfo != null)
-                {
-                    result = fieldInfo.GetValue(_instance);
-                    return true;
-                }
-
-                PropertyInfo propertyInfo = GetPropertyInfo(binder.Name);
-                if (propertyInfo == null)
+                MemberInfo info = GetFieldOrPropertyInfo(binder.Name);
+                if (info == null)
                     return false;
 
-                result = propertyInfo.GetValue(_instance);
+                result = GetValue(info);
                 return true;
             }
 
-            private PropertyInfo GetPropertyInfo(string propertyName)
-                => s_type.GetProperty(
-                    propertyName,
-                    BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
+            private MemberInfo GetFieldOrPropertyInfo(string memberName)
+            {
+                Type type = s_type;
+                MemberInfo info;
 
-            private FieldInfo GetFieldInfo(string fieldName)
-                => s_type.GetField(
-                    fieldName,
-                    BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
+                do
+                {
+                    info = (MemberInfo)type.GetField(
+                        memberName,
+                        BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic)
+                        ?? type.GetProperty(
+                            memberName,
+                            BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
+
+                    if (info != null || type == typeof(object))
+                    {
+                        // Found something, or already at the top of the type heirarchy
+                        break;
+                    }
+
+                    // Walk up the type heirarchy
+                    type = s_type.BaseType;
+                } while (true);
+
+                return info;
+            }
+
+            private object GetValue(MemberInfo memberInfo)
+                => memberInfo switch
+                {
+                    FieldInfo fieldInfo => fieldInfo.GetValue(_instance),
+                    PropertyInfo propertyInfo => propertyInfo.GetValue(_instance),
+                    _ => throw new InvalidOperationException()
+                };
+
+            private void SetValue(MemberInfo memberInfo, object value)
+            {
+                switch (memberInfo)
+                {
+                    case FieldInfo fieldInfo:
+                        fieldInfo.SetValue(_instance, value);
+                        break;
+                    case PropertyInfo propertyInfo:
+                        propertyInfo.SetValue(_instance, value);
+                        break;
+                    default:
+                        throw new InvalidOperationException();
+                }
+            }
         }
     }
 }

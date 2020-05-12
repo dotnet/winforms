@@ -154,12 +154,29 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TestAccessor_UpcastType()
+        public void TestAccessor_DynamicAccess_UpcastType()
         {
             A a = new B();
             dynamic accessor = a.TestAccessor().Dynamic;
             accessor._b = 3;
             Assert.Equal(3, accessor._b);
+        }
+
+        [Fact]
+        public void TestAccessor_DynamicAccess_BaseClassField()
+        {
+            A a = new B();
+            dynamic accessor = a.TestAccessor().Dynamic;
+            accessor._a = 5;
+            Assert.Equal(5, accessor._a);
+        }
+
+        [Fact]
+        public void TestAccessor_DynamicAccess_BaseClassMethod()
+        {
+            A a = new B();
+            dynamic accessor = a.TestAccessor().Dynamic;
+            Assert.Equal(42, (int)accessor.AMethod());
         }
 
         // As you can't use a ref struct as a generic parameter to Action/Func, you
@@ -175,6 +192,7 @@ namespace System.Windows.Forms.Tests
 
         public class A
         {
+            private int AMethod() => 42;
             private int _a;
         }
 
