@@ -88,8 +88,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a value indicating whether pressing ENTER
-        ///  in a multiline <see cref='TextBox'/>
+        ///  Gets or sets a value indicating whether pressing ENTER in a multiline <see cref='TextBox'/>
         ///  control creates a new line of text in the control or activates the default button
         ///  for the form.
         /// </summary>
@@ -102,7 +101,6 @@ namespace System.Windows.Forms
             {
                 return acceptsReturn;
             }
-
             set
             {
                 acceptsReturn = value;
@@ -141,8 +139,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is the AutoCompleteSource which can be one of the
-        ///  values from AutoCompleteSource enumeration.
+        ///  This is the AutoCompleteSource which can be one of the values from AutoCompleteSource enumeration.
         ///  This property in conjunction with AutoCompleteMode enables the AutoComplete feature for TextBox.
         /// </summary>
         [DefaultValue(AutoCompleteSource.None)]
@@ -237,8 +234,6 @@ namespace System.Windows.Forms
             {
                 if (characterCasing != value)
                 {
-                    //verify that 'value' is a valid enum type...
-                    //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)CharacterCasing.Normal, (int)CharacterCasing.Lower))
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CharacterCasing));
@@ -269,13 +264,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Determines if the control is in password protect mode.
         /// </summary>
-        internal override bool PasswordProtect
-        {
-            get
-            {
-                return PasswordChar != '\0';
-            }
-        }
+        private protected override bool PasswordProtect
+            => PasswordChar != '\0';
 
         /// <summary>
         ///  Returns the parameters needed to create the handle. Inheriting classes
@@ -299,9 +289,11 @@ namespace System.Windows.Forms
                 }
 
                 // Translate for Rtl if necessary
-                //
                 HorizontalAlignment align = RtlTranslateHorizontal(textAlign);
-                cp.ExStyle &= ~(int)WS_EX.RIGHT;   // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+
+                // WS_EX_RIGHT overrides the ES_XXXX alignment styles
+                cp.ExStyle &= ~(int)WS_EX.RIGHT;
+
                 switch (align)
                 {
                     case HorizontalAlignment.Left:
@@ -401,7 +393,6 @@ namespace System.Windows.Forms
             {
                 if (scrollBars != value)
                 {
-                    //valid values are 0x0 to 0x3
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)ScrollBars.None, (int)ScrollBars.Both))
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ScrollBars));
@@ -435,8 +426,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets
-        ///  the current text in the text box.
+        ///  Gets or sets the current text in the text box.
         /// </summary>
         public override string Text
         {
@@ -449,9 +439,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets how text is
-        ///  aligned in a <see cref='TextBox'/>
-        ///  control.
+        ///  Gets or sets how text is aligned in a <see cref='TextBox'/> control.
         ///  Note: This code is duplicated in MaskedTextBox for simplicity.
         /// </summary>
         [Localizable(true)]
@@ -468,9 +456,6 @@ namespace System.Windows.Forms
             {
                 if (textAlign != value)
                 {
-                    //verify that 'value' is a valid enum type...
-
-                    //valid values are 0x0 to 0x2
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
                     {
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
@@ -522,7 +507,6 @@ namespace System.Windows.Forms
         public event EventHandler TextAlignChanged
         {
             add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
-
             remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
         }
 
@@ -533,7 +517,7 @@ namespace System.Windows.Forms
                 // Reset this just in case, because the SHAutoComplete stuff
                 // will subclass this guys wndproc (and nativewindow can't know about it).
                 // so this will undo it, but on a dispose we'll be Destroying the window anyay.
-                //
+
                 ResetAutoComplete(true);
                 if (autoCompleteCustomSource != null)
                 {
@@ -575,6 +559,7 @@ namespace System.Windows.Forms
         protected unsafe override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
+
             // Force repainting of the entire window frame
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
@@ -591,7 +576,7 @@ namespace System.Windows.Forms
             base.OnFontChanged(e);
             if (AutoCompleteMode != AutoCompleteMode.None)
             {
-                //we always will recreate the handle when autocomplete mode is on
+                // Always recreate the handle when autocomplete mode is on
                 RecreateHandle();
             }
         }
@@ -706,7 +691,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Performs the actual select without doing arg checking.
         /// </summary>
-        internal override void SelectInternal(int start, int length, int textLen)
+        private protected override void SelectInternal(int start, int length, int textLen)
         {
             // If user set selection into text box, mark it so we don't
             // clobber it when we get focus.
@@ -727,9 +712,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the AutoComplete mode in TextBox.
         /// </summary>
-        internal void SetAutoComplete(bool reset)
+        private void SetAutoComplete(bool reset)
         {
-            //Autocomplete Not Enabled for Password enabled and MultiLine Textboxes.
+            // Autocomplete Not Enabled for Password enabled and MultiLine Textboxes.
             if (Multiline || passwordChar != 0 || useSystemPasswordChar || AutoCompleteSource == AutoCompleteSource.None)
             {
                 return;
@@ -866,8 +851,6 @@ namespace System.Windows.Forms
             }
         }
 
-        //-------------------------------------------------------------------------------------------------
-
         /// <summary>
         ///  Draws the <see cref="PlaceholderText"/> in the client area of the <see cref="TextBox"/> using the default font and color.
         /// </summary>
@@ -939,11 +922,6 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                     }
                     break;
-                //for readability ... so that we know whats happening ...
-                // case WM_LBUTTONUP is included here eventhough it just calls the base.
-                case User32.WM.LBUTTONUP:
-                    base.WndProc(ref m);
-                    break;
                 case User32.WM.PRINT:
                     WmPrint(ref m);
                     break;
@@ -962,24 +940,10 @@ namespace System.Windows.Forms
         }
 
         private bool ShouldRenderPlaceHolderText(in Message m) =>
-                    !string.IsNullOrEmpty(PlaceholderText) &&
-                    (m.Msg == (int)User32.WM.PAINT || m.Msg == (int)User32.WM.KILLFOCUS) &&
-                    !GetStyle(ControlStyles.UserPaint) &&
-                    !Focused &&
-                    TextLength == 0;
-
-        internal TestAccessor GetTestAccessor() => new TestAccessor(this);
-
-        internal readonly struct TestAccessor
-        {
-            private readonly TextBox _textBox;
-
-            public TestAccessor(TextBox textBox)
-            {
-                _textBox = textBox;
-            }
-
-            public bool ShouldRenderPlaceHolderText(in Message m) => _textBox.ShouldRenderPlaceHolderText(m);
-        }
+            !string.IsNullOrEmpty(PlaceholderText) &&
+            (m.Msg == (int)User32.WM.PAINT || m.Msg == (int)User32.WM.KILLFOCUS) &&
+            !GetStyle(ControlStyles.UserPaint) &&
+            !Focused &&
+            TextLength == 0;
     }
 }

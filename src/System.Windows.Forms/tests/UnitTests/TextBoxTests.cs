@@ -377,7 +377,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TextBox_ShouldRenderPlaceHolderText_TestData))]
         public void TextBox_ShouldRenderPlaceHolderText(TextBox textBox, Message m, bool expected)
         {
-            var result = textBox.GetTestAccessor().ShouldRenderPlaceHolderText(m);
+            bool result = textBox.TestAccessor().Dynamic.ShouldRenderPlaceHolderText(m);
             Assert.Equal(expected, result);
         }
 
