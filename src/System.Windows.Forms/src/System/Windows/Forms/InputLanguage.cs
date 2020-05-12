@@ -191,8 +191,7 @@ namespace System.Windows.Forms
                     substitutions.Close();
                 }
 
-                string layoutName;
-                RegistryKey layouts = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts");
+                using RegistryKey layouts = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts");
                 if (layouts != null)
                 {
                     encodings = layouts.GetSubKeyNames();
@@ -203,10 +202,10 @@ namespace System.Windows.Forms
                         Debug.Assert(encoding.Length == 8, "unexpected key in registry: hklm\\SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts\\" + encoding);
                         if (currentHandle == (IntPtr)Convert.ToInt32(encoding, 16))
                         {
-                            RegistryKey key = layouts.OpenSubKey(encoding);
+                            using RegistryKey key = layouts.OpenSubKey(encoding);
 
                             // Attempt to extract the localized keyboard layout name using the SHLoadIndirectString API.
-                            layoutName = GetLocalizedKeyboardLayoutName(key.GetValue("Layout Display Name") as string);
+                            string layoutName = GetLocalizedKeyboardLayoutName(key.GetValue("Layout Display Name") as string);
 
                             // Default back to our legacy codepath and obtain the name
                             // directly through the registry value
@@ -215,50 +214,48 @@ namespace System.Windows.Forms
                                 layoutName = (string)key.GetValue("Layout Text");
                             }
 
-                            key.Close();
+                            if (layoutName != null)
+                            {
+                                return layoutName;
+                            }
                             break;
                         }
                     }
                 }
 
-                if (layoutName == null)
+                // No luck there.  Match the language first, then try to find a layout ID
+                foreach (string encoding in encodings)
                 {
-                    // No luck there.  Match the language first, then try to find a layout ID
-                    foreach (string encoding in encodings)
+                    Debug.Assert(encoding.Length == 8, "unexpected key in registry: hklm\\SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts\\" + encoding);
+                    if (language == (0xffff & Convert.ToInt32(encoding.Substring(4, 4), 16)))
                     {
-                        Debug.Assert(encoding.Length == 8, "unexpected key in registry: hklm\\SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts\\" + encoding);
-                        if (language == (0xffff & Convert.ToInt32(encoding.Substring(4, 4), 16)))
+                        using RegistryKey key = layouts.OpenSubKey(encoding);
+                        string codeValue = (string)key.GetValue("Layout Id");
+                        if (codeValue != null)
                         {
-                            RegistryKey key = layouts.OpenSubKey(encoding);
-                            string codeValue = (string)key.GetValue("Layout Id");
-                            if (codeValue != null)
+                            int value = Convert.ToInt32(codeValue, 16);
+                            if (value == device)
                             {
-                                int value = Convert.ToInt32(codeValue, 16);
-                                if (value == device)
-                                {
-                                    // Attempt to extract the localized keyboard layout name using the SHLoadIndirectString API.
-                                    layoutName = GetLocalizedKeyboardLayoutName(key.GetValue("Layout Display Name") as string);
+                                // Attempt to extract the localized keyboard layout name using the SHLoadIndirectString API.
+                                string layoutName = GetLocalizedKeyboardLayoutName(key.GetValue("Layout Display Name") as string);
 
-                                    // Default back to our legacy codepath and obtain the name
-                                    // directly through the registry value
-                                    if (layoutName == null)
-                                    {
-                                        layoutName = (string)key.GetValue("Layout Text");
-                                    }
+                                // Default back to our legacy codepath and obtain the name
+                                // directly through the registry value
+                                if (layoutName == null)
+                                {
+                                    layoutName = (string)key.GetValue("Layout Text");
                                 }
-                            }
-                            key.Close();
-                            if (layoutName != null)
-                            {
-                                break;
+
+                                if (layoutName != null)
+                                {
+                                    return layoutName;
+                                }
                             }
                         }
                     }
                 }
 
-                layouts.Close();
-
-                return layoutName ?? SR.UnknownInputLanguageLayout;
+                return SR.UnknownInputLanguageLayout;
             }
         }
 
