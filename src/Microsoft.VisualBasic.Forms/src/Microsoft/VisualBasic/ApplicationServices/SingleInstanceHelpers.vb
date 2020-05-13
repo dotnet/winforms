@@ -30,23 +30,22 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         Friend Async Function WaitForClientConnectionsAsync(pipeServer As NamedPipeServerStream, callback As Action(Of String()), cancellationToken As CancellationToken) As Task
-            While True
-                cancellationToken.ThrowIfCancellationRequested()
-                Try
-                    Await pipeServer.WaitForConnectionAsync(cancellationToken)
+            Try
+                While True
+                    cancellationToken.ThrowIfCancellationRequested()
+                    Await pipeServer.WaitForConnectionAsync(cancellationToken).ConfigureAwait(False)
                     Try
-                        Dim args = Await ReadArgsAsync(pipeServer, cancellationToken)
+                        Dim args = Await ReadArgsAsync(pipeServer, cancellationToken).ConfigureAwait(False)
                         If args IsNot Nothing Then
                             callback(args)
                         End If
                     Finally
                         pipeServer.Disconnect()
                     End Try
-                Catch ex As IOException
-                Catch ex As ObjectDisposedException
-                    Return
-                End Try
-            End While
+                End While
+            Catch ex As IOException
+            Catch ex As ObjectDisposedException
+            End Try
         End Function
 
         Friend Function SendSecondInstanceArgs(pipeName As String, timeout As Integer, args As String()) As Boolean
@@ -59,7 +58,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim tokenSource = New CancellationTokenSource()
                     tokenSource.CancelAfter(timeout)
                     Try
-                        Dim task = WriteArgsAsync(pipeClient, args, tokenSource.Token)
+                        Dim task = WriteArgsAsync(pipeClient, args, tokenSource.Token).ConfigureAwait(False)
                         task.GetAwaiter().GetResult()
                         Return True
                     Catch ex As TaskCanceledException
@@ -75,7 +74,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Dim buffer = New Byte(nBuffer - 1) {}
             Using stream As New MemoryStream
                 While True
-                    Dim nRead = Await pipeServer.ReadAsync(buffer, 0, nBuffer, cancellationToken)
+                    Dim nRead = Await pipeServer.ReadAsync(buffer, 0, nBuffer, cancellationToken).ConfigureAwait(False)
                     If nRead = 0 Then
                         Exit While
                     End If
@@ -92,15 +91,16 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         Private Async Function WriteArgsAsync(pipeClient As NamedPipeClientStream, args As String(), cancellationToken As CancellationToken) As Task
-            Await pipeClient.ConnectAsync(cancellationToken)
+            Await pipeClient.ConnectAsync(cancellationToken).ConfigureAwait(False)
             Dim content As Byte()
             Using stream As New MemoryStream
                 Dim serializer = New DataContractSerializer(GetType(String()))
                 serializer.WriteObject(stream, args)
                 content = stream.ToArray()
             End Using
-            Await pipeClient.WriteAsync(content, 0, content.Length, cancellationToken)
+            Await pipeClient.WriteAsync(content, 0, content.Length, cancellationToken).ConfigureAwait(False)
         End Function
+
     End Module
 
 End Namespace

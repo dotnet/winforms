@@ -9,6 +9,7 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -17,7 +18,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
 {
     public class SingleInstanceTests
     {
-        private const int SendTimeout = 1000;
+        private const int SendTimeout = 10000;
 
         private sealed class ReceivedArgs
         {
@@ -142,12 +143,52 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 const int n = 5;
                 var sentArgs = Enumerable.Range(0, n).Select(i => Enumerable.Range(0, i).Select(i => i.ToString()).ToArray()).ToArray();
                 var receivedArgs = new ReceivedArgs();
-                var tasks = Enumerable.Range(0, n).Select(i => Task.Factory.StartNew(() => { Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, sentArgs[i])); })).ToArray();
                 WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
+                var tasks = Enumerable.Range(0, n).Select(i => Task.Factory.StartNew(() => { Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, sentArgs[i])); })).ToArray();
                 Task.WaitAll(tasks);
                 FlushLastConnection(pipeName);
                 var receivedSorted = receivedArgs.Freeze().Sort((x, y) => x.Length - y.Length);
                 Assert.Equal(sentArgs, receivedSorted);
+            }
+        }
+
+        // Message that exceeds the buffer size in SingleInstanceHelpers.ReadArgsAsync.
+        [Fact]
+        public void ManyArgs()
+        {
+            var pipeName = GetUniqueName();
+            using (var pipeServer = CreatePipeServer(pipeName))
+            {
+                var expectedArgs = getStrings(20000).ToArray();
+                var receivedArgs = new ReceivedArgs();
+                WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
+                Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, expectedArgs));
+                FlushLastConnection(pipeName);
+                var actualArgs = receivedArgs.Freeze().Single();
+                Assert.Equal(expectedArgs, actualArgs);
+            }
+
+            static IEnumerable<string> getStrings(int maxTotalLength)
+            {
+                var r = new Random();
+                int n = 0;
+                while (n < maxTotalLength)
+                {
+                    var str = getString(r);
+                    n += str.Length;
+                    yield return str;
+                }
+            }
+
+            static string getString(Random r)
+            {
+                int n = r.Next(1000);
+                var builder = new StringBuilder();
+                for (int i = 0; i < n; i++)
+                {
+                    builder.Append((char)('a' + r.Next(26)));
+                }
+                return builder.ToString();
             }
         }
 
@@ -205,9 +246,13 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
 
             static void sendData<T>(string pipeName, T obj)
             {
-                using (var pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out))
+                var pipeClient = CreateClientConnection(pipeName, SendTimeout);
+                if (pipeClient is null)
                 {
-                    pipeClient.Connect();
+                    return;
+                }
+                using (pipeClient)
+                {
                     var serializer = new DataContractSerializer(typeof(T));
                     serializer.WriteObject(pipeClient, obj);
                 }
@@ -244,17 +289,20 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
 
             static void closeAfterConnect(string pipeName)
             {
-                using (var pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out))
+                using (var pipeClient = CreateClientConnection(pipeName, SendTimeout))
                 {
-                    pipeClient.Connect();
                 }
             }
 
             static void sendUnexpectedArgs(string pipeName)
             {
-                using (var pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out))
+                var pipeClient = CreateClientConnection(pipeName, SendTimeout);
+                if (pipeClient is null)
                 {
-                    pipeClient.Connect();
+                    return;
+                }
+                using (pipeClient)
+                {
                     pipeClient.Write(new byte[] { 1, 2, 3 }, 0, 3);
                 }
             }
@@ -272,9 +320,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 using (var pipeServer = CreatePipeServer(pipeName))
                 {
                     WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
-
-                    pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out);
-                    pipeClient.Connect();
+                    pipeClient = CreateClientConnection(pipeName, SendTimeout);
                 }
                 Thread.Sleep(500);
                 Assert.Empty(receivedArgs.Freeze());
@@ -292,10 +338,24 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         // server by creating an extra client connection that closes after connecting.
         private static void FlushLastConnection(string pipeName)
         {
-            using (var pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out))
+            using (CreateClientConnection(pipeName, SendTimeout))
             {
-                pipeClient.Connect();
             }
+        }
+
+        private static NamedPipeClientStream CreateClientConnection(string pipeName, int timeout)
+        {
+            var pipeClient = new NamedPipeClientStream(".", pipeName, PipeDirection.Out);
+            try
+            {
+                pipeClient.Connect(timeout);
+            }
+            catch (TimeoutException)
+            {
+                pipeClient.Dispose();
+                return null;
+            }
+            return pipeClient;
         }
     }
 }
