@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -24,7 +22,7 @@ namespace System.Windows.Forms
             private static IntPtr s_oleAccAvailable = NativeMethods.InvalidIntPtr;
 
             private IntPtr _handle = IntPtr.Zero; // Associated window handle (if any)
-            private int[] _runtimeId = null;      // Used by UIAutomation
+            private int[]? _runtimeId = null;     // Used by UIAutomation
 
             public ControlAccessibleObject(Control ownerControl)
             {
@@ -50,7 +48,7 @@ namespace System.Windows.Forms
             ///  the user. The system defaults to z-order, which is bad for us because
             ///  that is usually the reverse of tab order!
             /// </summary>
-            internal override int[] GetSysChildOrder()
+            internal override int[]? GetSysChildOrder()
                 => Owner.GetStyle(ControlStyles.ContainerControl)
                     ? Owner.GetChildWindowsInTabOrder() : base.GetSysChildOrder();
 
@@ -85,7 +83,7 @@ namespace System.Windows.Forms
             ///  allows us to present the end user with the illusion of accessible objects in
             ///  tab index order, even though the system behavior only supports z-order.
             /// </summary>
-            internal override bool GetSysChild(AccessibleNavigation navdir, out AccessibleObject accessibleObject)
+            internal override bool GetSysChild(AccessibleNavigation navdir, out AccessibleObject? accessibleObject)
             {
                 // Clear the out parameter
                 accessibleObject = null;
@@ -95,7 +93,7 @@ namespace System.Windows.Forms
 
                 // ctrls[index] will indicate the control at the destination of this navigation operation
                 int index = -1;
-                Control[] ctrls = null;
+                Control[]? ctrls = null;
 
                 // Now handle any 'appropriate' navigation requests...
                 switch (navdir)
@@ -156,8 +154,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            public override string DefaultAction
-                => Owner.AccessibleDefaultActionDescription ?? base.DefaultAction;
+            public override string? DefaultAction => Owner.AccessibleDefaultActionDescription ?? base.DefaultAction;
 
             // This is used only if control supports IAccessibleEx
             internal override int[] RuntimeId
@@ -173,8 +170,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Description
-                => Owner.AccessibleDescription ?? base.Description;
+            public override string? Description => Owner.AccessibleDescription ?? base.Description;
 
             public IntPtr Handle
             {
@@ -218,26 +214,23 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Help
+            public override string? Help
             {
                 get
                 {
-                    QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[s_queryAccessibilityHelpEvent];
-
+                    QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
                     if (handler != null)
                     {
                         QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
                         handler(Owner, args);
                         return args.HelpString;
                     }
-                    else
-                    {
-                        return base.Help;
-                    }
+
+                    return base.Help;
                 }
             }
 
-            public override string KeyboardShortcut
+            public override string? KeyboardShortcut
             {
                 get
                 {
@@ -248,14 +241,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Name
+            public override string? Name
             {
                 get
                 {
                     // Special case: If an explicit name has been set in the AccessibleName property, use that.
                     // Note: Any non-null value in AccessibleName overrides the default accessible name logic,
                     // even an empty string (this is the only way to *force* the accessible name to be blank).
-                    string name = Owner.AccessibleName;
+                    string? name = Owner.AccessibleName;
                     if (name != null)
                     {
                         return name;
@@ -273,7 +266,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Parent => base.Parent;
+            public override AccessibleObject? Parent => base.Parent;
 
             // Determine the text that should be used to 'label' this control for accessibility purposes.
             //
@@ -281,7 +274,7 @@ namespace System.Windows.Forms
             // OLEACC.DLL to determine the name. The rules used by OLEACC.DLL are the same as what we now have below,
             // except that OLEACC searches for preceding labels using z-order, and we want to search for labels using
             // TabIndex order.
-            internal string TextLabel
+            internal string? TextLabel
             {
                 get
                 {
@@ -296,7 +289,7 @@ namespace System.Windows.Forms
                     }
 
                     // Otherwise use the text of the preceding Label control, if there is one
-                    Label previousLabel = PreviousLabel;
+                    Label? previousLabel = PreviousLabel;
                     if (previousLabel != null)
                     {
                         string text = previousLabel.Text;
@@ -311,14 +304,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            public Control Owner { get; } = null;
+            public Control Owner { get; }
 
             // Look for a label immediately preceeding this control in
             // the tab order, and use its name for the accessible name.
             //
             // This method aims to emulate the equivalent behavior in OLEACC.DLL,
             // but walking controls in TabIndex order rather than native z-order.
-            internal Label PreviousLabel
+            internal Label? PreviousLabel
             {
                 get
                 {
@@ -368,33 +361,30 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override int GetHelpTopic(out string fileName)
+            public override int GetHelpTopic(out string? fileName)
             {
                 int topic = 0;
 
-                QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[s_queryAccessibilityHelpEvent];
-
-                if (handler != null)
-                {
-                    QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
-                    handler(Owner, args);
-
-                    fileName = args.HelpNamespace;
-
-                    try
-                    {
-                        topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
-                    }
-                    catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
-                    {
-                    }
-
-                    return topic;
-                }
-                else
+                QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
+                if (handler == null)
                 {
                     return base.GetHelpTopic(out fileName);
                 }
+
+                QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
+                handler(Owner, args);
+
+                fileName = args.HelpNamespace;
+
+                try
+                {
+                    topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
+                }
+                catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
+                {
+                }
+
+                return topic;
             }
 
             public void NotifyClients(AccessibleEvents accEvent)
@@ -440,7 +430,7 @@ namespace System.Windows.Forms
             internal override bool IsIAccessibleExSupported()
                 => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 if (propertyID == UiaCore.UIA.LiveSettingPropertyId && Owner is IAutomationLiveRegion)
                 {

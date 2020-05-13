@@ -2,8 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -27,7 +29,7 @@ namespace System.Windows.Forms
                 this.currentChild = currentChild;
             }
 
-            HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[] ppEnum)
+            HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[]? ppEnum)
             {
                 if (ppEnum == null)
                 {
@@ -71,7 +73,7 @@ namespace System.Windows.Forms
                     Debug.Indent();
 
                     int childCount;
-                    int[] newOrder;
+                    int[]? newOrder;
 
                     if ((childCount = owner.GetChildCount()) >= 0)
                     {
@@ -115,7 +117,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void NextFromSystem(uint celt, IntPtr rgVar, uint* pCeltFetched)
             {
-                owner.systemIEnumVariant.Next(celt, rgVar, pCeltFetched);
+                owner.systemIEnumVariant?.Next(celt, rgVar, pCeltFetched);
                 if (pCeltFetched != null)
                 {
                     currentChild += *pCeltFetched;
@@ -143,6 +145,11 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void NextFromSystemReordered(uint celt, IntPtr rgVar, uint* pCeltFetched, int[] newOrder)
             {
+                if (owner.systemIEnumVariant == null)
+                {
+                    return;
+                }
+
                 uint i;
                 for (i = 0; i < celt && currentChild < newOrder.Length; ++i)
                 {
