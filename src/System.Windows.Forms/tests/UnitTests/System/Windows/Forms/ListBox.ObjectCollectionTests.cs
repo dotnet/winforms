@@ -701,7 +701,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, selectedIndexChangedCallCount);
             Assert.False(owner.IsHandleCreated);
 
-            // Remove selected.
+            // Set selected.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
             collection[1] = 2;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
@@ -742,7 +750,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, selectedIndexChangedCallCount);
             Assert.False(owner.IsHandleCreated);
 
-            // Remove selected.
+            // Set selected.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
             collection[1] = 2;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
@@ -795,7 +811,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, selectedIndexChangedCallCount);
             Assert.False(owner.IsHandleCreated);
 
+            // Set first selection same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2, 3 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
             // Set last selection.
+            collection[2] = 4;
+            Assert.Equal(new object[] { 2, 4 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set last selection same.
             collection[2] = 4;
             Assert.Equal(new object[] { 2, 4 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
@@ -849,7 +881,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, selectedIndexChangedCallCount);
             Assert.False(owner.IsHandleCreated);
 
+            // Set first selection same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2, 3 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
             // Set last selection.
+            collection[2] = 4;
+            Assert.Equal(new object[] { 2, 4 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set last selection same.
             collection[2] = 4;
             Assert.Equal(new object[] { 2, 4 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
@@ -905,12 +953,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
-            // Remove selected.
+            // Set selected.
             collection[1] = 2;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
             Assert.Equal(2, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set selected same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(3, selectedIndexChangedCallCount);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -967,12 +1026,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
-            // Remove selected.
+            // Set selected.
             collection[1] = 2;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
             Assert.Equal(2, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(3, selectedIndexChangedCallCount);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1044,12 +1114,34 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
+            // Set first selection same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2, 3 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(3, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
             // Set last selection.
             collection[2] = 4;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
-            Assert.Equal(3, selectedIndexChangedCallCount);
+            Assert.Equal(4, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set last selection same.
+            collection[2] = 4;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(4, selectedIndexChangedCallCount);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1122,12 +1214,34 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
+            // Set first selection same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2, 3 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(3, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
             // Set last selection.
             collection[2] = 4;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
-            Assert.Equal(3, selectedIndexChangedCallCount);
+            Assert.Equal(4, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set last selection same.
+            collection[2] = 4;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(4, selectedIndexChangedCallCount);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -7338,7 +7452,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, selectedIndexChangedCallCount);
             Assert.False(owner.IsHandleCreated);
 
-            // Remove selected.
+            // Set selected.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
             collection[1] = 2;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
@@ -7379,7 +7501,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, selectedIndexChangedCallCount);
             Assert.False(owner.IsHandleCreated);
 
-            // Remove selected.
+            // Set selected.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set same.
             collection[1] = 2;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
@@ -7432,7 +7562,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, selectedIndexChangedCallCount);
             Assert.False(owner.IsHandleCreated);
 
+            // Set first selection same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2, 3 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
             // Set last selection.
+            collection[2] = 4;
+            Assert.Equal(new object[] { 2, 4 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set last selection same.
             collection[2] = 4;
             Assert.Equal(new object[] { 2, 4 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
@@ -7486,7 +7632,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, selectedIndexChangedCallCount);
             Assert.False(owner.IsHandleCreated);
 
+            // Set first selection same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2, 3 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
             // Set last selection.
+            collection[2] = 4;
+            Assert.Equal(new object[] { 2, 4 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(0, selectedIndexChangedCallCount);
+            Assert.False(owner.IsHandleCreated);
+
+            // Set last selection same.
             collection[2] = 4;
             Assert.Equal(new object[] { 2, 4 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
@@ -7542,12 +7704,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
-            // Remove selected.
+            // Set selected.
             collection[1] = 2;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
             Assert.Equal(2, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set selected same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(3, selectedIndexChangedCallCount);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -7604,12 +7777,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
-            // Remove selected.
+            // Set selected.
             collection[1] = 2;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
             Assert.Equal(2, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(3, selectedIndexChangedCallCount);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -7681,12 +7865,34 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
+            // Set first selection same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2, 3 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(3, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
             // Set last selection.
             collection[2] = 4;
             Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
-            Assert.Equal(3, selectedIndexChangedCallCount);
+            Assert.Equal(4, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set last selection same.
+            collection[2] = 4;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(4, selectedIndexChangedCallCount);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -7759,39 +7965,38 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
-            // Set last selection.
-            collection[2] = 4;
-            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
-            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            // Set first selection same.
+            collection[1] = 2;
+            Assert.Equal(new object[] { 2, 3 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1, 2 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
             Assert.Equal(3, selectedIndexChangedCallCount);
             Assert.True(owner.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
 
-        [WinFormsTheory]
-        [InlineData(-1)]
-        [InlineData(0)]
-        [InlineData(1)]
-        public void ListBoxObjectCollection_IListItem_SetInvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
-        {
-            using var owner = new ListBox();
-            IList collection = new ListBox.ObjectCollection(owner);
-            Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
-        }
+            // Set last selection.
+            collection[2] = 4;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(4, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
 
-        [WinFormsTheory]
-        [InlineData(-1)]
-        [InlineData(1)]
-        [InlineData(2)]
-        public void ListBoxObjectCollection_IListItem_SetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
-        {
-            using var owner = new ListBox();
-            IList collection = new ListBox.ObjectCollection(owner);
-            collection.Add(1);
-            Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
+            // Set last selection same.
+            collection[2] = 4;
+            Assert.Equal(new object[] { 2 }, owner.SelectedItems.Cast<object>());
+            Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
+            Assert.Equal(1, owner.SelectedIndex);
+            Assert.Equal(4, selectedIndexChangedCallCount);
+            Assert.True(owner.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsTheory]
@@ -7817,6 +8022,29 @@ namespace System.Windows.Forms.Tests
             IList collection = new ListBox.ObjectCollection(owner);
             collection.Add(1);
             Assert.Throws<ArgumentNullException>("value", () => collection[index] = null);
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ListBoxObjectCollection_IListItem_SetInvalidIndexEmpty_ThrowsArgumentOutOfRangeException(int index)
+        {
+            using var owner = new ListBox();
+            IList collection = new ListBox.ObjectCollection(owner);
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
+        }
+
+        [WinFormsTheory]
+        [InlineData(-1)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void ListBoxObjectCollection_IListItem_SetInvalidIndexNotEmpty_ThrowsArgumentOutOfRangeException(int index)
+        {
+            using var owner = new ListBox();
+            IList collection = new ListBox.ObjectCollection(owner);
+            collection.Add(1);
+            Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = 2);
         }
 
         [WinFormsFact]
