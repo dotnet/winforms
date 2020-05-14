@@ -134,7 +134,7 @@ Namespace Microsoft.VisualBasic
             If IntPtr.op_Equality(WindowHandle, IntPtr.Zero) Then 'we never found a window belonging to the desired process
                 Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, CStr(ProcessId)))
             Else
-                AppActivateHelper(WindowHandle)
+                AppActivateHelper(WindowHandle, CStr(ProcessId))
             End If
         End Sub
 
@@ -193,11 +193,11 @@ Namespace Microsoft.VisualBasic
             If IntPtr.op_Equality(WindowHandle, IntPtr.Zero) Then 'no match
                 Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, Title))
             Else
-                AppActivateHelper(WindowHandle)
+                AppActivateHelper(WindowHandle, Title)
             End If
         End Sub
 
-        Private Sub AppActivateHelper(hwndApp As IntPtr)
+        Private Sub AppActivateHelper(hwndApp As IntPtr, ProcessId As String)
             '  if no window with name (full or truncated) or task id, return an error
             '  if the window is not enabled or not visible, get the first window owned by it that is not enabled or not visible
             Dim hwndOwned As IntPtr
@@ -218,7 +218,7 @@ Namespace Microsoft.VisualBasic
 
                 '  if scan failed, return an error
                 If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
-                    Throw New ArgumentException(GetResourceString(SR.ProcessNotFound))
+                    Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, ProcessId))
                 End If
 
                 '  set active window to the owned one
