@@ -952,6 +952,19 @@ namespace System.Windows.Forms.Tests
             Assert.False(exceptionThrown, "Getting accessible object for ComboBox item has thrown an exception.");
         }
 
+        [Fact]
+        public void ComboBox_SelectedIndexChanged_Doesnt_force_Handle_creating()
+        {
+            string[] items = new[] { "Item 1", "Item 2", "Item 3" };
+
+            var comboBox = new ComboBox();
+            Assert.False(comboBox.IsHandleCreated);
+
+            comboBox.Items.AddRange(items);
+            comboBox.SelectedItem = items[1];
+            Assert.False(comboBox.IsHandleCreated);
+        }
+
         public class HashNotImplementedObject
         {
             public override int GetHashCode()
