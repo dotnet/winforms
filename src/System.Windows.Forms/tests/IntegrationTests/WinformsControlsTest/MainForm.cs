@@ -19,6 +19,11 @@ namespace WinformsControlsTest
             InitializeComponent();
         }
 
+        private void toggleIconButton_Click(object sender, EventArgs e)
+        {
+            this.ShowIcon = !this.ShowIcon;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             new Buttons().Show();
