@@ -1904,16 +1904,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the ComboBox editing control was just detached. (focused out to another cell)
-        /// </summary>
-        internal bool ComboBoxControlWasDetached { get; set; }
-
-        /// <summary>
-        ///  Indicates whether the TextBox editing control was just detached. (focused out to another cell)
-        /// </summary>
-        internal bool TextBoxControlWasDetached { get; set; }
-
-        /// <summary>
         ///  Gets
         ///  or sets a value indicating if the dataGridView's column headers are visible.
         /// </summary>
