@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Buffers;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -2355,13 +2356,25 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Get the text stored by the native control for the specified list item.
         /// </summary>
-        private string NativeGetItemText(int index)
+        private unsafe string NativeGetItemText(int index)
         {
-            int len = unchecked((int)(long)SendMessageW(this, (WM)CB.GETLBTEXTLEN, (IntPtr)index));
-            return string.Create(len + 1, this, (span, comboBox) =>
+            int maxLen = PARAM.ToInt(SendMessageW(this, (WM)CB.GETLBTEXTLEN, (IntPtr)index));
+            if (maxLen == LB_ERR)
             {
-                SendMessageW(comboBox, (WM)CB.GETLBTEXT, (IntPtr)index, ref span[0]);
-            });
+                return string.Empty;
+            }
+
+            char[] text = ArrayPool<char>.Shared.Rent(maxLen + 1);
+            string result;
+            fixed (char* pText = text)
+            {
+                int actualLen = PARAM.ToInt(SendMessageW(this, (WM)CB.GETLBTEXT, (IntPtr)index, (IntPtr)pText));
+                Debug.Assert(actualLen != LB_ERR, "Should have validated the index above");
+                result = new string(pText, 0, actualLen);
+            }
+
+            ArrayPool<char>.Shared.Return(text);
+            return result;
         }
 
         /// <summary>

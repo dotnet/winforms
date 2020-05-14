@@ -6,6 +6,7 @@ using Xunit;
 using System.ComponentModel;
 using System.Collections.Generic;
 using WinForms.Common.Tests;
+using System.Drawing;
 
 namespace System.Windows.Forms.Tests
 {
@@ -321,6 +322,101 @@ namespace System.Windows.Forms.Tests
             box.SetItemChecked(0, send);
 
             Assert.Equal(expected, box.GetItemCheckState(0));
+        }
+
+        public static IEnumerable<object[]> OnDrawItem_TestData()
+        {
+            yield return new object[] { null, Rectangle.Empty, 0, DrawItemState.Default, Color.Red, Color.Blue };
+            yield return new object[] { null, new Rectangle(1, 2, 3, 4), 1, DrawItemState.None, Color.Red, Color.Blue };
+            yield return new object[] { null, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Checked, Color.Red, Color.Blue };
+            yield return new object[] { new Font("Arial", 8.25f), new Rectangle(10, 20, 30, 40), 1, DrawItemState.Default, Color.Red, Color.Blue };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnDrawItem_TestData))]
+        public void CheckedListBox_OnDrawItem_Invoke_Success(Font font, Rectangle rect, int index, DrawItemState state, Color foreColor, Color backColor)
+        {
+            using var control = new SubCheckedListBox();
+            control.Items.Add("item1");
+            control.Items.Add("item2");
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var e = new DrawItemEventArgs(graphics, font, rect, index, state, foreColor, backColor);
+            control.OnDrawItem(e);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(OnDrawItem_TestData))]
+        public void CheckedListBox_OnDrawItem_InvokeWithHandle_Success(Font font, Rectangle rect, int index, DrawItemState state, Color foreColor, Color backColor)
+        {
+            using var control = new SubCheckedListBox();
+            control.Items.Add("item1");
+            control.Items.Add("item2");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var e = new DrawItemEventArgs(graphics, font, rect, index, state, foreColor, backColor);
+            control.OnDrawItem(e);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBox_OnDrawItem_NullE_ThrowsNullReferenceException()
+        {
+            using var control = new SubCheckedListBox();
+            Assert.Throws<NullReferenceException>(() => control.OnDrawItem(null));
+        }
+
+        [WinFormsFact]
+        public void CheckedListBox_OnDrawItem_NegativeEIndex_Success()
+        {
+            using var control = new SubCheckedListBox();
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var e = new DrawItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), -1, DrawItemState.Default);
+            control.OnDrawItem(e);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBox_OnDrawItem_LargeEIndexEmpty_Success()
+        {
+            using var control = new SubCheckedListBox();
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var e = new DrawItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 1, DrawItemState.Default);
+            control.OnDrawItem(e);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBox_OnDrawItem_LargeEIndexNotEmpty_Success()
+        {
+            using var control = new SubCheckedListBox();
+            control.Items.Add("item1");
+
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            var e = new DrawItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 2, DrawItemState.Default);
+            control.OnDrawItem(e);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        private class SubCheckedListBox : CheckedListBox
+        {
+            public new void OnDrawItem(DrawItemEventArgs e) => base.OnDrawItem(e);
         }
     }
 }
