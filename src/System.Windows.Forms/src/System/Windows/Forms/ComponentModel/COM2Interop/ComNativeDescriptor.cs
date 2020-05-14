@@ -191,8 +191,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 Guid g = Guid.Empty;
-                var pExcepInfo = new EXCEPINFO();
-                var dispParams = new DISPPARAMS();
+                var pExcepInfo = new Oleaut32.EXCEPINFO();
+                var dispParams = new Oleaut32.DISPPARAMS();
                 try
                 {
                     HRESULT hr = iDispatch.Invoke(

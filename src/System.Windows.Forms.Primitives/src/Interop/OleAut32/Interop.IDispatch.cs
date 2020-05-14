@@ -39,9 +39,9 @@ internal partial class Interop
                 Guid* riid,
                 uint lcid,
                 DISPATCH dwFlags,
-                Ole32.DISPPARAMS* pDispParams,
+                DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
-                Ole32.EXCEPINFO* pExcepInfo,
+                EXCEPINFO* pExcepInfo,
                 uint* pArgErr);
         }
     }

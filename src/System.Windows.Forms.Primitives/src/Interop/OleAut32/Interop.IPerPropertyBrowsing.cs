@@ -3,12 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop.Ole32;
 
 internal partial class Interop
 {
-    internal static partial class Ole32
+    internal static partial class Oleaut32
     {
         [ComImport]
         [Guid("376BD3AA-3845-101B-84ED-08002B2EC713")]

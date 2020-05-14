@@ -186,9 +186,9 @@ namespace System.Windows.Forms
         private Ole32.IOleControl iOleControl;
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObject;
         private Ole32.IOleInPlaceActiveObject iOleInPlaceActiveObjectExternal;
-        private Ole32.IPerPropertyBrowsing iPerPropertyBrowsing;
+        private Oleaut32.IPerPropertyBrowsing iPerPropertyBrowsing;
         private VSSDK.ICategorizeProperties iCategorizeProperties;
-        private Ole32.IPersistPropertyBag iPersistPropBag;
+        private Oleaut32.IPersistPropertyBag iPersistPropBag;
         private Ole32.IPersistStream iPersistStream;
         private Ole32.IPersistStreamInit iPersistStreamInit;
         private Ole32.IPersistStorage iPersistStorage;
@@ -2946,7 +2946,7 @@ namespace System.Windows.Forms
             SetOcState(OC_RUNNING);
         }
 
-        private void DepersistFromIPropertyBag(Ole32.IPropertyBag propBag)
+        private void DepersistFromIPropertyBag(Oleaut32.IPropertyBag propBag)
         {
             iPersistPropBag.Load(propBag, null);
         }
@@ -3025,10 +3025,10 @@ namespace System.Windows.Forms
                     }
                     return;
                 }
-                if (instance is Ole32.IPersistPropertyBag)
+                if (instance is Oleaut32.IPersistPropertyBag)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, this + " supports IPersistPropertyBag.");
-                    iPersistPropBag = (Ole32.IPersistPropertyBag)instance;
+                    iPersistPropBag = (Oleaut32.IPersistPropertyBag)instance;
                     try
                     {
                         iPersistPropBag.InitNew();
@@ -3098,7 +3098,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    iPersistPropBag = (Ole32.IPersistPropertyBag)instance;
+                    iPersistPropBag = (Oleaut32.IPersistPropertyBag)instance;
                     DepersistFromIPropertyBag(ocxState.GetPropBag());
                 }
                 catch (Exception e)
@@ -3914,14 +3914,14 @@ namespace System.Windows.Forms
             return iCategorizeProperties;
         }
 
-        private Ole32.IPerPropertyBrowsing GetPerPropertyBrowsing()
+        private Oleaut32.IPerPropertyBrowsing GetPerPropertyBrowsing()
         {
             if (iPerPropertyBrowsing == null && !axState[checkedIppb] && instance != null)
             {
                 axState[checkedIppb] = true;
-                if (instance is Ole32.IPerPropertyBrowsing)
+                if (instance is Oleaut32.IPerPropertyBrowsing)
                 {
-                    iPerPropertyBrowsing = (Ole32.IPerPropertyBrowsing)instance;
+                    iPerPropertyBrowsing = (Oleaut32.IPerPropertyBrowsing)instance;
                 }
             }
             return iPerPropertyBrowsing;

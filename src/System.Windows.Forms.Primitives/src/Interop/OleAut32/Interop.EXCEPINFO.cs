@@ -6,7 +6,7 @@ using System;
 
 internal static partial class Interop
 {
-    internal static partial class Ole32
+    internal static partial class Oleaut32
     {
         public struct EXCEPINFO
         {

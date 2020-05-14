@@ -20,7 +20,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return typeof(IPerPropertyBrowsing);
+                return typeof(Oleaut32.IPerPropertyBrowsing);
             }
         }
 
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private unsafe Guid GetPropertyPageGuid(IPerPropertyBrowsing target, DispatchID dispid)
+        private unsafe Guid GetPropertyPageGuid(Oleaut32.IPerPropertyBrowsing target, Ole32.DispatchID dispid)
         {
             // check for a property page
             Guid guid = Guid.Empty;
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return Guid.Empty;
         }
 
-        internal static string GetDisplayString(IPerPropertyBrowsing ppb, DispatchID dispid, ref bool success)
+        internal static string GetDisplayString(Oleaut32.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
         {
             HRESULT hr = ppb.GetDisplayString(dispid, out string strVal);
             if (hr != HRESULT.S_OK)
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
         {
-            if (sender.TargetObject is IPerPropertyBrowsing target)
+            if (sender.TargetObject is Oleaut32.IPerPropertyBrowsing target)
             {
                 // we hide IDispatch props by default, we we need to force showing them here
 
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                if (sender.TargetObject is IPerPropertyBrowsing)
+                if (sender.TargetObject is Oleaut32.IPerPropertyBrowsing)
                 {
                     // if we are using the dropdown, don't convert the value
                     // or the values will change when we select them and call back
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     bool success = true;
 
-                    string displayString = GetDisplayString((IPerPropertyBrowsing)sender.TargetObject, sender.DISPID, ref success);
+                    string displayString = GetDisplayString((Oleaut32.IPerPropertyBrowsing)sender.TargetObject, sender.DISPID, ref success);
 
                     if (success)
                     {
@@ -118,7 +118,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
         {
-            if (sender.TargetObject is IPerPropertyBrowsing ppb)
+            if (sender.TargetObject is Oleaut32.IPerPropertyBrowsing ppb)
             {
                 bool hasStrings = false;
 
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     if (curValue == value || (curValue != null && curValue.Equals(value)))
                     {
                         bool success = false;
-                        string val = GetDisplayString((IPerPropertyBrowsing)itemsEnum.target.TargetObject, itemsEnum.target.DISPID, ref success);
+                        string val = GetDisplayString((Oleaut32.IPerPropertyBrowsing)itemsEnum.target.TargetObject, itemsEnum.target.DISPID, ref success);
                         if (success)
                         {
                             return val;
@@ -291,7 +291,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     object[] nameItems = nameMarshaller.Items;
                     object[] cookieItems = valueMarshaller.Items;
 
-                    IPerPropertyBrowsing ppb = (IPerPropertyBrowsing)target.TargetObject;
+                    Oleaut32.IPerPropertyBrowsing ppb = (Oleaut32.IPerPropertyBrowsing)target.TargetObject;
                     int itemCount = 0;
 
                     Debug.Assert(cookieItems != null && nameItems != null, "An item array is null");
@@ -299,7 +299,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     if (nameItems.Length > 0)
                     {
                         object[] valueItems = new object[cookieItems.Length];
-                        var var = new VARIANT();
+                        var var = new Oleaut32.VARIANT();
                         int cookie;
 
                         Debug.Assert(cookieItems.Length == nameItems.Length, "Got uneven names and cookies");
@@ -392,7 +392,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     bool success = false;
 
-                    string displayString = Com2IPerPropertyBrowsingHandler.GetDisplayString((IPerPropertyBrowsing)target.TargetObject, target.DISPID, ref success);
+                    string displayString = Com2IPerPropertyBrowsingHandler.GetDisplayString((Oleaut32.IPerPropertyBrowsing)target.TargetObject, target.DISPID, ref success);
 
                     if (success)
                     {

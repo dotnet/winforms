@@ -5,10 +5,11 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Resources;
+using static Interop.Ole32;
 
 internal static partial class Interop
 {
-    internal static partial class Ole32
+    internal static partial class Oleaut32
     {
         [StructLayout(LayoutKind.Sequential)]
         public sealed class VARIANT

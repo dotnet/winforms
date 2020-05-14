@@ -586,7 +586,7 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
 
-                    var dispParams = new DISPPARAMS();
+                    var dispParams = new Oleaut32.DISPPARAMS();
                     object[] pvt = new object[1];
                     Guid g = Guid.Empty;
                     HRESULT hr = disp.Invoke(
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Load
             /// </summary>
-            internal unsafe void Load(IPropertyBag pPropBag, IErrorLog pErrorLog)
+            internal unsafe void Load(Oleaut32.IPropertyBag pPropBag, Oleaut32.IErrorLog pErrorLog)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
@@ -1173,7 +1173,7 @@ namespace System.Windows.Forms
                                     IntPtr bstrDescription = Marshal.StringToBSTR(errorString);
                                     try
                                     {
-                                        var err = new EXCEPINFO
+                                        var err = new Oleaut32.EXCEPINFO
                                         {
                                             bstrSource = bstrSource,
                                             bstrDescription = bstrDescription,
@@ -1790,7 +1790,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Save
             /// </summary>
-            internal void Save(IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
+            internal void Save(Oleaut32.IPropertyBag pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
@@ -2461,7 +2461,7 @@ namespace System.Windows.Forms
             ///  This is a property bag implementation that sits on a stream.  It can
             ///  read and write the bag to the stream.
             /// </summary>
-            private class PropertyBagStream : IPropertyBag
+            private class PropertyBagStream : Oleaut32.IPropertyBag
             {
                 private Hashtable _bag = new Hashtable();
 
@@ -2508,7 +2508,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                HRESULT IPropertyBag.Read(string pszPropName, ref object pVar, IErrorLog pErrorLog)
+                HRESULT Oleaut32.IPropertyBag.Read(string pszPropName, ref object pVar, Oleaut32.IErrorLog pErrorLog)
                 {
                     if (!_bag.Contains(pszPropName))
                     {
@@ -2519,7 +2519,7 @@ namespace System.Windows.Forms
                     return HRESULT.S_OK;
                 }
 
-                HRESULT IPropertyBag.Write(string pszPropName, ref object pVar)
+                HRESULT Oleaut32.IPropertyBag.Write(string pszPropName, ref object pVar)
                 {
                     _bag[pszPropName] = pVar;
                     return HRESULT.S_OK;

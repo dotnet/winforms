@@ -901,8 +901,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)component;
             object[] pVarResult = new object[1];
-            var pExcepInfo = new EXCEPINFO();
-            var dispParams = new DISPPARAMS();
+            var pExcepInfo = new Oleaut32.EXCEPINFO();
+            var dispParams = new Oleaut32.DISPPARAMS();
             Guid g = Guid.Empty;
 
             HRESULT hr = pDisp.Invoke(
@@ -1281,8 +1281,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)owner;
 
-            var excepInfo = new EXCEPINFO();
-            var dispParams = new DISPPARAMS();
+            var excepInfo = new Oleaut32.EXCEPINFO();
+            var dispParams = new Oleaut32.DISPPARAMS();
             dispParams.cArgs = 1;
             dispParams.cNamedArgs = 1;
             DispatchID[] namedArgs = new DispatchID[] { DispatchID.PROPERTYPUT };
@@ -1292,7 +1292,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 dispParams.rgdispidNamedArgs = Marshal.UnsafeAddrOfPinnedArrayElement(namedArgs, 0);
                 const int SizeOfVariant = 16;
-                Debug.Assert(SizeOfVariant == Marshal.SizeOf<VARIANT>());
+                Debug.Assert(SizeOfVariant == Marshal.SizeOf<Oleaut32.VARIANT>());
                 IntPtr mem = Marshal.AllocCoTaskMem(SizeOfVariant);
                 Oleaut32.VariantInit(mem);
                 Marshal.GetNativeVariantForObject(value, mem);

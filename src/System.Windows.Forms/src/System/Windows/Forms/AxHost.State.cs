@@ -207,7 +207,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal Ole32.IPropertyBag GetPropBag()
+            internal Oleaut32.IPropertyBag GetPropBag()
             {
                 return PropertyBagBinary;
             }
