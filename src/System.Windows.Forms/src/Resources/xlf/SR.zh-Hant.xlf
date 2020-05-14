@@ -10866,11 +10866,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">當執行檔案下載時發生。</target>
         <note />
       </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">不支援將 WebBrowser 控制項加入 Internet Explorer 中。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
         <source>Determines whether the Web browser control operates in offline mode.</source>
         <target state="translated">決定 Web 瀏覽器控制項是否可在離線模式中操作。</target>

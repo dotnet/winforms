@@ -6440,9 +6440,6 @@ Stack trace where the illegal operation occurred was:
   <data name="WebBrowserFileDownloadDescr" xml:space="preserve">
     <value>Occurs when a file download occurs.</value>
   </data>
-  <data name="WebBrowserInIENotSupported" xml:space="preserve">
-    <value>Adding a WebBrowser control in Internet Explorer is not supported.</value>
-  </data>
   <data name="WebBrowserIsOfflineDescr" xml:space="preserve">
     <value>Determines whether the Web browser control operates in offline mode.</value>
   </data>

@@ -10867,11 +10867,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Возникает при скачивании файлов.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">Добавление элемента управления "Веб-браузер" в Internet Explorer не поддерживается.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
         <source>Determines whether the Web browser control operates in offline mode.</source>
         <target state="translated">Определяет, работает ли элемент управления "Веб-браузер" вне сети.</target>

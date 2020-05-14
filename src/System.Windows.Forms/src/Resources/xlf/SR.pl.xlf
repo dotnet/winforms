@@ -10866,11 +10866,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Występuje, gdy zostanie pobrany plik.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">Dodawanie formantu WebBrowser w programie Internet Explorer nie jest obsługiwane.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
         <source>Determines whether the Web browser control operates in offline mode.</source>
         <target state="translated">Określa, czy formant przeglądarki sieci Web działa w trybie offline.</target>

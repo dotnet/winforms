@@ -2712,11 +2712,6 @@ namespace System.Windows.Forms
         internal virtual bool IsContainerControl => false;
 
         /// <summary>
-        ///  Used to tell if this control is being hosted in IE.
-        /// </summary>
-        internal bool IsIEParent => IsActiveX ? ActiveXInstance.IsIE : false;
-
-        /// <summary>
         ///  Used to tell if the control is mirrored
         ///  Don't call this from CreateParams. Will lead to nasty problems
         ///  since we might call CreateParams here - you dig!

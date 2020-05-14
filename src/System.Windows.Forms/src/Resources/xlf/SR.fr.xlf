@@ -10866,11 +10866,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Se produit en cas de téléchargement d'un fichier.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">L'ajout d'un contrôle WebBrowser dans Internet Explorer n'est pas pris en charge.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
         <source>Determines whether the Web browser control operates in offline mode.</source>
         <target state="translated">Détermine si le contrôle de navigateur web fonctionne en mode hors connexion.</target>
