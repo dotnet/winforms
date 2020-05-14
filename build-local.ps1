@@ -242,7 +242,10 @@ try {
     # Detect the require version of NETCoreApp and see if we have it already
     [xml]$versionsProps = Get-Content -Raw -Path ./eng/Versions.props
     $value = $versionsProps.Project.PropertyGroup | Where-Object { $_['MicrosoftNETCoreAppRuntimewinx64PackageVersion'] -ne $null }
-    $netCoreAppVersion = $value.InnerText
+    if (!$value) {
+        throw "Unable to find Project.PropertyGroup.MicrosoftNETCoreAppRuntimewinx64PackageVersion element"
+    }
+    $netCoreAppVersion = $value.MicrosoftNETCoreAppRuntimewinx64PackageVersion
     $localNETCoreAppLocation = [System.IO.Path]::Combine($localSharedPath, 'Microsoft.NETCore.App', $netCoreAppVersion);
     $systemNETCoreAppLocation = [string][System.IO.Path]::Combine($(Get-SystemDotnetPath), 'shared\Microsoft.NETCore.App', $netCoreAppVersion);
 

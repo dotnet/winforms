@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -3084,7 +3084,7 @@ namespace System.Windows.Forms
                 str = str.Substring(0, nullTerminatedLength);
             }
 
-            // get the string into a byte array
+            // Get the string into a byte array
             byte[] encodedBytes;
             if ((flags & RichTextBoxConstants.SF_UNICODE) != 0)
             {
@@ -3092,8 +3092,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                encodedBytes = Encoding.Default.GetBytes(str);
+                // Encode using the default code page.
+                encodedBytes = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetBytes(str);
             }
+
             editStream = new MemoryStream(encodedBytes.Length);
             editStream.Write(encodedBytes, 0, encodedBytes.Length);
             editStream.Position = 0;
@@ -3116,14 +3118,16 @@ namespace System.Windows.Forms
                 Debug.Assert(data != null, "StreamIn passed a null stream");
 
                 // If SF_RTF is requested then check for the RTF tag at the start
-                // of the file.  We don't load if the tag is not there
-                //
+                // of the file.  We don't load if the tag is not there.
+
                 if ((flags & RichTextBoxConstants.SF_RTF) != 0)
                 {
                     long streamStart = editStream.Position;
                     byte[] bytes = new byte[SZ_RTF_TAG.Length];
                     editStream.Read(bytes, (int)streamStart, SZ_RTF_TAG.Length);
-                    string str = Encoding.Default.GetString(bytes);
+
+                    // Encode using the default encoding.
+                    string str = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetString(bytes);
                     if (!SZ_RTF_TAG.Equals(str))
                     {
                         throw new ArgumentException(SR.InvalidFileFormat);
@@ -3134,6 +3138,7 @@ namespace System.Windows.Forms
                 }
 
                 int cookieVal = 0;
+
                 // set up structure to do stream operation
                 NativeMethods.EDITSTREAM es = new NativeMethods.EDITSTREAM();
                 if ((flags & RichTextBoxConstants.SF_UNICODE) != 0)
@@ -3223,9 +3228,10 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    result = Encoding.Default.GetString(bytes, 0, bytes.Length);
+                    // Convert from the current code page
+                    result = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetString(bytes, 0, bytes.Length);
                 }
-                // workaround ??? for
+
 
                 if (!string.IsNullOrEmpty(result) && (result[result.Length - 1] == '\0'))
                 {
