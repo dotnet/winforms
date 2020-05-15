@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -21,7 +19,7 @@ namespace System.Windows.Forms
     ///  accessibility application.
     /// </summary>
     [ComVisible(true)]
-    public class AccessibleObject :
+    public partial class AccessibleObject :
         StandardOleMarshalObject,
         IReflect,
         IAccessible,
@@ -50,17 +48,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the <see cref='IAccessible'/> interface used by this <see cref='AccessibleObject'/>.
         /// </summary>
-        private IAccessible systemIAccessible = null;
+        private IAccessible? systemIAccessible = null;
 
         /// <summary>
         ///  Specifies the <see cref='OleAut32.IEnumVariant'/> used by this
         /// <see cref='AccessibleObject'/> .
         /// </summary>
-        private OleAut32.IEnumVariant systemIEnumVariant = null;
-        private OleAut32.IEnumVariant enumVariant = null;
+        private OleAut32.IEnumVariant? systemIEnumVariant = null;
+        private OleAut32.IEnumVariant? enumVariant = null;
 
         // IOleWindow interface of the 'inner' system IAccessible object that we are wrapping
-        private Ole32.IOleWindow systemIOleWindow = null;
+        private Ole32.IOleWindow? systemIOleWindow = null;
 
         // Indicates this object is being used ONLY to wrap a system IAccessible
         private readonly bool systemWrapper = false;
@@ -78,7 +76,7 @@ namespace System.Windows.Forms
         }
 
         // This constructor is used ONLY for wrapping system IAccessible objects
-        private AccessibleObject(IAccessible iAcc)
+        private AccessibleObject(IAccessible? iAcc)
         {
             systemIAccessible = iAcc;
             systemWrapper = true;
@@ -111,7 +109,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets a description of the default action for an object.
         /// </summary>
-        public virtual string DefaultAction
+        public virtual string? DefaultAction
         {
             get
             {
@@ -134,7 +132,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets a description of the object's visual appearance to the user.
         /// </summary>
-        public virtual string Description
+        public virtual string? Description
         {
             get
             {
@@ -161,7 +159,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets a description of what the object does or how the object is used.
         /// </summary>
-        public virtual string Help
+        public virtual string? Help
         {
             get
             {
@@ -183,7 +181,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the object shortcut key or access key for an accessible object.
         /// </summary>
-        public virtual string KeyboardShortcut
+        public virtual string? KeyboardShortcut
         {
             get
             {
@@ -205,7 +203,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the object name.
         /// </summary>
-        public virtual string Name
+        public virtual string? Name
         {
             // Does nothing by default
             get
@@ -244,7 +242,7 @@ namespace System.Windows.Forms
         ///  When overridden in a derived class, gets or sets the parent of an
         ///  accessible object.
         /// </summary>
-        public virtual AccessibleObject Parent
+        public virtual AccessibleObject? Parent
         {
             get
             {
@@ -270,10 +268,8 @@ namespace System.Windows.Forms
                 {
                     return (AccessibleRole)systemIAccessible.get_accRole(NativeMethods.CHILDID_SELF);
                 }
-                else
-                {
-                    return AccessibleRole.None;
-                }
+
+                return AccessibleRole.None;
             }
         }
 
@@ -288,17 +284,15 @@ namespace System.Windows.Forms
                 {
                     return (AccessibleStates)systemIAccessible.get_accState(NativeMethods.CHILDID_SELF);
                 }
-                else
-                {
-                    return AccessibleStates.None;
-                }
+
+                return AccessibleStates.None;
             }
         }
 
         /// <summary>
         ///  Gets or sets the value of an accessible object.
         /// </summary>
-        public virtual string Value
+        public virtual string? Value
         {
             // Does nothing by default
             get
@@ -337,7 +331,7 @@ namespace System.Windows.Forms
         ///  When overridden in a derived class, gets the accessible child
         ///  corresponding to the specified index.
         /// </summary>
-        public virtual AccessibleObject GetChild(int index) => null;
+        public virtual AccessibleObject? GetChild(int index) => null;
 
         /// <summary>
         ///  When overridden in a derived class, gets the number of children
@@ -359,7 +353,7 @@ namespace System.Windows.Forms
         ///  Note: This array could also be used to filter out unwanted child
         ///  windows too, if necessary (not recommended).
         /// </summary>
-        internal virtual int[] GetSysChildOrder() => null;
+        internal virtual int[]? GetSysChildOrder() => null;
 
         /// <summary>
         ///  Mechanism for overriding default IAccessible.accNavigate behavior of
@@ -372,7 +366,7 @@ namespace System.Windows.Forms
         ///  system behavior. Otherwise return destination object in the out
         ///  parameter, or null to indicate 'off end of list'.
         /// </summary>
-        internal virtual bool GetSysChild(AccessibleNavigation navdir, out AccessibleObject accessibleObject)
+        internal virtual bool GetSysChild(AccessibleNavigation navdir, out AccessibleObject? accessibleObject)
         {
             accessibleObject = null;
             return false;
@@ -382,7 +376,7 @@ namespace System.Windows.Forms
         ///  When overridden in a derived class, gets the object that has the
         ///  keyboard focus.
         /// </summary>
-        public virtual AccessibleObject GetFocused()
+        public virtual AccessibleObject? GetFocused()
         {
             // Default behavior for objects with AccessibleObject children
             if (GetChildCount() >= 0)
@@ -390,7 +384,7 @@ namespace System.Windows.Forms
                 int count = GetChildCount();
                 for (int index = 0; index < count; ++index)
                 {
-                    AccessibleObject child = GetChild(index);
+                    AccessibleObject? child = GetChild(index);
                     Debug.Assert(child != null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
                     if (child != null && ((child.State & AccessibleStates.Focused) != 0))
                     {
@@ -402,6 +396,7 @@ namespace System.Windows.Forms
                 {
                     return this;
                 }
+
                 return null;
             }
 
@@ -423,7 +418,7 @@ namespace System.Windows.Forms
         ///  Gets an identifier for a Help topic and the path to the Help file
         ///  associated with this accessible object.
         /// </summary>
-        public virtual int GetHelpTopic(out string fileName)
+        public virtual int GetHelpTopic(out string? fileName)
         {
             if (systemIAccessible != null)
             {
@@ -443,7 +438,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  When overridden in a derived class, gets the currently selected child.
         /// </summary>
-        public virtual AccessibleObject GetSelected()
+        public virtual AccessibleObject? GetSelected()
         {
             // Default behavior for objects with AccessibleObject children
             if (GetChildCount() >= 0)
@@ -451,7 +446,7 @@ namespace System.Windows.Forms
                 int count = GetChildCount();
                 for (int index = 0; index < count; ++index)
                 {
-                    AccessibleObject child = GetChild(index);
+                    AccessibleObject? child = GetChild(index);
                     Debug.Assert(child != null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
                     if (child != null && ((child.State & AccessibleStates.Selected) != 0))
                     {
@@ -484,7 +479,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the child object at the given screen coordinates.
         /// </summary>
-        public virtual AccessibleObject HitTest(int x, int y)
+        public virtual AccessibleObject? HitTest(int x, int y)
         {
             // Default behavior for objects with AccessibleObject children
             if (GetChildCount() >= 0)
@@ -492,7 +487,7 @@ namespace System.Windows.Forms
                 int count = GetChildCount();
                 for (int index = 0; index < count; ++index)
                 {
-                    AccessibleObject child = GetChild(index);
+                    AccessibleObject? child = GetChild(index);
                     Debug.Assert(child != null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
                     if (child != null && child.Bounds.Contains(x, y))
                     {
@@ -539,14 +534,14 @@ namespace System.Windows.Forms
             return false;
         }
 
-        internal virtual int[] RuntimeId => null;
+        internal virtual int[]? RuntimeId => null;
 
         internal virtual int ProviderOptions
             => (int)(UiaCore.ProviderOptions.ServerSideProvider | UiaCore.ProviderOptions.UseComThreading);
 
-        internal virtual UiaCore.IRawElementProviderSimple HostRawElementProvider => null;
+        internal virtual UiaCore.IRawElementProviderSimple? HostRawElementProvider => null;
 
-        internal virtual object GetPropertyValue(UiaCore.UIA propertyID)
+        internal virtual object? GetPropertyValue(UiaCore.UIA propertyID)
         {
             if (propertyID == UiaCore.UIA.IsInvokePatternAvailablePropertyId)
             {
@@ -610,10 +605,9 @@ namespace System.Windows.Forms
 
         internal virtual int GetChildId() => NativeMethods.CHILDID_SELF;
 
-        internal virtual UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-            => null;
+        internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) => null;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetEmbeddedFragmentRoots() => null;
+        internal virtual UiaCore.IRawElementProviderSimple[]? GetEmbeddedFragmentRoots() => null;
 
         internal virtual void SetFocus()
         {
@@ -621,11 +615,11 @@ namespace System.Windows.Forms
 
         internal virtual Rectangle BoundingRectangle => Bounds;
 
-        internal virtual UiaCore.IRawElementProviderFragmentRoot FragmentRoot => null;
+        internal virtual UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => null;
 
         internal virtual UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y) => this;
 
-        internal virtual UiaCore.IRawElementProviderFragment GetFocus() => null;
+        internal virtual UiaCore.IRawElementProviderFragment? GetFocus() => null;
 
         internal virtual void Expand()
         {
@@ -643,17 +637,17 @@ namespace System.Windows.Forms
 
         internal virtual UiaCore.ToggleState ToggleState => UiaCore.ToggleState.Indeterminate;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetRowHeaders() => null;
+        internal virtual UiaCore.IRawElementProviderSimple[]? GetRowHeaders() => null;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetColumnHeaders() => null;
+        internal virtual UiaCore.IRawElementProviderSimple[]? GetColumnHeaders() => null;
 
         internal virtual UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetRowHeaderItems() => null;
+        internal virtual UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems() => null;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetColumnHeaderItems() => null;
+        internal virtual UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems() => null;
 
-        internal virtual UiaCore.IRawElementProviderSimple GetItem(int row, int column) => null;
+        internal virtual UiaCore.IRawElementProviderSimple? GetItem(int row, int column) => null;
 
         internal virtual int RowCount => -1;
 
@@ -667,7 +661,7 @@ namespace System.Windows.Forms
 
         internal virtual int ColumnSpan => 1;
 
-        internal virtual UiaCore.IRawElementProviderSimple ContainingGrid => null;
+        internal virtual UiaCore.IRawElementProviderSimple? ContainingGrid => null;
 
         internal virtual void Invoke() => DoDefaultAction();
 
@@ -678,7 +672,7 @@ namespace System.Windows.Forms
             Value = newValue;
         }
 
-        internal virtual UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd) => null;
+        internal virtual UiaCore.IRawElementProviderSimple? GetOverrideProviderForHwnd(IntPtr hwnd) => null;
 
         internal virtual void SetValue(double newValue)
         {
@@ -694,7 +688,7 @@ namespace System.Windows.Forms
 
         internal virtual double RangeValue => double.NaN;
 
-        internal virtual UiaCore.IRawElementProviderSimple[] GetSelection() => null;
+        internal virtual UiaCore.IRawElementProviderSimple[]? GetSelection() => null;
 
         internal virtual bool CanSelectMultiple => false;
 
@@ -714,7 +708,7 @@ namespace System.Windows.Forms
 
         internal virtual bool IsItemSelected => false;
 
-        internal virtual UiaCore.IRawElementProviderSimple ItemSelectionContainer => null;
+        internal virtual UiaCore.IRawElementProviderSimple? ItemSelectionContainer => null;
 
         /// <summary>
         ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
@@ -758,10 +752,10 @@ namespace System.Windows.Forms
             return HRESULT.E_NOINTERFACE;
         }
 
-        UiaCore.IAccessibleEx UiaCore.IAccessibleEx.GetObjectForChild(int idChild) => null;
+        UiaCore.IAccessibleEx? UiaCore.IAccessibleEx.GetObjectForChild(int idChild) => null;
 
         // This method is never called
-        unsafe HRESULT UiaCore.IAccessibleEx.GetIAccessiblePair(out object ppAcc, int* pidChild)
+        unsafe HRESULT UiaCore.IAccessibleEx.GetIAccessiblePair(out object? ppAcc, int* pidChild)
         {
             if (pidChild == null)
             {
@@ -775,79 +769,72 @@ namespace System.Windows.Forms
             return HRESULT.E_POINTER;
         }
 
-        int[] UiaCore.IAccessibleEx.GetRuntimeId() => RuntimeId;
+        int[]? UiaCore.IAccessibleEx.GetRuntimeId() => RuntimeId;
 
-        HRESULT UiaCore.IAccessibleEx.ConvertReturnedElement(UiaCore.IRawElementProviderSimple pIn, out UiaCore.IAccessibleEx ppRetValOut)
+        HRESULT UiaCore.IAccessibleEx.ConvertReturnedElement(UiaCore.IRawElementProviderSimple pIn, out UiaCore.IAccessibleEx? ppRetValOut)
         {
             // No need to implement this for patterns and properties
             ppRetValOut = null;
             return HRESULT.E_NOTIMPL;
         }
 
-        UiaCore.ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions
-            => (UiaCore.ProviderOptions)ProviderOptions;
+        UiaCore.ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions => (UiaCore.ProviderOptions)ProviderOptions;
 
-        UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderSimple.HostRawElementProvider
-            => HostRawElementProvider;
+        UiaCore.IRawElementProviderSimple? UiaCore.IRawElementProviderSimple.HostRawElementProvider => HostRawElementProvider;
 
-        object UiaCore.IRawElementProviderSimple.GetPatternProvider(UiaCore.UIA patternId)
+        object? UiaCore.IRawElementProviderSimple.GetPatternProvider(UiaCore.UIA patternId)
         {
             if (IsPatternSupported(patternId))
             {
                 return this;
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
-        object UiaCore.IRawElementProviderSimple.GetPropertyValue(UiaCore.UIA propertyID)
-            => GetPropertyValue(propertyID);
+        object? UiaCore.IRawElementProviderSimple.GetPropertyValue(UiaCore.UIA propertyID) => GetPropertyValue(propertyID);
 
-        object UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction)
-            => FragmentNavigate(direction);
+        object? UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction) => FragmentNavigate(direction);
 
-        int[] UiaCore.IRawElementProviderFragment.GetRuntimeId() => RuntimeId;
+        int[]? UiaCore.IRawElementProviderFragment.GetRuntimeId() => RuntimeId;
 
-        object[] UiaCore.IRawElementProviderFragment.GetEmbeddedFragmentRoots() => GetEmbeddedFragmentRoots();
+        object[]? UiaCore.IRawElementProviderFragment.GetEmbeddedFragmentRoots() => GetEmbeddedFragmentRoots();
 
         void UiaCore.IRawElementProviderFragment.SetFocus() => SetFocus();
 
         UiaCore.UiaRect UiaCore.IRawElementProviderFragment.BoundingRectangle => new UiaCore.UiaRect(BoundingRectangle);
 
-        UiaCore.IRawElementProviderFragmentRoot UiaCore.IRawElementProviderFragment.FragmentRoot => FragmentRoot;
+        UiaCore.IRawElementProviderFragmentRoot? UiaCore.IRawElementProviderFragment.FragmentRoot => FragmentRoot;
 
-        object UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y)
-            => ElementProviderFromPoint(x, y);
+        object UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => ElementProviderFromPoint(x, y);
 
-        object UiaCore.IRawElementProviderFragmentRoot.GetFocus() => GetFocus();
+        object? UiaCore.IRawElementProviderFragmentRoot.GetFocus() => GetFocus();
 
-        string UiaCore.ILegacyIAccessibleProvider.DefaultAction => DefaultAction;
+        string? UiaCore.ILegacyIAccessibleProvider.DefaultAction => DefaultAction;
 
-        string UiaCore.ILegacyIAccessibleProvider.Description => Description;
+        string? UiaCore.ILegacyIAccessibleProvider.Description => Description;
 
-        string UiaCore.ILegacyIAccessibleProvider.Help => Help;
+        string? UiaCore.ILegacyIAccessibleProvider.Help => Help;
 
-        string UiaCore.ILegacyIAccessibleProvider.KeyboardShortcut => KeyboardShortcut;
+        string? UiaCore.ILegacyIAccessibleProvider.KeyboardShortcut => KeyboardShortcut;
 
-        string UiaCore.ILegacyIAccessibleProvider.Name => Name;
+        string? UiaCore.ILegacyIAccessibleProvider.Name => Name;
 
         uint UiaCore.ILegacyIAccessibleProvider.Role => (uint)Role;
 
         uint UiaCore.ILegacyIAccessibleProvider.State => (uint)State;
 
-        string UiaCore.ILegacyIAccessibleProvider.Value => Value;
+        string? UiaCore.ILegacyIAccessibleProvider.Value => Value;
 
         int UiaCore.ILegacyIAccessibleProvider.ChildId => GetChildId();
 
         void UiaCore.ILegacyIAccessibleProvider.DoDefaultAction() => DoDefaultAction();
 
-        IAccessible UiaCore.ILegacyIAccessibleProvider.GetIAccessible() => AsIAccessible(this);
+        IAccessible? UiaCore.ILegacyIAccessibleProvider.GetIAccessible() => AsIAccessible(this);
 
-        object[] UiaCore.ILegacyIAccessibleProvider.GetSelection()
+        object?[] UiaCore.ILegacyIAccessibleProvider.GetSelection()
         {
-            return new UiaCore.IRawElementProviderSimple[]
+            return new UiaCore.IRawElementProviderSimple?[]
             {
                 GetSelected() as UiaCore.IRawElementProviderSimple
             };
@@ -867,7 +854,7 @@ namespace System.Windows.Forms
 
         BOOL UiaCore.IValueProvider.IsReadOnly => IsReadOnly ? BOOL.TRUE : BOOL.FALSE;
 
-        string UiaCore.IValueProvider.Value => Value;
+        string? UiaCore.IValueProvider.Value => Value;
 
         void UiaCore.IValueProvider.SetValue(string newValue) => SetValue(newValue);
 
@@ -875,17 +862,17 @@ namespace System.Windows.Forms
 
         UiaCore.ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
 
-        object[] UiaCore.ITableProvider.GetRowHeaders() =>  GetRowHeaders();
+        object[]? UiaCore.ITableProvider.GetRowHeaders() => GetRowHeaders();
 
-        object[] UiaCore.ITableProvider.GetColumnHeaders() =>  GetColumnHeaders();
+        object[]? UiaCore.ITableProvider.GetColumnHeaders() => GetColumnHeaders();
 
         UiaCore.RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => RowOrColumnMajor;
 
-        object[] UiaCore.ITableItemProvider.GetRowHeaderItems() =>  GetRowHeaderItems();
+        object[]? UiaCore.ITableItemProvider.GetRowHeaderItems() => GetRowHeaderItems();
 
-        object[] UiaCore.ITableItemProvider.GetColumnHeaderItems() => GetColumnHeaderItems();
+        object[]? UiaCore.ITableItemProvider.GetColumnHeaderItems() => GetColumnHeaderItems();
 
-        object UiaCore.IGridProvider.GetItem(int row, int column) => GetItem(row, column);
+        object? UiaCore.IGridProvider.GetItem(int row, int column) => GetItem(row, column);
 
         int UiaCore.IGridProvider.RowCount => RowCount;
 
@@ -899,7 +886,7 @@ namespace System.Windows.Forms
 
         int UiaCore.IGridItemProvider.ColumnSpan => ColumnSpan;
 
-        UiaCore.IRawElementProviderSimple UiaCore.IGridItemProvider.ContainingGrid => ContainingGrid;
+        UiaCore.IRawElementProviderSimple? UiaCore.IGridItemProvider.ContainingGrid => ContainingGrid;
 
         /// <summary>
         ///  Perform the default action
@@ -921,7 +908,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     child.DoDefaultAction();
@@ -945,14 +932,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Perform a hit test
         /// </summary>
-        object IAccessible.accHitTest(int xLeft, int yTop)
+        object? IAccessible.accHitTest(int xLeft, int yTop)
         {
             if (IsClientObject)
             {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.AccHitTest: this = " +
                     ToString());
 
-                AccessibleObject obj = HitTest(xLeft, yTop);
+                AccessibleObject? obj = HitTest(xLeft, yTop);
                 if (obj != null)
                 {
                     return AsVariant(obj);
@@ -1011,7 +998,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     Rectangle bounds = child.Bounds;
@@ -1050,7 +1037,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Navigate to another accessible object.
         /// </summary>
-        object IAccessible.accNavigate(int navDir, object childID)
+        object? IAccessible.accNavigate(int navDir, object childID)
         {
             if (IsClientObject)
             {
@@ -1062,7 +1049,7 @@ namespace System.Windows.Forms
                 // Use the Navigate function's return value if available
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
                 {
-                    AccessibleObject newObject = Navigate((AccessibleNavigation)navDir);
+                    AccessibleObject? newObject = Navigate((AccessibleNavigation)navDir);
                     if (newObject != null)
                     {
                         return AsVariant(newObject);
@@ -1070,7 +1057,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     return AsVariant(child.Navigate((AccessibleNavigation)navDir));
@@ -1081,7 +1068,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    if (!SysNavigate(navDir, childID, out object retObject))
+                    if (!SysNavigate(navDir, childID, out object? retObject))
                     {
                         return systemIAccessible.accNavigate(navDir, childID);
                     }
@@ -1116,7 +1103,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     child.Select((AccessibleSelection)flagsSelect);
@@ -1160,7 +1147,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a child Accessible object
         /// </summary>
-        object IAccessible.get_accChild(object childID)
+        object? IAccessible.get_accChild(object childID)
         {
             if (IsClientObject)
             {
@@ -1176,7 +1163,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     // Make sure we're not returning ourselves as our own child
@@ -1234,7 +1221,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the default action
         /// </summary>
-        string IAccessible.get_accDefaultAction(object childID)
+        string? IAccessible.get_accDefaultAction(object childID)
         {
             if (IsClientObject)
             {
@@ -1247,7 +1234,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     return child.DefaultAction;
@@ -1272,7 +1259,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the object or child description
         /// </summary>
-        string IAccessible.get_accDescription(object childID)
+        string? IAccessible.get_accDescription(object childID)
         {
             if (IsClientObject)
             {
@@ -1285,7 +1272,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     return child.Description;
@@ -1309,7 +1296,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the appropriate child from the Accessible Child Collection, if available
         /// </summary>
-        private AccessibleObject GetAccessibleChild(object childID)
+        private AccessibleObject? GetAccessibleChild(object childID)
         {
             if (!childID.Equals(NativeMethods.CHILDID_SELF))
             {
@@ -1320,13 +1307,14 @@ namespace System.Windows.Forms
                     return GetChild(index);
                 }
             }
+
             return null;
         }
 
         /// <summary>
         ///  Return the object or child focus
         /// </summary>
-        object IAccessible.accFocus
+        object? IAccessible.accFocus
         {
             get
             {
@@ -1335,7 +1323,7 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.GetAccFocus: this = " +
                         ToString());
 
-                    AccessibleObject obj = GetFocused();
+                    AccessibleObject? obj = GetFocused();
                     if (obj != null)
                     {
                         return AsVariant(obj);
@@ -1360,7 +1348,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return help for this accessible object.
         /// </summary>
-        string IAccessible.get_accHelp(object childID)
+        string? IAccessible.get_accHelp(object childID)
         {
             if (IsClientObject)
             {
@@ -1372,7 +1360,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     return child.Help;
@@ -1396,7 +1384,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the object or child help topic
         /// </summary>
-        int IAccessible.get_accHelpTopic(out string pszHelpFile, object childID)
+        int IAccessible.get_accHelpTopic(out string? pszHelpFile, object childID)
         {
             if (IsClientObject)
             {
@@ -1408,7 +1396,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     return child.GetHelpTopic(out pszHelpFile);
@@ -1433,12 +1421,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the object or child keyboard shortcut
         /// </summary>
-        string IAccessible.get_accKeyboardShortcut(object childID)
+        string? IAccessible.get_accKeyboardShortcut(object childID)
         {
             return get_accKeyboardShortcutInternal(childID);
         }
 
-        internal virtual string get_accKeyboardShortcutInternal(object childID)
+        internal virtual string? get_accKeyboardShortcutInternal(object childID)
         {
             if (IsClientObject)
             {
@@ -1450,7 +1438,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     return child.KeyboardShortcut;
@@ -1474,12 +1462,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the object or child name
         /// </summary>
-        string IAccessible.get_accName(object childID)
+        string? IAccessible.get_accName(object childID)
         {
             return get_accNameInternal(childID);
         }
 
-        internal virtual string get_accNameInternal(object childID)
+        internal virtual string? get_accNameInternal(object childID)
         {
             if (IsClientObject)
             {
@@ -1495,7 +1483,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     return child.Name;
@@ -1505,7 +1493,7 @@ namespace System.Windows.Forms
             // Otherwise, use the system provided name
             if (systemIAccessible != null)
             {
-                string retval = systemIAccessible.get_accName(childID);
+                string? retval = systemIAccessible.get_accName(childID);
 
                 if (IsClientObject)
                 {
@@ -1525,12 +1513,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the parent object
         /// </summary>
-        object IAccessible.accParent
+        object? IAccessible.accParent
         {
             get
             {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.accParent: this = " + ToString());
-                AccessibleObject parent = Parent;
+                AccessibleObject? parent = Parent;
                 if (parent != null)
                 {
                     // Some debugging related tests
@@ -1550,7 +1538,7 @@ namespace System.Windows.Forms
         ///  The role property describes an object's purpose in terms of its
         ///  relationship with sibling or child objects.
         /// </summary>
-        object IAccessible.get_accRole(object childID)
+        object? IAccessible.get_accRole(object childID)
         {
             if (IsClientObject)
             {
@@ -1563,7 +1551,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     return (int)child.Role;
@@ -1581,7 +1569,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the object or child selection
         /// </summary>
-        object IAccessible.accSelection
+        object? IAccessible.accSelection
         {
             get
             {
@@ -1590,7 +1578,7 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.GetAccSelection: this = " +
                         ToString());
 
-                    AccessibleObject obj = GetSelected();
+                    AccessibleObject? obj = GetSelected();
                     if (obj != null)
                     {
                         return AsVariant(obj);
@@ -1615,7 +1603,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the object or child state
         /// </summary>
-        object IAccessible.get_accState(object childID)
+        object? IAccessible.get_accState(object childID)
         {
             if (IsClientObject)
             {
@@ -1631,7 +1619,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     return (int)child.State;
@@ -1644,7 +1632,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Return the object or child value
         /// </summary>
-        string IAccessible.get_accValue(object childID)
+        string? IAccessible.get_accValue(object childID)
         {
             if (IsClientObject)
             {
@@ -1657,7 +1645,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     return child.Value;
@@ -1696,7 +1684,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     child.Name = newName;
@@ -1725,7 +1713,7 @@ namespace System.Windows.Forms
                 }
 
                 // If we have an accessible object collection, get the appropriate child
-                AccessibleObject child = GetAccessibleChild(childID);
+                AccessibleObject? child = GetAccessibleChild(childID);
                 if (child != null)
                 {
                     child.Value = newValue;
@@ -1769,7 +1757,7 @@ namespace System.Windows.Forms
             }
 
             // Otherwise delegate to the parent object
-            AccessibleObject parent = Parent;
+            AccessibleObject? parent = Parent;
             if (parent is Ole32.IOleWindow parentWindow)
             {
                 return parentWindow.GetWindow(phwnd);
@@ -1797,7 +1785,7 @@ namespace System.Windows.Forms
             }
 
             // Otherwise delegate to the parent object
-            AccessibleObject parent = Parent;
+            AccessibleObject? parent = Parent;
             if (parent is Ole32.IOleWindow parentWindow)
             {
                 return parentWindow.ContextSensitiveHelp(fEnterMode);
@@ -1810,7 +1798,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Clone this accessible object.
         /// </summary>
-        HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[] ppEnum) => EnumVariant.Clone(ppEnum);
+        HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[]? ppEnum) => EnumVariant.Clone(ppEnum);
 
         /// <summary>
         ///  Obtain the next n children of this accessible object.
@@ -1833,7 +1821,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  When overridden in a derived class, navigates to another object.
         /// </summary>
-        public virtual AccessibleObject Navigate(AccessibleNavigation navdir)
+        public virtual AccessibleObject? Navigate(AccessibleNavigation navdir)
         {
             // Some default behavior for objects with AccessibleObject children
             if (GetChildCount() >= 0)
@@ -1847,7 +1835,7 @@ namespace System.Windows.Forms
                     case AccessibleNavigation.Previous:
                     case AccessibleNavigation.Up:
                     case AccessibleNavigation.Left:
-                        if (Parent.GetChildCount() > 0)
+                        if (Parent?.GetChildCount() > 0)
                         {
                             return null;
                         }
@@ -1855,7 +1843,7 @@ namespace System.Windows.Forms
                     case AccessibleNavigation.Next:
                     case AccessibleNavigation.Down:
                     case AccessibleNavigation.Right:
-                        if (Parent.GetChildCount() > 0)
+                        if (Parent?.GetChildCount() > 0)
                         {
                             return null;
                         }
@@ -1867,7 +1855,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    if (!SysNavigate((int)navdir, NativeMethods.CHILDID_SELF, out object retObject))
+                    if (!SysNavigate((int)navdir, NativeMethods.CHILDID_SELF, out object? retObject))
                     {
                         retObject = systemIAccessible.accNavigate((int)navdir, NativeMethods.CHILDID_SELF);
                     }
@@ -1901,7 +1889,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private object AsVariant(AccessibleObject obj)
+        private object? AsVariant(AccessibleObject? obj)
         {
             if (obj == this)
             {
@@ -1911,7 +1899,7 @@ namespace System.Windows.Forms
             return AsIAccessible(obj);
         }
 
-        private IAccessible AsIAccessible(AccessibleObject obj)
+        private IAccessible? AsIAccessible(AccessibleObject? obj)
         {
             if (obj != null && obj.systemWrapper)
             {
@@ -1950,7 +1938,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsNonClientObject => AccessibleObjectId == User32.OBJID.WINDOW;
 
-        internal IAccessible GetSystemIAccessibleInternal() => systemIAccessible;
+        internal IAccessible? GetSystemIAccessibleInternal() => systemIAccessible;
 
         protected void UseStdAccessibleObjects(IntPtr handle)
         {
@@ -1961,7 +1949,7 @@ namespace System.Windows.Forms
         {
             // Get a standard accessible Object
             Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
-            object acc = null;
+            object? acc = null;
             int result = UnsafeNativeMethods.CreateStdAccessibleObject(
                             new HandleRef(this, handle),
                             objid,
@@ -1970,7 +1958,7 @@ namespace System.Windows.Forms
 
             // Get the IEnumVariant interface
             Guid IID_IEnumVariant = typeof(OleAut32.IEnumVariant).GUID;
-            object en = null;
+            object? en = null;
             result = UnsafeNativeMethods.CreateStdAccessibleObject(
                         new HandleRef(this, handle),
                         objid,
@@ -1979,8 +1967,8 @@ namespace System.Windows.Forms
 
             if (acc != null || en != null)
             {
-                systemIAccessible = (IAccessible)acc;
-                systemIEnumVariant = (OleAut32.IEnumVariant)en;
+                systemIAccessible = acc as IAccessible;
+                systemIEnumVariant = en as OleAut32.IEnumVariant;
                 systemIOleWindow = acc as Ole32.IOleWindow;
             }
         }
@@ -1993,7 +1981,7 @@ namespace System.Windows.Forms
         ///  calling IAccessible.accNavigate on the 'inner' system accessible
         ///  object.
         /// </summary>
-        private bool SysNavigate(int navDir, object childID, out object retObject)
+        private bool SysNavigate(int navDir, object childID, out object? retObject)
         {
             retObject = null;
 
@@ -2004,7 +1992,7 @@ namespace System.Windows.Forms
             }
 
             // Perform any supported navigation operation (fall back on system for unsupported navigation ops)
-            if (!GetSysChild((AccessibleNavigation)navDir, out AccessibleObject newObject))
+            if (!GetSysChild((AccessibleNavigation)navDir, out AccessibleObject? newObject))
             {
                 return false;
             }
@@ -2039,7 +2027,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private AccessibleObject WrapIAccessible(object iacc)
+        private AccessibleObject? WrapIAccessible(object? iacc)
         {
             if (!(iacc is IAccessible accessible))
             {
@@ -2060,7 +2048,7 @@ namespace System.Windows.Forms
         ///  match is based upon the name and DescriptorInfo which describes the signature
         ///  of the method.
         /// </summary>
-        MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
+        MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers)
             => typeof(IAccessible).GetMethod(name, bindingAttr, binder, types, modifiers);
 
         /// <summary>
@@ -2068,7 +2056,7 @@ namespace System.Windows.Forms
         ///  match is based upon the name of the method. If the object implementes multiple methods
         ///  with the same name an AmbiguousMatchException is thrown.
         /// </summary>
-        MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
+        MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetMethod(name, bindingAttr);
 
         MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
@@ -2079,7 +2067,7 @@ namespace System.Windows.Forms
         ///  object. The match is based upon a name. There cannot be more than
         ///  a single field with a name.
         /// </summary>
-        FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
+        FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetField(name, bindingAttr);
 
         FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
@@ -2090,14 +2078,14 @@ namespace System.Windows.Forms
         ///  the given name an AmbiguousMatchException will be thrown. Returns
         ///  null if no property is found.
         /// </summary>
-        PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
+        PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
             => typeof(IAccessible).GetProperty(name, bindingAttr);
 
         /// <summary>
         ///  Return the property based upon the name and Descriptor info describing
         ///  the property indexing. Return null if no property is found.
         /// </summary>
-        PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
+        PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder? binder, Type? returnType, Type[] types, ParameterModifier[]? modifiers)
             => typeof(IAccessible).GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
 
         /// <summary>
@@ -2151,14 +2139,14 @@ namespace System.Windows.Forms
         ///  @exception ArgumentException when <var>invokeAttr</var> specifies property set and
         ///  invoke method.
         /// </summary>
-        object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
+        object? IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder? binder, object? target, object?[]? args, ParameterModifier[]? modifiers, CultureInfo? culture, string[]? namedParameters)
         {
-            if (args.Length == 0)
+            if (args?.Length == 0)
             {
                 MemberInfo[] member = typeof(IAccessible).GetMember(name);
                 if (member != null && member.Length > 0 && member[0] is PropertyInfo)
                 {
-                    MethodInfo getMethod = ((PropertyInfo)member[0]).GetGetMethod();
+                    MethodInfo? getMethod = ((PropertyInfo)member[0]).GetGetMethod();
                     if (getMethod != null && getMethod.GetParameters().Length > 0)
                     {
                         args = new object[getMethod.GetParameters().Length];
@@ -2169,6 +2157,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return typeof(IAccessible).InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
         }
 
@@ -2179,7 +2168,7 @@ namespace System.Windows.Forms
         /// </summary>
         Type IReflect.UnderlyingSystemType => typeof(IAccessible);
 
-        UiaCore.IRawElementProviderSimple UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
+        UiaCore.IRawElementProviderSimple? UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
             => GetOverrideProviderForHwnd(hwnd);
 
         BOOL UiaCore.IRangeValueProvider.IsReadOnly => IsReadOnly ? BOOL.TRUE : BOOL.FALSE;
@@ -2196,7 +2185,7 @@ namespace System.Windows.Forms
 
         void UiaCore.IRangeValueProvider.SetValue(double value) => SetValue(value);
 
-        object[] UiaCore.ISelectionProvider.GetSelection() => GetSelection();
+        object[]? UiaCore.ISelectionProvider.GetSelection() => GetSelection();
 
         BOOL UiaCore.ISelectionProvider.CanSelectMultiple => CanSelectMultiple ? BOOL.TRUE : BOOL.FALSE;
 
@@ -2210,7 +2199,7 @@ namespace System.Windows.Forms
 
         BOOL UiaCore.ISelectionItemProvider.IsSelected => IsItemSelected ? BOOL.TRUE : BOOL.FALSE;
 
-        UiaCore.IRawElementProviderSimple UiaCore.ISelectionItemProvider.SelectionContainer => ItemSelectionContainer;
+        UiaCore.IRawElementProviderSimple? UiaCore.ISelectionItemProvider.SelectionContainer => ItemSelectionContainer;
 
         /// <summary>
         ///  Raises the UIA Notification event.
@@ -2298,219 +2287,6 @@ namespace System.Windows.Forms
         internal virtual void ScrollIntoView()
         {
             Debug.Fail($"{nameof(ScrollIntoView)}() is not overriden");
-        }
-
-        private class EnumVariantObject : OleAut32.IEnumVariant
-        {
-            private uint currentChild = 0;
-            private readonly AccessibleObject owner;
-
-            public EnumVariantObject(AccessibleObject owner)
-            {
-                Debug.Assert(owner != null, "Cannot create EnumVariantObject with a null owner");
-                this.owner = owner;
-            }
-
-            public EnumVariantObject(AccessibleObject owner, uint currentChild)
-            {
-                Debug.Assert(owner != null, "Cannot create EnumVariantObject with a null owner");
-                this.owner = owner;
-                this.currentChild = currentChild;
-            }
-
-            HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[] ppEnum)
-            {
-                if (ppEnum == null)
-                {
-                    return HRESULT.E_INVALIDARG;
-                }
-
-                ppEnum[0] = new EnumVariantObject(owner, currentChild);
-                return HRESULT.S_OK;
-            }
-
-            /// <summary>
-            ///  Resets the child accessible object enumerator.
-            /// </summary>
-            HRESULT OleAut32.IEnumVariant.Reset()
-            {
-                currentChild = 0;
-                owner.systemIEnumVariant?.Reset();
-                return HRESULT.S_OK;
-            }
-
-            /// <summary>
-            ///  Skips the next <paramref name="celt"/> child accessible objects.
-            /// </summary>
-            HRESULT OleAut32.IEnumVariant.Skip(uint celt)
-            {
-                currentChild += celt;
-                owner.systemIEnumVariant?.Skip(celt);
-                return HRESULT.S_OK;
-            }
-
-            /// <summary>
-            ///  Gets the next n child accessible objects.
-            /// </summary>
-            unsafe HRESULT OleAut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
-            {
-                // NOTE: rgvar is a pointer to an array of variants
-                if (owner.IsClientObject)
-                {
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "EnumVariantObject: owner = " + owner.ToString() + ", celt = " + celt);
-
-                    Debug.Indent();
-
-                    int childCount;
-                    int[] newOrder;
-
-                    if ((childCount = owner.GetChildCount()) >= 0)
-                    {
-                        NextFromChildCollection(celt, rgVar, pCeltFetched, childCount);
-                    }
-                    else if (owner.systemIEnumVariant == null)
-                    {
-                        NextEmpty(celt, rgVar, pCeltFetched);
-                    }
-                    else if ((newOrder = owner.GetSysChildOrder()) != null)
-                    {
-                        NextFromSystemReordered(celt, rgVar, pCeltFetched, newOrder);
-                    }
-                    else
-                    {
-                        NextFromSystem(celt, rgVar, pCeltFetched);
-                    }
-
-                    Debug.Unindent();
-                }
-                else
-                {
-                    NextFromSystem(celt, rgVar, pCeltFetched);
-                }
-
-                if (pCeltFetched == null)
-                {
-                    return HRESULT.S_OK;
-                }
-
-                // Tell caller whether requested number of items was returned. Once list of items has
-                // been exhausted, we return S_FALSE so that caller knows to stop calling this method.
-                return *pCeltFetched == celt ? HRESULT.S_OK : HRESULT.S_FALSE;
-            }
-
-            /// <summary>
-            ///  When we have the IEnumVariant of an accessible proxy provided by the system (ie.
-            ///  OLEACC.DLL), we can fall back on that to return the children. Generally, the system
-            ///  proxy will enumerate the child windows, create a suitable kind of child accessible
-            ///  proxy for each one, and return a set of IDispatch interfaces to these proxy objects.
-            /// </summary>
-            private unsafe void NextFromSystem(uint celt, IntPtr rgVar, uint* pCeltFetched)
-            {
-                owner.systemIEnumVariant.Next(celt, rgVar, pCeltFetched);
-                if (pCeltFetched != null)
-                {
-                    currentChild += *pCeltFetched;
-                }
-
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: Delegating to systemIEnumVariant");
-            }
-
-            /// <summary>
-            ///  Sometimes we want to rely on the system-provided behavior to create
-            ///  and return child accessible objects, but we want to impose a new
-            ///  order on those objects (or even filter some objects out).
-            ///
-            ///  This method takes an array of ints that dictates the new order.
-            ///  It queries the system for each child individually, and inserts the
-            ///  result into the correct *new* position.
-            ///
-            ///  Note: This code has to make certain *assumptions* about OLEACC.DLL
-            ///  proxy object behavior. However, this behavior is well documented.
-            ///  We *assume* the proxy will return a set of child accessible objects
-            ///  that correspond 1:1 with the owning control's child windows, and
-            ///  that the default order it returns these objects in is z-order
-            ///  (which also happens to be the order that children appear in the
-            ///  Control.Controls[] collection).
-            /// </summary>
-            private unsafe void NextFromSystemReordered(uint celt, IntPtr rgVar, uint* pCeltFetched, int[] newOrder)
-            {
-                uint i;
-                for (i = 0; i < celt && currentChild < newOrder.Length; ++i)
-                {
-                    if (!GotoItem(owner.systemIEnumVariant, newOrder[currentChild], GetAddressOfVariantAtIndex(rgVar, i)))
-                    {
-                        break;
-                    }
-
-                    currentChild++;
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: adding sys child " + currentChild + " of " + newOrder.Length);
-                }
-
-                if (pCeltFetched != null)
-                {
-                    *pCeltFetched = i;
-                }
-            }
-
-            /// <summary>
-            ///  If we have our own custom accessible child collection, return a set
-            ///  of 1-based integer child ids, that the caller will eventually pass
-            ///  back to us via IAccessible.get_accChild().
-            /// </summary>
-            private unsafe void NextFromChildCollection(uint celt, IntPtr rgVar, uint* pCeltFetched, int childCount)
-            {
-                uint i;
-                for (i = 0; i < celt && currentChild < childCount; ++i)
-                {
-                    ++currentChild;
-                    Marshal.GetNativeVariantForObject(((object)currentChild), GetAddressOfVariantAtIndex(rgVar, i));
-                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: adding own child " + currentChild + " of " + childCount);
-                }
-
-                if (pCeltFetched != null)
-                {
-                    *pCeltFetched = i;
-                }
-            }
-
-            /// <summary>
-            ///  Default behavior if there is no custom child collection or
-            ///  system-provided proxy to fall back on. In this case, we return
-            ///  an empty child collection.
-            /// </summary>
-            private unsafe void NextEmpty(uint celt, IntPtr rgvar, uint* pCeltFetched)
-            {
-                if (pCeltFetched != null)
-                {
-                    *pCeltFetched = 0;
-                }
-
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: no children to add");
-            }
-
-            /// <summary>
-            ///  Given an IEnumVariant interface, this method jumps to a specific
-            ///  item in the collection and extracts the result for that one item.
-            /// </summary>
-            private unsafe static bool GotoItem(OleAut32.IEnumVariant iev, int index, IntPtr variantPtr)
-            {
-                uint celtFetched = 0;
-
-                iev.Reset();
-                iev.Skip((uint)index);
-                iev.Next(1, variantPtr, &celtFetched);
-
-                return celtFetched == 1;
-            }
-
-            /// <summary>
-            ///  Given an array of pointers to variants, calculate address of a given array element.
-            /// </summary>
-            private static IntPtr GetAddressOfVariantAtIndex(IntPtr variantArrayPtr, uint index)
-            {
-                int variantSize = 8 + (IntPtr.Size * 2);
-                return (IntPtr)((ulong)variantArrayPtr + ((ulong)index) * ((ulong)variantSize));
-            }
         }
     }
 }

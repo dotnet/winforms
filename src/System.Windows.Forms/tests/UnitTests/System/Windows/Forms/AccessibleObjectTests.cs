@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -511,7 +511,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleNavigation.Next)]
         [InlineData(AccessibleNavigation.Down)]
         [InlineData(AccessibleNavigation.Right)]
-        public void AccessibleObject_Navigate_InvokeWithChildrenWithoutParent_ThrowsNullReferenceException(AccessibleNavigation navdir)
+        public void AccessibleObject_Navigate_InvokeWithChildrenWithoutParent_ReturnsNull(AccessibleNavigation navdir)
         {
             var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
             mockAccessibleObject
@@ -523,7 +523,8 @@ namespace System.Windows.Forms.Tests
             mockAccessibleObject
                 .Setup(a => a.Navigate(navdir))
                 .CallBase();
-            Assert.Throws<NullReferenceException>(() => mockAccessibleObject.Object.Navigate(navdir));
+
+            Assert.Null(mockAccessibleObject.Object.Navigate(navdir));
         }
 
         [WinFormsTheory]

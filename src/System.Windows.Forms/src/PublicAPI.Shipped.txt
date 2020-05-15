@@ -142,7 +142,7 @@ System.Windows.Forms.AccessibleNavigation.Right = 4 -> System.Windows.Forms.Acce
 System.Windows.Forms.AccessibleNavigation.Up = 1 -> System.Windows.Forms.AccessibleNavigation
 System.Windows.Forms.AccessibleObject
 System.Windows.Forms.AccessibleObject.AccessibleObject() -> void
-~System.Windows.Forms.AccessibleObject.RaiseAutomationNotification(System.Windows.Forms.Automation.AutomationNotificationKind notificationKind, System.Windows.Forms.Automation.AutomationNotificationProcessing notificationProcessing, string notificationText) -> bool
+System.Windows.Forms.AccessibleObject.RaiseAutomationNotification(System.Windows.Forms.Automation.AutomationNotificationKind notificationKind, System.Windows.Forms.Automation.AutomationNotificationProcessing notificationProcessing, string! notificationText) -> bool
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(System.IntPtr handle) -> void
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(System.IntPtr handle, int objid) -> void
 System.Windows.Forms.AccessibleRole
@@ -1062,13 +1062,13 @@ System.Windows.Forms.Control.Control() -> void
 ~System.Windows.Forms.Control.Control(string text) -> void
 ~System.Windows.Forms.Control.Control(string text, int left, int top, int width, int height) -> void
 System.Windows.Forms.Control.ControlAccessibleObject
-~System.Windows.Forms.Control.ControlAccessibleObject.ControlAccessibleObject(System.Windows.Forms.Control ownerControl) -> void
+System.Windows.Forms.Control.ControlAccessibleObject.ControlAccessibleObject(System.Windows.Forms.Control! ownerControl) -> void
 System.Windows.Forms.Control.ControlAccessibleObject.Handle.get -> System.IntPtr
 System.Windows.Forms.Control.ControlAccessibleObject.Handle.set -> void
 System.Windows.Forms.Control.ControlAccessibleObject.NotifyClients(System.Windows.Forms.AccessibleEvents accEvent) -> void
 System.Windows.Forms.Control.ControlAccessibleObject.NotifyClients(System.Windows.Forms.AccessibleEvents accEvent, int childID) -> void
 System.Windows.Forms.Control.ControlAccessibleObject.NotifyClients(System.Windows.Forms.AccessibleEvents accEvent, int objectID, int childID) -> void
-~System.Windows.Forms.Control.ControlAccessibleObject.Owner.get -> System.Windows.Forms.Control
+System.Windows.Forms.Control.ControlAccessibleObject.Owner.get -> System.Windows.Forms.Control!
 System.Windows.Forms.Control.ControlAdded -> System.Windows.Forms.ControlEventHandler
 System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.Control.ControlCollection.Contains(System.Windows.Forms.Control control) -> bool
@@ -8964,17 +8964,17 @@ override System.Windows.Forms.ContainerControl.WndProc(ref System.Windows.Forms.
 override System.Windows.Forms.ContextMenuStrip.Dispose(bool disposing) -> void
 override System.Windows.Forms.ContextMenuStrip.SetVisibleCore(bool visible) -> void
 override System.Windows.Forms.Control.CanRaiseEvents.get -> bool
-~override System.Windows.Forms.Control.ControlAccessibleObject.DefaultAction.get -> string
-~override System.Windows.Forms.Control.ControlAccessibleObject.Description.get -> string
-~override System.Windows.Forms.Control.ControlAccessibleObject.GetHelpTopic(out string fileName) -> int
-~override System.Windows.Forms.Control.ControlAccessibleObject.Help.get -> string
-~override System.Windows.Forms.Control.ControlAccessibleObject.KeyboardShortcut.get -> string
-~override System.Windows.Forms.Control.ControlAccessibleObject.Name.get -> string
-~override System.Windows.Forms.Control.ControlAccessibleObject.Name.set -> void
-~override System.Windows.Forms.Control.ControlAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.Control.ControlAccessibleObject.DefaultAction.get -> string?
+override System.Windows.Forms.Control.ControlAccessibleObject.Description.get -> string?
+override System.Windows.Forms.Control.ControlAccessibleObject.GetHelpTopic(out string? fileName) -> int
+override System.Windows.Forms.Control.ControlAccessibleObject.Help.get -> string?
+override System.Windows.Forms.Control.ControlAccessibleObject.KeyboardShortcut.get -> string?
+override System.Windows.Forms.Control.ControlAccessibleObject.Name.get -> string?
+override System.Windows.Forms.Control.ControlAccessibleObject.Name.set -> void
+override System.Windows.Forms.Control.ControlAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.Control.ControlAccessibleObject.RaiseLiveRegionChanged() -> bool
 override System.Windows.Forms.Control.ControlAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
-~override System.Windows.Forms.Control.ControlAccessibleObject.ToString() -> string
+override System.Windows.Forms.Control.ControlAccessibleObject.ToString() -> string!
 ~override System.Windows.Forms.Control.ControlCollection.GetEnumerator() -> System.Collections.IEnumerator
 override System.Windows.Forms.Control.Dispose(bool disposing) -> void
 ~override System.Windows.Forms.Control.Site.get -> System.ComponentModel.ISite
@@ -11984,27 +11984,27 @@ virtual System.Resources.ResXResourceReader.Dispose(bool disposing) -> void
 virtual System.Resources.ResXResourceWriter.Dispose() -> void
 virtual System.Resources.ResXResourceWriter.Dispose(bool disposing) -> void
 virtual System.Windows.Forms.AccessibleObject.Bounds.get -> System.Drawing.Rectangle
-~virtual System.Windows.Forms.AccessibleObject.DefaultAction.get -> string
-~virtual System.Windows.Forms.AccessibleObject.Description.get -> string
+virtual System.Windows.Forms.AccessibleObject.DefaultAction.get -> string?
+virtual System.Windows.Forms.AccessibleObject.Description.get -> string?
 virtual System.Windows.Forms.AccessibleObject.DoDefaultAction() -> void
-~virtual System.Windows.Forms.AccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
+virtual System.Windows.Forms.AccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
 virtual System.Windows.Forms.AccessibleObject.GetChildCount() -> int
-~virtual System.Windows.Forms.AccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.AccessibleObject.GetHelpTopic(out string fileName) -> int
-~virtual System.Windows.Forms.AccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.AccessibleObject.Help.get -> string
-~virtual System.Windows.Forms.AccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.AccessibleObject.KeyboardShortcut.get -> string
-~virtual System.Windows.Forms.AccessibleObject.Name.get -> string
-~virtual System.Windows.Forms.AccessibleObject.Name.set -> void
-~virtual System.Windows.Forms.AccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navdir) -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.AccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
+virtual System.Windows.Forms.AccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
+virtual System.Windows.Forms.AccessibleObject.GetHelpTopic(out string? fileName) -> int
+virtual System.Windows.Forms.AccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject?
+virtual System.Windows.Forms.AccessibleObject.Help.get -> string?
+virtual System.Windows.Forms.AccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject?
+virtual System.Windows.Forms.AccessibleObject.KeyboardShortcut.get -> string?
+virtual System.Windows.Forms.AccessibleObject.Name.get -> string?
+virtual System.Windows.Forms.AccessibleObject.Name.set -> void
+virtual System.Windows.Forms.AccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navdir) -> System.Windows.Forms.AccessibleObject?
+virtual System.Windows.Forms.AccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
 virtual System.Windows.Forms.AccessibleObject.RaiseLiveRegionChanged() -> bool
 virtual System.Windows.Forms.AccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
 virtual System.Windows.Forms.AccessibleObject.Select(System.Windows.Forms.AccessibleSelection flags) -> void
 virtual System.Windows.Forms.AccessibleObject.State.get -> System.Windows.Forms.AccessibleStates
-~virtual System.Windows.Forms.AccessibleObject.Value.get -> string
-~virtual System.Windows.Forms.AccessibleObject.Value.set -> void
+virtual System.Windows.Forms.AccessibleObject.Value.get -> string?
+virtual System.Windows.Forms.AccessibleObject.Value.set -> void
 virtual System.Windows.Forms.ApplicationContext.Dispose(bool disposing) -> void
 virtual System.Windows.Forms.ApplicationContext.ExitThreadCore() -> void
 virtual System.Windows.Forms.ApplicationContext.OnMainFormClosed(object? sender, System.EventArgs! e) -> void

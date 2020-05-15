@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -107,20 +105,18 @@ namespace System.Windows.Forms
         /// </summary>
         private object AsNativeAccessible(object accObject)
         {
-            if (accObject is AccessibleObject)
+            if (accObject is AccessibleObject accessibleObject)
             {
-                return new InternalAccessibleObject(accObject as AccessibleObject);
+                return new InternalAccessibleObject(accessibleObject);
             }
-            else
-            {
-                return accObject;
-            }
+
+            return accObject;
         }
 
         /// <summary>
         ///  Wraps AccessibleObject elements of a given array into InternalAccessibleObjects
         /// </summary>
-        private object[] AsArrayOfNativeAccessibles(object[] accObjectArray)
+        private object[]? AsArrayOfNativeAccessibles(object[]? accObjectArray)
         {
             if (accObjectArray != null && accObjectArray.Length > 0)
             {
@@ -129,6 +125,7 @@ namespace System.Windows.Forms
                     accObjectArray[i] = AsNativeAccessible(accObjectArray[i]);
                 }
             }
+
             return accObjectArray;
         }
 
@@ -210,25 +207,25 @@ namespace System.Windows.Forms
         HRESULT Ole32.IOleWindow.ContextSensitiveHelp(BOOL fEnterMode)
             => publicIOleWindow.ContextSensitiveHelp(fEnterMode);
 
-        MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder binder, Type[] types, ParameterModifier[] modifiers)
+        MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers)
             => publicIReflect.GetMethod(name, bindingAttr, binder, types, modifiers);
 
-        MethodInfo IReflect.GetMethod(string name, BindingFlags bindingAttr)
+        MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
             => publicIReflect.GetMethod(name, bindingAttr);
 
         MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
             => publicIReflect.GetMethods(bindingAttr);
 
-        FieldInfo IReflect.GetField(string name, BindingFlags bindingAttr)
+        FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr)
             => publicIReflect.GetField(name, bindingAttr);
 
         FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
             => publicIReflect.GetFields(bindingAttr);
 
-        PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr)
+        PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
             => publicIReflect.GetProperty(name, bindingAttr);
 
-        PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
+        PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder? binder, Type? returnType, Type[] types, ParameterModifier[]? modifiers)
             => publicIReflect.GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
 
         PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
@@ -240,7 +237,7 @@ namespace System.Windows.Forms
         MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
             => publicIReflect.GetMembers(bindingAttr);
 
-        object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
+        object? IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder? binder, object? target, object?[]? args, ParameterModifier[]? modifiers, CultureInfo? culture, string[]? namedParameters)
             => publicIReflect.InvokeMember(name, invokeAttr, binder, publicIAccessible, args, modifiers, culture, namedParameters);
 
         Type IReflect.UnderlyingSystemType => publicIReflect.UnderlyingSystemType;
@@ -262,7 +259,7 @@ namespace System.Windows.Forms
             return publicIAccessibleEx.GetObjectForChild(idChild);
         }
 
-        unsafe HRESULT IAccessibleEx.GetIAccessiblePair(out object ppAcc, int* pidChild)
+        unsafe HRESULT IAccessibleEx.GetIAccessiblePair(out object? ppAcc, int* pidChild)
         {
             if (pidChild == null)
             {
@@ -287,9 +284,9 @@ namespace System.Windows.Forms
         IRawElementProviderSimple IRawElementProviderSimple.HostRawElementProvider
             => publicIRawElementProviderSimple.HostRawElementProvider;
 
-        object IRawElementProviderSimple.GetPatternProvider(UIA patternId)
+        object? IRawElementProviderSimple.GetPatternProvider(UIA patternId)
         {
-            object obj = publicIRawElementProviderSimple.GetPatternProvider(patternId);
+            object? obj = publicIRawElementProviderSimple.GetPatternProvider(patternId);
             if (obj != null)
             {
                 // we always want to return the internal accessible object
@@ -365,7 +362,7 @@ namespace System.Windows.Forms
         int[] IRawElementProviderFragment.GetRuntimeId()
             => publicIRawElementProviderFragment.GetRuntimeId();
 
-        object[] IRawElementProviderFragment.GetEmbeddedFragmentRoots()
+        object[]? IRawElementProviderFragment.GetEmbeddedFragmentRoots()
             => AsArrayOfNativeAccessibles(publicIRawElementProviderFragment.GetEmbeddedFragmentRoots());
 
         void IRawElementProviderFragment.SetFocus()
@@ -407,7 +404,7 @@ namespace System.Windows.Forms
         IAccessible ILegacyIAccessibleProvider.GetIAccessible()
             => publicILegacyIAccessibleProvider.GetIAccessible();
 
-        object[] ILegacyIAccessibleProvider.GetSelection()
+        object[]? ILegacyIAccessibleProvider.GetSelection()
             => AsArrayOfNativeAccessibles(publicILegacyIAccessibleProvider.GetSelection());
 
         void ILegacyIAccessibleProvider.Select(int flagsSelect)
@@ -451,18 +448,18 @@ namespace System.Windows.Forms
 
         ToggleState IToggleProvider.ToggleState => publicIToggleProvider.ToggleState;
 
-        object[] ITableProvider.GetRowHeaders()
+        object[]? ITableProvider.GetRowHeaders()
             => AsArrayOfNativeAccessibles(publicITableProvider.GetRowHeaders());
 
-        object[] ITableProvider.GetColumnHeaders()
+        object[]? ITableProvider.GetColumnHeaders()
             => AsArrayOfNativeAccessibles(publicITableProvider.GetColumnHeaders());
 
         RowOrColumnMajor ITableProvider.RowOrColumnMajor => publicITableProvider.RowOrColumnMajor;
 
-        object[] ITableItemProvider.GetRowHeaderItems()
+        object[]? ITableItemProvider.GetRowHeaderItems()
             => AsArrayOfNativeAccessibles(publicITableItemProvider.GetRowHeaderItems());
 
-        object[] ITableItemProvider.GetColumnHeaderItems()
+        object[]? ITableItemProvider.GetColumnHeaderItems()
             => AsArrayOfNativeAccessibles(publicITableItemProvider.GetColumnHeaderItems());
 
         object IGridProvider.GetItem(int row, int column)
