@@ -1667,6 +1667,12 @@ namespace System.Windows.Forms
         /// </summary>
         internal static DateTime SysTimeToDateTime(Kernel32.SYSTEMTIME s)
         {
+            if (s.wYear <= 0 || s.wMonth <= 0 || s.wDay <= 0)
+            {
+                Debug.Fail("Incorrect SYSTEMTIME info!");
+                return DateTime.MinValue;
+            }
+
             return new DateTime(s.wYear, s.wMonth, s.wDay, s.wHour, s.wMinute, s.wSecond);
         }
 

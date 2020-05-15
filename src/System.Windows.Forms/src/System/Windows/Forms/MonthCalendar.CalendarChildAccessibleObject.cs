@@ -16,13 +16,13 @@ namespace System.Windows.Forms
         /// </summary>
         internal abstract class CalendarChildAccessibleObject : AccessibleObject
         {
-            protected MonthCalendarAccessibleObject _calendarAccessibleObject;
+            protected readonly MonthCalendarAccessibleObject _calendarAccessibleObject;
             protected int _calendarIndex;
             protected CalendarChildType _itemType;
 
             public CalendarChildAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex, CalendarChildType itemType)
             {
-                _calendarAccessibleObject = calendarAccessibleObject;
+                _calendarAccessibleObject = calendarAccessibleObject ?? throw new ArgumentNullException(nameof(calendarAccessibleObject));
                 _calendarIndex = calendarIndex;
                 _itemType = itemType;
             }
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                var rectangle = CalculateBoundingRectangle();
+                RECT rectangle = CalculateBoundingRectangle();
                 int x = rectangle.left + ((rectangle.right - rectangle.left) / 2);
                 int y = rectangle.top + ((rectangle.bottom - rectangle.top) / 2);
 

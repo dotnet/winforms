@@ -13,12 +13,12 @@ namespace System.Windows.Forms
         /// </summary>
         internal abstract class CalendarGridChildAccessibleObject : CalendarChildAccessibleObject
         {
-            protected AccessibleObject _parentAccessibleObject;
+            protected readonly AccessibleObject _parentAccessibleObject;
 
             public CalendarGridChildAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject, int calendarIndex, CalendarChildType itemType,
                 AccessibleObject parentAccessibleObject, int itemIndex) : base(calendarAccessibleObject, calendarIndex, itemType)
             {
-                _parentAccessibleObject = parentAccessibleObject;
+                _parentAccessibleObject = parentAccessibleObject ?? throw new ArgumentNullException(nameof(parentAccessibleObject));
             }
 
             public override AccessibleObject Parent => _parentAccessibleObject;
