@@ -59,10 +59,26 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         }
 
         // Should be able to test internal methods with [InternalsVisibleTo] rather than reflection.
+        private static Task SendSecondInstanceArgsAsync(string pipeName, string[] args, CancellationToken cancellationToken)
+        {
+            var method = GetHelperType().GetMethod("SendSecondInstanceArgsAsync", BindingFlags.NonPublic | BindingFlags.Static);
+            return (Task)method.Invoke(null, new object[] { pipeName, args, cancellationToken });
+        }
+
         private static bool SendSecondInstanceArgs(string pipeName, int timeout, string[] args)
         {
-            var method = GetHelperType().GetMethod("SendSecondInstanceArgs", BindingFlags.NonPublic | BindingFlags.Static);
-            return (bool)method.Invoke(null, new object[] { pipeName, timeout, args });
+            var tokenSource = new CancellationTokenSource();
+            tokenSource.CancelAfter(timeout);
+            try
+            {
+                var awaitable = SendSecondInstanceArgsAsync(pipeName, args, tokenSource.Token).ConfigureAwait(false);
+                awaitable.GetAwaiter().GetResult();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
 
         private static string GetUniqueName() => Guid.NewGuid().ToString();

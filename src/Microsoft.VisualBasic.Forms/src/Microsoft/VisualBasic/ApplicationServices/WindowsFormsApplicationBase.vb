@@ -330,14 +330,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     '--- This is the first instance of a single-instance application to run.  This is the instance that subsequent instances will attach to.
                     Using pipeServer
                         Dim tokenSource = New CancellationTokenSource()
-                        Dim task = WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
+#Disable Warning BC42358 ' call is not awaited
+                        WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
+#Enable Warning BC42358
                         DoApplicationModel()
                         tokenSource.Cancel()
                     End Using
                 Else '--- We are launching a subsequent instance.
-                    If Not SendSecondInstanceArgs(ApplicationInstanceID, SECOND_INSTANCE_TIMEOUT, commandLine) Then
+                    Dim tokenSource = New CancellationTokenSource()
+                    tokenSource.CancelAfter(SECOND_INSTANCE_TIMEOUT)
+                    Try
+                        Dim awaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                        awaitable.GetAwaiter().GetResult()
+                    Catch ex As Exception
                         Throw New CantStartSingleInstanceException()
-                    End If
+                    End Try
                 End If
             End If 'Single-Instance application
         End Sub
@@ -807,7 +814,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 MainForm.Invoke(
                     Sub()
                         invoked = True
-                        OnStartupNextInstance(New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(args), True)) 'by default, we set BringToFront as True since that's the behavior most people will want
+                        OnStartupNextInstance(New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(args), bringToForegroundFlag:=True))
                     End Sub)
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
