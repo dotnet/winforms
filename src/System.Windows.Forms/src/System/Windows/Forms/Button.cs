@@ -372,7 +372,6 @@ namespace System.Windows.Forms
                 case User32.WM.REFLECT | User32.WM.COMMAND:
                     if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED)
                     {
-                        Debug.Assert(!GetStyle(ControlStyles.UserPaint), "Shouldn't get BN_CLICKED when UserPaint");
                         if (!ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);

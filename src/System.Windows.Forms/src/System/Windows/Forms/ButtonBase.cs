@@ -153,11 +153,7 @@ namespace System.Windows.Forms
                     if (value != Color.Empty)
                     {
                         PropertyDescriptor pd = TypeDescriptor.GetProperties(this)["UseVisualStyleBackColor"];
-                        Debug.Assert(pd != null);
-                        if (pd != null)
-                        {
-                            pd.SetValue(this, false);
-                        }
+                        pd?.SetValue(this, false);
                     }
                 }
                 else
@@ -823,7 +819,6 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseEnter(EventArgs eventargs)
         {
-            Debug.Assert(Enabled, "ButtonBase.OnMouseEnter should not be called if the button is disabled");
             SetFlag(FlagMouseOver, true);
             Invalidate();
             if (!DesignMode && AutoEllipsis && ShowToolTip && textToolTip != null)
@@ -856,7 +851,6 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs mevent)
         {
-            Debug.Assert(Enabled, "ButtonBase.OnMouseMove should not be called if the button is disabled");
             if (mevent.Button != MouseButtons.None && GetFlag(FlagMousePressed))
             {
                 Rectangle r = ClientRectangle;
@@ -887,7 +881,6 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
-            Debug.Assert(Enabled, "ButtonBase.OnMouseDown should not be called if the button is disabled");
             if (mevent.Button == MouseButtons.Left)
             {
                 SetFlag(FlagMouseDown, true);
@@ -1061,7 +1054,6 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs kevent)
         {
-            Debug.Assert(Enabled, "ButtonBase.OnKeyDown should not be called if the button is disabled");
             if (kevent.KeyData == Keys.Space)
             {
                 if (!GetFlag(FlagMouseDown))
