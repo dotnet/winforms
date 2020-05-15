@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Identifies a button cell in the dataGridView.
     /// </summary>
-    public class DataGridViewButtonCell : DataGridViewCell
+    public partial class DataGridViewButtonCell : DataGridViewCell
     {
         private static readonly int PropButtonCellFlatStyle = PropertyStore.CreateKey();
         private static readonly int PropButtonCellState = PropertyStore.CreateKey();
@@ -1037,82 +1037,6 @@ namespace System.Windows.Forms
             {
                 ButtonState = newButtonState;
                 DataGridView.InvalidateCell(ColumnIndex, rowIndex);
-            }
-        }
-
-        private class DataGridViewButtonCellRenderer
-        {
-            private static VisualStyleRenderer visualStyleRenderer;
-
-            private DataGridViewButtonCellRenderer()
-            {
-            }
-
-            public static VisualStyleRenderer DataGridViewButtonRenderer
-            {
-                get
-                {
-                    if (visualStyleRenderer == null)
-                    {
-                        visualStyleRenderer = new VisualStyleRenderer(ButtonElement);
-                    }
-                    return visualStyleRenderer;
-                }
-            }
-
-            public static void DrawButton(Graphics g, Rectangle bounds, int buttonState)
-            {
-                DataGridViewButtonRenderer.SetParameters(ButtonElement.ClassName, ButtonElement.Part, buttonState);
-                DataGridViewButtonRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
-            }
-        }
-
-        protected class DataGridViewButtonCellAccessibleObject : DataGridViewCellAccessibleObject
-        {
-            public DataGridViewButtonCellAccessibleObject(DataGridViewCell owner) : base(owner)
-            {
-            }
-
-            public override string DefaultAction
-            {
-                get
-                {
-                    return SR.DataGridView_AccButtonCellDefaultAction;
-                }
-            }
-
-            public override void DoDefaultAction()
-            {
-                DataGridViewButtonCell dataGridViewCell = (DataGridViewButtonCell)Owner;
-                DataGridView dataGridView = dataGridViewCell.DataGridView;
-
-                if (dataGridView != null && dataGridViewCell.RowIndex == -1)
-                {
-                    throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedCell);
-                }
-
-                if (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
-                {
-                    dataGridView.OnCellClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
-                    dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
-                }
-            }
-
-            public override int GetChildCount()
-            {
-                return 0;
-            }
-
-            internal override bool IsIAccessibleExSupported() => true;
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.ButtonControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
             }
         }
     }

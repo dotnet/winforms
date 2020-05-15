@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Identifies a cell in the dataGridView.
     /// </summary>
-    public class DataGridViewTextBoxCell : DataGridViewCell
+    public partial class DataGridViewTextBoxCell : DataGridViewCell
     {
         private static readonly int PropTextBoxCellMaxInputLength = PropertyStore.CreateKey();
         private static readonly int PropTextBoxCellEditingTextBox = PropertyStore.CreateKey();
@@ -793,25 +793,6 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             return "DataGridViewTextBoxCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
-        }
-
-        protected class DataGridViewTextBoxCellAccessibleObject : DataGridViewCellAccessibleObject
-        {
-            public DataGridViewTextBoxCellAccessibleObject(DataGridViewCell owner) : base(owner)
-            {
-            }
-
-            internal override bool IsIAccessibleExSupported() => true;
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.EditControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
         }
     }
 }

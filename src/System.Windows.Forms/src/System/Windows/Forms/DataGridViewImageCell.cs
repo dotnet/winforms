@@ -14,7 +14,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    public class DataGridViewImageCell : DataGridViewCell
+    public partial class DataGridViewImageCell : DataGridViewCell
     {
         private static readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
         private static readonly int PropImageCellDescription = PropertyStore.CreateKey();
@@ -944,90 +944,6 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             return "DataGridViewImageCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
-        }
-
-        protected class DataGridViewImageCellAccessibleObject : DataGridViewCellAccessibleObject
-        {
-            public DataGridViewImageCellAccessibleObject(DataGridViewCell owner) : base(owner)
-            {
-            }
-
-            public override string DefaultAction
-            {
-                get
-                {
-                    return string.Empty;
-                }
-            }
-
-            public override string Description
-            {
-                get
-                {
-                    if (Owner is DataGridViewImageCell imageCell)
-                    {
-                        return imageCell.Description;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
-
-            public override string Value
-            {
-                get => base.Value;
-
-                set
-                {
-                    // do nothing.
-                }
-            }
-
-            public override void DoDefaultAction()
-            {
-                DataGridViewImageCell dataGridViewCell = (DataGridViewImageCell)Owner;
-                DataGridView dataGridView = dataGridViewCell.DataGridView;
-
-                if (dataGridView != null && dataGridViewCell.RowIndex != -1 &&
-                    dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
-                {
-                    dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
-                }
-            }
-
-            public override int GetChildCount()
-            {
-                return 0;
-            }
-
-            internal override bool IsIAccessibleExSupported() => true;
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.ImageControlTypeId;
-                }
-
-                if (propertyID == UiaCore.UIA.IsInvokePatternAvailablePropertyId)
-                {
-                    return true;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.InvokePatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
         }
     }
 }
