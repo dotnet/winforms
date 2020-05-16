@@ -45,10 +45,13 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         }
 
         // Should be able to test internal methods with [InternalsVisibleTo] rather than reflection.
-        private static NamedPipeServerStream CreatePipeServer(string pipeName)
+        private static bool TryCreatePipeServer(string pipeName, out NamedPipeServerStream pipeServer)
         {
-            var method = GetHelperType().GetMethod("CreatePipeServer", BindingFlags.NonPublic | BindingFlags.Static);
-            return (NamedPipeServerStream)method.Invoke(null, new object[] { pipeName });
+            var method = GetHelperType().GetMethod("TryCreatePipeServer", BindingFlags.NonPublic | BindingFlags.Static);
+            var args = new object[] { pipeName, null };
+            var result = (bool)method.Invoke(null, args);
+            pipeServer = (NamedPipeServerStream)args[1];
+            return result;
         }
 
         // Should be able to test internal methods with [InternalsVisibleTo] rather than reflection.
@@ -92,7 +95,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             {
                 for (int i = 0; i < n; i++)
                 {
-                    var pipeServer = CreatePipeServer(GetUniqueName());
+                    Assert.True(TryCreatePipeServer(GetUniqueName(), out var pipeServer));
                     Assert.NotNull(pipeServer);
                     pipeServers.Add(pipeServer);
                 }
@@ -116,12 +119,12 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             var tasks = Enumerable.Range(0, n).Select(i => Task.Factory.StartNew(() =>
             {
                 Thread.Sleep(100);
-                using (var pipeServer = CreatePipeServer(pipeName))
+                if (TryCreatePipeServer(pipeName, out var pipeServer))
                 {
-                    if (pipeServer is { })
-                    {
-                        Interlocked.Increment(ref created);
-                    }
+                    Interlocked.Increment(ref created);
+                }
+                using (pipeServer)
+                {
                     Thread.Sleep(10);
                 }
                 Interlocked.Increment(ref completed);
@@ -135,7 +138,8 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         public void MultipleClients_Sequential()
         {
             var pipeName = GetUniqueName();
-            using (var pipeServer = CreatePipeServer(pipeName))
+            Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
+            using (pipeServer)
             {
                 const int n = 5;
                 var sentArgs = Enumerable.Range(0, n).Select(i => Enumerable.Range(0, i).Select(i => i.ToString()).ToArray()).ToArray();
@@ -154,7 +158,8 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         public void MultipleClients_Overlapping()
         {
             var pipeName = GetUniqueName();
-            using (var pipeServer = CreatePipeServer(pipeName))
+            Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
+            using (pipeServer)
             {
                 const int n = 5;
                 var sentArgs = Enumerable.Range(0, n).Select(i => Enumerable.Range(0, i).Select(i => i.ToString()).ToArray()).ToArray();
@@ -173,7 +178,8 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         public void ManyArgs()
         {
             var pipeName = GetUniqueName();
-            using (var pipeServer = CreatePipeServer(pipeName))
+            Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
+            using (pipeServer)
             {
                 var expectedArgs = getStrings(20000).ToArray();
                 var receivedArgs = new ReceivedArgs();
@@ -212,7 +218,8 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         public void ClientConnectionTimeout()
         {
             var pipeName = GetUniqueName();
-            using (var pipeServer = CreatePipeServer(pipeName))
+            Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
+            using (pipeServer)
             {
                 var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, timeout: 300, Array.Empty<string>()));
                 bool result = task.Result;
@@ -225,7 +232,8 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         public void ClientConnectBeforeWaitForClientConnection()
         {
             var pipeName = GetUniqueName();
-            using (var pipeServer = CreatePipeServer(pipeName))
+            Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
+            using (pipeServer)
             {
                 var receivedArgs = new ReceivedArgs();
                 var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "1", "ABC" }));
@@ -243,7 +251,8 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         public void InvalidClientData()
         {
             var pipeName = GetUniqueName();
-            using (var pipeServer = CreatePipeServer(pipeName))
+            Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
+            using (pipeServer)
             {
                 var receivedArgs = new ReceivedArgs();
                 WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
@@ -280,7 +289,8 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         public void CloseClientAfterClientConnect()
         {
             var pipeName = GetUniqueName();
-            using (var pipeServer = CreatePipeServer(pipeName))
+            Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
+            using (pipeServer)
             {
                 var receivedArgs = new ReceivedArgs();
                 WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
@@ -333,7 +343,8 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             try
             {
                 var receivedArgs = new ReceivedArgs();
-                using (var pipeServer = CreatePipeServer(pipeName))
+                Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
+                using (pipeServer)
                 {
                     WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
                     pipeClient = CreateClientConnection(pipeName, SendTimeout);

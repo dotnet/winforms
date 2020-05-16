@@ -6,6 +6,7 @@ Option Strict On
 Option Explicit On
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
+Imports System.IO.Pipes
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Security
@@ -325,8 +326,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 DoApplicationModel()
             Else 'This is a Single-Instance application
                 Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly) 'Note: Must pass the calling assembly from here so we can get the running app.  Otherwise, can break single instance.
-                Dim pipeServer = CreatePipeServer(ApplicationInstanceID)
-                If pipeServer IsNot Nothing Then
+                Dim pipeServer As NamedPipeServerStream = Nothing
+                If TryCreatePipeServer(ApplicationInstanceID, pipeServer) Then
                     '--- This is the first instance of a single-instance application to run.  This is the instance that subsequent instances will attach to.
                     Using pipeServer
                         Dim tokenSource = New CancellationTokenSource()

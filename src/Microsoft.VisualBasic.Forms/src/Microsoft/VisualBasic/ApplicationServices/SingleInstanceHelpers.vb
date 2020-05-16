@@ -8,6 +8,7 @@ Option Explicit On
 Imports System
 Imports System.IO
 Imports System.IO.Pipes
+Imports System.Runtime.InteropServices
 Imports System.Runtime.Serialization
 Imports System.Threading
 
@@ -16,16 +17,18 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Friend Module SingleInstanceHelpers
         Private Const NamedPipeOptions As PipeOptions = PipeOptions.Asynchronous Or PipeOptions.CurrentUserOnly
 
-        Friend Function CreatePipeServer(pipeName As String) As NamedPipeServerStream
+        Friend Function TryCreatePipeServer(pipeName As String, <Out> ByRef pipeServer As NamedPipeServerStream) As Boolean
             Try
-                Return New NamedPipeServerStream(
+                pipeServer = New NamedPipeServerStream(
                         pipeName:=pipeName,
                         direction:=PipeDirection.In,
                         maxNumberOfServerInstances:=1,
                         transmissionMode:=PipeTransmissionMode.Byte,
                         options:=NamedPipeOptions)
+                Return True
             Catch ex As IOException
-                Return Nothing
+                pipeServer = Nothing
+                Return False
             End Try
         End Function
 
@@ -56,15 +59,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         Private Async Function ReadArgsAsync(pipeServer As NamedPipeServerStream, cancellationToken As CancellationToken) As Task(Of String())
-            Const nBuffer = 1024
-            Dim buffer = New Byte(nBuffer - 1) {}
+            Const bufferLength = 1024
+            Dim buffer = New Byte(bufferLength - 1) {}
             Using stream As New MemoryStream
                 While True
-                    Dim nRead = Await pipeServer.ReadAsync(buffer, 0, nBuffer, cancellationToken).ConfigureAwait(False)
-                    If nRead = 0 Then
+                    Dim bytesRead = Await pipeServer.ReadAsync(buffer, 0, bufferLength, cancellationToken).ConfigureAwait(False)
+                    If bytesRead = 0 Then
                         Exit While
                     End If
-                    stream.Write(buffer, 0, nRead)
+                    stream.Write(buffer, 0, bytesRead)
                 End While
                 stream.Seek(0, SeekOrigin.Begin)
                 Dim serializer = New DataContractSerializer(GetType(String()))
