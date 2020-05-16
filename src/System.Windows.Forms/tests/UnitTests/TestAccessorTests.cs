@@ -189,6 +189,7 @@ namespace System.Windows.Forms.Tests
 #pragma warning disable IDE0051   // unaccessed private
 #pragma warning disable IDE0052   // unaccessed private
 #pragma warning disable CS0169    // unused field
+#pragma warning disable CA1823    // unused field
 
         public class A
         {
@@ -233,5 +234,6 @@ namespace System.Windows.Forms.Tests
 #pragma warning restore IDE0051
 #pragma warning disable IDE0052
 #pragma warning restore CS0169
+#pragma warning restore CA1823
     }
 }
