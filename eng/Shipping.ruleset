@@ -252,7 +252,7 @@
     <Rule Id="CA2229" Action="None" />             <!-- Implement serialization constructors -->
     <Rule Id="CA2234" Action="None" />             <!-- Pass system uri objects instead of strings -->
     <Rule Id="CA2237" Action="None" />             <!-- Mark ISerializable types with serializable -->
-    <Rule Id="CA2242" Action="None" />             <!-- Test for NaN correctly -->
+    <Rule Id="CA2242" Action="Warning" />          <!-- Test for NaN correctly -->
     <Rule Id="CA2245" Action="None" />             <!-- Do not assign a property to itself. -->
     <Rule Id="CA5369" Action="None" />             <!-- Use XmlReader For Deserialize -->
   </Rules>

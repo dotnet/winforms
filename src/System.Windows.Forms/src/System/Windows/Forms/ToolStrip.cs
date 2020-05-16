@@ -2433,7 +2433,7 @@ namespace System.Windows.Forms
                     minTan = Math.Min(minTan, tan);
                     minHypotenuse = Math.Min(minHypotenuse, hypotenuse);
 
-                    if (minTan == tan && minTan != double.NaN)
+                    if (minTan == tan && !double.IsNaN(minTan))
                     {
                         tanWinner = otherItem;
                         hypotenuseOfTanWinner = hypotenuse;
