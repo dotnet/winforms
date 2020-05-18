@@ -75,7 +75,7 @@ namespace System.Windows.Forms
                     // marshal the items.
                     object[] nameItems = nameMarshaller.Items;
                     object[] cookieItems = valueMarshaller.Items;
-                    Ole32.IPerPropertyBrowsing ppb = (Ole32.IPerPropertyBrowsing)owner.GetPerPropertyBrowsing();
+                    Oleaut32.IPerPropertyBrowsing ppb = (Oleaut32.IPerPropertyBrowsing)owner.GetPerPropertyBrowsing();
                     int itemCount = 0;
 
                     Debug.Assert(cookieItems != null && nameItems != null, "An item array is null");
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                     if (nameItems.Length > 0)
                     {
                         object[] valueItems = new object[cookieItems.Length];
-                        var var = new Ole32.VARIANT();
+                        var var = new Oleaut32.VARIANT();
                         int cookie;
 
                         Debug.Assert(cookieItems.Length == nameItems.Length, "Got uneven names and cookies");

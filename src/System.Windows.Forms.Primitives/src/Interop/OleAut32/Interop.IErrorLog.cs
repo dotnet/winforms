@@ -7,24 +7,17 @@ using System.Runtime.InteropServices;
 
 internal partial class Interop
 {
-    internal static partial class Ole32
+    internal static partial class Oleaut32
     {
         [ComImport]
-        [Guid("55272A00-42CB-11CE-8135-00AA004BB851")]
+        [Guid("3127CA40-446E-11CE-8135-00AA004BB851")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPropertyBag
+        public unsafe interface IErrorLog
         {
             [PreserveSig]
-            HRESULT Read(
+            HRESULT AddError(
                 [MarshalAs(UnmanagedType.LPWStr)] string pszPropName,
-                ref object pVar,
-                IErrorLog pErrorLog);
-
-            [PreserveSig]
-            HRESULT Write(
-                [MarshalAs(UnmanagedType.LPWStr)]
-                string pszPropName,
-                ref object pVar);
+                EXCEPINFO* pExcepInfo);
         }
     }
 }

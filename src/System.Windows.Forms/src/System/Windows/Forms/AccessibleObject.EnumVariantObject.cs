@@ -11,7 +11,7 @@ namespace System.Windows.Forms
 {
     public partial class AccessibleObject
     {
-        private class EnumVariantObject : OleAut32.IEnumVariant
+        private class EnumVariantObject : Oleaut32.IEnumVariant
         {
             private uint currentChild = 0;
             private readonly AccessibleObject owner;
@@ -29,7 +29,7 @@ namespace System.Windows.Forms
                 this.currentChild = currentChild;
             }
 
-            HRESULT OleAut32.IEnumVariant.Clone(OleAut32.IEnumVariant[]? ppEnum)
+            HRESULT Oleaut32.IEnumVariant.Clone(Oleaut32.IEnumVariant[]? ppEnum)
             {
                 if (ppEnum == null)
                 {
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Resets the child accessible object enumerator.
             /// </summary>
-            HRESULT OleAut32.IEnumVariant.Reset()
+            HRESULT Oleaut32.IEnumVariant.Reset()
             {
                 currentChild = 0;
                 owner.systemIEnumVariant?.Reset();
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Skips the next <paramref name="celt"/> child accessible objects.
             /// </summary>
-            HRESULT OleAut32.IEnumVariant.Skip(uint celt)
+            HRESULT Oleaut32.IEnumVariant.Skip(uint celt)
             {
                 currentChild += celt;
                 owner.systemIEnumVariant?.Skip(celt);
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the next n child accessible objects.
             /// </summary>
-            unsafe HRESULT OleAut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
+            unsafe HRESULT Oleaut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
             {
                 // NOTE: rgvar is a pointer to an array of variants
                 if (owner.IsClientObject)
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
             ///  Given an IEnumVariant interface, this method jumps to a specific
             ///  item in the collection and extracts the result for that one item.
             /// </summary>
-            private unsafe static bool GotoItem(OleAut32.IEnumVariant iev, int index, IntPtr variantPtr)
+            private unsafe static bool GotoItem(Oleaut32.IEnumVariant iev, int index, IntPtr variantPtr)
             {
                 uint celtFetched = 0;
 

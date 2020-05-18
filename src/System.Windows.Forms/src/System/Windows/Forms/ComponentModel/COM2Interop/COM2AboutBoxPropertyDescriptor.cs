@@ -153,8 +153,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 if (Marshal.IsComObject(component) && component is Oleaut32.IDispatch pDisp)
                 {
-                    var pExcepInfo = new Ole32.EXCEPINFO();
-                    var dispParams = new Ole32.DISPPARAMS();
+                    var pExcepInfo = new Oleaut32.EXCEPINFO();
+                    var dispParams = new Oleaut32.DISPPARAMS();
                     Guid g = Guid.Empty;
                     HRESULT hr = pDisp.Invoke(
                         Ole32.DispatchID.ABOUTBOX,

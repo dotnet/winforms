@@ -435,7 +435,7 @@ namespace System.Windows.Forms
         public unsafe object InvokeMember(string methodName, params object[] parameter)
         {
             object retVal = null;
-            var dispParams = new Ole32.DISPPARAMS();
+            var dispParams = new Oleaut32.DISPPARAMS();
             try
             {
                 if (NativeHtmlElement is Oleaut32.IDispatch scriptObject)
@@ -458,7 +458,7 @@ namespace System.Windows.Forms
                         dispParams.cNamedArgs = 0;
 
                         object[] retVals = new object[1];
-                        var pExcepInfo = new Ole32.EXCEPINFO();
+                        var pExcepInfo = new Oleaut32.EXCEPINFO();
                         hr = scriptObject.Invoke(
                             dispid,
                             &g,

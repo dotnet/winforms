@@ -64,9 +64,9 @@ internal static partial class Interop
                 [MarshalAs(UnmanagedType.Interface)] object pvInstance,
                 Ole32.DispatchID memid,
                 DISPATCH wFlags,
-                Ole32.DISPPARAMS* pDispParams,
+                DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,
-                Ole32.EXCEPINFO* pExcepInfo,
+                EXCEPINFO* pExcepInfo,
                 uint* puArgErr);
 
             [PreserveSig]

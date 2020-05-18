@@ -163,7 +163,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    Ole32.IPerPropertyBrowsing ippb = owner.GetPerPropertyBrowsing();
+                    Oleaut32.IPerPropertyBrowsing ippb = owner.GetPerPropertyBrowsing();
                     if (ippb == null)
                     {
                         return Guid.Empty;
@@ -335,7 +335,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    Ole32.IPerPropertyBrowsing ppb = owner.GetPerPropertyBrowsing();
+                    Oleaut32.IPerPropertyBrowsing ppb = owner.GetPerPropertyBrowsing();
 
                     if (ppb != null)
                     {

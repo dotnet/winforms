@@ -6,6 +6,7 @@
 
 using System.Drawing;
 using static Interop;
+using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -30,7 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
         {
             // we're getting an IFont here
-            if (!(nativeValue is Ole32.IFont nativeFont))
+            if (!(nativeValue is IFont nativeFont))
             {
                 _lastHandle = IntPtr.Zero;
                 _lastFont = Control.DefaultFont;
@@ -86,7 +87,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             _lastFont = (Font)managedValue;
-            Ole32.IFont nativeFont = (Ole32.IFont)pd.GetNativeValue(pd.TargetObject);
+            IFont nativeFont = (IFont)pd.GetNativeValue(pd.TargetObject);
 
             // now, push all the values into the native side
             if (nativeFont != null)

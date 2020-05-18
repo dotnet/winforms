@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static Interop;
+using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -99,7 +100,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             using var nameBstr = new BSTR();
-            pTypeInfo.GetDocumentation(Ole32.DispatchID.MEMBERID_NIL, &nameBstr, null, null, null);
+            pTypeInfo.GetDocumentation(DispatchID.MEMBERID_NIL, &nameBstr, null, null, null);
             return nameBstr.String.TrimStart('_').ToString();
         }
 
@@ -120,8 +121,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return "";
             }
 
-            Ole32.DispatchID dispid = Com2TypeInfoProcessor.GetNameDispId((Oleaut32.IDispatch)component);
-            if (dispid != Ole32.DispatchID.UNKNOWN)
+            DispatchID dispid = Com2TypeInfoProcessor.GetNameDispId((Oleaut32.IDispatch)component);
+            if (dispid != DispatchID.UNKNOWN)
             {
                 bool success = false;
                 object value = GetPropertyValue(component, dispid, ref success);
@@ -143,12 +144,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             string[] names = new string[] { propertyName };
-            Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
+            DispatchID dispid = DispatchID.UNKNOWN;
             Guid g = Guid.Empty;
             try
             {
                 HRESULT hr = iDispatch.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
-                if (dispid == Ole32.DispatchID.UNKNOWN || !hr.Succeeded())
+                if (dispid == DispatchID.UNKNOWN || !hr.Succeeded())
                 {
                     return null;
                 }
@@ -161,7 +162,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal object GetPropertyValue(object component, Ole32.DispatchID dispid, ref bool succeeded)
+        internal object GetPropertyValue(object component, DispatchID dispid, ref bool succeeded)
         {
             if (!(component is Oleaut32.IDispatch))
             {
@@ -180,7 +181,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        internal unsafe HRESULT GetPropertyValue(object component, Ole32.DispatchID dispid, object[] retval)
+        internal unsafe HRESULT GetPropertyValue(object component, DispatchID dispid, object[] retval)
         {
             if (!(component is Oleaut32.IDispatch iDispatch))
             {
@@ -190,8 +191,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             try
             {
                 Guid g = Guid.Empty;
-                var pExcepInfo = new Ole32.EXCEPINFO();
-                var dispParams = new Ole32.DISPPARAMS();
+                var pExcepInfo = new Oleaut32.EXCEPINFO();
+                var dispParams = new Oleaut32.DISPPARAMS();
                 try
                 {
                     HRESULT hr = iDispatch.Invoke(
@@ -226,7 +227,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Checks if the given dispid matches the dispid that the Object would like to specify
         ///  as its identification proeprty (Name, ID, etc).
         /// </summary>
-        internal bool IsNameDispId(object obj, Ole32.DispatchID dispid)
+        internal bool IsNameDispId(object obj, DispatchID dispid)
         {
             if (obj == null || !obj.GetType().IsCOMObject)
             {
@@ -328,7 +329,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (component is VSSDK.IVSMDPerPropertyBrowsing)
             {
-                object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes((VSSDK.IVSMDPerPropertyBrowsing)component, Ole32.DispatchID.MEMBERID_NIL);
+                object[] temp = Com2IManagedPerPropertyBrowsingHandler.GetComponentAttributes((VSSDK.IVSMDPerPropertyBrowsing)component, DispatchID.MEMBERID_NIL);
                 for (int i = 0; i < temp.Length; ++i)
                 {
                     attrs.Add(temp[i]);

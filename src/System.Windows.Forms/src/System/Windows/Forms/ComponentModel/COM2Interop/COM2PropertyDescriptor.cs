@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Interop;
+using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -44,7 +45,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  The dispid. This is also in a DispIDAttiribute, but we
         ///  need it a lot.
         /// </summary>
-        private readonly Ole32.DispatchID dispid;
+        private readonly DispatchID dispid;
 
         private TypeConverter converter;
         private object editor;
@@ -132,10 +133,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             oleConverters = new SortedList
             {
                 [GUID_COLOR] = typeof(Com2ColorConverter),
-                [typeof(Ole32.IFontDisp).GUID] = typeof(Com2FontConverter),
-                [typeof(Ole32.IFont).GUID] = typeof(Com2FontConverter),
-                [typeof(Ole32.IPictureDisp).GUID] = typeof(Com2PictureConverter),
-                [typeof(Ole32.IPicture).GUID] = typeof(Com2PictureConverter)
+                [typeof(IFontDisp).GUID] = typeof(Com2FontConverter),
+                [typeof(IFont).GUID] = typeof(Com2FontConverter),
+                [typeof(IPictureDisp).GUID] = typeof(Com2PictureConverter),
+                [typeof(IPicture).GUID] = typeof(Com2PictureConverter)
             };
         }
 
@@ -147,7 +148,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Ctor.
         /// </summary>
-        public Com2PropertyDescriptor(Ole32.DispatchID dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
+        public Com2PropertyDescriptor(DispatchID dispid, string name, Attribute[] attrs, bool readOnly, Type propType, object typeData, bool hrHidden)
             : base(name, attrs)
         {
             baseReadOnly = readOnly;
@@ -420,7 +421,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves the DISPID for this item
         /// </summary>
-        public Ole32.DispatchID DISPID
+        public DispatchID DISPID
         {
             get
             {
@@ -900,8 +901,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)component;
             object[] pVarResult = new object[1];
-            var pExcepInfo = new Ole32.EXCEPINFO();
-            var dispParams = new Ole32.DISPPARAMS();
+            var pExcepInfo = new Oleaut32.EXCEPINFO();
+            var dispParams = new Oleaut32.DISPPARAMS();
             Guid g = Guid.Empty;
 
             HRESULT hr = pDisp.Invoke(
@@ -1280,18 +1281,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)owner;
 
-            var excepInfo = new Ole32.EXCEPINFO();
-            var dispParams = new Ole32.DISPPARAMS();
+            var excepInfo = new Oleaut32.EXCEPINFO();
+            var dispParams = new Oleaut32.DISPPARAMS();
             dispParams.cArgs = 1;
             dispParams.cNamedArgs = 1;
-            Ole32.DispatchID[] namedArgs = new Ole32.DispatchID[] { Ole32.DispatchID.PROPERTYPUT };
+            DispatchID[] namedArgs = new DispatchID[] { DispatchID.PROPERTYPUT };
             GCHandle gcHandle = GCHandle.Alloc(namedArgs, GCHandleType.Pinned);
 
             try
             {
                 dispParams.rgdispidNamedArgs = Marshal.UnsafeAddrOfPinnedArrayElement(namedArgs, 0);
                 const int SizeOfVariant = 16;
-                Debug.Assert(SizeOfVariant == Marshal.SizeOf<Ole32.VARIANT>());
+                Debug.Assert(SizeOfVariant == Marshal.SizeOf<Oleaut32.VARIANT>());
                 IntPtr mem = Marshal.AllocCoTaskMem(SizeOfVariant);
                 Oleaut32.VariantInit(mem);
                 Marshal.GetNativeVariantForObject(value, mem);

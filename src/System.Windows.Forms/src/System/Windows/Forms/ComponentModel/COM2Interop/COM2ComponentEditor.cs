@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using static Interop;
+using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -15,20 +16,20 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public unsafe static bool NeedsComponentEditor(object obj)
         {
-            if (obj is Ole32.IPerPropertyBrowsing)
+            if (obj is Oleaut32.IPerPropertyBrowsing)
             {
                 // check for a property page
                 Guid guid = Guid.Empty;
-                HRESULT hr = ((Ole32.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
+                HRESULT hr = ((Oleaut32.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
                 if ((hr == HRESULT.S_OK) && !guid.Equals(Guid.Empty))
                 {
                     return true;
                 }
             }
 
-            if (obj is Ole32.ISpecifyPropertyPages ispp)
+            if (obj is ISpecifyPropertyPages ispp)
             {
-                var uuids = new Ole32.CAUUID();
+                var uuids = new CAUUID();
                 try
                 {
                     HRESULT hr = ispp.GetPages(&uuids);
@@ -56,11 +57,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             IntPtr handle = (parent == null ? IntPtr.Zero : parent.Handle);
 
             // try to get the page guid
-            if (obj is Ole32.IPerPropertyBrowsing)
+            if (obj is Oleaut32.IPerPropertyBrowsing)
             {
                 // check for a property page
                 Guid guid = Guid.Empty;
-                HRESULT hr = ((Ole32.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
+                HRESULT hr = ((Oleaut32.IPerPropertyBrowsing)obj).MapPropertyToPage(Ole32.DispatchID.MEMBERID_NIL, &guid);
                 if (hr == HRESULT.S_OK & !guid.Equals(Guid.Empty))
                 {
                     IntPtr pUnk = Marshal.GetIUnknownForObject(obj);
@@ -87,11 +88,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (obj is Ole32.ISpecifyPropertyPages ispp)
+            if (obj is ISpecifyPropertyPages ispp)
             {
                 try
                 {
-                    var uuids = new Ole32.CAUUID();
+                    var uuids = new CAUUID();
                     HRESULT hr = ispp.GetPages(&uuids);
                     if (!hr.Succeeded() || uuids.cElems == 0)
                     {

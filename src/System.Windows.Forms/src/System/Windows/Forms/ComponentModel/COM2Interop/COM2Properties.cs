@@ -68,7 +68,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             typeof(VSSDK.ICategorizeProperties),
             typeof(VSSDK.IProvidePropertyBuilder),
-            typeof(Ole32.IPerPropertyBrowsing),
+            typeof(Oleaut32.IPerPropertyBrowsing),
             typeof(VSSDK.IVsPerPropertyBrowsing),
             typeof(VSSDK.IVSMDPerPropertyBrowsing)
         };
