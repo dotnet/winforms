@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -285,7 +285,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_BackColorChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Tests
             control.BackColorChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_BackgroundImageChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -303,7 +303,7 @@ namespace System.Windows.Forms.Tests
             control.BackgroundImageChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_BackgroundImageLayoutChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -312,7 +312,7 @@ namespace System.Windows.Forms.Tests
             control.BackgroundImageLayoutChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_BindingContextChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.Tests
             control.BindingContextChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_UICuesEventHandler_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.Tests
             control.ChangeUICues -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_Click_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -339,7 +339,7 @@ namespace System.Windows.Forms.Tests
             control.Click -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_CursorChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -348,7 +348,7 @@ namespace System.Windows.Forms.Tests
             control.CursorChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_DoubleClick_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -357,7 +357,7 @@ namespace System.Windows.Forms.Tests
             control.DoubleClick -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_DragDrop_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -366,7 +366,7 @@ namespace System.Windows.Forms.Tests
             control.DragDrop -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_DragEnter_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -375,7 +375,7 @@ namespace System.Windows.Forms.Tests
             control.DragEnter -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_DragLeave_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -384,7 +384,7 @@ namespace System.Windows.Forms.Tests
             control.DragLeave -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_DragOver_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -393,7 +393,7 @@ namespace System.Windows.Forms.Tests
             control.DragOver -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_EnabledChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -402,7 +402,7 @@ namespace System.Windows.Forms.Tests
             control.EnabledChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_Enter_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -411,7 +411,7 @@ namespace System.Windows.Forms.Tests
             control.Enter -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_FontChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -420,7 +420,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_ForeColorChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -429,7 +429,7 @@ namespace System.Windows.Forms.Tests
             control.ForeColorChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_GiveFeedback_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -438,7 +438,7 @@ namespace System.Windows.Forms.Tests
             control.GiveFeedback -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_HelpRequested_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -447,7 +447,7 @@ namespace System.Windows.Forms.Tests
             control.HelpRequested -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_ImeModeChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -456,7 +456,7 @@ namespace System.Windows.Forms.Tests
             control.ImeModeChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_KeyDown_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -465,7 +465,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_KeyPress_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -474,7 +474,7 @@ namespace System.Windows.Forms.Tests
             control.KeyPress -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_KeyUp_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -483,7 +483,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_Layout_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -492,7 +492,7 @@ namespace System.Windows.Forms.Tests
             ((Control)control).Layout -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_Leave_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -501,7 +501,7 @@ namespace System.Windows.Forms.Tests
             control.Leave -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_MouseCaptureChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -510,7 +510,7 @@ namespace System.Windows.Forms.Tests
             control.MouseCaptureChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_MouseClick_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -519,7 +519,7 @@ namespace System.Windows.Forms.Tests
             control.MouseClick -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_MouseDoubleClick_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -528,7 +528,7 @@ namespace System.Windows.Forms.Tests
             control.MouseDoubleClick -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_MouseDown_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -537,7 +537,7 @@ namespace System.Windows.Forms.Tests
             control.MouseDown -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_MouseEnter_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -546,7 +546,7 @@ namespace System.Windows.Forms.Tests
             control.MouseEnter -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_MouseHover_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -555,7 +555,7 @@ namespace System.Windows.Forms.Tests
             control.MouseHover -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_MouseLeave_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -564,7 +564,7 @@ namespace System.Windows.Forms.Tests
             control.MouseLeave -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_MouseMove_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -573,7 +573,7 @@ namespace System.Windows.Forms.Tests
             control.MouseMove -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_MouseUp_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -582,7 +582,7 @@ namespace System.Windows.Forms.Tests
             control.MouseUp -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_MouseWheel_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -591,7 +591,7 @@ namespace System.Windows.Forms.Tests
             control.MouseWheel -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_Paint_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -600,7 +600,7 @@ namespace System.Windows.Forms.Tests
             control.Paint -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_QueryAccessibilityHelp__AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -609,7 +609,7 @@ namespace System.Windows.Forms.Tests
             control.QueryAccessibilityHelp -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_QueryContinueDrag__AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -618,7 +618,7 @@ namespace System.Windows.Forms.Tests
             control.QueryContinueDrag -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_RightToLeftChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -627,7 +627,7 @@ namespace System.Windows.Forms.Tests
             control.RightToLeftChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_StyleChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -636,7 +636,7 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged -= handler;
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void WebBrowserBase_TextChanged_AddRemove_ThrowsNotSupportedException()
         {
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2");

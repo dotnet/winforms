@@ -2267,7 +2267,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedText, control.Text);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnHandleCreated_InvokeWithHandleAllowDrop_CallsHandleCreated(EventArgs eventArgs)
         {
@@ -2548,7 +2548,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedText, control.Text);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnHandleDestroyed_InvokeWithHandleAllowDrop_CallsHandleDestroyed(EventArgs eventArgs)
         {
