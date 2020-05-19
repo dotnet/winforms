@@ -24,24 +24,32 @@ namespace System.Windows.Forms
 
             public ObjectCollection(ListBox owner)
             {
-                this.owner = owner;
+                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
             /// <summary>
-                    ///  Initializes a new instance of ListBox.ObjectCollection based on another ListBox.ObjectCollection.
-                /// </summary>
-            public ObjectCollection(ListBox owner, ObjectCollection value)
+            ///  Initializes a new instance of ListBox.ObjectCollection based on another ListBox.ObjectCollection.
+            /// </summary>
+            public ObjectCollection(ListBox owner, ObjectCollection value) : this(owner)
             {
-                this.owner = owner;
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 AddRange(value);
             }
 
             /// <summary>
-                    ///  Initializes a new instance of ListBox.ObjectCollection containing any array of objects.
-                /// </summary>
-            public ObjectCollection(ListBox owner, object[] value)
+            ///  Initializes a new instance of ListBox.ObjectCollection containing any array of objects.
+            /// </summary>
+            public ObjectCollection(ListBox owner, object[] value) : this(owner)
             {
-                this.owner = owner;
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 AddRange(value);
             }
 
@@ -196,22 +204,30 @@ namespace System.Windows.Forms
 
             public void AddRange(ObjectCollection value)
             {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 owner.CheckNoDataSource();
                 AddRangeInternal((ICollection)value);
             }
 
             public void AddRange(object[] items)
             {
+                if (items == null)
+                {
+                    throw new ArgumentNullException(nameof(items));
+                }
+
                 owner.CheckNoDataSource();
                 AddRangeInternal((ICollection)items);
             }
 
             internal void AddRangeInternal(ICollection items)
             {
-                if (items == null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                Debug.Assert(items != null);
+
                 owner.BeginUpdate();
                 try
                 {
@@ -295,6 +311,11 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
+                if (destination == null)
+                {
+                    throw new ArgumentNullException(nameof(destination));
+                }
+
                 int count = InnerArray.GetCount(0);
                 for (int i = 0; i < count; i++)
                 {
@@ -304,6 +325,11 @@ namespace System.Windows.Forms
 
             void ICollection.CopyTo(Array destination, int index)
             {
+                if (destination == null)
+                {
+                    throw new ArgumentNullException(nameof(destination));
+                }
+
                 int count = InnerArray.GetCount(0);
                 for (int i = 0; i < count; i++)
                 {
@@ -400,8 +426,9 @@ namespace System.Windows.Forms
             /// </summary>
             public void Remove(object value)
             {
-                int index = InnerArray.IndexOf(value, 0);
+                owner.CheckNoDataSource();
 
+                int index = InnerArray.IndexOf(value, 0);
                 if (index != -1)
                 {
                     RemoveAt(index);

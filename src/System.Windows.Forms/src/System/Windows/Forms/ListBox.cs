@@ -2145,6 +2145,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void SetItemsCore(IList value)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
             BeginUpdate();
             Items.ClearInternal();
             Items.AddRangeInternal(value);
