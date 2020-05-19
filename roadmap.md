@@ -42,9 +42,9 @@ Add testing infrastructure and improve test coverage.
 
 We also are gathering feedback regarding what other features you'd like to see in WinForms. Please let us know if any of those or something else would be useful for your applications. You an create a feature request in this repo or vote for an existing one.
 
-### Add wrappers for missing Win32 controls
+### Add and improve wrappers for missing Win32 controls
 
-such as Task Dialog, Ribbon Control, Balloons, SearchBox, etc.
+such as Task Dialog, Ribbon Control, Balloons, SearchBox, improvements around ListView, etc.
 
 ### Add support for OS themes in WinForms applications
 
