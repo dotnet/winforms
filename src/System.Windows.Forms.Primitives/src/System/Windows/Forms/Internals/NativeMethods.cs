@@ -298,17 +298,6 @@ namespace System.Windows.Forms
             public byte[] contents = new byte[56];
         }
 
-        // GetRegionData structures
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RGNDATAHEADER
-        {
-            public int cbSizeOfStruct;
-            public int iType;
-            public int nCount;
-            public int nRgnSize;
-            // public RECT rcBound; // Note that we don't define this field as part of the marshaling
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class ENPROTECTED
         {

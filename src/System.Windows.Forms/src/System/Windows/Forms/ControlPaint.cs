@@ -239,7 +239,7 @@ namespace System.Windows.Forms
         ///  From MSDN:
         ///    This member supports the framework infrastructure and is not intended to be used directly from your code.
         /// </summary>
-        public static IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap)
+        public unsafe static IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap)
         {
             if (bitmap == null)
             {
@@ -285,9 +285,11 @@ namespace System.Windows.Forms
 
             bitmap.UnlockBits(data);
 
-            IntPtr mask = SafeNativeMethods.CreateBitmap(size.Width, size.Height, 1, /* 1bpp */ 1, bits);
-
-            return mask;
+            // Create 1bpp.
+            fixed (byte* pBits = bits)
+            {
+                return Gdi32.CreateBitmap(size.Width, size.Height, 1, 1, pBits);
+            }
         }
 
         /// <summary>
@@ -337,15 +339,15 @@ namespace System.Windows.Forms
             return colorMask;
         }
 
-        internal static IntPtr CreateHalftoneHBRUSH()
+        internal unsafe static IntPtr CreateHalftoneHBRUSH()
         {
-            short[] grayPattern = new short[8];
+            short* grayPattern = stackalloc short[8];
             for (int i = 0; i < 8; i++)
             {
                 grayPattern[i] = (short)(0x5555 << (i & 1));
             }
 
-            IntPtr hBitmap = SafeNativeMethods.CreateBitmap(8, 8, 1, 1, grayPattern);
+            IntPtr hBitmap = Gdi32.CreateBitmap(8, 8, 1, 1, grayPattern);
             try
             {
                 var lb = new Gdi32.LOGBRUSH

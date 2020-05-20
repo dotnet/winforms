@@ -77,55 +77,6 @@ namespace System.Windows.Forms
         [DllImport(Libraries.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
 
-        //for RegionData
-        [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int GetRegionData(HandleRef hRgn, int size, IntPtr lpRgnData);
-
-        public unsafe static RECT[] GetRectsFromRegion(IntPtr hRgn)
-        {
-            RECT[] regionRects = null;
-            IntPtr pBytes = IntPtr.Zero;
-            try
-            {
-                // see how much memory we need to allocate
-                int regionDataSize = GetRegionData(new HandleRef(null, hRgn), 0, IntPtr.Zero);
-                if (regionDataSize != 0)
-                {
-                    pBytes = Marshal.AllocCoTaskMem(regionDataSize);
-                    // get the data
-                    int ret = GetRegionData(new HandleRef(null, hRgn), regionDataSize, pBytes);
-                    if (ret == regionDataSize)
-                    {
-                        // cast to the structure
-                        NativeMethods.RGNDATAHEADER* pRgnDataHeader = (NativeMethods.RGNDATAHEADER*)pBytes;
-                        if (pRgnDataHeader->iType == 1)
-                        {    // expecting RDH_RECTANGLES
-                            regionRects = new RECT[pRgnDataHeader->nCount];
-
-                            Debug.Assert(regionDataSize == pRgnDataHeader->cbSizeOfStruct + pRgnDataHeader->nCount * pRgnDataHeader->nRgnSize);
-                            Debug.Assert(Marshal.SizeOf<RECT>() == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
-
-                            // use the header size as the offset, and cast each rect in.
-                            int rectStart = pRgnDataHeader->cbSizeOfStruct;
-                            for (int i = 0; i < pRgnDataHeader->nCount; i++)
-                            {
-                                // use some fancy pointer math to just copy the rect bits directly into the array.
-                                regionRects[i] = *((RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf<RECT>() * i)));
-                            }
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                if (pBytes != IntPtr.Zero)
-                {
-                    Marshal.FreeCoTaskMem(pBytes);
-                }
-            }
-            return regionRects;
-        }
-
         internal class Shell32
         {
             [DllImport(ExternDll.Shell32, PreserveSig = true)]

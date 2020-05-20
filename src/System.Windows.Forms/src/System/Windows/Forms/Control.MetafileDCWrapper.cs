@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Buffers;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -31,7 +32,7 @@ namespace System.Windows.Forms
             private readonly IntPtr _hMetafileDC;
             private RECT _destRect;
 
-            internal MetafileDCWrapper(IntPtr hOriginalDC, Size size)
+            internal unsafe MetafileDCWrapper(IntPtr hOriginalDC, Size size)
             {
                 Debug.Assert(Gdi32.GetObjectType(hOriginalDC) == Gdi32.ObjectType.OBJ_ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
@@ -47,7 +48,7 @@ namespace System.Windows.Forms
 
                 int planes = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.PLANES);
                 int bitsPixel = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.BITSPIXEL);
-                _hBitmap = SafeNativeMethods.CreateBitmap(size.Width, size.Height, planes, bitsPixel, IntPtr.Zero);
+                _hBitmap = Gdi32.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, null);
                 _hOriginalBmp = Gdi32.SelectObject(HDC, _hBitmap);
             }
 
@@ -94,7 +95,7 @@ namespace System.Windows.Forms
                 long i;
 
                 // Get the bitmap from the DC by selecting in a 1x1 pixel temp bitmap
-                IntPtr hNullBitmap = SafeNativeMethods.CreateBitmap(1, 1, 1, 1, IntPtr.Zero);
+                IntPtr hNullBitmap = Gdi32.CreateBitmap(1, 1, 1, 1, null);
                 if (hNullBitmap == IntPtr.Zero)
                 {
                     return false;
@@ -134,24 +135,31 @@ namespace System.Windows.Forms
                     long iColors = 1 << (bmp.bmBitsPixel * bmp.bmPlanes);
                     if (iColors <= 256)
                     {
-                        byte[] aj = new byte[sizeof(Gdi32.PALETTEENTRY) * 256];
-                        SafeNativeMethods.GetSystemPaletteEntries(hdcSrc, 0, (int)iColors, aj);
-
-                        fixed (byte* pcolors = lpbmi.bmiColors)
+                        byte[] aj = ArrayPool<byte>.Shared.Rent(sizeof(Gdi32.PALETTEENTRY) * 256);
+                        try
                         {
-                            fixed (byte* ppal = aj)
-                            {
-                                Gdi32.RGBQUAD* prgb = (Gdi32.RGBQUAD*)pcolors;
-                                Gdi32.PALETTEENTRY* lppe = (Gdi32.PALETTEENTRY*)ppal;
+                            Gdi32.GetSystemPaletteEntries(hdcSrc, 0, (uint)iColors, aj);
 
-                                // Convert the palette entries to RGB quad entries
-                                for (i = 0; i < (int)iColors; i++)
+                            fixed (byte* pcolors = lpbmi.bmiColors)
+                            {
+                                fixed (byte* ppal = aj)
                                 {
-                                    prgb[i].rgbRed = lppe[i].peRed;
-                                    prgb[i].rgbBlue = lppe[i].peBlue;
-                                    prgb[i].rgbGreen = lppe[i].peGreen;
+                                    Gdi32.RGBQUAD* prgb = (Gdi32.RGBQUAD*)pcolors;
+                                    Gdi32.PALETTEENTRY* lppe = (Gdi32.PALETTEENTRY*)ppal;
+
+                                    // Convert the palette entries to RGB quad entries
+                                    for (i = 0; i < (int)iColors; i++)
+                                    {
+                                        prgb[i].rgbRed = lppe[i].peRed;
+                                        prgb[i].rgbBlue = lppe[i].peBlue;
+                                        prgb[i].rgbGreen = lppe[i].peGreen;
+                                    }
                                 }
                             }
+                        }
+                        finally
+                        {
+                            ArrayPool<byte>.Shared.Return(aj);
                         }
                     }
 

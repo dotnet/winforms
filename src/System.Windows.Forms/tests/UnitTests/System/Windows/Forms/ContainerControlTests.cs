@@ -35,6 +35,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.AutoScrollMinSize);
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
             Assert.False(control.AutoSize);
+            Assert.Equal(AutoValidate.EnablePreventFocusChange, control.AutoValidate);
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
             Assert.Null(control.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
