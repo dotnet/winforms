@@ -723,7 +723,7 @@ namespace System.Windows.Forms.Tests
             control.BackColor = value;
             Assert.Equal(expected, control.BackColor);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -1074,11 +1074,15 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> FlatStyle_SetWithParent_TestData()
         {
-            foreach (FlatStyle value in Enum.GetValues(typeof(FlatStyle)))
-            {
-                yield return new object[] { true, value, 1 };
-                yield return new object[] { false, value, 0 };
-            }
+            yield return new object[] { true, FlatStyle.Flat, 1 };
+            yield return new object[] { true, FlatStyle.Popup, 1 };
+            yield return new object[] { true, FlatStyle.Standard, 0 };
+            yield return new object[] { true, FlatStyle.System, 1 };
+
+            yield return new object[] { false, FlatStyle.Flat, 0 };
+            yield return new object[] { false, FlatStyle.Popup, 0 };
+            yield return new object[] { false, FlatStyle.Standard, 0 };
+            yield return new object[] { false, FlatStyle.System, 0 };
         }
 
         [WinFormsTheory]
@@ -1120,7 +1124,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(value != FlatStyle.System, control.GetStyle(ControlStyles.UserMouse));
                 Assert.Equal(value != FlatStyle.System, control.GetStyle(ControlStyles.UserPaint));
                 Assert.Equal(0, layoutCallCount);
-                Assert.Equal(expectedParentLayoutCallCount * 2, parentLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
                 Assert.False(control.IsHandleCreated);
                 Assert.False(parent.IsHandleCreated);
             }
@@ -1136,7 +1140,7 @@ namespace System.Windows.Forms.Tests
             {
                 yield return new object[] { autoSize, FlatStyle.Flat, 1, 0 };
                 yield return new object[] { autoSize, FlatStyle.Popup, 1, 0 };
-                yield return new object[] { autoSize, FlatStyle.Standard, 1, 0 };
+                yield return new object[] { autoSize, FlatStyle.Standard, 0, 0 };
                 yield return new object[] { autoSize, FlatStyle.System, 1, 1 };
             }
         }
@@ -1174,32 +1178,32 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value != FlatStyle.System, control.GetStyle(ControlStyles.UserMouse));
             Assert.Equal(value != FlatStyle.System, control.GetStyle(ControlStyles.UserPaint));
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(expectedCreatedCallCount, createdCallCount);
         }
 
         public static IEnumerable<object[]> FlatStyle_SetWithCustomOldValueWithHandle_TestData()
         {
-            yield return new object[] { FlatStyle.Flat, FlatStyle.Flat, 1, 0 };
+            yield return new object[] { FlatStyle.Flat, FlatStyle.Flat, 0, 0 };
             yield return new object[] { FlatStyle.Flat, FlatStyle.Popup, 1, 0 };
             yield return new object[] { FlatStyle.Flat, FlatStyle.Standard, 1, 0 };
             yield return new object[] { FlatStyle.Flat, FlatStyle.System, 1, 1 };
 
             yield return new object[] { FlatStyle.Popup, FlatStyle.Flat, 1, 0 };
-            yield return new object[] { FlatStyle.Popup, FlatStyle.Popup, 1, 0 };
+            yield return new object[] { FlatStyle.Popup, FlatStyle.Popup, 0, 0 };
             yield return new object[] { FlatStyle.Popup, FlatStyle.Standard, 1, 0 };
             yield return new object[] { FlatStyle.Popup, FlatStyle.System, 1, 1 };
 
             yield return new object[] { FlatStyle.Standard, FlatStyle.Flat, 1, 0 };
             yield return new object[] { FlatStyle.Standard, FlatStyle.Popup, 1, 0 };
-            yield return new object[] { FlatStyle.Standard, FlatStyle.Standard, 1, 0 };
+            yield return new object[] { FlatStyle.Standard, FlatStyle.Standard, 0, 0 };
             yield return new object[] { FlatStyle.Standard, FlatStyle.System, 1, 1 };
 
             yield return new object[] { FlatStyle.System, FlatStyle.Flat, 1, 1 };
             yield return new object[] { FlatStyle.System, FlatStyle.Popup, 1, 1 };
             yield return new object[] { FlatStyle.System, FlatStyle.Standard, 1, 1 };
-            yield return new object[] { FlatStyle.System, FlatStyle.System, 1, 0 };
+            yield return new object[] { FlatStyle.System, FlatStyle.System, 0, 0 };
         }
 
         [WinFormsTheory]
@@ -1233,7 +1237,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value != FlatStyle.System, control.GetStyle(ControlStyles.UserMouse));
             Assert.Equal(value != FlatStyle.System, control.GetStyle(ControlStyles.UserPaint));
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(expectedCreatedCallCount, createdCallCount);
         }
@@ -1242,12 +1246,12 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { true, FlatStyle.Flat, 1, 1, 0 };
             yield return new object[] { true, FlatStyle.Popup, 1, 1, 0 };
-            yield return new object[] { true, FlatStyle.Standard, 1, 1, 0 };
+            yield return new object[] { true, FlatStyle.Standard, 0, 0, 0 };
             yield return new object[] { true, FlatStyle.System, 1, 1, 1 };
 
             yield return new object[] { false, FlatStyle.Flat, 0, 1, 0 };
             yield return new object[] { false, FlatStyle.Popup, 0, 1, 0 };
-            yield return new object[] { false, FlatStyle.Standard, 0, 1, 0 };
+            yield return new object[] { false, FlatStyle.Standard, 0, 0, 0 };
             yield return new object[] { false, FlatStyle.System, 0, 1, 1 };
         }
 
@@ -1301,9 +1305,9 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(value != FlatStyle.System, control.GetStyle(ControlStyles.UserMouse));
                 Assert.Equal(value != FlatStyle.System, control.GetStyle(ControlStyles.UserPaint));
                 Assert.Equal(0, layoutCallCount);
-                Assert.Equal(expectedParentLayoutCallCount * 2, parentLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
                 Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
+                Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(expectedCreatedCallCount, createdCallCount);
                 Assert.True(parent.IsHandleCreated);
@@ -3901,15 +3905,15 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> UseMnemonic_SetWithParent_TestData()
         {
-            yield return new object[] { true, true, 1 };
-            yield return new object[] { true, false, 1 };
-            yield return new object[] { false, true, 0 };
-            yield return new object[] { false, false, 0 };
+            yield return new object[] { true, true, 0, 1 };
+            yield return new object[] { true, false, 1, 2 };
+            yield return new object[] { false, true, 0, 0 };
+            yield return new object[] { false, false, 0, 0 };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(UseMnemonic_SetWithParent_TestData))]
-        public void ButtonBase_UseMnemonic_SetWithParent_GetReturnsExpected(bool autoSize, bool value, int expectedParentLayoutCallCount)
+        public void ButtonBase_UseMnemonic_SetWithParent_GetReturnsExpected(bool autoSize, bool value, int expectedParentLayoutCallCount1, int expectedParentLayoutCallCount2)
         {
             using var parent = new Control();
             using var control = new Button
@@ -3934,7 +3938,7 @@ namespace System.Windows.Forms.Tests
                 control.UseMnemonic = value;
                 Assert.Equal(value, control.UseMnemonic);
                 Assert.Equal(0, layoutCallCount);
-                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount1, parentLayoutCallCount);
                 Assert.False(control.IsHandleCreated);
                 Assert.False(parent.IsHandleCreated);
 
@@ -3942,7 +3946,7 @@ namespace System.Windows.Forms.Tests
                 control.UseMnemonic = value;
                 Assert.Equal(value, control.UseMnemonic);
                 Assert.Equal(0, layoutCallCount);
-                Assert.Equal(expectedParentLayoutCallCount * 2, parentLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount1, parentLayoutCallCount);
                 Assert.False(control.IsHandleCreated);
                 Assert.False(parent.IsHandleCreated);
 
@@ -3950,7 +3954,7 @@ namespace System.Windows.Forms.Tests
                 control.UseMnemonic = !value;
                 Assert.Equal(!value, control.UseMnemonic);
                 Assert.Equal(0, layoutCallCount);
-                Assert.Equal(expectedParentLayoutCallCount * 3, parentLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount2, parentLayoutCallCount);
                 Assert.False(control.IsHandleCreated);
                 Assert.False(parent.IsHandleCreated);
             }
@@ -3964,7 +3968,7 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool autoSize in new bool[] { true, false })
             {
-                yield return new object[] { autoSize, true, 1 };
+                yield return new object[] { autoSize, true, 0 };
                 yield return new object[] { autoSize, false, 1 };
             }
         }
@@ -4000,7 +4004,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.UseMnemonic);
             Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -4009,22 +4013,22 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, control.UseMnemonic);
             Assert.Equal(0, layoutCallCount);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount * 2 + 1, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
 
         public static IEnumerable<object[]> UseMnemonic_SetWithParentWithHandle_TestData()
         {
-            yield return new object[] { true, true, 1, 1, 2, 3 };
-            yield return new object[] { true, false, 1, 1, 2, 3 };
-            yield return new object[] { false, true, 0, 1, 2, 3 };
-            yield return new object[] { false, false, 0, 1, 2, 3 };
+            yield return new object[] { true, true, 0, 1, 0, 1 };
+            yield return new object[] { true, false, 1, 2, 1, 2 };
+            yield return new object[] { false, true, 0, 0, 0, 1 };
+            yield return new object[] { false, false, 0, 0, 1, 2 };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(UseMnemonic_SetWithParentWithHandle_TestData))]
-        public void ButtonBase_UseMnemonic_SetWithParentWithHandle_GetReturnsExpected(bool autoSize, bool value, int expectedParentLayoutCallCount, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2, int expectedInvalidatedCallCount3)
+        public void ButtonBase_UseMnemonic_SetWithParentWithHandle_GetReturnsExpected(bool autoSize, bool value, int expectedParentLayoutCallCount1, int expectedParentLayoutCallCount2, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
         {
             using var parent = new Control();
             using var control = new Button
@@ -4057,7 +4061,7 @@ namespace System.Windows.Forms.Tests
                 control.UseMnemonic = value;
                 Assert.Equal(value, control.UseMnemonic);
                 Assert.Equal(0, layoutCallCount);
-                Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount1, parentLayoutCallCount);
                 Assert.True(control.IsHandleCreated);
                 Assert.Equal(expectedInvalidatedCallCount1, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
@@ -4068,9 +4072,9 @@ namespace System.Windows.Forms.Tests
                 control.UseMnemonic = value;
                 Assert.Equal(value, control.UseMnemonic);
                 Assert.Equal(0, layoutCallCount);
-                Assert.Equal(expectedParentLayoutCallCount * 2, parentLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount1, parentLayoutCallCount);
                 Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount2, invalidatedCallCount);
+                Assert.Equal(expectedInvalidatedCallCount1, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
                 Assert.True(parent.IsHandleCreated);
@@ -4079,9 +4083,9 @@ namespace System.Windows.Forms.Tests
                 control.UseMnemonic = !value;
                 Assert.Equal(!value, control.UseMnemonic);
                 Assert.Equal(0, layoutCallCount);
-                Assert.Equal(expectedParentLayoutCallCount * 3, parentLayoutCallCount);
+                Assert.Equal(expectedParentLayoutCallCount2, parentLayoutCallCount);
                 Assert.True(control.IsHandleCreated);
-                Assert.Equal(expectedInvalidatedCallCount3, invalidatedCallCount);
+                Assert.Equal(expectedInvalidatedCallCount2, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
                 Assert.True(parent.IsHandleCreated);
@@ -4100,6 +4104,30 @@ namespace System.Windows.Forms.Tests
             {
                 UseVisualStyleBackColor = value
             };
+            Assert.Equal(value, control.UseVisualStyleBackColor);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.UseVisualStyleBackColor = value;
+            Assert.Equal(value, control.UseVisualStyleBackColor);
+            Assert.False(control.IsHandleCreated);
+
+            // Set different.
+            control.UseVisualStyleBackColor = !value;
+            Assert.Equal(!value, control.UseVisualStyleBackColor);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ButtonBase_UseVisualStyleBackColor_SetWithCustomOldValue_GetReturnsExpected(bool value)
+        {
+            using var control = new SubButtonBase
+            {
+                UseVisualStyleBackColor = true
+            };
+
+            control.UseVisualStyleBackColor = value;
             Assert.Equal(value, control.UseVisualStyleBackColor);
             Assert.False(control.IsHandleCreated);
 
@@ -4139,7 +4167,7 @@ namespace System.Windows.Forms.Tests
             control.UseVisualStyleBackColor = value;
             Assert.Equal(value, control.UseVisualStyleBackColor);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount * 2, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -4147,7 +4175,48 @@ namespace System.Windows.Forms.Tests
             control.UseVisualStyleBackColor = !value;
             Assert.Equal(!value, control.UseVisualStyleBackColor);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount * 2 + 1, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 0)]
+        [InlineData(false, 1)]
+        public void ButtonBase_UseVisualStyleBackColor_SetWithCustomOldValueWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubButtonBase
+            {
+                UseVisualStyleBackColor = true
+            };
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            control.UseVisualStyleBackColor = value;
+            Assert.Equal(value, control.UseVisualStyleBackColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.UseVisualStyleBackColor = value;
+            Assert.Equal(value, control.UseVisualStyleBackColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set different.
+            control.UseVisualStyleBackColor = !value;
+            Assert.Equal(!value, control.UseVisualStyleBackColor);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
