@@ -412,6 +412,11 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             public new static IPictureDisp GetIPictureDispFromPicture(Image image) => (IPictureDisp)AxHost.GetIPictureDispFromPicture(image);
         }
 
+        // ITypeInfo often requires manual RCW reference management. The native object may be free threaded
+        // but when created on an STA thread it will be associated with that thread. If the native code keeps
+        // reusing the same instance you can run into a condition where the GC cleans up the RCW from one STA
+        // thread while you want to start using the same underlying object on a new STA thread. This will lead
+        // to an error so manual release is required to avoid running into this condition.
         private struct ComRefReleaser : IDisposable
         {
             private object _reference;
