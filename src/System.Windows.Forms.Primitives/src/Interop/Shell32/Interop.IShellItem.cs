@@ -14,24 +14,29 @@ internal static partial class Interop
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IShellItem
         {
-            void BindToHandler(
+            [PreserveSig]
+            HRESULT BindToHandler(
                 IntPtr pbc,
                 ref Guid bhid,
                 ref Guid riid,
                 out IntPtr ppv);
 
-            void GetParent(
+            [PreserveSig]
+            HRESULT GetParent(
                 out IShellItem ppsi);
 
-            void GetDisplayName(
+            [PreserveSig]
+            HRESULT GetDisplayName(
                 SIGDN sigdnName,
                 [MarshalAs(UnmanagedType.LPWStr)] out string ppszName);
 
-            void GetAttributes(
+            [PreserveSig]
+            HRESULT GetAttributes(
                 uint sfgaoMask,
                 out uint psfgaoAttribs);
 
-            void Compare(
+            [PreserveSig]
+            HRESULT Compare(
                 IShellItem psi,
                 uint hint,
                 out int piOrder);

@@ -280,7 +280,12 @@ namespace System.Windows.Forms
 
         private protected static string GetFilePathFromShellItem(IShellItem item)
         {
-            item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string filename);
+            HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string filename);
+            if (!hr.Succeeded())
+            {
+                throw Marshal.GetExceptionForHR((int)hr);
+            }
+
             return filename;
         }
 

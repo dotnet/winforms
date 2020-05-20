@@ -261,7 +261,11 @@ namespace System.Windows.Forms
         private void GetResult(FileDialogNative.IFileDialog dialog)
         {
             dialog.GetResult(out IShellItem item);
-            item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
+            HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
+            if (!hr.Succeeded())
+            {
+                throw Marshal.GetExceptionForHR((int)hr);
+            }
         }
 
         private unsafe bool RunDialogOld(IntPtr hWndOwner)
