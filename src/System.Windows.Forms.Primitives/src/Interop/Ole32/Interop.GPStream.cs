@@ -175,17 +175,17 @@ internal static partial class Interop
                 pstatstg = new STATSTG
                 {
                     cbSize = (ulong)_dataStream.Length,
-                    type = STGTY.STGTY_STREAM,
+                    type = STGTY.STREAM,
 
-                    // Default read/write access is STGM_READ, which == 0
+                    // Default read/write access is READ, which == 0
                     grfMode = _dataStream.CanWrite
                         ? _dataStream.CanRead
-                            ? STGM.STGM_READWRITE
-                            : STGM.STGM_WRITE
+                            ? STGM.READWRITE
+                            : STGM.WRITE
                         : STGM.Default
                 };
 
-                if (grfStatFlag == STATFLAG.STATFLAG_DEFAULT)
+                if (grfStatFlag == STATFLAG.DEFAULT)
                 {
                     // Caller wants a name
                     pstatstg.AllocName(_dataStream is FileStream fs ? fs.Name : _dataStream.ToString());

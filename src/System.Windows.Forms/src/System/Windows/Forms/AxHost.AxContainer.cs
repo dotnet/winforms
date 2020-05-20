@@ -33,13 +33,6 @@ namespace System.Windows.Forms
             private Hashtable proxyCache = null;
             private AxHost ctlInEditMode = null;
 
-            private const int GC_CHILD = 0x1;
-            private const int GC_LASTSIBLING = 0x2;
-            private const int GC_FIRSTSIBLING = 0x4;
-            private const int GC_CONTAINER = 0x20;
-            private const int GC_PREVSIBLING = 0x40;
-            private const int GC_NEXTSIBLING = 0x80;
-
             internal AxContainer(ContainerControl parent)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in constructor.  Parent created : " + parent.Created.ToString());

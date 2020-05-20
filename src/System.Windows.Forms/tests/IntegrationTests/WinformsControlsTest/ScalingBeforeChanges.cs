@@ -18,10 +18,6 @@ namespace WinformsControlsTest
             InitializeComponent();
         }
 
-        [DllImport("User32", ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter,
-                                               int x, int y, int cx, int cy, int flags);
-
         [DllImport("user32", ExactSpelling = true)]
         internal static extern bool EnableNonClientDpiScaling(HandleRef hWnd);
 
@@ -87,8 +83,13 @@ namespace WinformsControlsTest
                     {
                         RECT suggestedRect = Marshal.PtrToStructure<RECT>(m.LParam);
 
-                        SetWindowPos(new HandleRef(this, Handle), new HandleRef(null, IntPtr.Zero), suggestedRect.left, suggestedRect.top,
-                            suggestedRect.right - suggestedRect.left, suggestedRect.bottom - suggestedRect.top, 0x4 | 0x10);
+                        User32.SetWindowPos(
+                            new HandleRef(this, Handle),
+                            IntPtr.Zero, suggestedRect.left,
+                            suggestedRect.top,
+                            suggestedRect.right - suggestedRect.left,
+                            suggestedRect.bottom - suggestedRect.top,
+                            User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
 
                         float factorX = (float)(x / deviceDpiX);
                         float factorY = (float)(y / deviceDpiY);
@@ -107,9 +108,6 @@ namespace WinformsControlsTest
 
     public class MyCheckBox : CheckBox
     {
-        [DllImport("User32", ExactSpelling = true, SetLastError = true)]
-        public static extern uint GetDpiForWindow(HandleRef hWnd);
-
         public MyCheckBox() : base()
         {
         }
@@ -119,13 +117,13 @@ namespace WinformsControlsTest
             switch ((User32.WM)m.Msg)
             {
                 case User32.WM.DPICHANGED_BEFOREPARENT:
-                    dpi = GetDpiForWindow(new HandleRef(this, Handle));
+                    dpi = User32.GetDpiForWindow(Handle);
                     Debug.WriteLine($"WM_DPICHANGED_BEFOREPARENT  {dpi}");
 
                     m.Result = (IntPtr)1;
                     break;
                 case User32.WM.DPICHANGED_AFTERPARENT:
-                    dpi = GetDpiForWindow(new HandleRef(this, Handle));
+                    dpi = User32.GetDpiForWindow(this);
                     Debug.WriteLine($"WM_DPICHANGED_AFTERPARENT {dpi}");
                     m.Result = (IntPtr)1;
                     break;

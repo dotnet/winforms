@@ -35,8 +35,6 @@ namespace System.Windows.Forms
         private const int DRAW_START = 1;
         private const int DRAW_MOVE = 2;
         private const int DRAW_END = 3;
-        private const int rightBorder = 5;
-        private const int leftBorder = 2;
 
         private int BORDERSIZE = 0;
 

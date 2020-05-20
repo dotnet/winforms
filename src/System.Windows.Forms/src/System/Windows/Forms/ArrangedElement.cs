@@ -21,11 +21,6 @@ namespace System.Windows.Forms
         private readonly int suspendCount = 0;
 
         private static readonly int stateVisible = BitVector32.CreateMask();
-        private static readonly int stateDisposing = BitVector32.CreateMask(stateVisible);
-        private static readonly int stateLocked = BitVector32.CreateMask(stateDisposing);
-
-        private static readonly int PropControlsCollection = PropertyStore.CreateKey();
-        private readonly Control spacer = new Control();
 
         internal ArrangedElement()
         {

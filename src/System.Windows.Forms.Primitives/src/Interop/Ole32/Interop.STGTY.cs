@@ -16,10 +16,10 @@ internal static partial class Interop
         /// </summary>
         public enum STGTY : uint
         {
-            STGTY_STORAGE = 1,
-            STGTY_STREAM = 2,
-            STGTY_LOCKBYTES = 3,
-            STGTY_PROPERTY = 4
+            STORAGE = 1,
+            STREAM = 2,
+            LOCKBYTES = 3,
+            PROPERTY = 4
         }
     }
 }

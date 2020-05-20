@@ -16,7 +16,6 @@ namespace System.Windows.Forms
 {
     public partial class DataGridViewImageCell : DataGridViewCell
     {
-        private static readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
         private static readonly int PropImageCellDescription = PropertyStore.CreateKey();
         private static readonly int PropImageCellLayout = PropertyStore.CreateKey();
         private static readonly Type defaultTypeImage = typeof(Image);

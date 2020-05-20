@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Design
                             {
                                 return;
                             }
-                            throw e;
+                            throw;
                         }
                     }
                 }

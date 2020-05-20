@@ -478,7 +478,7 @@ namespace System.ComponentModel.Design
 
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
-                    Ole32.STGM.STGM_SHARE_EXCLUSIVE | Ole32.STGM.STGM_CREATE | Ole32.STGM.STGM_READWRITE,
+                    Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE,
                     0);
                 Debug.Assert(storage != null, "storage is NULL!");
 

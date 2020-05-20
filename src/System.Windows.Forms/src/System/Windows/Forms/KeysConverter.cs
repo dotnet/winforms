@@ -23,13 +23,6 @@ namespace System.Windows.Forms
         private List<string> displayOrder;
         private StandardValuesCollection values;
 
-        private const Keys FirstDigit = System.Windows.Forms.Keys.D0;
-        private const Keys LastDigit = System.Windows.Forms.Keys.D9;
-        private const Keys FirstAscii = System.Windows.Forms.Keys.A;
-        private const Keys LastAscii = System.Windows.Forms.Keys.Z;
-        private const Keys FirstNumpadDigit = System.Windows.Forms.Keys.NumPad0;
-        private const Keys LastNumpadDigit = System.Windows.Forms.Keys.NumPad9;
-
         private void AddKey(string key, Keys value)
         {
             keyNames[key] = value;

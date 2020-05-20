@@ -30,8 +30,6 @@ namespace System.Windows.Forms
 
         private static PowerStatus s_powerStatus;
 
-        private const int DefaultMouseWheelScrollLines = 3;
-
         /// <summary>
         ///  Gets a value indicating whether the user has enabled full window drag.
         /// </summary>

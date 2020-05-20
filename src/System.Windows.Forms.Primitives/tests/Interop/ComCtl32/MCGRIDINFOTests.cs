@@ -71,8 +71,6 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32
             Assert.Equal(96, Marshal.SizeOf<MCGRIDINFO>());
         }
 
-        private bool a = ArchitectureDetection.Is64bit;
-
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public unsafe void MCGRIDINFO_x64_ensure_layout()
         {

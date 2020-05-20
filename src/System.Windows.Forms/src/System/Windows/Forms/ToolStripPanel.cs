@@ -28,7 +28,6 @@ namespace System.Windows.Forms
         private static readonly Padding rowMargin = new Padding(3, 0, 0, 0);
         private Padding scaledRowMargin = rowMargin;
         private ToolStripRendererSwitcher rendererSwitcher = null;
-        private readonly Type currentRendererType = typeof(Type);
         private BitVector32 state = new BitVector32();
         private readonly ToolStripContainer owner;
 
@@ -41,9 +40,6 @@ namespace System.Windows.Forms
         internal static TraceSwitch ToolStripPanelFeedbackDebug;
         internal static TraceSwitch ToolStripPanelMissingRowDebug;
 #endif
-
-        [ThreadStatic]
-        private static Rectangle lastFeedbackRect = Rectangle.Empty;
 
         // properties
         private static readonly int PropToolStripPanelRowCollection = PropertyStore.CreateKey();

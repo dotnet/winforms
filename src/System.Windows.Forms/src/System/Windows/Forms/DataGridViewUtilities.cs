@@ -14,7 +14,6 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginWidth = 3;      // 3 pixels of margin on the left and right of icons
         private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginHeight = 2;     // 2 pixels of margin on the top and bottom of icons
         private const byte DATAGRIDVIEWROWHEADERCELL_contentMarginWidth = 3;   // 3 pixels of margin on the left and right of content
-        private const byte DATAGRIDVIEWROWHEADERCELL_contentMarginHeight = 3;  // 3 pixels of margin on the top and bottom of content
         private const byte DATAGRIDVIEWROWHEADERCELL_iconsWidth = 12;          // all icons are 12 pixels wide - make sure that is stays that way
         private const byte DATAGRIDVIEWROWHEADERCELL_iconsHeight = 11;         // all icons are 11 pixels tall - make sure that is stays that way
 

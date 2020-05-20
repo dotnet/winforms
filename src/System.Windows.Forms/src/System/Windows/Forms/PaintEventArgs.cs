@@ -37,23 +37,6 @@ namespace System.Windows.Forms
 
         private IntPtr oldPal = IntPtr.Zero;
 
-#if DEBUG
-        private static readonly TraceSwitch s_paintEventFinalizationSwitch = new TraceSwitch("PaintEventFinalization", "Tracks the creation and finalization of PaintEvent objects");
-
-        internal static string GetAllocationStack()
-        {
-            if (s_paintEventFinalizationSwitch.TraceVerbose)
-            {
-                return Environment.StackTrace;
-            }
-            else
-            {
-                return "Enabled 'PaintEventFinalization' trace switch to see stack of allocation";
-            }
-        }
-        private readonly string AllocationSite = PaintEventArgs.GetAllocationStack();
-#endif
-
         /// <summary>
         ///  Initializes a new instance of the <see cref='PaintEventArgs'/>
         ///  class with the specified graphics and clipping rectangle.

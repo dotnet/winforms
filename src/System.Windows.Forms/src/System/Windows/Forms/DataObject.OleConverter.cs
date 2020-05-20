@@ -82,7 +82,7 @@ namespace System.Windows.Forms
                     if (medium.tymed == TYMED.TYMED_ISTREAM && medium.unionmember != IntPtr.Zero)
                     {
                         pStream = (Ole32.IStream)Marshal.GetObjectForIUnknown(medium.unionmember);
-                        pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.STATFLAG_DEFAULT);
+                        pStream.Stat(out Ole32.STATSTG sstg, Ole32.STATFLAG.DEFAULT);
 
                         hglobal = Kernel32.GlobalAlloc(
                             Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,

@@ -10,8 +10,8 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [DllImport(Libraries.Kernel32, ExactSpelling = true, SetLastError = true)]
-        public static extern uint FormatMessage(
+        [DllImport(Libraries.Kernel32, CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
+        public static extern uint FormatMessageW(
             FormatMessageOptions dwFlags,
             IntPtr lpSource,
             uint dwMessageId,

@@ -394,7 +394,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return false;
                         }
-                        throw co;
+                        throw;
                     }
                 }
             }

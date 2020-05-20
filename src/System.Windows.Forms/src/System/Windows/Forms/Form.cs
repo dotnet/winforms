@@ -33,9 +33,6 @@ namespace System.Windows.Forms
     [DesignerCategory("Form")]
     public partial class Form : ContainerControl
     {
-#if DEBUG
-        static readonly BooleanSwitch AlwaysRestrictWindows = new BooleanSwitch("AlwaysRestrictWindows", "Always make Form classes behave as though they are restricted");
-#endif
         private static readonly object EVENT_ACTIVATED = new object();
         private static readonly object EVENT_CLOSING = new object();
         private static readonly object EVENT_CLOSED = new object();

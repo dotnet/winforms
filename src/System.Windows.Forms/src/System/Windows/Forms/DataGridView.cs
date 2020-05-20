@@ -387,8 +387,6 @@ namespace System.Windows.Forms
         // the tool tip string we get from cells
         private string toolTipCaption = string.Empty;
 
-        private const int maxTTDISPINFOBufferLength = 80;
-
         // Last Mouse Click Info
         private MouseClickInfo lastMouseClickInfo;
 

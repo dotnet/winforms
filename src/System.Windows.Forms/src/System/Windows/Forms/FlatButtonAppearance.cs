@@ -174,6 +174,7 @@ namespace System.Windows.Forms
         }
     }
 
+    [AttributeUsage(AttributeTargets.All)]
     internal sealed class ApplicableToButtonAttribute : Attribute
     {
         public ApplicableToButtonAttribute()

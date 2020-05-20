@@ -97,8 +97,6 @@ namespace System.Windows.Forms
         private int dividerMoveY = -1;
         private const int CYDIVIDER = 3;
         private static int cyDivider = CYDIVIDER;
-        private const int CXINDENT = 0;
-        private const int CYINDENT = 2;
         private const int MIN_GRID_HEIGHT = 20;
 
         private const int PROPERTIES = 0;
@@ -3632,7 +3630,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
-                                        throw coEx;
+                                        throw;
                                     }
 
                                     try

@@ -30,7 +30,6 @@ namespace System.ComponentModel.Design
         private const int ListBoxMaximumHeight = 200; // The maximum height of a dropdown listbox
         private const int MinimumWidth = 150; // The minimum overall width of the panel
         private const int BottomPadding = 2; // Padding at the bottom of the panel
-        private const int TopPadding = 2; // Padding at the top of the panel
 
         private const int LineLeftMargin = 5; // Left padding for all lines
         private const int LineRightMargin = 4; // Right padding for all lines
@@ -1055,7 +1054,7 @@ namespace System.ComponentModel.Design
                         {
                             return false;
                         }
-                        throw ce;
+                        throw;
                     }
                 }
                 return true;

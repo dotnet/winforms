@@ -17,7 +17,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Com2Properties
     {
+#if DEBUG
         private static readonly TraceSwitch DbgCom2PropertiesSwitch = new TraceSwitch("DbgCom2Properties", "Com2Properties: debug Com2 properties manager");
+#endif
 
         /// <summary>
         ///  This is the interval that we'll hold props for.  If someone doesn't touch an object

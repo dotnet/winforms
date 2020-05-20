@@ -65,8 +65,6 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionMonthCalendar))]
     public partial class MonthCalendar : Control
     {
-        private const long DaysTo1601 = 548229;
-        private const long DaysTo10000 = 3615900;
         private static readonly Color s_defaultTitleBackColor = SystemColors.ActiveCaption;
         private static readonly Color s_defaultTitleForeColor = SystemColors.ActiveCaptionText;
         private static readonly Color s_trailingForeColor = SystemColors.GrayText;
@@ -87,9 +85,6 @@ namespace System.Windows.Forms
         private const Day DefaultFirstDayOfWeek = Day.Default;
         private const int DefaultMaxSelectionCount = 7;
         private const int DefaultScrollChange = 0;
-        private const int UniqueDate = 0;
-        private const int AnnualDate = 1;
-        private const int MonthlyDate = 2;
 
         private static readonly Size s_defaultSingleMonthSize = new Size(176, 153);
 
