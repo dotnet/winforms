@@ -1,8 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Runtime.InteropServices;
 using Xunit;
 using static Interop;
 using static Interop.Ole32;
@@ -21,6 +22,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             IntPtr pv = (IntPtr)int.MaxValue;
@@ -37,6 +39,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             Guid riid = typeof(IPictureDisp).GUID;
@@ -54,6 +57,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             IntPtr typeLib = (IntPtr)int.MaxValue;
@@ -79,6 +83,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             var dllName = new BSTR("DllName");
@@ -99,6 +104,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             using var name = new BSTR("Name");
@@ -121,6 +127,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             FUNCDESC* pFuncDesc = null;
@@ -157,6 +164,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             var rgszNames = new string[] { "Width", "Other" };
@@ -178,6 +186,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             IMPLTYPEFLAG implTypeFlags = (IMPLTYPEFLAG)(-1);
@@ -194,6 +203,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             var mops = new BSTR("Mops");
@@ -210,6 +220,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             BSTR* rgszNames = stackalloc BSTR[2];
@@ -234,6 +245,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             uint refType = uint.MaxValue;
@@ -255,6 +267,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             uint refType = uint.MaxValue;
@@ -271,6 +284,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             TYPEATTR* pTypeAttr = null;
@@ -312,6 +326,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             IntPtr typeComp = IntPtr.Zero;
@@ -335,6 +350,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             VARDESC* pVarDesc = null;
@@ -366,6 +382,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
+            using var typeInfoReleaser = new ComRefReleaser(typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
 
             var dispParams = new DISPPARAMS();
@@ -393,6 +410,25 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             }
 
             public new static IPictureDisp GetIPictureDispFromPicture(Image image) => (IPictureDisp)AxHost.GetIPictureDispFromPicture(image);
+        }
+
+        private struct ComRefReleaser : IDisposable
+        {
+            private object _reference;
+
+            public ComRefReleaser(object reference)
+            {
+                _reference = reference;
+            }
+
+            public void Dispose()
+            {
+                if (_reference != null)
+                {
+                    Marshal.ReleaseComObject(_reference);
+                    _reference = null;
+                }
+            }
         }
     }
 }
