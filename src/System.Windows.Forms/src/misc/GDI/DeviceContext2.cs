@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -28,7 +26,7 @@ namespace System.Windows.Forms.Internal
         ///  See DeviceContext.cs for information about this class.  The class has been split to be able
         ///  to compile the right set of functionalities into different assemblies.
         /// </summary>
-        public WindowsFont ActiveFont { get; private set; }
+        public WindowsFont? ActiveFont { get; private set; }
 
         /// <summary>
         ///  DC background color.
@@ -89,7 +87,7 @@ namespace System.Windows.Forms.Internal
 #if OPTIMIZED_MEASUREMENTDC
                 if (MeasurementDCInfo.IsMeasurementDC(this))
                 {
-                    WindowsFont font = MeasurementDCInfo.LastUsedFont;
+                    WindowsFont? font = MeasurementDCInfo.LastUsedFont;
                     if (font != null && (font.Hfont != IntPtr.Zero))
                     {
 #if DEBUG
@@ -158,7 +156,7 @@ namespace System.Windows.Forms.Internal
             }
             IntPtr result = SelectObject(font.Hfont, GdiObjectType.Font);
 
-            WindowsFont previousFont = ActiveFont;
+            WindowsFont? previousFont = ActiveFont;
             ActiveFont = font;
             _hCurrentFont = font.Hfont;
 

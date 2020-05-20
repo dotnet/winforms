@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 #if OPTIMIZED_MEASUREMENTDC
 #if WGCM_TEST_SUITE // Enable tracking when built for the test suites.
 #define TRACK_HDC
@@ -24,43 +22,39 @@ namespace System.Windows.Forms.Internal
         ///  To turn it on for your DLL, use the OPTIMIZED_MEASUREMENTDC compiler switch and add this class to the sources.
 
         [ThreadStatic]
-        private static CachedInfo cachedMeasurementDCInfo;
+        private static CachedInfo? t_cachedMeasurementDCInfo;
 
         ///  IsMeasurementDC
         ///  Returns whether the IDeviceContext passed in is our static MeasurementDC.
         ///  If it is, we know a bit more information about it.
         internal static bool IsMeasurementDC(DeviceContext dc)
         {
-            WindowsGraphics sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
+            WindowsGraphics? sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
             return sharedGraphics != null && sharedGraphics.DeviceContext != null && sharedGraphics.DeviceContext.Hdc == dc.Hdc;
         }
 
-        ///  LastUsedFont -
+        /// <summary>
         ///  Returns the font we think was last selected into the MeasurementGraphics.
-        ///
-        internal static WindowsFont LastUsedFont
+        /// </summary>
+        internal static WindowsFont? LastUsedFont
         {
-            get
-            {
-                return cachedMeasurementDCInfo?.LastUsedFont;
-            }
+            get => t_cachedMeasurementDCInfo?.LastUsedFont;
             set
             {
-                if (cachedMeasurementDCInfo == null)
-                {
-                    cachedMeasurementDCInfo = new CachedInfo();
-                }
-                cachedMeasurementDCInfo.UpdateFont(value);
+                t_cachedMeasurementDCInfo ??= new CachedInfo();
+                t_cachedMeasurementDCInfo.UpdateFont(value);
             }
         }
 
-        ///  GetTextMargins - checks to see if we have cached information about the current font,
+        /// <summary>
+        ///  Checks to see if we have cached information about the current font,
         ///  returns info about it.
         ///  An MRU of Font margins was considered, but seems like overhead.
-        internal static User32.DRAWTEXTPARAMS GetTextMargins(WindowsGraphics wg, WindowsFont font)
+        /// </summary>
+        internal static User32.DRAWTEXTPARAMS GetTextMargins(WindowsGraphics wg, WindowsFont? font)
         {
             // PERF: operate on a local reference rather than party directly on the thread static one.
-            CachedInfo currentCachedInfo = cachedMeasurementDCInfo;
+            CachedInfo? currentCachedInfo = t_cachedMeasurementDCInfo;
 
             if (currentCachedInfo != null && currentCachedInfo.LeftTextMargin > 0 && currentCachedInfo.RightTextMargin > 0 && font == currentCachedInfo.LastUsedFont)
             {
@@ -74,7 +68,7 @@ namespace System.Windows.Forms.Internal
             else if (currentCachedInfo == null)
             {
                 currentCachedInfo = new CachedInfo();
-                cachedMeasurementDCInfo = currentCachedInfo;
+                t_cachedMeasurementDCInfo = currentCachedInfo;
             }
             User32.DRAWTEXTPARAMS drawTextParams = wg.GetTextMargins(font);
             currentCachedInfo.LeftTextMargin = drawTextParams.iLeftMargin;
@@ -90,35 +84,33 @@ namespace System.Windows.Forms.Internal
 
         internal static void ResetIfIsMeasurementDC(IntPtr hdc)
         {
-            WindowsGraphics sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
+            WindowsGraphics? sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
             if (sharedGraphics != null && sharedGraphics.DeviceContext != null && sharedGraphics.DeviceContext.Hdc == hdc)
             {
-                CachedInfo currentCachedInfo = cachedMeasurementDCInfo;
-                if (currentCachedInfo != null)
-                {
-                    currentCachedInfo.UpdateFont(null);
-                }
+                CachedInfo? currentCachedInfo = t_cachedMeasurementDCInfo;
+                currentCachedInfo?.UpdateFont(null);
             }
         }
-        ///  Reset
-        ///  clear the current cached information about the measurement dc.
+
+        /// <summary>
+        ///  Clear the current cached information about the measurement dc.
+        /// </summary>
         internal static void Reset()
         {
-            CachedInfo currentCachedInfo = cachedMeasurementDCInfo;
-            if (currentCachedInfo != null)
-            {
-                currentCachedInfo.UpdateFont(null);
-            }
+            CachedInfo? currentCachedInfo = t_cachedMeasurementDCInfo;
+            currentCachedInfo?.UpdateFont(null);
         }
-        ///  CachedInfo
-        ///  store all the thread statics together so we dont have to fetch individual fields out of TLS
+
+        /// <summary>
+        ///  Store all the thread statics together so we dont have to fetch individual fields out of TLS
+        /// </summary>
         private sealed class CachedInfo
         {
-            public WindowsFont LastUsedFont;
+            public WindowsFont? LastUsedFont;
             public int LeftTextMargin;
             public int RightTextMargin;
 
-            internal void UpdateFont(WindowsFont font)
+            internal void UpdateFont(WindowsFont? font)
             {
                 if (LastUsedFont != font)
                 {

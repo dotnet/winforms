@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 // #define TRACK_HDC
 // #define GDI_FINALIZATION_WATCH
 
@@ -65,33 +63,29 @@ namespace System.Windows.Forms.Internal
         ///  See book "Windows Graphics Programming - Feng Yuang", P315 - Device Context Attributes.
         /// </summary>
         private IntPtr _hDC;
-        public event EventHandler Disposing;
+        public event EventHandler? Disposing;
         private bool _disposed;
 
         // We cache the hWnd when creating the dc from one, to provide support forIDeviceContext.GetHdc/ReleaseHdc.
         // This hWnd could be null, in such case it is referring to the screen.
-        readonly IntPtr _hWnd = (IntPtr)(-1); // Unlikely to be a valid hWnd.
+        private readonly IntPtr _hWnd = (IntPtr)(-1); // Unlikely to be a valid hWnd.
 
-        IntPtr _hInitialPen;
-        IntPtr _hInitialBrush;
-        IntPtr _hInitialBmp;
-        IntPtr _hInitialFont;
+        private IntPtr _hInitialPen;
+        private IntPtr _hInitialBrush;
+        private IntPtr _hInitialBmp;
+        private IntPtr _hInitialFont;
 
-        IntPtr _hCurrentPen;
-        IntPtr _hCurrentBrush;
-        IntPtr _hCurrentBmp;
-        IntPtr _hCurrentFont;
+        private IntPtr _hCurrentPen;
+        private IntPtr _hCurrentBrush;
+        private IntPtr _hCurrentBmp;
+        private IntPtr _hCurrentFont;
 
-        Stack<GraphicsState> _contextStack;
+        private Stack<GraphicsState>? _contextStack;
 
 #if GDI_FINALIZATION_WATCH
         private string AllocationSite = DbgUtil.StackTrace;
         private string DeAllocationSite = string.Empty;
 #endif
-
-        ///
-        ///  Class properties...
-        ///
 
         /// <summary>
         ///  The device type the context refers to.
@@ -183,10 +177,6 @@ namespace System.Windows.Forms.Internal
             Gdi32.DeleteObject(handleToDelete);
         }
 
-        //
-        // object construction API.  Publicly constructable from static methods only.
-        //
-
         /// <summary>
         ///  Constructor to contruct a DeviceContext object from an window handle.
         /// </summary>
@@ -248,10 +238,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public static DeviceContext FromHwnd(IntPtr hwnd) => new DeviceContext(hwnd);
 
-        ~DeviceContext()
-        {
-            Dispose(false);
-        }
+        ~DeviceContext() => Dispose(false);
 
         public void Dispose()
         {
@@ -395,7 +382,7 @@ namespace System.Windows.Forms.Internal
                 }
                 else
                 {
-                    WindowsFont previousFont = ActiveFont;
+                    WindowsFont? previousFont = ActiveFont;
                     ActiveFont = null;
                     if (previousFont != null && MeasurementDCInfo.IsMeasurementDC(this))
                     {
@@ -426,12 +413,7 @@ namespace System.Windows.Forms.Internal
             HandleRef hdc = new HandleRef(this, Hdc);
             int state = Gdi32.SaveDC(hdc);
 
-            if (_contextStack == null)
-            {
-                _contextStack = new Stack<GraphicsState>();
-            }
-
-            GraphicsState g = new GraphicsState
+            var g = new GraphicsState
             {
                 hBitmap = _hCurrentBmp,
                 hBrush = _hCurrentBrush,
@@ -439,7 +421,7 @@ namespace System.Windows.Forms.Internal
                 hFont = _hCurrentFont,
                 font = new WeakReference(ActiveFont)
             };
-
+            _contextStack ??= new Stack<GraphicsState>();
             _contextStack.Push(g);
 
 #if TRACK_HDC
@@ -504,9 +486,9 @@ namespace System.Windows.Forms.Internal
             Gdi32.OffsetViewportOrgEx(new HandleRef(this, Hdc), dx, dy, ref origin);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            DeviceContext other = obj as DeviceContext;
+            DeviceContext? other = obj as DeviceContext;
 
             if (other == this)
             {
