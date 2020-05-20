@@ -76,14 +76,5 @@ namespace System.Windows.Forms
 
         [DllImport(Libraries.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
-
-        internal class Shell32
-        {
-            [DllImport(ExternDll.Shell32, PreserveSig = true)]
-            public static extern int SHCreateShellItem(IntPtr pidlParent, IntPtr psfParent, IntPtr pidl, out FileDialogNative.IShellItem ppsi);
-
-            [DllImport(ExternDll.Shell32, PreserveSig = true)]
-            public static extern int SHILCreateFromPath([MarshalAs(UnmanagedType.LPWStr)]string pszPath, out IntPtr ppIdl, ref uint rgflnOut);
-        }
     }
 }

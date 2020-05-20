@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using static Interop;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -58,7 +59,7 @@ namespace System.Windows.Forms
         ///  to an actual filesystem directory.
         ///  The caller is responsible for handling these situations.
         /// </remarks>
-        internal FileDialogNative.IShellItem GetNativePath()
+        internal IShellItem GetNativePath()
         {
             string filePathString;
             if (!string.IsNullOrEmpty(_path))
@@ -67,14 +68,14 @@ namespace System.Windows.Forms
             }
             else
             {
-                int result = Shell32.SHGetKnownFolderPath(ref _knownFolderGuid, 0, IntPtr.Zero, out filePathString);
+                int result = SHGetKnownFolderPath(ref _knownFolderGuid, 0, IntPtr.Zero, out filePathString);
                 if (result == 0)
                 {
                     return null;
                 }
             }
 
-            return FileDialogNative.GetShellItemForPath(filePathString);
+            return GetShellItemForPath(filePathString);
         }
     }
 }

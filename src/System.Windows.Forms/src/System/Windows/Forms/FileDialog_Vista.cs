@@ -84,7 +84,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    FileDialogNative.IShellItem initialDirectory = FileDialogNative.GetShellItemForPath(InitialDirectory);
+                    IShellItem initialDirectory = GetShellItemForPath(InitialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);
@@ -213,7 +213,7 @@ namespace System.Windows.Forms
                 return _dialog.HandleVistaFileOk(pfd) ? (int)HRESULT.S_OK : (int)HRESULT.S_FALSE;
             }
 
-            public int OnFolderChanging(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psiFolder)
+            public int OnFolderChanging(FileDialogNative.IFileDialog pfd, IShellItem psiFolder)
             {
                 return (int)HRESULT.S_OK;
             }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
             {
             }
 
-            public void OnShareViolation(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psi, out FDESVR pResponse)
+            public void OnShareViolation(FileDialogNative.IFileDialog pfd, IShellItem psi, out FDESVR pResponse)
             {
                 pResponse = FDESVR.DEFAULT;
             }
@@ -235,7 +235,7 @@ namespace System.Windows.Forms
             {
             }
 
-            public void OnOverwrite(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psi, out FDEOR pResponse)
+            public void OnOverwrite(FileDialogNative.IFileDialog pfd, IShellItem psi, out FDEOR pResponse)
             {
                 pResponse = FDEOR.DEFAULT;
             }
@@ -278,7 +278,7 @@ namespace System.Windows.Forms
             return extensions.ToArray();
         }
 
-        private protected static string GetFilePathFromShellItem(FileDialogNative.IShellItem item)
+        private protected static string GetFilePathFromShellItem(IShellItem item)
         {
             item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string filename);
             return filename;

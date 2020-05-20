@@ -11,6 +11,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
