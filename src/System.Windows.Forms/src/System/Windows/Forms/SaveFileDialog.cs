@@ -7,6 +7,7 @@
 using System.ComponentModel;
 using System.IO;
 using static Interop;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -146,7 +147,7 @@ namespace System.Windows.Forms
         private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
         {
             FileDialogNative.IFileSaveDialog saveDialog = (FileDialogNative.IFileSaveDialog)dialog;
-            dialog.GetResult(out FileDialogNative.IShellItem item);
+            dialog.GetResult(out IShellItem item);
             return new string[] { GetFilePathFromShellItem(item) };
         }
 

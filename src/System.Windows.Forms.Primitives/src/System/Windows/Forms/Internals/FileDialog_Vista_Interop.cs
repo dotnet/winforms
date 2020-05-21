@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using static Interop.Shell32;
@@ -10,26 +11,6 @@ namespace System.Windows.Forms
 {
     internal static class FileDialogNative
     {
-        internal static IShellItem GetShellItemForPath(string path)
-        {
-            IShellItem ret = null;
-            IntPtr pidl = IntPtr.Zero;
-            uint zero = 0;
-            if (UnsafeNativeMethods.Shell32.SHILCreateFromPath(path, out pidl, ref zero) >= 0)
-            {
-                if (UnsafeNativeMethods.Shell32.SHCreateShellItem(
-                    IntPtr.Zero, // No parent specified
-                    IntPtr.Zero,
-                    pidl,
-                    out ret) >= 0)
-                {
-                    return ret;
-                }
-            }
-
-            throw new FileNotFoundException();
-        }
-
         [ComImport]
         [Guid(IIDGuid.IFileOpenDialog)]
         [CoClass(typeof(FileOpenDialogRCW))]
@@ -71,7 +52,6 @@ namespace System.Windows.Forms
             public const string IFileSaveDialog = "84bccd23-5fde-4cdb-aea4-af64b83d78ab";
             public const string IFileDialogEvents = "973510DB-7D7F-452B-8975-74A85828D354";
             public const string IFileDialogCustomize = "e6fdd21a-163f-4975-9c8c-a69f1ba37034";
-            public const string IShellItem = "43826D1E-E718-42EE-BC55-A1E261C37BFE";
             public const string IShellItemArray = "B63EA76D-1F85-456F-A19C-48159EFA858B";
         }
 
@@ -361,22 +341,6 @@ namespace System.Windows.Forms
             void MakeProminent([In] int dwIDCtl);
         }
 
-        [ComImport,
-        Guid(IIDGuid.IShellItem),
-        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IShellItem
-        {
-            void BindToHandler([In, MarshalAs(UnmanagedType.Interface)] IntPtr pbc, [In] ref Guid bhid, [In] ref Guid riid, out IntPtr ppv);
-
-            void GetParent([MarshalAs(UnmanagedType.Interface)] out IShellItem ppsi);
-
-            void GetDisplayName([In] SIGDN sigdnName, [MarshalAs(UnmanagedType.LPWStr)] out string ppszName);
-
-            void GetAttributes([In] uint sfgaoMask, out uint psfgaoAttribs);
-
-            void Compare([In, MarshalAs(UnmanagedType.Interface)] IShellItem psi, [In] uint hint, out int piOrder);
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto, Pack = 4)]
         public struct COMDLG_FILTERSPEC
         {
@@ -384,21 +348,6 @@ namespace System.Windows.Forms
             public string pszName;
             [MarshalAs(UnmanagedType.LPWStr)]
             public string pszSpec;
-        }
-
-        [DllImport(ExternDll.Shell32, CharSet = CharSet.Unicode)]
-        private static extern int SHCreateItemFromParsingName([MarshalAs(UnmanagedType.LPWStr)] string pszPath, IntPtr pbc, ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out object ppv);
-
-        public static IShellItem CreateItemFromParsingName(string path)
-        {
-            Guid guid = new Guid(IIDGuid.IShellItem);
-            int hr = SHCreateItemFromParsingName(path, IntPtr.Zero, ref guid, out object item);
-            if (hr != 0)
-            {
-                throw new System.ComponentModel.Win32Exception(hr);
-            }
-
-            return (IShellItem)item;
         }
     }
 }

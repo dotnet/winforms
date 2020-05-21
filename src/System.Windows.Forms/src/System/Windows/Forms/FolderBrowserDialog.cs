@@ -240,16 +240,32 @@ namespace System.Windows.Forms
                 else
                 {
                     string folder = Path.GetFileName(_selectedPath);
-                    dialog.SetFolder(FileDialogNative.CreateItemFromParsingName(parent));
+                    dialog.SetFolder(CreateItemFromParsingName(parent));
                     dialog.SetFileName(folder);
                 }
             }
         }
 
+        private static IShellItem CreateItemFromParsingName(string path)
+        {
+            Guid guid = typeof(IShellItem).GUID;
+            HRESULT hr = SHCreateItemFromParsingName(path, IntPtr.Zero, ref guid, out object item);
+            if (hr != HRESULT.S_OK)
+            {
+                throw new Win32Exception((int)hr);
+            }
+
+            return (IShellItem)item;
+        }
+
         private void GetResult(FileDialogNative.IFileDialog dialog)
         {
-            dialog.GetResult(out FileDialogNative.IShellItem item);
-            item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
+            dialog.GetResult(out IShellItem item);
+            HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);
+            if (!hr.Succeeded())
+            {
+                throw Marshal.GetExceptionForHR((int)hr);
+            }
         }
 
         private unsafe bool RunDialogOld(IntPtr hWndOwner)

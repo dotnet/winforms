@@ -4,6 +4,7 @@
 
 using System.Collections.ObjectModel;
 using System.IO;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -18,7 +19,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    FileDialogNative.IShellItem shellItem = customPlace.GetNativePath();
+                    IShellItem shellItem = customPlace.GetNativePath();
                     if (null != shellItem)
                     {
                         dialog.AddPlace(shellItem, 0);

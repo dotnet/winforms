@@ -7,6 +7,7 @@
 using System.ComponentModel;
 using System.IO;
 using static Interop;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -124,14 +125,14 @@ namespace System.Windows.Forms
                 string[] files = new string[count];
                 for (uint i = 0; i < count; ++i)
                 {
-                    results.GetItemAt(i, out FileDialogNative.IShellItem item);
+                    results.GetItemAt(i, out IShellItem item);
                     files[unchecked((int)i)] = GetFilePathFromShellItem(item);
                 }
                 return files;
             }
             else
             {
-                openDialog.GetResult(out FileDialogNative.IShellItem item);
+                openDialog.GetResult(out IShellItem item);
                 return new string[] { GetFilePathFromShellItem(item) };
             }
         }
