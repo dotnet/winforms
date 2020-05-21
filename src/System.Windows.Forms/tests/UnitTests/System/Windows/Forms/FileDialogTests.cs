@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop.Shell32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -696,9 +697,9 @@ namespace System.Windows.Forms.Tests
                 return RunFileDialogAction(ofn);
             }
 
-            private protected override FileDialogNative.IFileDialog CreateVistaDialog() => null;
+            private protected override IFileDialog CreateVistaDialog() => null;
 
-            private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog) => null;
+            private protected override string[] ProcessVistaFiles(IFileDialog dialog) => null;
 
             public new void OnFileOk(CancelEventArgs e) => base.OnFileOk(e);
 

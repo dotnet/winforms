@@ -32,8 +32,8 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT GetAttributes(
-                uint sfgaoMask,
-                out uint psfgaoAttribs);
+                SFGAOF sfgaoMask,
+                out SFGAOF psfgaoAttribs);
 
             [PreserveSig]
             HRESULT Compare(

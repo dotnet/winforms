@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Shell32;
 
@@ -115,12 +116,12 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
+        private protected override string[] ProcessVistaFiles(IFileDialog dialog)
         {
-            FileDialogNative.IFileOpenDialog openDialog = (FileDialogNative.IFileOpenDialog)dialog;
+            IFileOpenDialog openDialog = (IFileOpenDialog)dialog;
             if (Multiselect)
             {
-                openDialog.GetResults(out FileDialogNative.IShellItemArray results);
+                openDialog.GetResults(out IShellItemArray results);
                 results.GetCount(out uint count);
                 string[] files = new string[count];
                 for (uint i = 0; i < count; ++i)
@@ -137,10 +138,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected override FileDialogNative.IFileDialog CreateVistaDialog()
-        {
-            return new FileDialogNative.NativeFileOpenDialog();
-        }
+        private protected override IFileDialog CreateVistaDialog() => new NativeFileOpenDialog();
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -185,6 +183,21 @@ namespace System.Windows.Forms
         private protected override bool SettingsSupportVistaDialog
         {
             get => base.SettingsSupportVistaDialog && !ShowReadOnly;
+        }
+
+        [ComImport]
+        [Guid("d57c7288-d4ad-4768-be02-9d969532d960")]
+        [CoClass(typeof(FileOpenDialogRCW))]
+        internal interface NativeFileOpenDialog : IFileOpenDialog
+        {
+        }
+
+        [ComImport]
+        [ClassInterface(ClassInterfaceType.None)]
+        [TypeLibType(TypeLibTypeFlags.FCanCreate)]
+        [Guid("DC1C5A9C-E88A-4dde-A5A1-60F82A20AEF7")]
+        internal class FileOpenDialogRCW
+        {
         }
     }
 }
