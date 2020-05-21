@@ -29,10 +29,10 @@ namespace Microsoft.VisualBasic.MyServices.Tests
         {
             var clipboard = (new Computer()).Clipboard;
             var text = GetUniqueText();
+            clipboard.SetText(text, TextDataFormat.UnicodeText);
             Assert.Equal(System.Windows.Forms.Clipboard.ContainsText(), clipboard.ContainsText());
             Assert.Equal(System.Windows.Forms.Clipboard.GetText(), clipboard.GetText());
             Assert.Equal(System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText), clipboard.GetText(TextDataFormat.UnicodeText));
-            clipboard.SetText(text, TextDataFormat.UnicodeText);
             Assert.Equal(text, clipboard.GetText(TextDataFormat.UnicodeText));
         }
 
