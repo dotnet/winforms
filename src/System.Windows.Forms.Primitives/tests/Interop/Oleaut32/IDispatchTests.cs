@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -43,6 +43,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
             Assert.NotNull(typeInfo);
+            System.Runtime.InteropServices.Marshal.ReleaseComObject(typeInfo);
         }
 
         [WinFormsFact]
