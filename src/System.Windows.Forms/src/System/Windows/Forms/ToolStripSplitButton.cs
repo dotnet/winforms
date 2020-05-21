@@ -226,7 +226,7 @@ namespace System.Windows.Forms
                 {
                     dropDownButtonWidth = value;
                     InvalidateSplitButtonLayout();
-                    InvalidateItemLayout(PropertyNames.DropDownButtonWidth, true);
+                    InvalidateItemLayout(PropertyNames.DropDownButtonWidth);
                 }
             }
         }

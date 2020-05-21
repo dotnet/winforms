@@ -15,6 +15,7 @@ using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
 using static Interop.User32;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests
 {
@@ -1792,22 +1793,52 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, disposedCallCount);
         }
 
-        /// <summary>
-        ///  Data for the DoDragDrop test
-        /// </summary>
-        public static TheoryData<DragDropEffects> DoDragDropData =>
-            CommonTestHelper.GetEnumTheoryData<DragDropEffects>();
+        public static IEnumerable<object[]> DoDragDrop_TestData()
+        {
+            foreach (DragDropEffects allowedEffects in Enum.GetValues(typeof(DragDropEffects)))
+            {
+                yield return new object[] { "text", allowedEffects };
+                yield return new object[] { new DataObject(), allowedEffects };
+                yield return new object[] { new DataObject("data"), allowedEffects };
+                yield return new object[] { new Mock<IDataObject>(MockBehavior.Strict).Object, allowedEffects };
+                yield return new object[] { new Mock<IComDataObject>(MockBehavior.Strict).Object, allowedEffects };
+            }
+        }
 
         [WinFormsTheory]
-        [MemberData(nameof(DoDragDropData))]
-        public void Control_DoDragDrop(DragDropEffects expected)
+        [MemberData(nameof(DoDragDrop_TestData))]
+        public void Control_DoDragDrop_Invoke_ReturnsNone(object data, DragDropEffects allowedEffects)
         {
-            using var cont = new Control();
-            var mock = new Mock<IDataObject>(MockBehavior.Strict);
+            using var control = new Control();
+            Assert.Equal(DragDropEffects.None, control.DoDragDrop(data, allowedEffects));
+            Assert.False(control.IsHandleCreated);
+        }
 
-            DragDropEffects ret = cont.DoDragDrop(mock.Object, expected);
+        [WinFormsTheory]
+        [MemberData(nameof(DoDragDrop_TestData))]
+        public void Control_DoDragDrop_InvokeWithHandle_ReturnsNone(object data, DragDropEffects allowedEffects)
+        {
+            using var control = new Control();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            Assert.Equal(DragDropEffects.None, ret);
+            Assert.Equal(DragDropEffects.None, control.DoDragDrop(data, allowedEffects));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void Control_DoDragDrop_NullData_ThrowsArgumentNullException()
+        {
+            using var control = new Control();
+            Assert.Throws<ArgumentNullException>("data", () => control.DoDragDrop(null, DragDropEffects.All));
         }
 
         public static IEnumerable<object[]> DrawToBitmap_TestData()
