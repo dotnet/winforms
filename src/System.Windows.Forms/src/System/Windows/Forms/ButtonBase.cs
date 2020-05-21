@@ -92,18 +92,20 @@ namespace System.Windows.Forms
 
             set
             {
-                if (AutoEllipsis != value)
+                if (value == AutoEllipsis)
                 {
-                    SetFlag(FlagAutoEllipsis, value);
-                    if (value)
-                    {
-                        if (textToolTip == null)
-                        {
-                            textToolTip = new ToolTip();
-                        }
-                    }
-                    Invalidate();
+                    return;
                 }
+
+                SetFlag(FlagAutoEllipsis, value);
+                if (value)
+                {
+                    if (textToolTip == null)
+                    {
+                        textToolTip = new ToolTip();
+                    }
+                }
+                Invalidate();
             }
         }
 
@@ -240,19 +242,21 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (GetFlag(FlagIsDefault) != value)
+                if (value == IsDefault)
                 {
-                    SetFlag(FlagIsDefault, value);
-                    if (IsHandleCreated)
+                    return;
+                }
+
+                SetFlag(FlagIsDefault, value);
+                if (IsHandleCreated)
+                {
+                    if (OwnerDraw)
                     {
-                        if (OwnerDraw)
-                        {
-                            Invalidate();
-                        }
-                        else
-                        {
-                            UpdateStyles();
-                        }
+                        Invalidate();
+                    }
+                    else
+                    {
+                        UpdateStyles();
                     }
                 }
             }
@@ -275,6 +279,11 @@ namespace System.Windows.Forms
             }
             set
             {
+                if (value == FlatStyle)
+                {
+                    return;
+                }
+
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
@@ -338,21 +347,23 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (Image != value)
+                if (value == Image)
                 {
-                    StopAnimate();
-
-                    image = value;
-                    if (image != null)
-                    {
-                        ImageIndex = -1;
-                        ImageList = null;
-                    }
-
-                    LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Image);
-                    Animate();
-                    Invalidate();
+                    return;
                 }
+
+                StopAnimate();
+
+                image = value;
+                if (image != null)
+                {
+                    ImageIndex = -1;
+                    ImageList = null;
+                }
+
+                LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Image);
+                Animate();
+                Invalidate();
             }
         }
 
@@ -411,18 +422,20 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
-                if (imageIndex.Index != value)
+                if (value == imageIndex.Index)
                 {
-                    if (value != -1)
-                    {
-                        // Image.set calls ImageIndex = -1
-                        image = null;
-                    }
-
-                    // If they were previously using keys - this should clear out the image key field.
-                    imageIndex.Index = value;
-                    Invalidate();
+                    return;
                 }
+
+                if (value != -1)
+                {
+                    // Image.set calls ImageIndex = -1
+                    image = null;
+                }
+
+                // If they were previously using keys - this should clear out the image key field.
+                imageIndex.Index = value;
+                Invalidate();
             }
         }
 
@@ -445,18 +458,20 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (imageIndex.Key != value)
+                if (value == ImageKey)
                 {
-                    if (value != null)
-                    {
-                        // Image.set calls ImageIndex = -1
-                        image = null;
-                    }
-
-                    // If they were previously using indexes - this should clear out the image index field.
-                    imageIndex.Key = value;
-                    Invalidate();
+                    return;
                 }
+
+                if (value != null)
+                {
+                    // Image.set calls ImageIndex = -1
+                    image = null;
+                }
+
+                // If they were previously using indexes - this should clear out the image index field.
+                imageIndex.Key = value;
+                Invalidate();
             }
         }
 
@@ -475,39 +490,41 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (imageList != value)
+                if (value == imageList)
                 {
-                    EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
-                    EventHandler disposedHandler = new EventHandler(DetachImageList);
-
-                    // Detach old event handlers
-                    //
-                    if (imageList != null)
-                    {
-                        imageList.RecreateHandle -= recreateHandler;
-                        imageList.Disposed -= disposedHandler;
-                    }
-
-                    // Make sure we don't have an Image as well as an ImageList
-                    //
-                    if (value != null)
-                    {
-                        image = null; // Image.set calls ImageList = null
-                    }
-
-                    imageList = value;
-                    imageIndex.ImageList = value;
-
-                    // Wire up new event handlers
-                    //
-                    if (value != null)
-                    {
-                        value.RecreateHandle += recreateHandler;
-                        value.Disposed += disposedHandler;
-                    }
-
-                    Invalidate();
+                    return;
                 }
+
+                EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
+                EventHandler disposedHandler = new EventHandler(DetachImageList);
+
+                // Detach old event handlers
+                //
+                if (imageList != null)
+                {
+                    imageList.RecreateHandle -= recreateHandler;
+                    imageList.Disposed -= disposedHandler;
+                }
+
+                // Make sure we don't have an Image as well as an ImageList
+                //
+                if (value != null)
+                {
+                    image = null; // Image.set calls ImageList = null
+                }
+
+                imageList = value;
+                imageIndex.ImageList = value;
+
+                // Wire up new event handlers
+                //
+                if (value != null)
+                {
+                    value.RecreateHandle += recreateHandler;
+                    value.Disposed += disposedHandler;
+                }
+
+                Invalidate();
             }
         }
 
@@ -655,18 +672,20 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
-                if (value != textAlign)
+                if (value == TextAlign)
                 {
-                    textAlign = value;
-                    LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.TextAlign);
-                    if (OwnerDraw)
-                    {
-                        Invalidate();
-                    }
-                    else
-                    {
-                        UpdateStyles();
-                    }
+                    return;
+                }
+
+                textAlign = value;
+                LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.TextAlign);
+                if (OwnerDraw)
+                {
+                    Invalidate();
+                }
+                else
+                {
+                    UpdateStyles();
                 }
             }
         }
@@ -685,12 +704,14 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextImageRelation));
                 }
 
-                if (value != TextImageRelation)
+                if (value == TextImageRelation)
                 {
-                    textImageRelation = value;
-                    LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.TextImageRelation);
-                    Invalidate();
+                    return;
                 }
+
+                textImageRelation = value;
+                LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.TextImageRelation);
+                Invalidate();
             }
         }
 
@@ -710,6 +731,11 @@ namespace System.Windows.Forms
 
             set
             {
+                if (value == UseMnemonic)
+                {
+                    return;
+                }
+
                 SetFlag(FlagUseMnemonic, value);
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.Text);
                 Invalidate();
@@ -1223,6 +1249,11 @@ namespace System.Windows.Forms
             }
             set
             {
+                if (isEnableVisualStyleBackgroundSet && value == enableVisualStyleBackground)
+                {
+                    return;
+                }
+
                 isEnableVisualStyleBackgroundSet = true;
                 enableVisualStyleBackground = value;
                 Invalidate();
