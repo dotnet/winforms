@@ -418,8 +418,6 @@ namespace System.Windows.Forms
 
         public unsafe object InvokeScript(string scriptName, object[] args)
         {
-            object retVal = null;
-            var dispParams = new Oleaut32.DISPPARAMS();
             try
             {
                 if (NativeHtmlDocument2.GetScript() is Oleaut32.IDispatch scriptObject)
@@ -428,21 +426,28 @@ namespace System.Windows.Forms
                     string[] names = new string[] { scriptName };
                     Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
                     HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
-                    if (hr.Succeeded() && dispid != Ole32.DispatchID.UNKNOWN)
+                    if (!hr.Succeeded() || dispid == Ole32.DispatchID.UNKNOWN)
                     {
-                        if (args != null)
-                        {
-                            // Reverse the arg order so that parms read naturally after IDispatch. (
-                            Array.Reverse(args);
-                        }
-                        dispParams.rgvarg = (args == null) ? IntPtr.Zero : HtmlDocument.ArrayToVARIANTVector(args);
-                        dispParams.cArgs = (args == null) ? 0 : (uint)args.Length;
-                        dispParams.rgdispidNamedArgs = IntPtr.Zero;
+                        return null;
+                    }
+
+                    if (args != null)
+                    {
+                        // Reverse the arg order so that they read naturally after IDispatch.
+                        Array.Reverse(args);
+                    }
+
+                    using var vectorArgs = new Oleaut32.VARIANTVector(args);
+                    fixed (Oleaut32.VARIANT* pVariants = vectorArgs.Variants)
+                    {
+                        var dispParams = new Oleaut32.DISPPARAMS();
+                        dispParams.rgvarg = pVariants;
+                        dispParams.cArgs = (uint)vectorArgs.Variants.Length;
+                        dispParams.rgdispidNamedArgs = null;
                         dispParams.cNamedArgs = 0;
 
-                        object[] retVals = new object[1];
-                        var pExcepInfo = new Oleaut32.EXCEPINFO();
-
+                        var retVals = new object[1];
+                        var excepInfo = new Oleaut32.EXCEPINFO();
                         hr = scriptObject.Invoke(
                             dispid,
                             &g,
@@ -450,11 +455,11 @@ namespace System.Windows.Forms
                             Oleaut32.DISPATCH.METHOD,
                             &dispParams,
                             retVals,
-                            &pExcepInfo,
+                            &excepInfo,
                             null);
                         if (hr == HRESULT.S_OK)
                         {
-                            retVal = retVals[0];
+                            return retVals[0];
                         }
                     }
                 }
@@ -462,15 +467,8 @@ namespace System.Windows.Forms
             catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
             }
-            finally
-            {
-                if (dispParams.rgvarg != IntPtr.Zero)
-                {
-                    HtmlDocument.FreeVARIANTVector(dispParams.rgvarg, args.Length);
-                }
-            }
 
-            return retVal;
+            return null;
         }
 
         public object InvokeScript(string scriptName)
@@ -557,47 +555,6 @@ namespace System.Windows.Forms
         {
             add => DocumentShim.AddHandler(EventStop, value);
             remove => DocumentShim.RemoveHandler(EventStop, value);
-        }
-
-        //
-        // Private helper methods:
-        //
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private struct FindSizeOfVariant
-        {
-            [MarshalAs(UnmanagedType.Struct)]
-            public object var;
-            public byte b;
-        }
-        private static readonly int VariantSize = (int)Marshal.OffsetOf(typeof(FindSizeOfVariant), "b");
-
-        /// <summary>
-        ///  Convert a object[] into an array of VARIANT, allocated with CoTask allocators.
-        /// </summary>
-        internal unsafe static IntPtr ArrayToVARIANTVector(object[] args)
-        {
-            int len = args.Length;
-            IntPtr mem = Marshal.AllocCoTaskMem(len * VariantSize);
-            byte* a = (byte*)(void*)mem;
-            for (int i = 0; i < len; ++i)
-            {
-                Marshal.GetNativeVariantForObject(args[i], (IntPtr)(a + VariantSize * i));
-            }
-            return mem;
-        }
-
-        /// <summary>
-        ///  Free a Variant array created with the above function
-        /// </summary>
-        internal unsafe static void FreeVARIANTVector(IntPtr mem, int len)
-        {
-            byte* a = (byte*)(void*)mem;
-            for (int i = 0; i < len; ++i)
-            {
-                Oleaut32.VariantClear((IntPtr)(a + VariantSize * i));
-            }
-
-            Marshal.FreeCoTaskMem(mem);
         }
 
         private Color ColorFromObject(object oColor)

@@ -6,13 +6,17 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Resources;
 using static Interop.Ole32;
+using static Interop.Oleaut32;
 
 internal static partial class Interop
 {
     internal static partial class Oleaut32
     {
-        [StructLayout(LayoutKind.Sequential)]
-        public sealed class VARIANT
+        /// <remarks>
+        ///  This implementation supports both VARIANT and VARIANTARG semantics.
+        ///  See https://devblogs.microsoft.com/oldnewthing/20171221-00/?p=97625
+        /// </remarks>
+        public unsafe struct VARIANT : IDisposable
         {
             public VARENUM vt;
             public short reserved1;
@@ -23,33 +27,30 @@ internal static partial class Interop
 
             public IntPtr data2;
 
+            public VARENUM Type => (vt & VARENUM.TYPEMASK);
+
             public bool Byref => (vt & VARENUM.BYREF) != 0;
 
             public void Clear()
             {
-                if ((vt == VARENUM.UNKNOWN || vt == VARENUM.DISPATCH) && data1 != IntPtr.Zero)
+                fixed (VARIANT* pThis = &this)
                 {
-                    Marshal.Release(data1);
+                    VariantClear(pThis);
                 }
 
-                if (vt == VARENUM.BSTR && data1 != IntPtr.Zero)
-                {
-                    Oleaut32.SysFreeString(data1);
-                }
-
-                data1 = data2 = IntPtr.Zero;
                 vt = VARENUM.EMPTY;
+                data1 = IntPtr.Zero;
+                data2 = IntPtr.Zero;
             }
 
-            ~VARIANT() => Clear();
+            public void Dispose() => Clear();
 
             public object ToObject()
             {
                 IntPtr val = data1;
                 long longVal;
 
-                VARENUM vtType = vt & ~VARENUM.TYPEMASK;
-                switch (vtType)
+                switch (Type)
                 {
                     case VARENUM.EMPTY:
                         return null;
@@ -127,7 +128,7 @@ internal static partial class Interop
                     val = GetRefInt(val);
                 }
 
-                switch (vtType)
+                switch (Type)
                 {
                     case VARENUM.R4:
                     case VARENUM.R8:
@@ -166,8 +167,8 @@ internal static partial class Interop
                         return (val != IntPtr.Zero);
 
                     case VARENUM.VARIANT:
-                        VARIANT varStruct = Marshal.PtrToStructure<VARIANT>(val);
-                        return varStruct.ToObject();
+                        VARIANT* pVariant = (VARIANT*)val;
+                        return pVariant->ToObject();
 
                     case VARENUM.CLSID:
                         Guid guid = Marshal.PtrToStructure<Guid>(val);

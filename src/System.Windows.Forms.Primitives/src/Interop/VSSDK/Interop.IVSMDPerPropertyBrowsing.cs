@@ -19,7 +19,7 @@ internal partial class Interop
                 Ole32.DispatchID dispid,
                 uint* pceltAttrs,
                 IntPtr* ppbstrTypeNames,
-                IntPtr* ppvarAttrValues);
+                Oleaut32.VARIANT** ppvarAttrValues);
         }
     }
 }

@@ -58,10 +58,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            // ensure that we have processed the caStructs into arrays
-            // of values and strings
-            //
-            private void EnsureArrays()
+            /// <summary>
+            ///  Ensure that we have processed the caStructs into arrays
+            ///  of values and strings
+            /// </summary>
+            private unsafe void EnsureArrays()
             {
                 if (arraysFetched)
                 {
@@ -83,13 +84,11 @@ namespace System.Windows.Forms
                     if (nameItems.Length > 0)
                     {
                         object[] valueItems = new object[cookieItems.Length];
-                        var var = new Oleaut32.VARIANT();
                         int cookie;
 
                         Debug.Assert(cookieItems.Length == nameItems.Length, "Got uneven names and cookies");
 
                         // for each name item, we ask the object for it's corresponding value.
-                        //
                         for (int i = 0; i < nameItems.Length; i++)
                         {
                             cookie = (int)cookieItems[i];
@@ -98,13 +97,12 @@ namespace System.Windows.Forms
                                 Debug.Fail("Bad IPerPropertyBrowsing item [" + i.ToString(CultureInfo.InvariantCulture) + "], name=" + (nameItems == null ? "(unknown)" : nameItems[i].ToString()));
                                 continue;
                             }
-                            var.vt = (short)Ole32.VARENUM.EMPTY;
-                            HRESULT hr = ppb.GetPredefinedValue(target.Dispid, (uint)cookie, var);
+                            using var var = new Oleaut32.VARIANT();
+                            HRESULT hr = ppb.GetPredefinedValue(target.Dispid, (uint)cookie, &var);
                             if (hr == HRESULT.S_OK && var.vt != Ole32.VARENUM.EMPTY)
                             {
                                 valueItems[i] = var.ToObject();
                             }
-                            var.Clear();
                             itemCount++;
                         }
 

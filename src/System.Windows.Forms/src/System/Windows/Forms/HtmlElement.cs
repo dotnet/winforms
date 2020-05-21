@@ -434,31 +434,36 @@ namespace System.Windows.Forms
 
         public unsafe object InvokeMember(string methodName, params object[] parameter)
         {
-            object retVal = null;
-            var dispParams = new Oleaut32.DISPPARAMS();
             try
             {
                 if (NativeHtmlElement is Oleaut32.IDispatch scriptObject)
                 {
                     Guid g = Guid.Empty;
-                    string[] names = new string[] { methodName };
+                    var names = new string[] { methodName };
                     Ole32.DispatchID dispid = Ole32.DispatchID.UNKNOWN;
                     HRESULT hr = scriptObject.GetIDsOfNames(&g, names, 1, Kernel32.GetThreadLocale(), &dispid);
-                    if (hr.Succeeded() && dispid != Ole32.DispatchID.UNKNOWN)
+                    if (!hr.Succeeded() || dispid == Ole32.DispatchID.UNKNOWN)
                     {
-                        // Reverse the arg order below so that parms are read properly thru IDispatch. (
-                        if (parameter != null)
-                        {
-                            // Reverse the parm order so that they read naturally after IDispatch. (
-                            Array.Reverse(parameter);
-                        }
-                        dispParams.rgvarg = (parameter == null) ? IntPtr.Zero : HtmlDocument.ArrayToVARIANTVector(parameter);
-                        dispParams.cArgs = (parameter == null) ? 0 : (uint)parameter.Length;
-                        dispParams.rgdispidNamedArgs = IntPtr.Zero;
+                        return null;
+                    }
+
+                    if (parameter != null)
+                    {
+                        // Reverse the parameter order so that they read naturally after IDispatch.
+                        Array.Reverse(parameter);
+                    }
+
+                    using var vectorArgs = new Oleaut32.VARIANTVector(parameter);
+                    fixed (Oleaut32.VARIANT* pVariant = vectorArgs.Variants)
+                    {
+                        var dispParams = new Oleaut32.DISPPARAMS();
+                        dispParams.rgvarg = pVariant;
+                        dispParams.cArgs = (uint)vectorArgs.Variants.Length;
+                        dispParams.rgdispidNamedArgs = null;
                         dispParams.cNamedArgs = 0;
 
-                        object[] retVals = new object[1];
-                        var pExcepInfo = new Oleaut32.EXCEPINFO();
+                        var retVals = new object[1];
+                        var excepInfo = new Oleaut32.EXCEPINFO();
                         hr = scriptObject.Invoke(
                             dispid,
                             &g,
@@ -466,11 +471,11 @@ namespace System.Windows.Forms
                             Oleaut32.DISPATCH.METHOD,
                             &dispParams,
                             retVals,
-                            &pExcepInfo,
+                            &excepInfo,
                             null);
                         if (hr == HRESULT.S_OK)
                         {
-                            retVal = retVals[0];
+                            return retVals[0];
                         }
                     }
                 }
@@ -478,15 +483,8 @@ namespace System.Windows.Forms
             catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
             {
             }
-            finally
-            {
-                if (dispParams.rgvarg != IntPtr.Zero)
-                {
-                    HtmlDocument.FreeVARIANTVector(dispParams.rgvarg, parameter.Length);
-                }
-            }
 
-            return retVal;
+            return null;
         }
 
         public void RemoveFocus()

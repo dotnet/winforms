@@ -35,7 +35,7 @@ internal partial class Interop
             HRESULT GetPredefinedValue(
                 DispatchID dispID,
                 uint dwCookie,
-                [Out] VARIANT pVarOut);
+                VARIANT* pVarOut);
         }
     }
 }
