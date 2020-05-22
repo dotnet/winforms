@@ -255,6 +255,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
 
             ITypeInfo refTypeInfo;
             hr = typeInfo.GetRefTypeInfo(refType, out refTypeInfo);
+            using var refTypeInfoReleaser = new ComRefReleaser(refTypeInfo);
             Assert.Equal(HRESULT.S_OK, hr);
             Assert.NotNull(refTypeInfo);
         }
