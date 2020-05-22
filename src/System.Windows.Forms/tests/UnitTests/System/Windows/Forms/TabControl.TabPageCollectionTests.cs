@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms.Tests
                 Assert.False(child3.IsHandleCreated);
 
                 // Add empty.
-                collection.AddRange(new TabPage[0]);
+                collection.AddRange(Array.Empty<TabPage>());
                 Assert.Equal(new TabPage[] { child1, child2, child3, child1, child2, child3 }, collection.Cast<TabPage>());
                 Assert.Same(owner, child1.Parent);
                 Assert.Same(owner, child2.Parent);

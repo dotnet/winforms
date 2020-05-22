@@ -1090,7 +1090,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (objects == null)
             {
-                objects = new object[0];
+                objects = Array.Empty<object>();
             }
 
             ComponentSerializationService css = GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;

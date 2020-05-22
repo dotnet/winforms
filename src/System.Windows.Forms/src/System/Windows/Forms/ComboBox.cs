@@ -5502,7 +5502,7 @@ namespace System.Windows.Forms
                     };
                 }
 
-                return new UiaCore.IRawElementProviderSimple[0];
+                return Array.Empty<UiaCore.IRawElementProviderSimple>();
             }
 
             internal override bool CanSelectMultiple

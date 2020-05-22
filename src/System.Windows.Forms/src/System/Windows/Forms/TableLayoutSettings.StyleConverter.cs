@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -32,8 +32,8 @@ namespace System.Windows.Forms
                     {
                         case SizeType.AutoSize:
                             return new InstanceDescriptor(
-                                style.GetType().GetConstructor(new Type[0]),
-                                new object[0]);
+                                style.GetType().GetConstructor(Array.Empty<Type>()),
+                                Array.Empty<object>());
                         case SizeType.Absolute:
                         case SizeType.Percent:
                             return new InstanceDescriptor(

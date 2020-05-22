@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests.PropertyGridInternal.Tests
             // Verify that invoking SetListBoxItemFocus does not lead to exception throwing even if SelectedItem = null.
             type.InvokeMember("SetListBoxItemFocus",
                 BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod,
-                null, dropDownListBoxAccessibleObject, new Object[] {});
+                null, dropDownListBoxAccessibleObject, Array.Empty<Object>());
         }
     }
 }

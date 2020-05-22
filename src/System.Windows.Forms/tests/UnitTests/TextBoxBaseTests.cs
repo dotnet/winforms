@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1316,7 +1316,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Lines_Get_TestData()
         {
-            yield return new object[] { string.Empty, new string[0] };
+            yield return new object[] { string.Empty, Array.Empty<string>() };
             yield return new object[] { "\r", new string[] { string.Empty, string.Empty } };
             yield return new object[] { "\n", new string[] { string.Empty, string.Empty } };
             yield return new object[] { "\r\n", new string[] { string.Empty, string.Empty } };
@@ -1349,9 +1349,9 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Lines_Set_TestData()
         {
-            yield return new object[] { null, new string[0], string.Empty };
-            yield return new object[] { new string[0], new string[0], string.Empty };
-            yield return new object[] { new string[] { string.Empty }, new string[0], string.Empty };
+            yield return new object[] { null, Array.Empty<string>(), string.Empty };
+            yield return new object[] { Array.Empty<string>(), Array.Empty<string>(), string.Empty };
+            yield return new object[] { Array.Empty<string>(), Array.Empty<string>(), string.Empty };
             yield return new object[] { new string[] { "abc" }, new string[] { "abc" }, "abc" };
             yield return new object[] { new string[] { "abc", "def" }, new string[] { "abc", "def" }, "abc\r\ndef" };
         }

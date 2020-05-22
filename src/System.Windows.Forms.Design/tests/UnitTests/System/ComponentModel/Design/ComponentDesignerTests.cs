@@ -153,7 +153,7 @@ namespace System.ComponentModel.Design.Tests
 
         public static IEnumerable<object[]> Children_GetInvalidService_TestData()
         {
-            foreach (ICollection associatedComponents in new object[] { null, new object[0], new object[] { new Component() }})
+            foreach (ICollection associatedComponents in new object[] { null, Array.Empty<object>(), new object[] { new Component() }})
             {
                 yield return new object[] { associatedComponents, null };
                 yield return new object[] { associatedComponents, new object() };
@@ -829,9 +829,9 @@ namespace System.ComponentModel.Design.Tests
                 yield return new object[] { property, null, 1, string.Empty };
                 yield return new object[] { property, null, 1, "UniqueMethod" };
 
-                yield return new object[] { property, new object[0], 1, null };
-                yield return new object[] { property, new object[0], 1, string.Empty };
-                yield return new object[] { property, new object[0], 1, "UniqueMethod" };
+                yield return new object[] { property, Array.Empty<object>(), 1, null };
+                yield return new object[] { property, Array.Empty<object>(), 1, string.Empty };
+                yield return new object[] { property, Array.Empty<object>(), 1, "UniqueMethod" };
 
                 yield return new object[] { property, new object[] { null, new object(), "NoSuchStringValue" }, 1, null };
                 yield return new object[] { property, new object[] { null, new object(), "NoSuchStringValue" }, 1, string.Empty };
@@ -978,7 +978,7 @@ namespace System.ComponentModel.Design.Tests
                 .Verifiable();
             mockEventBindingService
                 .Setup(s => s.GetCompatibleMethods(It.IsAny<EventDescriptor>()))
-                .Returns(new object[0]);
+                .Returns(Array.Empty<object>());
             mockEventBindingService
                 .Setup(s => s.CreateUniqueMethodName(component, It.IsAny<EventDescriptor>()))
                 .Returns(uniqueName);
@@ -1723,7 +1723,7 @@ namespace System.ComponentModel.Design.Tests
         public static IEnumerable<object[]> DoDefaultAction_InvalidSelectedComponents_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new object[0] };
+            yield return new object[] { Array.Empty<object>() };
             yield return new object[] { new object[] { null, new object() } };
         }
 
@@ -1921,7 +1921,7 @@ namespace System.ComponentModel.Design.Tests
                 .Verifiable();
             mockEventBindingService
                 .Setup(s => s.GetCompatibleMethods(It.IsAny<EventDescriptor>()))
-                .Returns(new object[0])
+                .Returns(Array.Empty<object>())
                 .Verifiable();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite

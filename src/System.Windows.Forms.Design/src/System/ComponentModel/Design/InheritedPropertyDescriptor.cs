@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritedPropertyDescriptor'/> class.
         /// </summary>
-        public InheritedPropertyDescriptor( PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, new Attribute[] { })
+        public InheritedPropertyDescriptor( PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, Array.Empty<Attribute>())
         {
             Debug.Assert(!(propertyDescriptor is InheritedPropertyDescriptor), "Recursive inheritance propertyDescriptor " + propertyDescriptor.ToString());
             this.propertyDescriptor = propertyDescriptor;

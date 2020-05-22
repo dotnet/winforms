@@ -401,7 +401,7 @@ namespace System.Windows.Forms.Design
 
         private void SerializePerformLayout(IDesignerSerializationManager manager, CodeStatementCollection statements, object control)
         {
-            SerializeMethodInvocation(manager, statements, control, "PerformLayout", null, new Type[0], StatementOrdering.Append);
+            SerializeMethodInvocation(manager, statements, control, "PerformLayout", null, Array.Empty<Type>(), StatementOrdering.Append);
         }
 
         private void SerializeResumeLayout(IDesignerSerializationManager manager, CodeStatementCollection statements, object control)
@@ -414,7 +414,7 @@ namespace System.Windows.Forms.Design
 
         private void SerializeSuspendLayout(IDesignerSerializationManager manager, CodeStatementCollection statements, object control)
         {
-            SerializeMethodInvocation(manager, statements, control, "SuspendLayout", null, new Type[0], StatementOrdering.Prepend);
+            SerializeMethodInvocation(manager, statements, control, "SuspendLayout", null, Array.Empty<Type>(), StatementOrdering.Prepend);
         }
 
         /// <summary>

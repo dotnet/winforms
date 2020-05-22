@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -476,7 +476,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new int[0]);
+            collection.AddRange(Array.Empty<int>());
             Assert.Equal(3, collection.Count);
             Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
             Assert.Empty(owner.CustomTabOffsets);
@@ -504,7 +504,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new int[0]);
+            collection.AddRange(Array.Empty<int>());
             Assert.Equal(3, collection.Count);
             Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
             Assert.Equal(new int[] { 1, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
@@ -542,7 +542,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Add empty.
-            collection.AddRange(new int[0]);
+            collection.AddRange(Array.Empty<int>());
             Assert.Equal(3, collection.Count);
             Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
             Assert.Empty(owner.CustomTabOffsets);
@@ -583,7 +583,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Add empty.
-            collection.AddRange(new int[0]);
+            collection.AddRange(Array.Empty<int>());
             Assert.Equal(3, collection.Count);
             Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
             Assert.Equal(new int[] { 1, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
@@ -617,7 +617,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new int[0]);
+            collection.AddRange(Array.Empty<int>());
             Assert.Equal(3, collection.Count);
             Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
             Assert.Empty(owner.CustomTabOffsets);
@@ -648,7 +648,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new int[0]);
+            collection.AddRange(Array.Empty<int>());
             Assert.Equal(3, collection.Count);
             Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
             Assert.Equal(new int[] { 1, 2, 3 }, owner.CustomTabOffsets.Cast<int>());
@@ -689,7 +689,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Add empty.
-            collection.AddRange(new int[0]);
+            collection.AddRange(Array.Empty<int>());
             Assert.Equal(3, collection.Count);
             Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
             Assert.Empty(owner.CustomTabOffsets);
@@ -733,7 +733,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Add empty.
-            collection.AddRange(new int[0]);
+            collection.AddRange(Array.Empty<int>());
             Assert.Equal(3, collection.Count);
             Assert.Equal(new int[] { 1, 2, 3 }, collection.Cast<int>());
             Assert.Equal(new int[] { 1, 2, 3 }, owner.CustomTabOffsets.Cast<int>());

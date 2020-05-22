@@ -167,8 +167,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> AnnuallyBoldedDates_Set_TestData()
         {
-            yield return new object[] { null, new DateTime[0] };
-            yield return new object[] { new DateTime[0], new DateTime[0] };
+            yield return new object[] { null, Array.Empty<DateTime>() };
+            yield return new object[] { Array.Empty<DateTime>(), Array.Empty<DateTime>() };
 
             yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) } };
             yield return new object[] { new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) }, new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) } };
@@ -463,8 +463,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> BoldedDates_Set_TestData()
         {
-            yield return new object[] { null, new DateTime[0] };
-            yield return new object[] { new DateTime[0], new DateTime[0] };
+            yield return new object[] { null, Array.Empty<DateTime>() };
+            yield return new object[] { Array.Empty<DateTime>(), Array.Empty<DateTime>() };
 
             yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) } };
             yield return new object[] { new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) }, new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) } };
@@ -1456,8 +1456,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> MonthlyBoldedDates_Set_TestData()
         {
-            yield return new object[] { null, new DateTime[0] };
-            yield return new object[] { new DateTime[0], new DateTime[0] };
+            yield return new object[] { null, Array.Empty<DateTime>() };
+            yield return new object[] { Array.Empty<DateTime>(), Array.Empty<DateTime>() };
 
             yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) } };
             yield return new object[] { new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) }, new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) } };

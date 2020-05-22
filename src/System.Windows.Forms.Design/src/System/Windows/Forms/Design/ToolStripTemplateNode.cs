@@ -137,8 +137,8 @@ namespace System.Windows.Forms.Design
             }
 
             SetupNewEditNode(this, text, image, component);
-            _commands = new MenuCommand[] { };
-            _addCommands = new MenuCommand[] { };
+            _commands = Array.Empty<MenuCommand>();
+            _addCommands = Array.Empty<MenuCommand>();
         }
 
         /// <summary>

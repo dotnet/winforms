@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_ToolStripItemArray_TestData()
         {
-            yield return new object[] { new ToolStripItem[0] };
+            yield return new object[] { Array.Empty<ToolStripItem>() };
             yield return new object[] { new ToolStripItem[] { new SubToolStripItem() } };
         }
 

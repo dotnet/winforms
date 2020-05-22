@@ -194,7 +194,7 @@ namespace System.ComponentModel.Design
                     }
                     else
                     {
-                        _byteViewer.SetBytes(new byte[0]);
+                        _byteViewer.SetBytes(Array.Empty<byte>());
                         _byteViewer.Enabled = false;
                     }
                 }

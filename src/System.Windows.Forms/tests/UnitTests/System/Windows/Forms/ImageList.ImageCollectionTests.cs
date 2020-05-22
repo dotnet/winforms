@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -776,7 +776,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(list.HandleCreated);
 
             // Add empty.
-            collection.AddRange(new Image[0]);
+            collection.AddRange(Array.Empty<Image>());
             Assert.Equal(2, collection.Count);
             Assert.False(collection.Empty);
             Assert.Equal(new string[] { string.Empty, string.Empty }, collection.Keys.Cast<string>());
@@ -801,7 +801,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(list.HandleCreated);
 
             // Add empty.
-            collection.AddRange(new Image[0]);
+            collection.AddRange(Array.Empty<Image>());
             Assert.Equal(2, collection.Count);
             Assert.False(collection.Empty);
             Assert.Equal(new string[] { string.Empty, string.Empty }, collection.Keys.Cast<string>());

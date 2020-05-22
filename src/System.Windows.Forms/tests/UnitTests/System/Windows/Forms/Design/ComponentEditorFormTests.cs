@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Design.Tests
         public void ComponentEditorComponentEditorForm_Ctor_Default()
         {
             using var component = new Component();
-            using var control = new SubComponentEditorForm(component, new Type[0]);
+            using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
             Assert.NotNull(control.AcceptButton);
             Assert.Null(control.AccessibleDefaultActionDescription);
             Assert.Null(control.AccessibleDescription);
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Design.Tests
         public void ComponentEditorComponentEditorForm_CreateParams_GetDefault_ReturnsExpected()
         {
             using var component = new Component();
-            using var control = new SubComponentEditorForm(component, new Type[0]);
+            using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
             CreateParams createParams = control.CreateParams;
             Assert.Equal("Properties", createParams.Caption);
             Assert.Null(createParams.ClassName);
@@ -194,7 +194,7 @@ namespace System.Windows.Forms.Design.Tests
         public void ComponentEditorComponentEditorForm_GetAutoSizeMode_Invoke_ReturnsExpected()
         {
             using var component = new Component();
-            using var control = new SubComponentEditorForm(component, new Type[0]);
+            using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
         }
 
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Design.Tests
         public void ComponentEditorComponentEditorForm_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
         {
             using var component = new Component();
-            using var control = new SubComponentEditorForm(component, new Type[0]);
+            using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
             Assert.Equal(expected, control.GetScrollState(bit));
         }
 
@@ -238,7 +238,7 @@ namespace System.Windows.Forms.Design.Tests
         public void ComponentEditorComponentEditorForm_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
         {
             using var component = new Component();
-            using var control = new SubComponentEditorForm(component, new Type[0]);
+            using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
             Assert.Equal(expected, control.GetStyle(flag));
 
             // Call again to test caching.
@@ -249,7 +249,7 @@ namespace System.Windows.Forms.Design.Tests
         public void ComponentEditorComponentEditorForm_GetTopLevel_Invoke_ReturnsExpected()
         {
             using var component = new Component();
-            using var control = new SubComponentEditorForm(component, new Type[0]);
+            using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
             Assert.True(control.GetTopLevel());
         }
 
@@ -287,7 +287,7 @@ namespace System.Windows.Forms.Design.Tests
         public void ComponentEditorForm_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var component = new Component();
-            using var control = new SubComponentEditorForm(component, new Type[0]);
+            using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -314,7 +314,7 @@ namespace System.Windows.Forms.Design.Tests
         public void ComponentEditorForm_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var component = new Component();
-            using var control = new SubComponentEditorForm(component, new Type[0]);
+            using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -341,7 +341,7 @@ namespace System.Windows.Forms.Design.Tests
         public void ComponentEditorForm_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var component = new Component();
-            using var control = new SubComponentEditorForm(component, new Type[0]);
+            using var control = new SubComponentEditorForm(component, Array.Empty<Type>());
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int callCount = 0;
             EventHandler handler = (sender, e) =>

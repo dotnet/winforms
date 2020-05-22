@@ -1361,8 +1361,7 @@ namespace System.Windows.Forms
             ImeMode.Off
         };
 
-        private static readonly ImeMode[] unsupportedTable = {
-        };
+        private static readonly ImeMode[] unsupportedTable = Array.Empty<ImeMode>();
 
         internal static ImeMode[] ChineseTable
         {

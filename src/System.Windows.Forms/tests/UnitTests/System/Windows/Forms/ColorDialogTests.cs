@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> CustomColors_Set_TestData()
         {
             yield return new object[] { null, Enumerable.Repeat(0x00FFFFFF, 16).ToArray() };
-            yield return new object[] { new int[0], Enumerable.Repeat(0x00FFFFFF, 16).ToArray() };
+            yield return new object[] { Array.Empty<int>(), Enumerable.Repeat(0x00FFFFFF, 16).ToArray() };
             yield return new object[] { new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 }.Concat(Enumerable.Repeat(0x00FFFFFF, 13)).ToArray() };
             yield return new object[] { Enumerable.Repeat(0, 16).ToArray(), Enumerable.Repeat(0, 16).ToArray() };
             yield return new object[] { Enumerable.Repeat(unchecked((int)0xFFFFFFFF), 16).ToArray(), Enumerable.Repeat(unchecked((int)0xFFFFFFFF), 16).ToArray() };
