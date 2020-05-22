@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-// #define TRACK_HDC
 // #define GDI_FINALIZATION_WATCH
 
 using System.Collections.Generic;
@@ -188,10 +187,6 @@ namespace System.Windows.Forms.Internal
             DeviceContexts.AddDeviceContext(this);
 
             // the hDc will be created on demand.
-
-#if TRACK_HDC
-            Debug.WriteLine( DbgUtil.StackTraceToStr(String.Format( "DeviceContext( hWnd=0x{0:x8} )", unchecked((int) hWnd))));
-#endif
         }
 
         /// <summary>
@@ -209,9 +204,6 @@ namespace System.Windows.Forms.Internal
             {
                 _hWnd = User32.WindowFromDC(new HandleRef(this, this._hDC));
             }
-#if TRACK_HDC
-            Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DeviceContext( hDC=0x{0:X8}, Type={1} )", unchecked((int) hDC), dcType) ));
-#endif
         }
 
         /// <summary>
@@ -272,10 +264,6 @@ namespace System.Windows.Forms.Internal
 
                     // CreateDC and CreateIC add an HDC handle to the HandleCollector; to remove it properly we need
                     // to call DeleteHDC.
-#if TRACK_HDC
-                    Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DC.DeleteHDC(hdc=0x{0:x8})", unchecked((int) this.hDC))));
-#endif
-
                     Gdi32.DeleteDC(_hDC);
                     _hDC = IntPtr.Zero;
                     break;
@@ -284,9 +272,6 @@ namespace System.Windows.Forms.Internal
 
                     // CreatCompatibleDC adds a GDI handle to HandleCollector, to remove it properly we need to call
                     // DeleteDC.
-#if TRACK_HDC
-                    Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("DC.DeleteDC(hdc=0x{0:x8})", unchecked((int) this.hDC))));
-#endif
                     Gdi32.DeleteDC(_hDC);
                     _hDC = IntPtr.Zero;
                     break;
@@ -297,8 +282,6 @@ namespace System.Windows.Forms.Internal
                     // do nothing, the hdc is not owned by this object.
                     // in this case it is ok if disposed throught finalization.
             }
-
-            DbgUtil.AssertFinalization(this, disposing);
         }
 
         /// <summary>
@@ -315,9 +298,6 @@ namespace System.Windows.Forms.Internal
                 // Note: for common DCs, GetDC assigns default attributes to the DC each time it is retrieved.
                 // For example, the default font is System.
                 _hDC = User32.GetDC(new HandleRef(this, _hWnd));
-#if TRACK_HDC
-                Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("hdc[0x{0:x8}]=DC.GetHdc(hWnd=0x{1:x8})", unchecked((int) this.hDC), unchecked((int) this.hWnd))));
-#endif
             }
 
             return _hDC;
@@ -331,14 +311,7 @@ namespace System.Windows.Forms.Internal
         {
             if (_hDC != IntPtr.Zero && DeviceContextType == DeviceContextType.Display)
             {
-#if TRACK_HDC
-                int retVal =
-#endif
                 User32.ReleaseDC(new HandleRef(this, _hWnd), _hDC);
-                // Note: retVal == 0 means it was not released but doesn't necessarily means an error; class or private DCs are never released.
-#if TRACK_HDC
-                Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("[ret={0}]=DC.ReleaseDC(hDc=0x{1:x8}, hWnd=0x{2:x8})", retVal, unchecked((int) this.hDC), unchecked((int) this.hWnd))));
-#endif
                 _hDC = IntPtr.Zero;
             }
         }
@@ -356,15 +329,8 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public void RestoreHdc()
         {
-#if TRACK_HDC
-            bool result =
-#endif
             // Note: Don't use the Hdc property here, it would force handle creation.
             Gdi32.RestoreDC(new HandleRef(this, _hDC), -1);
-#if TRACK_HDC
-            // Note: Winforms may call this method during app exit at which point the DC may have been finalized already causing this assert to popup.
-            Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("ret[0]=DC.RestoreHdc(hDc=0x{1:x8})", result, unchecked((int) this.hDC)) ));
-#endif
             Debug.Assert(_contextStack != null, "Someone is calling RestoreHdc() before SaveHdc()");
 
             if (_contextStack != null)
@@ -420,10 +386,6 @@ namespace System.Windows.Forms.Internal
             };
             _contextStack ??= new Stack<GraphicsState>();
             _contextStack.Push(g);
-
-#if TRACK_HDC
-            Debug.WriteLine( DbgUtil.StackTraceToStr( String.Format("state[0]=DC.SaveHdc(hDc=0x{1:x8})", state, unchecked((int) this.hDC)) ));
-#endif
 
             return state;
         }

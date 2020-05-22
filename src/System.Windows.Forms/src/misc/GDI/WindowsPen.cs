@@ -113,8 +113,6 @@ namespace System.Windows.Forms.Internal
         {
             if (_nativeHandle != IntPtr.Zero && _dc != null)
             {
-                DbgUtil.AssertFinalization(this, disposing);
-
                 _dc.DeleteObject(_nativeHandle, GdiObjectType.Pen);
                 _nativeHandle = IntPtr.Zero;
             }

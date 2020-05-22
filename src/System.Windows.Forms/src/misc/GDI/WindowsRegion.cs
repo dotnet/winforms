@@ -112,8 +112,6 @@ namespace System.Windows.Forms.Internal
         {
             if (_nativeHandle != IntPtr.Zero)
             {
-                DbgUtil.AssertFinalization(this, disposing);
-
                 if (ownHandle)
                 {
                     Gdi32.DeleteObject(_nativeHandle);

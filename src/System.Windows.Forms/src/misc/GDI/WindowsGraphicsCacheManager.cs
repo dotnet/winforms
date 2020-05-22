@@ -74,9 +74,6 @@ namespace System.Windows.Forms.Internal
                 if (t_measurementGraphics == null || t_measurementGraphics.DeviceContext == null /*object disposed*/)
                 {
                     Debug.Assert(t_measurementGraphics == null || t_measurementGraphics.DeviceContext != null, "TLS MeasurementGraphics was disposed somewhere, enable TRACK_HDC macro to determine who did it, recreating it for now ...");
-#if TRACK_HDC
-                    Debug.WriteLine( DbgUtil.StackTraceToStr("Initializing MeasurementGraphics"));
-#endif
                     t_measurementGraphics = WindowsGraphics.CreateMeasurementWindowsGraphics();
                 }
 

@@ -183,8 +183,6 @@ namespace System.Windows.Forms.Internal
         {
             if (DeviceContext != null)
             {
-                DbgUtil.AssertFinalization(this, disposing);
-
                 try
                 {
                     // Restore original dc.

@@ -45,8 +45,6 @@ namespace System.Windows.Forms.Internal
         {
             if (DC != null && _nativeHandle != IntPtr.Zero)
             {
-                DbgUtil.AssertFinalization(this, disposing);
-
                 DC.DeleteObject(_nativeHandle, GdiObjectType.Brush);
 
                 _nativeHandle = IntPtr.Zero;

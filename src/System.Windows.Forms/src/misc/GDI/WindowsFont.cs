@@ -183,7 +183,6 @@ namespace System.Windows.Forms.Internal
                     if (_everOwnedByCacheManager || !disposing || !DeviceContexts.IsFontInUse(this))
                     {
                         Debug.Assert(Hfont != IntPtr.Zero, "Unexpected null hFont.");
-                        DbgUtil.AssertFinalization(this, disposing);
 
                         Gdi32.DeleteObject(Hfont);
                         Hfont = IntPtr.Zero;
