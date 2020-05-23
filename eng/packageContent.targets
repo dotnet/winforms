@@ -14,20 +14,20 @@
   <PropertyGroup>
     <!-- Also in global.json -->
     <DotNetApiDocsNetCoreApp30>0.0.0.1</DotNetApiDocsNetCoreApp30>
-    <IntellisenseXmlDir>$(RepositoryToolsDir)native\bin\dotnet-api-docs_netcoreapp3.0\$(DotNetApiDocsNetCoreApp30)\_intellisense\netcore-3.0\</IntellisenseXmlDir>
+    <IntellisenseXmlDir>$(RepositoryToolsDir)\bin\dotnet-api-docs_netcoreapp3.0\$(DotNetApiDocsNetCoreApp30)\_intellisense\netcore-3.0\</IntellisenseXmlDir>
   </PropertyGroup>
 
   <PropertyGroup>
     <IntellisenseXmlFileSource>$(IntellisenseXmlDir)$(AssemblyName).xml</IntellisenseXmlFileSource>
     <!-- TODO: remove when we get dotnet-api-docs_netcoreapp5.0 -->
     <IntellisenseXmlFileSource Condition="!Exists('$(IntellisenseXmlFileSource)')">$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXmlFileSource>
-    
+
     <IntellisenseXml Condition="'$(ProduceReferenceAssembly)' == 'true' And '$(PackageAsRefAndLib)' != 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetRefPath)', '.xml'))</IntellisenseXml>
     <IntellisenseXml Condition="'$(PackageAsRefAndLib)' == 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXml>
 
     <IntellisenseXmlDir Condition="'$(IntellisenseXml)' != ''">$([System.IO.Path]::GetDirectoryName('$(IntellisenseXml)'))</IntellisenseXmlDir>
   </PropertyGroup>
-  
+
   <Target Name="GetPackageContent"
           DependsOnTargets="SatelliteDllsProjectOutputGroup"
           Returns="@(PackageFile)">
@@ -35,8 +35,8 @@
       <PackageFile Include="$(TargetPath)" PackagePath="$(PackagePath)" />
       <PackageFile Condition="'$(IncludePdbInPackage)' == 'true'" Include="$(TargetDir)$(TargetName).pdb" PackagePath="$(PackagePath)" />
       <PackageFile Condition="'$(ProduceReferenceAssembly)' == 'true'" Include="$(TargetRefPath)" PackagePath="$(RefPackagePath)" />
-      <PackageFile Condition="'$(ProduceReferenceAssembly)' == 'true' Or '$(PackageAsRefAndLib)' == 'true'" 
-                   Include="$(IntellisenseXml)" 
+      <PackageFile Condition="'$(ProduceReferenceAssembly)' == 'true' Or '$(PackageAsRefAndLib)' == 'true'"
+                   Include="$(IntellisenseXml)"
                    PackagePath="$(RefPackagePath)" />
       <PackageFile Condition="'$(PackageAsRefAndLib)' == 'true'" Include="$(TargetPath)" PackagePath="$(RefPackagePath)" />
       <PackageFile Condition="'$(IncludeResourcesInPackage)' == 'true'"
@@ -44,20 +44,20 @@
                    PackagePath="$(PackagePath)/%(SatelliteDllsProjectOutputGroupOutput.Culture)" />
     </ItemGroup>
   </Target>
-  
+
   <!-- xml files can be added here for intellisense -->
   <Target Name="CopyIntellisenseXmlsToTargetRefPath"
           AfterTargets="Build"
           Inputs="$(IntellisenseXmlFileSource)"
           Outputs="$(IntellisenseXml)"
           Condition="'$(ProduceReferenceAssembly)' == 'true' Or '$(PackageAsRefAndLib)' == 'true'">
-    
+
     <Message Condition="!Exists('$(IntellisenseXmlFileSource)')"
              Text="$(IntellisenseXmlFileSource) is missing" />
 
     <MakeDir Condition="!Exists('$(IntellisenseXmlDir)')"
              Directories="$([System.IO.Path]::GetDirectoryName('$(IntellisenseXml)'))" />
-    
+
     <Copy SourceFiles="$(IntellisenseXmlFileSource)"
           Condition="Exists('$(IntellisenseXmlFileSource)')"
           DestinationFiles="$(IntellisenseXml)"
