@@ -667,7 +667,7 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            //valid values are 0xd2 to 0x2, and 0xa29 to 0xa29
+            //valid values are 0xd2 to 0xd2, and 0xa29 to 0xa29
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)FontProperty.TextFont, (int)FontProperty.TextFont) &&
                 !ClientUtils.IsEnumValid(prop, (int)prop, (int)FontProperty.GlyphFont, (int)FontProperty.GlyphFont))
             {
