@@ -8,6 +8,7 @@ namespace System.Windows.Forms.VisualStyles
 {
     public enum FontProperty
     {
+        TextFont = TMT.FONT,
         GlyphFont = TMT.GLYPHFONT
     }
 }
