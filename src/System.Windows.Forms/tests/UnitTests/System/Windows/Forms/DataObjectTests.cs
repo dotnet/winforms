@@ -15,10 +15,14 @@ using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
+using static Interop.Shell32;
+using static Interop.User32;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests
 {
+    using Point = System.Drawing.Point;
+
     // NB: doesn't require thread affinity
     public class DataObjectTests : IClassFixture<ThreadExceptionFixture>
     {
@@ -1634,8 +1638,8 @@ namespace System.Windows.Forms.Tests
             {
                 // do not check the requested storage medium, we always return a metafile handle, thats what Office does
 
-                if (format.cfFormat != (short)Interop.User32.CF.ENHMETAFILE || format.dwAspect != DVASPECT.DVASPECT_CONTENT || format.lindex != -1)
-                    return (int)Interop.HRESULT.DV_E_FORMATETC;
+                if (format.cfFormat != (short)CF.ENHMETAFILE || format.dwAspect != DVASPECT.DVASPECT_CONTENT || format.lindex != -1)
+                    return (int)HRESULT.DV_E_FORMATETC;
 
                 return 0;
             }
@@ -2130,6 +2134,286 @@ namespace System.Windows.Forms.Tests
             IComDataObject comDataObject = dataObject;
             Assert.Same(result, comDataObject.EnumFormatEtc(dwDirection));
             mockComDataObject.Verify(o => o.EnumFormatEtc(dwDirection), Times.Once());
+        }
+
+        public static IEnumerable<object[]> GetDataHere_Text_TestData()
+        {
+            yield return new object[] { TextDataFormat.Rtf, (short)DataFormats.GetFormat(DataFormats.Rtf).Id };
+            yield return new object[] { TextDataFormat.Html, (short)DataFormats.GetFormat(DataFormats.Html).Id };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetDataHere_Text_TestData))]
+        public unsafe void IComDataObjectGetDataHere_Text_Success(TextDataFormat textDataFormat, short cfFormat)
+        {
+            var dataObject = new DataObject();
+            dataObject.SetText("text", textDataFormat);
+            IComDataObject iComDataObject = dataObject;
+
+            var formatetc = new FORMATETC
+            {
+                tymed = TYMED.TYMED_HGLOBAL,
+                cfFormat = cfFormat
+            };
+            var stgMedium = new STGMEDIUM
+            {
+                tymed = TYMED.TYMED_HGLOBAL
+            };
+            IntPtr handle = Kernel32.GlobalAlloc(
+                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                1);
+            try
+            {
+                stgMedium.unionmember = handle;
+                iComDataObject.GetDataHere(ref formatetc, ref stgMedium);
+
+                sbyte* pChar = *(sbyte**)stgMedium.unionmember;
+                Assert.Equal("text", new string(pChar));
+            }
+            finally
+            {
+                Kernel32.GlobalFree(handle);
+            }
+        }
+
+        public static IEnumerable<object[]> GetDataHere_UnicodeText_TestData()
+        {
+            yield return new object[] { TextDataFormat.Text, (short)CF.UNICODETEXT };
+            yield return new object[] { TextDataFormat.UnicodeText, (short)CF.UNICODETEXT };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetDataHere_UnicodeText_TestData))]
+        public unsafe void IComDataObjectGetDataHere_UnicodeText_Success(TextDataFormat textDataFormat, short cfFormat)
+        {
+            var dataObject = new DataObject();
+            dataObject.SetText("text", textDataFormat);
+            IComDataObject iComDataObject = dataObject;
+
+            var formatetc = new FORMATETC
+            {
+                tymed = TYMED.TYMED_HGLOBAL,
+                cfFormat = cfFormat
+            };
+            var stgMedium = new STGMEDIUM
+            {
+                tymed = TYMED.TYMED_HGLOBAL
+            };
+            IntPtr handle = Kernel32.GlobalAlloc(
+                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                1);
+            try
+            {
+                stgMedium.unionmember = handle;
+                iComDataObject.GetDataHere(ref formatetc, ref stgMedium);
+
+                char* pChar = *(char**)stgMedium.unionmember;
+                Assert.Equal("text", new string(pChar));
+            }
+            finally
+            {
+                Kernel32.GlobalFree(handle);
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetDataHere_Text_TestData))]
+        public unsafe void IComDataObjectGetDataHere_TextNoData_ThrowsArgumentException(TextDataFormat textDataFormat, short cfFormat)
+        {
+            var dataObject = new DataObject();
+            dataObject.SetText("text", textDataFormat);
+            IComDataObject iComDataObject = dataObject;
+
+            var formatetc = new FORMATETC
+            {
+                tymed = TYMED.TYMED_HGLOBAL,
+                cfFormat = cfFormat
+            };
+            var stgMedium = new STGMEDIUM
+            {
+                tymed = TYMED.TYMED_HGLOBAL
+            };
+            Assert.Throws<ArgumentException>(null, () => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetDataHere_UnicodeText_TestData))]
+        public unsafe void IComDataObjectGetDataHere_UnicodeTextNoData_ThrowsArgumentException(TextDataFormat textDataFormat, short cfFormat)
+        {
+            var dataObject = new DataObject();
+            dataObject.SetText("text", textDataFormat);
+            IComDataObject iComDataObject = dataObject;
+
+            var formatetc = new FORMATETC
+            {
+                tymed = TYMED.TYMED_HGLOBAL,
+                cfFormat = cfFormat
+            };
+            var stgMedium = new STGMEDIUM
+            {
+                tymed = TYMED.TYMED_HGLOBAL
+            };
+            Assert.Throws<ArgumentException>(null, () => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
+        }
+
+        [WinFormsFact]
+        public unsafe void IComDataObjectGetDataHere_FileNames_Success()
+        {
+            var dataObject = new DataObject();
+            dataObject.SetFileDropList(new StringCollection { "Path1", "Path2" });
+            IComDataObject iComDataObject = dataObject;
+
+            var formatetc = new FORMATETC
+            {
+                tymed = TYMED.TYMED_HGLOBAL,
+                cfFormat = (short)CF.HDROP
+            };
+            var stgMedium = new STGMEDIUM
+            {
+                tymed = TYMED.TYMED_HGLOBAL
+            };
+            IntPtr handle = Kernel32.GlobalAlloc(
+                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                1);
+            try
+            {
+                stgMedium.unionmember = handle;
+                iComDataObject.GetDataHere(ref formatetc, ref stgMedium);
+
+                DROPFILES* pDropFiles = *(DROPFILES**)stgMedium.unionmember;
+                Assert.Equal(20u, pDropFiles->pFiles);
+                Assert.Equal(Point.Empty, pDropFiles->pt);
+                Assert.Equal(BOOL.FALSE, pDropFiles->fNC);
+                Assert.Equal(BOOL.TRUE, pDropFiles->fWide);
+                char* text = (char*)IntPtr.Add((IntPtr)pDropFiles, (int)pDropFiles->pFiles);
+                Assert.Equal("Path1\0Path2\0\0", new string(text, 0, "Path1".Length + 1 + "Path2".Length + 1 + 1));
+            }
+            finally
+            {
+                Kernel32.GlobalFree(handle);
+            }
+        }
+
+        [WinFormsFact]
+        public unsafe void IComDataObjectGetDataHere_EmptyFileNames_Success()
+        {
+            var dataObject = new DataObject();
+            dataObject.SetFileDropList(new StringCollection());
+            IComDataObject iComDataObject = dataObject;
+
+            var formatetc = new FORMATETC
+            {
+                tymed = TYMED.TYMED_HGLOBAL,
+                cfFormat = (short)CF.HDROP
+            };
+            var stgMedium = new STGMEDIUM
+            {
+                tymed = TYMED.TYMED_HGLOBAL
+            };
+            IntPtr handle = Kernel32.GlobalAlloc(
+                Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                (uint)sizeof(DROPFILES));
+            try
+            {
+                stgMedium.unionmember = handle;
+                iComDataObject.GetDataHere(ref formatetc, ref stgMedium);
+
+                DROPFILES* pDropFiles = *(DROPFILES**)stgMedium.unionmember;
+                Assert.Equal(0u, pDropFiles->pFiles);
+                Assert.Equal(Point.Empty, pDropFiles->pt);
+                Assert.Equal(BOOL.FALSE, pDropFiles->fNC);
+                Assert.Equal(BOOL.FALSE, pDropFiles->fWide);
+            }
+            finally
+            {
+                Kernel32.GlobalFree(handle);
+            }
+        }
+
+        [WinFormsFact]
+        public unsafe void IComDataObjectGetDataHere_FileNamesNoData_ThrowsArgumentException()
+        {
+            var dataObject = new DataObject();
+            dataObject.SetFileDropList(new StringCollection { "Path1", "Path2" });
+            IComDataObject iComDataObject = dataObject;
+
+            var formatetc = new FORMATETC
+            {
+                tymed = TYMED.TYMED_HGLOBAL,
+                cfFormat = (short)CF.HDROP
+            };
+            var stgMedium = new STGMEDIUM
+            {
+                tymed = TYMED.TYMED_HGLOBAL
+            };
+            Assert.Throws<ArgumentException>(null, () => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
+        }
+
+        [WinFormsFact]
+        public unsafe void IComDataObjectGetDataHere_EmptyFileNamesNoData_Success()
+        {
+            var dataObject = new DataObject();
+            dataObject.SetFileDropList(new StringCollection());
+            IComDataObject iComDataObject = dataObject;
+
+            var formatetc = new FORMATETC
+            {
+                tymed = TYMED.TYMED_HGLOBAL,
+                cfFormat = (short)CF.HDROP
+            };
+            var stgMedium = new STGMEDIUM
+            {
+                tymed = TYMED.TYMED_HGLOBAL
+            };
+            iComDataObject.GetDataHere(ref formatetc, ref stgMedium);
+        }
+
+        [WinFormsTheory]
+        [InlineData(TYMED.TYMED_FILE, TYMED.TYMED_FILE)]
+        [InlineData(TYMED.TYMED_ISTORAGE, TYMED.TYMED_ISTORAGE)]
+        [InlineData(TYMED.TYMED_MFPICT, TYMED.TYMED_MFPICT)]
+        [InlineData(TYMED.TYMED_ENHMF, TYMED.TYMED_ENHMF)]
+        [InlineData(TYMED.TYMED_NULL, TYMED.TYMED_NULL)]
+        public void IComDataObjectGetDataHere_InvalidTymed_ThrowsCOMException(TYMED formatetcTymed, TYMED stgMediumTymed)
+        {
+            var dataObject = new DataObject();
+            IComDataObject iComDataObject = dataObject;
+
+            var formatetc = new FORMATETC
+            {
+                tymed = formatetcTymed
+            };
+            var stgMedium = new STGMEDIUM
+            {
+                tymed = stgMediumTymed
+            };
+            COMException ex = Assert.Throws<COMException>(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
+            Assert.Equal(HRESULT.DV_E_TYMED, (HRESULT)ex.HResult);
+        }
+
+        [WinFormsTheory]
+        [InlineData(TYMED.TYMED_HGLOBAL, TYMED.TYMED_HGLOBAL, (short)CF.UNICODETEXT)]
+        [InlineData(TYMED.TYMED_HGLOBAL, TYMED.TYMED_HGLOBAL, (short)CF.HDROP)]
+        [InlineData(TYMED.TYMED_ISTREAM, TYMED.TYMED_ISTREAM, (short)CF.UNICODETEXT)]
+        [InlineData(TYMED.TYMED_ISTREAM, TYMED.TYMED_ISTREAM, (short)CF.HDROP)]
+        [InlineData(TYMED.TYMED_GDI, TYMED.TYMED_GDI, (short)CF.UNICODETEXT)]
+        [InlineData(TYMED.TYMED_GDI, TYMED.TYMED_GDI, (short)CF.HDROP)]
+        public void IComDataObjectGetDataHere_NoDataPresentNoData_ThrowsCOMException(TYMED formatetcTymed, TYMED stgMediumTymed, short cfFormat)
+        {
+            var dataObject = new DataObject();
+            IComDataObject iComDataObject = dataObject;
+
+            var formatetc = new FORMATETC
+            {
+                tymed = formatetcTymed,
+                cfFormat = cfFormat
+            };
+            var stgMedium = new STGMEDIUM
+            {
+                tymed = stgMediumTymed
+            };
+            COMException ex = Assert.Throws<COMException>(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium));
+            Assert.Equal(HRESULT.DV_E_FORMATETC, (HRESULT)ex.HResult);
         }
     }
 }
