@@ -128,7 +128,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                     Thread.Sleep(10);
                 }
                 Interlocked.Increment(ref completed);
-            })).ToArray();
+            }, cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default)).ToArray();
             Task.WaitAll(tasks);
             Assert.Equal(n, completed);
             Assert.True(created >= 1);
@@ -165,7 +165,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 var sentArgs = Enumerable.Range(0, n).Select(i => Enumerable.Range(0, i).Select(i => i.ToString()).ToArray()).ToArray();
                 var receivedArgs = new ReceivedArgs();
                 WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
-                var tasks = Enumerable.Range(0, n).Select(i => Task.Factory.StartNew(() => { Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, sentArgs[i])); })).ToArray();
+                var tasks = Enumerable.Range(0, n).Select(i => Task.Factory.StartNew(() => { Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, sentArgs[i])); }, cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default)).ToArray();
                 Task.WaitAll(tasks);
                 FlushLastConnection(pipeName);
                 var receivedSorted = receivedArgs.Freeze().Sort((x, y) => x.Length - y.Length);
@@ -221,7 +221,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
             using (pipeServer)
             {
-                var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, timeout: 300, Array.Empty<string>()));
+                var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, timeout: 300, Array.Empty<string>()), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
                 bool result = task.Result;
                 Assert.False(result);
             }
@@ -236,7 +236,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             using (pipeServer)
             {
                 var receivedArgs = new ReceivedArgs();
-                var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "1", "ABC" }));
+                var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "1", "ABC" }), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
                 // Allow time for connection.
                 Thread.Sleep(100);
                 WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
