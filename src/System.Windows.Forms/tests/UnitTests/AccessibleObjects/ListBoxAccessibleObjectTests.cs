@@ -9,10 +9,10 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class ListBoxAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        [StaFact]
+        [WinFormsFact]
         public void ListBoxAccessibleObjectTests_Ctor_Default()
         {
-            ListBox listBox = new ListBox();
+            using ListBox listBox = new ListBox();
             listBox.Items.AddRange(new object[] {
                 "a",
                 "b",

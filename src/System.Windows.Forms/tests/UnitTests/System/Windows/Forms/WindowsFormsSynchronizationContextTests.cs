@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -34,7 +34,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [WinFormsFact]
+        [WinFormsFact(Skip = "WindowsFormsSynchronizationContext disposed of too early. See: https://github.com/dotnet/winforms/issues/3297")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3297")]
         public void WindowsFormsSynchronizationContext_Dispose_MultipleTimes_Success()
         {
             var context = new WindowsFormsSynchronizationContext();
@@ -91,7 +92,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "WindowsFormsSynchronizationContext disposed of too early. See: https://github.com/dotnet/winforms/issues/3297")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3297")]
         [MemberData(nameof(Send_TestData))]
         public void WindowsFormsSynchronizationContext_Send_InvokeDisposed_Nop(object state)
         {
@@ -133,7 +135,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "WindowsFormsSynchronizationContext disposed of too early. See: https://github.com/dotnet/winforms/issues/3297")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3297")]
         [MemberData(nameof(Send_TestData))]
         public void WindowsFormsSynchronizationContext_Post_InvokeDisposed_Nop(object state)
         {

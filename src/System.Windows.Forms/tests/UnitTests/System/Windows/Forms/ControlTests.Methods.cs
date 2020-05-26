@@ -477,7 +477,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedText, control.Text);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void Control_CreateControl_InvokeAllowDrop_Success()
         {
             using var control = new SubControl
@@ -664,7 +664,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedText, control.Text);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void Control_CreateHandle_InvokeAllowDrop_Success()
         {
             using var control = new SubControl
@@ -882,7 +882,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(region, control.Region);
         }
 
-        [StaFact]
+        [WinFormsFact]
         public void Control_DestroyHandle_InvokeWithHandleAllowDrop_Success()
         {
             using var control = new SubControl
@@ -1805,7 +1805,8 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "hangs CI, see https://github.com/dotnet/winforms/issues/3336")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3336")]
         [MemberData(nameof(DoDragDrop_TestData))]
         public void Control_DoDragDrop_Invoke_ReturnsNone(object data, DragDropEffects allowedEffects)
         {
@@ -1814,7 +1815,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "hangs CI, see https://github.com/dotnet/winforms/issues/3336")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3336")]
         [MemberData(nameof(DoDragDrop_TestData))]
         public void Control_DoDragDrop_InvokeWithHandle_ReturnsNone(object data, DragDropEffects allowedEffects)
         {
