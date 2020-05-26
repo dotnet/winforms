@@ -565,5 +565,16 @@ namespace System.Windows.Forms.VisualStyles.Tests
             var renderer = new VisualStyleRenderer("BUTTON", 0, 0);
             Assert.False(renderer.IsBackgroundPartiallyTransparent());
         }
+
+        [Fact]
+        public void VisualStyleRenderer_GetFont_for_TextFont()
+        {
+            var renderer = new VisualStyleRenderer("TEXTSTYLE", 1, 0);
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            using Font font = renderer.GetFont(graphics, FontProperty.TextFont);
+
+            Assert.NotNull(font);
+        }
     }
 }
