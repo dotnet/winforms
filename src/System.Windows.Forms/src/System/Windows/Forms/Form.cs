@@ -104,9 +104,6 @@ namespace System.Windows.Forms
         private const int SizeGripSize = 16;
 
         private static Icon defaultIcon = null;
-#if MAGIC_PADDING
-        private static Padding FormPadding = new Padding(9);  // UI guideline
-#endif
         private static readonly object internalSyncObject = new object();
 
         // Property store keys for properties.  The property store allocates most efficiently
@@ -3557,62 +3554,6 @@ namespace System.Windows.Forms
             }
 
             return new SizeF(width, height);
-        }
-
-        internal override Size GetPreferredSizeCore(Size proposedSize)
-        {
-            //
-
-            Size preferredSize = base.GetPreferredSizeCore(proposedSize);
-
-#if MAGIC_PADDING
-//We are removing the magic padding in runtime.
-
-            bool dialogFixRequired = false;
-
-            if (Padding == Padding.Empty) {
-                Padding paddingToAdd = Padding.Empty;
-                foreach (Control c in this.Controls) {
-                    if (c.Dock == DockStyle.None) {
-                        AnchorStyles anchor = c.Anchor;
-                        if (anchor == AnchorStyles.None) {
-                            break;
-                        }
-
-                        // TOP
-                        // if we are anchored to the top only add padding if the top edge is too far down
-                        if ((paddingToAdd.Bottom == 0) && DefaultLayout.IsAnchored(anchor, AnchorStyles.Top)) {
-                            if (c.Bottom > preferredSize.Height - FormPadding.Bottom) {
-                               paddingToAdd.Bottom = FormPadding.Bottom;
-
-                               dialogFixRequired = true;
-                            }
-                        }
-                        // BOTTOM
-                        // if we are anchored to the bottom
-                        // dont add any padding - it's way too confusing to be dragging a button up
-                        // and have the form grow to the bottom.
-
-                        // LEFT
-                        // if we are anchored to the left only add padding if the right edge is too far right
-                        if ((paddingToAdd.Left == 0) && DefaultLayout.IsAnchored(anchor, AnchorStyles.Left)) {
-                            if (c.Right > preferredSize.Width - FormPadding.Right) {
-                               paddingToAdd.Right = FormPadding.Right;
-                               dialogFixRequired = true;
-                            }
-                        }
-                        // RIGHT
-                        // if we are anchored to the bottom
-                        // dont add any padding - it's way too confusing to be dragging a button left
-                        // and have the form grow to the right
-
-                    }
-                }
-                Debug.Assert(!dialogFixRequired, "this dialog needs update: " + this.Name);
-                return preferredSize + paddingToAdd.Size;
-            }
-#endif
-            return preferredSize;
         }
 
         private void CallShownEvent()

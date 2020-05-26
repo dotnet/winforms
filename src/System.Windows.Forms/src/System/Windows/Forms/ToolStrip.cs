@@ -2403,15 +2403,6 @@ namespace System.Windows.Forms
                 //[ otherControl ]
                 //       *
                 Point otherItemMidLocation = new Point(otherItem.Bounds.X + otherItem.Width / 2, (down) ? otherItem.Bounds.Top : otherItem.Bounds.Bottom);
-#if DEBUG_UPDOWN
-                         Graphics g = Graphics.FromHwnd(this.Handle);
-
-                         using (Pen p = new Pen(Color.FromKnownColor((KnownColor)i))) {
-                             g.DrawLine(p,otherItemMidLocation, midPointOfCurrent);
-                         }
-                         System.Threading.Thread.Sleep(100);
-                         g.Dispose();
-#endif
                 int oppositeSide = otherItemMidLocation.X - midPointOfCurrent.X;
                 int adjacentSide = otherItemMidLocation.Y - midPointOfCurrent.Y;
 
@@ -2446,12 +2437,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-
-#if DEBUG_UPDOWN
-                 string tanWinnerString = (tanWinner == null) ? "null" : tanWinner.ToString();
-                 string hypWinnerString = (hypotenuseWinner == null) ? "null": hypotenuseWinner.ToString();
-                 Debug.WriteLine(String.Format("Tangent winner is {0} Hyp winner is {1}",  tanWinnerString, hypWinnerString));
-#endif
 
             if ((tanWinner == null) || (hypotenuseWinner == null))
             {

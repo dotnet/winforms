@@ -4,8 +4,6 @@
 
 #nullable disable
 
-//#define PBRS_PAINT_DEBUG
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -2081,9 +2079,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (paintFullLabel && (neededWidth >= (rect.Width - (stringX + 2))))
             {
                 int totalWidth = stringX + neededWidth + PropertyGridView.GDIPLUS_SPACE; // 5 = extra needed to ensure text draws completely and isn't clipped.
-#if PBRS_PAINT_DEBUG
-                blank = Brushes.Green;
-#endif
 
                 // blank out the space we're going to use
                 g.FillRectangle(blank, borderWidth - 1, rect.Y, totalWidth - borderWidth + 3, rect.Height);
@@ -2098,9 +2093,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             { // Normal case -- no pseudo-tooltip for the label
-#if PBRS_PAINT_DEBUG
-                blank = Brushes.Red;
-#endif
                 g.FillRectangle(blank, rect.X, rect.Y, rect.Width, rect.Height);
             }
 
@@ -2143,11 +2135,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     TextRenderer.DrawText(g, strLabel, font, textRect, textColor, PropertyGrid.MeasureTextHelper.GetTextRendererFlags());
                 }
-#if PBRS_PAINT_DEBUG
-                textRect.Width --;
-                textRect.Height--;
-                g.DrawRectangle(new Pen(Color.Blue), textRect);
-#endif
                 g.SetClip(oldClip, CombineMode.Replace);
                 oldClip.Dispose();   // clip is actually copied out.
 
@@ -2363,10 +2350,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             Brush blank = bkBrush;
-#if PBRS_PAINT_DEBUG
-            blank = Brushes.Yellow;
-#endif
-            //g.FillRectangle(blank, rect.X-1, rect.Y, rect.Width+1, rect.Height);
             g.FillRectangle(blank, clipRect);
 
             if (IsCustomPaint)
@@ -2476,12 +2459,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     hfont = Gdi32.SelectObject(hdc, hfont);
                     g.ReleaseHdcInternal(hdc);
                 }
-
-#if PBRS_PAINT_DEBUG
-                    rect.Width --;
-                    rect.Height--;
-                    g.DrawRectangle(new Pen(Color.Purple), rect);
-#endif
 
                 if (doToolTip)
                 {
@@ -2932,7 +2909,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             return GetType().FullName + " " + PropertyLabel;
         }
 
-#if !DONT_SUPPORT_ADD_EVENT_HANDLER
         private EventEntry eventList;
 
         protected virtual void AddEventHandler(object key, Delegate handler)
@@ -3032,7 +3008,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 this.handler = handler;
             }
         }
-#endif
 
         [ComVisible(true)]
         public class GridEntryAccessibleObject : AccessibleObject

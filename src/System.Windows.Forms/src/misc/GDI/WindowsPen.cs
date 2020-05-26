@@ -27,10 +27,6 @@ namespace System.Windows.Forms.Internal
 
         private const int CosmeticPenWidth = 1;
 
-#if GDI_FINALIZATION_WATCH
-        private string AllocationSite = DbgUtil.StackTrace;
-#endif
-
         public WindowsPen(DeviceContext dc) :
             this(dc, default, CosmeticPenWidth, Color.Black)
         {
@@ -113,8 +109,6 @@ namespace System.Windows.Forms.Internal
         {
             if (_nativeHandle != IntPtr.Zero && _dc != null)
             {
-                DbgUtil.AssertFinalization(this, disposing);
-
                 _dc.DeleteObject(_nativeHandle, GdiObjectType.Pen);
                 _nativeHandle = IntPtr.Zero;
             }

@@ -1109,13 +1109,6 @@ namespace System.Windows.Forms
                 if (InternalLayout is ToolStripMenuItemInternalLayout menuItemInternalLayout && menuItemInternalLayout.UseMenuLayout)
                 {
                     // Support for special DropDownMenu layout
-#if DEBUG_PAINT
-                        g.DrawRectangle(Pens.Green, menuItemInternalLayout.TextRectangle);
-                        g.DrawRectangle(Pens.HotPink, menuItemInternalLayout.ImageRectangle);
-                        g.DrawRectangle(Pens.Black, menuItemInternalLayout.CheckRectangle);
-                        g.DrawRectangle(Pens.Red, menuItemInternalLayout.ArrowRectangle);
-                        g.DrawRectangle(Pens.Blue, new Rectangle(Point.Empty, new Size(-1,-1) + this.Size));
-#endif
                     if (CheckState != CheckState.Unchecked && menuItemInternalLayout.PaintCheck)
                     {
                         Rectangle checkRectangle = menuItemInternalLayout.CheckRectangle;

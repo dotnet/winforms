@@ -333,7 +333,6 @@ namespace System.Windows.Forms.Internal
             // pixels (its not a FitBlackBox, if the text is italicized, it will overhang on the right.)
             // So we need to account for this.
 
-#if OPTIMIZED_MEASUREMENTDC
             User32.DRAWTEXTPARAMS dtparams;
             // use the cache if we've got it
             if (MeasurementDCInfo.IsMeasurementDC(DeviceContext))
@@ -344,9 +343,6 @@ namespace System.Windows.Forms.Internal
             {
                 dtparams = GetTextMargins(font);
             }
-#else
-            User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font);
-#endif
 
             // If Width / Height are < 0, we need to make them larger or DrawText will return
             // an unbounded measurement when we actually trying to make it very narrow.

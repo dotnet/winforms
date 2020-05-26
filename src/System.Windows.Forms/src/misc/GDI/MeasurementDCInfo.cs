@@ -2,12 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if OPTIMIZED_MEASUREMENTDC
-#if WGCM_TEST_SUITE // Enable tracking when built for the test suites.
-#define TRACK_HDC
-#define GDI_FONT_CACHE_TRACK
-#endif
-
 using static Interop;
 
 namespace System.Windows.Forms.Internal
@@ -19,7 +13,6 @@ namespace System.Windows.Forms.Internal
         ///  This prevents unnecessary p/invoke calls to GetCurrentObject, etc
         ///  It has been found to give close to 2x performance when drawing lots of text in rapid succession
         ///  DataGridView with lots of text, etc.
-        ///  To turn it on for your DLL, use the OPTIMIZED_MEASUREMENTDC compiler switch and add this class to the sources.
 
         [ThreadStatic]
         private static CachedInfo? t_cachedMeasurementDCInfo;
@@ -122,4 +115,3 @@ namespace System.Windows.Forms.Internal
         }
     }
 }
-#endif // OPTIMIZED_MEASUREMENTDC

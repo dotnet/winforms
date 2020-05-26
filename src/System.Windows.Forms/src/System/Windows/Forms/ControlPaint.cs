@@ -4,8 +4,6 @@
 
 #nullable disable
 
-#define GRAYSCALE_DISABLED
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -1760,7 +1758,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(image));
             }
-#if GRAYSCALE_DISABLED
+
             Size imageSize = image.Size;
 
             if (disabledImageAttr == null)
@@ -1818,48 +1816,6 @@ namespace System.Windows.Forms
                                    GraphicsUnit.Pixel,
                                    disabledImageAttr);
             }
-#else
-
-            // This is remarkably simple -- make a monochrome version of the image, draw once
-            // with the button highlight color, then a second time offset by one pixel
-            // and in the button shadow color.
-            // Technique borrowed from comctl Toolbar.
-
-            Bitmap bitmap;
-            bool disposeBitmap = false;
-            if (image is Bitmap)
-                bitmap = (Bitmap) image;
-            else {
-                // metafiles can have extremely high resolutions,
-                // so if we naively turn them into bitmaps, the performance will be very poor.
-                // bitmap = new Bitmap(image);
-
-                GraphicsUnit units = GraphicsUnit.Display;
-                RectangleF bounds = image.GetBounds(ref units);
-                bitmap = new Bitmap((int) (bounds.Width * graphics.DpiX / image.HorizontalResolution),
-                                    (int) (bounds.Height * graphics.DpiY / image.VerticalResolution));
-
-                Graphics bitmapGraphics = Graphics.FromImage(bitmap);
-                bitmapGraphics.Clear(Color.Transparent);
-                bitmapGraphics.DrawImage(image, 0, 0, image.Size.Width, image.Size.Height);
-                bitmapGraphics.Dispose();
-
-                disposeBitmap = true;
-            }
-
-            Color highlight = ControlPaint.LightLight(background);
-            Bitmap monochrome = MakeMonochrome(bitmap, highlight);
-            graphics.DrawImage(monochrome, new Rectangle(imageBounds.X + 1, imageBounds.Y + 1, imageBounds.Width, imageBounds.Height));
-            monochrome.Dispose();
-
-            Color shadow = ControlPaint.Dark(background);
-            monochrome = MakeMonochrome(bitmap, shadow);
-            graphics.DrawImage(monochrome, imageBounds);
-            monochrome.Dispose();
-
-            if (disposeBitmap)
-                bitmap.Dispose();
-#endif
         }
 
         /// <summary>
@@ -2573,43 +2529,6 @@ namespace System.Windows.Forms
         {
             return new HLSColor(baseColor).Lighter(1.0f);
         }
-
-#if !GRAYSCALE_DISABLED
-        // Returns a monochrome bitmap based on the input.
-        private static Bitmap MakeMonochrome(Bitmap input, Color color) {
-            Bitmap output = new Bitmap(input.Width, input.Height);
-            output.SetResolution(input.HorizontalResolution, input.VerticalResolution);
-            Size size = input.Size;
-            int width = input.Width;
-            int height = input.Height;
-
-            BitmapData inputData = input.LockBits(new Rectangle(0,0, width, height),
-                                                  ImageLockMode.ReadOnly,
-                                                  PixelFormat.Format32bppArgb);
-            BitmapData outputData = output.LockBits(new Rectangle(0,0, width, height),
-                                                    ImageLockMode.WriteOnly,
-                                                    PixelFormat.Format32bppArgb);
-
-            Debug.Assert(inputData.Scan0 != IntPtr.Zero && outputData.Scan0 != IntPtr.Zero, "BitmapData.Scan0 is null; check marshalling");
-
-            int colorARGB = color.ToArgb();
-            for (int y = 0; y < height; y++) {
-                IntPtr inputScan = (IntPtr)((long)inputData.Scan0 + y * inputData.Stride);
-                IntPtr outputScan = (IntPtr)((long)outputData.Scan0 + y * outputData.Stride);
-                for (int x = 0; x < width; x++) {
-                    int pixel = Marshal.ReadInt32(inputScan,x*4);
-                    if (pixel >> 24 == 0)
-                        Marshal.WriteInt32(outputScan, x*4, 0); // transparent
-                    else
-                        Marshal.WriteInt32(outputScan, x*4, colorARGB);
-                }
-            }
-            input.UnlockBits(inputData);
-            output.UnlockBits(outputData);
-
-            return output;
-        }
-#endif
 
         internal static ColorMatrix MultiplyColorMatrix(float[][] matrix1, float[][] matrix2)
         {

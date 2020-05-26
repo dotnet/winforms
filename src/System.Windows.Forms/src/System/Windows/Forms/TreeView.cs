@@ -2754,20 +2754,6 @@ namespace System.Windows.Forms
                     }
 
                     //TreeViewDrawMode.Normal case
-#if DEBUGGING
-                    // Diagnostic output
-                    Debug.WriteLine("Itemstate: "+state);
-                    Debug.WriteLine("Itemstate: "+
-                                            "\nDISABLED" + (((state & CDIS.DISABLED) != 0) ? "TRUE" : "FALSE") +
-                                            "\nHOT" + (((state & CDIS.HOT) != 0) ? "TRUE" : "FALSE") +
-                                            "\nGRAYED" + (((state & CDIS.GRAYED) != 0) ? "TRUE" : "FALSE") +
-                                            "\nSELECTED" + (((state & CDIS.SELECTED) != 0) ? "TRUE" : "FALSE") +
-                                            "\nFOCUS" + (((state & CDIS.FOCUS) != 0) ? "TRUE" : "FALSE") +
-                                            "\nDEFAULT" + (((state & CDIS.DEFAULT) != 0) ? "TRUE" : "FALSE") +
-                                            "\nMARKED" + (((state & CDIS.MARKED) != 0) ? "TRUE" : "FALSE") +
-                                            "\nINDETERMINATE" + (((state & CDIS.INDETERMINATE) != 0) ? "TRUE" : "FALSE"));
-#endif
-
                     OwnerDrawPropertyBag renderinfo = GetItemRenderStyles(node, (int)state);
 
                     // TreeView has problems with drawing items at times; it gets confused

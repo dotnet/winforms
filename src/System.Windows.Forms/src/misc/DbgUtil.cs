@@ -27,46 +27,6 @@ namespace System.Windows.Forms.Internal
 
         // Methods
 
-        /// <summary>
-        ///  Call this method from your Dispose(bool) to assert that unmanaged resources has been explicitly disposed.
-        /// </summary>
-        [Conditional("DEBUG")] // This code will be compiled into the assembly anyways, it is up to the compiler to ignore the call.
-        public static void AssertFinalization(object obj, bool disposing)
-        {
-#if GDI_FINALIZATION_WATCH
-            if( disposing || AppDomain.CurrentDomain.IsFinalizingForUnload() )
-            {
-                return;
-            }
-
-            try
-            {
-                BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Static | BindingFlags.Instance;
-                FieldInfo allocSiteFld = obj.GetType().GetField("AllocationSite", bindingFlags);
-                string allocationSite = allocSiteFld != null ? allocSiteFld.GetValue( obj ).ToString() : "<Allocation site unavailable>";
-
-                // ignore ojects created by WindowsGraphicsCacheManager.
-                if( allocationSite.Contains("WindowsGraphicsCacheManager") )
-                {
-                    return;
-                }
-
-                Debug.Fail("Object Disposed through finalization - it should be explicitly disposed.");
-                Debug.WriteLine("Allocation stack:\r\n" + allocationSite);
-            }
-            catch(Exception ex)
-            {
-                try
-                {
-                    Debug.WriteLine("Exception thrown while trying to get allocation stack: " + ex);
-                }
-                catch
-                {
-                }
-            }
-#endif
-        }
-
         [Conditional("DEBUG")]
         public static void AssertWin32(bool expression, string message)
         {
@@ -312,4 +272,3 @@ namespace System.Windows.Forms.Internal
         }
     }
 }
-

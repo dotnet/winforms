@@ -16,10 +16,6 @@ namespace System.Windows.Forms.Internal
     {
         private IntPtr _nativeHandle;
 
-#if WINGRAPHICS_FINALIZATION_WATCH
-        private string AllocationSite = DbgUtil.StackTrace;
-#endif
-
         public abstract object Clone();
 
         protected abstract void CreateBrush();
@@ -49,8 +45,6 @@ namespace System.Windows.Forms.Internal
         {
             if (DC != null && _nativeHandle != IntPtr.Zero)
             {
-                DbgUtil.AssertFinalization(this, disposing);
-
                 DC.DeleteObject(_nativeHandle, GdiObjectType.Brush);
 
                 _nativeHandle = IntPtr.Zero;

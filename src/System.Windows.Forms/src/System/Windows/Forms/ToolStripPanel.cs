@@ -4,8 +4,6 @@
 
 #nullable disable
 
-//#define DEBUG_PAINT
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -455,17 +453,6 @@ namespace System.Windows.Forms
         {
             OnRendererChanged(e);
         }
-
-#if DEBUG_PAINT
-                protected  override void OnPaint(PaintEventArgs e) {
-                    base.OnPaint(e);
-                    Graphics g = e.Graphics;
-                    foreach (ToolStripPanelRow row in this.RowsInternal) {
-                        g.DrawRectangle(SystemPens.Highlight, row.Bounds);
-                        row.PaintColumns(e);
-                    }
-                }
-#endif
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnPaintBackground(PaintEventArgs e)

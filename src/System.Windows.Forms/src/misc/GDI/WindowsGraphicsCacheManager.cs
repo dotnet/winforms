@@ -2,11 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if WGCM_TEST_SUITE // Enable tracking when built for the test suites.
-#define TRACK_HDC
-#define GDI_FONT_CACHE_TRACK
-#endif
-
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -79,23 +74,16 @@ namespace System.Windows.Forms.Internal
                 if (t_measurementGraphics == null || t_measurementGraphics.DeviceContext == null /*object disposed*/)
                 {
                     Debug.Assert(t_measurementGraphics == null || t_measurementGraphics.DeviceContext != null, "TLS MeasurementGraphics was disposed somewhere, enable TRACK_HDC macro to determine who did it, recreating it for now ...");
-#if TRACK_HDC
-                    Debug.WriteLine( DbgUtil.StackTraceToStr("Initializing MeasurementGraphics"));
-#endif
                     t_measurementGraphics = WindowsGraphics.CreateMeasurementWindowsGraphics();
                 }
 
                 return t_measurementGraphics;
             }
         }
-#if OPTIMIZED_MEASUREMENTDC
+
         // in some cases, we dont want to demand create MeasurementGraphics, as creating it has
         // re-entrant side effects.
-        internal static WindowsGraphics? GetCurrentMeasurementGraphics()
-        {
-            return t_measurementGraphics;
-        }
-#endif
+        internal static WindowsGraphics? GetCurrentMeasurementGraphics() => t_measurementGraphics;
 
         /// <summary>
         ///  Get the cached WindowsFont associated with the specified font if one exists, otherwise create one and
@@ -193,11 +181,6 @@ namespace System.Windows.Forms.Internal
                     WindowsFontCache[t_currentIndex] = newEntry;
                     winFont.OwnedByCacheManager = true;
 
-#if GDI_FONT_CACHE_TRACK
-                    Debug.WriteLine("Removing from cache: " + wfont);
-                    Debug.WriteLine( "Adding to cache: " + winFont );
-#endif
-
                     wfont.OwnedByCacheManager = false;
                     wfont.Dispose();
                 }
@@ -206,22 +189,13 @@ namespace System.Windows.Forms.Internal
                     // do not cache font - caller is ALWAYS responsible for
                     // disposing now.  If it is owned  by the CM, it will not
                     // disposed.
-
                     winFont.OwnedByCacheManager = false;
-
-#if GDI_FONT_CACHE_TRACK
-                    Debug.WriteLine("Creating uncached font: " + winFont);
-#endif
                 }
             }
             else
             {
                 winFont.OwnedByCacheManager = true;
                 WindowsFontCache.Add(newEntry);
-
-#if GDI_FONT_CACHE_TRACK
-                Debug.WriteLine( "Adding to cache: " + winFont );
-#endif
             }
             return winFont;
         }

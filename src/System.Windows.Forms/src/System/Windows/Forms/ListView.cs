@@ -2534,14 +2534,6 @@ namespace System.Windows.Forms
                         if (OwnerDraw)
                         {
                             Graphics g = Graphics.FromHdcInternal(nmcd->nmcd.hdc);
-
-#if DEBUGGING
-                            Rectangle r = itemBounds;
-                            Rectangle r2 = Rectangle.FromLTRB(nmcd->nmcd.rc.left, nmcd->nmcd.rc.top, nmcd->nmcd.rc.right, nmcd->nmcd.rc.bottom);
-                            Debug.WriteLine("ClipBounds      : l {0} t {1} r {2} b {3}", g.ClipBounds.Left, g.ClipBounds.Top, g.ClipBounds.Right, g.ClipBounds.Bottom);
-                            Debug.WriteLine("Rect (Send Msg) : l {0} t {1} r {2} b {3}", r.Left, r.Top, r.Right, r.Bottom);
-                            Debug.WriteLine("Rect (NM)       : l {0} t {1} r {2} b {3}", r2.Left, r2.Top, r2.Right, r2.Bottom);
-#endif
                             DrawListViewItemEventArgs e = null;
                             try
                             {

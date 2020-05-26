@@ -17,10 +17,6 @@ namespace System.Windows.Forms.Internal
         private IntPtr _nativeHandle; // The hRegion, this class always takes ownership of the hRegion.
         private bool ownHandle;
 
-#if GDI_FINALIZATION_WATCH
-        private string AllocationSite = DbgUtil.StackTrace;
-#endif
-
         private WindowsRegion()
         {
         }
@@ -112,8 +108,6 @@ namespace System.Windows.Forms.Internal
         {
             if (_nativeHandle != IntPtr.Zero)
             {
-                DbgUtil.AssertFinalization(this, disposing);
-
                 if (ownHandle)
                 {
                     Gdi32.DeleteObject(_nativeHandle);
