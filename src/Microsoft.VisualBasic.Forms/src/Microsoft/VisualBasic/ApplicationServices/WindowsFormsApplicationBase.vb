@@ -156,8 +156,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     ''' Exception for when we launch a single-instance application and it can't connect with the 
     ''' original instance.
     ''' </summary>
-    <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Never)>
-    <System.Serializable()>
+    <EditorBrowsable(EditorBrowsableState.Never)>
+    <Serializable()>
     Public Class CantStartSingleInstanceException : Inherits System.Exception
 
         ''' <summary>
@@ -176,7 +176,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ' Deserialization constructor must be defined since we are serializable
-        <System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Sub New(ByVal info As System.Runtime.Serialization.SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
         End Sub

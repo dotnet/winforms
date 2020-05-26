@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         transmissionMode:=PipeTransmissionMode.Byte,
                         options:=NamedPipeOptions)
                 Return True
-            Catch ex As IOException
+            Catch ex As Exception
                 pipeServer = Nothing
                 Return False
             End Try
