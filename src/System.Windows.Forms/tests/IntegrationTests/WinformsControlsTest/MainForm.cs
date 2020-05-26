@@ -141,6 +141,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.ToggleIconButton,
                 new InitInfo("ToggleFormIcon", (obj, e) => ShowIcon = !ShowIcon)
+            },
+            {
+                MainFormControlsTabOrder.FileDialogButton,
+                new InitInfo("FileDialog", (obj, e) => new FileDialog().Show())
             }
         };
 

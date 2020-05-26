@@ -28,6 +28,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         RichTextBoxesButton,
         PictureBoxesButton,
         FormBorderStylesButton,
-        ToggleIconButton
+        ToggleIconButton,
+        FileDialogButton,
     }
 }
