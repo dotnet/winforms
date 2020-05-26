@@ -65,21 +65,6 @@ namespace System.Windows.Forms
         IKeyboardToolTip,
         IHandle
     {
-#if FINALIZATION_WATCH
-        static readonly TraceSwitch ControlFinalization = new TraceSwitch("ControlFinalization", "Tracks the creation and destruction of finalization");
-        internal static string GetAllocationStack() {
-            if (ControlFinalization.TraceVerbose) {
-            //  the operation is safe (data obtained from the CLR). This code is for debugging purposes only.
-                return Environment.StackTrace;
-            }
-            else {
-                return "Enable 'ControlFinalization' switch to see stack of allocation";
-            }
-
-        }
-        private string allocationSite = Control.GetAllocationStack();
-#endif
-
 #if DEBUG
         internal static readonly TraceSwitch s_paletteTracing = new TraceSwitch("PaletteTracing", "Debug Palette code");
         internal static readonly TraceSwitch s_controlKeyboardRouting = new TraceSwitch("ControlKeyboardRouting", "Debug Keyboard routing for controls");
@@ -5211,11 +5196,6 @@ namespace System.Windows.Forms
             }
             else
             {
-#if FINALIZATION_WATCH
-                if (!GetState(States.DISPOSED)) {
-                    Debug.Fail("Control of type '" + GetType().FullName +"' is being finalized that wasn't disposed\n" + allocationSite);
-                }
-#endif
                 // This same post is done in NativeWindow's finalize method, so if you change
                 // it, change it there too.
                 if (_window != null)
