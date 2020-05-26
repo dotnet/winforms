@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-// #define GDI_FINALIZATION_WATCH
-
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -81,11 +79,6 @@ namespace System.Windows.Forms.Internal
 
         private Stack<GraphicsState>? _contextStack;
 
-#if GDI_FINALIZATION_WATCH
-        private string AllocationSite = DbgUtil.StackTrace;
-        private string DeAllocationSite = string.Empty;
-#endif
-
         /// <summary>
         ///  The device type the context refers to.
         /// </summary>
@@ -113,12 +106,6 @@ namespace System.Windows.Forms.Internal
                         _hDC = ((IDeviceContext)this).GetHdc();  // this.hDC will be released on call to Dispose.
                         CacheInitialState();
                     }
-#if GDI_FINALIZATION_WATCH
-                    else
-                    {
-                        try { Debug.WriteLine(string.Format("Allocation stack:\r\n{0}\r\nDeallocation stack:\r\n{1}", AllocationSite, DeAllocationSite)); } catch  {}
-                    }
-#endif
                 }
 
                 return _hDC;

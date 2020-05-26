@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-//#define GDI_FINALIZATION_WATCH
-
 // THIS PARTIAL CLASS CONTAINS THE BASE METHODS FOR CREATING AND DISPOSING A WINDOWSGRAPHICS AS WELL
 // GETTING, DISPOSING AND WORKING WITH A DC.
 
@@ -30,10 +28,6 @@ namespace System.Windows.Forms.Internal
     {
         private bool _disposeDc;
         private Graphics? _graphics; // cached when initialized FromGraphics to be able to call g.ReleaseHdc from Dispose.
-
-#if GDI_FINALIZATION_WATCH
-        private string AllocationSite = DbgUtil.StackTrace;
-#endif
 
         public WindowsGraphics(DeviceContext dc)
         {
