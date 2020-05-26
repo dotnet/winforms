@@ -21,6 +21,7 @@ namespace System.Windows.Forms
     {
         private ToolStripDropDown dropDown = null;
         private ToolStripDropDownDirection toolStripDropDownDirection = ToolStripDropDownDirection.Default;
+        private ToolTip hookedKeyboardTooltip = null;
         private static readonly object EventDropDownShow = new object();
         private static readonly object EventDropDownHide = new object();
         private static readonly object EventDropDownOpened = new object();
@@ -81,6 +82,10 @@ namespace System.Windows.Forms
                 {
                     if (dropDown != null)
                     {
+                        if (hookedKeyboardTooltip != null)
+                        {
+                            KeyboardToolTipStateMachine.Instance.Unhook(dropDown, hookedKeyboardTooltip);
+                        }
                         dropDown.Opened -= new EventHandler(DropDown_Opened);
                         dropDown.Closed -= new ToolStripDropDownClosedEventHandler(DropDown_Closed);
                         dropDown.ItemClicked -= new ToolStripItemClickedEventHandler(DropDown_ItemClicked);
@@ -90,6 +95,10 @@ namespace System.Windows.Forms
                     dropDown = value;
                     if (dropDown != null)
                     {
+                        if (hookedKeyboardTooltip != null)
+                        {
+                            KeyboardToolTipStateMachine.Instance.Hook(dropDown, hookedKeyboardTooltip);
+                        }
                         dropDown.Opened += new EventHandler(DropDown_Opened);
                         dropDown.Closed += new ToolStripDropDownClosedEventHandler(DropDown_Closed);
                         dropDown.ItemClicked += new ToolStripItemClickedEventHandler(DropDown_ItemClicked);
@@ -338,6 +347,11 @@ namespace System.Windows.Forms
         {
             if (dropDown != null)
             {
+                if (hookedKeyboardTooltip != null)
+                {
+                    KeyboardToolTipStateMachine.Instance.Unhook(dropDown, hookedKeyboardTooltip);
+                }
+
                 dropDown.Opened -= new EventHandler(DropDown_Opened);
                 dropDown.Closed -= new ToolStripDropDownClosedEventHandler(DropDown_Closed);
                 dropDown.ItemClicked -= new ToolStripItemClickedEventHandler(DropDown_ItemClicked);
@@ -684,13 +698,21 @@ namespace System.Windows.Forms
         internal override void OnKeyboardToolTipHook(ToolTip toolTip)
         {
             base.OnKeyboardToolTipHook(toolTip);
-            KeyboardToolTipStateMachine.Instance.Hook(DropDown, toolTip);
+            hookedKeyboardTooltip = toolTip;
+            if (dropDown != null)
+            {
+                KeyboardToolTipStateMachine.Instance.Hook(dropDown, toolTip);
+            }
         }
 
         internal override void OnKeyboardToolTipUnhook(ToolTip toolTip)
         {
             base.OnKeyboardToolTipUnhook(toolTip);
-            KeyboardToolTipStateMachine.Instance.Unhook(DropDown, toolTip);
+            hookedKeyboardTooltip = null;
+            if (dropDown != null)
+            {
+                KeyboardToolTipStateMachine.Instance.Unhook(dropDown, toolTip);
+            }
         }
 
         internal override void ToolStrip_RescaleConstants(int oldDpi, int newDpi)
