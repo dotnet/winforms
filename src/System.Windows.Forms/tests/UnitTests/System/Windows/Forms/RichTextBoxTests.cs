@@ -3798,10 +3798,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Find_CharArray_TestData()
         {
-            yield return new object[] { string.Empty, new char[0], -1 };
+            yield return new object[] { string.Empty, Array.Empty<char>(), -1 };
             yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, -1 };
 
-            yield return new object[] { "abc", new char[0], -1 };
+            yield return new object[] { "abc", Array.Empty<char>(), -1 };
             yield return new object[] { "abc", new char[] { 'a' }, 0 };
             yield return new object[] { "abc", new char[] { 'a', 'b' }, 0 };
             yield return new object[] { "abc", new char[] { 'a', 'b', 'c' }, 0 };
@@ -3836,10 +3836,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Find_CharArray_Int_TestData()
         {
-            yield return new object[] { string.Empty, new char[0], 0, -1 };
+            yield return new object[] { string.Empty, Array.Empty<char>(), 0, -1 };
             yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, 0, -1 };
 
-            yield return new object[] { "abc", new char[0], 0, -1 };
+            yield return new object[] { "abc", Array.Empty<char>(), 0, -1 };
             yield return new object[] { "abc", new char[] { 'a' },0,  0 };
             yield return new object[] { "abc", new char[] { 'a', 'b' },0,  0 };
             yield return new object[] { "abc", new char[] { 'a', 'b', 'c' },0,  0 };
@@ -3880,10 +3880,10 @@ namespace System.Windows.Forms.Tests
         {
             foreach (int end in new int[] { -1, 0 })
             {
-                yield return new object[] { string.Empty, new char[0], 0, end, -1 };
+                yield return new object[] { string.Empty, Array.Empty<char>(), 0, end, -1 };
                 yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, 0, end, -1 };
 
-                yield return new object[] { "abc", new char[0], 0, end, -1 };
+                yield return new object[] { "abc", Array.Empty<char>(), 0, end, -1 };
                 yield return new object[] { "abc", new char[] { 'a' },0, end,  0 };
                 yield return new object[] { "abc", new char[] { 'a', 'b' },0, end,  0 };
                 yield return new object[] { "abc", new char[] { 'a', 'b', 'c' },0, end,  0 };

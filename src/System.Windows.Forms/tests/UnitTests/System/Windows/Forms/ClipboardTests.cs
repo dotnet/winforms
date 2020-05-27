@@ -169,7 +169,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Clipboard_SetAudio_InvokeEmptyByteArray_GetReturnsExpected()
         {
-            byte[] audioBytes = new byte[0];
+            byte[] audioBytes = Array.Empty<byte>();
             Clipboard.SetAudio(audioBytes);
             Assert.Null(Clipboard.GetAudioStream());
             Assert.Null(Clipboard.GetData(DataFormats.WaveAudio));
@@ -217,7 +217,7 @@ namespace System.Windows.Forms.Tests
         [Fact] // x-thread
         public void Clipboard_SetAudio_NotSta_ThrowsThreadStateException()
         {
-            Assert.Throws<ThreadStateException>(() => Clipboard.SetAudio(new byte[0]));
+            Assert.Throws<ThreadStateException>(() => Clipboard.SetAudio(Array.Empty<byte>()));
             Assert.Throws<ThreadStateException>(() => Clipboard.SetAudio(new MemoryStream()));
         }
 

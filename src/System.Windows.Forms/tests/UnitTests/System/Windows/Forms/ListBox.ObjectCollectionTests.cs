@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Tests
             using var owner = new ListBox();
             Assert.Throws<ArgumentNullException>("owner", () => new ListBox.ObjectCollection(null));
             Assert.Throws<ArgumentNullException>("owner", () => new ListBox.ObjectCollection(null, new ListBox.ObjectCollection(owner)));
-            Assert.Throws<ArgumentNullException>("owner", () => new ListBox.ObjectCollection(null, new object[0]));
+            Assert.Throws<ArgumentNullException>("owner", () => new ListBox.ObjectCollection(null, Array.Empty<object>()));
         }
 
         [WinFormsFact]
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox
             {
-                DataSource = new object[0]
+                DataSource = Array.Empty<object>()
             };
             using var otherOwner = new ListBox();
             var otherCollection = new ListBox.ObjectCollection(otherOwner);
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(emptyCollection);
             Assert.Empty(owner.Items);
             Assert.False(emptyCollection.IsReadOnly);
-            Assert.Throws<ArgumentException>(null, () => new ListBox.ObjectCollection(owner, new object[0]));
+            Assert.Throws<ArgumentException>(null, () => new ListBox.ObjectCollection(owner, Array.Empty<object>()));
             Assert.Throws<ArgumentException>(null, () => new ListBox.ObjectCollection(owner, otherCollection));
         }
 
@@ -2190,7 +2190,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox
             {
-                DataSource = new object[0]
+                DataSource = Array.Empty<object>()
             };
             var collection = new ListBox.ObjectCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.Add(1));
@@ -2226,7 +2226,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
             Assert.Empty(owner.Items);
@@ -2250,7 +2250,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
             Assert.Equal(new object[] { 2, 1, 1, 3 }, owner.Items.Cast<object>());
@@ -2277,7 +2277,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
             Assert.Empty(owner.Items);
@@ -2304,7 +2304,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
             Assert.Equal(new object[] { 1, 1, 2, 3 }, owner.Items.Cast<object>());
@@ -2345,7 +2345,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
             Assert.Empty(owner.Items);
@@ -2397,7 +2397,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
             Assert.Equal(new object[] { 2, 1, 1, 3 }, owner.Items.Cast<object>());
@@ -2452,7 +2452,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
             Assert.Empty(owner.Items);
@@ -2507,7 +2507,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("3", new string(textBuffer));
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
             Assert.Equal(new object[] { 1, 1, 2, 3 }, owner.Items.Cast<object>());
@@ -2546,7 +2546,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 0 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(0, owner.SelectedIndex);
@@ -2577,7 +2577,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
@@ -2612,7 +2612,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 0, 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(0, owner.SelectedIndex);
@@ -2646,7 +2646,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(owner.IsHandleCreated);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1, 3 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
@@ -2683,7 +2683,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 0 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(0, owner.SelectedIndex);
@@ -2727,7 +2727,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(new object[] { 1 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
@@ -2775,7 +2775,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 0, 1 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(0, owner.SelectedIndex);
@@ -2823,7 +2823,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Add empty.
-            collection.AddRange(new object[0]);
+            collection.AddRange(Array.Empty<object>());
             Assert.Equal(new object[] { 1, 3 }, owner.SelectedItems.Cast<object>());
             Assert.Equal(new int[] { 1, 3 }, owner.SelectedIndices.Cast<int>());
             Assert.Equal(1, owner.SelectedIndex);
@@ -3656,12 +3656,12 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox
             {
-                DataSource = new object[0]
+                DataSource = Array.Empty<object>()
             };
             var collection = new ListBox.ObjectCollection(owner);
             using var otherOwner = new ListBox();
             var otherCollection = new ListBox.ObjectCollection(otherOwner);
-            Assert.Throws<ArgumentException>(null, () => collection.AddRange(new object[0]));
+            Assert.Throws<ArgumentException>(null, () => collection.AddRange(Array.Empty<object>()));
             Assert.Throws<ArgumentException>(null, () => collection.AddRange(otherCollection));
         }
 
@@ -5003,7 +5003,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox
             {
-                DataSource = new object[0]
+                DataSource = Array.Empty<object>()
             };
             var collection = new ListBox.ObjectCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.Insert(0, 1));
@@ -5948,7 +5948,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox
             {
-                DataSource = new object[0]
+                DataSource = Array.Empty<object>()
             };
             var collection = new ListBox.ObjectCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.Remove(1));
@@ -6822,7 +6822,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox
             {
-                DataSource = new object[0]
+                DataSource = Array.Empty<object>()
             };
             var collection = new ListBox.ObjectCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.RemoveAt(1));
@@ -8941,7 +8941,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox
             {
-                DataSource = new object[0]
+                DataSource = Array.Empty<object>()
             };
             IList collection = new ListBox.ObjectCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.Add(1));
@@ -10281,7 +10281,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox
             {
-                DataSource = new object[0]
+                DataSource = Array.Empty<object>()
             };
             IList collection = new ListBox.ObjectCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.Insert(0, 1));
@@ -11226,7 +11226,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox
             {
-                DataSource = new object[0]
+                DataSource = Array.Empty<object>()
             };
             IList collection = new ListBox.ObjectCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.Remove(1));
@@ -12100,7 +12100,7 @@ namespace System.Windows.Forms.Tests
         {
             using var owner = new ListBox
             {
-                DataSource = new object[0]
+                DataSource = Array.Empty<object>()
             };
             IList collection = new ListBox.ObjectCollection(owner);
             Assert.Throws<ArgumentException>(null, () => collection.RemoveAt(1));

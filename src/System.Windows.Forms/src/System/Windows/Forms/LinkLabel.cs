@@ -771,7 +771,7 @@ namespace System.Windows.Forms
 
             if (string.IsNullOrEmpty(text))
             {
-                return new CharacterRange[] { };
+                return Array.Empty<CharacterRange>();
             }
 
             StringInfo stringInfo = new StringInfo(text);

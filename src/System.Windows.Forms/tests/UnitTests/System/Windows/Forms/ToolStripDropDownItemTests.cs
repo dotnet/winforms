@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -297,8 +297,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_String_Image_ToolStripItemArray_TestData()
         {
-            yield return new object[] { null, null, null, new ToolStripItem[0] };
-            yield return new object[] { string.Empty, new Bitmap(10, 10), new ToolStripItem[0], new ToolStripItem[0] };
+            yield return new object[] { null, null, null, Array.Empty<ToolStripItem>() };
+            yield return new object[] { string.Empty, new Bitmap(10, 10), Array.Empty<ToolStripItem>(), Array.Empty<ToolStripItem>() };
 
             var items = new ToolStripItem[] { new SubToolStripItem() };
             yield return new object[] { "text", new Bitmap(10, 10), items, items };

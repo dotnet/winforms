@@ -100,8 +100,8 @@ namespace System.Windows.Forms.Tests
         public void TreeNode_Ctor_String_TreeNodeArray()
         {
             // Work around: We cannot serialize type System.Windows.Forms.TreeNode[] because it lives in the GAC.
-            TreeNode_Ctor_String_TreeNodeArray_Helper(null, new TreeNode[0], string.Empty);
-            TreeNode_Ctor_String_TreeNodeArray_Helper(string.Empty, new TreeNode[0], string.Empty);
+            TreeNode_Ctor_String_TreeNodeArray_Helper(null, Array.Empty<TreeNode>(), string.Empty);
+            TreeNode_Ctor_String_TreeNodeArray_Helper(string.Empty, Array.Empty<TreeNode>(), string.Empty);
             TreeNode_Ctor_String_TreeNodeArray_Helper("text", new TreeNode[] { new TreeNode() }, "text");
             TreeNode_Ctor_String_TreeNodeArray_Helper("text", new TreeNode[] { new TreeNode(), new TreeNode("text") }, "text");
         }
@@ -191,8 +191,8 @@ namespace System.Windows.Forms.Tests
         public void TreeNode_Ctor_String_Int_Int_TreeNodeArray()
         {
             // Work around: We cannot serialize type System.Windows.Forms.TreeNode[] because it lives in the GAC.
-            TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper(null, -1, -1, new TreeNode[0], "");
-            TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper(null, 0, 0, new TreeNode[0], "");
+            TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper(null, -1, -1, Array.Empty<TreeNode>(), "");
+            TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper(null, 0, 0, Array.Empty<TreeNode>(), "");
             TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper("text", 1, 1, new TreeNode[] { new TreeNode() }, "text");
             TreeNode_Ctor_String_Int_Int_TreeNodeArray_Helper("text", 1, 14, new TreeNode[] { new TreeNode(), new TreeNode("text") }, "text");
         }
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.Tests
         public void TreeNode_Ctor_InvalidImageIndex_ThrowsArgumentOutOfRangeException(int imageIndex)
         {
             Assert.Throws<ArgumentOutOfRangeException>("value", () => new TreeNode("text", imageIndex, 0));
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => new TreeNode("text", imageIndex, 0, new TreeNode[0]));
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => new TreeNode("text", imageIndex, 0, Array.Empty<TreeNode>()));
         }
 
         [WinFormsTheory]
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.Tests
         public void TreeNode_Ctor_InvalidSelectedImageIndex_ThrowsArgumentOutOfRangeException(int selectedImageIndex)
         {
             Assert.Throws<ArgumentOutOfRangeException>("value", () => new TreeNode("text", 0, selectedImageIndex));
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => new TreeNode("text", 0, selectedImageIndex, new TreeNode[0]));
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => new TreeNode("text", 0, selectedImageIndex, Array.Empty<TreeNode>()));
         }
 
         [WinFormsTheory]

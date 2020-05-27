@@ -611,7 +611,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetFormats_Mocked_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new string[0] };
+            yield return new object[] { Array.Empty<string>() };
             yield return new object[] { new string[] { "a", "  ", string.Empty, null } };
         }
 
@@ -634,7 +634,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> GetFormats_IDataObject_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new string[0] };
+            yield return new object[] { Array.Empty<string>() };
             yield return new object[] { new string[] { "a", string.Empty, null } };
             yield return new object[] { new string[] { "a", "  ", string.Empty, null } };
         }
@@ -666,7 +666,7 @@ namespace System.Windows.Forms.Tests
             foreach (bool autoConvert in new bool[] { true, false })
             {
                 yield return new object[] { autoConvert, null };
-                yield return new object[] { autoConvert, new string[0] };
+                yield return new object[] { autoConvert, Array.Empty<string>() };
                 yield return new object[] { autoConvert, new string[] { "a", "  ", string.Empty, null } };
             }
         }
@@ -842,7 +842,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SetAudio_ByteArray_TestData()
         {
-            yield return new object[] { new byte[0] };
+            yield return new object[] { Array.Empty<byte>() };
             yield return new object[] { new byte[] { 1, 2, 3 } };
         }
 
@@ -897,7 +897,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SetAudio_Stream_TestData()
         {
-            yield return new object[] { new MemoryStream(new byte[0]) };
+            yield return new object[] { new MemoryStream(Array.Empty<byte>()) };
             yield return new object[] { new MemoryStream(new byte[] { 1, 2, 3 }) };
         }
 

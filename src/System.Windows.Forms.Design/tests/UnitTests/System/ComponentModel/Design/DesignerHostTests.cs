@@ -2168,22 +2168,22 @@ namespace System.ComponentModel.Design.Tests
         public static IEnumerable<object[]> DesignerHost_EndLoad_TestData()
         {
             yield return new object[] { null, true, null };
-            yield return new object[] { null, true, new object[0] };
+            yield return new object[] { null, true, Array.Empty<object>() };
             yield return new object[] { null, true, new object[] { new Exception() } };
             yield return new object[] { null, true, new object[] { "abc" } };
             yield return new object[] { null, true, new object[] { null } };
             yield return new object[] { null, false, null };
-            yield return new object[] { null, false, new object[0] };
+            yield return new object[] { null, false, Array.Empty<object>() };
             yield return new object[] { null, false, new object[] { new Exception() } };
             yield return new object[] { null, false, new object[] { "abc" } };
             yield return new object[] { null, false, new object[] { null } };
             yield return new object[] { string.Empty, true, null };
-            yield return new object[] { string.Empty, true, new object[0] };
+            yield return new object[] { string.Empty, true, Array.Empty<object>() };
             yield return new object[] { string.Empty, true, new object[] { new Exception() } };
             yield return new object[] { string.Empty, true, new object[] { "abc" } };
             yield return new object[] { string.Empty, true, new object[] { null } };
             yield return new object[] { string.Empty, false, null };
-            yield return new object[] { string.Empty, false, new object[0] };
+            yield return new object[] { string.Empty, false, Array.Empty<object>() };
             yield return new object[] { string.Empty, false, new object[] { new Exception() } };
             yield return new object[] { string.Empty, false, new object[] { "abc" } };
             yield return new object[] { string.Empty, false, new object[] { null } };

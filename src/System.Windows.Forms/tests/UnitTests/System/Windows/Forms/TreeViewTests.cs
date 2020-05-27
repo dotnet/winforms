@@ -5975,9 +5975,9 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnHandleCreated_WithHandleWithProperties_TestData()
         {
-            yield return new object[] { new Image[0], null, false };
+            yield return new object[] { Array.Empty<Image>(), null, false };
             yield return new object[] { new Image[] { new Bitmap(10, 10) }, null, true };
-            yield return new object[] { new Image[0], new EventArgs(), false };
+            yield return new object[] { Array.Empty<Image>(), new EventArgs(), false };
             yield return new object[] { new Image[] { new Bitmap(10, 10) }, new EventArgs(), true };
         }
 

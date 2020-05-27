@@ -4505,7 +4505,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
 
             // Add empty.
-            control.AddItemsCore(new object[0]);
+            control.AddItemsCore(Array.Empty<object>());
             Assert.Equal(new string[] { "item1", "item2", "item3" }, control.Items.Cast<object>());
             Assert.False(control.IsHandleCreated);
 
@@ -4544,7 +4544,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Add empty.
-            control.AddItemsCore(new object[0]);
+            control.AddItemsCore(Array.Empty<object>());
             Assert.Equal(new string[] { "item1", "item2", "item3" }, control.Items.Cast<object>());
             Assert.True(control.IsHandleCreated);
             Assert.Equal(2, invalidatedCallCount);
@@ -5937,7 +5937,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> SetItemsCore_TestData()
         {
             yield return new object[] { new object[] { "item1", "item2", "item3" } };
-            yield return new object[] { new object[0] };
+            yield return new object[] { Array.Empty<object>() };
         }
 
         [WinFormsTheory]

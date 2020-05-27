@@ -3945,7 +3945,7 @@ namespace System.Windows.Forms.Tests
             using var control = new Control();
             Action method = () => { };
             Assert.Throws<InvalidOperationException>(() => control.Invoke(method));
-            Assert.Throws<InvalidOperationException>(() => control.Invoke(method, new object[0]));
+            Assert.Throws<InvalidOperationException>(() => control.Invoke(method, Array.Empty<object>()));
         }
 
         [WinFormsFact]
@@ -3956,7 +3956,7 @@ namespace System.Windows.Forms.Tests
             Action<int> method = (i) => { };
             Assert.Throws<TargetParameterCountException>(() => control.Invoke(method));
             Assert.Throws<TargetParameterCountException>(() => control.Invoke(method, null));
-            Assert.Throws<TargetParameterCountException>(() => control.Invoke(method, new object[0]));
+            Assert.Throws<TargetParameterCountException>(() => control.Invoke(method, Array.Empty<object>()));
         }
 
         [WinFormsTheory]
