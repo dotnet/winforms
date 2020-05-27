@@ -16,22 +16,6 @@ namespace System.Windows.Forms
 
         /* RichTextBox messages */
 
-        // New notifications
-        internal const int EN_MSGFILTER = 0x0700;
-        internal const int EN_REQUESTRESIZE = 0x0701;
-        internal const int EN_SELCHANGE = 0x0702;
-        internal const int EN_DROPFILES = 0x0703;
-        internal const int EN_PROTECTED = 0x0704;
-        internal const int EN_CORRECTTEXT = 0x0705;       /* PenWin specific */
-        internal const int EN_STOPNOUNDO = 0x0706;
-        internal const int EN_IMECHANGE = 0x0707;       /* Asia specific */
-        internal const int EN_SAVECLIPBOARD = 0x0708;
-        internal const int EN_OLEOPFAILED = 0x0709;
-        internal const int EN_OBJECTPOSITIONS = 0x070a;
-        internal const int EN_LINK = 0x070b;
-        internal const int EN_DRAGDROPDONE = 0x070c;
-        internal const int EN_PARAGRAPHEXPANDED = 0x070d;
-
         // Event notification masks */
         internal const int ENM_NONE = 0x00000000;
         internal const int ENM_CHANGE = 0x00000001;

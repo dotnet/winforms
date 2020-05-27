@@ -3352,12 +3352,12 @@ namespace System.Windows.Forms
             if (m.HWnd == Handle)
             {
                 User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
-                switch (nmhdr->code)
+                switch ((EN)nmhdr->code)
                 {
-                    case RichTextBoxConstants.EN_LINK:
+                    case EN.LINK:
                         EnLinkMsgHandler(ref m);
                         break;
-                    case RichTextBoxConstants.EN_DROPFILES:
+                    case EN.DROPFILES:
                         ENDROPFILES* endropfiles = (ENDROPFILES*)m.LParam;
 
                         // Only look at the first file.
@@ -3385,11 +3385,11 @@ namespace System.Windows.Forms
                         m.Result = (IntPtr)1;   // tell them we did the drop
                         break;
 
-                    case RichTextBoxConstants.EN_REQUESTRESIZE:
+                    case EN.REQUESTRESIZE:
                         if (!CallOnContentsResized)
                         {
-                            Richedit.REQRESIZE* reqResize = (Richedit.REQRESIZE*)m.LParam;
-                            if (BorderStyle == System.Windows.Forms.BorderStyle.Fixed3D)
+                            REQRESIZE* reqResize = (REQRESIZE*)m.LParam;
+                            if (BorderStyle == BorderStyle.Fixed3D)
                             {
                                 reqResize->rc.bottom++;
                             }
@@ -3397,12 +3397,12 @@ namespace System.Windows.Forms
                         }
                         break;
 
-                    case RichTextBoxConstants.EN_SELCHANGE:
-                        Richedit.SELCHANGE* selChange = (Richedit.SELCHANGE*)m.LParam;
+                    case EN.SELCHANGE:
+                        SELCHANGE* selChange = (SELCHANGE*)m.LParam;
                         WmSelectionChange(*selChange);
                         break;
 
-                    case RichTextBoxConstants.EN_PROTECTED:
+                    case EN.PROTECTED:
                         {
                             NativeMethods.ENPROTECTED enprotected;
 
