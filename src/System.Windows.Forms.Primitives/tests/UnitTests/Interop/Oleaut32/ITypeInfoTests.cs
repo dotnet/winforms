@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
     [Collection("Sequential")]
     public class ITypeInfoTests
     {
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_AddressOfMember_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.Equal(IntPtr.Zero, pv);
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_CreateInstance_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.Equal(IntPtr.Zero, pvObj);
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetContainingTypeLib_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             }
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetDllEntry_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -96,7 +96,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.Equal(0u, wOrdinal);
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetDocumentation_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.Empty(helpFile.String.ToString());
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetFuncDesc_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             }
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetIDsOfNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             }
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetImplTypeFlags_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.NotEqual(IMPLTYPEFLAG.FDEFAULT, implTypeFlags);
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetMops_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -212,7 +212,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.Empty(mops.String.ToString());
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -237,7 +237,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             rgszNames[1].Dispose();
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetRefTypeInfo_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -260,7 +260,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.NotNull(refTypeInfo);
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetRefTypeOfImplType_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -277,7 +277,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.NotEqual(0u, refType);
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetTypeAttr_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -319,7 +319,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             }
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetTypeComp_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -343,7 +343,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             }
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_GetVarDesc_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -375,7 +375,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             }
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void ITypeInfo_Invoke_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);

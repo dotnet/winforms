@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
     [Collection("Sequential")]
     public partial class IDispatchTests
     {
-        [WinFormsFact]
+        [StaFact]
         public unsafe void IDispatch_GetIDsOfNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             }
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void IDispatch_GetTypeInfo_Invoke_Success()
         {
             using var image = new Bitmap(16, 16);
@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             System.Runtime.InteropServices.Marshal.ReleaseComObject(typeInfo);
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void IDispatch_GetTypeInfoCount_Invoke_Success()
         {
             using var image = new Bitmap(16, 16);
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.Equal(1u, ctInfo);
         }
 
-        [WinFormsFact]
+        [StaFact]
         public unsafe void IDispatch_Invoke_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
