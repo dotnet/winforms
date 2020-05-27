@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Tests
             };
             return data;
         }
- 
+
         [Theory]
         [MemberData(nameof(GetGuidTheoryData))]
         public void FileDialogCustomPlacesCollection_Add_Guid_Success(Guid knownFolderGuid)

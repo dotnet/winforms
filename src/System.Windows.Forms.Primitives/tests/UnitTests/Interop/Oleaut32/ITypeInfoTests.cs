@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_AddressOfMember_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_CreateInstance_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetContainingTypeLib_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetDllEntry_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetDocumentation_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetFuncDesc_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetIDsOfNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -182,7 +182,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetImplTypeFlags_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -199,7 +199,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetMops_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetNames_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -241,7 +241,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetRefTypeInfo_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -264,7 +264,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetRefTypeOfImplType_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -281,7 +281,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetTypeAttr_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -323,7 +323,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetTypeComp_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -347,7 +347,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_GetVarDesc_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         public unsafe void ITypeInfo_Invoke_Invoke_Success()
         {
             using var image = new Bitmap(16, 32);
-            IPictureDisp picture = SubAxHost.GetIPictureDispFromPicture(image);
+            IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(image);
             IDispatch dispatch = (IDispatch)picture;
             ITypeInfo typeInfo;
             HRESULT hr = dispatch.GetTypeInfo(0, Kernel32.GetThreadLocale(), out typeInfo);
@@ -402,15 +402,6 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
             Assert.Equal(HRESULT.DISP_E_MEMBERNOTFOUND, hr);
             Assert.Null(varResult[0]);
             Assert.Equal(0u, argErr);
-        }
-
-        private class SubAxHost : AxHost
-        {
-            private SubAxHost(string clsidString) : base(clsidString)
-            {
-            }
-
-            public new static IPictureDisp GetIPictureDispFromPicture(Image image) => (IPictureDisp)AxHost.GetIPictureDispFromPicture(image);
         }
 
         // ITypeInfo often requires manual RCW reference management. The native object may be free threaded
