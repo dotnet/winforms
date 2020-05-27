@@ -3,15 +3,25 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
     public class FileDialogCustomPlacesCollectionTests
     {
+        public static TheoryData<string> GetStringWithNullTheoryData()
+        {
+            var data = new TheoryData<string>
+            {
+                null,
+                string.Empty,
+                "reasonable"
+            };
+            return data;
+        }
+
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [MemberData(nameof(GetStringWithNullTheoryData))]
         public void FileDialogCustomPlacesCollection_Add_String_Success(string path)
         {
             var collection = new FileDialogCustomPlacesCollection
@@ -23,8 +33,18 @@ namespace System.Windows.Forms.Tests
             Assert.Same(path ?? string.Empty, place.Path);
         }
 
+        public static TheoryData<Guid> GetGuidTheoryData()
+        {
+            var data = new TheoryData<Guid>
+            {
+                Guid.Empty,
+                Guid.NewGuid()
+            };
+            return data;
+        }
+ 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetGuidTheoryData))]
+        [MemberData(nameof(GetGuidTheoryData))]
         public void FileDialogCustomPlacesCollection_Add_Guid_Success(Guid knownFolderGuid)
         {
             var collection = new FileDialogCustomPlacesCollection

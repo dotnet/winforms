@@ -12,7 +12,7 @@ using static Interop.Oleaut32;
 namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
 {
     [Collection("Sequential")]
-    public class ITypeInfoTests : IClassFixture<ThreadExceptionFixture>
+    public class ITypeInfoTests
     {
         [WinFormsFact]
         public unsafe void ITypeInfo_AddressOfMember_Invoke_Success()

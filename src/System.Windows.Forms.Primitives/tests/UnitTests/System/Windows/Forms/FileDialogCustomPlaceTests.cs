@@ -3,15 +3,25 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
     public class FileDialogCustomPlaceTests
     {
+        public static TheoryData<string> GetStringWithNullTheoryData()
+        {
+            var data = new TheoryData<string>
+            {
+                null,
+                string.Empty,
+                "reasonable"
+            };
+            return data;
+        }
+
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [MemberData(nameof(GetStringWithNullTheoryData))]
         public void FileDialogCustomPlace_Ctor_String(string path)
         {
             var place = new FileDialogCustomPlace(path);
@@ -19,8 +29,18 @@ namespace System.Windows.Forms.Tests
             Assert.Same(path ?? string.Empty, place.Path);
         }
 
+        public static TheoryData<Guid> GetGuidTheoryData()
+        {
+            var data = new TheoryData<Guid>
+            {
+                Guid.Empty,
+                Guid.NewGuid()
+            };
+            return data;
+        }
+
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetGuidTheoryData))]
+        [MemberData(nameof(GetGuidTheoryData))]
         public void FileDialogCustomPlace_Ctor_Guid(Guid knownFolderGuid)
         {
             var place = new FileDialogCustomPlace(knownFolderGuid);
@@ -29,7 +49,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetGuidTheoryData))]
+        [MemberData(nameof(GetGuidTheoryData))]
         public void FileDialogCustomPlace_KnownFolderGuid_Set_GetReturnsExpected(Guid value)
         {
             var place = new FileDialogCustomPlace("path")
@@ -46,7 +66,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [MemberData(nameof(GetStringWithNullTheoryData))]
         public void FileDialogCustomPlace_Path_Set_GetReturnsExpected(string value)
         {
             var place = new FileDialogCustomPlace(Guid.NewGuid())

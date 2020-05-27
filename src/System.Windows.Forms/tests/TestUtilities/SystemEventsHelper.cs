@@ -8,7 +8,7 @@ using Microsoft.Win32;
 using Xunit;
 using static Interop.User32;
 
-namespace WinForms.Common.Tests
+namespace System
 {
     public static class SystemEventsHelper
     {

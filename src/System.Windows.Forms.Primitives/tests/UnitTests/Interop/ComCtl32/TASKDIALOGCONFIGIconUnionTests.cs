@@ -8,7 +8,7 @@ using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32
 {
-    public class TASKDIALOGCONFIGIconUnionTests : IClassFixture<ThreadExceptionFixture>
+    public class TASKDIALOGCONFIGIconUnionTests
     {
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void TASKDIALOGCONFIGIconUnion_x32_Size()

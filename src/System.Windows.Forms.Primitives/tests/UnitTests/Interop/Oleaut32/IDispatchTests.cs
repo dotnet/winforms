@@ -11,7 +11,7 @@ using static Interop.Oleaut32;
 namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
 {
     [Collection("Sequential")]
-    public class IDispatchTests : IClassFixture<ThreadExceptionFixture>
+    public class IDispatchTests
     {
         [WinFormsFact]
         public unsafe void IDispatch_GetIDsOfNames_Invoke_Success()

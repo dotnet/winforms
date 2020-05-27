@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.Primitives.csproj" />
-    <ProjectReference Include="..\Utilities\System.Windows.Forms.Primitives.TestUtilities.csproj" />
+    <ProjectReference Include="..\TestUtilities\System.Windows.Forms.Primitives.TestUtilities.csproj" />
   </ItemGroup>
 
 </Project>
