@@ -10,14 +10,14 @@ internal static partial class Interop
     public static partial class UxTheme
     {
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern HRESULT GetThemeFont(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, int iPropId, out User32.LOGFONTW pFont);
+        public unsafe static extern HRESULT GetThemeMargins(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, int iPropId, RECT* prc, out MARGINS pMargins);
 
-        public static HRESULT GetThemeFont(IHandle hTheme, HandleRef hdc, int iPartId, int iStateId, int iPropId, out User32.LOGFONTW pFont)
+        public unsafe static HRESULT GetThemeMargins(IHandle hTheme, HandleRef hdc, int iPartId, int iStateId, int iPropId, RECT* prc, out MARGINS pMargins)
         {
-            HRESULT result = GetThemeFont(hTheme.Handle, hdc.Handle, iPartId, iStateId, iPropId, out pFont);
+            HRESULT hr = GetThemeMargins(hTheme.Handle, hdc.Handle, iPartId, iStateId, iPropId, prc, out pMargins);
             GC.KeepAlive(hTheme);
             GC.KeepAlive(hdc.Wrapper);
-            return result;
+            return hr;
         }
     }
 }

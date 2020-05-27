@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -10,14 +11,13 @@ internal static partial class Interop
     public static partial class UxTheme
     {
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern HRESULT GetThemeFont(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, int iPropId, out User32.LOGFONTW pFont);
+        public unsafe static extern HRESULT GetThemePosition(IntPtr hTheme, int iPartId, int iStateId, int iPropId, out Point pPoint);
 
-        public static HRESULT GetThemeFont(IHandle hTheme, HandleRef hdc, int iPartId, int iStateId, int iPropId, out User32.LOGFONTW pFont)
+        public unsafe static HRESULT GetThemePosition(IHandle hTheme, int iPartId, int iStateId, int iPropId, out Point pPoint)
         {
-            HRESULT result = GetThemeFont(hTheme.Handle, hdc.Handle, iPartId, iStateId, iPropId, out pFont);
+            HRESULT hr = GetThemePosition(hTheme.Handle, iPartId, iStateId, iPropId, out pPoint);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc.Wrapper);
-            return result;
+            return hr;
         }
     }
 }
