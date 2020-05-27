@@ -6,6 +6,8 @@ Option Strict On
 Option Explicit On
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
+Imports System.IO.Pipes
+Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Security.Permissions
@@ -151,6 +153,36 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     End Class
 
     ''' <summary>
+    ''' Exception for when we launch a single-instance application and it can't connect with the 
+    ''' original instance.
+    ''' </summary>
+    <EditorBrowsable(EditorBrowsableState.Never)>
+    <Serializable()>
+    Public Class CantStartSingleInstanceException : Inherits System.Exception
+
+        ''' <summary>
+        '''  Creates a new exception
+        ''' </summary>
+        Public Sub New()
+            MyBase.New(GetResourceString(SR.AppModel_SingleInstanceCantConnect))
+        End Sub
+
+        Public Sub New(ByVal message As String)
+            MyBase.New(message)
+        End Sub
+
+        Public Sub New(ByVal message As String, ByVal inner As System.Exception)
+            MyBase.New(message, inner)
+        End Sub
+
+        ' Deserialization constructor must be defined since we are serializable
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Protected Sub New(ByVal info As System.Runtime.Serialization.SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+    End Class
+
+    ''' <summary>
     ''' Provides the infrastructure for the VB Windows Forms application model
     ''' </summary>
     ''' <remarks>Don't put access on this definition.</remarks>
@@ -290,9 +322,32 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             'Prime the command line args with what we receive from Main() so that Click-Once windows apps don't have to do a System.Environment call which would require permissions.
             InternalCommandLine = New ReadOnlyCollection(Of String)(commandLine)
 
-            ' .NET Framework implementation uses System.Runtime.Remoting when Me.IsSingleInstance
-            ' to avoid launching multiple instances. System.Runtime.Remoting is not available on .NET Core.
-            DoApplicationModel()
+            If Not Me.IsSingleInstance Then
+                DoApplicationModel()
+            Else 'This is a Single-Instance application
+                Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly) 'Note: Must pass the calling assembly from here so we can get the running app.  Otherwise, can break single instance.
+                Dim pipeServer As NamedPipeServerStream = Nothing
+                If TryCreatePipeServer(ApplicationInstanceID, pipeServer) Then
+                    '--- This is the first instance of a single-instance application to run.  This is the instance that subsequent instances will attach to.
+                    Using pipeServer
+                        Dim tokenSource = New CancellationTokenSource()
+#Disable Warning BC42358 ' call is not awaited
+                        WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
+#Enable Warning BC42358
+                        DoApplicationModel()
+                        tokenSource.Cancel()
+                    End Using
+                Else '--- We are launching a subsequent instance.
+                    Dim tokenSource = New CancellationTokenSource()
+                    tokenSource.CancelAfter(SECOND_INSTANCE_TIMEOUT)
+                    Try
+                        Dim awaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                        awaitable.GetAwaiter().GetResult()
+                    Catch ex As Exception
+                        Throw New CantStartSingleInstanceException()
+                    End Try
+                End If
+            End If 'Single-Instance application
         End Sub
 
         ''' <summary>
@@ -622,12 +677,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Property IsSingleInstance() As Boolean
             Get
-                Return False
+                Return _isSingleInstance
             End Get
             Set(value As Boolean)
-                If value Then
-                    Throw New PlatformNotSupportedException()
-                End If
+                _isSingleInstance = value
             End Set
         End Property
 
@@ -753,6 +806,24 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             OnUnhandledException(New UnhandledExceptionEventArgs(True, e.Exception))
         End Sub
 
+        Private Sub OnStartupNextInstanceMarshallingAdaptor(ByVal args As String())
+            If MainForm Is Nothing Then
+                Return
+            End If
+            Dim invoked = False
+            Try
+                MainForm.Invoke(
+                    Sub()
+                        invoked = True
+                        OnStartupNextInstance(New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(args), bringToForegroundFlag:=True))
+                    End Sub)
+            Catch ex As Exception When Not invoked
+                ' Only catch exceptions thrown when the UI thread is not available, before
+                ' the UI thread has been created or after it has been terminated. Exceptions
+                ' thrown from OnStartupNextInstance() should be allowed to propagate.
+            End Try
+        End Sub
+
         ''' <summary>
         ''' Handles the Network.NetworkAvailability event (on the correct thread) and raises the
         ''' NetworkAvailabilityChanged event
@@ -763,12 +834,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RaiseEvent NetworkAvailabilityChanged(sender, e)
         End Sub
 
+        Private Const SECOND_INSTANCE_TIMEOUT As Integer = 2500 'milliseconds.  How long a subsequent instance will wait for the original instance to get on its feet.
         Private _unhandledExceptionHandlers As ArrayList
         Private _processingUnhandledExceptionEvent As Boolean
         Private _turnOnNetworkListener As Boolean 'Tracks whether we need to create the network object so we can listen to the NetworkAvailabilityChanged event
         Private _finishedOnInitilaize As Boolean 'Whether we have made it through the processing of OnInitialize
         Private _networkAvailabilityEventHandlers As ArrayList
         Private _networkObject As Devices.Network
+        Private _isSingleInstance As Boolean 'whether this app runs using Word like instancing behavior
         Private _shutdownStyle As ShutdownMode 'defines when the application decides to close
 #Disable Warning IDE0032 ' Use auto property, Justification:=<Public API>
         Private _enableVisualStyles As Boolean 'whether to use Windows XP styles
@@ -824,6 +897,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
             End If
         End Sub
+
+        ''' <summary>
+        ''' Generates the name for the remote singleton that we use to channel multiple instances
+        ''' to the same application model thread.
+        ''' </summary>
+        Private Shared Function GetApplicationInstanceID(ByVal Entry As Assembly) As String
+            Return Entry.ManifestModule.ModuleVersionId.ToString()
+        End Function
 
     End Class 'WindowsFormsApplicationBase
 End Namespace

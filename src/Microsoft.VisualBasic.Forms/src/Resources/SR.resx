@@ -212,6 +212,9 @@
   <data name="AppModel_NoStartupForm" xml:space="preserve">
     <value>A startup form has not been specified.</value>
   </data>
+  <data name="AppModel_SingleInstanceCantConnect" xml:space="preserve">
+    <value>This single-instance application could not connect to the original instance.</value>
+  </data>
   <data name="AppModel_SplashAndMainFormTheSame" xml:space="preserve">
     <value>Splash screen and main form cannot be the same form.</value>
   </data>

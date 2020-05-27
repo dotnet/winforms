@@ -40,7 +40,13 @@ namespace VisualBasicRuntimeTest
                         Interaction_MsgBox(useVbHost: true);
                         break;
                     case "WindowsFormsApplicationBase.Run":
-                        WindowsFormsApplicationBase_Run();
+                        WindowsFormsApplicationBase_Run(isSingleInstance: false, isFirstInstance: true);
+                        break;
+                    case "WindowsFormsApplicationBase.RunSingleInstance0":
+                        WindowsFormsApplicationBase_Run(isSingleInstance: true, isFirstInstance: true);
+                        break;
+                    case "WindowsFormsApplicationBase.RunSingleInstance1":
+                        WindowsFormsApplicationBase_Run(isSingleInstance: true, isFirstInstance: false);
                         break;
                     case "ProgressDialog.ShowProgressDialog":
                         ProgressDialog_ShowProgressDialog();
@@ -74,14 +80,27 @@ namespace VisualBasicRuntimeTest
             Interaction.MsgBox(Prompt: "Message", Buttons: MsgBoxStyle.OkCancel, Title: "Title");
         }
 
-        private static void WindowsFormsApplicationBase_Run()
+        private static void WindowsFormsApplicationBase_Run(bool isSingleInstance, bool isFirstInstance)
         {
             var mainForm = new Form();
-            var application = new WindowsApplication(mainForm);
+            var application = new WindowsApplication(mainForm, isSingleInstance);
+
             bool valid = false;
+            bool loaded = false;
+            bool startUpNextInstance = false;
+
+            application.StartupNextInstance += (object sender, StartupNextInstanceEventArgs e) =>
+            {
+                startUpNextInstance = true;
+                if (!isFirstInstance)
+                {
+                    mainForm.Close();
+                }
+            };
 
             mainForm.Load += (object sender, EventArgs e) =>
             {
+                loaded = true;
                 var forms = application.OpenForms;
                 valid = forms.Count == 1 &&
                     forms[0] == mainForm &&
@@ -93,6 +112,15 @@ namespace VisualBasicRuntimeTest
             };
 
             application.Run(Array.Empty<string>());
+
+            if (startUpNextInstance)
+            {
+                throw new InvalidOperationException();
+            }
+            if (!loaded && !isFirstInstance)
+            {
+                throw new InvalidOperationException();
+            }
             if (!valid)
             {
                 throw new InvalidOperationException();
@@ -148,9 +176,10 @@ namespace VisualBasicRuntimeTest
 
         private sealed class WindowsApplication : WindowsFormsApplicationBase
         {
-            internal WindowsApplication(Form mainForm)
+            internal WindowsApplication(Form mainForm, bool isSingleInstance)
             {
                 MainForm = mainForm;
+                IsSingleInstance = isSingleInstance;
             }
         }
 
