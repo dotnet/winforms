@@ -13,6 +13,8 @@ internal static partial class Interop
         [Flags]
         public enum TMT
         {
+            FONT = 210,
+
             FLATMENUS = 1001,
             MINCOLORDEPTH = 1301,
 

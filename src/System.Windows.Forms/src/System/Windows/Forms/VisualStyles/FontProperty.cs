@@ -8,6 +8,10 @@ namespace System.Windows.Forms.VisualStyles
 {
     public enum FontProperty
     {
+        /// <summary>
+        /// The font that will be used to draw text within the context of this part.
+        /// </summary>
+        TextFont = TMT.FONT,
         GlyphFont = TMT.GLYPHFONT
     }
 }
