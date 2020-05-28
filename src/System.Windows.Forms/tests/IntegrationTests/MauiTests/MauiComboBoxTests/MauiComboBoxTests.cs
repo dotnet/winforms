@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
+using System.Drawing;
 using System.Threading;
-using System.Windows.Forms;
 using System.Windows.Forms.IntegrationTests.Common;
-using WFCTestLib.Util;
-using WFCTestLib.Log;
 using ReflectTools;
+using WFCTestLib.Log;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
@@ -21,8 +19,9 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         public MauiComboBoxTests(string[] args) : base(args)
         {
             this.BringToForeground();
+
             _comboBox = new ComboBox();
-            _comboBox.SelectedIndexChanged += (x,y) => _numEvents++;
+            _comboBox.SelectedIndexChanged += (x, y) => _numEvents++;
             Controls.Add(_comboBox);
         }
 
@@ -184,6 +183,37 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return sr;
         }
 
+        [Scenario(true)]
+        public ScenarioResult Verify_OnMeasureItem_receives_correct_arguments(TParams p)
+        {
+            var _derivedComboBox = new DerivedComboBox();
+            _derivedComboBox.Items.AddRange(new object[] {
+                "One",
+                "Two",
+                "Three"});
+            _derivedComboBox.Location = new Point(0, 50);
+            Controls.Add(_derivedComboBox);
+
+            if (_derivedComboBox.MeasureItemEventArgs.Count != 3)
+                return new ScenarioResult(false, $"Expected 3 events, received: {_derivedComboBox.MeasureItemEventArgs.Count}");
+
+            for (int i = 0; i < 3; i++)
+            {
+                MeasureItemEventArgs e = _derivedComboBox.MeasureItemEventArgs[i];
+
+                if (e.Graphics == null)
+                    return new ScenarioResult(false, $"Expected MeasureItemEventArgs[{i}].Graphics not null");
+                if (e.Index != i)
+                    return new ScenarioResult(false, $"Expected MeasureItemEventArgs[{i}].Index to be {i}, received: {e.Index}");
+                if (e.ItemHeight != 18)
+                    return new ScenarioResult(false, $"Expected MeasureItemEventArgs[{i}].ItemHeight to be 18, received: {e.ItemHeight}");
+                if (e.ItemWidth != 0)
+                    return new ScenarioResult(false, $"Expected MeasureItemEventArgs[{i}].ItemWidth to be {i}, received: {e.ItemWidth}");
+            }
+
+            return new ScenarioResult(true);
+        }
+
         private bool InitializeItems(ComboBox comboBox, TParams p)
         {
             comboBox.Items.Clear();
@@ -257,6 +287,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
             return true;
         }
+
         bool FindItem(TParams p, ComboBox comboBox, bool isExactMatch)
         {
             var count = comboBox.Items.Count;
@@ -281,6 +312,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
             return (matchingIndex == expectedMatchingIndex);
         }
+
         bool SelectItemWithKeyboard(ComboBox comboBox, string key, int numKeyPresses)
         {
             Activate();

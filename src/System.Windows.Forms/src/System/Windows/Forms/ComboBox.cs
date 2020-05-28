@@ -3696,10 +3696,11 @@ namespace System.Windows.Forms
             MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParam;
 
             // Determine if message was sent by a combo item or the combo edit field
-            if (DrawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
+            int itemID = (int)mis->itemID;
+            if (DrawMode == DrawMode.OwnerDrawVariable && itemID >= 0)
             {
                 using Graphics graphics = CreateGraphicsInternal();
-                var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
+                var mie = new MeasureItemEventArgs(graphics, itemID, ItemHeight);
                 OnMeasureItem(mie);
                 mis->itemHeight = unchecked((uint)mie.ItemHeight);
             }
