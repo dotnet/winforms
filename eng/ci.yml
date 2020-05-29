@@ -100,20 +100,20 @@ stages:
         - script: eng\cibuild.cmd
             -test
             -configuration $(_BuildConfig)
+            -platform x86
             $(_OfficialBuildIdArgs)
             /p:Coverage=$(_Coverage)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test_x86.binlog
-            /p:Platform=x86
             /m:1
           displayName: Run Unit Tests x86
 
         - script: eng\cibuild.cmd
             -test
             -configuration $(_BuildConfig)
+            -platform x64
             $(_OfficialBuildIdArgs)
             /p:Coverage=$(_Coverage)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test_x64.binlog
-            /p:Platform=x64
             /m:1
           displayName: Run Unit Tests x64
 
