@@ -182,6 +182,40 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.GetTopLevel());
         }
 
+        [WinFormsFact]
+        public void Label_ImageIndex_setting_minus_one_resets_ImageKey()
+        {
+            int index = -1;
+
+            using var control = new SubLabel();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(index, control.ImageIndex);
+            Assert.Equal(string.Empty, control.ImageKey);
+
+            control.ImageKey = "key";
+            control.ImageIndex = index;
+
+            Assert.Equal(index, control.ImageIndex);
+            Assert.Equal(string.Empty, control.ImageKey);
+        }
+
+        [WinFormsFact]
+        public void Label_ImageKey_setting_empty_resets_ImageIndex()
+        {
+            string key = string.Empty;
+
+            using var control = new SubLabel();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(key, control.ImageKey);
+            Assert.Equal(-1, control.ImageIndex);
+
+            control.ImageIndex = 2;
+            control.ImageKey = key;
+
+            Assert.Equal(key, control.ImageKey);
+            Assert.Equal(-1, control.ImageIndex);
+        }
+
         public class SubLabel : Label
         {
             public new bool CanEnableIme => base.CanEnableIme;

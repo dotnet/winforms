@@ -1401,15 +1401,15 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.Image = null;
             Assert.Equal("ImageKey", control.ImageKey);
-            Assert.Equal(-1, control.ImageIndex);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, control.ImageIndex);
             Assert.Null(control.Image);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             using var value = new Bitmap(10, 10);
             control.Image = value;
-            Assert.Equal("ImageKey", control.ImageKey);
-            Assert.Equal(-1, control.ImageIndex);
+            Assert.Equal(ImageList.Indexer.DefaultKey, control.ImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, control.ImageIndex);
             Assert.Same(value, control.Image);
             Assert.False(control.IsHandleCreated);
         }
@@ -1550,7 +1550,7 @@ namespace System.Windows.Forms.Tests
                     foreach (bool visible in new bool[] { true, false })
                     {
                         yield return new object[] { autoSize, enabled, visible, null, 0 };
-                        yield return new object[] { autoSize, enabled, visible, new Bitmap(10, 10), 1 };
+                        yield return new object[] { autoSize, enabled, visible, new Bitmap(10, 10), 2 };
                     }
                 }
             }
@@ -1653,9 +1653,9 @@ namespace System.Windows.Forms.Tests
                 foreach (bool visible in new bool[] { true, false })
                 {
                     yield return new object[] { true, enabled, visible, null, 0, 0 };
-                    yield return new object[] { true, enabled, visible, new Bitmap(10, 10), 1, 1 };
+                    yield return new object[] { true, enabled, visible, new Bitmap(10, 10), 1, 2 };
                     yield return new object[] { false, enabled, visible, null, 0, 0 };
-                    yield return new object[] { false, enabled, visible, new Bitmap(10, 10), 0, 1 };
+                    yield return new object[] { false, enabled, visible, new Bitmap(10, 10), 0, 2 };
                 }
             }
         }
@@ -2045,10 +2045,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, "ImageKey")]
-        [InlineData(0, "")]
-        [InlineData(1, "")]
-        public void ButtonBase_ImageIndex_SetWithImageKey_GetReturnsExpected(int value, string expectedImageKey)
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ButtonBase_ImageIndex_SetWithImageKey_GetReturnsExpected(int value)
         {
             using var control = new SubButtonBase
             {
@@ -2056,13 +2056,13 @@ namespace System.Windows.Forms.Tests
                 ImageIndex = value
             };
             Assert.Equal(value, control.ImageIndex);
-            Assert.Equal(expectedImageKey, control.ImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, control.ImageKey);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ImageIndex = value;
             Assert.Equal(value, control.ImageIndex);
-            Assert.Equal(expectedImageKey, control.ImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, control.ImageKey);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -2120,10 +2120,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, 0)]
-        [InlineData(0, 1)]
-        [InlineData(1, 1)]
-        public void ButtonBase_ImageIndex_SetWithHandle_GetReturnsExpected(int value, int expectedInvalidatedCallCount)
+        [InlineData(-1, 1, 2)]
+        [InlineData(0, 1, 1)]
+        [InlineData(1, 1, 1)]
+        public void ButtonBase_ImageIndex_SetWithHandle_GetReturnsExpected(int value, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
         {
             using var control = new SubButtonBase();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -2138,7 +2138,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.ImageIndex);
             Assert.Empty(control.ImageKey);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount1, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
@@ -2147,7 +2147,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.ImageIndex);
             Assert.Empty(control.ImageKey);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(expectedInvalidatedCallCount2, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
@@ -2188,40 +2188,32 @@ namespace System.Windows.Forms.Tests
                 Image = image
             };
 
-            // Set same.
-            control.ImageKey = string.Empty;
-            Assert.Empty(control.ImageKey);
-            Assert.Equal(-1, control.ImageIndex);
-            Assert.Same(image, control.Image);
-            Assert.False(control.IsHandleCreated);
-
-            // Set different.
-            control.ImageKey = "ImageKey";
-            Assert.Equal("ImageKey", control.ImageKey);
-            Assert.Equal(-1, control.ImageIndex);
+            control.ImageKey = ImageList.Indexer.DefaultKey;
+            Assert.Equal(ImageList.Indexer.DefaultKey, control.ImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, control.ImageIndex);
             Assert.Null(control.Image);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [InlineData(null, "", -1)]
-        [InlineData("", "", 0)]
-        [InlineData("ImageKey", "ImageKey", -1)]
-        public void ButtonBase_ImageKey_SetWithImageIndex_GetReturnsExpected(string value, string expected, int expectedImageIndex)
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("ImageKey", "ImageKey")]
+        public void ButtonBase_ImageKey_SetWithImageIndex_GetReturnsExpected(string value, string expectedImageKey)
         {
             using var control = new SubButtonBase
             {
                 ImageIndex = 0,
                 ImageKey = value
             };
-            Assert.Equal(expected, control.ImageKey);
-            Assert.Equal(expectedImageIndex, control.ImageIndex);
+            Assert.Equal(expectedImageKey, control.ImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, control.ImageIndex);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ImageKey = value;
-            Assert.Equal(expected, control.ImageKey);
-            Assert.Equal(expectedImageIndex, control.ImageIndex);
+            Assert.Equal(expectedImageKey, control.ImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, control.ImageIndex);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -2280,7 +2272,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData(null, "", 1, 2)]
-        [InlineData("", "", 0, 0)]
+        [InlineData("", "", 1, 2)]
         [InlineData("ImageKey", "ImageKey", 1, 1)]
         public void ButtonBase_ImageKey_SetWithHandle_GetReturnsExpected(string value, string expected, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
         {
@@ -2463,7 +2455,7 @@ namespace System.Windows.Forms.Tests
         public void ButtonBase_ImageList_Set_DoesNotCreateImageHandle()
         {
             using var control = new SubButtonBase();
-            using var imageList =  new ImageList();
+            using var imageList = new ImageList();
             control.ImageList = imageList;
             Assert.False(imageList.HandleCreated);
             Assert.False(control.IsHandleCreated);

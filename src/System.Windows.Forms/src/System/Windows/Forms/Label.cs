@@ -471,7 +471,8 @@ namespace System.Windows.Forms
                     }
                     return index;
                 }
-                return -1;
+
+                return ImageList.Indexer.DefaultIndex;
             }
             set
             {
@@ -479,17 +480,20 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
-                if (ImageIndex != value)
-                {
-                    if (value != -1)
-                    {
-                        // Image.set calls ImageIndex = -1
-                        Properties.SetObject(PropImage, null);
-                    }
 
-                    ImageIndexer.Index = value;
-                    Invalidate();
+                if (ImageIndex == value && value != ImageList.Indexer.DefaultIndex)
+                {
+                    return;
                 }
+
+                if (value != ImageList.Indexer.DefaultIndex)
+                {
+                    // Image.set calls ImageIndex = -1
+                    Properties.SetObject(PropImage, null);
+                }
+
+                ImageIndexer.Index = value;
+                Invalidate();
             }
         }
 
@@ -517,14 +521,16 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (ImageKey != value)
+                if (ImageKey == value && !string.Equals(value, ImageList.Indexer.DefaultKey))
                 {
-                    // Image.set calls ImageIndex = -1
-                    Properties.SetObject(PropImage, null);
-
-                    ImageIndexer.Key = value;
-                    Invalidate();
+                    return;
                 }
+
+                // Image.set calls ImageIndex = -1
+                Properties.SetObject(PropImage, null);
+
+                ImageIndexer.Key = value;
+                Invalidate();
             }
         }
 
@@ -1693,7 +1699,7 @@ namespace System.Windows.Forms
         public override ImageList ImageList
         {
             get { return owner?.ImageList; }
-            set{ Debug.Assert(false, "Setting the image list in this class is not supported"); }
+            set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
         }
 
         public override string Key

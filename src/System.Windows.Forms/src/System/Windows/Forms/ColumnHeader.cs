@@ -195,7 +195,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndexer.Index != -1 && ImageList != null && imageIndexer.Index >= ImageList.Images.Count)
+                if (imageIndexer.Index != ImageList.Indexer.DefaultIndex && ImageList != null && imageIndexer.Index >= ImageList.Images.Count)
                 {
                     return ImageList.Images.Count - 1;
                 }
@@ -208,14 +208,16 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
 
-                if (imageIndexer.Index != value)
+                if (imageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
                 {
-                    imageIndexer.Index = value;
+                    return;
+                }
 
-                    if (ListView != null && ListView.IsHandleCreated)
-                    {
-                        ListView.SetColumnInfo(LVCF.IMAGE, this);
-                    }
+                imageIndexer.Index = value;
+
+                if (ListView != null && ListView.IsHandleCreated)
+                {
+                    ListView.SetColumnInfo(LVCF.IMAGE, this);
                 }
             }
         }
@@ -243,14 +245,16 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != imageIndexer.Key)
+                if (value == imageIndexer.Key && !string.Equals(value, ImageList.Indexer.DefaultKey))
                 {
-                    imageIndexer.Key = value;
+                    return;
+                }
 
-                    if (ListView != null && ListView.IsHandleCreated)
-                    {
-                        ListView.SetColumnInfo(LVCF.IMAGE, this);
-                    }
+                imageIndexer.Key = value;
+
+                if (ListView != null && ListView.IsHandleCreated)
+                {
+                    ListView.SetColumnInfo(LVCF.IMAGE, this);
                 }
             }
         }
