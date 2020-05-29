@@ -18,14 +18,14 @@ namespace System.Windows.Forms
             // This is the bitmask used within ItemArray to identify selected objects.
             internal static int SelectedObjectMask = ItemArray.CreateMask();
 
-            private readonly ListBox owner;
+            private readonly ListBox _owner;
             private bool stateDirty;
             private int lastVersion;
             private int count;
 
             public SelectedObjectCollection(ListBox owner)
             {
-                this.owner = owner;
+                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
                 stateDirty = true;
                 lastVersion = -1;
             }
@@ -37,16 +37,16 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner.IsHandleCreated)
+                    if (_owner.IsHandleCreated)
                     {
-                        SelectionMode current = (owner.selectionModeChanging) ? owner.cachedSelectionMode : owner.selectionMode;
+                        SelectionMode current = (_owner.selectionModeChanging) ? _owner.cachedSelectionMode : _owner.selectionMode;
                         switch (current)
                         {
                             case SelectionMode.None:
                                 return 0;
 
                             case SelectionMode.One:
-                                int index = owner.SelectedIndex;
+                                int index = _owner.SelectedIndex;
                                 if (index >= 0)
                                 {
                                     return 1;
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
 
                             case SelectionMode.MultiSimple:
                             case SelectionMode.MultiExtended:
-                                return unchecked((int)(long)SendMessageW(owner, (WM)LB.GETSELCOUNT));
+                                return unchecked((int)(long)SendMessageW(_owner, (WM)LB.GETSELCOUNT));
                         }
 
                         return 0;
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
                 get
                 {
                     EnsureUpToDate();
-                    return ((ObjectCollection)owner.Items).InnerArray;
+                    return ((ObjectCollection)_owner.Items).InnerArray;
                 }
             }
 
@@ -128,9 +128,9 @@ namespace System.Windows.Forms
                 if (stateDirty)
                 {
                     stateDirty = false;
-                    if (owner.IsHandleCreated)
+                    if (_owner.IsHandleCreated)
                     {
-                        owner.NativeUpdateSelection();
+                        _owner.NativeUpdateSelection();
                     }
                 }
             }
@@ -234,12 +234,12 @@ namespace System.Windows.Forms
             internal void PushSelectionIntoNativeListBox(int index)
             {
                 // we can't use ItemArray accessor because this will wipe out our Selection collection
-                bool selected = ((ObjectCollection)owner.Items).InnerArray.GetState(index, SelectedObjectMask);
+                bool selected = ((ObjectCollection)_owner.Items).InnerArray.GetState(index, SelectedObjectMask);
                 // push selection only if the item is actually selected
                 // this also takes care of the case where owner.SelectionMode == SelectionMode.One
                 if (selected)
                 {
-                    owner.NativeSetSelected(index, true /*we signal selection to the native listBox only if the item is actually selected*/);
+                    _owner.NativeSetSelected(index, true /*we signal selection to the native listBox only if the item is actually selected*/);
                 }
             }
 
@@ -253,23 +253,23 @@ namespace System.Windows.Forms
 
             public void Clear()
             {
-                if (owner != null)
+                if (_owner != null)
                 {
-                    owner.ClearSelected();
+                    _owner.ClearSelected();
                 }
             }
 
             public void Add(object value)
             {
-                if (owner != null)
+                if (_owner != null)
                 {
-                    ObjectCollection items = owner.Items;
+                    ObjectCollection items = _owner.Items;
                     if (items != null && value != null)
                     {
                         int index = items.IndexOf(value);
                         if (index != -1 && !GetSelected(index))
                         {
-                            owner.SelectedIndex = index;
+                            _owner.SelectedIndex = index;
                         }
                     }
                 }
@@ -277,15 +277,15 @@ namespace System.Windows.Forms
 
             public void Remove(object value)
             {
-                if (owner != null)
+                if (_owner != null)
                 {
-                    ObjectCollection items = owner.Items;
+                    ObjectCollection items = _owner.Items;
                     if (items != null & value != null)
                     {
                         int index = items.IndexOf(value);
                         if (index != -1 && GetSelected(index))
                         {
-                            owner.SetSelected(index, false);
+                            _owner.SetSelected(index, false);
                         }
                     }
                 }

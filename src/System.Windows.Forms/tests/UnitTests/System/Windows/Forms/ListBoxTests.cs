@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
@@ -3288,6 +3289,74 @@ namespace System.Windows.Forms.Tests
 
             AssertExtensions.Throws<ArgumentException>("value", () => control.SelectedItem = null);
             Assert.Null(control.SelectedItem);
+        }
+
+        [WinFormsFact]
+        public void ListBox_SelectedItems_GetDirtyCustom_ReturnsExpected()
+        {
+            using var control = new CustomListBox
+            {
+                SelectionMode = SelectionMode.MultiSimple
+            };
+            control.Items.Add("Item0");
+            control.Items.Add("Item1");
+            control.Items.Add("Item2");
+            control.Items.Add("Item3");
+            control.Items.Add("Item4");
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Set MakeCustom after the Handle is created to allow for default behaviour.
+            control.MakeCustom = true;
+
+            // Verify equal lengths.
+            control.GetSelCountResult = (IntPtr)1;
+            control.GetSelResult = new int[] { 2 };
+            Dirty();
+            Assert.Equal(new int[] { 2 }, control.SelectedIndices.Cast<int>());
+
+            // Verify truncated
+            control.GetSelCountResult = (IntPtr)2;
+            control.GetSelResult = new int[] { 2 };
+            Dirty();
+            Assert.Equal(new int[] { 0, 2 }, control.SelectedIndices.Cast<int>());
+
+            void Dirty()
+            {
+                // Simulate a selection change notification.
+                SendMessageW(control.Handle, WM.REFLECT | WM.COMMAND, PARAM.FromLowHigh(0, (int)LBN.SELCHANGE));
+            }
+        }
+
+        private class CustomListBox : ListBox
+        {
+            public bool MakeCustom { get; set; }
+
+            public IntPtr GetSelCountResult { get; set; }
+            public int[] GetSelResult { get; set; }
+
+            protected override void WndProc(ref Message m)
+            {
+                if (MakeCustom && m.Msg == (int)LB.GETSELCOUNT)
+                {
+                    m.Result = GetSelCountResult;
+                    return;
+                }
+                else if (MakeCustom && m.Msg == (int)LB.GETSELITEMS)
+                {
+                    Assert.Equal(GetSelCountResult, m.WParam);
+                    Marshal.Copy(GetSelResult, 0, m.LParam, GetSelResult.Length);
+                    m.Result = (IntPtr)GetSelResult.Length;
+                    return;
+                }
+
+                base.WndProc(ref m);
+            }
         }
 
         [WinFormsTheory]
