@@ -249,6 +249,8 @@ function InstallDotNet([string] $dotnetRoot,
   if ($runtime) { $installParameters.Runtime = $runtime }
   if ($skipNonVersionedFiles) { $installParameters.SkipNonVersionedFiles = $skipNonVersionedFiles }
 
+  $installParameters.Architecture = 'x86'
+
   try {
     & $installScript @installParameters
   }
