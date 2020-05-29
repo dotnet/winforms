@@ -107,7 +107,7 @@ stages:
             /m:1
           displayName: Run Unit Tests x86
 
-          - script: eng\cibuild.cmd
+        - script: eng\cibuild.cmd
             -test
             -configuration $(_BuildConfig)
             $(_OfficialBuildIdArgs)
