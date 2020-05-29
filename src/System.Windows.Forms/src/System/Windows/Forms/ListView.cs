@@ -49,6 +49,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_SELECTEDINDEXCHANGED = new object();
         private static readonly object EVENT_VIRTUALITEMSSELECTIONRANGECHANGED = new object();
         private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new object();
+        private static readonly object EVENT_GROUPCOLLAPSEDSTATECHANGED = new object();
 
         private ItemActivation activation = ItemActivation.Standard;
         private ListViewAlignment alignStyle = ListViewAlignment.Top;
@@ -2105,6 +2106,17 @@ namespace System.Windows.Forms
         {
             add => Events.AddHandler(EVENT_ITEMSELECTIONCHANGED, value);
             remove => Events.RemoveHandler(EVENT_ITEMSELECTIONCHANGED, value);
+        }
+
+        /// <summary>
+        ///  Occurs when the <see cref="ListViewGroup.CollapsedState"/> changes on a <see cref="ListViewGroup"/>.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ListViewGroupCollapsedStateChangedDescr))]
+        public event EventHandler<ListViewGroupEventArgs> GroupCollapsedStateChanged
+        {
+            add => Events.AddHandler(EVENT_GROUPCOLLAPSEDSTATECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_GROUPCOLLAPSEDSTATECHANGED, value);
         }
 
         [Browsable(false)]
@@ -4227,6 +4239,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Fires the <see cref="GroupCollapsedStateChanged"/> event.
+        /// </summary>
+        protected virtual void OnGroupCollapsedStateChanged(ListViewGroupEventArgs e)
+        {
+            ((EventHandler<ListViewGroupEventArgs>)Events[EVENT_GROUPCOLLAPSEDSTATECHANGED])?.Invoke(this, e);
+        }
+
+        /// <summary>
         ///  Fires the columnClick event.
         /// </summary>
         protected virtual void OnColumnClick(ColumnClickEventArgs e)
@@ -5392,10 +5412,19 @@ namespace System.Windows.Forms
             var lvgroup = new LVGROUPW
             {
                 cbSize = (uint)sizeof(LVGROUPW),
-                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | additionalMask,
+                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | LVGF.STATE | additionalMask,
                 cchHeader = header.Length,
                 iGroupId = group.ID
             };
+
+            if (group.CollapsedState != ListViewGroupCollapsedState.Default)
+            {
+                lvgroup.state |= LVGS.COLLAPSIBLE;
+                if (group.CollapsedState == ListViewGroupCollapsedState.Collapsed)
+                {
+                    lvgroup.state |= LVGS.COLLAPSED;
+                }
+            }
 
             switch (group.HeaderAlignment)
             {
@@ -5933,15 +5962,59 @@ namespace System.Windows.Forms
 
         private int GetIndexOfClickedItem()
         {
+            var lvhi = SetupHitTestInfo();
+            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi));
+        }
+
+        private LVHITTESTINFO SetupHitTestInfo ()
+        {
             Point pos = Cursor.Position;
             pos = PointToClient(pos);
-
             var lvhi = new LVHITTESTINFO
             {
                 pt = (POINT)pos
             };
 
-            return (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi);
+            return lvhi;
+        }
+
+        private int UpdateGroupCollapse(Interop.User32.WM clickType)
+        {
+            // see if the mouse event occurred on a group
+            var lvhi = SetupHitTestInfo();
+            int groupID = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, (IntPtr)(-1), ref lvhi));
+            if (groupID == -1)
+            {
+                return groupID;
+            }
+
+            // check if group header was double clicked
+            bool groupHeaderDblClked = lvhi.flags == LVHT.EX_GROUP_HEADER && clickType == User32.WM.LBUTTONDBLCLK;
+            // check if chevron was clicked
+            bool chevronClked = (lvhi.flags & LVHT.EX_GROUP_COLLAPSE) == LVHT.EX_GROUP_COLLAPSE && clickType == User32.WM.LBUTTONUP;
+            if (!groupHeaderDblClked && !chevronClked)
+            {
+                return groupID;
+            }
+            for (int i = 0; i < groups.Count; i++)
+            {
+                ListViewGroup targetGroup = groups[i];
+                if (targetGroup.ID == groupID)
+                {
+                    if (targetGroup.CollapsedState == ListViewGroupCollapsedState.Default)
+                    {
+                        return groupID;
+                    }
+
+                    targetGroup.CollapsedState = targetGroup.CollapsedState == ListViewGroupCollapsedState.Expanded
+                                                ? ListViewGroupCollapsedState.Collapsed
+                                                : ListViewGroupCollapsedState.Expanded;
+                    OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(i));
+                    break;
+                }
+            }
+
+            return groupID;
         }
 
         internal void RecreateHandleInternal()
@@ -6387,6 +6460,7 @@ namespace System.Windows.Forms
                     ItemCollectionChangedInMouseDown = false;
                     Capture = true;
                     WmMouseDown(ref m, MouseButtons.Left, 2);
+                    UpdateGroupCollapse(User32.WM.LBUTTONDBLCLK);
                     break;
 
                 case User32.WM.LBUTTONDOWN:
@@ -6403,8 +6477,7 @@ namespace System.Windows.Forms
                 case User32.WM.MBUTTONUP:
 
                     // see the mouse is on item
-                    //
-                    int index = GetIndexOfClickedItem();
+                    int index = UpdateGroupCollapse(User32.WM.LBUTTONUP);
 
                     if (!ValidationCancelled && listViewState[LISTVIEWSTATE_doubleclickFired] && index != -1)
                     {

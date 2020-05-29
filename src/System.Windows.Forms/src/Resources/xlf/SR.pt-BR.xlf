@@ -6356,6 +6356,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Exibe linhas de grade ao redor de itens e SubItems. Mostradas somente na exibição Detalhes.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
+        <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
+        <target state="new">Event raised when the CollapsedState property of a ListViewGroup changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">O parâmetro deve ser do tipo ListViewGroup.</target>

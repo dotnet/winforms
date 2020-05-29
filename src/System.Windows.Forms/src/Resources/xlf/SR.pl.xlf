@@ -6356,6 +6356,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Wyświetla linie siatki wokół elementów i podelementów. Pokazywany tylko w widoku Details.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
+        <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
+        <target state="new">Event raised when the CollapsedState property of a ListViewGroup changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Parametr musi być typu ListViewGroup.</target>

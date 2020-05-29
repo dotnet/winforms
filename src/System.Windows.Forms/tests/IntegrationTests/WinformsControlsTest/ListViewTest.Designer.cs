@@ -57,7 +57,8 @@ namespace WinformsControlsTest
             this.columnHeader2.ImageIndex = 1;
             // 
             // listView1
-            // 
+            //
+            this.listView1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});

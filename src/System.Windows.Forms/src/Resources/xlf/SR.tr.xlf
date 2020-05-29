@@ -6356,6 +6356,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Öğelerin ve SubItem'ların etrafında kılavuz çizgileri görüntüler. Yalnızca Ayrıntı görünümünde gösterilir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
+        <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
+        <target state="new">Event raised when the CollapsedState property of a ListViewGroup changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Parametre ListViewGroup türünde olmalıdır.</target>
