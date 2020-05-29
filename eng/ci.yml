@@ -92,7 +92,7 @@ stages:
             -configuration $(_BuildConfig)
             $(_OfficialBuildIdArgs)
             /p:Coverage=$(_Coverage)
-            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc.binlog          
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc.binlog
           displayName: Build
 
         # Run Unit Tests
