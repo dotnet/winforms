@@ -100,22 +100,12 @@ stages:
         - script: eng\cibuild.cmd
             -test
             -configuration $(_BuildConfig)
-            -platform x86
             $(_OfficialBuildIdArgs)
             /p:Coverage=$(_Coverage)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test_x86.binlog
             /m:1
           displayName: Run Unit Tests x86
 
-        - script: eng\cibuild.cmd
-            -test
-            -configuration $(_BuildConfig)
-            -platform x64
-            $(_OfficialBuildIdArgs)
-            /p:Coverage=$(_Coverage)
-            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test_x64.binlog
-            /m:1
-          displayName: Run Unit Tests x64
 
         # Run Integration Tests
         # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
