@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -27,6 +28,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
             Assert.Equal("ListViewGroup", group.Header);
             Assert.Equal(HorizontalAlignment.Left, group.HeaderAlignment);
+            Assert.Empty(group.Subtitle);
             Assert.Empty(group.Items);
             Assert.Same(group.Items, group.Items);
             Assert.Null(group.ListView);
@@ -44,6 +46,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
             Assert.Equal(expectedHeader, group.Header);
             Assert.Equal(HorizontalAlignment.Left, group.HeaderAlignment);
+            Assert.Empty(group.Subtitle);
             Assert.Empty(group.Items);
             Assert.Same(group.Items, group.Items);
             Assert.Null(group.ListView);
@@ -70,6 +73,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
             Assert.Equal(expectedHeader, group.Header);
             Assert.Equal(headerAlignment, group.HeaderAlignment);
+            Assert.Empty(group.Subtitle);
             Assert.Empty(group.Items);
             Assert.Equal(group.Items, group.Items);
             Assert.Null(group.ListView);
@@ -94,12 +98,130 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(HorizontalAlignment.Left, group.FooterAlignment);
             Assert.Equal(expectedHeader, group.Header);
             Assert.Equal(HorizontalAlignment.Left, group.HeaderAlignment);
+            Assert.Empty(group.Subtitle);
             Assert.Empty(group.Items);
             Assert.Same(group.Items, group.Items);
             Assert.Null(group.ListView);
             Assert.Equal(key, group.Name);
             Assert.Null(group.Tag);
             Assert.Equal(ListViewGroupCollapsedState.Default, group.CollapsedState);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [InlineData("te\0xt", "te\0xt")]
+        public void ListViewGroup_Subtitle_SetWithoutListView_GetReturnsExpected(string value, string expected)
+        {
+            var group = new ListViewGroup
+            {
+                Subtitle = value
+            };
+            Assert.Equal(expected, group.Subtitle);
+
+            // Set same.
+            group.Subtitle = value;
+            Assert.Equal(expected, group.Subtitle);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [InlineData("te\0xt", "te\0xt")]
+        public void ListViewGroup_Subtitle_SetWithListView_GetReturnsExpected(string value, string expected)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+
+            group.Subtitle = value;
+            Assert.Equal(expected, group.Subtitle);
+            Assert.False(listView.IsHandleCreated);
+
+            // Set same.
+            group.Subtitle = value;
+            Assert.Equal(expected, group.Subtitle);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("header", "header")]
+        [InlineData("te\0xt", "te\0xt")]
+        [InlineData("ListViewGroup", "ListViewGroup")]
+        public void ListViewGroup_Subtitle_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            int invalidatedCallCount = 0;
+            listView.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            listView.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            listView.HandleCreated += (sender, e) => createdCallCount++;
+
+            group.Subtitle = value;
+            Assert.Equal(expected, group.Subtitle);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            group.Subtitle = value;
+            Assert.Equal(expected, group.Subtitle);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Property_TypeString_GetGroupInfo_TestData()
+        {
+            yield return new object[] { null, string.Empty };
+            yield return new object[] { string.Empty, string.Empty };
+            yield return new object[] { "text", "text" };
+            yield return new object[] { "te\0t", "te" };
+        }
+
+        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        public unsafe void ListViewGroup_Subtitle_GetGroupInfo_Success()
+        {
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
+            {
+                foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
+                {
+                    string value = (string)data[0];
+                    string expected = (string)data[1];
+
+                    Application.EnableVisualStyles();
+
+                    using var listView = new ListView();
+                    var group = new ListViewGroup();
+                    listView.Groups.Add(group);
+
+                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
+                    group.Subtitle = value;
+
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                    char* buffer = stackalloc char[256];
+                    var lvgroup = new LVGROUPW
+                    {
+                        cbSize = (uint)sizeof(LVGROUPW),
+                        mask = LVGF.SUBTITLE | LVGF.GROUPID,
+                        pszSubtitle = buffer,
+                        cchSubtitle = 256
+                    };
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
+                    Assert.Equal(expected, new string(lvgroup.pszSubtitle));
+                    Assert.True(lvgroup.iGroupId >= 0);
+                }
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -172,21 +294,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        public static IEnumerable<object[]> Footer_GetGroupInfo_TestData()
-        {
-            yield return new object[] { null, string.Empty };
-            yield return new object[] { string.Empty, string.Empty };
-            yield return new object[] { "text", "text" };
-            yield return new object[] { "te\0t", "te" };
-        }
-
         [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
         public unsafe void ListViewGroup_Footer_GetGroupInfo_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
             using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
-                foreach (object[] data in Footer_GetGroupInfo_TestData())
+                foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
                 {
                     string value = (string)data[0];
                     string expected = (string)data[1];
@@ -433,21 +547,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        public static IEnumerable<object[]> Header_GetGroupInfo_TestData()
-        {
-            yield return new object[] { null, string.Empty };
-            yield return new object[] { string.Empty, string.Empty };
-            yield return new object[] { "text", "text" };
-            yield return new object[] { "te\0t", "te" };
-        }
-
         [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
         public unsafe void ListViewGroup_Header_GetGroupInfo_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
             using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
-                foreach (object[] data in Header_GetGroupInfo_TestData())
+                foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
                 {
                     string value = (string)data[0];
                     string expected = (string)data[1];

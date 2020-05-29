@@ -1,0 +1,2 @@
+System.Windows.Forms.ListViewGroup.Subtitle.get -> string!
+System.Windows.Forms.ListViewGroup.Subtitle.set -> void
