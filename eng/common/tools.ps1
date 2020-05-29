@@ -238,7 +238,13 @@ function InstallDotNet([string] $dotnetRoot,
     InstallDir = $dotnetRoot
   }
 
-  if ($architecture) { $installParameters.Architecture = $architecture }
+  if ($architecture) { 
+    $installParameters.Architecture = $architecture 
+    Write-PipelineTelemetryError -Category 'Architecture' -Type 'warning' -Message "Architecture: '$architecture'."
+  }
+  else {
+    Write-PipelineTelemetryError -Category 'Architecture' -Type 'warning' -Message "Architecture is unset."
+  }
   if ($runtime) { $installParameters.Runtime = $runtime }
   if ($skipNonVersionedFiles) { $installParameters.SkipNonVersionedFiles = $skipNonVersionedFiles }
 
