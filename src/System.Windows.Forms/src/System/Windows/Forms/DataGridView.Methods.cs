@@ -18254,7 +18254,7 @@ namespace System.Windows.Forms
                 RowHeadersWidth = cachedRowHeadersWidth;
             }
 
-            if (Events[EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED] is EventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
+            if (Events[EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED] is DataGridViewAutoSizeModeEventHandler eh && !dataGridViewOper[DATAGRIDVIEWOPER_inDispose] && !IsDisposed)
             {
                 eh(this, e);
             }
