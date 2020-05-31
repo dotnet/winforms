@@ -298,11 +298,11 @@ namespace System.Windows.Forms
                 if ((DataGridView == null && rowIndex != -1) ||
                     (DataGridView != null && (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)))
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex), nameof(rowIndex));
                 }
                 if (DataGridView != null && DataGridView.Rows.SharedRow(rowIndex) != OwningRow)
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex), nameof(rowIndex));
                 }
                 state |= (OwningRow.GetState(rowIndex) & DataGridViewElementStates.Frozen);
                 if (OwningRow.GetResizable(rowIndex) == DataGridViewTriState.True || (DataGridView != null && DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing))
@@ -426,7 +426,7 @@ namespace System.Windows.Forms
                 }
                 if (DataGridView.Rows.SharedRow(rowIndex) != OwningRow)
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex), nameof(rowIndex));
                 }
                 return new Size(DataGridView.RowHeadersWidth, OwningRow.GetHeight(rowIndex));
             }
