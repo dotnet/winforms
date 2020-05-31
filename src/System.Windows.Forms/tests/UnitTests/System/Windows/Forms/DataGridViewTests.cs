@@ -31,15 +31,15 @@ namespace System.Windows.Forms.Tests
             {
                 foreach (bool autoSize in new bool[] { true, false })
                 {
-                    yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, autoSize, 4, DefaultColumnHeadersHeight, false };
-                    yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, autoSize, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, false };
-                    yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, autoSize, 32768, DefaultColumnHeadersHeight, false };
+                    yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, autoSize, 4, DefaultColumnHeadersHeight };
+                    yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, autoSize, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight };
+                    yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, autoSize, 32768, DefaultColumnHeadersHeight };
 
                     foreach (DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode in new DataGridViewColumnHeadersHeightSizeMode[] { DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DataGridViewColumnHeadersHeightSizeMode.DisableResizing })
                     {
-                        yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, autoSize, 4, 4, true };
-                        yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, autoSize, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, false };
-                        yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, autoSize, 32768, 32768, true };
+                        yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, autoSize, 4, 4 };
+                        yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, autoSize, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight };
+                        yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, autoSize, 32768, 32768 };
                     }
                 }
             }
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ColumnHeadersHeight_Set_TestData))]
-        public void DataGridView_ColumnHeadersHeight_Set_GetReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, bool autoSize, int value, int expectedValue, bool expectedIsHandleCreated)
+        public void DataGridView_ColumnHeadersHeight_Set_GetReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, bool autoSize, int value, int expectedValue)
         {
             using var control = new DataGridView
             {
@@ -61,41 +61,41 @@ namespace System.Windows.Forms.Tests
             control.ColumnHeadersHeight = value;
             Assert.Equal(expectedValue, control.ColumnHeadersHeight);
             Assert.Equal(0, layoutCallCount);
-            Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ColumnHeadersHeight = value;
             Assert.Equal(expectedValue, control.ColumnHeadersHeight);
             Assert.Equal(0, layoutCallCount);
-            Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> ColumnHeadersHeight_SetWithParent_TestData()
         {
             foreach (bool columnHeadersVisible in new bool[] { true, false })
             {
-                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, true, 4, DefaultColumnHeadersHeight, 0, 0, false };
-                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0, false };
-                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, true, 32768, DefaultColumnHeadersHeight, 0, 0, false };
-                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, false, 4, DefaultColumnHeadersHeight, 0, 0, false };
-                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0, false };
-                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, false, 32768, DefaultColumnHeadersHeight, 0, 0, false };
+                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, true, 4, DefaultColumnHeadersHeight, 0, 0 };
+                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0 };
+                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, true, 32768, DefaultColumnHeadersHeight, 0, 0 };
+                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, false, 4, DefaultColumnHeadersHeight, 0, 0 };
+                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0 };
+                yield return new object[] { DataGridViewColumnHeadersHeightSizeMode.AutoSize, columnHeadersVisible, false, 32768, DefaultColumnHeadersHeight, 0, 0 };
 
                 foreach (DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode in new DataGridViewColumnHeadersHeightSizeMode[] { DataGridViewColumnHeadersHeightSizeMode.EnableResizing, DataGridViewColumnHeadersHeightSizeMode.DisableResizing })
                 {
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 4, 4, 0, 1, true };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0, false };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 32768, 32768, columnHeadersVisible ? 1 : 0, 1, true };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 4, 4, 0, 0, true };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0, false };
-                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 32768, 32768, 0, 0, true };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 4, 4, 0, 1 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, true, 32768, 32768, columnHeadersVisible ? 1 : 0, 1 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 4, 4, 0, 0 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, DefaultColumnHeadersHeight, DefaultColumnHeadersHeight, 0, 0 };
+                    yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, false, 32768, 32768, 0, 0 };
                 }
             }
         }
 
         [WinFormsTheory]
         [MemberData(nameof(ColumnHeadersHeight_SetWithParent_TestData))]
-        public void DataGridView_ColumnHeadersHeight_SetWithParent_GetReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, bool autoSize, int value, int expectedValue, int expectedLayoutCallCount, int expectedParentLayoutCallCount, bool expectedIsHandleCreated)
+        public void DataGridView_ColumnHeadersHeight_SetWithParent_GetReturnsExpected(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, bool autoSize, int value, int expectedValue, int expectedLayoutCallCount, int expectedParentLayoutCallCount)
         {
             using var parent = new Control();
             using var control = new DataGridView
@@ -123,14 +123,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedValue, control.ColumnHeadersHeight);
                 Assert.Equal(expectedLayoutCallCount, layoutCallCount);
                 Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
-                Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+                Assert.False(control.IsHandleCreated);
 
                 // Set same.
                 control.ColumnHeadersHeight = value;
                 Assert.Equal(expectedValue, control.ColumnHeadersHeight);
                 Assert.Equal(expectedLayoutCallCount, layoutCallCount);
                 Assert.Equal(expectedParentLayoutCallCount, parentLayoutCallCount);
-                Assert.Equal(expectedIsHandleCreated, control.IsHandleCreated);
+                Assert.False(control.IsHandleCreated);
             }
             finally
             {
@@ -333,7 +333,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCallCount * 2, callCount);
         }
 
-#if false
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewColumnHeadersHeightSizeMode))]
         public void DataGridView_ColumnHeadersHeight_SetWithHandlerDisposed_DoesNotCallColumnHeadersHeightChanged(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode)
@@ -469,7 +468,6 @@ namespace System.Windows.Forms.Tests
             control.Dispose();
             Assert.Equal(1, disposingCallCount);
         }
-#endif
 
         [WinFormsTheory]
         [InlineData(3)]
@@ -1892,7 +1890,6 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-#if false
         [WinFormsTheory]
         [MemberData(nameof(OnColumnHeadersHeightChanged_TestData))]
         public void DataGridView_OnColumnHeadersHeightChanged_Invoke_CallsColumnHeadersHeightChanged(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, EventArgs eventArgs)
@@ -1922,7 +1919,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
         }
-#endif
 
         [WinFormsTheory]
         [MemberData(nameof(OnColumnHeadersHeightChanged_TestData))]
@@ -1967,7 +1963,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-#if false
         [WinFormsTheory]
         [MemberData(nameof(OnColumnHeadersHeightChanged_TestData))]
         public void DataGridView_OnColumnHeadersHeightChanged_InvokeDisposed_DoesNotCallColumnHeadersHeightChanged(DataGridViewColumnHeadersHeightSizeMode columnHeadersWidthSizeMode, bool columnHeadersVisible, EventArgs eventArgs)
@@ -2071,7 +2066,6 @@ namespace System.Windows.Forms.Tests
             control.Dispose();
             Assert.Equal(1, disposingCallCount);
         }
-#endif
 
         public static IEnumerable<object[]> OnColumnHeadersHeightSizeModeChanged_TestData()
         {
@@ -2100,18 +2094,14 @@ namespace System.Windows.Forms.Tests
             // Call with handler.
             control.ColumnHeadersHeightSizeModeChanged += handler;
             control.OnColumnHeadersHeightSizeModeChanged(eventArgs);
-#if false
             Assert.Equal(1, callCount);
-#endif
             Assert.Equal(DefaultColumnHeadersHeight, control.ColumnHeadersHeight);
             Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.ColumnHeadersHeightSizeModeChanged -= handler;
             control.OnColumnHeadersHeightSizeModeChanged(eventArgs);
-#if false
             Assert.Equal(1, callCount);
-#endif
             Assert.Equal(DefaultColumnHeadersHeight, control.ColumnHeadersHeight);
             Assert.False(control.IsHandleCreated);
         }
@@ -2150,9 +2140,7 @@ namespace System.Windows.Forms.Tests
             // Call with handler.
             control.ColumnHeadersHeightSizeModeChanged += handler;
             control.OnColumnHeadersHeightSizeModeChanged(eventArgs);
-#if false
             Assert.Equal(1, callCount);
-#endif
             Assert.Equal(expectedColumnHeadersHeight, control.ColumnHeadersHeight);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -2162,9 +2150,7 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.ColumnHeadersHeightSizeModeChanged -= handler;
             control.OnColumnHeadersHeightSizeModeChanged(eventArgs);
-#if false
             Assert.Equal(1, callCount);
-#endif
             Assert.Equal(expectedColumnHeadersHeight, control.ColumnHeadersHeight);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -2229,17 +2215,13 @@ namespace System.Windows.Forms.Tests
                 // Call with handler.
                 control.ColumnHeadersHeightSizeModeChanged += handler;
                 control.OnColumnHeadersHeightSizeModeChanged(eventArgs);
-#if false
                 Assert.Equal(1, callCount);
-#endif
                 Assert.False(control.IsHandleCreated);
 
                 // Remove handler.
                 control.ColumnHeadersHeightSizeModeChanged -= handler;
                 control.OnColumnHeadersHeightSizeModeChanged(eventArgs);
-#if false
                 Assert.Equal(1, callCount);
-#endif
                 Assert.False(control.IsHandleCreated);
                 disposingCallCount++;
             };
@@ -2522,18 +2504,14 @@ namespace System.Windows.Forms.Tests
             // Call with handler.
             control.RowHeadersWidthSizeModeChanged += handler;
             control.OnRowHeadersWidthSizeModeChanged(eventArgs);
-#if false
             Assert.Equal(1, callCount);
-#endif
             Assert.Equal(DefaultRowHeadersWidth, control.RowHeadersWidth);
             Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.RowHeadersWidthSizeModeChanged -= handler;
             control.OnRowHeadersWidthSizeModeChanged(eventArgs);
-#if false
             Assert.Equal(1, callCount);
-#endif
             Assert.Equal(DefaultRowHeadersWidth, control.RowHeadersWidth);
             Assert.False(control.IsHandleCreated);
         }
@@ -2576,9 +2554,7 @@ namespace System.Windows.Forms.Tests
             // Call with handler.
             control.RowHeadersWidthSizeModeChanged += handler;
             control.OnRowHeadersWidthSizeModeChanged(eventArgs);
-#if false
             Assert.Equal(1, callCount);
-#endif
             Assert.Equal(expectedRowHeadersWidth, control.RowHeadersWidth);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -2588,9 +2564,7 @@ namespace System.Windows.Forms.Tests
             // Remove handler.
             control.RowHeadersWidthSizeModeChanged -= handler;
             control.OnRowHeadersWidthSizeModeChanged(eventArgs);
-#if false
             Assert.Equal(1, callCount);
-#endif
             Assert.Equal(expectedRowHeadersWidth, control.RowHeadersWidth);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -2655,17 +2629,13 @@ namespace System.Windows.Forms.Tests
                 // Call with handler.
                 control.RowHeadersWidthSizeModeChanged += handler;
                 control.OnRowHeadersWidthSizeModeChanged(eventArgs);
-#if false
                 Assert.Equal(1, callCount);
-#endif
                 Assert.False(control.IsHandleCreated);
 
                 // Remove handler.
                 control.RowHeadersWidthSizeModeChanged -= handler;
                 control.OnRowHeadersWidthSizeModeChanged(eventArgs);
-#if false
                 Assert.Equal(1, callCount);
-#endif
                 Assert.False(control.IsHandleCreated);
                 disposingCallCount++;
             };

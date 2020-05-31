@@ -5969,7 +5969,8 @@ namespace System.Windows.Forms
             {
                 OnMouseEnter(EventArgs.Empty);
             }
-            UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
+
+            UpdateMouseEnteredCell(hti: null, e: null);
         }
 
         private void EditingControls_MouseLeave(object sender, EventArgs e)
@@ -5985,7 +5986,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
+            UpdateMouseEnteredCell(hti: null, e: null);
 
             Point ptMouse = PointToClient(Control.MousePosition);
             if (!ClientRectangle.Contains(ptMouse))
@@ -14049,7 +14050,7 @@ namespace System.Windows.Forms
                 PositionEditingControl(true, false, false);
             }
 
-            UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
+            UpdateMouseEnteredCell(hti: null, e: null);
 
             OnColumnHeadersGlobalAutoSize();
 
@@ -14578,7 +14579,7 @@ namespace System.Windows.Forms
                     PositionEditingControl(ptCurrentCell.X != e.Column.Index, true, false);
                 }
 
-                UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
+                UpdateMouseEnteredCell(hti: null, e: null);
 
                 if (AutoSize)
                 {
@@ -18221,10 +18222,7 @@ namespace System.Windows.Forms
                     PositionEditingControl(true, false, false);
                 }
 
-                if (IsHandleCreated)
-                {
-                    UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
-                }
+                UpdateMouseEnteredCell(hti: null, e: null);
 
                 OnRowHeadersGlobalAutoSize(false /*expandingRows*/);
             }
@@ -25381,12 +25379,12 @@ namespace System.Windows.Forms
             {
                 OnMouseEnter(EventArgs.Empty);
             }
-            UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
+            UpdateMouseEnteredCell(hti: null, e: null);
         }
 
         private void ScrollBar_MouseLeave(object sender, EventArgs e)
         {
-            UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
+            UpdateMouseEnteredCell(hti: null, e: null);
             Point ptMouse = PointToClient(Control.MousePosition);
             if (!ClientRectangle.Contains(ptMouse))
             {
@@ -25738,7 +25736,7 @@ namespace System.Windows.Forms
             }
 
             // The mouse probably is not over the same cell after the scroll.
-            UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
+            UpdateMouseEnteredCell(hti: null, e: null);
 
             RECT scrollArea = rowsRect;
             User32.ScrollWindow(this, 0, deltaY, ref scrollArea, ref scrollArea);
@@ -28325,7 +28323,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                UpdateMouseEnteredCell(null /*HitTestInfo*/, null /*MouseEventArgs*/);
+                UpdateMouseEnteredCell(hti: null, e: null);
             }
         }
 
@@ -28369,6 +28367,12 @@ namespace System.Windows.Forms
 
         private void UpdateMouseEnteredCell(HitTestInfo hti, MouseEventArgs e)
         {
+            // Don't force handle creation.
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             Point ptMouse = PointToClient(Control.MousePosition);
             HitTestInfo htiToUse;
             if (hti != null)
