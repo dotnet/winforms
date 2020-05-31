@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -23,6 +24,7 @@ namespace System.Windows.Forms
         private HorizontalAlignment _headerAlignment = HorizontalAlignment.Left;
         private string? _footer;
         private HorizontalAlignment _footerAlignment = HorizontalAlignment.Left;
+        private ListViewGroupCollapsedState _collapsedState = ListViewGroupCollapsedState.Default;
 
         private ListView.ListViewItemCollection? _items;
 
@@ -157,6 +159,26 @@ namespace System.Windows.Forms
                 }
 
                 _footerAlignment = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  Controls which <see cref="ListViewGroupCollapsedState"/> the group will appear as.
+        /// </summary>
+        [DefaultValue(ListViewGroupCollapsedState.Default)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public ListViewGroupCollapsedState CollapsedState
+        {
+            get => _collapsedState;
+            set
+            {
+                if (_collapsedState == value)
+                {
+                    return;
+                }
+
+                _collapsedState = value;
                 UpdateListView();
             }
         }

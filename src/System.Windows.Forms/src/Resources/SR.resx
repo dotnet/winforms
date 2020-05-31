@@ -6707,4 +6707,7 @@ Stack trace where the illegal operation occurred was:
   <data name="WindowSubclassHandlerWndProcIsNotExceptedOne" xml:space="preserve">
     <value>The current window procedure is not the expected one.</value>
   </data>
+  <data name="ListViewGroupCollapsedStateChangedDescr" xml:space="preserve">
+    <value>Event raised when the CollapsedState property of a ListViewGroup changes.</value>
+  </data>
 </root>
