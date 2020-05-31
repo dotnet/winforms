@@ -90,7 +90,6 @@ namespace System.Windows.Forms
                 }
 
                 // top left header cell
-                Debug.Assert(!DataGridView.LayoutInfo.dirty);
                 return DataGridView.LayoutInfo.TopLeftHeader != Rectangle.Empty;
             }
         }
