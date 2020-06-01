@@ -13,7 +13,7 @@ namespace System
     /// <remarks>
     ///  In the System namespace for implicit discovery.
     /// </remarks>
-    public static class TestAccessors
+    public static partial class TestAccessors
     {
         // Need to pass a null parameter when constructing a static instance
         // of TestAccessor. As this is pretty common and never changes, caching

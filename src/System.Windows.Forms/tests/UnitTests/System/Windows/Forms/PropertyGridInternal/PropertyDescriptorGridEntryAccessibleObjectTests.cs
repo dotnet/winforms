@@ -3,10 +3,39 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Linq;
 using System.Reflection;
 using Xunit;
 using static Interop;
+
+namespace System
+{
+    public static partial class TestAccessors
+    {
+        public class PropertyGridTestAccessor : TestAccessor<Windows.Forms.PropertyGrid>
+        {
+            public PropertyGridTestAccessor(Windows.Forms.PropertyGrid instance) : base(instance) { }
+
+            internal Windows.Forms.PropertyGridInternal.PropertyGridView GridView => Dynamic.gridView;
+        }
+
+        public static PropertyGridTestAccessor TestAccessor(this Windows.Forms.PropertyGrid propertyGrid)
+            => new PropertyGridTestAccessor(propertyGrid);
+
+        internal class PropertyGridViewTestAccessor : TestAccessor<Windows.Forms.PropertyGridInternal.PropertyGridView>
+        {
+            public PropertyGridViewTestAccessor(Windows.Forms.PropertyGridInternal.PropertyGridView instance) : base(instance) { }
+
+            internal Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry SelectedGridEntry
+            {
+                get => Dynamic.selectedGridEntry;
+                set => Dynamic.selectedGridEntry = value;
+            }
+        }
+
+        internal static PropertyGridViewTestAccessor TestAccessor(this Windows.Forms.PropertyGridInternal.PropertyGridView propertyGridView)
+            => new PropertyGridViewTestAccessor(propertyGridView);
+    }
+}
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
@@ -50,13 +79,13 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
 
             form.Controls.Add(propertyGrid);
 
-            var propertyGridView = propertyGrid.TestAccessor().Dynamic._gridView as PropertyGridView;
+            PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
 
             int firstPropertyIndex = 1; // Index 0 corresponds to the category grid entry.
             PropertyDescriptorGridEntry gridEntry =
                 (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
 
-            var selectedGridEntry = propertyGridView.TestAccessor().Dynamic.selectedGridEntry as PropertyDescriptorGridEntry;
+            var selectedGridEntry = propertyGridView.TestAccessor().SelectedGridEntry;
             Assert.Equal(gridEntry.PropertyName, selectedGridEntry.PropertyName);
 
             AccessibleObject selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;
@@ -68,11 +97,37 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             Assert.Equal(UiaCore.ExpandCollapseState.Expanded, selectedGridEntryAccessibleObject.ExpandCollapseState);
         }
 
-        internal class PropertyDescriptorGridEntryTestEntity : PropertyDescriptorGridEntry
+        [WinFormsFact]
+        public void PropertyDescriptorGridEntryAccessibleObject_Navigates_to_ListBoxAccessibleObject()
+        {
+            using var form = new Form();
+            using var propertyGrid = new PropertyGrid();
+            using var button = new Button();
+
+            propertyGrid.SelectedObject = button;
+            form.Controls.Add(propertyGrid);
+            form.Controls.Add(button);
+
+            using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView as PropertyGridView;
+
+            int thirdPropertyIndex = 3; // Index of AccessibleRole property which has a ListBox as editor.
+            PropertyDescriptorGridEntry gridEntry = (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[thirdPropertyIndex];
+
+            propertyGridView.TestAccessor().SelectedGridEntry = gridEntry;
+
+            using TestDropDownHolder dropDownHolder = new TestDropDownHolder(propertyGridView, propertyGridView.DropDownListBox);
+            propertyGridView.TestAccessor().Dynamic.dropDownHolder = dropDownHolder;
+            dropDownHolder.SetStatePublic(0x00000002, true);
+
+            var listboxFieldAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+            Assert.Equal("GridViewListBoxAccessibleObject", listboxFieldAccessibleObject.GetType().Name);
+        }
+
+        private class PropertyDescriptorGridEntryTestEntity : PropertyDescriptorGridEntry
         {
             private PropertyDescriptorGridEntryAccessibleObject _accessibleObject { get; set; }
 
-            internal PropertyDescriptorGridEntryTestEntity(PropertyGrid ownerGrid, GridEntry peParent, bool hide)
+            public PropertyDescriptorGridEntryTestEntity(PropertyGrid ownerGrid, GridEntry peParent, bool hide)
                 : base(ownerGrid, peParent, hide)
             {
                 _accessibleObject = new PropertyDescriptorGridEntryAccessibleObject(this);
@@ -87,11 +142,29 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             }
         }
 
-        internal class TestEntity
+        private class TestEntity
         {
             public Font FontProperty
             {
                 get; set;
+            }
+        }
+
+        private class TestDropDownHolder : PropertyGridView.DropDownHolder
+        {
+            private Control _component;
+
+            public TestDropDownHolder(PropertyGridView psheet, Control component)
+                : base(psheet)
+            {
+                _component = component;
+            }
+
+            public override Control Component => _component;
+
+            public void SetStatePublic(int flag, bool value)
+            {
+                SetState((States)flag, value);
             }
         }
     }

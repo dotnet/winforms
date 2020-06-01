@@ -371,7 +371,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private GridViewListBox DropDownListBox
+        internal GridViewListBox DropDownListBox
         {
             get
             {
@@ -6029,7 +6029,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return;
         }
 
-        private class GridViewListBox : ListBox
+        internal class GridViewListBox : ListBox
         {
             internal bool fInSetSelectedIndex;
             private readonly PropertyGridView _owningPropertyGridView;
