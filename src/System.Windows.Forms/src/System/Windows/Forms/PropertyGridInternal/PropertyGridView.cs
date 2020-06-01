@@ -6095,87 +6095,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                 fInSetSelectedIndex = true;
                 base.OnSelectedIndexChanged(e);
                 fInSetSelectedIndex = false;
-
-                if (AccessibilityObject is GridViewListBoxAccessibleObject gridViewListBoxAccessibleObject)
-                {
-                    gridViewListBoxAccessibleObject.SetListBoxItemFocus();
-                }
             }
         }
 
-        private class GridViewListBoxItemAccessibleObject : AccessibleObject
+        private class GridViewListBoxItemAccessibleObject : ListBox.ListBoxItemAccessibleObject
         {
             private readonly GridViewListBox _owningGridViewListBox;
             private readonly object _owningItem;
 
             public GridViewListBoxItemAccessibleObject(GridViewListBox owningGridViewListBox, object owningItem)
+                : base(owningGridViewListBox, owningItem, owningGridViewListBox.AccessibilityObject as ListBox.ListBoxAccessibleObject)
             {
                 _owningGridViewListBox = owningGridViewListBox;
                 _owningItem = owningItem;
-
-                UseStdAccessibleObjects(_owningGridViewListBox.Handle);
-            }
-
-            /// <summary>
-            ///  Gets the DropDown button bounds.
-            /// </summary>
-            public override Rectangle Bounds
-            {
-                get
-                {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    systemIAccessible.accLocation(out int left, out int top, out int width, out int height, GetChildId());
-                    return new Rectangle(left, top, width, height);
-                }
-            }
-
-            /// <summary>
-            ///  Gets the DropDown button default action.
-            /// </summary>
-            public override string DefaultAction
-            {
-                get
-                {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    return systemIAccessible.accDefaultAction[GetChildId()];
-                }
-            }
-
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                switch (direction)
-                {
-                    case UiaCore.NavigateDirection.Parent:
-                        return _owningGridViewListBox.AccessibilityObject;
-                    case UiaCore.NavigateDirection.NextSibling:
-                        int currentIndex = GetCurrentIndex();
-                        if (_owningGridViewListBox.AccessibilityObject is GridViewListBoxAccessibleObject gridViewListBoxAccessibleObject)
-                        {
-                            int itemsCount = gridViewListBoxAccessibleObject.GetChildFragmentCount();
-                            int nextItemIndex = currentIndex + 1;
-                            if (itemsCount > nextItemIndex)
-                            {
-                                return gridViewListBoxAccessibleObject.GetChildFragment(nextItemIndex);
-                            }
-                        }
-                        break;
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                        currentIndex = GetCurrentIndex();
-                        gridViewListBoxAccessibleObject = _owningGridViewListBox.AccessibilityObject as GridViewListBoxAccessibleObject;
-                        if (gridViewListBoxAccessibleObject != null)
-                        {
-                            var itemsCount = gridViewListBoxAccessibleObject.GetChildFragmentCount();
-                            int previousItemIndex = currentIndex - 1;
-                            if (previousItemIndex >= 0)
-                            {
-                                return gridViewListBoxAccessibleObject.GetChildFragment(previousItemIndex);
-                            }
-                        }
-
-                        break;
-                }
-
-                return base.FragmentNavigate(direction);
             }
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
@@ -6186,68 +6118,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            private int GetCurrentIndex()
-            {
-                return _owningGridViewListBox.Items.IndexOf(_owningItem);
-            }
-
-            internal override int GetChildId()
-            {
-                return GetCurrentIndex() + 1; // Index is zero-based, Child ID is 1-based.
-            }
-
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
-                    case UiaCore.UIA.RuntimeIdPropertyId:
-                        return RuntimeId;
-                    case UiaCore.UIA.BoundingRectanglePropertyId:
-                        return BoundingRectangle;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ListItemControlTypeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
                     case UiaCore.UIA.AccessKeyPropertyId:
                         return KeyboardShortcut;
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _owningGridViewListBox.Focused;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return _owningGridViewListBox.Enabled;
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return Help ?? string.Empty;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                     default:
                         return base.GetPropertyValue(propertyID);
-                }
-            }
-
-            /// <summary>
-            ///  Gets the help text.
-            /// </summary>
-            public override string Help
-            {
-                get
-                {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    return systemIAccessible.accHelp[GetChildId()];
-                }
-            }
-
-            /// <summary>
-            ///  Gets the keyboard shortcut.
-            /// </summary>
-            public override string KeyboardShortcut
-            {
-                get
-                {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    return systemIAccessible.get_accKeyboardShortcut(GetChildId());
                 }
             }
 
@@ -6258,8 +6136,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>True if specified </returns>
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
-                    patternId == UiaCore.UIA.InvokePatternId)
+                if (patternId == UiaCore.UIA.InvokePatternId)
                 {
                     return true;
                 }
@@ -6285,18 +6162,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///  Gets the accessible role.
-            /// </summary>
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    return (AccessibleRole)systemIAccessible.get_accRole(GetChildId());
-                }
-            }
-
-            /// <summary>
             ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
@@ -6311,64 +6176,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return runtimeId;
                 }
             }
-
-            /// <summary>
-            ///  Gets the accessible state.
-            /// </summary>
-            public override AccessibleStates State
-            {
-                get
-                {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    return (AccessibleStates)systemIAccessible.get_accState(GetChildId());
-                }
-            }
-
-            internal override void SetFocus()
-            {
-                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-
-                base.SetFocus();
-            }
-        }
-
-        private class GridViewListBoxItemAccessibleObjectCollection : Hashtable
-        {
-            private readonly GridViewListBox _owningGridViewListBox;
-
-            public GridViewListBoxItemAccessibleObjectCollection(GridViewListBox owningGridViewListBox)
-            {
-                _owningGridViewListBox = owningGridViewListBox;
-            }
-
-            public override object this[object key]
-            {
-                get
-                {
-                    if (!ContainsKey(key))
-                    {
-                        var itemAccessibleObject = new GridViewListBoxItemAccessibleObject(_owningGridViewListBox, key);
-                        base[key] = itemAccessibleObject;
-                    }
-
-                    return base[key];
-                }
-
-                set
-                {
-                    base[key] = value;
-                }
-            }
         }
 
         /// <summary>
         ///  Represents the PropertyGridView ListBox accessibility object.
         /// </summary>
-        private class GridViewListBoxAccessibleObject : ControlAccessibleObject
+        private class GridViewListBoxAccessibleObject : ListBox.ListBoxAccessibleObject
         {
-            private readonly GridViewListBox _owningGridViewListBox;
             private readonly PropertyGridView _owningPropertyGridView;
-            private readonly GridViewListBoxItemAccessibleObjectCollection _itemAccessibleObjects;
 
             /// <summary>
             ///  Constructs the new instance of GridViewListBoxAccessibleObject.
@@ -6376,9 +6191,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="owningGridViewListBox">The owning GridViewListBox.</param>
             public GridViewListBoxAccessibleObject(GridViewListBox owningGridViewListBox) : base(owningGridViewListBox)
             {
-                _owningGridViewListBox = owningGridViewListBox;
+                if (owningGridViewListBox.OwningPropertyGridView == null)
+                {
+                    throw new ArgumentNullException(nameof(owningGridViewListBox.OwningPropertyGridView));
+                }
+
                 _owningPropertyGridView = owningGridViewListBox.OwningPropertyGridView;
-                _itemAccessibleObjects = new GridViewListBoxItemAccessibleObjectCollection(owningGridViewListBox);
             }
 
             /// <summary>
@@ -6391,18 +6209,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (direction == UiaCore.NavigateDirection.Parent && _owningPropertyGridView.SelectedGridEntry != null)
                 {
                     return _owningPropertyGridView.SelectedGridEntry.AccessibilityObject;
-                }
-                else if (direction == UiaCore.NavigateDirection.FirstChild)
-                {
-                    return GetChildFragment(0);
-                }
-                else if (direction == UiaCore.NavigateDirection.LastChild)
-                {
-                    var childFragmentCount = GetChildFragmentCount();
-                    if (childFragmentCount > 0)
-                    {
-                        return GetChildFragment(childFragmentCount - 1);
-                    }
                 }
                 else if (direction == UiaCore.NavigateDirection.NextSibling)
                 {
@@ -6426,57 +6232,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     return _owningPropertyGridView.AccessibilityObject;
-                }
-            }
-
-            public AccessibleObject GetChildFragment(int index)
-            {
-                if (index < 0 || index >= _owningGridViewListBox.Items.Count)
-                {
-                    return null;
-                }
-
-                var item = _owningGridViewListBox.Items[index];
-                return _itemAccessibleObjects[item] as AccessibleObject;
-            }
-
-            public int GetChildFragmentCount()
-            {
-                return _owningGridViewListBox.Items.Count;
-            }
-
-            /// <summary>
-            ///  Request value of specified property from an element.
-            /// </summary>
-            /// <param name="propertyID">Identifier indicating the property to return</param>
-            /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.ListControlTypeId;
-                }
-                else if (propertyID == UiaCore.UIA.NamePropertyId)
-                {
-                    return Name;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
-            internal override void SetFocus()
-            {
-                RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-
-                base.SetFocus();
-            }
-
-            internal void SetListBoxItemFocus()
-            {
-                var selectedItem = _owningGridViewListBox.SelectedItem;
-                if (selectedItem != null && _itemAccessibleObjects[selectedItem] is AccessibleObject itemAccessibleObject)
-                {
-                    itemAccessibleObject.SetFocus();
                 }
             }
         }
@@ -7431,7 +7186,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return _owningPropertyGridView.OwnerGrid.AccessibilityObject;
+                    return _owningPropertyGridView.OwnerGrid?.AccessibilityObject;
                 }
             }
 

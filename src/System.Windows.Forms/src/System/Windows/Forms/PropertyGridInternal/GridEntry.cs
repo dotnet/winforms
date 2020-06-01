@@ -2946,7 +2946,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return PropertyGridView.AccessibilityGetGridEntryBounds(owner);
+                    if (PropertyGridView != null && PropertyGridView.IsHandleCreated)
+                    {
+                        return PropertyGridView.AccessibilityGetGridEntryBounds(owner);
+                    }
+
+                    return Rectangle.Empty;
                 }
             }
 
@@ -3047,6 +3052,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
+                    if (owner.GridEntryHost == null || !owner.GridEntryHost.IsHandleCreated)
+                    {
+                        return base.RuntimeId;
+                    }
+
                     if (runtimeId == null)
                     {
                         // we need to provide a unique ID
