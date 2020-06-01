@@ -433,6 +433,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
+        internal DropDownHolder DropDownControlHolder => dropDownHolder;
+
         internal bool DropDownVisible
         {
             get
@@ -6036,6 +6038,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public GridViewListBox(PropertyGridView gridView)
             {
+                if (gridView == null)
+                {
+                    throw new ArgumentNullException(nameof(gridView));
+                }
+
                 base.IntegralHeight = false;
                 _owningPropertyGridView = gridView;
                 base.BackColor = gridView.BackColor;
