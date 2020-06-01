@@ -118,7 +118,16 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the accessible role.
             /// </summary>
-            public override AccessibleRole Role => (AccessibleRole)_systemIAccessible.get_accRole(GetChildId());
+            public override AccessibleRole Role
+            {
+                get
+                {
+                    var accRole = _systemIAccessible.get_accRole(GetChildId());
+                    return accRole != null
+                        ? (AccessibleRole)accRole
+                        : AccessibleRole.None;
+                }
+            }
 
             /// <summary>
             ///  Gets the accessible state.
@@ -134,7 +143,13 @@ namespace System.Windows.Forms
                         return state |= AccessibleStates.Selected | AccessibleStates.Focused;
                     }
 
-                    return state |= (AccessibleStates)(_systemIAccessible.get_accState(GetChildId()));
+                    var systemIAccessibleState = _systemIAccessible.get_accState(GetChildId());
+                    if (systemIAccessibleState != null)
+                    {
+                        return state |= (AccessibleStates)systemIAccessibleState;
+                    }
+
+                    return state;
                 }
             }
 
@@ -299,19 +314,13 @@ namespace System.Windows.Forms
 
             public override void Select(AccessibleSelection flags)
             {
-                try
-                {
-                    _systemIAccessible.accSelect((int)flags, GetChildId());
-                }
-                catch (ArgumentException)
-                {
-                    // In Everett, the ListBox accessible children did not have any selection capability.
-                    // In Whidbey, they delegate the selection capability to OLEACC.
-                    // However, OLEACC does not deal w/ several Selection flags: ExtendSelection, AddSelection, RemoveSelection.
-                    // OLEACC instead throws an ArgumentException.
-                    // Since Whidbey API's should not throw an exception in places where Everett API's did not, we catch
-                    // the ArgumentException and fail silently.
-                }
+                // In Everett, the ListBox accessible children did not have any selection capability.
+                // In Whidbey, they delegate the selection capability to OLEACC.
+                // However, OLEACC does not deal w/ several Selection flags: ExtendSelection, AddSelection, RemoveSelection.
+                // OLEACC instead throws an ArgumentException.
+                // Since Whidbey API's should not throw an exception in places where Everett API's did not, we catch
+                // the ArgumentException and fail silently.
+                _systemIAccessible.accSelect((int)flags, GetChildId());
             }
         }
     }
