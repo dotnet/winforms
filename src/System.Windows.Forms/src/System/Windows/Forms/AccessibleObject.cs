@@ -1654,7 +1654,7 @@ namespace System.Windows.Forms
             if (acc != null || en != null)
             {
                 systemIAccessible = new SystemIAccessibleWrapper((IAccessible?)acc);
-                systemIEnumVariant = (Oleaut32.IEnumVariant)en;
+                systemIEnumVariant = (Oleaut32.IEnumVariant?)en;
                 systemIOleWindow = acc as Ole32.IOleWindow;
             }
         }

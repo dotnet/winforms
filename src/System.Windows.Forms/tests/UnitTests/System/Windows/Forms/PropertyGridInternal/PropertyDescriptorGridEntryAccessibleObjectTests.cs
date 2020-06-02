@@ -7,36 +7,6 @@ using System.Reflection;
 using Xunit;
 using static Interop;
 
-namespace System
-{
-    public static partial class TestAccessors
-    {
-        public class PropertyGridTestAccessor : TestAccessor<Windows.Forms.PropertyGrid>
-        {
-            public PropertyGridTestAccessor(Windows.Forms.PropertyGrid instance) : base(instance) { }
-
-            internal Windows.Forms.PropertyGridInternal.PropertyGridView GridView => Dynamic.gridView;
-        }
-
-        public static PropertyGridTestAccessor TestAccessor(this Windows.Forms.PropertyGrid propertyGrid)
-            => new PropertyGridTestAccessor(propertyGrid);
-
-        internal class PropertyGridViewTestAccessor : TestAccessor<Windows.Forms.PropertyGridInternal.PropertyGridView>
-        {
-            public PropertyGridViewTestAccessor(Windows.Forms.PropertyGridInternal.PropertyGridView instance) : base(instance) { }
-
-            internal Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry SelectedGridEntry
-            {
-                get => Dynamic.selectedGridEntry;
-                set => Dynamic.selectedGridEntry = value;
-            }
-        }
-
-        internal static PropertyGridViewTestAccessor TestAccessor(this Windows.Forms.PropertyGridInternal.PropertyGridView propertyGridView)
-            => new PropertyGridViewTestAccessor(propertyGridView);
-    }
-}
-
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
     public class PropertyDescriptorGridEntryAccessibleObjectTests
