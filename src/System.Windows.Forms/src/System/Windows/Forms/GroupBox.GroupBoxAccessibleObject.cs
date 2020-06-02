@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -17,8 +15,6 @@ namespace System.Windows.Forms
             internal GroupBoxAccessibleObject(GroupBox owner) : base(owner)
             {
             }
-
-            private GroupBox OwningGroupBox => Owner as GroupBox;
 
             public override AccessibleRole Role
             {
@@ -34,7 +30,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
                     UiaCore.UIA.NamePropertyId
@@ -42,7 +38,7 @@ namespace System.Windows.Forms
                     UiaCore.UIA.ControlTypePropertyId
                         => UiaCore.UIA.GroupControlTypeId,
                     UiaCore.UIA.AutomationIdPropertyId
-                        => OwningGroupBox.IsHandleCreated ? OwningGroupBox.Name : string.Empty,
+                        => Owner.Name,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         => true,
                     _ => base.GetPropertyValue(propertyID)
