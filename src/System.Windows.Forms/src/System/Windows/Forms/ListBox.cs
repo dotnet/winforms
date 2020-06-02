@@ -1621,19 +1621,24 @@ namespace System.Windows.Forms
         /// </summary>
         internal unsafe string NativeGetItemText(int index)
         {
-            int maxLen = PARAM.ToInt(SendMessageW(this, (WM)LB.GETTEXTLEN, (IntPtr)index));
-            if (maxLen == LB_ERR)
+            int maxLength = PARAM.ToInt(SendMessageW(this, (WM)LB.GETTEXTLEN, (IntPtr)index));
+            if (maxLength == LB_ERR)
             {
                 return string.Empty;
             }
 
-            char[] text = ArrayPool<char>.Shared.Rent(maxLen + 1);
+            char[] text = ArrayPool<char>.Shared.Rent(maxLength + 1);
             string result;
             fixed (char* pText = text)
             {
-                int actualLen = PARAM.ToInt(SendMessageW(this, (WM)LB.GETTEXT, (IntPtr)index, (IntPtr)pText));
-                Debug.Assert(actualLen != LB_ERR, "Should have validated the index above");
-                result = new string(pText, 0, actualLen);
+                int actualLength = PARAM.ToInt(SendMessageW(this, (WM)LB.GETTEXT, (IntPtr)index, (IntPtr)pText));
+                Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
+                if (actualLength == LB_ERR)
+                {
+                    return string.Empty;
+                }
+
+                result = new string(pText, 0, Math.Min(maxLength, actualLength));
             }
 
             ArrayPool<char>.Shared.Return(text);
