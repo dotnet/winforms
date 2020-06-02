@@ -301,10 +301,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, "ImageKey")]
-        [InlineData(0, "")]
-        [InlineData(1, "")]
-        public void ColumnHeader_ImageIndex_SetWithImageKey_GetReturnsExpected(int value, string expectedImageKey)
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void ColumnHeader_ImageIndex_SetWithImageKey_GetReturnsExpected(int value)
         {
             using var header = new ColumnHeader
             {
@@ -312,12 +312,12 @@ namespace System.Windows.Forms.Tests
                 ImageIndex = value
             };
             Assert.Equal(value, header.ImageIndex);
-            Assert.Equal(expectedImageKey, header.ImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, header.ImageKey);
 
             // Set same.
             header.ImageIndex = value;
             Assert.Equal(value, header.ImageIndex);
-            Assert.Equal(expectedImageKey, header.ImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, header.ImageKey);
         }
 
         [WinFormsTheory]
@@ -522,23 +522,23 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(null, "", -1)]
-        [InlineData("", "", 0)]
-        [InlineData("ImageKey", "ImageKey", -1)]
-        public void ColumnHeader_ImageKey_SetWithImageIndex_GetReturnsExpected(string value, string expected, int expectedImageIndex)
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("ImageKey", "ImageKey")]
+        public void ColumnHeader_ImageKey_SetWithImageIndex_GetReturnsExpected(string value, string expectedImageKey)
         {
             using var header = new ColumnHeader
             {
                 ImageIndex = 0,
                 ImageKey = value
             };
-            Assert.Equal(expected, header.ImageKey);
-            Assert.Equal(expectedImageIndex, header.ImageIndex);
+            Assert.Equal(expectedImageKey, header.ImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, header.ImageIndex);
 
             // Set same.
             header.ImageKey = value;
-            Assert.Equal(expected, header.ImageKey);
-            Assert.Equal(expectedImageIndex, header.ImageIndex);
+            Assert.Equal(expectedImageKey, header.ImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, header.ImageIndex);
         }
 
         [WinFormsTheory]

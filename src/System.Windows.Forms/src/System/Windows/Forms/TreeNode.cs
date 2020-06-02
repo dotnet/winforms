@@ -570,7 +570,7 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                if (ImageIndexer.Index != -1 && tv != null && tv.ImageList != null && ImageIndexer.Index >= tv.ImageList.Images.Count)
+                if (ImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv != null && tv.ImageList != null && ImageIndexer.Index >= tv.ImageList.Images.Count)
                 {
                     return tv.ImageList.Images.Count - 1;
                 }
@@ -584,7 +584,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
 
-                if (ImageIndexer.Index == value)
+                if (ImageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
                 {
                     return;
                 }
@@ -611,7 +611,7 @@ namespace System.Windows.Forms
             get => ImageIndexer.Key;
             set
             {
-                if (value == ImageIndexer.Key)
+                if (value == ImageIndexer.Key && !string.Equals(value, ImageList.Indexer.DefaultKey))
                 {
                     return;
                 }
