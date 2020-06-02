@@ -23,9 +23,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             ImageList.ImageCollection collection = list.Images;
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
         }
 
         [WinFormsFact]
@@ -373,9 +371,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.Add("Key1", value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal("Key1", Assert.Single(collection.Keys));
             Assert.False(list.HandleCreated);
@@ -420,9 +416,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.Add("Key1", value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal("Key1", Assert.Single(collection.Keys));
             Assert.True(list.HandleCreated);
@@ -466,9 +460,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.Add(value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.False(list.HandleCreated);
@@ -493,9 +485,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.Add(value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.True(list.HandleCreated);
@@ -539,9 +529,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.Add(value, transparentColor);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.False(list.HandleCreated);
@@ -566,9 +554,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.Add(value, transparentColor);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.True(list.HandleCreated);
@@ -600,9 +586,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.Add("Key1", value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal("Key1", Assert.Single(collection.Keys));
             Assert.False(list.HandleCreated);
@@ -647,9 +631,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.Add("Key1", value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal("Key1", Assert.Single(collection.Keys));
             Assert.True(list.HandleCreated);
@@ -693,9 +675,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.Add(value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.False(list.HandleCreated);
@@ -720,9 +700,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.Add(value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.True(list.HandleCreated);
@@ -859,9 +837,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.AddStrip(value);
-#pragma warning disable xUnit2013
             Assert.Equal(expectedCount, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(Enumerable.Repeat(string.Empty, expectedCount), collection.Keys.Cast<string>());
             Assert.False(list.HandleCreated);
@@ -879,9 +855,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.AddStrip(value);
-#pragma warning disable xUnit2013
             Assert.Equal(expectedCount, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(Enumerable.Repeat(string.Empty, expectedCount), collection.Keys.Cast<string>());
             Assert.True(list.HandleCreated);
@@ -927,19 +901,15 @@ namespace System.Windows.Forms.Tests
 
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.False(list.HandleCreated);
 
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.False(list.HandleCreated);
         }
 
@@ -953,19 +923,15 @@ namespace System.Windows.Forms.Tests
 
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.False(list.HandleCreated);
 
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.False(list.HandleCreated);
         }
 
@@ -978,19 +944,15 @@ namespace System.Windows.Forms.Tests
 
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
 
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
         }
 
@@ -1005,19 +967,15 @@ namespace System.Windows.Forms.Tests
 
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
 
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
         }
 
@@ -1291,17 +1249,13 @@ namespace System.Windows.Forms.Tests
             // Remove first.
             collection.RemoveAt(0);
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
 
             // Remove last.
             collection.RemoveAt(0);
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
             Assert.True(collection.Empty);
         }
 
@@ -1335,18 +1289,14 @@ namespace System.Windows.Forms.Tests
             // Remove first.
             collection.RemoveAt(0);
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(color3, ((Bitmap)collection[0]).GetPixel(0, 0));
 
             // Remove last.
             collection.RemoveAt(0);
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
             Assert.True(collection.Empty);
         }
 
@@ -1403,17 +1353,13 @@ namespace System.Windows.Forms.Tests
             // Remove first.
             collection.RemoveByKey("image1");
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
 
             // Remove last.
             collection.RemoveByKey("IMAGE3");
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
             Assert.True(collection.Empty);
         }
 
@@ -1455,18 +1401,14 @@ namespace System.Windows.Forms.Tests
             // Remove first.
             collection.RemoveByKey("image1");
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(color3, ((Bitmap)collection[0]).GetPixel(0, 0));
 
             // Remove last.
             collection.RemoveByKey("IMAGE3");
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
             Assert.True(collection.Empty);
         }
 

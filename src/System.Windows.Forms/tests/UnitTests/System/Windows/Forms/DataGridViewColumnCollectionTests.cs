@@ -12,8 +12,6 @@ namespace System.Windows.Forms.Tests
 {
     public class DataGridViewColumnCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-#pragma warning disable xUnit2013
-
         [WinFormsFact]
         public void DataGridViewColumnCollection_Ctor_DataGridView()
         {
@@ -574,6 +572,5 @@ namespace System.Windows.Forms.Tests
 
             public new ArrayList List => base.List;
         }
-#pragma warning restore xUnit2013
     }
 }

@@ -6,4 +6,8 @@
     <Rule Id="CA1825" Action="None" />          <!-- Avoid zero-length array allocations. -->
   </Rules>
 
+  <Rules AnalyzerId="xunit.analyzers" RuleNamespace="xunit.analyzers">
+    <Rule Id="xUnit2013" Action="None" />       <!-- Do not use equality check to check for collection size. -->
+  </Rules>
+
 </RuleSet>
