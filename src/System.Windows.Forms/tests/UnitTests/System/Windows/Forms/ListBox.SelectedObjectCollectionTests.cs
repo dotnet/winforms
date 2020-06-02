@@ -9,10 +9,6 @@ namespace System.Windows.Forms.Tests
 {
     public class ListBoxSelectedObjectCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        // Disable the warning "Do not use equality check to check for collection size"
-        // because Assert.Empty/NotEmpty/Single use IEnumerable.GetEnumerator internally,
-        // but we want to verify the actual return value of Count or ICollection.Count.
-#pragma warning disable xUnit2013
         [WinFormsFact]
         public void ListBoxSelectedObjectCollection_Ctor_ListBox()
         {
@@ -125,6 +121,5 @@ namespace System.Windows.Forms.Tests
             IList collection = new ListBox.SelectedObjectCollection(owner);
             Assert.Throws<NotSupportedException>(() => collection.RemoveAt(index));
         }
-#pragma warning restore xUnit2013
     }
 }

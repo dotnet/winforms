@@ -15,9 +15,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new DataGridView();
             DataGridViewSelectedCellCollection collection = control.SelectedCells;
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.IsReadOnly);
             Assert.False(collection.IsSynchronized);
             Assert.Same(collection, collection.SyncRoot);
@@ -37,9 +35,7 @@ namespace System.Windows.Forms.Tests
             control.Rows[2].Cells[0].Selected = true;
 
             DataGridViewSelectedCellCollection collection = control.SelectedCells;
-#pragma warning disable xUnit2013
             Assert.Equal(2, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.IsReadOnly);
             Assert.False(collection.IsSynchronized);
             Assert.Same(collection, collection.SyncRoot);
