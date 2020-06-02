@@ -401,19 +401,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(cell.Displayed);
         }
 
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void DataGridViewCell_Displayed_GetWithColumn_ReturnsExpected(bool columnVisible)
-        {
-            using var column = new DataGridViewColumn
-            {
-                Visible = columnVisible
-            };
-            using var cell = new DataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.False(cell.Displayed);
-        }
-
         public static IEnumerable<object[]> Displayed_GetWithDataGridView_TestData()
         {
             foreach (bool gridVisible in new bool[] { true, false })
@@ -502,29 +489,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(Displayed_GetWithSharedDataGridView_TestData))]
-        public void DataGridViewCell_Displayed_GetWithColumnDataGridView_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool columnVisible)
-        {
-            using var control = new DataGridView
-            {
-                Visible = gridVisible,
-                RowHeadersVisible = rowHeadersVisible,
-                ColumnHeadersVisible = columnHeadersVisible
-            };
-            using var cellTemplate = new SubDataGridViewCell();
-            using var column = new DataGridViewColumn
-            {
-                CellTemplate = cellTemplate,
-                Visible = columnVisible
-            };
-            control.Columns.Add(column);
-            using var cell = new DataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.False(cell.Displayed);
-            Assert.False(control.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
         [MemberData(nameof(Displayed_GetWithDataGridView_TestData))]
         public void DataGridViewCell_Displayed_GetWithDataGridViewWithHandle_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool rowVisible, bool columnVisible)
         {
@@ -589,40 +553,6 @@ namespace System.Windows.Forms.Tests
 
             DataGridViewCell cell = row.Cells[0];
             Assert.False(cell.Displayed);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(Displayed_GetWithSharedDataGridView_TestData))]
-        public void DataGridViewCell_Displayed_GetWithColumnDataGridViewWithHandle_ReturnsExpected(bool gridVisible, bool rowHeadersVisible, bool columnHeadersVisible, bool columnVisible)
-        {
-            using var control = new DataGridView
-            {
-                Visible = gridVisible,
-                RowHeadersVisible = rowHeadersVisible,
-                ColumnHeadersVisible = columnHeadersVisible
-            };
-            using var cellTemplate = new SubDataGridViewCell();
-            using var column = new DataGridViewColumn
-            {
-                CellTemplate = cellTemplate,
-                Visible = columnVisible
-            };
-            control.Columns.Add(column);
-            using var cell = new DataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            control.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            control.HandleCreated += (sender, e) => createdCallCount++;
-
-            Assert.Equal(gridVisible && columnHeadersVisible && columnVisible, cell.Displayed);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1416,6 +1346,7 @@ namespace System.Windows.Forms.Tests
             column.Frozen = columnFrozen;
             DataGridViewCell cell = row.Cells[0];
             Assert.Equal(rowFrozen && columnFrozen, cell.Frozen);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1433,6 +1364,7 @@ namespace System.Windows.Forms.Tests
             column.Frozen = columnFrozen;
             DataGridViewCell cell = row.Cells[0];
             Assert.False(cell.Frozen);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -1634,19 +1566,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void DataGridViewCell_ReadOnly_GetWithColumn_ReturnsExpected(bool columnReadOnly)
-        {
-            using var column = new DataGridViewColumn
-            {
-                ReadOnly = columnReadOnly
-            };
-            using var cell = new DataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.True(cell.ReadOnly);
-        }
-
-        [WinFormsTheory]
         [InlineData(false, true, true)]
         [InlineData(false, true, false)]
         [InlineData(false, false, true)]
@@ -1672,6 +1591,7 @@ namespace System.Windows.Forms.Tests
             column.ReadOnly = columnReadOnly;
             DataGridViewCell cell = row.Cells[0];
             Assert.Equal(readOnly || rowReadOnly || columnReadOnly, cell.ReadOnly);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1834,18 +1754,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, cell.ReadOnly);
             Assert.False(row.ReadOnly);
             Assert.Equal(value, (cell.State & DataGridViewElementStates.ReadOnly) != 0);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             cell.ReadOnly = value;
             Assert.Equal(value, cell.ReadOnly);
             Assert.False(row.ReadOnly);
             Assert.Equal(value, (cell.State & DataGridViewElementStates.ReadOnly) != 0);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             cell.ReadOnly = !value;
             Assert.Equal(!value, cell.ReadOnly);
             Assert.False(row.ReadOnly);
             Assert.Equal(!value, (cell.State & DataGridViewElementStates.ReadOnly) != 0);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1877,18 +1800,21 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(readOnly || value, cell.ReadOnly);
             Assert.Equal(readOnly || (rowReadOnly && value), row.ReadOnly);
             Assert.Equal(!readOnly && !rowReadOnly && value, (cell.State & DataGridViewElementStates.ReadOnly) != 0);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             cell.ReadOnly = value;
             Assert.Equal(readOnly || value, cell.ReadOnly);
             Assert.Equal(readOnly || (rowReadOnly && value), row.ReadOnly);
             Assert.Equal(!readOnly && !rowReadOnly && value, (cell.State & DataGridViewElementStates.ReadOnly) != 0);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             cell.ReadOnly = !value;
             Assert.Equal(readOnly || !value, cell.ReadOnly);
             Assert.Equal(readOnly, row.ReadOnly);
             Assert.Equal(!readOnly && !value, (cell.State & DataGridViewElementStates.ReadOnly) != 0);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -1927,6 +1853,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(readOnly || rowReadOnly, cell2.ReadOnly);
             Assert.Equal(readOnly || (rowReadOnly && value), row.ReadOnly);
             Assert.Equal(!readOnly && !rowReadOnly && value, (cell1.State & DataGridViewElementStates.ReadOnly) != 0);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             cell1.ReadOnly = value;
@@ -1934,6 +1861,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(readOnly || rowReadOnly, cell2.ReadOnly);
             Assert.Equal(readOnly || (rowReadOnly && value), row.ReadOnly);
             Assert.Equal(!readOnly && !rowReadOnly && value, (cell1.State & DataGridViewElementStates.ReadOnly) != 0);
+            Assert.False(control.IsHandleCreated);
 
             // Set different.
             cell1.ReadOnly = !value;
@@ -1941,6 +1869,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(readOnly || rowReadOnly, cell2.ReadOnly);
             Assert.Equal(readOnly, row.ReadOnly);
             Assert.Equal(!readOnly && !value, (cell1.State & DataGridViewElementStates.ReadOnly) != 0);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -2000,6 +1929,7 @@ namespace System.Windows.Forms.Tests
             control.Columns.Add(column);
             DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
             Assert.Throws<InvalidOperationException>(() => cell.ReadOnly = value);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2032,21 +1962,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(DataGridViewTriState.True, true)]
-        [InlineData(DataGridViewTriState.False, false)]
-        [InlineData(DataGridViewTriState.NotSet, false)]
-        public void DataGridViewCell_Resizable_GetWithColumn_ReturnsExpected(DataGridViewTriState columnResizable, bool expected)
-        {
-            using var column = new DataGridViewColumn
-            {
-                Resizable = columnResizable
-            };
-            using var cell = new DataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.Equal(expected, cell.Resizable);
-        }
-
-        [WinFormsTheory]
         [InlineData(DataGridViewTriState.True, DataGridViewTriState.True, true)]
         [InlineData(DataGridViewTriState.True, DataGridViewTriState.False, true)]
         [InlineData(DataGridViewTriState.True, DataGridViewTriState.NotSet, true)]
@@ -2070,6 +1985,7 @@ namespace System.Windows.Forms.Tests
             column.Resizable = columnResizable;
             DataGridViewCell cell = row.Cells[0];
             Assert.Equal(expected, cell.Resizable);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2087,6 +2003,7 @@ namespace System.Windows.Forms.Tests
             column.Resizable = columnResizable;
             DataGridViewCell cell = row.Cells[0];
             Assert.False(cell.Resizable);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2112,15 +2029,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(cell.Selected);
         }
 
-        [WinFormsFact]
-        public void DataGridViewCell_Selected_GetWithColumn_ReturnsExpected()
-        {
-            using var column = new DataGridViewColumn();
-            using var cell = new DataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.False(cell.Selected);
-        }
-
         [WinFormsTheory]
         [InlineData(true, true)]
         [InlineData(true, false)]
@@ -2140,6 +2048,7 @@ namespace System.Windows.Forms.Tests
             column.Selected = columnSelected;
             DataGridViewCell cell = row.Cells[0];
             Assert.Equal(rowSelected, cell.Selected);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2157,10 +2066,11 @@ namespace System.Windows.Forms.Tests
             column.Selected = columnSelected;
             DataGridViewCell cell = row.Cells[0];
             Assert.False(cell.Selected);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void DataGridViewCell_Selected_SetNoDataGridView_ThrowsInvalidOperationException()
+        public void DataGridViewCell_Selected_Set_ThrowsInvalidOperationException()
         {
             using var cell = new SubDataGridViewCell();
             Assert.Throws<InvalidOperationException>(() => cell.Selected = true);
@@ -2168,6 +2078,125 @@ namespace System.Windows.Forms.Tests
 
             cell.Selected = false;
             Assert.False(cell.Selected);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCell_Selected_SetWithRow_ThrowsInvalidOperationException()
+        {
+            using var row = new DataGridViewRow();
+            using var cell = new SubDataGridViewCell();
+            row.Cells.Add(cell);
+
+            Assert.Throws<InvalidOperationException>(() => cell.Selected = true);
+            Assert.False(cell.Selected);
+
+            cell.Selected = false;
+            Assert.False(cell.Selected);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DataGridViewCell_Selected_SetWithColumn_ThrowsInvalidOperationException(bool value)
+        {
+            using var column = new DataGridViewColumn();
+            using var cell = new DataGridViewColumnHeaderCell();
+            column.HeaderCell = cell;
+
+            Assert.Throws<InvalidOperationException>(() => cell.Selected = value);
+            Assert.False(cell.Selected);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DataGridViewCell_Selected_SetWithDataGridView_ReturnsExpected(bool value)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView();
+            control.Columns.Add(column);
+            DataGridViewCell cell = control.Rows[0].Cells[0];
+
+            cell.Selected = value;
+            Assert.Equal(value, cell.Selected);
+            Assert.Equal(value, (cell.State & DataGridViewElementStates.Selected) != 0);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            cell.Selected = value;
+            Assert.Equal(value, cell.Selected);
+            Assert.Equal(value, (cell.State & DataGridViewElementStates.Selected) != 0);
+            Assert.False(control.IsHandleCreated);
+
+            // Set different.
+            cell.Selected = !value;
+            Assert.Equal(!value, cell.Selected);
+            Assert.Equal(!value, (cell.State & DataGridViewElementStates.Selected) != 0);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void DataGridViewCell_Selected_SetShared_ThrowsInvalidOperationException(bool value)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView();
+            control.Columns.Add(column);
+            DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
+
+            Assert.Throws<InvalidOperationException>(() => cell.Selected = value);
+            Assert.False(cell.Selected);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCell_Selected_SetWithDataGridView_CallsCellStateChanged()
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView();
+            control.Columns.Add(column);
+            DataGridViewCell cell = control.Rows[0].Cells[0];
+
+            int callCount = 0;
+            DataGridViewCellStateChangedEventHandler handler = (sender, e) =>
+            {
+                callCount++;
+                Assert.Same(control, sender);
+                Assert.Same(cell, e.Cell);
+                Assert.Equal(DataGridViewElementStates.Selected, e.StateChanged);
+            };
+            control.CellStateChanged += handler;
+
+            // Set true.
+            cell.Selected = true;
+            Assert.True(cell.Selected);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            cell.Selected = true;
+            Assert.True(cell.Selected);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            cell.Selected = false;
+            Assert.False(cell.Selected);
+            Assert.Equal(2, callCount);
+
+            // Remove handler.
+            control.CellStateChanged -= handler;
+            cell.Selected = true;
+            Assert.True(cell.Selected);
+            Assert.Equal(2, callCount);
         }
 
         public static IEnumerable<object[]> Style_Set_TestData()
@@ -2737,6 +2766,7 @@ namespace System.Windows.Forms.Tests
             control.Columns.Add(column);
             DataGridViewCell cell = control.Rows[0].Cells[0];
             Assert.Same(valueType, cell.ValueType);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2875,11 +2905,13 @@ namespace System.Windows.Forms.Tests
             cell.ValueType = value;
             Assert.Equal(value, cell.ValueType);
             Assert.Equal(value, cell.FormattedValueType);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             cell.ValueType = value;
             Assert.Equal(value, cell.ValueType);
             Assert.Equal(value, cell.FormattedValueType);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2899,11 +2931,13 @@ namespace System.Windows.Forms.Tests
             cell.ValueType = value;
             Assert.Equal(value, cell.ValueType);
             Assert.Equal(value, cell.FormattedValueType);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             cell.ValueType = value;
             Assert.Equal(value, cell.ValueType);
             Assert.Equal(value, cell.FormattedValueType);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2931,19 +2965,6 @@ namespace System.Windows.Forms.Tests
             using var cell = new SubDataGridViewCell();
             row.Cells.Add(cell);
             Assert.Equal(rowVisible, cell.Visible);
-        }
-
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void DataGridViewCell_Visible_GetWithColumn_ReturnsExpected(bool columnVisible)
-        {
-            using var column = new DataGridViewColumn
-            {
-                Visible = columnVisible
-            };
-            using var cell = new DataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.Equal(columnVisible, cell.Visible);
         }
 
         [WinFormsTheory]
@@ -2980,8 +3001,10 @@ namespace System.Windows.Forms.Tests
             DataGridViewRow row = control.Rows[0];
             row.Visible = rowVisible;
             column.Visible = columnVisible;
+
             DataGridViewCell cell = row.Cells[0];
             Assert.Equal(rowVisible && columnVisible, cell.Visible);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2997,8 +3020,10 @@ namespace System.Windows.Forms.Tests
             control.Columns.Add(column);
             DataGridViewRow row = control.Rows.SharedRow(0);
             column.Visible = columnVisible;
+
             DataGridViewCell cell = row.Cells[0];
             Assert.False(cell.Visible);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -4228,6 +4253,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cell.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context));
         }
 
+        [WinFormsTheory]
+        [InlineData(-2)]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void DataGridViewCell_GetInheritedContextMenuStrip_Invoke_ReturnsExpected(int rowIndex)
+        {
+            using var cell = new SubDataGridViewCell();
+            Assert.Null(cell.GetInheritedContextMenuStrip(rowIndex));
+        }
+
+        [WinFormsTheory]
+        [InlineData(-2)]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void DataGridViewCell_GetInheritedContextMenuStrip_InvokeWithMenu_ReturnsExpected(int rowIndex)
+        {
+            using var cellMenu = new ContextMenuStrip();
+            using var cell = new SubDataGridViewCell
+            {
+                ContextMenuStrip = cellMenu
+            };
+            Assert.Same(cellMenu, cell.GetInheritedContextMenuStrip(rowIndex));
+        }
+
         public static IEnumerable<object[]> GetInheritedContextMenuStrip_TestData()
         {
             yield return new object[] { -2, null };
@@ -4251,6 +4300,23 @@ namespace System.Windows.Forms.Tests
             Assert.Same(menu, cell.GetInheritedContextMenuStrip(rowIndex));
         }
 
+        [WinFormsTheory]
+        [MemberData(nameof(GetInheritedContextMenuStrip_TestData))]
+        public void DataGridViewCell_GetInheritedContextMenuStrip_InvokeWithMenuWithRow_ReturnsExpected(int rowIndex, ContextMenuStrip menu)
+        {
+            using var row = new DataGridViewRow
+            {
+                ContextMenuStrip = menu
+            };
+            using var cellMenu = new ContextMenuStrip();
+            using var cell = new SubDataGridViewCell
+            {
+                ContextMenuStrip = cellMenu
+            };
+            row.Cells.Add(cell);
+            Assert.Same(cellMenu, cell.GetInheritedContextMenuStrip(rowIndex));
+        }
+
         public static IEnumerable<object[]> ContextMenuStrip_GetWithDataGridView_TestData()
         {
             yield return new object[] { null };
@@ -4259,44 +4325,64 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ContextMenuStrip_GetWithDataGridView_TestData))]
-        public void DataGridViewCell_GetInheritedContextMenuStrip_InvokeWithColumn_ReturnsExpected(ContextMenuStrip menu)
-        {
-            using var column = new DataGridViewColumn
-            {
-                ContextMenuStrip = menu
-            };
-            using var cell = new DataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.Null(cell.GetInheritedContextMenuStrip(-1));
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(ContextMenuStrip_GetWithDataGridView_TestData))]
         public void DataGridViewCell_GetInheritedContextMenuStrip_InvokeWithDataGridView_ReturnsExpected(ContextMenuStrip menu)
         {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
             using var control = new DataGridView
             {
-                ColumnCount = 1,
-                RowCount = 1,
                 ContextMenuStrip = menu
             };
-            DataGridViewCell cell = control.Rows[0].Cells[0];
+            control.Columns.Add(column);
             int callCount = 0;
             control.CellContextMenuStripNeeded += (sender, e) => callCount++;
+
+            DataGridViewCell cell = control.Rows[0].Cells[0];
             Assert.Same(menu, cell.GetInheritedContextMenuStrip(0));
             Assert.Equal(0, callCount);
         }
 
         [WinFormsTheory]
         [MemberData(nameof(ContextMenuStrip_GetWithDataGridView_TestData))]
-        public void DataGridViewCell_GetInheritedContextMenuStripShared_InvokeWithDataGridView_ReturnsExpected(ContextMenuStrip menu)
+        public void DataGridViewCell_GetInheritedContextMenuStrip_InvokeWithMenuWithDataGridView_ReturnsExpected(ContextMenuStrip menu)
         {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
             using var control = new DataGridView
             {
-                ColumnCount = 1,
-                RowCount = 1,
                 ContextMenuStrip = menu
             };
+            control.Columns.Add(column);
+            int callCount = 0;
+            control.CellContextMenuStripNeeded += (sender, e) => callCount++;
+
+            using var cellMenu = new ContextMenuStrip();
+            DataGridViewCell cell = control.Rows[0].Cells[0];
+            cell.ContextMenuStrip = cellMenu;
+            Assert.Same(cellMenu, cell.GetInheritedContextMenuStrip(0));
+            Assert.Equal(0, callCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ContextMenuStrip_GetWithDataGridView_TestData))]
+        public void DataGridViewCell_GetInheritedContextMenuStrip_InvokeShared_ReturnsExpected(ContextMenuStrip menu)
+        {
+            using var cellTemplate = new DataGridViewHeaderCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                ContextMenuStrip = menu
+            };
+            control.Columns.Add(column);
             DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
             int callCount = 0;
             control.CellContextMenuStripNeeded += (sender, e) => callCount++;
@@ -4408,6 +4494,12 @@ namespace System.Windows.Forms.Tests
             DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetInheritedContextMenuStrip(rowIndex));
         }
+        [WinFormsFact]
+        public void DataGridViewCell_GetInheritedState_Invoke_ReturnsExpected()
+        {
+            using var cell = new SubDataGridViewCell();
+            Assert.Equal(DataGridViewElementStates.ResizableSet, cell.GetInheritedState(-1));
+        }
 
         [WinFormsFact]
         public void DataGridViewCell_GetInheritedState_InvokeWithRow_ReturnsExpected()
@@ -4437,33 +4529,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void DataGridViewCell_GetInheritedState_InvokeWithColumn_ReturnsExpected()
-        {
-            using var column = new DataGridViewColumn();
-            using var cell = new DataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.Equal(DataGridViewElementStates.ReadOnly | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible, cell.GetInheritedState(-1));
-        }
-
-        [WinFormsTheory]
-        [InlineData(DataGridViewTriState.True, DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet)]
-        [InlineData(DataGridViewTriState.False, DataGridViewElementStates.ResizableSet)]
-        [InlineData(DataGridViewTriState.NotSet, DataGridViewElementStates.ResizableSet)]
-        public void DataGridViewCell_GetInheritedState_InvokeWithColumnCustomState_ReturnsExpected(DataGridViewTriState resizable, DataGridViewElementStates expected)
-        {
-            using var column = new DataGridViewColumn
-            {
-                Frozen = true,
-                ReadOnly = true,
-                Visible = false,
-                Resizable = resizable
-            };
-            using var cell = new DataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.Equal(DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | expected, cell.GetInheritedState(-1));
-        }
-
-        [WinFormsFact]
         public void DataGridViewCell_GetInheritedState_InvokeWithDataGrid_ReturnsExpected()
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -4473,8 +4538,144 @@ namespace System.Windows.Forms.Tests
             };
             using var control = new DataGridView();
             control.Columns.Add(column);
+
             DataGridViewCell cell = control.Rows[0].Cells[0];
             Assert.Equal(DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible, cell.GetInheritedState(0));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GetInheritedState_DataGridViewCustomState_TestData()
+        {
+            // Frozen.
+            yield return new object[] { DataGridViewTriState.True, true, true, DataGridViewTriState.True, true, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen };
+            yield return new object[] { DataGridViewTriState.True, true, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, true, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+
+            // Visible.
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, false, DataGridViewElementStates.Resizable };
+            yield return new object[] { DataGridViewTriState.True, false, false, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable };
+            yield return new object[] { DataGridViewTriState.True, false, false, DataGridViewTriState.True, false, false, DataGridViewElementStates.Resizable };
+
+            // Resizable.
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.False, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.NotSet, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+            yield return new object[] { DataGridViewTriState.False, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+            yield return new object[] { DataGridViewTriState.False, false, true, DataGridViewTriState.False, false, true, DataGridViewElementStates.Visible };
+            yield return new object[] { DataGridViewTriState.False, false, true, DataGridViewTriState.NotSet, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+            yield return new object[] { DataGridViewTriState.NotSet, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+            yield return new object[] { DataGridViewTriState.NotSet, false, true, DataGridViewTriState.False, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+            yield return new object[] { DataGridViewTriState.NotSet, false, true, DataGridViewTriState.NotSet, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetInheritedState_DataGridViewCustomState_TestData))]
+        public void DataGridViewCell_GetInheritedState_InvokeWithDataGridCustomState_ReturnsExpected(DataGridViewTriState rowResizable, bool rowFrozen, bool rowVisible, DataGridViewTriState columnResizable, bool columnFrozen, bool columnVisible, DataGridViewElementStates expected)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView();
+            control.Columns.Add(column);
+            control.Rows.Add();
+            DataGridViewRow row = control.Rows[0];
+            row.Resizable = rowResizable;
+            row.Frozen = rowFrozen;
+            row.Visible = rowVisible;
+            column.Resizable = columnResizable;
+            column.Frozen = columnFrozen;
+            column.Visible = columnVisible;
+            DataGridViewCell cell = row.Cells[0];
+            Assert.Equal(DataGridViewElementStates.ResizableSet | expected, cell.GetInheritedState(0));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCell_GetInheritedState_InvokeWithDataGridWithHandle_ReturnsExpected()
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView();
+            control.Columns.Add(column);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            DataGridViewCell cell = control.Rows[0].Cells[0];
+            Assert.Equal(DataGridViewElementStates.Resizable | DataGridViewElementStates.ResizableSet | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed, cell.GetInheritedState(0));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> GetInheritedState_DataGridViewCustomStateWithHandle_TestData()
+        {
+            // Frozen.
+            yield return new object[] { DataGridViewTriState.True, true, true, DataGridViewTriState.True, true, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected | DataGridViewElementStates.Frozen };
+            yield return new object[] { DataGridViewTriState.True, true, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, true, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+
+            // Visible.
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, false, DataGridViewElementStates.Resizable };
+            yield return new object[] { DataGridViewTriState.True, false, false, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable };
+            yield return new object[] { DataGridViewTriState.True, false, false, DataGridViewTriState.True, false, false, DataGridViewElementStates.Resizable };
+
+            // Resizable.
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.False, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.NotSet, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+            yield return new object[] { DataGridViewTriState.False, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+            yield return new object[] { DataGridViewTriState.False, false, true, DataGridViewTriState.False, false, true, DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+            yield return new object[] { DataGridViewTriState.False, false, true, DataGridViewTriState.NotSet, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+            yield return new object[] { DataGridViewTriState.NotSet, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+            yield return new object[] { DataGridViewTriState.NotSet, false, true, DataGridViewTriState.False, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+            yield return new object[] { DataGridViewTriState.NotSet, false, true, DataGridViewTriState.NotSet, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Selected };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GetInheritedState_DataGridViewCustomStateWithHandle_TestData))]
+        public void DataGridViewCell_GetInheritedState_InvokeWithDataGridCustomStateWithHandle_ReturnsExpected(DataGridViewTriState rowResizable, bool rowFrozen, bool rowVisible, DataGridViewTriState columnResizable, bool columnFrozen, bool columnVisible, DataGridViewElementStates expected)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView();
+            control.Columns.Add(column);
+            control.Rows.Add();
+            DataGridViewRow row = control.Rows[0];
+            row.Resizable = rowResizable;
+            row.Frozen = rowFrozen;
+            row.Visible = rowVisible;
+            column.Resizable = columnResizable;
+            column.Frozen = columnFrozen;
+            column.Visible = columnVisible;
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            DataGridViewCell cell = row.Cells[0];
+            Assert.Equal(DataGridViewElementStates.ResizableSet | expected, cell.GetInheritedState(0));
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]
@@ -4703,15 +4904,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(-1, -1), cell.GetSize(rowIndex));
         }
 
-        [WinFormsFact]
-        public void DataGridViewCell_GetSize_InvokeWithColumn_ReturnsExpected()
-        {
-            using var column = new DataGridViewColumn();
-            using var cell = new SubDataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.Equal(new Size(-1, -1), cell.GetSize(-1));
-        }
-
         [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(0)]
@@ -4730,6 +4922,7 @@ namespace System.Windows.Forms.Tests
             row.Height = 11;
             SubDataGridViewCell cell = (SubDataGridViewCell)row.Cells[0];
             Assert.Equal(new Size(10, 11), cell.GetSize(rowIndex));
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -4748,6 +4941,7 @@ namespace System.Windows.Forms.Tests
             control.Columns.Add(column);
             SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows.SharedRow(0).Cells[0];
             Assert.Equal(new Size(10, Control.DefaultFont.Height + 9), cell.GetSize(rowIndex));
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -4805,6 +4999,21 @@ namespace System.Windows.Forms.Tests
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
+        public void DataGridViewCell_GetValue_InvokeWithValue_ReturnsExpected(int rowIndex)
+        {
+            var value = new object();
+            using var cell = new SubDataGridViewCell
+            {
+                Value = value
+            };
+            Assert.Same(value, cell.GetValue(rowIndex));
+        }
+
+        [WinFormsTheory]
+        [InlineData(-2)]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
         public void DataGridViewCell_GetValue_InvokeWithRow_ReturnsExpected(int rowIndex)
         {
             using var row = new DataGridViewRow();
@@ -4813,13 +5022,21 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.GetValue(rowIndex));
         }
 
-        [WinFormsFact]
-        public void DataGridViewCell_GetValue_InvokeWithColumn_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(-2)]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void DataGridViewCell_GetValue_InvokeWithValueWithRow_ReturnsExpected(int rowIndex)
         {
-            using var column = new DataGridViewColumn();
-            using var cell = new SubDataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.Empty((string)cell.GetValue(-1));
+            var value = new object();
+            using var row = new DataGridViewRow();
+            using var cell = new SubDataGridViewCell
+            {
+                Value = value
+            };
+            row.Cells.Add(cell);
+            Assert.Same(value, cell.GetValue(rowIndex));
         }
 
         [WinFormsFact]
@@ -4838,6 +5055,23 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void DataGridViewCell_GetValue_InvokeWithValueWithDataGridView_ReturnsExpected()
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate,
+                Width = 10
+            };
+            using var control = new DataGridView();
+            control.Columns.Add(column);
+            var value = new object();
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.Value = value;
+            Assert.Same(value, cell.GetValue(0));
+        }
+
+        [WinFormsFact]
         public void DataGridViewCell_GetValue_InvokeShared_ReturnsExpected()
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -4851,15 +5085,138 @@ namespace System.Windows.Forms.Tests
             Assert.Null(cell.GetValue(0));
         }
 
-        [WinFormsTheory]
-        [InlineData(-2)]
-        [InlineData(0)]
-        public void DataGridViewCell_GetValue_InvalidRowIndexWithColumn_ThrowsArgumentOutOfRangeException(int rowIndex)
+        [WinFormsFact]
+        public void DataGridViewCell_GetValue_InvokeSharedWithValue_ReturnsExpected()
         {
-            using var column = new DataGridViewColumn();
-            using var cell = new SubDataGridViewColumnHeaderCell();
-            column.HeaderCell = cell;
-            Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetValue(rowIndex));
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView();
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows.SharedRow(0).Cells[0];
+            var value = new object();
+            Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.Value = value);
+            Assert.Null(cell.GetValue(0));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCell_GetValue_InvokeWithDataGridViewVirtualMode_CallsCellValueNeeded()
+        {
+            var value1 = new object();
+            var value2 = new object();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                VirtualMode = true
+            };
+            control.Columns.Add(column);
+            control.Rows.Add();
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.Value = value1;
+
+            int callCount = 0;
+            DataGridViewCellValueEventHandler handler = (sender, e) =>
+            {
+                callCount++;
+                Assert.Same(control, sender);
+                Assert.Equal(0, e.RowIndex);
+                Assert.Null(e.Value);
+                e.Value = value2;
+            };
+            control.CellValueNeeded += handler;
+
+            Assert.Same(value2, cell.GetValue(0));
+            Assert.Equal(1, callCount);
+
+            // Remove the handler.
+            control.CellValueNeeded -= handler;
+            Assert.Null(cell.GetValue(0));
+            Assert.Equal(1, callCount);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCell_GetValue_InvokeWithDataGridViewNewRowVirtualMode_CallsCellValueNeeded()
+        {
+            var value1 = new object();
+            var value2 = new object();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                VirtualMode = true
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.Value = value1;
+
+            int callCount = 0;
+            DataGridViewCellValueEventHandler handler = (sender, e) =>
+            {
+                callCount++;
+                Assert.Same(control, sender);
+                Assert.Equal(0, e.RowIndex);
+                Assert.Null(e.Value);
+                e.Value = value2;
+            };
+            control.CellValueNeeded += handler;
+
+            Assert.Null(cell.GetValue(0));
+            Assert.Equal(0, callCount);
+
+            // Remove the handler.
+            control.CellValueNeeded -= handler;
+            Assert.Null(cell.GetValue(0));
+            Assert.Equal(0, callCount);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCell_GetValue_InvokeWithDataGridViewNewRowDataSource_CallsCellValueNeeded()
+        {
+            var value1 = new object();
+            var value2 = new object();
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                DataSource = new[] { new { Name = "Name" } }
+            };
+            control.Columns.Add(column);
+            using var form = new Form();
+            form.Controls.Add(control);
+            Assert.NotNull(control.BindingContext);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.Value = value1;
+
+            int callCount = 0;
+            DataGridViewCellValueEventHandler handler = (sender, e) =>
+            {
+                callCount++;
+                Assert.Same(control, sender);
+                Assert.Equal(0, e.RowIndex);
+                Assert.Null(e.Value);
+                e.Value = value2;
+            };
+            control.CellValueNeeded += handler;
+
+            Assert.Same(value1, cell.GetValue(0));
+            Assert.Equal(0, callCount);
+
+            // Remove the handler.
+            control.CellValueNeeded -= handler;
+            Assert.Same(value1, cell.GetValue(0));
+            Assert.Equal(0, callCount);
         }
 
         [WinFormsTheory]
@@ -5217,18 +5574,123 @@ namespace System.Windows.Forms.Tests
             Assert.False(cell.MouseDownUnsharesRow(e));
         }
 
-        [WinFormsFact]
-        public void DataGridViewCell_MouseEnterUnsharesRow_Invoke_ReturnsFalse()
+        public static IEnumerable<object[]> DataGridViewCellMouseEventArgs_WithDataGridView_TestData()
         {
-            using var cell = new SubDataGridViewCell();
-            Assert.False(cell.MouseEnterUnsharesRow(-1));
+            foreach (bool enableHeadersVisualStyles in new bool[] { true, false })
+            {
+                yield return new object[] { enableHeadersVisualStyles, null };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, -1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(-1, 0, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 0, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(1, 0, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(1, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)) };
+                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)) };
+            }
         }
 
-        [WinFormsFact]
-        public void DataGridViewCell_MouseLeaveUnsharesRow_Invoke_ReturnsFalse()
+        [WinFormsTheory]
+        [MemberData(nameof(DataGridViewCellMouseEventArgs_WithDataGridView_TestData))]
+        public void DataGridViewCell_MouseDownUnsharesRow_InvokeWithDataGridView_ReturnsFalse(bool enableHeadersVisualStyles, DataGridViewCellMouseEventArgs e)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows.SharedRow(0).Cells[0];
+            Assert.False(cell.MouseDownUnsharesRow(e));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(-2)]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void DataGridViewCell_MouseEnterUnsharesRow_Invoke_ReturnsFalse(int rowIndex)
         {
             using var cell = new SubDataGridViewCell();
-            Assert.False(cell.MouseLeaveUnsharesRow(-1));
+            Assert.False(cell.MouseEnterUnsharesRow(rowIndex));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, -2)]
+        [InlineData(true, -1)]
+        [InlineData(true, 0)]
+        [InlineData(true, 1)]
+        [InlineData(false, -2)]
+        [InlineData(false, -1)]
+        [InlineData(false, 0)]
+        [InlineData(false, 1)]
+        public void DataGridViewCell_MouseEnterUnsharesRow_InvokeWithDataGridView_ReturnsFalse(bool enableHeadersVisualStyles, int rowIndex)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            Assert.False(cell.MouseEnterUnsharesRow(rowIndex));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(-2)]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void DataGridViewCell_MouseLeaveUnsharesRow_Invoke_ReturnsFalse(int rowIndex)
+        {
+            using var cell = new SubDataGridViewCell();
+            Assert.False(cell.MouseLeaveUnsharesRow(rowIndex));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, -2)]
+        [InlineData(true, -1)]
+        [InlineData(true, 0)]
+        [InlineData(true, 1)]
+        [InlineData(false, -2)]
+        [InlineData(false, -1)]
+        [InlineData(false, 0)]
+        [InlineData(false, 1)]
+        public void DataGridViewCell_MouseLeaveUnsharesRow_InvokeWithDataGridView_ReturnsFalse(bool enableHeadersVisualStyles, int rowIndex)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            Assert.False(cell.MouseLeaveUnsharesRow(rowIndex));
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -5240,11 +5702,49 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [MemberData(nameof(DataGridViewCellMouseEventArgs_WithDataGridView_TestData))]
+        public void DataGridViewCell_MouseMoveUnsharesRow_InvokeWithDataGridView_ReturnsFalse(bool enableHeadersVisualStyles, DataGridViewCellMouseEventArgs e)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            Assert.False(cell.MouseMoveUnsharesRow(e));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [MemberData(nameof(DataGridViewCellMouseEventArgs_TestData))]
         public void DataGridViewCell_MouseUpUnsharesRow_Invoke_ReturnsFalse(DataGridViewCellMouseEventArgs e)
         {
             using var cell = new SubDataGridViewCell();
             Assert.False(cell.MouseUpUnsharesRow(e));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DataGridViewCellMouseEventArgs_WithDataGridView_TestData))]
+        public void DataGridViewCell_MouseUpUnsharesRow_InvokeWithDataGridView_ReturnsFalse(bool enableHeadersVisualStyles, DataGridViewCellMouseEventArgs e)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            Assert.False(cell.MouseUpUnsharesRow(e));
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -5356,11 +5856,49 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [MemberData(nameof(DataGridViewCellMouseEventArgs_WithDataGridView_TestData))]
+        public void DataGridViewCell_OnMouseClick_InvokeWithDataGridView_Nop(bool enableHeadersVisualStyles, DataGridViewCellMouseEventArgs e)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.OnMouseClick(e);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [MemberData(nameof(DataGridViewCellMouseEventArgs_TestData))]
         public void DataGridViewCell_OnMouseDoubleClick_Invoke_Nop(DataGridViewCellMouseEventArgs e)
         {
             using var cell = new SubDataGridViewCell();
             cell.OnMouseDoubleClick(e);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DataGridViewCellMouseEventArgs_WithDataGridView_TestData))]
+        public void DataGridViewCell_OnMouseDoubleClick_InvokeWithDataGridView_Nop(bool enableHeadersVisualStyles, DataGridViewCellMouseEventArgs e)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.OnMouseDoubleClick(e);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -5371,18 +5909,97 @@ namespace System.Windows.Forms.Tests
             cell.OnMouseDown(e);
         }
 
-        [WinFormsFact]
-        public void DataGridViewCell_OnMouseEnter_Invoke_Nop()
+        [WinFormsTheory]
+        [MemberData(nameof(DataGridViewCellMouseEventArgs_WithDataGridView_TestData))]
+        public void DataGridViewCell_OnMouseDown_InvokeWithDataGridView_Nop(bool enableHeadersVisualStyles, DataGridViewCellMouseEventArgs e)
         {
-            using var cell = new SubDataGridViewCell();
-            cell.OnMouseEnter(-1);
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.OnMouseDown(e);
+            Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void DataGridViewCell_OnMouseLeave_Invoke_Nop()
+        [WinFormsTheory]
+        [InlineData(-2)]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void DataGridViewCell_OnMouseEnter_Invoke_Nop(int rowIndex)
         {
             using var cell = new SubDataGridViewCell();
-            cell.OnMouseLeave(-1);
+            cell.OnMouseEnter(rowIndex);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, -2)]
+        [InlineData(true, -1)]
+        [InlineData(true, 0)]
+        [InlineData(true, 1)]
+        [InlineData(false, -2)]
+        [InlineData(false, -1)]
+        [InlineData(false, 0)]
+        [InlineData(false, 1)]
+        public void DataGridViewCell_OnMouseEnter_InvokeWithDataGridView_Nop(bool enableHeadersVisualStyles, int rowIndex)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.OnMouseEnter(rowIndex);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(-2)]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void DataGridViewCell_OnMouseLeave_Invoke_Nop(int rowIndex)
+        {
+            using var cell = new SubDataGridViewCell();
+            cell.OnMouseLeave(rowIndex);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, -2)]
+        [InlineData(true, -1)]
+        [InlineData(true, 0)]
+        [InlineData(true, 1)]
+        [InlineData(false, -2)]
+        [InlineData(false, -1)]
+        [InlineData(false, 0)]
+        [InlineData(false, 1)]
+        public void DataGridViewCell_OnMouseLeave_InvokeWithDataGridView_Nop(bool enableHeadersVisualStyles, int rowIndex)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.OnMouseLeave(rowIndex);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -5394,11 +6011,49 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [MemberData(nameof(DataGridViewCellMouseEventArgs_WithDataGridView_TestData))]
+        public void DataGridViewCell_OnMouseMove_InvokeWithDataGridView_Nop(bool enableHeadersVisualStyles, DataGridViewCellMouseEventArgs e)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.OnMouseMove(e);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [MemberData(nameof(DataGridViewCellMouseEventArgs_TestData))]
         public void DataGridViewCell_OnMouseUp_Invoke_Nop(DataGridViewCellMouseEventArgs e)
         {
             using var cell = new SubDataGridViewCell();
             cell.OnMouseUp(e);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DataGridViewCellMouseEventArgs_WithDataGridView_TestData))]
+        public void DataGridViewCell_OnMouseUp_InvokeWithDataGridView_Nop(bool enableHeadersVisualStyles, DataGridViewCellMouseEventArgs e)
+        {
+            using var cellTemplate = new SubDataGridViewCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = enableHeadersVisualStyles
+            };
+            control.Columns.Add(column);
+            SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
+            cell.OnMouseUp(e);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
