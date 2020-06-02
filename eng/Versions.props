@@ -4,7 +4,7 @@
     <VersionPrefix>5.0.0</VersionPrefix>
     <!-- version in our package name #.#.#-below.#####.## -->
     <PreReleaseVersionLabel>preview</PreReleaseVersionLabel>
-    <PreReleaseVersionIteration>6</PreReleaseVersionIteration>
+    <PreReleaseVersionIteration>7</PreReleaseVersionIteration>
     <!-- Use the compiler in the CLI instead of in the sdk, since the sdk one doesn't work with netcoreapp5.0 yet -->
     <UsingToolMicrosoftNetCompilers>false</UsingToolMicrosoftNetCompilers>
   </PropertyGroup>
