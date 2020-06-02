@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -24,15 +22,15 @@ namespace System.Windows.Forms
         internal bool _smallChangeSetExternally;
         internal bool _largeChangeSetExternally;
 
-        private readonly ScrollableControl _parent;
+        private readonly ScrollableControl? _parent;
 
-        protected ScrollableControl ParentControl => _parent;
+        protected ScrollableControl? ParentControl => _parent;
 
         internal bool _visible = false;
 
         private bool _enabled = true;
 
-        protected ScrollProperties(ScrollableControl container)
+        protected ScrollProperties(ScrollableControl? container)
         {
             _parent = container;
         }
@@ -176,13 +174,13 @@ namespace System.Windows.Forms
             }
         }
 
-        internal abstract int PageSize { get; }
+        private protected abstract int GetPageSize(ScrollableControl parent);
 
-        internal abstract User32.SB Orientation { get; }
+        private protected abstract User32.SB Orientation { get; }
 
-        internal abstract int HorizontalDisplayPosition { get; }
+        private protected abstract int GetHorizontalDisplayPosition(ScrollableControl parent);
 
-        internal abstract int VerticalDisplayPosition { get; }
+        private protected abstract int GetVerticalDisplayPosition(ScrollableControl parent);
 
         /// <summary>
         ///  Gets or sets the value to be added or subtracted to the <see cref='ScrollBar.Value'/>
@@ -238,7 +236,7 @@ namespace System.Windows.Forms
 
                     _value = value;
                     UpdateScrollInfo();
-                    _parent?.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
+                    UpdateDisplayPosition();
                 }
             }
         }
@@ -264,7 +262,7 @@ namespace System.Windows.Forms
                     _visible = value;
                     _parent?.UpdateStylesCore();
                     UpdateScrollInfo();
-                    _parent?.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
+                    UpdateDisplayPosition();
                 }
             }
         }
@@ -279,12 +277,24 @@ namespace System.Windows.Forms
                     fMask = User32.SIF.ALL,
                     nMin = _minimum,
                     nMax = _maximum,
-                    nPage = _parent.AutoScroll ? (uint)PageSize : (uint)LargeChange,
+                    nPage = _parent.AutoScroll ? (uint)GetPageSize(_parent) : (uint)LargeChange,
                     nPos = _value,
                     nTrackPos = 0
                 };
                 User32.SetScrollInfo(_parent, Orientation, ref si, BOOL.TRUE);
             }
+        }
+
+        private void UpdateDisplayPosition()
+        {
+            if (_parent == null)
+            {
+                return;
+            }
+
+            int horizontal = GetHorizontalDisplayPosition(_parent);
+            int vertical = GetVerticalDisplayPosition(_parent);
+            _parent.SetDisplayFromScrollProps(horizontal, vertical);
         }
     }
 }

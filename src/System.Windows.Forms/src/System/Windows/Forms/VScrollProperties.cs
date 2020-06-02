@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -13,16 +11,16 @@ namespace System.Windows.Forms
     /// </summary>
     public class VScrollProperties : ScrollProperties
     {
-        public VScrollProperties(ScrollableControl container) : base(container)
+        public VScrollProperties(ScrollableControl? container) : base(container)
         {
         }
 
-        internal override int PageSize => ParentControl.ClientRectangle.Height;
+        private protected override int GetPageSize(ScrollableControl parent) => parent.ClientRectangle.Height;
 
-        internal override User32.SB Orientation => User32.SB.VERT;
+        private protected override User32.SB Orientation => User32.SB.VERT;
 
-        internal override int HorizontalDisplayPosition => ParentControl.DisplayRectangle.X;
+        private protected override int GetHorizontalDisplayPosition(ScrollableControl parent) => parent.DisplayRectangle.X;
 
-        internal override int VerticalDisplayPosition => -_value;
+        private protected override int GetVerticalDisplayPosition(ScrollableControl parent) => -_value;
     }
 }
