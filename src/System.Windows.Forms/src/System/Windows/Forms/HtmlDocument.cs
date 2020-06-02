@@ -693,8 +693,7 @@ namespace System.Windows.Forms
                 // our EventHandler properly.
 
                 HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
-                bool success = ((IHTMLDocument3)NativeHtmlDocument2).AttachEvent(eventName, proxy);
-                Debug.Assert(success, "failed to add event");
+                ((IHTMLDocument3)NativeHtmlDocument2).AttachEvent(eventName, proxy);
             }
 
             ///  Support IHtmlDocument3.DetachHandler
