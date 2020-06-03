@@ -10,7 +10,6 @@ using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
 {
-
     [Collection("Sequential")]
     public class IPictureTests
     {
@@ -76,25 +75,5 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
             Assert.NotNull(image);
             Assert.Equal(bitmap.Size, image.Size);
         }
-
-        //internal class MockAxHost : AxHost
-        //{
-        //    private MockAxHost() : base(string.Empty) { }
-
-        //    internal new static IPicture GetIPictureFromCursor(Cursor cursor)
-        //        => (IPicture)AxHost.GetIPictureFromCursor(cursor);
-
-        //    internal new static IPicture GetIPictureFromPicture(Image image)
-        //        => (IPicture)AxHost.GetIPictureFromPicture(image);
-
-        //    internal new static IPictureDisp GetIPictureDispFromPicture(Image image)
-        //        => (IPictureDisp)AxHost.GetIPictureDispFromPicture(image);
-
-        //    internal static Image GetPictureFromIPicture(IPicture picture)
-        //        => GetPictureFromIPicture((object)picture);
-
-        //    internal static Image GetPictureFromIPictureDisp(IPictureDisp picture)
-        //        => GetPictureFromIPictureDisp((object)picture);
-        //}
     }
 }
