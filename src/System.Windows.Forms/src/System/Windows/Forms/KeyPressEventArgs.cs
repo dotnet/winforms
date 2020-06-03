@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides data for the <see cref='Control.KeyPress'/> event.
     /// </summary>
-    [ComVisible(true)]
     public class KeyPressEventArgs : EventArgs
     {
         /// <summary>

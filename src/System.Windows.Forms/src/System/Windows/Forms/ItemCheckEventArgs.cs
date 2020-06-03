@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides data for the <see cref='CheckedListBox.ItemCheck'/> event.
     /// </summary>
-    [ComVisible(true)]
     public class ItemCheckEventArgs : EventArgs
     {
         public ItemCheckEventArgs(int index, CheckState newCheckValue, CheckState currentValue)

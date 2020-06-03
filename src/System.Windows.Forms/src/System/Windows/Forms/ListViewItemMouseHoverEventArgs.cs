@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides data for the <see cref='ListView.OnItemMouseHover'/> event.
     /// </summary>
-    [ComVisible(true)]
     public class ListViewItemMouseHoverEventArgs : EventArgs
     {
         public ListViewItemMouseHoverEventArgs(ListViewItem item)

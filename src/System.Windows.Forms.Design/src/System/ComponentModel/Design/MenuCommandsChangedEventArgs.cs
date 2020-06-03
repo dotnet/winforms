@@ -9,7 +9,6 @@ namespace System.ComponentModel.Design
     ///     that there has been a change in MenuCommands (added or removed)
     ///     on the related object.
     /// </summary>
-    [System.Runtime.InteropServices.ComVisible(true)]
     public class MenuCommandsChangedEventArgs : EventArgs
     {
         /// <summary>

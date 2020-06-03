@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides data for the Control.HelpRequest event.
     /// </summary>
-    [ComVisible(true)]
     public class HelpEventArgs : EventArgs
     {
         /// <summary>

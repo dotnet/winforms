@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides data for the <see cref='LinkLabel.OnLinkClicked'/> event.
     /// </summary>
-    [ComVisible(true)]
     public class LinkLabelLinkClickedEventArgs : EventArgs
     {
         /// <summary>

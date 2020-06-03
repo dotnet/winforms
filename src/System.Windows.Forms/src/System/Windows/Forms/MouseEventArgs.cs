@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     ///  Provides data for the <see cref='Control.MouseUp'/>, <see cref='Control.MouseDown'/> and
     /// <see cref='Control.MouseMove'/> events.
     /// </summary>
-    [ComVisible(true)]
     public class MouseEventArgs : EventArgs
     {
         /// <summary>

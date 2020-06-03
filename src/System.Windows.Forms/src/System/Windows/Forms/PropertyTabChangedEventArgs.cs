@@ -9,7 +9,6 @@ using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
     public class PropertyTabChangedEventArgs : EventArgs
     {
         public PropertyTabChangedEventArgs(PropertyTab oldTab, PropertyTab newTab)

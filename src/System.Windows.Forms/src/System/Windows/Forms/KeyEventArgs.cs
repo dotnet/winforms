@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     ///  Provides data for the <see cref='Forms.Control.KeyDown'/> or
     /// <see cref='Forms.Control.KeyUp'/> event.
     /// </summary>
-    [ComVisible(true)]
     public class KeyEventArgs : EventArgs
     {
         private bool _suppressKeyPress = false;
