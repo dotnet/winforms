@@ -7,7 +7,6 @@ namespace System.Windows.Forms.Design
     /// <summary>
     ///  Provides an interface for a designer to support Insitu editing for selected components.
     /// </summary>
-    [Runtime.InteropServices.ComVisible(true)]
     internal interface ISupportInSituService
     {
         /// <summary>

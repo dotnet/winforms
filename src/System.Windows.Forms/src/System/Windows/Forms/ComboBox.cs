@@ -3941,7 +3941,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         private class ComboBoxChildNativeWindow : NativeWindow
         {
             private readonly ComboBox _owner;
