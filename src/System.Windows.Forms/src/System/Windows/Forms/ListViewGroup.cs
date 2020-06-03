@@ -25,6 +25,7 @@ namespace System.Windows.Forms
         private string? _footer;
         private HorizontalAlignment _footerAlignment = HorizontalAlignment.Left;
         private ListViewGroupCollapsedState _collapsedState = ListViewGroupCollapsedState.Default;
+        private string? _subtitle;
 
         private ListView.ListViewItemCollection? _items;
 
@@ -179,6 +180,26 @@ namespace System.Windows.Forms
                 }
 
                 _collapsedState = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  The text displayed in the group subtitle.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [AllowNull]
+        public string Subtitle
+        {
+            get => _subtitle ?? string.Empty;
+            set
+            {
+                if (_subtitle == value)
+                {
+                    return;
+                }
+
+                _subtitle = value;
                 UpdateListView();
             }
         }

@@ -5409,10 +5409,11 @@ namespace System.Windows.Forms
         {
             string header = group.Header;
             string footer = group.Footer;
+            string subtitle = group.Subtitle;
             var lvgroup = new LVGROUPW
             {
                 cbSize = (uint)sizeof(LVGROUPW),
-                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | LVGF.STATE | additionalMask,
+                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | LVGF.STATE | LVGF.SUBTITLE | additionalMask,
                 cchHeader = header.Length,
                 iGroupId = group.ID
             };
@@ -5439,6 +5440,7 @@ namespace System.Windows.Forms
                     break;
             }
 
+            fixed (char* pSubtitle = subtitle)
             fixed (char* pHeader = header)
             fixed (char* pFooter = footer)
             {
@@ -5457,6 +5459,8 @@ namespace System.Windows.Forms
                         break;
                 }
 
+                lvgroup.cchSubtitle = (uint)subtitle.Length;
+                lvgroup.pszSubtitle = pSubtitle;
                 lvgroup.pszHeader = pHeader;
                 return User32.SendMessageW(this, (User32.WM)msg, lParam, ref lvgroup);
             }
