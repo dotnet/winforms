@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 
 namespace System.ComponentModel.Design
 {
-    [ComVisible(true)]
     public class DesignerActionListCollection : CollectionBase
     {
         public DesignerActionListCollection()
