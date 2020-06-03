@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -11,11 +9,14 @@ namespace System.Windows.Forms
 {
     public partial class CheckBox
     {
-        [ComVisible(true)]
         public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject
         {
-            public CheckBoxAccessibleObject(Control owner) : base(owner)
+            private readonly CheckBox _owningCheckBox;
+
+            public CheckBoxAccessibleObject(Control owner)
+                : base((owner is CheckBox owningCheckBox) ? owner : throw new ArgumentException(string.Format(SR.ConstructorArgumentInvalidValueType, nameof(Owner), typeof(CheckBox))))
             {
+                _owningCheckBox = owningCheckBox;
             }
 
             public override string DefaultAction
@@ -23,19 +24,15 @@ namespace System.Windows.Forms
                 get
                 {
                     string defaultAction = Owner.AccessibleDefaultActionDescription;
+
                     if (defaultAction != null)
                     {
                         return defaultAction;
                     }
 
-                    if (((CheckBox)Owner).Checked)
-                    {
-                        return SR.AccessibleActionUncheck;
-                    }
-                    else
-                    {
-                        return SR.AccessibleActionCheck;
-                    }
+                    return _owningCheckBox.Checked
+                        ? SR.AccessibleActionUncheck
+                        : SR.AccessibleActionCheck;
                 }
             }
 
@@ -44,37 +41,59 @@ namespace System.Windows.Forms
                 get
                 {
                     AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    return AccessibleRole.CheckButton;
+                    return role != AccessibleRole.Default
+                        ? role
+                        : AccessibleRole.CheckButton;
                 }
             }
 
             public override AccessibleStates State
-            {
-                get
+                => _owningCheckBox.CheckState switch
                 {
-                    switch (((CheckBox)Owner).CheckState)
-                    {
-                        case CheckState.Checked:
-                            return AccessibleStates.Checked | base.State;
-                        case CheckState.Indeterminate:
-                            return AccessibleStates.Indeterminate | base.State;
-                    }
+                    CheckState.Checked => AccessibleStates.Checked | base.State,
+                    CheckState.Indeterminate => AccessibleStates.Indeterminate | base.State,
+                    _ => base.State
+                };
 
-                    return base.State;
-                }
-            }
+            internal override UiaCore.ToggleState ToggleState
+                => _owningCheckBox.Checked
+                    ? UiaCore.ToggleState.On
+                    : UiaCore.ToggleState.Off;
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+                => patternId switch
+                {
+                    var p when
+                        p == UiaCore.UIA.TogglePatternId => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
+
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+                => propertyID switch
+                {
+                    UiaCore.UIA.NamePropertyId
+                        => Name,
+                    UiaCore.UIA.AutomationIdPropertyId
+                        => Owner.Name,
+                    UiaCore.UIA.IsTogglePatternAvailablePropertyId
+                        => IsPatternSupported(UiaCore.UIA.TogglePatternId),
+                    UiaCore.UIA.ControlTypePropertyId
+                        => UiaCore.UIA.CheckBoxControlTypeId,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId
+                        =>
+                        // This is necessary for compatibility with MSAA proxy:
+                        // IsKeyboardFocusable = true regardless the control is enabled/disabled.
+                        true,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId
+                        => Owner.Focused,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             public override void DoDefaultAction()
             {
-                CheckBox cb = Owner as CheckBox;
-
-                if (cb != null)
+                if (_owningCheckBox.IsHandleCreated)
                 {
-                    cb.AccObjDoDefaultAction = true;
+                    _owningCheckBox.AccObjDoDefaultAction = true;
                 }
 
                 try
@@ -83,11 +102,16 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (cb != null)
+                    if (_owningCheckBox.IsHandleCreated)
                     {
-                        cb.AccObjDoDefaultAction = false;
+                        _owningCheckBox.AccObjDoDefaultAction = false;
                     }
                 }
+            }
+
+            internal override void Toggle()
+            {
+                _owningCheckBox.Checked = !_owningCheckBox.Checked;
             }
         }
     }

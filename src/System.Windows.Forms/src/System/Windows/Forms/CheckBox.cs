@@ -405,6 +405,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         /// <summary>
         ///  Gets or sets a value indicating the alignment of the
         ///  text on the checkbox control.
@@ -489,8 +491,15 @@ namespace System.Windows.Forms
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureStart, -1);
             }
 
+            // MSAA events:
             AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+
+            // UIA events:
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId,
+                Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On,
+                Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off);
+            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
 
             if (FlatStyle == FlatStyle.System)
             {
