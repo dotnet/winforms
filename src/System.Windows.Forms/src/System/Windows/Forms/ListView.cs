@@ -50,6 +50,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_VIRTUALITEMSSELECTIONRANGECHANGED = new object();
         private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new object();
         private static readonly object EVENT_GROUPCOLLAPSEDSTATECHANGED = new object();
+        private static readonly object EVENT_GROUPTASKLINKCLICK = new object();
 
         private ItemActivation activation = ItemActivation.Standard;
         private ListViewAlignment alignStyle = ListViewAlignment.Top;
@@ -1992,6 +1993,17 @@ namespace System.Windows.Forms
         {
             add => onColumnClick += value;
             remove => onColumnClick -= value;
+        }
+
+        /// <summary>
+        ///  Occurs when the user clicks a <see cref="ListViewGroup.TaskLink"/> on a <see cref="ListViewGroup"/>.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ListViewGroupTaskLinkClickDescr))]
+        public event EventHandler<ListViewGroupEventArgs> GroupTaskLinkClick
+        {
+            add => Events.AddHandler(EVENT_GROUPTASKLINKCLICK, value);
+            remove => Events.RemoveHandler(EVENT_GROUPTASKLINKCLICK, value);
         }
 
         /// <summary>
@@ -4255,6 +4267,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Fires the <see cref="GroupTaskLinkClick"/> event.
+        /// </summary>
+        protected virtual void OnGroupTaskLinkClick(ListViewGroupEventArgs e)
+        {
+            ((EventHandler<ListViewGroupEventArgs>)Events[EVENT_GROUPTASKLINKCLICK])?.Invoke(this, e);
+        }
+
+        /// <summary>
         ///  Fires the column header rearranged event.
         /// </summary>
         protected virtual void OnColumnReordered(ColumnReorderedEventArgs e)
@@ -5410,10 +5430,11 @@ namespace System.Windows.Forms
             string header = group.Header;
             string footer = group.Footer;
             string subtitle = group.Subtitle;
+            string task = group.TaskLink;
             var lvgroup = new LVGROUPW
             {
                 cbSize = (uint)sizeof(LVGROUPW),
-                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | LVGF.STATE | LVGF.SUBTITLE | additionalMask,
+                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | LVGF.STATE | LVGF.SUBTITLE | LVGF.TASK | additionalMask,
                 cchHeader = header.Length,
                 iGroupId = group.ID
             };
@@ -5441,6 +5462,7 @@ namespace System.Windows.Forms
             }
 
             fixed (char* pSubtitle = subtitle)
+            fixed (char* pTask = task)
             fixed (char* pHeader = header)
             fixed (char* pFooter = footer)
             {
@@ -5461,6 +5483,8 @@ namespace System.Windows.Forms
 
                 lvgroup.cchSubtitle = (uint)subtitle.Length;
                 lvgroup.pszSubtitle = pSubtitle;
+                lvgroup.cchTask = (uint)task.Length;
+                lvgroup.pszTask = pTask;
                 lvgroup.pszHeader = pHeader;
                 return User32.SendMessageW(this, (User32.WM)msg, lParam, ref lvgroup);
             }
@@ -6060,6 +6084,22 @@ namespace System.Windows.Forms
                         NMLISTVIEW* nmlv = (NMLISTVIEW*)m.LParam;
                         listViewState[LISTVIEWSTATE_columnClicked] = true;
                         columnIndex = nmlv->iSubItem;
+                        break;
+                    }
+
+                case (int)LVN.LINKCLICK:
+                    {
+                        NMLVLINK* pLink = (NMLVLINK*)m.LParam;
+                        int groupID = pLink->iSubItem;
+                        for (int i = 0; i < groups.Count; i++)
+                        {
+                            if (groups[i].ID == groupID)
+                            {
+                                OnGroupTaskLinkClick(new ListViewGroupEventArgs(i));
+                                break;
+                            }
+                        }
+
                         break;
                     }
 

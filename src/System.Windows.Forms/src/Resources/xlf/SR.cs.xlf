@@ -6381,6 +6381,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Název této skupiny</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
         <source>The groups in the ListView.</source>
         <target state="translated">Skupiny v zobrazení ListView</target>
