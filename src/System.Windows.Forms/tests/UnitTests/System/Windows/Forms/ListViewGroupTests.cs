@@ -35,6 +35,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(group.Name);
             Assert.Null(group.Tag);
             Assert.Equal(ListViewGroupCollapsedState.Default, group.CollapsedState);
+            Assert.Empty(group.TaskLink);
         }
 
         [WinFormsTheory]
@@ -53,6 +54,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(group.Name);
             Assert.Null(group.Tag);
             Assert.Equal(ListViewGroupCollapsedState.Default, group.CollapsedState);
+            Assert.Empty(group.TaskLink);
         }
 
         public static IEnumerable<object[]> Ctor_String_HorizontalAlignment_TestData()
@@ -80,6 +82,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(group.Name);
             Assert.Null(group.Tag);
             Assert.Equal(ListViewGroupCollapsedState.Default, group.CollapsedState);
+            Assert.Empty(group.TaskLink);
         }
 
         public static IEnumerable<object[]> Ctor_String_String_TestData()
@@ -105,6 +108,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(key, group.Name);
             Assert.Null(group.Tag);
             Assert.Equal(ListViewGroupCollapsedState.Default, group.CollapsedState);
+            Assert.Empty(group.TaskLink);
         }
 
         [WinFormsTheory]
@@ -861,6 +865,117 @@ namespace System.Windows.Forms.Tests
             // Set same.
             group.Name = value;
             Assert.Same(value, group.Name);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [InlineData("te\0xt", "te\0xt")]
+        public void ListViewGroup_Task_SetWithoutListView_GetReturnsExpected(string value, string expected)
+        {
+            var group = new ListViewGroup
+            {
+                TaskLink = value
+            };
+
+            Assert.Equal(expected, group.TaskLink);
+
+            // Set same.
+            group.TaskLink = value;
+            Assert.Equal(expected, group.TaskLink);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [InlineData("te\0xt", "te\0xt")]
+        public void ListViewGroup_Task_SetWithListView_GetReturnsExpected(string value, string expected)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+
+            group.TaskLink = value;
+            Assert.Equal(expected, group.TaskLink);
+            Assert.False(listView.IsHandleCreated);
+
+            // Set same.
+            group.TaskLink = value;
+            Assert.Equal(expected, group.TaskLink);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("header", "header")]
+        [InlineData("te\0xt", "te\0xt")]
+        [InlineData("ListViewGroup", "ListViewGroup")]
+        public void ListViewGroup_Task_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            int invalidatedCallCount = 0;
+            listView.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            listView.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            listView.HandleCreated += (sender, e) => createdCallCount++;
+
+            group.TaskLink = value;
+            Assert.Equal(expected, group.TaskLink);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            group.TaskLink = value;
+            Assert.Equal(expected, group.TaskLink);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        public unsafe void ListViewGroup_Task_GetGroupInfo_Success()
+        {
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
+            {
+                foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
+                {
+                    string value = (string)data[0];
+                    string expected = (string)data[1];
+
+                    Application.EnableVisualStyles();
+
+                    using var listView = new ListView();
+                    var group = new ListViewGroup();
+                    listView.Groups.Add(group);
+
+                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
+                    group.TaskLink = value;
+
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                    char* buffer = stackalloc char[256];
+                    var lvgroup = new LVGROUPW
+                    {
+                        cbSize = (uint)sizeof(LVGROUPW),
+                        mask = LVGF.TASK | LVGF.GROUPID,
+                        pszTask = buffer,
+                        cchTask = 256
+                    };
+
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
+                    Assert.Equal(expected, new string(lvgroup.pszTask));
+                    Assert.True(lvgroup.iGroupId >= 0);
+                }
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]

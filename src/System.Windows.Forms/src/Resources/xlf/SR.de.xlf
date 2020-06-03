@@ -6381,6 +6381,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Der Name dieser Gruppe.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
         <source>The groups in the ListView.</source>
         <target state="translated">Die Gruppen in der ListView.</target>

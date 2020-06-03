@@ -6381,6 +6381,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Nom de ce groupe.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
         <source>The groups in the ListView.</source>
         <target state="translated">Les groupes dans le ListView.</target>

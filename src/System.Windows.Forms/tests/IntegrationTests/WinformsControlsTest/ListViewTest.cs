@@ -38,6 +38,7 @@ namespace WinformsControlsTest
             };
 
             AddCollapsibleGroupToListView();
+            AddGroupTasks();
         }
 
         private void CreateMyListView()
@@ -176,6 +177,30 @@ namespace WinformsControlsTest
         private void listView1_GroupCollapsedStateChanged(object sender, ListViewGroupEventArgs e)
         {
             MessageBox.Show("CollapsedState changed at group with index " + e.GroupIndex);
+        }
+
+        private void AddGroupTasks()
+        {
+            listView1.Groups[0].TaskLink = "Task";
+            listView1.GroupTaskLinkClick += listView1_GroupTaskLinkClick;
+
+            var lvgroup1 = new ListViewGroup
+            {
+                Header = "TaskGroup",
+                TaskLink = "Task2"
+            };
+
+            listView1.Groups.Add(lvgroup1);
+            listView1.Items.Add(new ListViewItem
+            {
+                Text = "Item",
+                Group = lvgroup1
+            });
+        }
+
+        private void listView1_GroupTaskLinkClick(object sender, ListViewGroupEventArgs e)
+        {
+            MessageBox.Show(this, "Task at group index " + e.GroupIndex + " was clicked", "GroupClick Event");
         }
 
         private void listView2_Click(object sender, System.EventArgs e)

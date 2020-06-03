@@ -6381,6 +6381,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">此组的名称。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
         <source>The groups in the ListView.</source>
         <target state="translated">ListView 中的组。</target>

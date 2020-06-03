@@ -26,6 +26,7 @@ namespace System.Windows.Forms
         private HorizontalAlignment _footerAlignment = HorizontalAlignment.Left;
         private ListViewGroupCollapsedState _collapsedState = ListViewGroupCollapsedState.Default;
         private string? _subtitle;
+        private string? _taskLink;
 
         private ListView.ListViewItemCollection? _items;
 
@@ -200,6 +201,26 @@ namespace System.Windows.Forms
                 }
 
                 _subtitle = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  The name of the task link displayed in the group header.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [AllowNull]
+        public string TaskLink
+        {
+            get => _taskLink ?? string.Empty;
+            set
+            {
+                if (value == _taskLink)
+                {
+                    return;
+                }
+
+                _taskLink = value;
                 UpdateListView();
             }
         }

@@ -6381,6 +6381,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Nombre de este grupo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
         <source>The groups in the ListView.</source>
         <target state="translated">Grupos de ListView.</target>
