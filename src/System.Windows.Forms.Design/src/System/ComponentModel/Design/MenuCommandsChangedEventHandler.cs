@@ -8,7 +8,6 @@ namespace System.ComponentModel.Design
     ///     This event is thown by the MenuCommandService when a shortcut
     ///     is either added or removed to/from the related object.
     /// </summary>
-    [System.Runtime.InteropServices.ComVisible(true)]
     public delegate void MenuCommandsChangedEventHandler(object sender, MenuCommandsChangedEventArgs e);
 }
 
