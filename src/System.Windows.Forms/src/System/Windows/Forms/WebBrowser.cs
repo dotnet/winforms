@@ -1443,7 +1443,6 @@ namespace System.Windows.Forms
         ///  Provides a default WebBrowserSite implementation for use in the CreateWebBrowserSite
         ///  method in the WebBrowser class.
         /// </summary>
-        [ComVisible(false)]
         protected class WebBrowserSite : WebBrowserSiteBase, IDocHostUIHandler
         {
             /// <summary>

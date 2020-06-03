@@ -14,7 +14,6 @@ namespace System.Windows.Forms
 {
     public abstract partial class AxHost
     {
-        [ComVisible(false)]
         public class AxComponentEditor : WindowsFormsComponentEditor
         {
             public override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent)

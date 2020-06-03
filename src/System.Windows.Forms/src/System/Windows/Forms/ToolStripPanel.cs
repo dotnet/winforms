@@ -1345,8 +1345,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [ListBindable(false),
-        ComVisible(false)]
+        [ListBindable(false)]
         public class ToolStripPanelRowCollection : ArrangedElementCollection, IList
         {
             private readonly ToolStripPanel owner;

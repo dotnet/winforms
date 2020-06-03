@@ -6537,7 +6537,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Represents a collection of controls on the form.
         /// </summary>
-        [ComVisible(false)]
         public new class ControlCollection : Control.ControlCollection
         {
             private readonly Form owner;

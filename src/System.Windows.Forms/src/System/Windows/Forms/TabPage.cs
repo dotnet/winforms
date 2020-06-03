@@ -562,7 +562,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Our control collection will throw an exception if you try to add other tab pages.
         /// </summary>
-        [ComVisible(false)]
         public class TabPageControlCollection : ControlCollection
         {
             /// <summary>

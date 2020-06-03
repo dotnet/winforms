@@ -418,7 +418,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of controls...
         /// </summary>
-        [ComVisible(false)]
         new public class ControlCollection : Control.ControlCollection
         {
             private readonly MdiClient owner;
