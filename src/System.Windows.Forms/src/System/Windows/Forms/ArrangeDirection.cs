@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Specifies the direction the system uses to arrange minimized windows.
     /// </summary>
-    [ComVisible(true)]
     [Flags]
     public enum ArrangeDirection
     {

@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     ///  Specifies the return value for HITTEST on treeview.
     /// </summary>
     [Flags]
-    [ComVisible(true)]
     public enum TreeViewHitTestLocations
     {
         /// <summary>

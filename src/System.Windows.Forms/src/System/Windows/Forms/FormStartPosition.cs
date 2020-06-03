@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Specifies the initial position of a form.
     /// </summary>
-    [ComVisible(true)]
     public enum FormStartPosition
     {
         /// <summary>

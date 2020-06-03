@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     ///  Specifies constants that define which mouse button was pressed.
     /// </summary>
     [Flags]
-    [ComVisible(true)]
     public enum MouseButtons
     {
         /// <summary>

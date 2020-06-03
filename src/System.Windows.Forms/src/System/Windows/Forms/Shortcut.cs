@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Specifies shortcut keys that can be used by menu items.
     /// </summary>
-    [ComVisible(true)]
     public enum Shortcut
     {
         /// <summary>

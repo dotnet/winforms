@@ -8,7 +8,6 @@ namespace System.ComponentModel.Design
     ///     An enum that defines what time of action happend to the
     ///     related object's MenuCommands collection.
     /// </summary>
-    [System.Runtime.InteropServices.ComVisible(true)]
     public enum MenuCommandsChangedType
     {
         /// <summary>

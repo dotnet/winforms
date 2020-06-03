@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
     [Editor("System.Windows.Forms.Design.BorderSidesEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
     [Flags]
     public enum ToolStripStatusLabelBorderSides

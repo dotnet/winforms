@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Possible values for property grid sorting mode
     /// </summary>
-    [ComVisible(true)]
     public enum PropertySort
     {
         /// <summary>

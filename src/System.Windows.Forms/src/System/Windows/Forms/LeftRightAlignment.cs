@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     ///  the left or
     ///  right of a reference point.
     /// </summary>
-    [ComVisible(true)]
     public enum LeftRightAlignment
     {
         /// <summary>
