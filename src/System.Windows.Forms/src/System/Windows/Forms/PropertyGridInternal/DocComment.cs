@@ -258,7 +258,6 @@ namespace System.Windows.Forms.PropertyGridInternal
     /// <summary>
     ///  Represents the DocComment control accessible object.
     /// </summary>
-    [Runtime.InteropServices.ComVisible(true)]
     internal class DocCommentAccessibleObject : Control.ControlAccessibleObject
     {
         private readonly PropertyGrid _parentPropertyGrid;

@@ -1649,7 +1649,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         internal class LabelAccessibleObject : ControlAccessibleObject
         {
             public LabelAccessibleObject(Label owner) : base(owner)

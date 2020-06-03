@@ -688,7 +688,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         public class DomainUpDownAccessibleObject : ControlAccessibleObject
         {
             private DomainItemListAccessibleObject itemList;
@@ -872,7 +871,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         public class DomainItemAccessibleObject : AccessibleObject
         {
             private string name;

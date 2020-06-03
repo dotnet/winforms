@@ -5508,7 +5508,6 @@ namespace System.Windows.Forms
     ///  Represents the PropertyGrid accessibility object.
     ///  Is used only in Accessibility Improvements of level3 to show correct accessible hierarchy.
     /// </summary>
-    [ComVisible(true)]
     internal class PropertyGridAccessibleObject : Control.ControlAccessibleObject
     {
         private readonly PropertyGrid _owningPropertyGrid;
@@ -5795,7 +5794,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents the PropertyGridToolStrip control accessibility object.
     /// </summary>
-    [ComVisible(true)]
     internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject
     {
         private readonly PropertyGrid _parentPropertyGrid;

@@ -649,7 +649,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         internal class StatusStripAccessibleObject : ToolStripAccessibleObject
         {
             public StatusStripAccessibleObject(StatusStrip owner) : base(owner)

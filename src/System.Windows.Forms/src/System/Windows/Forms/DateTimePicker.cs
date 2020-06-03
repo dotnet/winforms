@@ -1687,7 +1687,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         public class DateTimePickerAccessibleObject : ControlAccessibleObject
         {
             public DateTimePickerAccessibleObject(DateTimePicker owner) : base(owner)

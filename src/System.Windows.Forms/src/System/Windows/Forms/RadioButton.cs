@@ -603,7 +603,6 @@ namespace System.Windows.Forms
             return s + ", Checked: " + Checked.ToString();
         }
 
-        [ComVisible(true)]
         public class RadioButtonAccessibleObject : ButtonBaseAccessibleObject
         {
             public RadioButtonAccessibleObject(RadioButton owner) : base(owner)

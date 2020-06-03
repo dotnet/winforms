@@ -14,7 +14,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  An implementation of AccessibleChild for use with ToolStripItems
         /// </summary>
-        [ComVisible(true)]
         internal class ToolStripButtonAccessibleObject : ToolStripItemAccessibleObject
         {
             private readonly ToolStripButton _ownerItem;

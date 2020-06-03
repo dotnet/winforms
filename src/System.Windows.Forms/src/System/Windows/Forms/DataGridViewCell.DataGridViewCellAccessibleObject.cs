@@ -14,7 +14,6 @@ namespace System.Windows.Forms
 {
     public abstract partial class DataGridViewCell
     {
-        [ComVisible(true)]
         protected class DataGridViewCellAccessibleObject : AccessibleObject
         {
             private int[] runtimeId = null; // Used by UIAutomation

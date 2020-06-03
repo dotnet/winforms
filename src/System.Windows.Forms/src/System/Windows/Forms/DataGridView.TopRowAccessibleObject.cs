@@ -13,7 +13,6 @@ namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        [ComVisible(true)]
         protected class DataGridViewTopRowAccessibleObject : AccessibleObject
         {
             private int[] runtimeId;

@@ -253,7 +253,6 @@ namespace System.Windows.Forms.PropertyGridInternal
     /// <summary>
     ///  Represents the hot commands control accessible object.
     /// </summary>
-    [Runtime.InteropServices.ComVisible(true)]
     internal class HotCommandsAccessibleObject : Control.ControlAccessibleObject
     {
         private readonly PropertyGrid _parentPropertyGrid;

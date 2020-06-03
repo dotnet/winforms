@@ -709,7 +709,6 @@ namespace System.Windows.Forms
         protected override AccessibleObject CreateAccessibilityInstance()
             => new ProgressBarAccessibleObject(this);
 
-        [ComVisible(true)]
         internal class ProgressBarAccessibleObject : ControlAccessibleObject
         {
             internal ProgressBarAccessibleObject(ProgressBar owner) : base(owner)

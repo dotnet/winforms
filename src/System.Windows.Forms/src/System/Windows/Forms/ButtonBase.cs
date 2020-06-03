@@ -1352,7 +1352,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         public class ButtonBaseAccessibleObject : ControlAccessibleObject
         {
             public ButtonBaseAccessibleObject(Control owner) : base(owner)

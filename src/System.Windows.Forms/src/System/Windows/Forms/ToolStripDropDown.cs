@@ -2228,7 +2228,6 @@ namespace System.Windows.Forms
 
         #endregion DropDownSpecific
 
-        [ComVisible(true)]
         public class ToolStripDropDownAccessibleObject : ToolStripAccessibleObject
         {
             private readonly ToolStripDropDown owner;

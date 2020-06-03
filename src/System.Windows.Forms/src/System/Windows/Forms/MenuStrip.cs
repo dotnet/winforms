@@ -263,7 +263,6 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
         }
 
-        [ComVisible(true)]
         internal class MenuStripAccessibleObject : ToolStripAccessibleObject
         {
             public MenuStripAccessibleObject(MenuStrip owner)

@@ -246,7 +246,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         internal class ToolStripStatusLabelAccessibleObject : ToolStripLabelAccessibleObject
         {
             private readonly ToolStripStatusLabel ownerItem;

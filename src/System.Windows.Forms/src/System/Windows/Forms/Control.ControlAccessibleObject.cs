@@ -16,7 +16,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  An implementation of AccessibleChild for use with Controls
         /// </summary>
-        [ComVisible(true)]
         public class ControlAccessibleObject : AccessibleObject
         {
             private static IntPtr s_oleAccAvailable = NativeMethods.InvalidIntPtr;

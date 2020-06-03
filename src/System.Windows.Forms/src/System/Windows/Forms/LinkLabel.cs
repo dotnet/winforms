@@ -2644,7 +2644,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         internal class LinkLabelAccessibleObject : LabelAccessibleObject
         {
             /// <summary>
@@ -2705,7 +2704,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         internal class LinkAccessibleObject : AccessibleObject
         {
             private readonly Link link;

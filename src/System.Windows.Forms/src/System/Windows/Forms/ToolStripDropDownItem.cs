@@ -769,7 +769,6 @@ namespace System.Windows.Forms
         }
     }
 
-    [Runtime.InteropServices.ComVisible(true)]
     public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject
     {
         private readonly ToolStripDropDownItem owner;

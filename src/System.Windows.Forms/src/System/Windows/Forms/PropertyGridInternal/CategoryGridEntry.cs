@@ -271,7 +271,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Defines the Category Grid Entry accessible object that is derived from Grid Entry accessible object.
         /// </summary>
-        [Runtime.InteropServices.ComVisible(true)]
         internal class CategoryGridEntryAccessibleObject : GridEntryAccessibleObject
         {
             private readonly CategoryGridEntry _owningCategoryGridEntry;

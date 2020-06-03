@@ -648,7 +648,6 @@ namespace System.Windows.Forms
             return s + ", CheckState: " + checkState.ToString(CultureInfo.InvariantCulture);
         }
 
-        [ComVisible(true)]
         public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject
         {
             public CheckBoxAccessibleObject(Control owner) : base(owner)

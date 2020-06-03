@@ -2358,7 +2358,6 @@ namespace System.Windows.Forms.Design
             return PARAM.ToInt(pt.X, pt.Y);
         }
 
-        [ComVisible(true)]
         public class ControlDesignerAccessibleObject : AccessibleObject
         {
             private readonly ControlDesigner _designer = null;

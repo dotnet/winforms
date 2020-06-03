@@ -889,7 +889,6 @@ namespace System.Windows.Forms
             return largestDigit;
         }
 
-        [ComVisible(true)]
         internal class NumericUpDownAccessibleObject : ControlAccessibleObject
         {
             private readonly UpDownBase _owner;

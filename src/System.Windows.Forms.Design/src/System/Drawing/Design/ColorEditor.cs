@@ -552,7 +552,6 @@ namespace System.Drawing.Design
                 }
             }
 
-            [ComVisible(true)]
             public class ColorPaletteAccessibleObject : ControlAccessibleObject
             {
                 private readonly ColorCellAccessibleObject[] cells;
@@ -598,7 +597,6 @@ namespace System.Drawing.Design
                     return base.HitTest(x, y);
                 }
 
-                [ComVisible(true)]
                 public class ColorCellAccessibleObject : AccessibleObject
                 {
                     private readonly Color color;

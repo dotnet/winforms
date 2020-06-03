@@ -1262,7 +1262,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  An implementation of AccessibleChild for use with ToolStripItems
         /// </summary>
-        [ComVisible(true)]
         internal class ToolStripMenuItemAccessibleObject : ToolStripDropDownItemAccessibleObject
         {
             private readonly ToolStripMenuItem ownerItem = null;

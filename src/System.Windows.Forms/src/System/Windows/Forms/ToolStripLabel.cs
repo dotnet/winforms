@@ -389,7 +389,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        [Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripLabelAccessibleObject : ToolStripItemAccessibleObject
         {
             private readonly ToolStripLabel ownerItem = null;

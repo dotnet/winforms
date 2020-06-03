@@ -239,7 +239,6 @@ namespace System.Windows.Forms.PropertyGridInternal
     ///  Represents the accessibility object for the PropertyGrid DropDown button.
     ///  This DropDownButtonAccessibleObject is available in Level3 only.
     /// </summary>
-    [Runtime.InteropServices.ComVisible(true)]
     internal class DropDownButtonAccessibleObject : Control.ControlAccessibleObject
     {
         private readonly DropDownButton _owningDropDownButton;

@@ -18,7 +18,6 @@ namespace System.Windows.Forms
     ///  Provides an implementation for an object that can be inspected by an
     ///  accessibility application.
     /// </summary>
-    [ComVisible(true)]
     public partial class AccessibleObject :
         StandardOleMarshalObject,
         IReflect,

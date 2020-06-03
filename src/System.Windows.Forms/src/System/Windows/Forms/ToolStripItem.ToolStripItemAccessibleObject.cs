@@ -17,7 +17,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  An implementation of AccessibleChild for use with ToolStripItems
         /// </summary>
-        [ComVisible(true)]
         public class ToolStripItemAccessibleObject : AccessibleObject
         {
             private readonly ToolStripItem _ownerItem; // The associated ToolStripItem for this AccessibleChild (if any)

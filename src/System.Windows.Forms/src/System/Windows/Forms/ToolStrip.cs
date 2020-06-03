@@ -4993,7 +4993,6 @@ namespace System.Windows.Forms
             return base.AllowsChildrenToShowToolTips() && ShowItemToolTips;
         }
 
-        [ComVisible(true)]
         public class ToolStripAccessibleObject : ControlAccessibleObject
         {
             private readonly ToolStrip owner;
