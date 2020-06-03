@@ -1261,7 +1261,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ObjectForScripting_Set_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new Control() };
+            yield return new object[] { new CustomScriptingObject() };
         }
 
         [WinFormsTheory]
@@ -4639,6 +4639,15 @@ namespace System.Windows.Forms.Tests
         }
 
         private class PrivateClass
+        {
+        }
+
+#pragma warning disable CS0618
+        // This class must be ComVisible because WebBrowser scripting requires IDispatch and ITypeInfo support.
+        [ComVisible(true)]
+        [ClassInterface(ClassInterfaceType.AutoDispatch)]
+#pragma warning restore CS0618
+        public class CustomScriptingObject
         {
         }
 
