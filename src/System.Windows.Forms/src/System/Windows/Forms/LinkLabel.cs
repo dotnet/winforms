@@ -20,8 +20,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Displays text that can contain a hyperlink.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultEvent(nameof(LinkClicked))]
     [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionLinkLabel))]

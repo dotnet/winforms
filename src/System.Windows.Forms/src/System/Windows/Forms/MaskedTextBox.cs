@@ -22,8 +22,6 @@ namespace System.Windows.Forms
     ///  Uses the services from the System.ComponentModel.MaskedTextBoxProvider class.
     ///  See spec at http://dotnetclient/whidbey/Specs/MaskEdit.doc
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultEvent(nameof(MaskInputRejected))]
     [DefaultBindingProperty(nameof(Text))]
     [DefaultProperty(nameof(Mask))]

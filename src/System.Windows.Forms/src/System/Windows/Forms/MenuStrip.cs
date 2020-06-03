@@ -12,10 +12,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
-     [ClassInterface(ClassInterfaceType.AutoDispatch)]
-     [SRDescription(nameof(SR.DescriptionMenuStrip))
-    ]
+    [SRDescription(nameof(SR.DescriptionMenuStrip))]
     public class MenuStrip : ToolStrip
     {
         private ToolStripMenuItem mdiWindowListItem = null;

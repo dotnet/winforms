@@ -16,8 +16,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a Windows up-down control that displays numeric values.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Value))]
     [DefaultEvent(nameof(ValueChanged))]
     [DefaultBindingProperty(nameof(Value))]

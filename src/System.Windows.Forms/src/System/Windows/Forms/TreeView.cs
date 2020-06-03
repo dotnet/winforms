@@ -23,8 +23,6 @@ namespace System.Windows.Forms
     ///  node includes a caption and an optional bitmap. The user can select a node. If
     ///  it has sub-nodes, the user can collapse or expand the node.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Nodes))]
     [DefaultEvent(nameof(AfterSelect))]
     [Docking(DockingBehavior.Ask)]

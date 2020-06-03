@@ -22,8 +22,6 @@ namespace System.Windows.Forms
     ///
     ///  of each item.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [LookupBindingProperties]
     [SRDescription(nameof(SR.DescriptionCheckedListBox))]
     public class CheckedListBox : ListBox

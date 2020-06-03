@@ -18,8 +18,6 @@ namespace System.Windows.Forms
     ///  Represents a Windows
     ///  check box.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Checked))]
     [DefaultEvent(nameof(CheckedChanged))]
     [DefaultBindingProperty(nameof(CheckState))]

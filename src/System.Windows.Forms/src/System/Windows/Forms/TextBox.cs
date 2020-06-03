@@ -17,8 +17,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a Windows text box control.
     /// </summary>
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
-    [ComVisible(true)]
     [Designer("System.Windows.Forms.Design.TextBoxDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionTextBox))]
     public class TextBox : TextBoxBase

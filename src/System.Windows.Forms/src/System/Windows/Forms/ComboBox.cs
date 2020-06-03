@@ -27,8 +27,6 @@ namespace System.Windows.Forms
     ///  list or to enter new text. Displays only the editing field until the user
     ///  explicitly displays the list.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [DefaultProperty(nameof(Items))]
     [DefaultBindingProperty(nameof(Text))]

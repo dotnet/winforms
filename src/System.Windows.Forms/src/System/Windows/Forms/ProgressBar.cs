@@ -16,8 +16,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a Windows progress bar control.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Value))]
     [DefaultBindingProperty(nameof(Value))]
     [SRDescription(nameof(SR.DescriptionProgressBar))]

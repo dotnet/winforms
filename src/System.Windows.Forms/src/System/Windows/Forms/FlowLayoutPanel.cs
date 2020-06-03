@@ -11,8 +11,6 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ProvideProperty("FlowBreak", typeof(Control))]
     [DefaultProperty(nameof(FlowDirection))]
     [Designer("System.Windows.Forms.Design.FlowLayoutPanelDesigner, " + AssemblyRef.SystemDesign)]

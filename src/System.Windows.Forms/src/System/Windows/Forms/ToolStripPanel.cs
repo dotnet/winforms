@@ -16,8 +16,6 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ToolStripPanelDesigner, " + AssemblyRef.SystemDesign)]
     [ToolboxBitmap(typeof(ToolStripPanel), "ToolStripPanel_standalone")]
     public class ToolStripPanel : ContainerControl, IArrangedElement

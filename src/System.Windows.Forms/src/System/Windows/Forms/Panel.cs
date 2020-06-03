@@ -15,8 +15,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a <see cref='Panel'/> control.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(BorderStyle))]
     [DefaultEvent(nameof(Paint))]
     [Docking(DockingBehavior.Ask)]

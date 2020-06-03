@@ -11,8 +11,6 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ToolStripContainerDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.ToolStripContainerDesc))]
     public class ToolStripContainer : ContainerControl

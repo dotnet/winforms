@@ -30,8 +30,6 @@ namespace System.Windows.Forms
     ///
     ///  The classid of the ActiveX control is specified in the constructor.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Name))]
     [DefaultEvent(nameof(Enter))]
     [Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]

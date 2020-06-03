@@ -10,8 +10,6 @@ using static Interop.Ole32;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
 {
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     internal class MockAxHost
     {
         private static Guid ipictureDisp_Guid = typeof(IPictureDisp).GUID;

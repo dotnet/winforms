@@ -19,8 +19,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This is a wrapper over the native WebBrowser control implemented in shdocvw.dll.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Url))]
     [DefaultEvent(nameof(DocumentCompleted))]
     [Docking(DockingBehavior.AutoDock)]

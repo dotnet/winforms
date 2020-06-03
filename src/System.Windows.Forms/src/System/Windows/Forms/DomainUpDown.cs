@@ -19,8 +19,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a Windows up-down control that displays string values.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Items))]
     [DefaultEvent(nameof(SelectedItemChanged))]
     [DefaultBindingProperty(nameof(SelectedItem))]

@@ -11,8 +11,6 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class DataGridViewComboBoxEditingControl : ComboBox, IDataGridViewEditingControl
     {
         private DataGridView dataGridView;

@@ -23,8 +23,6 @@ namespace System.Windows.Forms
     ///  Rich Text control. The RichTextBox is a control that contains formatted text.
     ///  It supports font selection, boldface, and other type attributes.
     /// </summary>
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
-    [ComVisible(true)]
     [Docking(DockingBehavior.Ask)]
     [Designer("System.Windows.Forms.Design.RichTextBoxDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionRichTextBox))]

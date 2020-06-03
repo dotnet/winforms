@@ -15,8 +15,6 @@ namespace System.Windows.Forms
     ///  Represents a
     ///  dialog box form that contains a <see cref='Forms.PrintPreviewControl'/>.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.ComponentModel.Design.ComponentDesigner, " + AssemblyRef.SystemDesign)]
     [DesignTimeVisible(true)]
     [DefaultProperty(nameof(Document))]

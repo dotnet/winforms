@@ -18,8 +18,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements the basic functionality required by a button control.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
     public abstract class ButtonBase : Control
     {

@@ -22,8 +22,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a window or dialog box that makes up an application's user interface.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ToolboxItemFilter("System.Windows.Forms.Control.TopLevel")]
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]

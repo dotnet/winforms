@@ -11,8 +11,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a standard Windows horizontal scroll bar.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [SRDescription(nameof(SR.DescriptionHScrollBar))]
     public class HScrollBar : ScrollBar
     {

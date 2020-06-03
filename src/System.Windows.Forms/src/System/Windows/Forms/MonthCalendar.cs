@@ -56,8 +56,6 @@ namespace System.Windows.Forms
     /// </code>
     ///  The same applies to addition and removal of annual and monthly bolded dates.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(SelectionRange))]
     [DefaultEvent(nameof(DateChanged))]
     [DefaultBindingProperty(nameof(SelectionRange))]

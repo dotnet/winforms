@@ -18,8 +18,6 @@ namespace System.Windows.Forms.Design
     /// <summary>
     ///  Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ToolboxItem(false)]
     public class ComponentEditorForm : Form
     {

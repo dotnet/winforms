@@ -17,8 +17,6 @@ using static Interop;
 namespace System.Windows.Forms
 {
     [Designer("System.Windows.Forms.Design.ToolStripDropDownDesigner, " + AssemblyRef.SystemDesign)]
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ToolStripDropDown : ToolStrip
     {
         private ToolStripItem ownerItem = null;

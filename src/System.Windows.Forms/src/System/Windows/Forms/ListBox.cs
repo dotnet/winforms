@@ -38,8 +38,6 @@ namespace System.Windows.Forms
     ///     "D" };
     /// </code>
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ListBoxDesigner, " + AssemblyRef.SystemDesign)]
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [DefaultProperty(nameof(Items))]

@@ -15,8 +15,6 @@ using static Interop;
 namespace System.Windows.Forms
 {
     [Designer("System.Windows.Forms.Design.ToolStripDropDownDesigner, " + AssemblyRef.SystemDesign)]
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ToolStripDropDownMenu : ToolStripDropDown
     {
         private static readonly Padding ImagePadding = new Padding(2);

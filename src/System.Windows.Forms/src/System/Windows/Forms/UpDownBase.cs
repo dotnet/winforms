@@ -17,8 +17,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements the basic functionality required by an up-down control.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.UpDownBaseDesigner, " + AssemblyRef.SystemDesign)]
     public abstract partial class UpDownBase : ContainerControl
     {

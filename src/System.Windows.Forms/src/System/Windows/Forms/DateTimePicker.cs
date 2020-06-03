@@ -19,8 +19,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Date/DateTime picker control
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Value))]
     [DefaultEvent(nameof(ValueChanged))]
     [DefaultBindingProperty(nameof(Value))]

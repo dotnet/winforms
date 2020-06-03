@@ -11,8 +11,6 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ToolStripOverflow : ToolStripDropDown, IArrangedElement
     {
 #if DEBUG
