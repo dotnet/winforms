@@ -22,7 +22,7 @@ dotnet run
 
 ## Designing Forms
 
-You can try the WinForms Core Designer Visual Studio extension preview, see [Windows Forms Designer Documentation](Documentation/winforms-designer.md). As an alternative, you can use [this workaround](winforms-designer.md).
+You can try the Windows Forms Core Designer Visual Studio extension, see [Windows Forms Designer documentation](designer-releases/readme.md). As an alternative, you can use [this workaround](winforms-designer.md).
 
 ## Samples
 
