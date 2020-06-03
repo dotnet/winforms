@@ -4,6 +4,8 @@
 
 using System.Runtime.CompilerServices;
 
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+
 [assembly: InternalsVisibleTo("System.Windows.Forms.Tests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("MauiMonthCalendarTests, PublicKey=00000000000000000400000000000000")]
 
