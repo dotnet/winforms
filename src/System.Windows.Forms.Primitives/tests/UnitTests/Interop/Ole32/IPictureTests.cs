@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
     [Collection("Sequential")]
     public class IPictureTests
     {
-        [Fact]
+        [StaFact]
         public void GetIPictureFromCursor()
         {
             using MockCursor arrow = new MockCursor(CursorResourceId.IDC_ARROW);
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
             Assert.Equal(arrow.Size.Width, GdiHelper.HimetricToPixelX(picture.Width));
         }
 
-        [Fact]
+        [StaFact]
         public void GetIPictureFromImage()
         {
             using MockCursor arrow = new MockCursor(CursorResourceId.IDC_ARROW);
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
             Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX(picture.Width));
         }
 
-        [Fact]
+        [StaFact]
         public void GetIPictureDispFromImage()
         {
             using Icon icon = SystemIcons.Question;
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
             Assert.Equal(bitmap.Size.Width, GdiHelper.HimetricToPixelX(picture.Width));
         }
 
-        [Fact]
+        [StaFact]
         public void GetPictureFromIPicture()
         {
             using Icon icon = SystemIcons.Exclamation;
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
             Assert.Equal(bitmap.Size, image.Size);
         }
 
-        [Fact]
+        [StaFact]
         public void GetPictureFromIPictureDisp()
         {
             using Bitmap bitmap = new Bitmap(100, 200);
