@@ -239,7 +239,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_Enabled_Set_GetReturnsExpected(bool value)
         {
-            var control = new Control
+            using var control = new Control
             {
                 Enabled = value
             };
@@ -258,7 +258,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PictureBox_Enabled_SetWithHandle_GetReturnsExpected(bool value)
         {
-            var control = new Control();
+            using var control = new Control();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             control.Enabled = value;
@@ -276,7 +276,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void PictureBox_Enabled_SetWithHandler_CallsEnabledChanged()
         {
-            var control = new Control
+            using var control = new Control
             {
                 Enabled = true
             };
@@ -819,7 +819,7 @@ namespace System.Windows.Forms.Tests
             mockSite
                 .Setup(s => s.DesignMode)
                 .Returns(true);
-            var pictureBox = new PictureBox
+            using var pictureBox = new PictureBox
             {
                 InitialImage = initialImage,
                 ErrorImage = errorImage,

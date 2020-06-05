@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Ctor_IContainer_TestData()
         {
-            var container = new Container();
+            using var container = new Container();
             using var toolTip = new SubToolTip(container);
             Assert.True(toolTip.Active);
             Assert.Equal(500, toolTip.AutomaticDelay);
@@ -568,7 +568,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ToolTip_RemoveAll_InvokeWithTools_GetToolTipReturnsEmpty()
         {
-            var control = new Control();
+            using var control = new Control();
             using var toolTip = new ToolTip();
             toolTip.SetToolTip(control, "caption");
             toolTip.RemoveAll();
@@ -591,7 +591,7 @@ namespace System.Windows.Forms.Tests
         public void ToolTip_SetToolTip_Invoke_GetToolTipReturnsExpected(string caption, string expected)
         {
             using var toolTip = new ToolTip();
-            var control = new Control();
+            using var control = new Control();
             toolTip.SetToolTip(control, caption);
             Assert.Equal(expected, toolTip.GetToolTip(control));
 
@@ -612,7 +612,7 @@ namespace System.Windows.Forms.Tests
             {
                 Site = mockSite.Object
             };
-            var control = new Control();
+            using var control = new Control();
             toolTip.SetToolTip(control, caption);
             Assert.Equal(expected, toolTip.GetToolTip(control));
 
@@ -638,7 +638,8 @@ namespace System.Windows.Forms.Tests
         public void ToolTip_Show_InvokeStringIWin32WindowControlWindow_Nop(string text)
         {
             using var toolTip = new ToolTip();
-            toolTip.Show(text, new Control());
+            using var control = new Control();
+            toolTip.Show(text, control);
         }
 
         [WinFormsTheory]
@@ -665,7 +666,8 @@ namespace System.Windows.Forms.Tests
         public void ToolTip_Show_InvokeStringIWin32WindowIntControlWindow_Nop(string text, int duration)
         {
             using var toolTip = new ToolTip();
-            toolTip.Show(text, new Control(), duration);
+            using var control = new Control();
+            toolTip.Show(text, control, duration);
         }
 
         [WinFormsTheory]
