@@ -6358,7 +6358,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
         <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
-        <target state="new">Event raised when the CollapsedState property of a ListViewGroup changes.</target>
+        <target state="translated">Zdarzenie wywoływane, gdy zostanie zmieniona właściwość CollapsedState elementu ListViewGroup.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -9093,17 +9093,17 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateClosedDialog">
         <source>Cannot navigate the dialog when it has already closed.</source>
-        <target state="translated">Nie można nawigować po oknie dialogowym, gdy zostało już zamknięte.</target>
+        <target state="translated">Nie można nawigować oknem dialogowym, gdy zostało już zamknięte.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
         <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
-        <target state="translated">Nie można nawigować po oknie dialogowym z poziomu programu obsługi zdarzeń wywoływanego z nawigacji.</target>
+        <target state="translated">Nie można nawigować oknen=m dialogowym z poziomu programu obsługi zdarzeń wywoływanego z nawigacji.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
         <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
-        <target state="translated">Nie można nawigować po oknie dialogowym z poziomu zdarzenia {0} jednego z przycisków opcji bieżącego okna dialogowego zadania.</target>
+        <target state="translated">Nie można nawigować oknem dialogowym z poziomu zdarzenia {0} jednego z przycisków opcji bieżącego okna dialogowego zadania.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
@@ -9148,7 +9148,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
         <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
-        <target state="translated">Nie można manipulować oknem dialogowym zadania zaraz po nawigacji w nim. Poczekaj na wystąpienie zdarzenia {0} następnej strony.</target>
+        <target state="translated">Nie można manipulować oknem dialogowym zadania zaraz po nawigowaniu nim. Poczekaj na wystąpienie zdarzenia {0} następnej strony.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateIconType">

@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="AppModel_SingleInstanceCantConnect">
         <source>This single-instance application could not connect to the original instance.</source>
-        <target state="new">This single-instance application could not connect to the original instance.</target>
+        <target state="translated">此單一執行個體應用程式無法連接到原始執行個體。</target>
         <note />
       </trans-unit>
       <trans-unit id="AppModel_SplashAndMainFormTheSame">
