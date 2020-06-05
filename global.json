@@ -2,8 +2,12 @@
   "tools": {
     "dotnet": "5.0.100-preview.6.20266.3",
     "runtimes": {
-      "dotnet/x64": [ "$(MicrosoftNETCoreAppPackageVersion)" ],
-      "dotnet/x86": [ "$(MicrosoftNETCoreAppPackageVersion)" ]
+      "dotnet/x64": [
+        "$(MicrosoftNETCoreAppPackageVersion)"
+      ],
+      "dotnet/x86": [
+        "$(MicrosoftNETCoreAppPackageVersion)"
+      ]
     }
   },
   "sdk": {
@@ -14,7 +18,7 @@
     "Microsoft.DotNet.CMake.Sdk": "5.0.0-beta.20256.5",
     "Microsoft.DotNet.Helix.Sdk": "5.0.0-beta.20280.1",
     "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
-    "Microsoft.NET.Sdk.IL": "5.0.0-preview.7.20303.11"
+    "Microsoft.NET.Sdk.IL": "5.0.0-preview.7.20305.1"
   },
   "native-tools": {
     "cmake": "3.14.2",
