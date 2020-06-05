@@ -2,9 +2,8 @@
   "tools": {
     "dotnet": "5.0.100-preview.6.20266.3",
     "runtimes": {
-      "dotnet": [
-        "$(MicrosoftNETCoreAppPackageVersion)"
-      ]
+      "dotnet/x64": [ "$(MicrosoftNETCoreAppPackageVersion)" ],
+      "dotnet/x86": [ "$(MicrosoftNETCoreAppPackageVersion)" ]
     }
   },
   "sdk": {
