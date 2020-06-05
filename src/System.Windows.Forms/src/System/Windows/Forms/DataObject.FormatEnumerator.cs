@@ -4,10 +4,9 @@
 
 #nullable disable
 
-using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.InteropServices.ComTypes;
 using static Interop;
 
@@ -20,65 +19,30 @@ namespace System.Windows.Forms
         /// </summary>
         private class FormatEnumerator : IEnumFORMATETC
         {
-            internal IDataObject parent = null;
-            internal ArrayList formats = new ArrayList();
-            internal int current = 0;
+            private IDataObject _parent;
+            private readonly List<FORMATETC> _formats = new List<FORMATETC>();
+            private int _current = 0;
 
             public FormatEnumerator(IDataObject parent) : this(parent, parent.GetFormats())
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Constructed: " + parent.ToString());
             }
 
-            public FormatEnumerator(IDataObject parent, FORMATETC[] formats)
+            private FormatEnumerator(FormatEnumerator source)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Constructed: " + parent.ToString() + ", FORMATETC[]" + formats.Length.ToString(CultureInfo.InvariantCulture));
-                this.formats.Clear();
-                this.parent = parent;
-                current = 0;
-                if (formats != null)
-                {
-                    if (parent is DataObject dataObject && dataObject.RestrictedFormats)
-                    {
-                        if (!Clipboard.IsFormatValid(formats))
-                        {
-                            throw new Security.SecurityException(SR.ClipboardSecurityException);
-                        }
-                    }
-
-                    for (int i = 0; i < formats.Length; i++)
-                    {
-                        FORMATETC currentFormat = formats[i];
-
-                        FORMATETC temp = new FORMATETC
-                        {
-                            cfFormat = currentFormat.cfFormat,
-                            dwAspect = currentFormat.dwAspect,
-                            ptd = currentFormat.ptd,
-                            lindex = currentFormat.lindex,
-                            tymed = currentFormat.tymed
-                        };
-                        this.formats.Add(temp);
-                    }
-                }
+                _parent = source._parent;
+                _current = 0;
+                _formats.AddRange(source._formats);
             }
 
             public FormatEnumerator(IDataObject parent, string[] formats)
             {
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Constructed: " + parent.ToString() + ", string[]" + formats.Length.ToString(CultureInfo.InvariantCulture));
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"FormatEnumerator: Constructed: {parent}, string[{(formats?.Length ?? 0)}]");
 
-                this.parent = parent;
-                this.formats.Clear();
+                _parent = parent;
 
                 if (formats != null)
                 {
-                    if (parent is DataObject dataObject && dataObject.RestrictedFormats)
-                    {
-                        if (!Clipboard.IsFormatValid(formats))
-                        {
-                            throw new Security.SecurityException(SR.ClipboardSecurityException);
-                        }
-                    }
-
                     for (int i = 0; i < formats.Length; i++)
                     {
                         string format = formats[i];
@@ -110,10 +74,7 @@ namespace System.Windows.Forms
                             temp.tymed = TYMED.TYMED_HGLOBAL;
                         }
 
-                        if (temp.tymed != 0)
-                        {
-                            this.formats.Add(temp);
-                        }
+                        _formats.Add(temp);
                     }
                 }
             }
@@ -121,9 +82,9 @@ namespace System.Windows.Forms
             public int Next(int celt, FORMATETC[] rgelt, int[] pceltFetched)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Next");
-                if (this.current < formats.Count && celt > 0)
+                if (_current < _formats.Count && celt > 0)
                 {
-                    FORMATETC current = (FORMATETC)formats[this.current];
+                    FORMATETC current = (FORMATETC)_formats[_current];
                     rgelt[0].cfFormat = current.cfFormat;
                     rgelt[0].tymed = current.tymed;
                     rgelt[0].dwAspect = DVASPECT.DVASPECT_CONTENT;
@@ -134,7 +95,7 @@ namespace System.Windows.Forms
                     {
                         pceltFetched[0] = 1;
                     }
-                    this.current++;
+                    _current++;
                 }
                 else
                 {
@@ -150,27 +111,25 @@ namespace System.Windows.Forms
             public int Skip(int celt)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Skip");
-                if (current + celt >= formats.Count)
+                if (_current + celt >= _formats.Count)
                 {
                     return (int)HRESULT.S_FALSE;
                 }
-                current += celt;
+                _current += celt;
                 return (int)HRESULT.S_OK;
             }
 
             public int Reset()
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Reset");
-                current = 0;
+                _current = 0;
                 return (int)HRESULT.S_OK;
             }
 
             public void Clone(out IEnumFORMATETC ppenum)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Clone");
-                FORMATETC[] temp = new FORMATETC[formats.Count];
-                formats.CopyTo(temp, 0);
-                ppenum = new FormatEnumerator(parent, temp);
+                ppenum = new FormatEnumerator(this);
             }
         }
     }
