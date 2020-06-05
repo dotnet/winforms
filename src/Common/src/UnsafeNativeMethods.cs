@@ -4028,6 +4028,9 @@ namespace System.Windows.Forms
 
         // UIAutomationCore methods
 
+        [DllImport(ExternDll.UiaCore, ExactSpelling = true)]
+        internal static extern int UiaDisconnectProvider(IRawElementProviderSimple provider);
+
         [DllImport(ExternDll.UiaCore, CharSet = CharSet.Unicode)]
         internal static extern int UiaHostProviderFromHwnd(HandleRef hwnd, out IRawElementProviderSimple provider);
 
