@@ -84,6 +84,10 @@ namespace System.Drawing.Design.Tests
                 stream.Position = 0;
                 Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
                 Assert.Equal(new Size(10, 10), result.Size);
+
+                using var resultStream = new MemoryStream();
+                result.Save(resultStream, ImageFormat.Bmp);
+                Assert.Equal(stream.Length, resultStream.Length);
             }
         }
 
