@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class ErrorProviderAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ErrorProviderAccessibleObjectTests : IDisposable, IClassFixture<ThreadExceptionFixture>
     {
         private readonly Form _form;
         private readonly Control _control1;
@@ -46,6 +46,14 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             _errorWindow = _errorProvider.EnsureErrorWindow(_form);
             _controlItem1 = _errorWindow.ControlItems.Count > 0 ? _errorWindow.ControlItems[0] : null;
             _controlItem2 = _errorWindow.ControlItems.Count > 0 ? _errorWindow.ControlItems[1] : null;
+        }
+
+        public void Dispose()
+        {
+            _errorProvider?.Dispose();
+            _control2?.Dispose();
+            _control1?.Dispose();
+            _form?.Dispose();
         }
 
         [WinFormsFact]
