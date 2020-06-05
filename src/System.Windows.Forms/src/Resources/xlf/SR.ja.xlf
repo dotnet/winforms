@@ -1189,7 +1189,7 @@
       </trans-unit>
       <trans-unit id="ContainerControlAutoScaleModeDescr">
         <source>Determines how the form or control will scale when screen resolution or fonts change.</source>
-        <target state="translated">解像度またはフォントが変更されたとき、フォームまたはコントロールのサイズ変更方法を決定します。</target>
+        <target state="translated">解像度またはフォントが変更されたとき、フォームまたはコントロールのスケーリング方法を決定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ContainerControlAutoValidate">
@@ -6358,7 +6358,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
         <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
-        <target state="new">Event raised when the CollapsedState property of a ListViewGroup changes.</target>
+        <target state="translated">ListViewGroup の CollapsedState プロパティが変更するときに発生するイベントです。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -8013,7 +8013,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyCategoryScale">
         <source>Scale</source>
-        <target state="translated">スケール</target>
+        <target state="translated">スケーリング</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryText">

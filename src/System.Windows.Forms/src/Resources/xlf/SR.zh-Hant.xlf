@@ -6358,7 +6358,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
         <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
-        <target state="new">Event raised when the CollapsedState property of a ListViewGroup changes.</target>
+        <target state="translated">ListViewGroup 的 CollapsedState 屬性變更時引發的事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -9093,22 +9093,22 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateClosedDialog">
         <source>Cannot navigate the dialog when it has already closed.</source>
-        <target state="translated">當對話方塊已經關閉後就不可瀏覽。</target>
+        <target state="translated">對話方塊一經關閉即無法瀏覽。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
         <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
-        <target state="translated">不可透過從瀏覽內呼叫的事件處理常式來瀏覽對話方塊。</target>
+        <target state="translated">無法從瀏覽內呼叫的事件處理常式來瀏覽對話方塊。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
         <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
-        <target state="translated">不可從目前工作對話方塊內其中一個選項按鈕的 {0} 事件中瀏覽對話方塊。</target>
+        <target state="translated">無法從目前工作對話方塊內其中一個選項按鈕的 {0} 事件中瀏覽對話方塊。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
         <source>Cannot navigate from a page not bound to a dialog.</source>
-        <target state="translated">不可從未繫結至對話方塊的頁面瀏覽。</target>
+        <target state="translated">無法從未繫結至對話方塊的頁面瀏覽。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
@@ -9148,7 +9148,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
         <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
-        <target state="translated">不可在瀏覽之後立即操作工作對話方塊。請等候下一頁的 {0} 事件發生。</target>
+        <target state="translated">無法在瀏覽之後立即操作工作對話方塊。請等候下一頁的 {0} 事件發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateIconType">
