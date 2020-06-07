@@ -342,8 +342,8 @@ namespace System.Windows.Forms
                         bool hasStrings = false;
 
                         // check for enums
-                        var caStrings = new Ole32.CA_STRUCT();
-                        var caCookies = new Ole32.CA_STRUCT();
+                        var caStrings = new Ole32.CA();
+                        var caCookies = new Ole32.CA();
 
                         HRESULT hr = HRESULT.S_OK;
                         try

@@ -10,31 +10,21 @@ using static Interop;
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     /// <summary>
-    ///  This class performs marshaling on a CALPOLESTR struct given
-    ///  from native code.
+    ///  This class performs marshaling on a CALPOLESTR struct given from native code.
     /// </summary>
     internal class OleStrCAMarshaler : BaseCAMarshaler
     {
-        public OleStrCAMarshaler(in Ole32.CA_STRUCT caAddr) : base(caAddr)
+        public OleStrCAMarshaler(in Ole32.CA caAddr) : base(caAddr)
         {
         }
 
         /// <summary>
-        ///  Returns the type of item this marshaler will
-        ///  return in the items array.  In this case, the type is string.
+        ///  Returns the type of item this marshaler will return in the items array.
+        ///  In this case, the type is string.
         /// </summary>
-        public override Type ItemType
-        {
-            get
-            {
-                return typeof(string);
-            }
-        }
+        public override Type ItemType =>  typeof(string);
 
-        protected override Array CreateArray()
-        {
-            return new string[Count];
-        }
+        protected override Array CreateArray() => new string[Count];
 
         /// <summary>
         ///  Override this member to perform marshalling of a single item
