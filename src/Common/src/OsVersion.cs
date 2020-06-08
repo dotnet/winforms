@@ -1,20 +1,22 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+using static Interop;
 
 namespace System.Windows.Forms
 {
     internal static class OsVersion
     {
-        private static Interop.NtDll.RTL_OSVERSIONINFOEX s_versionInfo = InitVersion();
+        private static NtDll.RTL_OSVERSIONINFOEX s_versionInfo = InitVersion();
 
-        private static Interop.NtDll.RTL_OSVERSIONINFOEX InitVersion()
+        private static NtDll.RTL_OSVERSIONINFOEX InitVersion()
         {
             // We use RtlGetVersion as it isn't subject to version lie. GetVersion
             // won't tell you the real version unless the launching exe is manifested
             // with the latest OS version.
 
-            Interop.NtDll.RtlGetVersion(out Interop.NtDll.RTL_OSVERSIONINFOEX info);
+            NtDll.RtlGetVersion(out NtDll.RTL_OSVERSIONINFOEX info);
             return info;
         }
 
@@ -35,6 +37,12 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool IsWindows8_1OrGreater
             => s_versionInfo.dwMajorVersion >= 10
-                || s_versionInfo.dwMajorVersion == 6 && s_versionInfo.dwMinorVersion == 3;
+                || (s_versionInfo.dwMajorVersion == 6 && s_versionInfo.dwMinorVersion == 3);
+
+        /// <summary>
+        ///  Is Windows 8 or later.
+        /// </summary>
+        public static bool IsWindows8OrGreater
+            => s_versionInfo.dwMajorVersion >= 8;
     }
 }
