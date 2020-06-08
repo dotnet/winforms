@@ -427,6 +427,16 @@ namespace System.Windows.Forms
                 return RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
             }
 
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            {
+                if (Owner.SupportsUiaProviders && patternId == UiaCore.UIA.LegacyIAccessiblePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
+
             internal override bool IsIAccessibleExSupported()
                 => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
 
