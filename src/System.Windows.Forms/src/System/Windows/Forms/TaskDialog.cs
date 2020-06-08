@@ -103,6 +103,8 @@ namespace System.Windows.Forms
         /// </summary>
         private IntPtr _instanceHandlePtr;
 
+        private IntPtr _handle;
+
         private WindowSubclassHandler? _windowSubclassHandler;
 
         /// <summary>
@@ -222,7 +224,22 @@ namespace System.Windows.Forms
         ///   Gets the window handle of the task dialog window, or <see cref="IntPtr.Zero"/>
         ///   if the dialog is currently not being shown.
         /// </summary>
-        public IntPtr Handle { get; private set; }
+        public IntPtr Handle
+        {
+            get
+            {
+                // Check that the current thread is the same than the one which created the window,
+                // similar to the check in Control.Handle. While the task dialog is showing, it must
+                // only be accessed from the original thread because the implementation is not
+                // thread-safe.
+                if (Control.CheckForIllegalCrossThreadCalls && InvokeRequired)
+                {
+                    throw new InvalidOperationException(string.Format(SR.IllegalCrossThreadCall, nameof(TaskDialog)));
+                }
+
+                return _handle;
+            }
+        }
 
         /// <summary>
         ///   Gets a value that indicates whether <see cref="ShowDialog(IntPtr, TaskDialogPage, TaskDialogStartupLocation)"/> is
@@ -244,6 +261,9 @@ namespace System.Windows.Forms
         /// </para>
         /// </remarks>
         internal bool IsHandleCreated => Handle != IntPtr.Zero;
+
+        internal bool InvokeRequired => _handle != IntPtr.Zero &&
+            User32.GetWindowThreadProcessId(_handle, out _) != Kernel32.GetCurrentThreadId();
 
         /// <summary>
         ///   Gets or sets the current count of stack frames that are in the
@@ -522,7 +542,7 @@ namespace System.Windows.Forms
                     // thrown (which means the native task dialog is still showing),
                     // which we should avoid as it is not supported.
                     // TODO: Maybe FailFast() in that case to prevent future errors.
-                    Debug.Assert(Handle == IntPtr.Zero);
+                    Debug.Assert(_handle == IntPtr.Zero);
 
                     // Ensure to keep the callback delegate alive until
                     // TaskDialogIndirect() returns (in case we could not undo the
@@ -537,7 +557,7 @@ namespace System.Windows.Forms
                     // raiseClosed/raisePageDestroyed flags are is cleared even if
                     // the TDN_DESTROYED notification did not occur (although that
                     // should only happen when there was an exception).
-                    Handle = IntPtr.Zero;
+                    _handle = IntPtr.Zero;
                     _raisedPageCreated = false;
 
                     // Clear cached objects and other fields.
@@ -826,8 +846,8 @@ namespace System.Windows.Forms
             Debug.Assert(_boundPage != null);
 
             // Set the hWnd as this may be the first time that we get it.
-            bool isFirstNotification = Handle == IntPtr.Zero;
-            Handle = hWnd;
+            bool isFirstNotification = _handle == IntPtr.Zero;
+            _handle = hWnd;
 
             try
             {
@@ -920,7 +940,7 @@ namespace System.Windows.Forms
                             // must not continue to send any notifications to the dialog
                             // after the callback function has returned from being called
                             // with the 'Destroyed' notification.
-                            Handle = IntPtr.Zero;
+                            _handle = IntPtr.Zero;
                         }
                         break;
 
