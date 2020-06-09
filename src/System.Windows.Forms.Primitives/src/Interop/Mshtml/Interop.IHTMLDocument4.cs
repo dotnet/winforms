@@ -22,7 +22,7 @@ internal partial class Interop
             void SetMedia(string bstrMedia);
             string GetMedia();
             object CreateEventObject([In, Optional] ref object eventObject);
-            bool FireEvent(string eventName);
+            bool FireEvent(string eventName, object pvarEventObject);
             object CreateRenderStyle(string bstr);
             void SetOncontrolselect(object p);
             object GetOncontrolselect();

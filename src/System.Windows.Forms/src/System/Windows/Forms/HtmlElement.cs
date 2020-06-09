@@ -1083,8 +1083,7 @@ namespace System.Windows.Forms
                 // our EventHandler properly.
 
                 HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
-                bool success = ((IHTMLElement2)NativeHtmlElement).AttachEvent(eventName, proxy);
-                Debug.Assert(success, "failed to add event");
+                ((IHTMLElement2)NativeHtmlElement).AttachEvent(eventName, proxy);
             }
 
             public override void ConnectToEvents()
