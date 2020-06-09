@@ -1398,7 +1398,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void CtrlBackspaceTextRemainsEmpty()
         {
-            SubComboBox control = CreateControlForCtrlBackspace();
+            using SubComboBox control = CreateControlForCtrlBackspace();
             SendCtrlBackspace(control);
             Assert.Equal("", control.Text);
         }
@@ -1407,7 +1407,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceData))]
         public void CtrlBackspaceTextChanged(string value, string expected, int cursorRelativeToEnd)
         {
-            SubComboBox control = CreateControlForCtrlBackspace(value, cursorRelativeToEnd);
+            using SubComboBox control = CreateControlForCtrlBackspace(value, cursorRelativeToEnd);
             SendCtrlBackspace(control);
             Assert.Equal(expected, control.Text);
         }
@@ -1416,7 +1416,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceRepeatedData))]
         public void CtrlBackspaceRepeatedTextChanged(string value, string expected, int repeats)
         {
-            SubComboBox control = CreateControlForCtrlBackspace(value);
+            using SubComboBox control = CreateControlForCtrlBackspace(value);
             for (int i = 0; i < repeats; i++)
             {
                 SendCtrlBackspace(control);
@@ -1427,7 +1427,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void CtrlBackspaceDeletesSelection()
         {
-            SubComboBox control = CreateControlForCtrlBackspace("123-5-7-9");
+            using SubComboBox control = CreateControlForCtrlBackspace("123-5-7-9");
             control.SelectionStart = 2;
             control.SelectionLength = 5;
             SendCtrlBackspace(control);
