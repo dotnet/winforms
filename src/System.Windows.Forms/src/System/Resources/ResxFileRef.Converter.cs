@@ -18,8 +18,7 @@ namespace System.Resources
     {
         public class Converter : TypeConverter
         {
-            public override bool CanConvertFrom(ITypeDescriptorContext context,
-                                                Type sourceType)
+            public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
             {
                 if (sourceType == typeof(string))
                 {
@@ -28,16 +27,16 @@ namespace System.Resources
                 return false;
             }
 
-            public override bool CanConvertTo(ITypeDescriptorContext context,
-                                              Type destinationType)
+            public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
             {
                 return destinationType == typeof(string);
             }
 
-            public override object ConvertTo(ITypeDescriptorContext context,
-                                             CultureInfo culture,
-                                             object value,
-                                             Type destinationType)
+            public override object ConvertTo(
+                ITypeDescriptorContext context,
+                CultureInfo culture,
+                object value,
+                Type destinationType)
             {
                 object created = null;
                 if (destinationType == typeof(string))
@@ -105,9 +104,10 @@ namespace System.Resources
                 return result;
             }
 
-            public override object ConvertFrom(ITypeDescriptorContext context,
-                                               CultureInfo culture,
-                                               object value)
+            public override object ConvertFrom(
+                ITypeDescriptorContext context,
+                CultureInfo culture,
+                object value)
             {
                 if (value is string stringValue)
                 {

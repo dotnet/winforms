@@ -52,12 +52,14 @@ namespace System.Resources
             _aliasResolver = new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(string fileName) : this(fileName, (ITypeResolutionService)null, (IAliasResolver)null)
+        public ResXResourceReader(string fileName) : this(fileName, (ITypeResolutionService)null, null)
         {
         }
-        public ResXResourceReader(string fileName, ITypeResolutionService typeResolver) : this(fileName, typeResolver, (IAliasResolver)null)
+
+        public ResXResourceReader(string fileName, ITypeResolutionService typeResolver) : this(fileName, typeResolver, null)
         {
         }
+
         internal ResXResourceReader(string fileName, ITypeResolutionService typeResolver, IAliasResolver aliasResolver)
         {
             _fileName = fileName;
@@ -65,12 +67,14 @@ namespace System.Resources
             _aliasResolver = aliasResolver ?? new ReaderAliasResolver();
         }
 
-        public ResXResourceReader(TextReader reader) : this(reader, (ITypeResolutionService)null, (IAliasResolver)null)
+        public ResXResourceReader(TextReader reader) : this(reader, (ITypeResolutionService)null, null)
         {
         }
+
         public ResXResourceReader(TextReader reader, ITypeResolutionService typeResolver) : this(reader, typeResolver, (IAliasResolver)null)
         {
         }
+
         internal ResXResourceReader(TextReader reader, ITypeResolutionService typeResolver, IAliasResolver aliasResolver)
         {
             _reader = reader;
@@ -81,9 +85,11 @@ namespace System.Resources
         public ResXResourceReader(Stream stream) : this(stream, (ITypeResolutionService)null, (IAliasResolver)null)
         {
         }
+
         public ResXResourceReader(Stream stream, ITypeResolutionService typeResolver) : this(stream, typeResolver, (IAliasResolver)null)
         {
         }
+
         internal ResXResourceReader(Stream stream, ITypeResolutionService typeResolver, IAliasResolver aliasResolver)
         {
             _stream = stream;
@@ -94,6 +100,7 @@ namespace System.Resources
         public ResXResourceReader(Stream stream, AssemblyName[] assemblyNames) : this(stream, assemblyNames, (IAliasResolver)null)
         {
         }
+
         internal ResXResourceReader(Stream stream, AssemblyName[] assemblyNames, IAliasResolver aliasResolver)
         {
             _stream = stream;
@@ -104,6 +111,7 @@ namespace System.Resources
         public ResXResourceReader(TextReader reader, AssemblyName[] assemblyNames) : this(reader, assemblyNames, (IAliasResolver)null)
         {
         }
+
         internal ResXResourceReader(TextReader reader, AssemblyName[] assemblyNames, IAliasResolver aliasResolver)
         {
             _reader = reader;
@@ -114,6 +122,7 @@ namespace System.Resources
         public ResXResourceReader(string fileName, AssemblyName[] assemblyNames) : this(fileName, assemblyNames, (IAliasResolver)null)
         {
         }
+
         internal ResXResourceReader(string fileName, AssemblyName[] assemblyNames, IAliasResolver aliasResolver)
         {
             _fileName = fileName;
@@ -170,13 +179,11 @@ namespace System.Resources
         /// <summary>
         ///  Closes and files or streams being used by the reader.
         /// </summary>
-        // NOTE: Part of IResourceReader - not protected by class level LinkDemand.
         public void Close()
         {
             ((IDisposable)this).Dispose();
         }
 
-        // NOTE: Part of IDisposable - not protected by class level LinkDemand.
         void IDisposable.Dispose()
         {
             GC.SuppressFinalize(this);
@@ -298,13 +305,11 @@ namespace System.Resources
             };
         }
 
-        // NOTE: Part of IEnumerable - not protected by class level LinkDemand.
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
-        // NOTE: Part of IResourceReader - not protected by class level LinkDemand.
         public IDictionaryEnumerator GetEnumerator()
         {
             _isReaderDirty = true;

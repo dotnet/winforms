@@ -159,8 +159,6 @@ namespace System.Resources
             }
         }
 
-        /// <summary>
-        /// </summary>
         public string Comment
         {
             get
@@ -178,8 +176,6 @@ namespace System.Resources
             }
         }
 
-        /// <summary>
-        /// </summary>
         public string Name
         {
             get
@@ -277,7 +273,8 @@ namespace System.Resources
         private void FillDataNodeInfoFromObject(DataNodeInfo nodeInfo, object value)
         {
             if (value is CultureInfo ci)
-            { // special-case CultureInfo, cannot use CultureInfoConverter for serialization
+            {
+                // special-case CultureInfo, cannot use CultureInfoConverter for serialization
                 nodeInfo.ValueData = ci.Name;
                 nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(CultureInfo), _typeNameConverter);
             }
@@ -564,8 +561,9 @@ namespace System.Resources
                             insideObject = GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver);
                         }
                         catch (Exception ex)
-                        { // it'd be better to catch SerializationException but the underlying type resolver
-                          // can throw things like FileNotFoundException which is kinda confusing, so I am catching all here..
+                        {
+                            // it'd be better to catch SerializationException but the underlying type resolver
+                            // can throw things like FileNotFoundException which is kinda confusing, so I am catching all here..
                             if (ClientUtils.IsCriticalException(ex))
                             {
                                 throw;

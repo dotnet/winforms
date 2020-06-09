@@ -114,10 +114,8 @@ namespace System.Resources
         /// <summary>
         ///  Creates a new ResXResourceWriter that will write to the specified file.
         /// </summary>
-        public ResXResourceWriter(string fileName)
-        {
-            _fileName = fileName;
-        }
+        public ResXResourceWriter(string fileName) => _fileName = fileName;
+
         public ResXResourceWriter(string fileName, Func<Type, string> typeNameConverter)
         {
             _fileName = fileName;
@@ -127,10 +125,8 @@ namespace System.Resources
         /// <summary>
         ///  Creates a new ResXResourceWriter that will write to the specified stream.
         /// </summary>
-        public ResXResourceWriter(Stream stream)
-        {
-            _stream = stream;
-        }
+        public ResXResourceWriter(Stream stream) => _stream = stream;
+
         public ResXResourceWriter(Stream stream, Func<Type, string> typeNameConverter)
         {
             _stream = stream;
@@ -140,10 +136,8 @@ namespace System.Resources
         /// <summary>
         ///  Creates a new ResXResourceWriter that will write to the specified TextWriter.
         /// </summary>
-        public ResXResourceWriter(TextWriter textWriter)
-        {
-            _textWriter = textWriter;
-        }
+        public ResXResourceWriter(TextWriter textWriter) => _textWriter = textWriter;
+
         public ResXResourceWriter(TextWriter textWriter, Func<Type, string> typeNameConverter)
         {
             _textWriter = textWriter;
@@ -159,8 +153,6 @@ namespace System.Resources
         {
             if (_xmlTextWriter == null)
             {
-                //
-
                 bool writeHeaderRequired = false;
 
                 if (_textWriter != null)
@@ -277,44 +269,30 @@ namespace System.Resources
         ///  Adds the given value to the collection of metadata.  These name/value pairs
         ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
         /// </summary>
-        public void AddMetadata(string name, byte[] value)
-        {
-            AddDataRow(MetadataStr, name, value);
-        }
+        public void AddMetadata(string name, byte[] value) => AddDataRow(MetadataStr, name, value);
 
         /// <summary>
         ///  Adds the given value to the collection of metadata.  These name/value pairs
         ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
         /// </summary>
-        public void AddMetadata(string name, string value)
-        {
-            AddDataRow(MetadataStr, name, value);
-        }
+        public void AddMetadata(string name, string value) => AddDataRow(MetadataStr, name, value);
 
         /// <summary>
         ///  Adds the given value to the collection of metadata.  These name/value pairs
         ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
         /// </summary>
-        public void AddMetadata(string name, object value)
-        {
-            AddDataRow(MetadataStr, name, value);
-        }
+        public void AddMetadata(string name, object value) => AddDataRow(MetadataStr, name, value);
 
         /// <summary>
         ///  Adds a blob resource to the resources.
         /// </summary>
-        // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
-        public void AddResource(string name, byte[] value)
-        {
-            AddDataRow(DataStr, name, value);
-        }
+        public void AddResource(string name, byte[] value) => AddDataRow(DataStr, name, value);
 
         /// <summary>
         ///  Adds a resource to the resources. If the resource is a string,
         ///  it will be saved that way, otherwise it will be serialized
         ///  and stored as in binary.
         /// </summary>
-        // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void AddResource(string name, object value)
         {
             if (value is ResXDataNode node)
@@ -330,11 +308,7 @@ namespace System.Resources
         /// <summary>
         ///  Adds a string resource to the resources.
         /// </summary>
-        // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
-        public void AddResource(string name, string value)
-        {
-            AddDataRow(DataStr, name, value);
-        }
+        public void AddResource(string name, string value) => AddDataRow(DataStr, name, value);
 
         /// <summary>
         ///  Adds a string resource to the resources.
@@ -454,7 +428,6 @@ namespace System.Resources
                 {
                     alias = GetAliasFromName(new AssemblyName(GetFullName(type)));
                 }
-                //AddAssemblyRow(AssemblyStr, alias, GetFullName(type));
             }
 
             Writer.WriteStartElement(elementName);
@@ -520,7 +493,6 @@ namespace System.Resources
                 {
                     Writer.WriteAttributeString(NameStr, name);
                 }
-                //Writer.WriteEndElement();
             }
             Writer.WriteEndElement();
         }
@@ -531,26 +503,27 @@ namespace System.Resources
             {
                 _cachedAliases = new Hashtable();
             }
+
             string alias = (string)_cachedAliases[assemblyName.FullName];
+
             if (string.IsNullOrEmpty(alias))
             {
                 alias = assemblyName.Name;
                 AddAlias(alias, assemblyName);
                 AddAssemblyRow(AssemblyStr, alias, assemblyName.FullName);
             }
+
             return alias;
         }
 
         /// <summary>
         ///  Closes any files or streams locked by the writer.
         /// </summary>
-        // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void Close()
         {
             Dispose();
         }
 
-        // NOTE: Part of IDisposable - not protected by class level LinkDemand.
         public virtual void Dispose()
         {
             Dispose(true);
@@ -635,7 +608,6 @@ namespace System.Resources
         /// <summary>
         ///  Writes the resources out to the file or stream.
         /// </summary>
-        // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void Generate()
         {
             if (_hasBeenSaved)

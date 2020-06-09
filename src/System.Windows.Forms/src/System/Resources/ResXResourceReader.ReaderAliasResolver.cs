@@ -13,28 +13,28 @@ namespace System.Resources
     {
         private sealed class ReaderAliasResolver : IAliasResolver
         {
-            private readonly Hashtable cachedAliases;
+            private readonly Hashtable _cachedAliases;
 
             internal ReaderAliasResolver()
             {
-                cachedAliases = new Hashtable();
+                _cachedAliases = new Hashtable();
             }
 
             public AssemblyName ResolveAlias(string alias)
             {
                 AssemblyName result = null;
-                if (cachedAliases != null)
+                if (_cachedAliases != null)
                 {
-                    result = (AssemblyName)cachedAliases[alias];
+                    result = (AssemblyName)_cachedAliases[alias];
                 }
                 return result;
             }
 
             public void PushAlias(string alias, AssemblyName name)
             {
-                if (cachedAliases != null && !string.IsNullOrEmpty(alias))
+                if (_cachedAliases != null && !string.IsNullOrEmpty(alias))
                 {
-                    cachedAliases[alias] = name;
+                    _cachedAliases[alias] = name;
                 }
             }
         }
