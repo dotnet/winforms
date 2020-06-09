@@ -320,7 +320,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="commandLine">The command line from Main()</param>
         <SecuritySafeCritical()>
         Public Sub Run(commandLine As String())
-            Throw New Exception("do not care")
             'Prime the command line args with what we receive from Main() so that Click-Once windows apps don't have to do a System.Environment call which would require permissions.
             InternalCommandLine = New ReadOnlyCollection(Of String)(commandLine)
 
