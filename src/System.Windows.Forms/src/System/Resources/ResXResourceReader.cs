@@ -20,7 +20,7 @@ namespace System.Resources
     /// <summary>
     ///  ResX resource reader.
     /// </summary>
-    public class ResXResourceReader : IResourceReader
+    public partial class ResXResourceReader : IResourceReader
     {
         readonly string fileName = null;
         TextReader reader = null;
@@ -686,34 +686,6 @@ namespace System.Resources
         {
             int indexStart = typeName.IndexOf(',');
             return typeName.Substring(0, indexStart);
-        }
-
-        private sealed class ReaderAliasResolver : IAliasResolver
-        {
-            private readonly Hashtable cachedAliases;
-
-            internal ReaderAliasResolver()
-            {
-                cachedAliases = new Hashtable();
-            }
-
-            public AssemblyName ResolveAlias(string alias)
-            {
-                AssemblyName result = null;
-                if (cachedAliases != null)
-                {
-                    result = (AssemblyName)cachedAliases[alias];
-                }
-                return result;
-            }
-
-            public void PushAlias(string alias, AssemblyName name)
-            {
-                if (cachedAliases != null && !string.IsNullOrEmpty(alias))
-                {
-                    cachedAliases[alias] = name;
-                }
-            }
         }
     }
 }
