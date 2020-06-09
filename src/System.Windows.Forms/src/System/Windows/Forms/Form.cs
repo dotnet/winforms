@@ -5208,20 +5208,20 @@ namespace System.Windows.Forms
                                                           "showDialog"), "owner");
                     }
 
-                    // In a multi DPI environment, DPI changed events triggered only when there is a DPI change
-                    // happened for the Handle directly or via its parent. So, it is necessary to not set the
-                    // owner before creating the handle. Otherwise, the window may never receive DPI changed
-                    // event even if its parent has different DPI.Users at runtime, has to move the window
-                    // between the screens to get the DPI changed events triggered.
+                    // In a multi DPI environment and applications in PMV2 mode, DPI changed events triggered
+                    // only when there is a DPI change happened for the Handle directly or via its parent.
+                    // So, it is necessary to not set the owner before creating the handle. Otherwise,
+                    // the window may never receive DPI changed event even if its parent has different DPI.
+                    // Users at runtime, has to move the window between the screens to get the DPI changed events triggered.
 
                     Properties.SetObject(PropDialogOwner, owner);
-                    if (owner is Form && owner != oldOwner)
+                    if (owner is Form form && owner != oldOwner)
                     {
-                        Owner = (Form)owner;
+                        Owner = form;
                     }
                     else
                     {
-                        // Set the new owner.
+                        // Set the new parent.
                         User32.SetWindowLong(this, User32.GWL.HWNDPARENT, new HandleRef(owner, hWndOwner));
                     }
                 }
