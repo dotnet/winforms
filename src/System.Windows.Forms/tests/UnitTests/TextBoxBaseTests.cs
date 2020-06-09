@@ -10,6 +10,7 @@ using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
+using static Interop.User32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -692,9 +693,9 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void RichTextBox_CanUndo_GetWithHandle_ReturnsExpected()
+        public void TextBoxBase_CanUndo_GetWithHandle_ReturnsExpected()
         {
-            using var control = new RichTextBox();
+            using var control = new TextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -718,9 +719,9 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(CanUndo_CustomCanUndo_TestData))]
-        public void RichTextBox_CanUndo_CustomCanUndo_ReturnsExpected(IntPtr result, bool expected)
+        public void TextBoxBase_CanUndo_CustomCanUndo_ReturnsExpected(IntPtr result, bool expected)
         {
-            using var control = new CustomCanUndoRichTextBox
+            using var control = new CustomCanUndoTextBoxBase
             {
                 Result = result
             };
@@ -728,7 +729,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, control.CanUndo);
         }
 
-        private class CustomCanUndoRichTextBox : RichTextBox
+        private class CustomCanUndoTextBoxBase : TextBoxBase
         {
             public IntPtr Result { get; set; }
 
@@ -742,6 +743,22 @@ namespace System.Windows.Forms.Tests
 
                 base.WndProc(ref m);
             }
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_CanUndo_GetCantCreateHandle_GetReturnsExpected()
+        {
+            using var control = new CantCreateHandleTextBox();
+            Assert.False(control.CanUndo);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_CanUndo_GetDisposed_ThrowsObjectDisposedException()
+        {
+            using var control = new TextBox();
+            control.Dispose();
+            Assert.False(control.CanUndo);
         }
 
         [WinFormsTheory]
@@ -816,6 +833,298 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void TextBoxBase_Font_Set_GetReturnsExpected(Font value)
+        {
+            using var control = new SubTextBox
+            {
+                Font = value
+            };
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void TextBoxBase_Font_SetWithText_GetReturnsExpected(Font value)
+        {
+            using var control = new SubTextBox
+            {
+                Text = "text",
+                Font = value
+            };
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void TextBoxBase_Font_SetWithNonNullOldValue_GetReturnsExpected(Font value)
+        {
+            using var oldValue = new Font("Arial", 1);
+            using var control = new SubTextBox
+            {
+                Font = oldValue
+            };
+
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void TextBoxBase_Font_SetWithNonNullOldValueWithText_GetReturnsExpected(Font value)
+        {
+            using var oldValue = new Font("Arial", 1);
+            using var control = new SubTextBox
+            {
+                Font = oldValue,
+                Text = "text"
+            };
+
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> Font_SetWithHandle_TestData()
+        {
+            foreach (bool userPaint in new bool[] { true, false })
+            {
+                yield return new object[] { userPaint, new Font("Arial", 8.25f), 1 };
+                yield return new object[] { userPaint, null, 0 };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Font_SetWithHandle_TestData))]
+        public void TextBoxBase_Font_SetWithHandle_GetReturnsExpected(bool userPaint, Font value, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubTextBox();
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(userPaint, control.GetStyle(ControlStyles.UserPaint));
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Set different.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Font_SetWithHandle_TestData))]
+        public void TextBoxBase_Font_SetWithTextWithHandle_GetReturnsExpected(bool userPaint, Font value, int expectedInvalidatedCallCount)
+        {
+            using var control = new SubTextBox
+            {
+                Text = "text"
+            };
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(userPaint, control.GetStyle(ControlStyles.UserPaint));
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Set different.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> Font_SetWithNonNullOldValueWithHandle_TestData()
+        {
+            foreach (bool userPaint in new bool[] { true, false })
+            {
+                yield return new object[] { userPaint, new Font("Arial", 8.25f) };
+                yield return new object[] { userPaint, null };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Font_SetWithNonNullOldValueWithHandle_TestData))]
+        public void TextBoxBase_Font_SetWithNonNullOldValueWithHandle_GetReturnsExpected(bool userPaint, Font value)
+        {
+            using var oldValue = new Font("Arial", 1);
+            using var control = new SubTextBox
+            {
+                Font = oldValue
+            };
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(userPaint, control.GetStyle(ControlStyles.UserPaint));
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Set different.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Font_SetWithNonNullOldValueWithHandle_TestData))]
+        public void TextBoxBase_Font_SetWithNonNullOldValueWithTextWithHandle_GetReturnsExpected(bool userPaint, Font value)
+        {
+            using var oldValue = new Font("Arial", 1);
+            using var control = new SubTextBox
+            {
+                Font = oldValue,
+                Text = "text"
+            };
+            control.SetStyle(ControlStyles.UserPaint, userPaint);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            Assert.Equal(userPaint, control.GetStyle(ControlStyles.UserPaint));
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            // Set different.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            Assert.Equal(control.Font.Height, control.FontHeight);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_Font_SetWithHandler_CallsFontChanged()
+        {
+            using var control = new TextBox();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.FontChanged += handler;
+
+            // Set different.
+            using var font1 = new Font("Arial", 8.25f);
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            using var font2 = SystemFonts.DialogFont;
+            control.Font = font2;
+            Assert.Same(font2, control.Font);
+            Assert.Equal(2, callCount);
+
+            // Set null.
+            control.Font = null;
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(3, callCount);
+
+            // Remove handler.
+            control.FontChanged -= handler;
+            control.Font = font1;
+            Assert.Same(font1, control.Font);
+            Assert.Equal(3, callCount);
         }
 
         public static IEnumerable<object[]> ForeColor_Set_TestData()
@@ -915,69 +1224,6 @@ namespace System.Windows.Forms.Tests
             control.ForeColor = Color.Red;
             Assert.Equal(Color.Red, control.ForeColor);
             Assert.Equal(2, callCount);
-        }
-
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
-        public void TextBoxBase_Font_Set_GetReturnsExpected(Font value)
-        {
-            using var control = new SubTextBox
-            {
-                Font = value
-            };
-            Assert.Equal(value ?? Control.DefaultFont, control.Font);
-            Assert.Equal(control.Font.Height, control.FontHeight);
-            Assert.Equal(control.Font.Height + SystemInformation.BorderSize.Height * 4 + 3, control.PreferredHeight);
-            Assert.False(control.IsHandleCreated);
-
-            // Set same.
-            control.Font = value;
-            Assert.Equal(value ?? Control.DefaultFont, control.Font);
-            Assert.Equal(control.Font.Height, control.FontHeight);
-            Assert.Equal(control.Font.Height + SystemInformation.BorderSize.Height * 4 + 3, control.PreferredHeight);
-            Assert.False(control.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void TextBoxBase_Font_SetWithHandler_CallsFontChanged()
-        {
-            using var control = new TextBox();
-            int callCount = 0;
-            EventHandler handler = (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(EventArgs.Empty, e);
-                callCount++;
-            };
-            control.FontChanged += handler;
-
-            // Set different.
-            using var font1 = new Font("Arial", 8.25f);
-            control.Font = font1;
-            Assert.Same(font1, control.Font);
-            Assert.Equal(1, callCount);
-
-            // Set same.
-            control.Font = font1;
-            Assert.Same(font1, control.Font);
-            Assert.Equal(1, callCount);
-
-            // Set different.
-            using var font2 = SystemFonts.DialogFont;
-            control.Font = font2;
-            Assert.Same(font2, control.Font);
-            Assert.Equal(2, callCount);
-
-            // Set null.
-            control.Font = null;
-            Assert.Equal(Control.DefaultFont, control.Font);
-            Assert.Equal(3, callCount);
-
-            // Remove handler.
-            control.FontChanged -= handler;
-            control.Font = font1;
-            Assert.Same(font1, control.Font);
-            Assert.Equal(3, callCount);
         }
 
         [WinFormsTheory]
@@ -2258,6 +2504,48 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
+        [WinFormsFact]
+        public void TextBoxBase_SelectedText_GetWithHandle_ReturnsExpected()
+        {
+            using var control = new TextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Empty(control.SelectedText);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Get again.
+            Assert.Empty(control.SelectedText);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_SelectedText_GetCantCreateHandle_ReturnsExpected()
+        {
+            using var control = new CantCreateHandleTextBox();
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_SelectedText_GetDisposed_ReturnsExpected()
+        {
+            using var control = new TextBox();
+            control.Dispose();
+            Assert.Empty(control.SelectedText);
+        }
+
         [WinFormsTheory]
         [InlineData("", null, "", 0)]
         [InlineData("", "", "", 0)]
@@ -2413,6 +2701,72 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void TextBoxBase_SelectedText_SetCantCreateHandle_GetReturnsExpected(string value)
+        {
+            using var control = new CantCreateHandleTextBox();
+            control.SelectedText = value;
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.SelectedText = value;
+            Assert.Empty(control.SelectedText);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void TextBoxBase_SelectedText_SetDisposed_ThrowsObjectDisposedException(string value)
+        {
+            using var control = new TextBox();
+            control.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => control.SelectedText = value);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_SelectionLength_GetWithHandle_ReturnsExpected()
+        {
+            using var control = new TextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(0, control.SelectionLength);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Get again.
+            Assert.Equal(0, control.SelectionLength);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_SelectionLength_GetCantCreateHandle_ReturnsExpected()
+        {
+            using var control = new CantCreateHandleTextBox();
+            Assert.Equal(0, control.SelectionLength);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_SelectionLength_GetDisposed_ReturnsExpected()
+        {
+            using var control = new TextBox();
+            control.Dispose();
+            Assert.Equal(0, control.SelectionLength);
+        }
+
+        [WinFormsTheory]
         [InlineData("", 0, 0, "")]
         [InlineData("", 1, 0, "")]
         [InlineData("text", 0, 0, "")]
@@ -2540,6 +2894,48 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubTextBox();
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SelectionLength = -1);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_SelectionStart_GetWithHandle_ReturnsExpected()
+        {
+            using var control = new TextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(0, control.SelectionStart);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Get again.
+            Assert.Equal(0, control.SelectionStart);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_SelectionStart_GetCantCreateHandle_ReturnsExpected()
+        {
+            using var control = new CantCreateHandleTextBox();
+            Assert.Equal(0, control.SelectionStart);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_SelectionStart_GetDisposed_ReturnsExpected()
+        {
+            using var control = new TextBox();
+            control.Dispose();
+            Assert.Equal(0, control.SelectionStart);
         }
 
         [WinFormsTheory]
@@ -2673,6 +3069,40 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.SelectionStart = -1);
         }
 
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void TextBoxBase_SelectionStart_SetCantCreateHandle_GetReturnsExpected(int value)
+        {
+            using var control = new CantCreateHandleTextBox();
+            control.SelectionStart = value;
+            Assert.Equal(0, control.SelectionStart);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.SelectionStart = value;
+            Assert.Equal(0, control.SelectionStart);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void TextBoxBase_SelectionStart_SetDisposed_ReturnsExpected(int value)
+        {
+            using var control = new TextBox();
+            control.Dispose();
+
+            control.SelectionStart = value;
+            Assert.Equal(0, control.SelectionStart);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.SelectionStart = value;
+            Assert.Equal(0, control.SelectionStart);
+            Assert.False(control.IsHandleCreated);
+        }
+
         private class ImeNotSupportedTextBox : TextBox
         {
             protected override ImeMode DefaultImeMode => ImeMode.Disable;
@@ -2698,6 +3128,48 @@ namespace System.Windows.Forms.Tests
             control.ShortcutsEnabled = !value;
             Assert.Equal(!value, control.ShortcutsEnabled);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_Text_GetWithHandle_ReturnsExpected()
+        {
+            using var control = new TextBox();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Empty(control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Get again.
+            Assert.Empty(control.Text);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_Text_GetCantCreateHandle_ReturnsExpected()
+        {
+            using var control = new CantCreateHandleTextBox();
+            Assert.Empty(control.Text);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_Text_GetDisposed_ReturnsExpected()
+        {
+            using var control = new TextBox();
+            control.Dispose();
+            Assert.Empty(control.Text);
         }
 
         [WinFormsTheory]
@@ -3057,6 +3529,38 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void TextBoxBase_Text_SetCantCreateHandle_GetReturnsExpected(string value, string expected)
+        {
+            using var control = new CantCreateHandleTextBox();
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void TextBoxBase_Text_SetDisposed_ThrowsObjectDisposedException(string value, string expected)
+        {
+            using var control = new TextBox();
+            control.Dispose();
+
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.Text = value;
+            Assert.Equal(expected, control.Text);
+            Assert.False(control.IsHandleCreated);
+        }
+
         [WinFormsFact]
         public void TextBoxBase_TextLength_GetDefaultWithoutHandle_Success()
         {
@@ -3132,6 +3636,22 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_TextLength_GetCantCreateHandle_GetReturnsExpected()
+        {
+            using var control = new CantCreateHandleTextBox();
+            Assert.Equal(0, control.TextLength);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBase_TextLength_GetDisposed_ReturnsExpected()
+        {
+            using var control = new TextBox();
+            control.Dispose();
+            Assert.Equal(0, control.TextLength);
         }
 
         [WinFormsTheory]
@@ -7199,16 +7719,21 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_ReflectCommand_TestData()
         {
-            yield return new object[] { IntPtr.Zero, 0 };
-            yield return new object[] { PARAM.FromLowHigh(0, (int)User32.EN.CHANGE), 1 };
-            yield return new object[] { PARAM.FromLowHigh(0, (int)User32.EN.UPDATE), 0 };
-            yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.CHANGE), 1 };
-            yield return new object[] { PARAM.FromLowHigh(123, 456), 0 };
+            foreach (IntPtr lParam in new IntPtr[] { IntPtr.Zero, (IntPtr)1 })
+            {
+                yield return new object[] { IntPtr.Zero, lParam, 0 };
+                yield return new object[] { PARAM.FromLowHigh(0, (int)User32.EN.CHANGE), lParam, 1 };
+                yield return new object[] { PARAM.FromLowHigh(0, (int)User32.EN.UPDATE), lParam, 0 };
+                yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.CHANGE), lParam, 1 };
+                yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.HSCROLL), lParam, 0 };
+                yield return new object[] { PARAM.FromLowHigh(123, (int)User32.EN.VSCROLL), lParam, 0 };
+                yield return new object[] { PARAM.FromLowHigh(123, 456), lParam, 0 };
+            }
         }
 
         [WinFormsTheory]
         [MemberData(nameof(WndProc_ReflectCommand_TestData))]
-        public void TextBoxBase_WndProc_InvokeReflectCommandWithoutHandle_Success(IntPtr wParam, int expectedTextChangedCallCount)
+        public void TextBoxBase_WndProc_InvokeReflectCommandWithoutHandle_Success(IntPtr wParam, IntPtr lParam, int expectedTextChangedCallCount)
         {
             using var control = new SubTextBox();
 
@@ -7225,6 +7750,7 @@ namespace System.Windows.Forms.Tests
             {
                 Msg = (int)(User32.WM.REFLECT | User32.WM.COMMAND),
                 WParam = wParam,
+                LParam = lParam,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -7236,7 +7762,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(WndProc_ReflectCommand_TestData))]
-        public void TextBoxBase_WndProc_InvokeReflectCommandWithHandle_Success(IntPtr wParam, int expectedTextChangedCallCount)
+        public void TextBoxBase_WndProc_InvokeReflectCommandWithHandle_Success(IntPtr wParam, IntPtr lParam, int expectedTextChangedCallCount)
         {
             using var control = new SubTextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -7260,6 +7786,7 @@ namespace System.Windows.Forms.Tests
             {
                 Msg = (int)(User32.WM.REFLECT | User32.WM.COMMAND),
                 WParam = wParam,
+                LParam = lParam,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -7271,7 +7798,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-
         [WinFormsTheory]
         [InlineData(true, 3)]
         [InlineData(false, 0)]
@@ -7285,13 +7811,16 @@ namespace System.Windows.Forms.Tests
                 };
                 var m = new Message
                 {
-                    Msg = (int)User32.WM.SETFONT,
+                    Msg = (int)WM.SETFONT,
                     Result = (IntPtr)250
                 };
+                int textChangedCallCount = 0;
+                control.TextChanged += (sender, e) => textChangedCallCount++;
                 control.WndProc(ref m);
                 Assert.Equal(IntPtr.Zero, m.Result);
                 Assert.Equal(!multiline, control.IsHandleCreated);
-                IntPtr result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMARGINS);
+                Assert.Equal(0, textChangedCallCount);
+                IntPtr result = SendMessageW(control.Handle, (WM)EM.GETMARGINS);
                 Assert.Equal(expectedMargin, PARAM.HIWORD(result));
                 Assert.Equal(expectedMargin, PARAM.LOWORD(result));
             }
@@ -7313,22 +7842,33 @@ namespace System.Windows.Forms.Tests
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
-            User32.SendMessageW(control.Handle, (User32.WM)User32.EM.SETMARGINS, (IntPtr)(User32.EC.LEFTMARGIN | User32.EC.RIGHTMARGIN), PARAM.FromLowHigh(1, 2));
+            SendMessageW(control.Handle, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN), PARAM.FromLowHigh(1, 2));
+            int textChangedCallCount = 0;
+            control.TextChanged += (sender, e) => textChangedCallCount++;
 
             var m = new Message
             {
-                Msg = (int)User32.WM.SETFONT,
+                Msg = (int)WM.SETFONT,
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
             Assert.Equal(IntPtr.Zero, m.Result);
-            IntPtr result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMARGINS);
+            Assert.Equal(0, textChangedCallCount);
+            IntPtr result = SendMessageW(control.Handle, (WM)EM.GETMARGINS);
             Assert.Equal(expectedLeft, PARAM.LOWORD(result));
             Assert.Equal(expectedRight, PARAM.HIWORD(result));
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        private class CantCreateHandleTextBox : TextBox
+        {
+            protected override void CreateHandle()
+            {
+                // Nop.
+            }
         }
 
         private class SubTextBox : TextBox

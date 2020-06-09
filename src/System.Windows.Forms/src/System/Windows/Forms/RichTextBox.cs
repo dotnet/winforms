@@ -913,23 +913,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                int selCharOffset = 0;
-
                 ForceHandleCreate();
-                CHARFORMATW cf = GetCharFormat(true);
-                // if the effects member contains valid info
-                if ((cf.dwMask & CFM.OFFSET) != 0)
-                {
-                    selCharOffset = cf.yOffset;
-                }
-                else
-                {
-                    // The selection contains characters of different offsets,
-                    // so we just return the offset of the first character.
-                    selCharOffset = cf.yOffset;
-                }
-
-                return Twip2Pixel(IntPtr.Zero, selCharOffset, false);
+                CHARFORMAT2W cf = GetCharFormat(true);
+                return Twip2Pixel(IntPtr.Zero, cf.yOffset, false);
             }
             set
             {
@@ -939,9 +925,9 @@ namespace System.Windows.Forms
                 }
 
                 ForceHandleCreate();
-                var cf = new CHARFORMATW
+                var cf = new CHARFORMAT2W
                 {
-                    cbSize = (uint)sizeof(CHARFORMATW),
+                    cbSize = (uint)sizeof(CHARFORMAT2W),
                     dwMask = CFM.OFFSET,
                     yOffset = Pixel2Twip(IntPtr.Zero, value, false)
                 };
@@ -969,7 +955,7 @@ namespace System.Windows.Forms
                 Color selColor = Color.Empty;
 
                 ForceHandleCreate();
-                CHARFORMATW cf = GetCharFormat(true);
+                CHARFORMAT2W cf = GetCharFormat(true);
                 // if the effects member contains valid info
                 if ((cf.dwMask & CFM.COLOR) != 0)
                 {
@@ -981,7 +967,7 @@ namespace System.Windows.Forms
             set
             {
                 ForceHandleCreate();
-                CHARFORMATW cf = GetCharFormat(true);
+                CHARFORMAT2W cf = GetCharFormat(true);
                 cf.dwMask = CFM.COLOR;
                 cf.dwEffects = 0;
                 cf.crTextColor = ColorTranslator.ToWin32(value);
@@ -998,7 +984,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.RichTextBoxSelBackColor))]
-        public Color SelectionBackColor
+        public unsafe Color SelectionBackColor
         {
             get
             {
@@ -1006,7 +992,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    NativeMethods.CHARFORMAT2A cf2 = GetCharFormat2(true);
+                    CHARFORMAT2W cf2 = GetCharFormat(true);
                     // If the effects member contains valid info
                     if ((cf2.dwEffects & CFE.AUTOBACKCOLOR) != 0)
                     {
@@ -1030,7 +1016,10 @@ namespace System.Windows.Forms
                 selectionBackColorToSetOnHandleCreated = value;
                 if (IsHandleCreated)
                 {
-                    NativeMethods.CHARFORMAT2A cf2 = new NativeMethods.CHARFORMAT2A();
+                    var cf2 = new CHARFORMAT2W
+                    {
+                        cbSize = (uint)sizeof(CHARFORMAT2W)
+                    };
                     if (value == Color.Empty)
                     {
                         cf2.dwEffects = CFE.AUTOBACKCOLOR;
@@ -1041,7 +1030,7 @@ namespace System.Windows.Forms
                         cf2.crBackColor = ColorTranslator.ToWin32(value);
                     }
 
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, cf2);
+                    User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf2);
                 }
             }
         }
@@ -1328,7 +1317,7 @@ namespace System.Windows.Forms
                 // Verify the argument, and throw an error if is bad
                 if (value != null && value.Length > MAX_TAB_STOPS)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(SelectionTabs), SR.SelTabCountRange);
+                    throw new ArgumentOutOfRangeException(nameof(value), SR.SelTabCountRange);
                 }
 
                 ForceHandleCreate();
@@ -2236,7 +2225,7 @@ namespace System.Windows.Forms
         // Sends set color message to HWND; doesn't call Control.SetForeColor
         private bool InternalSetForeColor(Color value)
         {
-            CHARFORMATW cf = GetCharFormat(false);
+            CHARFORMAT2W cf = GetCharFormat(false);
             if ((cf.dwMask & CFM.COLOR) != 0
                 && ColorTranslator.ToWin32(value) == cf.crTextColor)
             {
@@ -2249,21 +2238,14 @@ namespace System.Windows.Forms
             return SetCharFormat(SCF.ALL, cf);
         }
 
-        private unsafe CHARFORMATW GetCharFormat(bool fSelection)
+        private unsafe CHARFORMAT2W GetCharFormat(bool fSelection)
         {
-            var cf = new CHARFORMATW
+            var cf = new CHARFORMAT2W
             {
-                cbSize = (uint)sizeof(CHARFORMATW)
+                cbSize = (uint)sizeof(CHARFORMAT2W)
             };
             User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETCHARFORMAT, (IntPtr)(fSelection ? SCF.SELECTION : SCF.DEFAULT), ref cf);
             return cf;
-        }
-
-        private NativeMethods.CHARFORMAT2A GetCharFormat2(bool fSelection)
-        {
-            NativeMethods.CHARFORMAT2A cf2 = new NativeMethods.CHARFORMAT2A();
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), (User32.WM)RichEditMessages.EM_GETCHARFORMAT, (IntPtr)(fSelection ? SCF.SELECTION : SCF.DEFAULT), cf2);
-            return cf2;
         }
 
         private RichTextBoxSelectionAttribute GetCharFormat(CFM mask, CFE effect)
@@ -2273,7 +2255,7 @@ namespace System.Windows.Forms
             // check to see if the control has been created
             if (IsHandleCreated)
             {
-                CHARFORMATW cf = GetCharFormat(true);
+                CHARFORMAT2W cf = GetCharFormat(true);
                 // if the effects member contains valid info
                 if ((cf.dwMask & mask) != 0)
                 {
@@ -2292,7 +2274,7 @@ namespace System.Windows.Forms
         {
             ForceHandleCreate();
 
-            CHARFORMATW cf = GetCharFormat(selectionOnly);
+            CHARFORMAT2W cf = GetCharFormat(selectionOnly);
             if ((cf.dwMask & CFM.FACE) == 0)
             {
                 return null;
@@ -2839,9 +2821,9 @@ namespace System.Windows.Forms
             // check to see if the control has been created
             if (IsHandleCreated)
             {
-                var cf = new CHARFORMATW
+                var cf = new CHARFORMAT2W
                 {
-                    cbSize = (uint)sizeof(CHARFORMATW),
+                    cbSize = (uint)sizeof(CHARFORMAT2W),
                     dwMask = mask
                 };
 
@@ -2864,7 +2846,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        private bool SetCharFormat(SCF charRange, CHARFORMATW cf)
+        private bool SetCharFormat(SCF charRange, CHARFORMAT2W cf)
         {
             return User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)charRange, ref cf) != IntPtr.Zero;
         }
@@ -2899,9 +2881,9 @@ namespace System.Windows.Forms
             }
 
             User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(value);
-            var charFormat = new CHARFORMATW
+            var charFormat = new CHARFORMAT2W
             {
-                cbSize = (uint)sizeof(CHARFORMATW),
+                cbSize = (uint)sizeof(CHARFORMAT2W),
                 dwMask = dwMask,
                 dwEffects = dwEffects,
                 yHeight = (int)(value.SizeInPoints * 20),
@@ -3421,9 +3403,8 @@ namespace System.Windows.Forms
                             {
                                 case RichEditMessages.EM_SETCHARFORMAT:
                                     // Allow change of protected style
-                                    //
-                                    CHARFORMATW charFormat = Marshal.PtrToStructure<CHARFORMATW>(enprotected.lParam);
-                                    if ((charFormat.dwMask & CFM.PROTECTED) != 0)
+                                    CHARFORMAT2W* charFormat = (CHARFORMAT2W*)enprotected.lParam;
+                                    if ((charFormat->dwMask & CFM.PROTECTED) != 0)
                                     {
                                         m.Result = IntPtr.Zero;
                                         return;

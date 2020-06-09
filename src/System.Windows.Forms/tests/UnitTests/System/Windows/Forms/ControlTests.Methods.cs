@@ -12756,6 +12756,54 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void Control_WndProc_InvokeImeNotifyCallCountWithoutHandle_Success()
+        {
+            using (new NoAssertContext())
+            {
+                using var control = new SubControl();
+                int imeModeChangedCallCount = 0;
+                control.ImeModeChanged += (sender, e) => imeModeChangedCallCount++;
+                var m = new Message
+                {
+                    Msg = (int)User32.WM.IME_NOTIFY,
+                    Result = (IntPtr)250
+                };
+                control.WndProc(ref m);
+                Assert.Equal(IntPtr.Zero, m.Result);
+                Assert.Equal(0, imeModeChangedCallCount);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeImeNotifyCallCountWithHandle_Success()
+        {
+            using var control = new SubControl();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            int imeModeChangedCallCount = 0;
+            control.ImeModeChanged += (sender, e) => imeModeChangedCallCount++;
+            var m = new Message
+            {
+                Msg = (int)User32.WM.IME_NOTIFY,
+                Result = (IntPtr)250
+            };
+            control.WndProc(ref m);
+            Assert.Equal(IntPtr.Zero, m.Result);
+            Assert.Equal(0, imeModeChangedCallCount);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
         public void Control_WndProc_InvokeKillFocusWithoutHandle_Success()
         {
             using (new NoAssertContext())
