@@ -687,16 +687,6 @@
         <target state="translated">Belgeyi yazdırdıktan sonra belgeyi değiştiremez ya ek yapamazsınız.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Double tarihe dönüştürülemez.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Tam sayı kayan noktalıya dönüştürülemez.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">Tek bir iş parçacığı üzerinde ikinci ileti döngüsünü başlatmak geçerli bir işlem değildir. Yerine Form.ShowDialog kullanın.</target>

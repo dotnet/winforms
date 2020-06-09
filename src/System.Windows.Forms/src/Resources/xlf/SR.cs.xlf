@@ -687,16 +687,6 @@
         <target state="translated">Po vytištění nelze dokument upravovat ani do něj již nelze přidávat položky.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Nelze převést typ Double na typ Date.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Nelze převést typ Integer na typ Float.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">Vytvoření druhé smyčky zpráv v jednom vlákně je neplatná operace. Použijte místo toho funkci Application.RunDialog nebo Form.ShowDialog.</target>

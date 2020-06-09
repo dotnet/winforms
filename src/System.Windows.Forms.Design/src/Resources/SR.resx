@@ -133,12 +133,6 @@
   <data name="InheritanceServiceReadOnlyCollection" xml:space="preserve">
     <value>Read-Only</value>
   </data>
-  <data name="CannotConvertDoubleToDate" xml:space="preserve">
-    <value>Double cannot be converted to a date.</value>
-  </data>
-  <data name="CannotConvertIntToFloat" xml:space="preserve">
-    <value>Integer cannot be converted to a float.</value>
-  </data>
   <data name="COM2UnhandledVT" xml:space="preserve">
     <value>Unhandled VT: {0}.</value>
   </data>

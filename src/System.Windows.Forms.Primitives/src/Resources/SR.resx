@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CannotConvertIntToFloat" xml:space="preserve">
-    <value>Integer cannot be converted to a float.</value>
-  </data>
-  <data name="CannotConvertDoubleToDate" xml:space="preserve">
-    <value>Double cannot be converted to a date.</value>
-  </data>
   <data name="COM2UnhandledVT" xml:space="preserve">
     <value>Unhandled VT: {0}.</value>
   </data>

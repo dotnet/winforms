@@ -265,8 +265,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 try
                 {
-                    using var variant = ptr[i];
-                    objects[i] = Marshal.GetObjectForNativeVariant((IntPtr)(&variant));
+                    using Oleaut32.VARIANT variant = ptr[i];
+                    objects[i] = variant.ToObject();
                 }
                 catch (Exception ex)
                 {

@@ -28,8 +28,8 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetPredefinedStrings(
                 DispatchID dispID,
-                CA* pCaStringsOut,
-                CA* pCaCookiesOut);
+                Ole32.CA* pCaStringsOut,
+                Ole32.CA* pCaCookiesOut);
 
             [PreserveSig]
             HRESULT GetPredefinedValue(
