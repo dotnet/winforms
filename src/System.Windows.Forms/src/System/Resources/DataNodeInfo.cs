@@ -10,12 +10,12 @@ namespace System.Resources
 {
     internal class DataNodeInfo
     {
-        internal string Name;
-        internal string Comment;
-        internal string TypeName;
-        internal string MimeType;
-        internal string ValueData;
-        internal Point ReaderPosition; //only used to track position in the reader
+        public string Name;
+        public string Comment;
+        public string TypeName;
+        public string MimeType;
+        public string ValueData;
+        public Point ReaderPosition; //only used to track position in the reader
 
         internal DataNodeInfo Clone()
         {

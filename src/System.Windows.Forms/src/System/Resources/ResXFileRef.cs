@@ -19,10 +19,6 @@ namespace System.Resources
     [TypeConverter(typeof(Converter))]
     public partial class ResXFileRef
     {
-        private string fileName;
-        private readonly string typeName;
-        private Encoding textFileEncoding;
-
         /// <summary>
         ///  Creates a new ResXFileRef that points to the specified file.
         ///  The type refered to by typeName must support a constructor
@@ -30,8 +26,8 @@ namespace System.Resources
         /// </summary>
         public ResXFileRef(string fileName, string typeName)
         {
-            this.fileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
-            this.typeName = typeName ?? throw new ArgumentNullException(nameof(typeName));
+            FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+            TypeName = typeName ?? throw new ArgumentNullException(nameof(typeName));
         }
 
         /// <summary>
@@ -41,37 +37,19 @@ namespace System.Resources
         /// </summary>
         public ResXFileRef(string fileName, string typeName, Encoding textFileEncoding) : this(fileName, typeName)
         {
-            this.textFileEncoding = textFileEncoding;
+            TextFileEncoding = textFileEncoding;
         }
 
         internal ResXFileRef Clone()
         {
-            return new ResXFileRef(fileName, typeName, textFileEncoding);
+            return new ResXFileRef(FileName, TypeName, TextFileEncoding);
         }
 
-        public string FileName
-        {
-            get
-            {
-                return fileName;
-            }
-        }
+        public string FileName { get; private set; }
 
-        public string TypeName
-        {
-            get
-            {
-                return typeName;
-            }
-        }
+        public string TypeName { get; }
 
-        public Encoding TextFileEncoding
-        {
-            get
-            {
-                return textFileEncoding;
-            }
-        }
+        public Encoding TextFileEncoding { get; }
 
         /// <summary>
         ///  path1+result = path2
@@ -123,25 +101,25 @@ namespace System.Resources
             {
                 return;
             }
-            fileName = PathDifference(basePath, fileName, false);
+            FileName = PathDifference(basePath, FileName, false);
         }
 
         public override string ToString()
         {
             string result = string.Empty;
 
-            if (fileName.IndexOf(';') != -1 || fileName.IndexOf('\"') != -1)
+            if (FileName.IndexOf(';') != -1 || FileName.IndexOf('\"') != -1)
             {
-                result += ("\"" + fileName + "\";");
+                result += ("\"" + FileName + "\";");
             }
             else
             {
-                result += (fileName + ";");
+                result += (FileName + ";");
             }
-            result += typeName;
-            if (textFileEncoding != null)
+            result += TypeName;
+            if (TextFileEncoding != null)
             {
-                result += (";" + textFileEncoding.WebName);
+                result += (";" + TextFileEncoding.WebName);
             }
             return result;
         }

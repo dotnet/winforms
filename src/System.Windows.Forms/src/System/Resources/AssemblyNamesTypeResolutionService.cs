@@ -15,16 +15,16 @@ namespace System.Resources
 {
     internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
     {
-        private AssemblyName[] names;
-        private Hashtable cachedAssemblies;
-        private Hashtable cachedTypes;
+        private AssemblyName[] _names;
+        private Hashtable _cachedAssemblies;
+        private Hashtable _cachedTypes;
 
         private static readonly string s_dotNetPath = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles"), "dotnet\\shared");
         private static readonly string s_dotNetPathX86 = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)"), "dotnet\\shared");
 
         internal AssemblyNamesTypeResolutionService(AssemblyName[] names)
         {
-            this.names = names;
+            _names = names;
         }
 
         public Assembly GetAssembly(AssemblyName name)
@@ -37,14 +37,14 @@ namespace System.Resources
         {
             Assembly result = null;
 
-            if (cachedAssemblies == null)
+            if (_cachedAssemblies == null)
             {
-                cachedAssemblies = Hashtable.Synchronized(new Hashtable());
+                _cachedAssemblies = Hashtable.Synchronized(new Hashtable());
             }
 
-            if (cachedAssemblies.Contains(name))
+            if (_cachedAssemblies.Contains(name))
             {
-                result = cachedAssemblies[name] as Assembly;
+                result = _cachedAssemblies[name] as Assembly;
             }
 
             if (result == null)
@@ -52,18 +52,18 @@ namespace System.Resources
                 result = Assembly.Load(name.FullName);
                 if (result != null)
                 {
-                    cachedAssemblies[name] = result;
+                    _cachedAssemblies[name] = result;
                 }
-                else if (names != null)
+                else if (_names != null)
                 {
-                    foreach (AssemblyName asmName in names.Where(an => an.Equals(name)))
+                    foreach (AssemblyName asmName in _names.Where(an => an.Equals(name)))
                     {
                         try
                         {
                             result = Assembly.LoadFrom(GetPathOfAssembly(asmName));
                             if (result != null)
                             {
-                                cachedAssemblies[asmName] = result;
+                                _cachedAssemblies[asmName] = result;
                             }
                         }
                         catch
@@ -100,14 +100,14 @@ namespace System.Resources
             Type result = null;
 
             // Check type cache first
-            if (cachedTypes == null)
+            if (_cachedTypes == null)
             {
-                cachedTypes = Hashtable.Synchronized(new Hashtable(StringComparer.Ordinal));
+                _cachedTypes = Hashtable.Synchronized(new Hashtable(StringComparer.Ordinal));
             }
 
-            if (cachedTypes.Contains(name))
+            if (_cachedTypes.Contains(name))
             {
-                result = cachedTypes[name] as Type;
+                result = _cachedTypes[name] as Type;
                 return result;
             }
 
@@ -117,7 +117,7 @@ namespace System.Resources
                 result = Type.GetType(name, false, ignoreCase);
             }
 
-            if (result == null && names != null)
+            if (result == null && _names != null)
             {
                 //
                 // If the type is assembly qualified name, we sort the assembly names
@@ -138,8 +138,8 @@ namespace System.Resources
 
                     if (assemblyName != null)
                     {
-                        List<AssemblyName> assemblyList = new List<AssemblyName>(names.Length);
-                        foreach (AssemblyName asmName in names)
+                        List<AssemblyName> assemblyList = new List<AssemblyName>(_names.Length);
+                        foreach (AssemblyName asmName in _names)
                         {
                             if (string.Compare(assemblyName.Name, asmName.Name, StringComparison.OrdinalIgnoreCase) == 0)
                             {
@@ -150,12 +150,12 @@ namespace System.Resources
                                 assemblyList.Add(asmName);
                             }
                         }
-                        names = assemblyList.ToArray();
+                        _names = assemblyList.ToArray();
                     }
                 }
 
                 // Search each reference assembly
-                foreach (AssemblyName asmName in names)
+                foreach (AssemblyName asmName in _names)
                 {
                     Assembly asm = GetAssembly(asmName, false);
                     if (asm != null)
@@ -190,7 +190,7 @@ namespace System.Resources
                 // For simplicity, don't cache custom types
                 if (IsDotNetAssembly(result.Assembly.Location))
                 {
-                    cachedTypes[name] = result;
+                    _cachedTypes[name] = result;
                 }
             }
 

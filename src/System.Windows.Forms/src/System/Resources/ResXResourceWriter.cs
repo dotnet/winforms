@@ -34,10 +34,11 @@ namespace System.Resources
         internal const string AssemblyStr = "assembly";
         internal const string AliasStr = "alias";
 
-        private Hashtable cachedAliases;
+        private Hashtable _cachedAliases;
 
-        private static readonly TraceSwitch ResValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
+        private static readonly TraceSwitch s_resValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
 
+#pragma warning disable IDE1006 // Naming Styles (Shipped public API)
         public static readonly string BinSerializedObjectMimeType = "application/x-microsoft.net.object.binary.base64";
         public static readonly string SoapSerializedObjectMimeType = "application/x-microsoft.net.object.soap.base64";
         public static readonly string DefaultSerializedObjectMimeType = BinSerializedObjectMimeType;
@@ -93,16 +94,17 @@ namespace System.Resources
         </xsd:element>
         </xsd:schema>
         ";
+#pragma warning restore IDE1006 // Naming Styles
 
-        readonly string fileName;
-        Stream stream;
-        TextWriter textWriter;
-        XmlTextWriter xmlTextWriter;
+        private readonly string _fileName;
+        private Stream _stream;
+        private TextWriter _textWriter;
+        private XmlTextWriter _xmlTextWriter;
 
-        bool hasBeenSaved;
-        bool initialized;
+        private bool _hasBeenSaved;
+        private bool _initialized;
 
-        private readonly Func<Type, string> typeNameConverter; // no public property to be consistent with ResXDataNode class.
+        private readonly Func<Type, string> _typeNameConverter; // no public property to be consistent with ResXDataNode class.
 
         /// <summary>
         ///  Base Path for ResXFileRefs.
@@ -114,12 +116,12 @@ namespace System.Resources
         /// </summary>
         public ResXResourceWriter(string fileName)
         {
-            this.fileName = fileName;
+            _fileName = fileName;
         }
         public ResXResourceWriter(string fileName, Func<Type, string> typeNameConverter)
         {
-            this.fileName = fileName;
-            this.typeNameConverter = typeNameConverter;
+            _fileName = fileName;
+            _typeNameConverter = typeNameConverter;
         }
 
         /// <summary>
@@ -127,12 +129,12 @@ namespace System.Resources
         /// </summary>
         public ResXResourceWriter(Stream stream)
         {
-            this.stream = stream;
+            _stream = stream;
         }
         public ResXResourceWriter(Stream stream, Func<Type, string> typeNameConverter)
         {
-            this.stream = stream;
-            this.typeNameConverter = typeNameConverter;
+            _stream = stream;
+            _typeNameConverter = typeNameConverter;
         }
 
         /// <summary>
@@ -140,12 +142,12 @@ namespace System.Resources
         /// </summary>
         public ResXResourceWriter(TextWriter textWriter)
         {
-            this.textWriter = textWriter;
+            _textWriter = textWriter;
         }
         public ResXResourceWriter(TextWriter textWriter, Func<Type, string> typeNameConverter)
         {
-            this.textWriter = textWriter;
-            this.typeNameConverter = typeNameConverter;
+            _textWriter = textWriter;
+            _typeNameConverter = typeNameConverter;
         }
 
         ~ResXResourceWriter()
@@ -155,101 +157,101 @@ namespace System.Resources
 
         private void InitializeWriter()
         {
-            if (xmlTextWriter == null)
+            if (_xmlTextWriter == null)
             {
                 //
 
                 bool writeHeaderRequired = false;
 
-                if (textWriter != null)
+                if (_textWriter != null)
                 {
-                    textWriter.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+                    _textWriter.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                     writeHeaderRequired = true;
 
-                    xmlTextWriter = new XmlTextWriter(textWriter);
+                    _xmlTextWriter = new XmlTextWriter(_textWriter);
                 }
-                else if (stream != null)
+                else if (_stream != null)
                 {
-                    xmlTextWriter = new XmlTextWriter(stream, System.Text.Encoding.UTF8);
+                    _xmlTextWriter = new XmlTextWriter(_stream, System.Text.Encoding.UTF8);
                 }
                 else
                 {
-                    Debug.Assert(fileName != null, "Nothing to output to");
-                    xmlTextWriter = new XmlTextWriter(fileName, System.Text.Encoding.UTF8);
+                    Debug.Assert(_fileName != null, "Nothing to output to");
+                    _xmlTextWriter = new XmlTextWriter(_fileName, System.Text.Encoding.UTF8);
                 }
-                xmlTextWriter.Formatting = Formatting.Indented;
-                xmlTextWriter.Indentation = 2;
+                _xmlTextWriter.Formatting = Formatting.Indented;
+                _xmlTextWriter.Indentation = 2;
 
                 if (!writeHeaderRequired)
                 {
-                    xmlTextWriter.WriteStartDocument(); // writes <?xml version="1.0" encoding="utf-8"?>
+                    _xmlTextWriter.WriteStartDocument(); // writes <?xml version="1.0" encoding="utf-8"?>
                 }
             }
             else
             {
-                xmlTextWriter.WriteStartDocument();
+                _xmlTextWriter.WriteStartDocument();
             }
 
-            xmlTextWriter.WriteStartElement("root");
+            _xmlTextWriter.WriteStartElement("root");
             XmlTextReader reader = new XmlTextReader(new StringReader(ResourceSchema))
             {
                 WhitespaceHandling = WhitespaceHandling.None
             };
-            xmlTextWriter.WriteNode(reader, true);
+            _xmlTextWriter.WriteNode(reader, true);
 
-            xmlTextWriter.WriteStartElement(ResHeaderStr);
+            _xmlTextWriter.WriteStartElement(ResHeaderStr);
             {
-                xmlTextWriter.WriteAttributeString(NameStr, ResMimeTypeStr);
-                xmlTextWriter.WriteStartElement(ValueStr);
+                _xmlTextWriter.WriteAttributeString(NameStr, ResMimeTypeStr);
+                _xmlTextWriter.WriteStartElement(ValueStr);
                 {
-                    xmlTextWriter.WriteString(ResMimeType);
+                    _xmlTextWriter.WriteString(ResMimeType);
                 }
-                xmlTextWriter.WriteEndElement();
+                _xmlTextWriter.WriteEndElement();
             }
-            xmlTextWriter.WriteEndElement();
-            xmlTextWriter.WriteStartElement(ResHeaderStr);
+            _xmlTextWriter.WriteEndElement();
+            _xmlTextWriter.WriteStartElement(ResHeaderStr);
             {
-                xmlTextWriter.WriteAttributeString(NameStr, VersionStr);
-                xmlTextWriter.WriteStartElement(ValueStr);
+                _xmlTextWriter.WriteAttributeString(NameStr, VersionStr);
+                _xmlTextWriter.WriteStartElement(ValueStr);
                 {
-                    xmlTextWriter.WriteString(Version);
+                    _xmlTextWriter.WriteString(Version);
                 }
-                xmlTextWriter.WriteEndElement();
+                _xmlTextWriter.WriteEndElement();
             }
-            xmlTextWriter.WriteEndElement();
-            xmlTextWriter.WriteStartElement(ResHeaderStr);
+            _xmlTextWriter.WriteEndElement();
+            _xmlTextWriter.WriteStartElement(ResHeaderStr);
             {
-                xmlTextWriter.WriteAttributeString(NameStr, ReaderStr);
-                xmlTextWriter.WriteStartElement(ValueStr);
+                _xmlTextWriter.WriteAttributeString(NameStr, ReaderStr);
+                _xmlTextWriter.WriteStartElement(ValueStr);
                 {
-                    xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceReader), typeNameConverter));
+                    _xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceReader), _typeNameConverter));
                 }
-                xmlTextWriter.WriteEndElement();
+                _xmlTextWriter.WriteEndElement();
             }
-            xmlTextWriter.WriteEndElement();
-            xmlTextWriter.WriteStartElement(ResHeaderStr);
+            _xmlTextWriter.WriteEndElement();
+            _xmlTextWriter.WriteStartElement(ResHeaderStr);
             {
-                xmlTextWriter.WriteAttributeString(NameStr, WriterStr);
-                xmlTextWriter.WriteStartElement(ValueStr);
+                _xmlTextWriter.WriteAttributeString(NameStr, WriterStr);
+                _xmlTextWriter.WriteStartElement(ValueStr);
                 {
-                    xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceWriter), typeNameConverter));
+                    _xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceWriter), _typeNameConverter));
                 }
-                xmlTextWriter.WriteEndElement();
+                _xmlTextWriter.WriteEndElement();
             }
-            xmlTextWriter.WriteEndElement();
+            _xmlTextWriter.WriteEndElement();
 
-            initialized = true;
+            _initialized = true;
         }
 
         private XmlWriter Writer
         {
             get
             {
-                if (!initialized)
+                if (!_initialized)
                 {
                     InitializeWriter();
                 }
-                return xmlTextWriter;
+                return _xmlTextWriter;
             }
         }
 
@@ -263,12 +265,12 @@ namespace System.Resources
                 throw new ArgumentNullException(nameof(assemblyName));
             }
 
-            if (cachedAliases == null)
+            if (_cachedAliases == null)
             {
-                cachedAliases = new Hashtable();
+                _cachedAliases = new Hashtable();
             }
 
-            cachedAliases[assemblyName.FullName] = aliasName;
+            _cachedAliases[assemblyName.FullName] = aliasName;
         }
 
         /// <summary>
@@ -375,7 +377,7 @@ namespace System.Resources
         /// </summary>
         private void AddDataRow(string elementName, string name, object value)
         {
-            Debug.WriteLineIf(ResValueProviderSwitch.TraceVerbose, "  resx: adding resource " + name);
+            Debug.WriteLineIf(s_resValueProviderSwitch.TraceVerbose, "  resx: adding resource " + name);
             switch (value)
             {
                 case string str:
@@ -386,14 +388,14 @@ namespace System.Resources
                     break;
                 case ResXFileRef fileRef:
                     {
-                        ResXDataNode node = new ResXDataNode(name, fileRef, typeNameConverter);
+                        ResXDataNode node = new ResXDataNode(name, fileRef, _typeNameConverter);
                         DataNodeInfo info = node.GetDataNodeInfo();
                         AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
                         break;
                     }
                 default:
                     {
-                        ResXDataNode node = new ResXDataNode(name, value, typeNameConverter);
+                        ResXDataNode node = new ResXDataNode(name, value, _typeNameConverter);
                         DataNodeInfo info = node.GetDataNodeInfo();
                         AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
                         break;
@@ -409,7 +411,7 @@ namespace System.Resources
             // if it's a null string, set it here as a resxnullref
             string typeName =
                 value == null
-                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), typeNameConverter)
+                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), _typeNameConverter)
                     : null;
             AddDataRow(elementName, name, value, typeName, null, null);
         }
@@ -420,7 +422,7 @@ namespace System.Resources
         /// </summary>
         private void AddDataRow(string elementName, string name, string value, string type, string mimeType, string comment)
         {
-            if (hasBeenSaved)
+            if (_hasBeenSaved)
             {
                 throw new InvalidOperationException(SR.ResXResourceWriterSaved);
             }
@@ -440,7 +442,7 @@ namespace System.Resources
                         }
                         else if (typeObject != null)
                         {
-                            assemblyName = GetFullName(MultitargetUtil.GetAssemblyQualifiedName(typeObject, typeNameConverter));
+                            assemblyName = GetFullName(MultitargetUtil.GetAssemblyQualifiedName(typeObject, _typeNameConverter));
                             alias = GetAliasFromName(new AssemblyName(assemblyName));
                         }
                     }
@@ -525,11 +527,11 @@ namespace System.Resources
 
         private string GetAliasFromName(AssemblyName assemblyName)
         {
-            if (cachedAliases == null)
+            if (_cachedAliases == null)
             {
-                cachedAliases = new Hashtable();
+                _cachedAliases = new Hashtable();
             }
-            string alias = (string)cachedAliases[assemblyName.FullName];
+            string alias = (string)_cachedAliases[assemblyName.FullName];
             if (string.IsNullOrEmpty(alias))
             {
                 alias = assemblyName.Name;
@@ -559,24 +561,24 @@ namespace System.Resources
         {
             if (disposing)
             {
-                if (!hasBeenSaved)
+                if (!_hasBeenSaved)
                 {
                     Generate();
                 }
-                if (xmlTextWriter != null)
+                if (_xmlTextWriter != null)
                 {
-                    xmlTextWriter.Close();
-                    xmlTextWriter = null;
+                    _xmlTextWriter.Close();
+                    _xmlTextWriter = null;
                 }
-                if (stream != null)
+                if (_stream != null)
                 {
-                    stream.Close();
-                    stream = null;
+                    _stream.Close();
+                    _stream = null;
                 }
-                if (textWriter != null)
+                if (_textWriter != null)
                 {
-                    textWriter.Close();
-                    textWriter = null;
+                    _textWriter.Close();
+                    _textWriter = null;
                 }
             }
         }
@@ -626,7 +628,7 @@ namespace System.Resources
 
         private string TypeNameWithAssembly(Type type)
         {
-            string result = MultitargetUtil.GetAssemblyQualifiedName(type, typeNameConverter);
+            string result = MultitargetUtil.GetAssemblyQualifiedName(type, _typeNameConverter);
             return result;
         }
 
@@ -636,18 +638,18 @@ namespace System.Resources
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void Generate()
         {
-            if (hasBeenSaved)
+            if (_hasBeenSaved)
             {
                 throw new InvalidOperationException(SR.ResXResourceWriterSaved);
             }
 
-            hasBeenSaved = true;
-            Debug.WriteLineIf(ResValueProviderSwitch.TraceVerbose, "writing XML");
+            _hasBeenSaved = true;
+            Debug.WriteLineIf(s_resValueProviderSwitch.TraceVerbose, "writing XML");
 
             Writer.WriteEndElement();
             Writer.Flush();
 
-            Debug.WriteLineIf(ResValueProviderSwitch.TraceVerbose, "done");
+            Debug.WriteLineIf(s_resValueProviderSwitch.TraceVerbose, "done");
         }
     }
 }

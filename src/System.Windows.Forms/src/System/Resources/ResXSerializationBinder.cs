@@ -15,29 +15,29 @@ namespace System.Resources
     //
     internal class ResXSerializationBinder : SerializationBinder
     {
-        private readonly ITypeResolutionService typeResolver;
-        private readonly Func<Type, string> typeNameConverter;
+        private readonly ITypeResolutionService _typeResolver;
+        private readonly Func<Type, string> _typeNameConverter;
 
         internal ResXSerializationBinder(ITypeResolutionService typeResolver)
         {
-            this.typeResolver = typeResolver;
+            _typeResolver = typeResolver;
         }
 
         internal ResXSerializationBinder(Func<Type, string> typeNameConverter)
         {
-            this.typeNameConverter = typeNameConverter;
+            _typeNameConverter = typeNameConverter;
         }
 
         public override Type BindToType(string assemblyName, string typeName)
         {
-            if (typeResolver == null)
+            if (_typeResolver == null)
             {
                 return null;
             }
 
             typeName = typeName + ", " + assemblyName;
 
-            Type type = typeResolver.GetType(typeName);
+            Type type = _typeResolver.GetType(typeName);
             if (type == null)
             {
                 string[] typeParts = typeName.Split(',');
@@ -56,10 +56,10 @@ namespace System.Resources
                             partialName = partialName + ", " + typePart;
                         }
                     }
-                    type = typeResolver.GetType(partialName);
+                    type = _typeResolver.GetType(partialName);
                     if (type == null)
                     {
-                        type = typeResolver.GetType(typeParts[0].Trim());
+                        type = _typeResolver.GetType(typeParts[0].Trim());
                     }
                 }
             }
@@ -86,9 +86,9 @@ namespace System.Resources
             //
             // another example are singleton objects like DBNull.Value which are serialized by System.UnitySerializationHolder
             typeName = null;
-            if (typeNameConverter != null)
+            if (_typeNameConverter != null)
             {
-                string assemblyQualifiedTypeName = MultitargetUtil.GetAssemblyQualifiedName(serializedType, typeNameConverter);
+                string assemblyQualifiedTypeName = MultitargetUtil.GetAssemblyQualifiedName(serializedType, _typeNameConverter);
                 if (!string.IsNullOrEmpty(assemblyQualifiedTypeName))
                 {
                     int pos = assemblyQualifiedTypeName.IndexOf(',');

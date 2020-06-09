@@ -21,32 +21,32 @@ namespace System.Resources
 {
     public sealed class ResXDataNode : ISerializable
     {
-        private static readonly char[] SpecialChars = new char[] { ' ', '\r', '\n' };
+        private static readonly char[] s_specialChars = new char[] { ' ', '\r', '\n' };
 
-        private DataNodeInfo nodeInfo;
+        private DataNodeInfo _nodeInfo;
 
-        private string name;
-        private string comment;
+        private string _name;
+        private string _comment;
 
-        private string typeName; // is only used when we create a resxdatanode manually with an object and contains the FQN
+        private string _typeName; // is only used when we create a resxdatanode manually with an object and contains the FQN
 
-        private string fileRefFullPath;
-        private string fileRefType;
-        private string fileRefTextEncoding;
+        private string _fileRefFullPath;
+        private string _fileRefType;
+        private string _fileRefTextEncoding;
 
-        private object value;
-        private ResXFileRef fileRef;
+        private object _value;
+        private ResXFileRef _fileRef;
 
-        private IFormatter binaryFormatter = null;
+        private IFormatter _binaryFormatter = null;
 
         // this is going to be used to check if a ResXDataNode is of type ResXFileRef
-        private static readonly ITypeResolutionService internalTypeResolver = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new AssemblyName("System.Windows.Forms") });
+        private static readonly ITypeResolutionService s_internalTypeResolver = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new AssemblyName("System.Windows.Forms") });
 
         // call back function to get type name for multitargeting.
         // No public property to force using constructors for the following reasons:
         // 1. one of the constructors needs this field (if used) to initialize the object, make it consistent with the other ctrs to avoid errors.
         // 2. once the object is constructed the delegate should not be changed to avoid getting inconsistent results.
-        private Func<Type, string> typeNameConverter;
+        private Func<Type, string> _typeNameConverter;
 
         private ResXDataNode()
         {
@@ -57,17 +57,17 @@ namespace System.Resources
             return new ResXDataNode
             {
                 // nodeinfo is just made up of immutable objects, we don't need to clone it
-                nodeInfo = nodeInfo?.Clone(),
-                name = name,
-                comment = comment,
-                typeName = typeName,
-                fileRefFullPath = fileRefFullPath,
-                fileRefType = fileRefType,
-                fileRefTextEncoding = fileRefTextEncoding,
+                _nodeInfo = _nodeInfo?.Clone(),
+                _name = _name,
+                _comment = _comment,
+                _typeName = _typeName,
+                _fileRefFullPath = _fileRefFullPath,
+                _fileRefType = _fileRefType,
+                _fileRefTextEncoding = _fileRefTextEncoding,
                 // we don't clone the value, because we don't know how
-                value = value,
-                fileRef = fileRef?.Clone(),
-                typeNameConverter = typeNameConverter
+                _value = _value,
+                _fileRef = _fileRef?.Clone(),
+                _typeNameConverter = _typeNameConverter
             };
         }
 
@@ -86,7 +86,7 @@ namespace System.Resources
                 throw (new ArgumentException(nameof(name)));
             }
 
-            this.typeNameConverter = typeNameConverter;
+            _typeNameConverter = typeNameConverter;
 
             Type valueType = (value == null) ? typeof(object) : value.GetType();
             if (value != null && !valueType.IsSerializable)
@@ -95,11 +95,11 @@ namespace System.Resources
             }
             if (value != null)
             {
-                typeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, this.typeNameConverter);
+                _typeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, _typeNameConverter);
             }
 
-            this.name = name;
-            this.value = value;
+            _name = name;
+            _value = value;
         }
 
         public ResXDataNode(string name, ResXFileRef fileRef) : this(name, fileRef, null)
@@ -113,14 +113,14 @@ namespace System.Resources
                 throw new ArgumentNullException(nameof(name));
             }
 
-            this.name = name;
-            this.fileRef = fileRef ?? throw new ArgumentNullException(nameof(fileRef));
-            this.typeNameConverter = typeNameConverter;
+            _name = name;
+            _fileRef = fileRef ?? throw new ArgumentNullException(nameof(fileRef));
+            _typeNameConverter = typeNameConverter;
         }
 
         internal ResXDataNode(DataNodeInfo nodeInfo, string basePath)
         {
-            this.nodeInfo = nodeInfo;
+            _nodeInfo = nodeInfo;
             InitializeDataNode(basePath);
         }
 
@@ -131,29 +131,29 @@ namespace System.Resources
             // and we can't be sure that we have a typeResolutionService that can
             // recognize this. It's not very clean but this should work.
             Type nodeType = null;
-            if (!string.IsNullOrEmpty(nodeInfo.TypeName)) // can be null if we have a string (default for string is TypeName == null)
+            if (!string.IsNullOrEmpty(_nodeInfo.TypeName)) // can be null if we have a string (default for string is TypeName == null)
             {
-                nodeType = internalTypeResolver.GetType(nodeInfo.TypeName, false, true);
+                nodeType = s_internalTypeResolver.GetType(_nodeInfo.TypeName, false, true);
             }
 
             if (nodeType != null && nodeType.Equals(typeof(ResXFileRef)))
             {
                 // we have a fileref, split the value data and populate the fields
-                string[] fileRefDetails = ResXFileRef.Converter.ParseResxFileRefString(nodeInfo.ValueData);
+                string[] fileRefDetails = ResXFileRef.Converter.ParseResxFileRefString(_nodeInfo.ValueData);
                 if (fileRefDetails != null && fileRefDetails.Length > 1)
                 {
                     if (!Path.IsPathRooted(fileRefDetails[0]) && basePath != null)
                     {
-                        fileRefFullPath = Path.Combine(basePath, fileRefDetails[0]);
+                        _fileRefFullPath = Path.Combine(basePath, fileRefDetails[0]);
                     }
                     else
                     {
-                        fileRefFullPath = fileRefDetails[0];
+                        _fileRefFullPath = fileRefDetails[0];
                     }
-                    fileRefType = fileRefDetails[1];
+                    _fileRefType = fileRefDetails[1];
                     if (fileRefDetails.Length > 2)
                     {
-                        fileRefTextEncoding = fileRefDetails[2];
+                        _fileRefTextEncoding = fileRefDetails[2];
                     }
                 }
             }
@@ -165,16 +165,16 @@ namespace System.Resources
         {
             get
             {
-                string result = comment;
-                if (result == null && nodeInfo != null)
+                string result = _comment;
+                if (result == null && _nodeInfo != null)
                 {
-                    result = nodeInfo.Comment;
+                    result = _nodeInfo.Comment;
                 }
                 return result ?? string.Empty;
             }
             set
             {
-                comment = value;
+                _comment = value;
             }
         }
 
@@ -184,10 +184,10 @@ namespace System.Resources
         {
             get
             {
-                string result = name;
-                if (result == null && nodeInfo != null)
+                string result = _name;
+                if (result == null && _nodeInfo != null)
                 {
-                    result = nodeInfo.Name;
+                    result = _nodeInfo.Name;
                 }
                 return result;
             }
@@ -201,7 +201,7 @@ namespace System.Resources
                 {
                     throw new ArgumentException(nameof(Name));
                 }
-                name = value;
+                _name = value;
             }
         }
 
@@ -213,14 +213,14 @@ namespace System.Resources
                 {
                     return null;
                 }
-                if (fileRef == null)
+                if (_fileRef == null)
                 {
-                    fileRef =
-                        string.IsNullOrEmpty(fileRefTextEncoding)
+                    _fileRef =
+                        string.IsNullOrEmpty(_fileRefTextEncoding)
                             ? new ResXFileRef(FileRefFullPath, FileRefType)
                             : new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding));
                 }
-                return fileRef;
+                return _fileRef;
             }
         }
 
@@ -228,7 +228,7 @@ namespace System.Resources
         {
             get
             {
-                return fileRef?.FileName ?? fileRefFullPath;
+                return _fileRef?.FileName ?? _fileRefFullPath;
             }
         }
 
@@ -236,7 +236,7 @@ namespace System.Resources
         {
             get
             {
-                return fileRef?.TypeName ?? fileRefType;
+                return _fileRef?.TypeName ?? _fileRefType;
             }
         }
 
@@ -244,7 +244,7 @@ namespace System.Resources
         {
             get
             {
-                return fileRef?.TextFileEncoding?.BodyName ?? fileRefTextEncoding;
+                return _fileRef?.TextFileEncoding?.BodyName ?? _fileRefTextEncoding;
             }
         }
 
@@ -279,7 +279,7 @@ namespace System.Resources
             if (value is CultureInfo ci)
             { // special-case CultureInfo, cannot use CultureInfoConverter for serialization
                 nodeInfo.ValueData = ci.Name;
-                nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(CultureInfo), typeNameConverter);
+                nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(CultureInfo), _typeNameConverter);
             }
             else if (value is string str)
             {
@@ -288,14 +288,14 @@ namespace System.Resources
             else if (value is byte[] bytes)
             {
                 nodeInfo.ValueData = ToBase64WrappedString(bytes);
-                nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(byte[]), typeNameConverter);
+                nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(byte[]), _typeNameConverter);
             }
             else
             {
                 Type valueType = (value == null) ? typeof(object) : value.GetType();
                 if (value != null && !valueType.IsSerializable)
                 {
-                    throw new InvalidOperationException(string.Format(SR.NotSerializableType, name, valueType.FullName));
+                    throw new InvalidOperationException(string.Format(SR.NotSerializableType, _name, valueType.FullName));
                 }
                 TypeConverter tc = TypeDescriptor.GetConverter(valueType);
                 bool toString = tc.CanConvertTo(typeof(string));
@@ -305,7 +305,7 @@ namespace System.Resources
                     if (toString && fromString)
                     {
                         nodeInfo.ValueData = tc.ConvertToInvariantString(value);
-                        nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, typeNameConverter);
+                        nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, _typeNameConverter);
                         return;
                     }
                 }
@@ -328,28 +328,28 @@ namespace System.Resources
                     byte[] data = (byte[])tc.ConvertTo(value, typeof(byte[]));
                     nodeInfo.ValueData = ToBase64WrappedString(data);
                     nodeInfo.MimeType = ResXResourceWriter.ByteArraySerializedObjectMimeType;
-                    nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, typeNameConverter);
+                    nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, _typeNameConverter);
                     return;
                 }
 
                 if (value == null)
                 {
                     nodeInfo.ValueData = string.Empty;
-                    nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), typeNameConverter);
+                    nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), _typeNameConverter);
                 }
                 else
                 {
-                    if (binaryFormatter == null)
+                    if (_binaryFormatter == null)
                     {
-                        binaryFormatter = new BinaryFormatter
+                        _binaryFormatter = new BinaryFormatter
                         {
-                            Binder = new ResXSerializationBinder(typeNameConverter)
+                            Binder = new ResXSerializationBinder(_typeNameConverter)
                         };
                     }
 
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        binaryFormatter.Serialize(ms, value);
+                        _binaryFormatter.Serialize(ms, value);
                         nodeInfo.ValueData = ToBase64WrappedString(ms.ToArray());
                     }
 
@@ -365,7 +365,7 @@ namespace System.Resources
             // default behavior: if we dont have a type name, it's a string
             string typeName =
                 string.IsNullOrEmpty(dataNodeInfo.TypeName)
-                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(string), typeNameConverter)
+                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(string), _typeNameConverter)
                     : dataNodeInfo.TypeName;
 
             if (!string.IsNullOrEmpty(mimeTypeName))
@@ -375,14 +375,14 @@ namespace System.Resources
                     string text = dataNodeInfo.ValueData;
                     byte[] serializedData = FromBase64WrappedString(text);
 
-                    if (binaryFormatter == null)
+                    if (_binaryFormatter == null)
                     {
-                        binaryFormatter = new BinaryFormatter
+                        _binaryFormatter = new BinaryFormatter
                         {
                             Binder = new ResXSerializationBinder(typeResolver)
                         };
                     }
-                    IFormatter formatter = binaryFormatter;
+                    IFormatter formatter = _binaryFormatter;
                     if (serializedData != null && serializedData.Length > 0)
                     {
                         result = formatter.Deserialize(new MemoryStream(serializedData));
@@ -475,7 +475,7 @@ namespace System.Resources
             else
             {
                 // if mimeTypeName and typeName are not filled in, the value must be a string
-                Debug.Assert(value is string, "Resource entries with no Type or MimeType must be encoded as strings");
+                Debug.Assert(_value is string, "Resource entries with no Type or MimeType must be encoded as strings");
             }
             return result;
         }
@@ -483,16 +483,16 @@ namespace System.Resources
         internal DataNodeInfo GetDataNodeInfo()
         {
             bool shouldSerialize = true;
-            if (nodeInfo != null)
+            if (_nodeInfo != null)
             {
                 shouldSerialize = false;
             }
             else
             {
-                nodeInfo = new DataNodeInfo();
+                _nodeInfo = new DataNodeInfo();
             }
-            nodeInfo.Name = Name;
-            nodeInfo.Comment = Comment;
+            _nodeInfo.Name = Name;
+            _nodeInfo.Comment = Comment;
 
             // We always serialize if this node represents a FileRef. This is because FileRef is a public property,
             // so someone could have modified it.
@@ -502,17 +502,17 @@ namespace System.Resources
                 // a direct object OR a fileref
                 if (FileRefFullPath != null)
                 {
-                    nodeInfo.ValueData = FileRef.ToString();
-                    nodeInfo.MimeType = null;
-                    nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXFileRef), typeNameConverter);
+                    _nodeInfo.ValueData = FileRef.ToString();
+                    _nodeInfo.MimeType = null;
+                    _nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXFileRef), _typeNameConverter);
                 }
                 else
                 {
                     // serialize to string inside the nodeInfo
-                    FillDataNodeInfoFromObject(nodeInfo, value);
+                    FillDataNodeInfoFromObject(_nodeInfo, _value);
                 }
             }
-            return nodeInfo;
+            return _nodeInfo;
         }
 
         /// <summary>
@@ -521,7 +521,7 @@ namespace System.Resources
         /// </summary>
         public Point GetNodePosition()
         {
-            return nodeInfo?.ReaderPosition ?? new Point();
+            return _nodeInfo?.ReaderPosition ?? new Point();
         }
 
         /// <summary>
@@ -531,12 +531,12 @@ namespace System.Resources
         public string GetValueTypeName(ITypeResolutionService typeResolver)
         {
             // the type name here is always a FQN
-            if (!string.IsNullOrEmpty(typeName))
+            if (!string.IsNullOrEmpty(_typeName))
             {
                 return
-                    typeName == MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), typeNameConverter)
-                        ? MultitargetUtil.GetAssemblyQualifiedName(typeof(object), typeNameConverter)
-                        : typeName;
+                    _typeName == MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), _typeNameConverter)
+                        ? MultitargetUtil.GetAssemblyQualifiedName(typeof(object), _typeNameConverter)
+                        : _typeName;
             }
             string result = FileRefType;
             Type objectType = null;
@@ -546,22 +546,22 @@ namespace System.Resources
                 // try to resolve this type
                 objectType = ResolveType(FileRefType, typeResolver);
             }
-            else if (nodeInfo != null)
+            else if (_nodeInfo != null)
             {
                 // we dont have a fileref, try to resolve the type of the datanode
-                result = nodeInfo.TypeName;
+                result = _nodeInfo.TypeName;
                 // if typename is null, the default is just a string
                 if (string.IsNullOrEmpty(result))
                 {
                     // we still dont know... do we have a mimetype? if yes, our only option is to
                     // deserialize to know what we're dealing with... very inefficient...
-                    if (!string.IsNullOrEmpty(nodeInfo.MimeType))
+                    if (!string.IsNullOrEmpty(_nodeInfo.MimeType))
                     {
                         object insideObject = null;
 
                         try
                         {
-                            insideObject = GenerateObjectFromDataNodeInfo(nodeInfo, typeResolver);
+                            insideObject = GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver);
                         }
                         catch (Exception ex)
                         { // it'd be better to catch SerializationException but the underlying type resolver
@@ -572,34 +572,34 @@ namespace System.Resources
                             }
                             // something went wrong, type is not specified at all or stream is corrupted
                             // return system.object
-                            result = MultitargetUtil.GetAssemblyQualifiedName(typeof(object), typeNameConverter);
+                            result = MultitargetUtil.GetAssemblyQualifiedName(typeof(object), _typeNameConverter);
                         }
 
                         if (insideObject != null)
                         {
-                            result = MultitargetUtil.GetAssemblyQualifiedName(insideObject.GetType(), typeNameConverter);
+                            result = MultitargetUtil.GetAssemblyQualifiedName(insideObject.GetType(), _typeNameConverter);
                         }
                     }
                     else
                     {
                         // no typename, no mimetype, we have a string...
-                        result = MultitargetUtil.GetAssemblyQualifiedName(typeof(string), typeNameConverter);
+                        result = MultitargetUtil.GetAssemblyQualifiedName(typeof(string), _typeNameConverter);
                     }
                 }
                 else
                 {
-                    objectType = ResolveType(nodeInfo.TypeName, typeResolver);
+                    objectType = ResolveType(_nodeInfo.TypeName, typeResolver);
                 }
             }
             if (objectType != null)
             {
                 if (objectType == typeof(ResXNullRef))
                 {
-                    result = MultitargetUtil.GetAssemblyQualifiedName(typeof(object), typeNameConverter);
+                    result = MultitargetUtil.GetAssemblyQualifiedName(typeof(object), _typeNameConverter);
                 }
                 else
                 {
-                    result = MultitargetUtil.GetAssemblyQualifiedName(objectType, typeNameConverter);
+                    result = MultitargetUtil.GetAssemblyQualifiedName(objectType, _typeNameConverter);
                 }
             }
             return result;
@@ -618,9 +618,9 @@ namespace System.Resources
         /// </summary>
         public object GetValue(ITypeResolutionService typeResolver)
         {
-            if (value != null)
+            if (_value != null)
             {
-                return value;
+                return _value;
             }
 
             object result = null;
@@ -630,12 +630,12 @@ namespace System.Resources
                 if (objectType != null)
                 {
                     // we have the FQN for this type
-                    fileRef =
+                    _fileRef =
                         FileRefTextEncoding != null
                             ? new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding))
                             : new ResXFileRef(FileRefFullPath, FileRefType);
                     TypeConverter tc = TypeDescriptor.GetConverter(typeof(ResXFileRef));
-                    result = tc.ConvertFrom(fileRef.ToString());
+                    result = tc.ConvertFrom(_fileRef.ToString());
                 }
                 else
                 {
@@ -644,10 +644,10 @@ namespace System.Resources
                     throw (newTle);
                 }
             }
-            else if (nodeInfo.ValueData != null)
+            else if (_nodeInfo.ValueData != null)
             {
                 // it's embedded, we deserialize it
-                result = GenerateObjectFromDataNodeInfo(nodeInfo, typeResolver);
+                result = GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver);
             }
             else
             {
@@ -669,7 +669,7 @@ namespace System.Resources
 
         private static byte[] FromBase64WrappedString(string text)
         {
-            if (text.IndexOfAny(SpecialChars) != -1)
+            if (text.IndexOfAny(s_specialChars) != -1)
             {
                 StringBuilder sb = new StringBuilder(text.Length);
                 foreach (var ch in text)
