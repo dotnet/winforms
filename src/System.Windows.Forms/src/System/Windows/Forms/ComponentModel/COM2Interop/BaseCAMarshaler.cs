@@ -17,30 +17,30 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     ///  which are structs in which the first word is the number of elements
     ///  and the second is a pointer to an array of such elements.
     /// </summary>
-    internal abstract class BaseCAMarshaler
+    internal unsafe abstract class BaseCAMarshaler
     {
-        private static readonly TraceSwitch CAMarshalSwitch = new TraceSwitch("CAMarshal", "BaseCAMarshaler: Debug CA* struct marshaling");
+        private static readonly TraceSwitch s_caMarshalSwitch = new TraceSwitch("CAMarshal", "BaseCAMarshaler: Debug CA* struct marshaling");
 
-        private IntPtr caArrayAddress;
-        private readonly int count;
-        private object[] itemArray;
+        private void* _caArrayAddress;
+        private readonly uint _count;
+        private object[] _itemArray;
 
         /// <summary>
         ///  Base ctor
         /// </summary>
-        protected BaseCAMarshaler(in Ole32.CA_STRUCT caStruct) : base()
+        protected BaseCAMarshaler(in Ole32.CA caStruct) : base()
         {
             // first 4 bytes is the count
-            count = caStruct.cElems;
-            caArrayAddress = caStruct.pElems;
-            Debug.WriteLineIf(CAMarshalSwitch.TraceVerbose, "Marshaling " + count.ToString(CultureInfo.InvariantCulture) + " items of type " + ItemType.Name);
+            _count = caStruct.cElems;
+            _caArrayAddress = caStruct.pElems;
+            Debug.WriteLineIf(s_caMarshalSwitch.TraceVerbose, "Marshaling " + _count.ToString(CultureInfo.InvariantCulture) + " items of type " + ItemType.Name);
         }
 
         ~BaseCAMarshaler()
         {
             try
             {
-                if (itemArray == null && caArrayAddress != IntPtr.Zero)
+                if (_itemArray == null && _caArrayAddress != null)
                 {
                     object[] items = Items;
                 }
@@ -53,25 +53,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         protected abstract Array CreateArray();
 
         /// <summary>
-        ///  Returns the type of item this marshaler will
-        ///  return in the items array.
+        ///  Returns the type of item this marshaler will return in the items array.
         /// </summary>
-        public abstract Type ItemType
-        {
-            get;
-        }
+        public abstract Type ItemType { get; }
 
         /// <summary>
-        ///  Returns the count of items that will be or have been
-        ///  marshaled.
+        ///  Returns the count of items that will be or have been marshaled.
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return count;
-            }
-        }
+        public uint Count => _count;
 
         /// <summary>
         ///  The marshaled items.
@@ -82,22 +71,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 try
                 {
-                    if (itemArray == null)
-                    {
-                        itemArray = Get_Items();
-                    }
+                    _itemArray ??= GetItems();
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLineIf(CAMarshalSwitch.TraceVerbose, "Marshaling failed: " + ex.GetType().Name + ", " + ex.Message);
+                    Debug.WriteLineIf(s_caMarshalSwitch.TraceVerbose, "Marshaling failed: " + ex.GetType().Name + ", " + ex.Message);
                 }
 #if DEBUG
-                if (itemArray != null)
+                if (_itemArray != null)
                 {
-                    Debug.WriteLineIf(CAMarshalSwitch.TraceVerbose, "Marshaled: " + itemArray.Length.ToString(CultureInfo.InvariantCulture) + " items, array type=" + itemArray.GetType().Name);
+                    Debug.WriteLineIf(s_caMarshalSwitch.TraceVerbose, "Marshaled: " + _itemArray.Length.ToString(CultureInfo.InvariantCulture) + " items, array type=" + _itemArray.GetType().Name);
                 }
 #endif
-                return itemArray;
+                return _itemArray;
             }
         }
 
@@ -108,33 +94,33 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         protected abstract object GetItemFromAddress(IntPtr addr);
 
         // Retrieve the items
-        private object[] Get_Items()
+        private object[] GetItems()
         {
             // cycle through the addresses and get an item for each addr
-            IntPtr addr;
-            Array items = new object[Count]; //cpb vs38262 System.Array.CreateInstance(this.ItemType,count);
-            object curItem;
-            for (int i = 0; i < count; i++)
+            var items = new object[Count];
+            var nativeItems = new ReadOnlySpan<IntPtr>(_caArrayAddress, (int)_count);
+            for (int i = 0; i < _count; i++)
             {
                 try
                 {
-                    addr = Marshal.ReadIntPtr(caArrayAddress, i * IntPtr.Size);
-                    curItem = GetItemFromAddress(addr);
+                    object curItem = GetItemFromAddress(nativeItems[i]);
                     if (curItem != null && ItemType.IsInstanceOfType(curItem))
                     {
-                        items.SetValue(curItem, i);
+                        items[i] = curItem;
                     }
-                    Debug.WriteLineIf(CAMarshalSwitch.TraceVerbose, "Marshaled " + ItemType.Name + " item, value=" + (curItem == null ? "(null)" : curItem.ToString()));
+
+                    Debug.WriteLineIf(s_caMarshalSwitch.TraceVerbose, "Marshaled " + ItemType.Name + " item, value=" + (curItem == null ? "(null)" : curItem.ToString()));
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLineIf(CAMarshalSwitch.TraceVerbose, "Failed to marshal " + ItemType.Name + " item, exception=" + ex.GetType().Name + ", " + ex.Message);
+                    Debug.WriteLineIf(s_caMarshalSwitch.TraceVerbose, "Failed to marshal " + ItemType.Name + " item, exception=" + ex.GetType().Name + ", " + ex.Message);
                 }
             }
+
             // free the array
-            Marshal.FreeCoTaskMem(caArrayAddress);
-            caArrayAddress = IntPtr.Zero;
-            return (object[])items;
+            Marshal.FreeCoTaskMem((IntPtr)_caArrayAddress);
+            _caArrayAddress = null;
+            return items;
         }
     }
 }
