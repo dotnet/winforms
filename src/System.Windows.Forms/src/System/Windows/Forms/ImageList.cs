@@ -578,30 +578,25 @@ namespace System.Windows.Forms
             }
         }
 
-        private void CopyBitmapData(BitmapData sourceData, BitmapData targetData)
+        private unsafe void CopyBitmapData(BitmapData sourceData, BitmapData targetData)
         {
+            Debug.Assert(Image.GetPixelFormatSize(sourceData.PixelFormat) == 32);
+            Debug.Assert(Image.GetPixelFormatSize(sourceData.PixelFormat) == Image.GetPixelFormatSize(targetData.PixelFormat));
+            Debug.Assert(targetData.Width == sourceData.Width);
+            Debug.Assert(targetData.Height == sourceData.Height);
+            Debug.Assert(targetData.Stride == targetData.Width * 4);
+
             // do the actual copy
             int offsetSrc = 0;
             int offsetDest = 0;
-            unsafe
+            for (int i = 0; i < targetData.Height; i++)
             {
-                for (int i = 0; i < targetData.Height; i++)
-                {
-                    IntPtr srcPtr, destPtr;
-                    if (IntPtr.Size == 4)
-                    {
-                        srcPtr = new IntPtr(sourceData.Scan0.ToInt32() + offsetSrc);
-                        destPtr = new IntPtr(targetData.Scan0.ToInt32() + offsetDest);
-                    }
-                    else
-                    {
-                        srcPtr = new IntPtr(sourceData.Scan0.ToInt64() + offsetSrc);
-                        destPtr = new IntPtr(targetData.Scan0.ToInt64() + offsetDest);
-                    }
-                    UnsafeNativeMethods.CopyMemory(new HandleRef(this, destPtr), new HandleRef(this, srcPtr), Math.Abs(targetData.Stride));
-                    offsetSrc += sourceData.Stride;
-                    offsetDest += targetData.Stride;
-                }
+                IntPtr srcPtr = sourceData.Scan0 + offsetSrc;
+                IntPtr destPtr = targetData.Scan0 + offsetDest;
+                int length = Math.Abs(targetData.Stride);
+                Buffer.MemoryCopy(srcPtr.ToPointer(), destPtr.ToPointer(), length, length);
+                offsetSrc += sourceData.Stride;
+                offsetDest += targetData.Stride;
             }
         }
 
