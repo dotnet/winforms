@@ -5,25 +5,30 @@
 using static Interop;
 
 namespace System.Windows.Forms
-{ 
+{
     public partial class Splitter
     {
         internal class SplitterAccessibleObject : ControlAccessibleObject
         {
             internal SplitterAccessibleObject(Splitter owner) : base(owner)
             {
-                OwningSplitter = owner;
             }
 
-            private Splitter OwningSplitter { get; set; }
+            internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
+                patternId switch
+                {
+                    var p when
+                        p == UiaCore.UIA.LegacyIAccessiblePatternId => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
                     UiaCore.UIA.NamePropertyId
                         => Name,
                     UiaCore.UIA.AutomationIdPropertyId
-                        => OwningSplitter.IsHandleCreated ? OwningSplitter.Name : String.Empty,
+                        => Owner.Name,
                     UiaCore.UIA.ControlTypePropertyId
                         => UiaCore.UIA.PaneControlTypeId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
