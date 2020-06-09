@@ -5175,15 +5175,8 @@ namespace System.Windows.Forms
             }
             IntPtr hWndActive = User32.GetActiveWindow();
             IntPtr hWndOwner = owner == null ? hWndActive : Control.GetSafeHandle(owner);
-            IntPtr hWndOldOwner = IntPtr.Zero;
-            Properties.SetObject(PropDialogOwner, owner);
 
             Form oldOwner = OwnerInternal;
-
-            if (owner is Form ownerForm && owner != oldOwner)
-            {
-                Owner = ownerForm;
-            }
 
             try
             {
@@ -5215,9 +5208,22 @@ namespace System.Windows.Forms
                                                           "showDialog"), "owner");
                     }
 
-                    // Set the new owner.
-                    hWndOldOwner = User32.GetWindowLong(new HandleRef(this, Handle), User32.GWL.HWNDPARENT);
-                    User32.SetWindowLong(this, User32.GWL.HWNDPARENT, new HandleRef(owner, hWndOwner));
+                    // In a multi DPI environment and applications in PMV2 mode, DPI changed events triggered
+                    // only when there is a DPI change happened for the Handle directly or via its parent.
+                    // So, it is necessary to not set the owner before creating the handle. Otherwise,
+                    // the window may never receive DPI changed event even if its parent has different DPI.
+                    // Users at runtime, has to move the window between the screens to get the DPI changed events triggered.
+
+                    Properties.SetObject(PropDialogOwner, owner);
+                    if (owner is Form form && owner != oldOwner)
+                    {
+                        Owner = form;
+                    }
+                    else
+                    {
+                        // Set the new parent.
+                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, new HandleRef(owner, hWndOwner));
+                    }
                 }
 
                 try
