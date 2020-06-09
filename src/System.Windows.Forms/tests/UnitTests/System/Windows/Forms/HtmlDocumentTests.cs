@@ -433,7 +433,8 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Equal("windows-1252", document.DefaultEncoding);
+            Assert.NotEmpty(document.DefaultEncoding);
+            Assert.DoesNotContain('\0', document.DefaultEncoding);
         }
 
         [WinFormsFact]
@@ -447,7 +448,8 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html><head><meta charset=\"UTF-8\" /></head></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Equal("windows-1252", document.DefaultEncoding);
+            Assert.NotEmpty(document.DefaultEncoding);
+            Assert.DoesNotContain('\0', document.DefaultEncoding);
         }
 
         [WinFormsFact]
@@ -463,7 +465,8 @@ namespace System.Windows.Forms.Tests
             HtmlDocument document = await GetDocument(control, Html);
             IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
             iHTMLDocument2.SetDefaultCharset("UTF-8");
-            Assert.Equal("windows-1252", document.DefaultEncoding);
+            Assert.NotEmpty(document.DefaultEncoding);
+            Assert.DoesNotContain('\0', document.DefaultEncoding);
         }
 
         [WinFormsFact]
@@ -530,7 +533,8 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Equal("windows-1252", document.Encoding);
+            Assert.NotEmpty(document.Encoding);
+            Assert.DoesNotContain('\0', document.Encoding);
         }
 
         [WinFormsFact]
