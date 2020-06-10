@@ -1282,106 +1282,89 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Oleaut32.IDispatch pDisp = (Oleaut32.IDispatch)owner;
 
             var excepInfo = new Oleaut32.EXCEPINFO();
-            var dispParams = new Oleaut32.DISPPARAMS();
-            dispParams.cArgs = 1;
-            dispParams.cNamedArgs = 1;
-            DispatchID[] namedArgs = new DispatchID[] { DispatchID.PROPERTYPUT };
-            GCHandle gcHandle = GCHandle.Alloc(namedArgs, GCHandleType.Pinned);
-
-            try
+            Ole32.DispatchID namedArg = Ole32.DispatchID.PROPERTYPUT;
+            var dispParams = new Oleaut32.DISPPARAMS
             {
-                dispParams.rgdispidNamedArgs = Marshal.UnsafeAddrOfPinnedArrayElement(namedArgs, 0);
-                const int SizeOfVariant = 16;
-                Debug.Assert(SizeOfVariant == Marshal.SizeOf<Oleaut32.VARIANT>());
-                IntPtr mem = Marshal.AllocCoTaskMem(SizeOfVariant);
-                Oleaut32.VariantInit(mem);
-                Marshal.GetNativeVariantForObject(value, mem);
-                dispParams.rgvarg = mem;
-                try
+                cArgs = 1,
+                cNamedArgs = 1,
+                rgdispidNamedArgs = &namedArg
+            };
+
+            using var variant = new Oleaut32.VARIANT();
+            Marshal.GetNativeVariantForObject(value, (IntPtr)(&variant));
+            dispParams.rgvarg = &variant;
+            Guid g = Guid.Empty;
+            uint pArgError = 0;
+            HRESULT hr = pDisp.Invoke(
+                dispid,
+                &g,
+                Kernel32.GetThreadLocale(),
+                Oleaut32.DISPATCH.PROPERTYPUT,
+                &dispParams,
+                null,
+                &excepInfo,
+                &pArgError);
+
+            string errorInfo = null;
+            if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
+            {
+                hr = excepInfo.scode;
+                if (excepInfo.bstrDescription != IntPtr.Zero)
                 {
-                    Guid g = Guid.Empty;
-                    uint pArgError = 0;
-                    HRESULT hr = pDisp.Invoke(
-                        dispid,
-                        &g,
-                        Kernel32.GetThreadLocale(),
-                        Oleaut32.DISPATCH.PROPERTYPUT,
-                        &dispParams,
-                        null,
-                        &excepInfo,
-                        &pArgError);
-
-                    string errorInfo = null;
-                    if (hr == HRESULT.DISP_E_EXCEPTION && excepInfo.scode != 0)
-                    {
-                        hr = excepInfo.scode;
-                        if (excepInfo.bstrDescription != IntPtr.Zero)
-                        {
-                            errorInfo = Marshal.PtrToStringBSTR(excepInfo.bstrDescription);
-                        }
-                    }
-
-                    switch (hr)
-                    {
-                        case HRESULT.E_ABORT:
-                        case HRESULT.OLE_E_PROMPTSAVECANCELLED:
-                            // cancelled checkout, etc.
-                            return;
-                        case HRESULT.S_OK:
-                        case HRESULT.S_FALSE:
-                            OnValueChanged(component, EventArgs.Empty);
-                            lastValue = value;
-                            return;
-                        default:
-                            if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
-                            {
-                                g = typeof(Oleaut32.IDispatch).GUID;
-                                if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
-                                {
-                                    Oleaut32.IErrorInfo pErrorInfo = null;
-                                    Oleaut32.GetErrorInfo(0, ref pErrorInfo);
-
-                                    string info = null;
-                                    if (pErrorInfo != null && pErrorInfo.GetDescription(ref info).Succeeded())
-                                    {
-                                        errorInfo = info;
-                                    }
-                                }
-                            }
-                            else if (errorInfo == null)
-                            {
-                                StringBuilder strMessage = new StringBuilder(256);
-
-                                uint result = Kernel32.FormatMessageW(
-                                    Kernel32.FormatMessageOptions.FROM_SYSTEM | Kernel32.FormatMessageOptions.IGNORE_INSERTS,
-                                    IntPtr.Zero,
-                                    (uint)hr,
-                                    (uint)CultureInfo.CurrentCulture.LCID,
-                                    strMessage,
-                                    255,
-                                    IntPtr.Zero);
-
-                                if (result == 0)
-                                {
-                                    errorInfo = string.Format(CultureInfo.CurrentCulture, string.Format(SR.DispInvokeFailed, "SetValue", hr));
-                                }
-                                else
-                                {
-                                    errorInfo = TrimNewline(strMessage);
-                                }
-                            }
-                            throw new ExternalException(errorInfo, (int)hr);
-                    }
-                }
-                finally
-                {
-                    Oleaut32.VariantClear(mem);
-                    Marshal.FreeCoTaskMem(mem);
+                    errorInfo = Marshal.PtrToStringBSTR(excepInfo.bstrDescription);
                 }
             }
-            finally
+
+            switch (hr)
             {
-                gcHandle.Free();
+                case HRESULT.E_ABORT:
+                case HRESULT.OLE_E_PROMPTSAVECANCELLED:
+                    // cancelled checkout, etc.
+                    return;
+                case HRESULT.S_OK:
+                case HRESULT.S_FALSE:
+                    OnValueChanged(component, EventArgs.Empty);
+                    lastValue = value;
+                    return;
+                default:
+                    if (pDisp is Oleaut32.ISupportErrorInfo iSupportErrorInfo)
+                    {
+                        g = typeof(Oleaut32.IDispatch).GUID;
+                        if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
+                        {
+                            Oleaut32.IErrorInfo pErrorInfo = null;
+                            Oleaut32.GetErrorInfo(0, ref pErrorInfo);
+
+                            string info = null;
+                            if (pErrorInfo != null && pErrorInfo.GetDescription(ref info).Succeeded())
+                            {
+                                errorInfo = info;
+                            }
+                        }
+                    }
+                    else if (errorInfo == null)
+                    {
+                        StringBuilder strMessage = new StringBuilder(256);
+
+                        uint result = Kernel32.FormatMessageW(
+                            Kernel32.FormatMessageOptions.FROM_SYSTEM | Kernel32.FormatMessageOptions.IGNORE_INSERTS,
+                            IntPtr.Zero,
+                            (uint)hr,
+                            (uint)CultureInfo.CurrentCulture.LCID,
+                            strMessage,
+                            255,
+                            IntPtr.Zero);
+
+                        if (result == 0)
+                        {
+                            errorInfo = string.Format(CultureInfo.CurrentCulture, string.Format(SR.DispInvokeFailed, "SetValue", hr));
+                        }
+                        else
+                        {
+                            errorInfo = TrimNewline(strMessage);
+                        }
+                    }
+                    throw new ExternalException(errorInfo, (int)hr);
             }
         }
 

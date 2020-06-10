@@ -267,16 +267,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            /*internal bool StandardValuesQueried {
-               get {
-                   this.standardValuesQueried = value;
-               }
-            } */
-
-            // ensure that we have processed the caStructs into arrays
-            // of values and strings
-            //
-            private void EnsureArrays()
+            /// <summary>
+            ///  Ensure that we have processed the caStructs into arrays
+            ///  of values and strings
+            /// </summary>
+            private unsafe void EnsureArrays()
             {
                 if (arraysFetched)
                 {
@@ -299,7 +294,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     if (nameItems.Length > 0)
                     {
                         object[] valueItems = new object[cookieItems.Length];
-                        var var = new Oleaut32.VARIANT();
                         int cookie;
 
                         Debug.Assert(cookieItems.Length == nameItems.Length, "Got uneven names and cookies");
@@ -315,8 +309,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 Debug.Fail("Bad IPerPropertyBrowsing item [" + i.ToString(CultureInfo.InvariantCulture) + "], name=" + (nameItems == null ? "(unknown)" : nameItems[i].ToString()));
                                 continue;
                             }
-                            var.vt = VARENUM.EMPTY;
-                            HRESULT hr = ppb.GetPredefinedValue(target.DISPID, (uint)cookie, var);
+                            using var var = new Oleaut32.VARIANT();
+                            HRESULT hr = ppb.GetPredefinedValue(target.DISPID, (uint)cookie, &var);
                             if (hr == HRESULT.S_OK && var.vt != VARENUM.EMPTY)
                             {
                                 valueItems[i] = var.ToObject();
@@ -340,7 +334,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 }
                             }
 
-                            var.Clear();
                             if (hr == HRESULT.S_OK)
                             {
                                 itemCount++;

@@ -54,10 +54,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             uint cItems = 0;
             IntPtr pbstrs = IntPtr.Zero;
-            IntPtr pvars = IntPtr.Zero;
+            Oleaut32.VARIANT* pvars = null;
 
             HRESULT hr = target.GetPropertyAttributes(dispid, &cItems, &pbstrs, &pvars);
-            if (hr != HRESULT.S_OK || cItems == 0)
+            if (hr != HRESULT.S_OK || cItems == 0 || pvars == null)
             {
                 return Array.Empty<Attribute>();
             }
@@ -258,47 +258,31 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private static object[] GetVariantsFromPtr(IntPtr ptr, uint cVariants)
+        private unsafe static object[] GetVariantsFromPtr(Oleaut32.VARIANT* ptr, uint cVariants)
         {
-            if (ptr != IntPtr.Zero)
+            var objects = new object[cVariants];
+            for (int i = 0; i < cVariants; i++)
             {
-                object[] objects = new object[cVariants];
-                IntPtr curVariant;
-
-                for (int i = 0; i < cVariants; i++)
-                {
-                    try
-                    {
-                        curVariant = (IntPtr)((long)ptr + (i * 16 /*sizeof(VARIANT)*/));
-                        if (curVariant != IntPtr.Zero)
-                        {
-                            objects[i] = Marshal.GetObjectForNativeVariant(curVariant);
-                            Oleaut32.VariantClear(curVariant);
-                        }
-                        else
-                        {
-                            objects[i] = Convert.DBNull;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.Fail("Failed to marshal component attribute VARIANT " + i.ToString(CultureInfo.InvariantCulture), ex.ToString());
-                    }
-                }
                 try
                 {
-                    Marshal.FreeCoTaskMem(ptr);
+                    using var variant = ptr[i];
+                    objects[i] = Marshal.GetObjectForNativeVariant((IntPtr)(&variant));
                 }
                 catch (Exception ex)
                 {
-                    Debug.Fail("Failed to free VARIANT array memory", ex.ToString());
+                    Debug.Fail("Failed to marshal component attribute VARIANT " + i, ex.ToString());
                 }
-                return objects;
             }
-            else
+            try
             {
-                return new object[cVariants];
+                Marshal.FreeCoTaskMem((IntPtr)ptr);
             }
+            catch (Exception ex)
+            {
+                Debug.Fail("Failed to free VARIANT array memory", ex.ToString());
+            }
+
+            return objects;
         }
     }
 }
