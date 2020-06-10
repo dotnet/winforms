@@ -19,6 +19,7 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
+    [Collection("Sequential")]
     public class WebBrowserTests
     {
         [WinFormsFact]
