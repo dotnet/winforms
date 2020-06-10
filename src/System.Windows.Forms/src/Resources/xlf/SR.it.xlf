@@ -5641,6 +5641,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Indice {0} non compreso nell'intervallo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InputLanguageCultureNotFound">
+        <source>Could not find an InputLanguage for culture '{0}'.</source>
+        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument=Valore di '{1}' non valido per '{0}'.</target>

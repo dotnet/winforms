@@ -6713,4 +6713,7 @@ Stack trace where the illegal operation occurred was:
   <data name="ListViewGroupTaskLinkClickDescr" xml:space="preserve">
     <value>Event raised when the TaskLink property of a ListViewGroup is clicked.</value>
   </data>
+  <data name="InputLanguageCultureNotFound" xml:space="preserve">
+    <value>Could not find an InputLanguage for culture '{0}'.</value>
+  </data>
 </root>

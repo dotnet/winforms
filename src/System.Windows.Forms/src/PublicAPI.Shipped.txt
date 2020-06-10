@@ -10064,11 +10064,11 @@ System.Windows.Forms.HScrollProperties.HScrollProperties(System.Windows.Forms.Sc
 System.Windows.Forms.InputLanguage.Culture.get -> System.Globalization.CultureInfo!
 System.Windows.Forms.InputLanguage.LayoutName.get -> string!
 System.Windows.Forms.InputLanguageChangedEventArgs.Culture.get -> System.Globalization.CultureInfo!
-System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage?
+System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage!
 System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguageChangedEventArgs(System.Globalization.CultureInfo! culture, byte charSet) -> void
 System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguageChangedEventArgs(System.Windows.Forms.InputLanguage! inputLanguage, byte charSet) -> void
 System.Windows.Forms.InputLanguageChangingEventArgs.Culture.get -> System.Globalization.CultureInfo!
-System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage?
+System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage!
 System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguageChangingEventArgs(System.Globalization.CultureInfo! culture, bool sysCharSet) -> void
 System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguageChangingEventArgs(System.Windows.Forms.InputLanguage! inputLanguage, bool sysCharSet) -> void
 System.Windows.Forms.InputLanguageCollection.Contains(System.Windows.Forms.InputLanguage? value) -> bool

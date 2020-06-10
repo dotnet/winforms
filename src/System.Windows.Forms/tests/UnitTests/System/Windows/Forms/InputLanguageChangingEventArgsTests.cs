@@ -13,9 +13,8 @@ namespace System.Windows.Forms.Tests
     {
         public static IEnumerable<object[]> Ctor_CultureInfo_Bool_TestData()
         {
-            yield return new object[] { CultureInfo.InvariantCulture, true };
-            yield return new object[] { new CultureInfo("en"), false };
-            yield return new object[] { new UnknownKeyboardCultureInfo(), false };
+            yield return new object[] { new CultureInfo("en-US"), true };
+            yield return new object[] { new CultureInfo("en-US"), false };
         }
 
         [Theory]
@@ -27,6 +26,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(culture, e.Culture);
             Assert.Equal(sysCharSet, e.SysCharSet);
             Assert.False(e.Cancel);
+        }
+
+        [Fact]
+        public void Ctor_NullCultureInfo_ThrowsNullReferenceException()
+        {
+            Assert.Throws<ArgumentNullException>("culture", () => new InputLanguageChangingEventArgs((CultureInfo)null, true));
+        }
+
+        public static IEnumerable<object[]> Ctor_NoSuchCultureInfo_TestData()
+        {
+            yield return new object[] { CultureInfo.InvariantCulture };
+            yield return new object[] { new CultureInfo("en") };
+            yield return new object[] { new UnknownKeyboardCultureInfo() };
+        }
+
+        [Theory]
+        [MemberData(nameof(Ctor_NoSuchCultureInfo_TestData))]
+        public void Ctor_NoSuchCultureInfo_ThrowsArgumentException(CultureInfo culture)
+        {
+            Assert.Throws<ArgumentException>("culture", () => new InputLanguageChangingEventArgs(culture, true));
         }
 
         public static IEnumerable<object[]> Ctor_InputLanguage_Bool_TestData()
@@ -49,12 +68,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(inputLanguage, e.InputLanguage);
             Assert.Equal(inputLanguage.Culture, e.Culture);
             Assert.Equal(sysCharSet, e.SysCharSet);
-        }
-
-        [Fact]
-        public void Ctor_NullCultureInfo_ThrowsNullReferenceException()
-        {
-            Assert.Throws<ArgumentNullException>("culture", () => new InputLanguageChangingEventArgs((CultureInfo)null, true));
         }
 
         [Fact]

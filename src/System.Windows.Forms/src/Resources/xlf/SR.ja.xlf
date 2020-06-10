@@ -5641,6 +5641,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">インデックス {0} が範囲を超えています。</target>
         <note />
       </trans-unit>
+      <trans-unit id="InputLanguageCultureNotFound">
+        <source>Could not find an InputLanguage for culture '{0}'.</source>
+        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">'{1}' の InvalidArgument=Value は '{0}' に対して有効ではありません。</target>

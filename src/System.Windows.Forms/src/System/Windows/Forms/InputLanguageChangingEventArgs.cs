@@ -18,7 +18,13 @@ namespace System.Windows.Forms
         /// </summary>
         public InputLanguageChangingEventArgs(CultureInfo culture, bool sysCharSet)
         {
-            InputLanguage = InputLanguage.FromCulture(culture);
+            InputLanguage? language = InputLanguage.FromCulture(culture);
+            if (language == null)
+            {
+                throw new ArgumentException(string.Format(SR.InputLanguageCultureNotFound, culture), nameof(culture));
+            }
+
+            InputLanguage = language;
             Culture = culture;
             SysCharSet = sysCharSet;
         }
@@ -37,7 +43,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the requested input language.
         /// </summary>
-        public InputLanguage? InputLanguage { get; }
+        public InputLanguage InputLanguage { get; }
 
         /// <summary>
         ///  Gets the locale of the requested input language.
