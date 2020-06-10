@@ -8201,11 +8201,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">{0} selecionado.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridRemotedObject">
-        <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">O objeto {0} é remoto por um proxy que não oferece suporte para a descoberta de interface. Não há suporte para esse tipo de objeto remoto.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
         <target state="translated">Guias static não podem ser removidas de PropertyGrid.</target>

@@ -4868,9 +4868,6 @@ Stack trace where the illegal operation occurred was:
   <data name="PropertyGridPropertyValueChangedDescr" xml:space="preserve">
     <value>Occurs when a property value changes.</value>
   </data>
-  <data name="PropertyGridRemotedObject" xml:space="preserve">
-    <value>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</value>
-  </data>
   <data name="PropertyGridRemoveStaticTabs" xml:space="preserve">
     <value>Static tabs cannot be removed from the PropertyGrid.</value>
   </data>

@@ -8201,11 +8201,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">{0} sélectionné.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridRemotedObject">
-        <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">L'objet {0} est mis à distance par le proxy qui ne prend pas en charge la découverte d'interface. Ce type d'objet distant n'est pas pris en charge.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
         <target state="translated">Impossible de supprimer des onglets statiques de PropertyGrid.</target>

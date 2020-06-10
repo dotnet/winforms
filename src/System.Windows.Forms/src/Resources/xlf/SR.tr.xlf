@@ -8201,11 +8201,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">{0} seçildi.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridRemotedObject">
-        <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">{0} nesnesi arabirim keşfini desteklemeyen bir ara sunucu tarafından uzaktan çalıştırılıyor. Bu tür uzak nesne haline getirilmiş nesneler desteklenmez.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
         <target state="translated">PropertyGrid'den statik sekmeler kaldırılamaz.</target>
