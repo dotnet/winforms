@@ -466,6 +466,26 @@ namespace System.Windows.Forms
                 return base.GetPropertyValue(propertyID);
             }
 
+            internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
+            {
+                if (!Owner.IsHandleCreated)
+                {
+                    return false;
+                }
+
+                return base.RaiseAutomationEvent(eventId);
+            }
+
+            internal override bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
+            {
+                if (!Owner.IsHandleCreated)
+                {
+                    return false;
+                }
+
+                return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
+            }
+
             internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
             {
                 get

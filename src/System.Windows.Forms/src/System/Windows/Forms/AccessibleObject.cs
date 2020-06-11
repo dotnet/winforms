@@ -2249,7 +2249,7 @@ namespace System.Windows.Forms
             throw new NotSupportedException(SR.AccessibleObjectLiveRegionNotSupported);
         }
 
-        internal bool RaiseAutomationEvent(UiaCore.UIA eventId)
+        internal virtual bool RaiseAutomationEvent(UiaCore.UIA eventId)
         {
             if (UiaCore.UiaClientsAreListening().IsTrue())
             {
@@ -2260,7 +2260,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        internal bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
+        internal virtual bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
         {
             if (UiaCore.UiaClientsAreListening().IsTrue())
             {
