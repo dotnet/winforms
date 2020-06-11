@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,6 +8,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
+    [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
     public class AxHostConnectionPointCookieTests : IClassFixture<ThreadExceptionFixture>
     {
         private static readonly Guid CLSID_WebBrowser = new Guid("8856f961-340a-11d0-a96b-00c04fd705a2");
