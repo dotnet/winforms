@@ -32,7 +32,6 @@ namespace System.Resources
             return GetAssembly(name, true);
         }
 
-        //
         public Assembly GetAssembly(AssemblyName name, bool throwOnError)
         {
             Assembly result = null;
@@ -119,7 +118,6 @@ namespace System.Resources
 
             if (result == null && _names != null)
             {
-                //
                 // If the type is assembly qualified name, we sort the assembly names
                 // to put assemblies with same name in the front so that they can
                 // be searched first.

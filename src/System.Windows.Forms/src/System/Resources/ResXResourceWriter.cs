@@ -171,6 +171,7 @@ namespace System.Resources
                     Debug.Assert(_fileName != null, "Nothing to output to");
                     _xmlTextWriter = new XmlTextWriter(_fileName, System.Text.Encoding.UTF8);
                 }
+
                 _xmlTextWriter.Formatting = Formatting.Indented;
                 _xmlTextWriter.Indentation = 2;
 
@@ -201,6 +202,7 @@ namespace System.Resources
                 _xmlTextWriter.WriteEndElement();
             }
             _xmlTextWriter.WriteEndElement();
+
             _xmlTextWriter.WriteStartElement(ResHeaderStr);
             {
                 _xmlTextWriter.WriteAttributeString(NameStr, VersionStr);
@@ -211,6 +213,7 @@ namespace System.Resources
                 _xmlTextWriter.WriteEndElement();
             }
             _xmlTextWriter.WriteEndElement();
+
             _xmlTextWriter.WriteStartElement(ResHeaderStr);
             {
                 _xmlTextWriter.WriteAttributeString(NameStr, ReaderStr);
@@ -221,6 +224,7 @@ namespace System.Resources
                 _xmlTextWriter.WriteEndElement();
             }
             _xmlTextWriter.WriteEndElement();
+
             _xmlTextWriter.WriteStartElement(ResHeaderStr);
             {
                 _xmlTextWriter.WriteAttributeString(NameStr, WriterStr);
@@ -243,6 +247,7 @@ namespace System.Resources
                 {
                     InitializeWriter();
                 }
+
                 return _xmlTextWriter;
             }
         }
@@ -332,6 +337,7 @@ namespace System.Resources
 
                 fileRef?.MakeFilePathRelative(modifiedBasePath);
             }
+
             DataNodeInfo info = nodeClone.GetDataNodeInfo();
             AddDataRow(DataStr, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
         }
@@ -468,6 +474,7 @@ namespace System.Resources
                     }
                 }
                 Writer.WriteEndElement();
+
                 if (!string.IsNullOrEmpty(comment))
                 {
                     Writer.WriteStartElement(CommentStr);
@@ -538,16 +545,19 @@ namespace System.Resources
                 {
                     Generate();
                 }
+
                 if (_xmlTextWriter != null)
                 {
                     _xmlTextWriter.Close();
                     _xmlTextWriter = null;
                 }
+
                 if (_stream != null)
                 {
                     _stream.Close();
                     _stream = null;
                 }
+
                 if (_textWriter != null)
                 {
                     _textWriter.Close();

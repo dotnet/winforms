@@ -68,6 +68,7 @@ namespace System.Resources
                 {
                     break;
                 }
+
                 if (path1[i] == Path.DirectorySeparatorChar)
                 {
                     si = i;
@@ -78,6 +79,7 @@ namespace System.Resources
             {
                 return path2;
             }
+
             if ((i == path1.Length) && (i == path2.Length))
             {
                 return string.Empty;
@@ -92,6 +94,7 @@ namespace System.Resources
                     relPath.Append(".." + Path.DirectorySeparatorChar);
                 }
             }
+
             return relPath.ToString() + path2.Substring(si + 1);
         }
 
@@ -101,6 +104,7 @@ namespace System.Resources
             {
                 return;
             }
+
             FileName = PathDifference(basePath, FileName, false);
         }
 
@@ -116,11 +120,13 @@ namespace System.Resources
             {
                 result += (FileName + ";");
             }
+
             result += TypeName;
             if (TextFileEncoding != null)
             {
                 result += (";" + TextFileEncoding.WebName);
             }
+
             return result;
         }
     }

@@ -12,7 +12,7 @@ namespace System.Resources
     // This class implements a partial type resolver for the BinaryFormatter.
     // This is needed to be able to read binary serialized content from older
     // NDP types and map them to newer versions.
-    //
+
     internal class ResXSerializationBinder : SerializationBinder
     {
         private readonly ITypeResolutionService _typeResolver;
@@ -56,6 +56,7 @@ namespace System.Resources
                             partialName = partialName + ", " + typePart;
                         }
                     }
+
                     type = _typeResolver.GetType(partialName);
                     if (type == null)
                     {
@@ -68,7 +69,6 @@ namespace System.Resources
             return type;
         }
 
-        //
         // Get the multitarget-aware string representation for the give type.
         public override void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {
@@ -100,6 +100,7 @@ namespace System.Resources
                         {
                             typeName = newTypeName;
                         }
+
                         return;
                     }
                 }

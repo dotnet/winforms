@@ -150,6 +150,7 @@ namespace System.Resources
                 {
                     throw new InvalidOperationException(SR.InvalidResXBasePathOperation);
                 }
+
                 _basePath = value;
             }
         }
@@ -172,6 +173,7 @@ namespace System.Resources
                 {
                     throw new InvalidOperationException(SR.InvalidResXBasePathOperation);
                 }
+
                 _useResXDataNodes = value;
             }
         }
@@ -467,7 +469,6 @@ namespace System.Resources
                 // in the resheader, however the "1.0" schema had a different
                 // casing. By checking the Equals first, we should
                 // see significant performance improvements.
-                //
 
                 if (name == ResXResourceWriter.VersionStr)
                 {
@@ -573,6 +574,7 @@ namespace System.Resources
             {
                 alias = assemblyName.Name;
             }
+
             _aliasResolver.PushAlias(alias, assemblyName);
         }
 
@@ -592,10 +594,12 @@ namespace System.Resources
             {
                 alias = GetAliasFromTypeName(typeName);
             }
+
             if (!string.IsNullOrEmpty(alias))
             {
                 assemblyName = _aliasResolver.ResolveAlias(alias);
             }
+
             if (assemblyName != null)
             {
                 nodeInfo.TypeName = GetTypeFromTypeName(typeName) + ", " + assemblyName.FullName;

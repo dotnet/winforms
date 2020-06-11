@@ -24,6 +24,7 @@ namespace System.Resources
                 {
                     return true;
                 }
+
                 return false;
             }
 
@@ -43,6 +44,7 @@ namespace System.Resources
                 {
                     created = ((ResXFileRef)value).ToString();
                 }
+
                 return created;
             }
 
@@ -87,6 +89,7 @@ namespace System.Resources
 
                         remainingString = stringValue.Substring(nextSemiColumn + 1);
                     }
+
                     string[] parts = remainingString.Split(';');
                     if (parts.Length > 1)
                     {
@@ -101,6 +104,7 @@ namespace System.Resources
                         result = new string[] { fileName };
                     }
                 }
+
                 return result;
             }
 
@@ -160,6 +164,7 @@ namespace System.Resources
 
                     return Activator.CreateInstance(toCreate, BindingFlags.Instance | BindingFlags.Public | BindingFlags.CreateInstance, null, new object[] { memStream }, null);
                 }
+
                 return null;
             }
         }

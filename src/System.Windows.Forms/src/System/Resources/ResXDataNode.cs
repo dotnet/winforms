@@ -81,6 +81,7 @@ namespace System.Resources
             {
                 throw (new ArgumentNullException(nameof(name)));
             }
+
             if (name.Length == 0)
             {
                 throw (new ArgumentException(nameof(name)));
@@ -89,10 +90,12 @@ namespace System.Resources
             _typeNameConverter = typeNameConverter;
 
             Type valueType = (value == null) ? typeof(object) : value.GetType();
+
             if (value != null && !valueType.IsSerializable)
             {
                 throw new InvalidOperationException(string.Format(SR.NotSerializableType, name, valueType.FullName));
             }
+
             if (value != null)
             {
                 _typeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, _typeNameConverter);
@@ -150,6 +153,7 @@ namespace System.Resources
                     {
                         _fileRefFullPath = fileRefDetails[0];
                     }
+
                     _fileRefType = fileRefDetails[1];
                     if (fileRefDetails.Length > 2)
                     {
@@ -294,6 +298,7 @@ namespace System.Resources
                 {
                     throw new InvalidOperationException(string.Format(SR.NotSerializableType, _name, valueType.FullName));
                 }
+
                 TypeConverter tc = TypeDescriptor.GetConverter(valueType);
                 bool toString = tc.CanConvertTo(typeof(string));
                 bool fromString = tc.CanConvertFrom(typeof(string));
@@ -379,6 +384,7 @@ namespace System.Resources
                             Binder = new ResXSerializationBinder(typeResolver)
                         };
                     }
+
                     IFormatter formatter = _binaryFormatter;
                     if (serializedData != null && serializedData.Length > 0)
                     {
@@ -389,7 +395,6 @@ namespace System.Resources
                         }
                     }
                 }
-
                 else if (string.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType))
                 {
                     if (!string.IsNullOrEmpty(typeName))
@@ -474,6 +479,7 @@ namespace System.Resources
                 // if mimeTypeName and typeName are not filled in, the value must be a string
                 Debug.Assert(_value is string, "Resource entries with no Type or MimeType must be encoded as strings");
             }
+
             return result;
         }
 

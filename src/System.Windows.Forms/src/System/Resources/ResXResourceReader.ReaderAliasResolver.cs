@@ -27,6 +27,7 @@ namespace System.Resources
                 {
                     result = (AssemblyName)_cachedAliases[alias];
                 }
+
                 return result;
             }
 
