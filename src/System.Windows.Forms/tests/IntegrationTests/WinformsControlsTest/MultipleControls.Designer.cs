@@ -89,6 +89,9 @@ namespace WinformsControlsTest
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
+            this.label1.AccessibleName = "Test Label AccessibleName";
+            this.label1.AccessibleDescription = "Test Label AccessibleDescription";
+            this.label1.AccessibleRole = System.Windows.Forms.AccessibleRole.Indicator;
             //
             // maskedTextBox1
             //
@@ -157,7 +160,7 @@ namespace WinformsControlsTest
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.ToolTipText = "I am tabPage2!\r\nI am multiline tooltip!";
-             this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPage2.UseVisualStyleBackColor = true;
             //
             // checkBox1
             //
@@ -199,6 +202,9 @@ namespace WinformsControlsTest
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
+            this.groupBox1.AccessibleName = "Test GroupBox AccessibleName";
+            this.groupBox1.AccessibleDescription = "Test GroupBox AccessibleDescription";
+            this.groupBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Table;
             //
             // checkedListBox1
             //
