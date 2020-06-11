@@ -12,7 +12,6 @@ Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Security.Permissions
 Imports System.Threading
-
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
@@ -903,17 +902,16 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' Generates the name for the remote singleton that we use to channel multiple instances
         ''' to the same application model thread.
         ''' </summary>
-        ''' <returns>GUID String that should be the same for versions of the application
-        ''' that have the same Major and Minor Version Number
+        ''' <returns>A string unique to the application that should be the same for versions of
+        '''  the application that have the same Major and Minor Version Number
         ''' </returns>
         ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId</remarks>
         Private Shared Function GetApplicationInstanceID(ByVal Entry As Assembly) As String
-            Dim customAttributes As Object() = Entry.GetCustomAttributes(GetType(GuidAttribute), True)
-            If customAttributes.Any Then
-                Dim guidAttrib As GuidAttribute = CType(customAttributes.First, GuidAttribute)
-                Dim versionParts As String() = Entry.GetName.Version.ToString.Split(CType(".", Char()))
-                If versionParts.Length > 1 Then
-                    Return $"{guidAttrib.Value}{versionParts(0)}.{versionParts(1)}"
+            Dim guidAttrib As GuidAttribute = Entry.GetCustomAttribute(Of GuidAttribute)()
+            If guidAttrib IsNot Nothing Then
+                Dim version As Version = Entry.GetName.Version
+                If version IsNot Nothing Then
+                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
                 Else
                     Return guidAttrib.Value
                 End If

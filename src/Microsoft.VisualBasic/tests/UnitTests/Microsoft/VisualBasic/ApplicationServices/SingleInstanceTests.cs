@@ -8,6 +8,8 @@ using System.Collections.Immutable;
 using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
@@ -383,6 +385,26 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 return null;
             }
             return pipeClient;
+        }
+
+        [Fact]
+        public void GetApplicationInstanceID_GuidAttribute()
+        {
+            var guid = Guid.NewGuid().ToString();
+            var attributeBuilder = new CustomAttributeBuilder(
+                typeof(GuidAttribute).GetConstructor(new[] { typeof(string) }), new[] { guid });
+            var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(
+                new AssemblyName(Guid.NewGuid().ToString()),
+                AssemblyBuilderAccess.RunAndCollect,
+                new[] { attributeBuilder });
+            assemblyBuilder.DefineDynamicModule(Guid.NewGuid().ToString());
+
+            var type = typeof(ApplicationServices.WindowsFormsApplicationBase);
+            var method = type.GetMethod("GetApplicationInstanceID",
+                BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.Equal(
+                $"{guid}0.0",
+                (string)method.Invoke(null, new object[] { assemblyBuilder }));
         }
     }
 }
