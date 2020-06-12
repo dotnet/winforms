@@ -2993,11 +2993,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, "SelectedImageKey", -1)]
-        [InlineData(0, "", 0)]
-        [InlineData(1, "", 0)]
-        [InlineData(2, "", 0)]
-        public void TreeNode_SelectedImageIndex_SetWithSelectedImageKey_GetReturnsExpected(int value, string expectedSelectedImageKey, int expectedWithImage)
+        [InlineData(-1, -1)]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)]
+        [InlineData(2, 0)]
+        public void TreeNode_SelectedImageIndex_SetWithSelectedImageKey_GetReturnsExpected(int value, int expectedWithImage)
         {
             var node = new TreeNode
             {
@@ -3005,32 +3005,32 @@ namespace System.Windows.Forms.Tests
                 SelectedImageIndex = value
             };
             Assert.Equal(value, node.SelectedImageIndex);
-            Assert.Equal(expectedSelectedImageKey, node.SelectedImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, node.SelectedImageKey);
 
             // Set same.
             node.SelectedImageIndex = value;
             Assert.Equal(value, node.SelectedImageIndex);
-            Assert.Equal(expectedSelectedImageKey, node.SelectedImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, node.SelectedImageKey);
 
             // Set tree view.
             using var control = new TreeView();
             control.Nodes.Add(node);
             Assert.Equal(value, node.SelectedImageIndex);
-            Assert.Equal(expectedSelectedImageKey, node.SelectedImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, node.SelectedImageKey);
             Assert.False(control.IsHandleCreated);
 
             // Add image list.
             using var imageList = new ImageList();
             control.ImageList = imageList;
             Assert.Equal(-1, node.SelectedImageIndex);
-            Assert.Equal(expectedSelectedImageKey, node.SelectedImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, node.SelectedImageKey);
             Assert.False(control.IsHandleCreated);
 
             // Add to image list.
             using var image = new Bitmap(10, 10);
             imageList.Images.Add(image);
             Assert.Equal(expectedWithImage, node.SelectedImageIndex);
-            Assert.Equal(expectedSelectedImageKey, node.SelectedImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, node.SelectedImageKey);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -3331,23 +3331,23 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(null, "", -1)]
-        [InlineData("", "", 0)]
-        [InlineData("SelectedImageKey", "SelectedImageKey", -1)]
-        public void TreeNode_SelectedImageKey_SetWithSelectedImageIndex_GetReturnsExpected(string value, string expected, int expectedSelectedImageIndex)
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("SelectedImageKey", "SelectedImageKey")]
+        public void TreeNode_SelectedImageKey_SetWithSelectedImageIndex_GetReturnsExpected(string value, string expectedSelectedImageKey)
         {
             var node = new TreeNode
             {
                 SelectedImageIndex = 0,
                 SelectedImageKey = value
             };
-            Assert.Equal(expected, node.SelectedImageKey);
-            Assert.Equal(expectedSelectedImageIndex, node.SelectedImageIndex);
+            Assert.Equal(expectedSelectedImageKey, node.SelectedImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, node.SelectedImageIndex);
 
             // Set same.
             node.SelectedImageKey = value;
-            Assert.Equal(expected, node.SelectedImageKey);
-            Assert.Equal(expectedSelectedImageIndex, node.SelectedImageIndex);
+            Assert.Equal(expectedSelectedImageKey, node.SelectedImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, node.SelectedImageIndex);
         }
 
         [WinFormsTheory]
@@ -3622,12 +3622,12 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, "StateImageKey", -1)]
-        [InlineData(0, "", 0)]
-        [InlineData(1, "", 0)]
-        [InlineData(2, "", 0)]
-        [InlineData(14, "", 0)]
-        public void TreeNode_StateImageIndex_SetWithStateImageKey_GetReturnsExpected(int value, string expectedStateImageKey, int expectedWithImage)
+        [InlineData(-1, -1)]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)]
+        [InlineData(2, 0)]
+        [InlineData(14, 0)]
+        public void TreeNode_StateImageIndex_SetWithStateImageKey_GetReturnsExpected(int value, int expectedWithImage)
         {
             var node = new TreeNode
             {
@@ -3635,32 +3635,32 @@ namespace System.Windows.Forms.Tests
                 StateImageIndex = value
             };
             Assert.Equal(value, node.StateImageIndex);
-            Assert.Equal(expectedStateImageKey, node.StateImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, node.StateImageKey);
 
             // Set same.
             node.StateImageIndex = value;
             Assert.Equal(value, node.StateImageIndex);
-            Assert.Equal(expectedStateImageKey, node.StateImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, node.StateImageKey);
 
             // Set tree view.
             using var control = new TreeView();
             control.Nodes.Add(node);
             Assert.Equal(value, node.StateImageIndex);
-            Assert.Equal(expectedStateImageKey, node.StateImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, node.StateImageKey);
             Assert.False(control.IsHandleCreated);
 
             // Add image list.
             using var imageList = new ImageList();
             control.StateImageList = imageList;
             Assert.Equal(-1, node.StateImageIndex);
-            Assert.Equal(expectedStateImageKey, node.StateImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, node.StateImageKey);
             Assert.False(control.IsHandleCreated);
 
             // Add to image list.
             using var image = new Bitmap(10, 10);
             imageList.Images.Add(image);
             Assert.Equal(expectedWithImage, node.StateImageIndex);
-            Assert.Equal(expectedStateImageKey, node.StateImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultKey, node.StateImageKey);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -4039,35 +4039,35 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(null, "", -1)]
-        [InlineData("", "", 0)]
-        [InlineData("StateImageKey", "StateImageKey", -1)]
-        public void TreeNode_StateImageKey_SetWithStateImageIndex_GetReturnsExpected(string value, string expected, int expectedStateImageIndex)
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("StateImageKey", "StateImageKey")]
+        public void TreeNode_StateImageKey_SetWithStateImageIndex_GetReturnsExpected(string value, string expectedStateImageKey)
         {
             var node = new TreeNode
             {
                 StateImageIndex = 0,
                 StateImageKey = value
             };
-            Assert.Equal(expected, node.StateImageKey);
-            Assert.Equal(expectedStateImageIndex, node.StateImageIndex);
+            Assert.Equal(expectedStateImageKey, node.StateImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, node.StateImageIndex);
 
             // Set same.
             node.StateImageKey = value;
-            Assert.Equal(expected, node.StateImageKey);
-            Assert.Equal(expectedStateImageIndex, node.StateImageIndex);
+            Assert.Equal(expectedStateImageKey, node.StateImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, node.StateImageIndex);
 
             // Set tree view.
             using var control = new TreeView();
             control.Nodes.Add(node);
-            Assert.Equal(expected, node.StateImageKey);
-            Assert.Equal(expectedStateImageIndex, node.StateImageIndex);
+            Assert.Equal(expectedStateImageKey, node.StateImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, node.StateImageIndex);
 
             // Add image list.
             using var imageList = new ImageList();
             control.StateImageList = imageList;
-            Assert.Equal(expected, node.StateImageKey);
-            Assert.Equal(-1, node.StateImageIndex);
+            Assert.Equal(expectedStateImageKey, node.StateImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, node.StateImageIndex);
         }
 
         public static IEnumerable<object[]> StateImageKey_SetWithTreeView_TestData()

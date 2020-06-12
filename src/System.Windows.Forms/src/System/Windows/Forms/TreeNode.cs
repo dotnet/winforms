@@ -988,7 +988,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedImageIndex), value, ImageList.Indexer.DefaultIndex));
                 }
 
-                if (SelectedImageIndexer.Index == value)
+                if (SelectedImageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
                 {
                     return;
                 }
@@ -1015,7 +1015,7 @@ namespace System.Windows.Forms
             get => SelectedImageIndexer.Key;
             set
             {
-                if (SelectedImageIndexer.Key == value)
+                if (SelectedImageIndexer.Key == value && !string.Equals(value, ImageList.Indexer.DefaultKey))
                 {
                     return;
                 }
@@ -1073,13 +1073,15 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (StateImageIndexer.Key != value)
+                if (StateImageIndexer.Key == value && !string.Equals(value, ImageList.Indexer.DefaultKey))
                 {
-                    StateImageIndexer.Key = value;
-                    if (treeView != null && !treeView.CheckBoxes)
-                    {
-                        UpdateNode(TVIF.STATE);
-                    }
+                    return;
+                }
+
+                StateImageIndexer.Key = value;
+                if (treeView != null && !treeView.CheckBoxes)
+                {
+                    UpdateNode(TVIF.STATE);
                 }
             }
         }
@@ -1111,7 +1113,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
                 }
 
-                if (StateImageIndexer.Index == value)
+                if (StateImageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
                 {
                     return;
                 }
