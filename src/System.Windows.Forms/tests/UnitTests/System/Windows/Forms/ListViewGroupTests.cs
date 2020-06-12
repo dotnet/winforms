@@ -853,6 +853,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ListViewGroupCollapsedState))]
+        public void ListViewGroup_CollapsedState_SetInvalid_ThrowsInvalidEnumArgumentException(ListViewGroupCollapsedState value)
+        {
+            var group = new ListViewGroup();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => group.CollapsedState = value);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ListViewGroup_Name_Set_GetReturnsExpected(string value)
         {
