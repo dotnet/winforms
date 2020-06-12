@@ -143,6 +143,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The alignment of the group footer.
         /// </summary>
+        /// <value>
+        ///  One of the <see cref="HorizontalAlignment"/> values that specifies the alignment of the footer text. The default is <see cref="HorizontalAlignment.Left"/>.
+        /// </value>
+        /// <exception cref="InvalidEnumArgumentException">
+        ///  The specified value when setting this property is not a valid <see cref="HorizontalAlignment"/> value.
+        /// </exception>
         [DefaultValue(HorizontalAlignment.Left)]
         [SRCategory(nameof(SR.CatAppearance))]
         public HorizontalAlignment FooterAlignment
@@ -168,6 +174,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Controls which <see cref="ListViewGroupCollapsedState"/> the group will appear as.
         /// </summary>
+        /// <exception cref="InvalidEnumArgumentException">
+        ///  The specified value when setting this property is not a valid <see cref="ListViewGroupCollapsedState"/> value.
+        /// </exception>
         [DefaultValue(ListViewGroupCollapsedState.Default)]
         [SRCategory(nameof(SR.CatAppearance))]
         public ListViewGroupCollapsedState CollapsedState
@@ -175,6 +184,11 @@ namespace System.Windows.Forms
             get => _collapsedState;
             set
             {
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ListViewGroupCollapsedState.Default, (int)ListViewGroupCollapsedState.Collapsed))
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ListViewGroupCollapsedState));
+                }
+
                 if (_collapsedState == value)
                 {
                     return;
