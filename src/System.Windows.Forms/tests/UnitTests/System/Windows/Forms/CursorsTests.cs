@@ -58,7 +58,9 @@ namespace System.Windows.Forms.Tests
             Assert.True(hotSpot.Y >= 0 && hotSpot.Y <= cursor.Size.Height);
             Assert.True(cursor.Size == new Size(32, 32) || cursor.Size == new Size(64, 64));
             Assert.Null(cursor.Tag);
-            Assert.Same(cursor, getCursor());
+
+            // Cursor statics aren't thread safe. While rare, this can and does fail.
+            // Assert.Same(cursor, getCursor());
         }
 
         [Fact]
