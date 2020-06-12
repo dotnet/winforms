@@ -19,6 +19,7 @@ namespace System.Windows.Forms.Tests
     using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
 
+    [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
     public class AxHostTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsTheory]

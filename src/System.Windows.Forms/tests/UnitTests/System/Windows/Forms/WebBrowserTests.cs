@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    [Collection("Sequential")]
+    [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads
     public class WebBrowserTests
     {
         [WinFormsFact]
