@@ -174,6 +174,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Controls which <see cref="ListViewGroupCollapsedState"/> the group will appear as.
         /// </summary>
+        /// <value>
+        ///  One of the <see cref="ListViewGroupCollapsedState"/> values that specifies how the group is displayed. The default is <see cref="ListViewGroupCollapsedState.Default"/>.
+        /// </value>
         /// <exception cref="InvalidEnumArgumentException">
         ///  The specified value when setting this property is not a valid <see cref="ListViewGroupCollapsedState"/> value.
         /// </exception>
