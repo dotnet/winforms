@@ -452,7 +452,7 @@ namespace System.Windows.Forms
         /// </summary>
         [TypeConverter(typeof(ImageIndexConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
-        [DefaultValue(-1)]
+        [DefaultValue(ImageList.Indexer.DefaultIndex)]
         [Localizable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRDescription(nameof(SR.ButtonImageIndexDescr))]
@@ -476,9 +476,9 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value < -1)
+                if (value < ImageList.Indexer.DefaultIndex)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
                 }
 
                 if (ImageIndex == value && value != ImageList.Indexer.DefaultIndex)
@@ -504,7 +504,7 @@ namespace System.Windows.Forms
         /// </summary>
         [TypeConverter(typeof(ImageKeyConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
-        [DefaultValue("")]
+        [DefaultValue(ImageList.Indexer.DefaultKey)]
         [Localizable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRDescription(nameof(SR.ButtonImageIndexDescr))]

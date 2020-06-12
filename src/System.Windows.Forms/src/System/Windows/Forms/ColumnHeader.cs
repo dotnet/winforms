@@ -186,7 +186,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [DefaultValue(-1)]
+        [DefaultValue(ImageList.Indexer.DefaultIndex)]
         [TypeConverter(typeof(ImageIndexConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         [RefreshProperties(RefreshProperties.Repaint)]
@@ -203,9 +203,9 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value < -1)
+                if (value < ImageList.Indexer.DefaultIndex)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
                 }
 
                 if (imageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [DefaultValue("")]
+        [DefaultValue(ImageList.Indexer.DefaultKey)]
         [TypeConverter(typeof(ImageKeyConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
         [RefreshProperties(RefreshProperties.Repaint)]
