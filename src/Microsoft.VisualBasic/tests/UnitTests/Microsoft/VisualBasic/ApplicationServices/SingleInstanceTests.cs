@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO.Pipes;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
@@ -37,34 +36,31 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             }
         }
 
-        private static Type GetHelperType()
+        private readonly dynamic _testAccessor = GetTestHelper();
+
+        private static dynamic GetTestHelper()
         {
             var assembly = typeof(Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase).Assembly;
-            return assembly.GetType("Microsoft.VisualBasic.ApplicationServices.SingleInstanceHelpers");
+            var type = assembly.GetType("Microsoft.VisualBasic.ApplicationServices.SingleInstanceHelpers");
+            return type.TestAccessor().Dynamic;
         }
 
-        private static bool TryCreatePipeServer(string pipeName, out NamedPipeServerStream pipeServer)
+        private bool TryCreatePipeServer(string pipeName, out NamedPipeServerStream pipeServer)
         {
-            var method = GetHelperType().GetMethod("TryCreatePipeServer", BindingFlags.NonPublic | BindingFlags.Static);
-            var args = new object[] { pipeName, null };
-            var result = (bool)method.Invoke(null, args);
-            pipeServer = (NamedPipeServerStream)args[1];
-            return result;
+            return _testAccessor.TryCreatePipeServer(pipeName, out pipeServer);
         }
 
-        private static Task WaitForClientConnectionsAsync(NamedPipeServerStream pipeServer, Action<string[]> callback, CancellationToken cancellationToken = default)
+        private Task WaitForClientConnectionsAsync(NamedPipeServerStream pipeServer, Action<string[]> callback, CancellationToken cancellationToken = default)
         {
-            var method = GetHelperType().GetMethod("WaitForClientConnectionsAsync", BindingFlags.NonPublic | BindingFlags.Static);
-            return (Task)method.Invoke(null, new object[] { pipeServer, callback, cancellationToken });
+            return _testAccessor.WaitForClientConnectionsAsync(pipeServer, callback, cancellationToken);
         }
 
-        private static Task SendSecondInstanceArgsAsync(string pipeName, string[] args, CancellationToken cancellationToken)
+        private Task SendSecondInstanceArgsAsync(string pipeName, string[] args, CancellationToken cancellationToken)
         {
-            var method = GetHelperType().GetMethod("SendSecondInstanceArgsAsync", BindingFlags.NonPublic | BindingFlags.Static);
-            return (Task)method.Invoke(null, new object[] { pipeName, args, cancellationToken });
+            return _testAccessor.SendSecondInstanceArgsAsync(pipeName, args, cancellationToken);
         }
 
-        private static bool SendSecondInstanceArgs(string pipeName, int timeout, string[] args)
+        private bool SendSecondInstanceArgs(string pipeName, int timeout, string[] args)
         {
             var tokenSource = new CancellationTokenSource();
             tokenSource.CancelAfter(timeout);
