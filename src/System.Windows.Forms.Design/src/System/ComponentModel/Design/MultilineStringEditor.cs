@@ -226,20 +226,12 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    RECT rect = new RECT();
-                    using ScreenDC hdc = ScreenDC.Create();
-                    IntPtr hRtbFont = Font.ToHfont();
-                    IntPtr hOldFont = Gdi32.SelectObject(hdc, hRtbFont);
+                    using var hdc = User32.GetDcScope.ScreenDC;
+                    using var font = new Gdi32.ObjectScope(Font.ToHfont());
+                    using var fontSelection = new Gdi32.SelectObjectScope(hdc, font);
 
-                    try
-                    {
-                        User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.DT.CALCRECT);
-                    }
-                    finally
-                    {
-                        Gdi32.DeleteObject(hRtbFont);
-                        Gdi32.SelectObject(hdc, hOldFont);
-                    }
+                    RECT rect = new RECT();
+                    User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.DT.CALCRECT);
                     return new Size(rect.right - rect.left + _caretPadding, rect.bottom - rect.top);
                 }
             }

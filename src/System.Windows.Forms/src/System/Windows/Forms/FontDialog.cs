@@ -429,7 +429,7 @@ namespace System.Windows.Forms
         protected unsafe override bool RunDialog(IntPtr hWndOwner)
         {
             var hookProcPtr = new User32.WNDPROCINT(HookProc);
-            using ScreenDC dc = ScreenDC.Create();
+            using var dc = User32.GetDcScope.ScreenDC;
             using Graphics graphics = Graphics.FromHdcInternal(dc);
             User32.LOGFONTW logFont = User32.LOGFONTW.FromFont(Font, graphics);
 
@@ -518,7 +518,7 @@ namespace System.Windows.Forms
 
         private void UpdateFont(ref User32.LOGFONTW lf)
         {
-            using ScreenDC dc = ScreenDC.Create();
+            using var dc = User32.GetDcScope.ScreenDC;
             using Font fontInWorldUnits = Font.FromLogFont(lf, dc);
 
             // The dialog claims its working in points (a device-independent unit),

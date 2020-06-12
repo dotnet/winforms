@@ -2901,7 +2901,7 @@ namespace System.Windows.Forms
 
         private static void SetupLogPixels(IntPtr hDC)
         {
-            using ScreenDC dc = ScreenDC.Create();
+            using var dc = User32.GetDcScope.ScreenDC;
             logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
             logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
         }

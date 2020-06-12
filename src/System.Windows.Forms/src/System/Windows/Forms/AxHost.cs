@@ -1212,7 +1212,7 @@ namespace System.Windows.Forms
         {
             if (logPixelsX == -1 || force)
             {
-                using ScreenDC dc = ScreenDC.Create();
+                using var dc = User32.GetDcScope.ScreenDC;
                 if (dc == IntPtr.Zero)
                 {
                     return HRESULT.E_FAIL;

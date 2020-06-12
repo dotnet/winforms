@@ -302,12 +302,11 @@ namespace System.Windows.Forms
             Size size = bitmap.Size;
 
             IntPtr colorMask = bitmap.GetHbitmap();
-            IntPtr hdcS = User32.GetDC(IntPtr.Zero);
-            IntPtr source = Gdi32.CreateCompatibleDC(hdcS);
-            IntPtr target = Gdi32.CreateCompatibleDC(hdcS);
-            User32.ReleaseDC(IntPtr.Zero, hdcS);
-            IntPtr previousSourceBitmap = Gdi32.SelectObject(source, monochromeMask);
-            IntPtr previousTargetBitmap = Gdi32.SelectObject(target, colorMask);
+            using var screenDC = new User32.GetDcScope(IntPtr.Zero);
+            using var sourceDC = new Gdi32.CreateDcScope(screenDC);
+            using var targetDC = new Gdi32.CreateDcScope(screenDC);
+            using var sourceBitmapSelection = new Gdi32.SelectObjectScope(sourceDC, monochromeMask);
+            using var targetBitmapSelection = new Gdi32.SelectObjectScope(targetDC, colorMask);
 
             // Now the trick is to make colorBitmap black wherever the transparent
             // color is located, but keep the original color everywhere else.
@@ -315,24 +314,19 @@ namespace System.Windows.Forms
             // to and with the inverse of the mask (ROP DSna). When going from
             // monochrome to color, Windows sets all 1 bits to the background
             // color, and all 0 bits to the foreground color.
-            //
-            Gdi32.SetBkColor(target, 0x00ffffff); // white
-            Gdi32.SetTextColor(target, 0x00000000); // black
+
+            Gdi32.SetBkColor(targetDC, 0x00ffffff);    // white
+            Gdi32.SetTextColor(targetDC, 0x00000000);  // black
             Gdi32.BitBlt(
-                target,
+                targetDC,
                 0,
                 0,
                 size.Width,
                 size.Height,
-                source,
+                sourceDC,
                 0,
                 0,
                 (Gdi32.ROP)0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
-
-            Gdi32.SelectObject(source, previousSourceBitmap);
-            Gdi32.SelectObject(target, previousTargetBitmap);
-            Gdi32.DeleteDC(source);
-            Gdi32.DeleteDC(target);
 
             return colorMask;
         }
@@ -1940,37 +1934,24 @@ namespace System.Windows.Forms
                 graphicsColor = Color.Black;
             }
 
-            IntPtr dc = User32.GetDCEx(User32.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
-            IntPtr pen;
+            using var desktopDC = new User32.GetDcScope(
+                User32.GetDesktopWindow(),
+                IntPtr.Zero,
+                User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
-            switch (style)
+            using var pen = new Gdi32.ObjectScope(style switch
             {
-                case FrameStyle.Dashed:
-                    pen = Gdi32.CreatePen(Gdi32.PS.DOT, 1, ColorTranslator.ToWin32(backColor));
-                    break;
+                FrameStyle.Dashed => Gdi32.CreatePen(Gdi32.PS.DOT, 1, ColorTranslator.ToWin32(backColor)),
+                FrameStyle.Thick => Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor)),
+                _ => IntPtr.Zero
+            });
 
-                case FrameStyle.Thick:
-                default:
-                    pen = Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor));
-                    break;
-            }
+            using var rop2Scope = new Gdi32.Rop2Scope(desktopDC, rop2);
+            using var brushSelection = new Gdi32.SelectObjectScope(desktopDC, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
+            using var penSelection = new Gdi32.SelectObjectScope(desktopDC, pen);
 
-            Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
-            IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
-            IntPtr oldPen = Gdi32.SelectObject(dc, pen);
-            Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));
-            Gdi32.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
-
-            Gdi32.SetROP2(dc, prevRop2);
-            Gdi32.SelectObject(dc, oldBrush);
-            Gdi32.SelectObject(dc, oldPen);
-
-            if (pen != IntPtr.Zero)
-            {
-                Gdi32.DeleteObject(pen);
-            }
-
-            User32.ReleaseDC(IntPtr.Zero, dc);
+            Gdi32.SetBkColor(desktopDC, ColorTranslator.ToWin32(graphicsColor));
+            Gdi32.Rectangle(desktopDC, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
         }
 
         /// <summary>
@@ -1981,21 +1962,20 @@ namespace System.Windows.Forms
         {
             Gdi32.R2 rop2 = (Gdi32.R2)GetColorRop(backColor, (int)Gdi32.R2.NOTXORPEN, (int)Gdi32.R2.XORPEN);
 
-            IntPtr dc = User32.GetDCEx(User32.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
-            IntPtr pen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(backColor));
+            using var desktopDC = new User32.GetDcScope(
+                User32.GetDesktopWindow(),
+                IntPtr.Zero,
+                User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
-            Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
-            IntPtr oldBrush = Gdi32.SelectObject(dc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
-            IntPtr oldPen = Gdi32.SelectObject(dc, pen);
+            using var pen = new Gdi32.ObjectScope(Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(backColor)));
+            using var ropScope = new Gdi32.Rop2Scope(desktopDC, rop2);
+            using var brushSelection = new Gdi32.SelectObjectScope(
+                desktopDC,
+                Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
+            using var penSelection = new Gdi32.SelectObjectScope(desktopDC, pen);
 
-            Gdi32.MoveToEx(dc, start.X, start.Y, null);
-            Gdi32.LineTo(dc, end.X, end.Y);
-
-            Gdi32.SetROP2(dc, prevRop2);
-            Gdi32.SelectObject(dc, oldBrush);
-            Gdi32.SelectObject(dc, oldPen);
-            Gdi32.DeleteObject(pen);
-            User32.ReleaseDC(IntPtr.Zero, dc);
+            Gdi32.MoveToEx(desktopDC, start.X, start.Y, null);
+            Gdi32.LineTo(desktopDC, end.X, end.Y);
         }
 
         /// <summary>
@@ -2170,19 +2150,16 @@ namespace System.Windows.Forms
                                    0x5a0049); // RasterOp.BRUSH.XorWith(RasterOp.TARGET));
             Gdi32.R2 rop2 = Gdi32.R2.NOT;
 
-            IntPtr dc = User32.GetDCEx(User32.GetDesktopWindow(), IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
-            IntPtr brush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor));
-
-            Gdi32.R2 prevRop2 = Gdi32.SetROP2(dc, rop2);
-            IntPtr oldBrush = Gdi32.SelectObject(dc, brush);
+            using var desktopDC = new User32.GetDcScope(
+                User32.GetDesktopWindow(),
+                IntPtr.Zero,
+                User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
+            using var brush = new Gdi32.ObjectScope(Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor)));
+            using var ropScope = new Gdi32.Rop2Scope(desktopDC, rop2);
+            using var brushSelection = new Gdi32.SelectObjectScope(desktopDC, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.
-            Gdi32.PatBlt(dc, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
-
-            Gdi32.SetROP2(dc, prevRop2);
-            Gdi32.SelectObject(dc, oldBrush);
-            Gdi32.DeleteObject(brush);
-            User32.ReleaseDC(IntPtr.Zero, dc);
+            Gdi32.PatBlt(desktopDC, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, rop3);
         }
 
         // Converts the font into one where Font.Unit = Point.

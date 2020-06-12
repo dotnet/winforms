@@ -14,7 +14,7 @@ namespace System
     {
         static GdiHelper()
         {
-            using ScreenDC dc = ScreenDC.Create();
+            using var dc = User32.GetDcScope.ScreenDC;
             LogicalPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
             LogicalPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
         }

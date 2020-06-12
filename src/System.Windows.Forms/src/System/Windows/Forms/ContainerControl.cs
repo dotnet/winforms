@@ -709,51 +709,38 @@ namespace System.Windows.Forms
 
             // Windows uses CreateCompatibleDC(NULL) to get a memory DC for
             // the monitor the application is currently on.
-            IntPtr dc = Gdi32.CreateCompatibleDC(IntPtr.Zero);
-            if (dc == IntPtr.Zero)
+
+            using var dc = new Gdi32.CreateDcScope(IntPtr.Zero);
+            if (dc.HDC == IntPtr.Zero)
             {
                 throw new Win32Exception();
             }
 
-            HandleRef hdc = new HandleRef(this, dc);
+            // We clone the Windows scaling function here as closely as
+            // possible. They use textmetric for height, and textmetric
+            // for width of fixed width fonts. For variable width fonts
+            // they use GetTextExtentPoint32 and pass in a long a-Z string.
+            // We must do the same here if our dialogs are to scale in a
+            // similar fashion.
 
-            try
+            using var fontSelection = new Gdi32.SelectObjectScope(dc, FontHandle);
+
+            var tm = new Gdi32.TEXTMETRICW();
+            Gdi32.GetTextMetricsW(dc, ref tm);
+
+            retval.Height = tm.tmHeight;
+
+            if ((tm.tmPitchAndFamily & Gdi32.TMPF.FIXED_PITCH) != 0)
             {
-                // We clone the Windows scaling function here as closely as
-                // possible. They use textmetric for height, and textmetric
-                // for width of fixed width fonts. For variable width fonts
-                // they use GetTextExtentPoint32 and pass in a long a-Z string.
-                // We must do the same here if our dialogs are to scale in a
-                // similar fashion.
-                IntPtr hfontOld = Gdi32.SelectObject(hdc, new HandleRef(this, FontHandle));
+                var size = new Size();
+                Gdi32.GetTextExtentPoint32W(dc, FontMeasureString, FontMeasureString.Length, ref size);
 
-                try
-                {
-                    var tm = new Gdi32.TEXTMETRICW();
-                    Gdi32.GetTextMetricsW(hdc, ref tm);
-
-                    retval.Height = tm.tmHeight;
-
-                    if ((tm.tmPitchAndFamily & Gdi32.TMPF.FIXED_PITCH) != 0)
-                    {
-                        var size = new Size();
-                        Gdi32.GetTextExtentPoint32W(hdc, FontMeasureString, FontMeasureString.Length, ref size);
-                        // Note: intentional integer round off here for Win32 compat
-                        retval.Width = (int)Math.Round(size.Width / ((float)FontMeasureString.Length));
-                    }
-                    else
-                    {
-                        retval.Width = tm.tmAveCharWidth;
-                    }
-                }
-                finally
-                {
-                    Gdi32.SelectObject(dc, hfontOld);
-                }
+                // Note: intentional integer round off here for Win32 compat
+                retval.Width = (int)Math.Round(size.Width / ((float)FontMeasureString.Length));
             }
-            finally
+            else
             {
-                Gdi32.DeleteDC(dc);
+                retval.Width = tm.tmAveCharWidth;
             }
 
             return retval;
