@@ -6358,7 +6358,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
         <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
-        <target state="new">Event raised when the CollapsedState property of a ListViewGroup changes.</target>
+        <target state="translated">Das ausgelöste Ereignis, wenn sich die CollapsedState-Eigenschaft für ein ListViewGroup-Element ändert.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6379,6 +6379,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="ListViewGroupNameDescr">
         <source>The name of this group.</source>
         <target state="translated">Der Name dieser Gruppe.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
@@ -9193,7 +9198,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="TaskDialogNavigationNotCompleted">
         <source>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</source>
-        <target state="translated">Die Navigation des Aufgabendialogfelds wurde noch nicht abgeschlossen. Warten Sie, bis das Ereignis "{0}" auftritt.</target>
+        <target state="translated">Die Aufgabendialogfeldnavigation wurde noch nicht abgeschlossen. Warten Sie, bis das Ereignis "{0}" auftritt.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogOnlySingleRadioButtonCanBeChecked">

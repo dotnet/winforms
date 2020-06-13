@@ -10,10 +10,6 @@ namespace System.Windows.Forms.Tests
 {
     public class ListBoxIntegerCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        // Disable the warning "Do not use equality check to check for collection size"
-        // because Assert.Empty/NotEmpty/Single use IEnumerable.GetEnumerator internally,
-        // but we want to verify the actual return value of Count or ICollection.Count.
-#pragma warning disable xUnit2013
         [WinFormsFact]
         public void ListBoxIntegerCollection_Ctor_ListBox()
         {
@@ -2747,6 +2743,5 @@ namespace System.Windows.Forms.Tests
             collection.Add(1);
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection.RemoveAt(index));
         }
-#pragma warning restore xUnit2013
     }
 }

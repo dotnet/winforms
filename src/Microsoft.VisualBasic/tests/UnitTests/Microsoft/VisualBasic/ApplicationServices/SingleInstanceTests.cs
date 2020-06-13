@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO.Pipes;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
@@ -37,38 +36,31 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             }
         }
 
-        // Should be able to test internal methods with [InternalsVisibleTo] rather than reflection.
-        private static Type GetHelperType()
+        private readonly dynamic _testAccessor = GetTestHelper();
+
+        private static dynamic GetTestHelper()
         {
             var assembly = typeof(Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase).Assembly;
-            return assembly.GetType("Microsoft.VisualBasic.ApplicationServices.SingleInstanceHelpers");
+            var type = assembly.GetType("Microsoft.VisualBasic.ApplicationServices.SingleInstanceHelpers");
+            return type.TestAccessor().Dynamic;
         }
 
-        // Should be able to test internal methods with [InternalsVisibleTo] rather than reflection.
-        private static bool TryCreatePipeServer(string pipeName, out NamedPipeServerStream pipeServer)
+        private bool TryCreatePipeServer(string pipeName, out NamedPipeServerStream pipeServer)
         {
-            var method = GetHelperType().GetMethod("TryCreatePipeServer", BindingFlags.NonPublic | BindingFlags.Static);
-            var args = new object[] { pipeName, null };
-            var result = (bool)method.Invoke(null, args);
-            pipeServer = (NamedPipeServerStream)args[1];
-            return result;
+            return _testAccessor.TryCreatePipeServer(pipeName, out pipeServer);
         }
 
-        // Should be able to test internal methods with [InternalsVisibleTo] rather than reflection.
-        private static Task WaitForClientConnectionsAsync(NamedPipeServerStream pipeServer, Action<string[]> callback, CancellationToken cancellationToken = default)
+        private Task WaitForClientConnectionsAsync(NamedPipeServerStream pipeServer, Action<string[]> callback, CancellationToken cancellationToken = default)
         {
-            var method = GetHelperType().GetMethod("WaitForClientConnectionsAsync", BindingFlags.NonPublic | BindingFlags.Static);
-            return (Task)method.Invoke(null, new object[] { pipeServer, callback, cancellationToken });
+            return _testAccessor.WaitForClientConnectionsAsync(pipeServer, callback, cancellationToken);
         }
 
-        // Should be able to test internal methods with [InternalsVisibleTo] rather than reflection.
-        private static Task SendSecondInstanceArgsAsync(string pipeName, string[] args, CancellationToken cancellationToken)
+        private Task SendSecondInstanceArgsAsync(string pipeName, string[] args, CancellationToken cancellationToken)
         {
-            var method = GetHelperType().GetMethod("SendSecondInstanceArgsAsync", BindingFlags.NonPublic | BindingFlags.Static);
-            return (Task)method.Invoke(null, new object[] { pipeName, args, cancellationToken });
+            return _testAccessor.SendSecondInstanceArgsAsync(pipeName, args, cancellationToken);
         }
 
-        private static bool SendSecondInstanceArgs(string pipeName, int timeout, string[] args)
+        private bool SendSecondInstanceArgs(string pipeName, int timeout, string[] args)
         {
             var tokenSource = new CancellationTokenSource();
             tokenSource.CancelAfter(timeout);
@@ -257,7 +249,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 var receivedArgs = new ReceivedArgs();
                 WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
 
-                sendData(pipeName, new string[0]); // valid
+                sendData(pipeName, Array.Empty<string>()); // valid
                 sendData(pipeName, (int)3); // invalid
                 sendData(pipeName, new[] { "ABC" }); // valid
                 sendData(pipeName, new int[] { 1, 2, 3 }); // invalid
@@ -266,7 +258,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
 
                 FlushLastConnection(pipeName);
 
-                Assert.Equal(new[] { new string[0], new[] { "ABC" }, new[] { "", "" } }, receivedArgs.Freeze());
+                Assert.Equal(new[] { Array.Empty<string>(), new[] { "ABC" }, new[] { "", "" } }, receivedArgs.Freeze());
             }
 
             static void sendData<T>(string pipeName, T obj)
@@ -296,7 +288,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
 
                 // Send valid args.
-                Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, new string[0]));
+                Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, Array.Empty<string>()));
                 Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "1", "ABC" }));
 
                 // Send bad args: close client after connect.
@@ -310,7 +302,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
 
                 FlushLastConnection(pipeName);
 
-                Assert.Equal(new[] { new string[0], new[] { "1", "ABC" }, new[] { "DEF", "2" } }, receivedArgs.Freeze());
+                Assert.Equal(new[] { Array.Empty<string>(), new[] { "1", "ABC" }, new[] { "DEF", "2" } }, receivedArgs.Freeze());
             }
 
             static void closeAfterConnect(string pipeName)

@@ -39,7 +39,6 @@ namespace System.Windows.Forms
             TYMED.TYMED_GDI};
 
         private readonly IDataObject innerData = null;
-        internal bool RestrictedFormats { get; set; }
 
         // We use this to identify that a stream is actually a serialized object.  On read,
         // we don't know if the contents of a stream were saved "raw" or if the stream is really
@@ -874,9 +873,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Saves a list of files out to the handle in HDROP format.
         /// </summary>
-        private HRESULT SaveFileListToHandle(IntPtr handle, string[] files)
+        private unsafe HRESULT SaveFileListToHandle(IntPtr handle, string[] files)
         {
-            if (files == null || files.Length < 1)
+            if (files == null || files.Length == 0)
             {
                 return HRESULT.S_OK;
             }
@@ -886,18 +885,21 @@ namespace System.Windows.Forms
                 return HRESULT.E_INVALIDARG;
             }
 
-            IntPtr currentPtr = IntPtr.Zero;
-            uint baseStructSize = 4 + 8 + 4 + 4;
-            uint sizeInBytes = baseStructSize;
+            // CF_HDROP consists of a DROPFILES struct followed by an list of strings
+            // including the terminating null character. An additional null character
+            // is appended to the final string to terminate the array.
+            // E.g. if the files c:\temp1.txt and c:\temp2.txt are being transferred,
+            // the character array is: "c:\temp1.txt\0c:\temp2.txt\0\0"
 
-            // First determine the size of the array
+            // Determine the size of the data structure.
+            uint sizeInBytes = (uint)sizeof(Shell32.DROPFILES);
             for (int i = 0; i < files.Length; i++)
             {
                 sizeInBytes += ((uint)files[i].Length + 1) * 2;
             }
             sizeInBytes += 2;
 
-            // Alloc the Win32 memory
+            // Allocate the Win32 memory
             IntPtr newHandle = Kernel32.GlobalReAlloc(
                 handle,
                 sizeInBytes,
@@ -913,24 +915,31 @@ namespace System.Windows.Forms
                 return HRESULT.E_OUTOFMEMORY;
             }
 
-            currentPtr = basePtr;
+            // Write out the DROPFILES struct.
+            Shell32.DROPFILES* pDropFiles = (Shell32.DROPFILES*)basePtr;
+            pDropFiles->pFiles = (uint)sizeof(Shell32.DROPFILES);
+            pDropFiles->pt = Point.Empty;
+            pDropFiles->fNC = BOOL.FALSE;
+            pDropFiles->fWide = BOOL.TRUE;
 
-            // Write out the struct...
-            int[] structData = new int[] { (int)baseStructSize, 0, 0, 0, unchecked((int)0xFFFFFFFF) };
-            Marshal.Copy(structData, 0, currentPtr, structData.Length);
-            currentPtr = (IntPtr)((long)currentPtr + baseStructSize);
+            char* dataPtr = (char*)(basePtr + (int)pDropFiles->pFiles);
 
             // Write out the strings.
             for (int i = 0; i < files.Length; i++)
             {
-                UnsafeNativeMethods.CopyMemoryW(currentPtr, files[i], files[i].Length * 2);
-                currentPtr = (IntPtr)((long)currentPtr + (files[i].Length * 2));
-                Marshal.Copy(new byte[] { 0, 0 }, 0, currentPtr, 2);
-                currentPtr = (IntPtr)((long)currentPtr + 2);
+                int bytesToCopy = files[i].Length * 2;
+                fixed (char* pFile = files[i])
+                {
+                    Buffer.MemoryCopy(pFile, dataPtr, bytesToCopy, bytesToCopy);
+                }
+
+                dataPtr = (char*)((IntPtr)dataPtr + bytesToCopy);
+                *dataPtr = '\0';
+                dataPtr++;
             }
 
-            Marshal.Copy(new char[] { '\0' }, 0, currentPtr, 1);
-            currentPtr = (IntPtr)((long)currentPtr + 2);
+            *dataPtr = '\0';
+            dataPtr++;
 
             Kernel32.GlobalUnlock(newHandle);
             return HRESULT.S_OK;
@@ -940,12 +949,13 @@ namespace System.Windows.Forms
         ///  Save string to handle. If unicode is set to true
         ///  then the string is saved as Unicode, else it is saves as DBCS.
         /// </summary>
-        private HRESULT SaveStringToHandle(IntPtr handle, string str, bool unicode)
+        private unsafe HRESULT SaveStringToHandle(IntPtr handle, string str, bool unicode)
         {
             if (handle == IntPtr.Zero)
             {
                 return HRESULT.E_INVALIDARG;
             }
+
             IntPtr newHandle = IntPtr.Zero;
             if (unicode)
             {
@@ -959,78 +969,73 @@ namespace System.Windows.Forms
                     return HRESULT.E_OUTOFMEMORY;
                 }
 
-                IntPtr ptr = Kernel32.GlobalLock(newHandle);
-                if (ptr == IntPtr.Zero)
+                char* ptr = (char*)Kernel32.GlobalLock(newHandle);
+                if (ptr == null)
                 {
                     return HRESULT.E_OUTOFMEMORY;
                 }
 
-                char[] chars = str.ToCharArray(0, str.Length);
-                UnsafeNativeMethods.CopyMemoryW(ptr, chars, chars.Length * 2);
+                var data = new Span<char>(ptr, str.Length + 1);
+                str.AsSpan().CopyTo(data);
+                data[str.Length] = '\0'; // Null terminator.
             }
             else
             {
-                int pinvokeSize = UnsafeNativeMethods.WideCharToMultiByte(0 /*CP_ACP*/, 0, str, str.Length, null, 0, IntPtr.Zero, IntPtr.Zero);
-
-                byte[] strBytes = new byte[pinvokeSize];
-                UnsafeNativeMethods.WideCharToMultiByte(0 /*CP_ACP*/, 0, str, str.Length, strBytes, strBytes.Length, IntPtr.Zero, IntPtr.Zero);
-
-                newHandle = Kernel32.GlobalReAlloc(
-                    handle,
-                    (uint)pinvokeSize + 1,
-
-                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
-                if (newHandle == IntPtr.Zero)
+                fixed (char* pStr = str)
                 {
-                    return HRESULT.E_OUTOFMEMORY;
-                }
+                    int pinvokeSize = Kernel32.WideCharToMultiByte(Kernel32.CP.ACP, 0, pStr, str.Length, null, 0, IntPtr.Zero, null);
+                    newHandle = Kernel32.GlobalReAlloc(
+                        handle,
+                        (uint)pinvokeSize + 1,
+                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
+                    if (newHandle == IntPtr.Zero)
+                    {
+                        return HRESULT.E_OUTOFMEMORY;
+                    }
 
-                IntPtr ptr = Kernel32.GlobalLock(newHandle);
-                if (ptr == IntPtr.Zero)
-                {
-                    return HRESULT.E_OUTOFMEMORY;
-                }
+                    byte* ptr = (byte*)Kernel32.GlobalLock(newHandle);
+                    if (ptr == null)
+                    {
+                        return HRESULT.E_OUTOFMEMORY;
+                    }
 
-                UnsafeNativeMethods.CopyMemory(ptr, strBytes, pinvokeSize);
-                Marshal.Copy(new byte[] { 0 }, 0, (IntPtr)((long)ptr + pinvokeSize), 1);
+                    Kernel32.WideCharToMultiByte(Kernel32.CP.ACP, 0, pStr, str.Length, ptr, pinvokeSize, IntPtr.Zero, null);
+                    ptr[pinvokeSize] = 0; // Null terminator
+                }
             }
 
-            if (newHandle != IntPtr.Zero)
-            {
-                Kernel32.GlobalUnlock(newHandle);
-            }
+            Kernel32.GlobalUnlock(newHandle);
             return HRESULT.S_OK;
         }
 
-        private HRESULT SaveHtmlToHandle(IntPtr handle, string str)
+        private unsafe HRESULT SaveHtmlToHandle(IntPtr handle, string str)
         {
             if (handle == IntPtr.Zero)
             {
                 return HRESULT.E_INVALIDARG;
             }
-            IntPtr newHandle = IntPtr.Zero;
 
-            UTF8Encoding encoding = new UTF8Encoding();
-            byte[] bytes = encoding.GetBytes(str);
-            newHandle = Kernel32.GlobalReAlloc(
+            int byteLength = Encoding.UTF8.GetByteCount(str);
+            IntPtr newHandle = Kernel32.GlobalReAlloc(
                 handle,
-                (uint)bytes.Length + 1,
+                (uint)byteLength + 1,
                 Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT);
             if (newHandle == IntPtr.Zero)
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
 
-            IntPtr ptr = Kernel32.GlobalLock(newHandle);
-            if (ptr == IntPtr.Zero)
+            byte* ptr = (byte*)Kernel32.GlobalLock(newHandle);
+            if (ptr == null)
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
 
             try
             {
-                UnsafeNativeMethods.CopyMemory(ptr, bytes, bytes.Length);
-                Marshal.Copy(new byte[] { 0 }, 0, (IntPtr)((long)ptr + bytes.Length), 1);
+                var span = new Span<byte>(ptr, byteLength + 1);
+                Encoding.UTF8.GetBytes(str, span);
+                span[byteLength] = 0; // Null terminator
             }
             finally
             {

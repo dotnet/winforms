@@ -25,6 +25,8 @@ namespace System.Windows.Forms
         private string? _footer;
         private HorizontalAlignment _footerAlignment = HorizontalAlignment.Left;
         private ListViewGroupCollapsedState _collapsedState = ListViewGroupCollapsedState.Default;
+        private string? _subtitle;
+        private string? _taskLink;
 
         private ListView.ListViewItemCollection? _items;
 
@@ -141,6 +143,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The alignment of the group footer.
         /// </summary>
+        /// <value>
+        ///  One of the <see cref="HorizontalAlignment"/> values that specifies the alignment of the footer text. The default is <see cref="HorizontalAlignment.Left"/>.
+        /// </value>
+        /// <exception cref="InvalidEnumArgumentException">
+        ///  The specified value when setting this property is not a valid <see cref="HorizontalAlignment"/> value.
+        /// </exception>
         [DefaultValue(HorizontalAlignment.Left)]
         [SRCategory(nameof(SR.CatAppearance))]
         public HorizontalAlignment FooterAlignment
@@ -166,6 +174,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Controls which <see cref="ListViewGroupCollapsedState"/> the group will appear as.
         /// </summary>
+        /// <value>
+        ///  One of the <see cref="ListViewGroupCollapsedState"/> values that specifies how the group is displayed. The default is <see cref="ListViewGroupCollapsedState.Default"/>.
+        /// </value>
+        /// <exception cref="InvalidEnumArgumentException">
+        ///  The specified value when setting this property is not a valid <see cref="ListViewGroupCollapsedState"/> value.
+        /// </exception>
         [DefaultValue(ListViewGroupCollapsedState.Default)]
         [SRCategory(nameof(SR.CatAppearance))]
         public ListViewGroupCollapsedState CollapsedState
@@ -173,12 +187,57 @@ namespace System.Windows.Forms
             get => _collapsedState;
             set
             {
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ListViewGroupCollapsedState.Default, (int)ListViewGroupCollapsedState.Collapsed))
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ListViewGroupCollapsedState));
+                }
+
                 if (_collapsedState == value)
                 {
                     return;
                 }
 
                 _collapsedState = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  The text displayed in the group subtitle.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [AllowNull]
+        public string Subtitle
+        {
+            get => _subtitle ?? string.Empty;
+            set
+            {
+                if (_subtitle == value)
+                {
+                    return;
+                }
+
+                _subtitle = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  The name of the task link displayed in the group header.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [AllowNull]
+        public string TaskLink
+        {
+            get => _taskLink ?? string.Empty;
+            set
+            {
+                if (value == _taskLink)
+                {
+                    return;
+                }
+
+                _taskLink = value;
                 UpdateListView();
             }
         }

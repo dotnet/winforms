@@ -1,5 +1,0 @@
-Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException
-Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New() -> Void
-Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New(info As System.Runtime.Serialization.SerializationInfo, context As System.Runtime.Serialization.StreamingContext) -> Void
-Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New(message As String) -> Void
-Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New(message As String, inner As System.Exception) -> Void

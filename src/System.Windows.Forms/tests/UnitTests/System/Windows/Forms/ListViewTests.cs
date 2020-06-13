@@ -461,7 +461,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(BackColor_Set_TestData))]
         public void ListView_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var control = new ListView
+            using var control = new ListView
             {
                 BackColor = value
             };
@@ -484,7 +484,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(BackColor_SetWithHandle_TestData))]
         public void ListView_BackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
         {
-            var control = new ListView();
+            using var control = new ListView();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -522,7 +522,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ListView_BackColor_SetWithHandler_CallsBackColorChanged()
         {
-            var control = new ListView();
+            using var control = new ListView();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -558,7 +558,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ListView_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
-            var control = new SubListView
+            using var control = new SubListView
             {
                 BackgroundImageLayout = value
             };
@@ -576,7 +576,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ListView_BackgroundImageLayout_SetWithHandler_CallsBackgroundImageLayoutChanged()
         {
-            var control = new ListView();
+            using var control = new ListView();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -612,7 +612,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void ListView_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
-            var control = new ListView();
+            using var control = new ListView();
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
         }
 
@@ -1096,7 +1096,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListView_DoubleBuffered_Get_ReturnsExpected(bool value)
         {
-            var control = new SubListView();
+            using var control = new SubListView();
             control.SetStyle(ControlStyles.OptimizedDoubleBuffer, value);
             Assert.Equal(value, control.DoubleBuffered);
         }
@@ -1105,7 +1105,7 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListView_DoubleBuffered_Set_GetReturnsExpected(bool value)
         {
-            var control = new SubListView
+            using var control = new SubListView
             {
                 DoubleBuffered = value
             };
@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(false, 0)]
         public void ListView_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
         {
-            var control = new SubListView();
+            using var control = new SubListView();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1177,7 +1177,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(FocusedItem_Set_TestData))]
         public void ListView_FocusedItem_Set_GetReturnsExpected(ListViewItem value, bool? expectedFocused)
         {
-            var control = new SubListView
+            using var control = new SubListView
             {
                 FocusedItem = value
             };
@@ -1196,7 +1196,7 @@ namespace System.Windows.Forms.Tests
         public void ListView_FocusedItem_SetChild_GetReturnsExpected()
         {
             var value = new ListViewItem();
-            var control = new SubListView();
+            using var control = new SubListView();
             control.Items.Add(value);
 
             control.FocusedItem = value;
@@ -1221,7 +1221,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(FocusedItem_Set_TestData))]
         public void ListView_FocusedItem_SetWithHandle_GetReturnsExpected(ListViewItem value, bool? expectedFocused)
         {
-            var control = new SubListView();
+            using var control = new SubListView();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             control.FocusedItem = value;
@@ -1238,7 +1238,7 @@ namespace System.Windows.Forms.Tests
         public void ListView_FocusedItem_SetChildWithHandle_GetReturnsExpected()
         {
             var value = new ListViewItem();
-            var control = new SubListView();
+            using var control = new SubListView();
             control.Items.Add(value);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -1270,7 +1270,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ForeColor_Set_TestData))]
         public void ListView_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
-            var control = new ListView
+            using var control = new ListView
             {
                 ForeColor = value
             };
@@ -1296,7 +1296,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ForeColor_SetWithHandle_TestData))]
         public void ListView_ForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected, int expectedInvalidatedCallCount)
         {
-            var control = new ListView();
+            using var control = new ListView();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -1334,7 +1334,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ListView_ForeColor_SetWithHandler_CallsForeColorChanged()
         {
-            var control = new ListView();
+            using var control = new ListView();
             int callCount = 0;
             EventHandler handler = (sender, e) =>
             {
@@ -1620,7 +1620,9 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new ListView();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((IntPtr)0xFFFFFFFF, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTBKCOLOR));
+
+            IntPtr expected = IntPtr.Size == 8 ? (IntPtr)0xFFFFFFFF : (IntPtr)(-1);
+            Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTBKCOLOR));
         }
 
         [WinFormsFact]

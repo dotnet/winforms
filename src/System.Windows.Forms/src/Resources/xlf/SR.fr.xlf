@@ -6358,7 +6358,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
         <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
-        <target state="new">Event raised when the CollapsedState property of a ListViewGroup changes.</target>
+        <target state="translated">Événement déclenché quand la propriété CollapsedState d'un ListViewGroup change.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6379,6 +6379,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="ListViewGroupNameDescr">
         <source>The name of this group.</source>
         <target state="translated">Nom de ce groupe.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
@@ -9088,17 +9093,17 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateClosedDialog">
         <source>Cannot navigate the dialog when it has already closed.</source>
-        <target state="translated">Impossible de naviguer dans la boîte de dialogue quand elle est déjà fermée.</target>
+        <target state="translated">Impossible de naviguer vers une autre page de la boîte de dialogue quand elle est déjà fermée.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
         <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
-        <target state="translated">Impossible de naviguer dans la boîte de dialogue depuis un gestionnaire d'événements appelé à partir de la navigation.</target>
+        <target state="translated">Impossible de naviguer vers une autre page de la boîte de dialogue depuis un gestionnaire d'événements appelé au sein de la navigation.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
         <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
-        <target state="translated">Impossible de naviguer dans la boîte de dialogue à partir de l'événement {0} de l'une des cases d'option de la boîte de dialogue de tâche active.</target>
+        <target state="translated">Impossible de naviguer vers une autre page de la boîte de dialogue à partir de l'événement {0} de l'une des cases d'option de la boîte de dialogue de tâche active.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
@@ -9143,7 +9148,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
         <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
-        <target state="translated">Impossible de manipuler la boîte de dialogue de tâche juste après avoir navigué dans celle-ci. Attendez que l'événement {0} de la page suivante se produise.</target>
+        <target state="translated">Impossible de manipuler la boîte de dialogue de tâche juste après avoir navigué vers une autre page de cette boîte de dialogue. Attendez que l'événement {0} de la page suivante se produise.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateIconType">
@@ -9193,7 +9198,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TaskDialogNavigationNotCompleted">
         <source>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</source>
-        <target state="translated">La navigation de la boîte de dialogue de tâche n'a pas encore eu lieu. Attendez que l'événement {0} se produise.</target>
+        <target state="translated">La navigation vers une autre page de la boîte de dialogue de tâche n'a pas encore eu lieu. Attendez que l'événement {0} se produise.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogOnlySingleRadioButtonCanBeChecked">

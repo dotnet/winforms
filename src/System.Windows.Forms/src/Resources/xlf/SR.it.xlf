@@ -5079,7 +5079,7 @@ Sostituirlo?</target>
       </trans-unit>
       <trans-unit id="FormAutoScaleDescr">
         <source>If set to true, the form will automatically scale with the screen font.</source>
-        <target state="translated">Se impostato su true, il form verrà automaticamente scalato in relazione al tipo di carattere utilizzato per lo schermo.</target>
+        <target state="translated">Se impostato su true, il form verrà automaticamente scalato in relazione al tipo di carattere usato per lo schermo.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormAutoScrollDescr">
@@ -6358,7 +6358,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
         <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
-        <target state="new">Event raised when the CollapsedState property of a ListViewGroup changes.</target>
+        <target state="translated">Evento generato quando la proprietà CollapsedState di un elemento ListViewGroup cambia.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6379,6 +6379,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="ListViewGroupNameDescr">
         <source>The name of this group.</source>
         <target state="translated">Il nome del gruppo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
@@ -9088,22 +9093,22 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateClosedDialog">
         <source>Cannot navigate the dialog when it has already closed.</source>
-        <target state="translated">Non è possibile spostare la finestra di dialogo se è già chiusa.</target>
+        <target state="translated">Non è possibile passare a un'altra pagina della finestra di dialogo se è già stata chiusa.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
         <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
-        <target state="translated">Non è possibile passare alla finestra di dialogo da un gestore dell'evento chiamato all'interno della struttura di spostamento.</target>
+        <target state="translated">Non è possibile passare a un'altra pagina della finestra di dialogo da un gestore dell'evento chiamato all'interno della struttura di spostamento.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
         <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
-        <target state="translated">Non è possibile passare alla finestra di dialogo dall'interno dell'evento {0} di uno dei pulsanti di opzione della finestra di dialogo attività corrente.</target>
+        <target state="translated">Non è possibile passare a un'altra pagina della finestra di dialogo dall'interno dell'evento {0} di uno dei pulsanti di opzione della finestra di dialogo attività corrente.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
         <source>Cannot navigate from a page not bound to a dialog.</source>
-        <target state="translated">Non è possibile spostarsi da una pagina non associata a una finestra di dialogo.</target>
+        <target state="translated">Non è possibile passare a un'altra pagina da una pagina non associata a una finestra di dialogo.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
@@ -9143,7 +9148,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
         <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
-        <target state="translated">Non è possibile modificare la finestra di dialogo attività subito dopo essere passati ad essa. Attendere che si verifichi l'evento {0} della pagina successiva.</target>
+        <target state="translated">Non è possibile modificare la finestra di dialogo attività subito dopo essere passati a una pagina diversa. Attendere che si verifichi l'evento {0} della pagina successiva.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateIconType">

@@ -12,10 +12,6 @@ namespace System.Windows.Forms.Tests
 {
     public class ListBoxObjectCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        // Disable the warning "Do not use equality check to check for collection size"
-        // because Assert.Empty/NotEmpty/Single use IEnumerable.GetEnumerator internally,
-        // but we want to verify the actual return value of Count or ICollection.Count.
-#pragma warning disable xUnit2013
         [WinFormsFact]
         public void ListBoxObjectCollection_Ctor_ListBox()
         {
@@ -12148,6 +12144,5 @@ namespace System.Windows.Forms.Tests
                 base.WndProc(ref m);
             }
         }
-#pragma warning restore xUnit2013
     }
 }

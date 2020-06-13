@@ -32,17 +32,11 @@ namespace System.Resources
         /// <summary>
         ///  Gets the default reader type associated with this set.
         /// </summary>
-        public override Type GetDefaultReader()
-        {
-            return typeof(ResXResourceReader);
-        }
+        public override Type GetDefaultReader() => typeof(ResXResourceReader);
 
         /// <summary>
         ///  Gets the default writer type associated with this set.
         /// </summary>
-        public override Type GetDefaultWriter()
-        {
-            return typeof(ResXResourceWriter);
-        }
+        public override Type GetDefaultWriter() => typeof(ResXResourceWriter);
     }
 }

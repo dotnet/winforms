@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="AppModel_SingleInstanceCantConnect">
         <source>This single-instance application could not connect to the original instance.</source>
-        <target state="new">This single-instance application could not connect to the original instance.</target>
+        <target state="translated">이 단일 인스턴스 응용 프로그램을 원본 인스턴스에 연결할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="AppModel_SplashAndMainFormTheSame">

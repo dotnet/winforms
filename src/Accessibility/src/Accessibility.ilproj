@@ -14,4 +14,6 @@
                       ReferenceOutputAssembly="false"
                       OutputItemType="ILResourceReference" />
   </ItemGroup>
+
+  <Target Name="CompileDesignTime" />
 </Project>

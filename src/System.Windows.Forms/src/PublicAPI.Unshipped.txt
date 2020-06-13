@@ -1,12 +1,6 @@
-System.Windows.Forms.ListViewGroupCollapsedState.Default = 0 -> System.Windows.Forms.ListViewGroupCollapsedState
-System.Windows.Forms.VisualStyles.FontProperty.TextFont = 210 -> System.Windows.Forms.VisualStyles.FontProperty
-System.Windows.Forms.ListView.GroupCollapsedStateChanged -> System.EventHandler<System.Windows.Forms.ListViewGroupEventArgs>
-System.Windows.Forms.ListViewGroup.CollapsedState.get -> System.Windows.Forms.ListViewGroupCollapsedState
-System.Windows.Forms.ListViewGroup.CollapsedState.set -> void
-System.Windows.Forms.ListViewGroupCollapsedState
-System.Windows.Forms.ListViewGroupCollapsedState.Collapsed = 2 -> System.Windows.Forms.ListViewGroupCollapsedState
-System.Windows.Forms.ListViewGroupCollapsedState.Expanded = 1 -> System.Windows.Forms.ListViewGroupCollapsedState
-System.Windows.Forms.ListViewGroupEventArgs
-System.Windows.Forms.ListViewGroupEventArgs.GroupIndex.get -> int
-System.Windows.Forms.ListViewGroupEventArgs.ListViewGroupEventArgs(int groupIndex) -> void
-~virtual System.Windows.Forms.ListView.OnGroupCollapsedStateChanged(System.Windows.Forms.ListViewGroupEventArgs e) -> void
+System.Windows.Forms.ListViewGroup.Subtitle.get -> string!
+System.Windows.Forms.ListViewGroup.Subtitle.set -> void
+System.Windows.Forms.ListView.GroupTaskLinkClick -> System.EventHandler<System.Windows.Forms.ListViewGroupEventArgs>
+System.Windows.Forms.ListViewGroup.TaskLink.get -> string!
+System.Windows.Forms.ListViewGroup.TaskLink.set -> void
+~virtual System.Windows.Forms.ListView.OnGroupTaskLinkClick(System.Windows.Forms.ListViewGroupEventArgs e) -> void

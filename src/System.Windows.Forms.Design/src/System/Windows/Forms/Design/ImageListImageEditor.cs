@@ -105,10 +105,9 @@ namespace System.Windows.Forms.Design
             byte[] buffer = new byte[stream.Length];
             stream.Read(buffer, 0, (int)stream.Length);
 
-            using (MemoryStream ms = new MemoryStream(buffer))
-            {
-                return ImageListImage.ImageListImageFromStream(ms, imageIsIcon);
-            }
+            // The created image will take over ownership of the stream.
+            MemoryStream ms = new MemoryStream(buffer);
+            return ImageListImage.ImageListImageFromStream(ms, imageIsIcon);
         }
 
         /// <summary>

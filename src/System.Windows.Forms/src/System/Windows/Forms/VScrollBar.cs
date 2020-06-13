@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -39,10 +37,8 @@ namespace System.Windows.Forms
                 {
                     return new Size(SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi), LogicalToDeviceUnits(DefaultHeight));
                 }
-                else
-                {
-                    return new Size(SystemInformation.VerticalScrollBarWidth, DefaultHeight);
-                }
+
+                return new Size(SystemInformation.VerticalScrollBarWidth, DefaultHeight);
             }
         }
 
@@ -51,13 +47,12 @@ namespace System.Windows.Forms
         public override RightToLeft RightToLeft
         {
             get => RightToLeft.No;
-            set
-            {
-            }
+            set { }
         }
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler RightToLeftChanged
+        public new event EventHandler? RightToLeftChanged
         {
             add => base.RightToLeftChanged += value;
             remove => base.RightToLeftChanged -= value;

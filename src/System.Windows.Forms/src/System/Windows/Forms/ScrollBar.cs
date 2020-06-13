@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -67,7 +65,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler AutoSizeChanged
+        public new event EventHandler? AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
             remove => base.AutoSizeChanged -= value;
@@ -83,7 +81,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackColorChanged
+        public new event EventHandler? BackColorChanged
         {
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
@@ -91,7 +89,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override Image BackgroundImage
+        public override Image? BackgroundImage
         {
             get => base.BackgroundImage;
             set => base.BackgroundImage = value;
@@ -99,7 +97,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageChanged
+        public new event EventHandler? BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
@@ -115,7 +113,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler BackgroundImageLayoutChanged
+        public new event EventHandler? BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
@@ -155,7 +153,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ForeColorChanged
+        public new event EventHandler? ForeColorChanged
         {
             add => base.ForeColorChanged += value;
             remove => base.ForeColorChanged -= value;
@@ -171,7 +169,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler FontChanged
+        public new event EventHandler? FontChanged
         {
             add => base.FontChanged += value;
             remove => base.FontChanged -= value;
@@ -187,7 +185,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler ImeModeChanged
+        public new event EventHandler? ImeModeChanged
         {
             add => base.ImeModeChanged += value;
             remove => base.ImeModeChanged -= value;
@@ -334,7 +332,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler TextChanged
+        public new event EventHandler? TextChanged
         {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
@@ -383,7 +381,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler Click
+        public new event EventHandler? Click
         {
             add => base.Click += value;
             remove => base.Click -= value;
@@ -391,7 +389,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event PaintEventHandler Paint
+        public new event PaintEventHandler? Paint
         {
             add => base.Paint += value;
             remove => base.Paint -= value;
@@ -399,7 +397,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event EventHandler DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -407,7 +405,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseClick
+        public new event MouseEventHandler? MouseClick
         {
             add => base.MouseClick += value;
             remove => base.MouseClick -= value;
@@ -415,7 +413,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -423,7 +421,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseDown
+        public new event MouseEventHandler? MouseDown
         {
             add => base.MouseDown += value;
             remove => base.MouseDown -= value;
@@ -431,7 +429,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseUp
+        public new event MouseEventHandler? MouseUp
         {
             add => base.MouseUp += value;
             remove => base.MouseUp -= value;
@@ -439,7 +437,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MouseEventHandler MouseMove
+        public new event MouseEventHandler? MouseMove
         {
             add => base.MouseMove += value;
             remove => base.MouseMove -= value;
@@ -450,7 +448,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
-        public event ScrollEventHandler Scroll
+        public event ScrollEventHandler? Scroll
         {
             add => Events.AddHandler(s_scrollEvent, value);
             remove => Events.RemoveHandler(s_scrollEvent, value);
@@ -463,7 +461,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.valueChangedEventDescr))]
-        public event EventHandler ValueChanged
+        public event EventHandler? ValueChanged
         {
             add => Events.AddHandler(s_valueChangedEvent, value);
             remove => Events.RemoveHandler(s_valueChangedEvent, value);
@@ -517,10 +515,7 @@ namespace System.Windows.Forms
         ///  Raises the <see cref='ValueChanged'/> event.
         /// </summary>
         protected virtual void OnScroll(ScrollEventArgs se)
-        {
-            ScrollEventHandler handler = (ScrollEventHandler)Events[s_scrollEvent];
-            handler?.Invoke(this, se);
-        }
+            => ((ScrollEventHandler?)Events[s_scrollEvent])?.Invoke(this, se);
 
         /// <summary>
         ///  Converts mouse wheel movements into scrolling, when scrollbar has the focus.
@@ -574,10 +569,7 @@ namespace System.Windows.Forms
         ///  Raises the <see cref='ValueChanged'/> event.
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
-        {
-            EventHandler handler = (EventHandler)Events[s_valueChangedEvent];
-            handler?.Invoke(this, e);
-        }
+            => ((EventHandler?)Events[s_valueChangedEvent])?.Invoke(this, e);
 
         private int ReflectPosition(int position)
         {

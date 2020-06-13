@@ -23,9 +23,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             ImageList.ImageCollection collection = list.Images;
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
         }
 
         [WinFormsFact]
@@ -140,6 +138,124 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(16, 16), bitmap5.Size);
             Assert.Equal(PixelFormat.Format32bppArgb, bitmap5.PixelFormat);
             Assert.True(list.HandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ImageCollection_Item_Get32bppColorDepth_Success()
+        {
+            using var list = new ImageList
+            {
+                ColorDepth = ColorDepth.Depth32Bit
+            };
+            ImageList.ImageCollection collection = list.Images;
+
+            using var image1bppIndexedEmpty = new Bitmap(16, 16, PixelFormat.Format1bppIndexed);
+            collection.Add(image1bppIndexedEmpty);
+
+            using var image1bppIndexedCustom = new Bitmap(16, 16, PixelFormat.Format1bppIndexed);
+            collection.Add(image1bppIndexedCustom);
+
+            using var image24bppRgbEmpty = new Bitmap(16, 16, PixelFormat.Format24bppRgb);
+            collection.Add(image24bppRgbEmpty);
+
+            using var image24bppRgbCustom = new Bitmap(16, 16, PixelFormat.Format24bppRgb);
+            image24bppRgbCustom.SetPixel(0, 0, Color.Red);
+            image24bppRgbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
+            collection.Add(image24bppRgbCustom);
+
+            using var image32bppRgbEmpty = new Bitmap(16, 16, PixelFormat.Format32bppRgb);
+            collection.Add(image32bppRgbEmpty);
+
+            using var image32bppRgbCustom = new Bitmap(16, 16, PixelFormat.Format32bppRgb);
+            image32bppRgbCustom.SetPixel(0, 0, Color.Red);
+            image32bppRgbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
+            collection.Add(image32bppRgbCustom);
+
+            using var image32bppArgbEmpty = new Bitmap(16, 16, PixelFormat.Format32bppArgb);
+            collection.Add(image32bppArgbEmpty);
+
+            using var image32bppArgbCustom = new Bitmap(16, 16, PixelFormat.Format32bppArgb);
+            image32bppArgbCustom.SetPixel(0, 0, Color.Red);
+            image32bppArgbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
+            collection.Add(image32bppArgbCustom);
+
+            using var image32bppPargbEmpty = new Bitmap(16, 16, PixelFormat.Format32bppPArgb);
+            collection.Add(image32bppPargbEmpty);
+
+            using var image32bppPargbCustom = new Bitmap(16, 16, PixelFormat.Format32bppPArgb);
+            image32bppPargbCustom.SetPixel(0, 0, Color.Red);
+            image32bppPargbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
+            collection.Add(image32bppPargbCustom);
+
+            using Bitmap resultImage1bppEmpty = Assert.IsType<Bitmap>(collection[0]);
+            Assert.NotSame(image1bppIndexedEmpty, resultImage1bppEmpty);
+            Assert.Equal(new Size(16, 16), resultImage1bppEmpty.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage1bppEmpty.PixelFormat);
+            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage1bppEmpty.GetPixel(0, 0));
+            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage1bppEmpty.GetPixel(1, 0));
+
+            using Bitmap resultImage1bppRgbCustom = Assert.IsType<Bitmap>(collection[1]);
+            Assert.NotSame(image1bppIndexedCustom, resultImage1bppRgbCustom);
+            Assert.Equal(new Size(16, 16), resultImage1bppRgbCustom.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage1bppRgbCustom.PixelFormat);
+            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage1bppRgbCustom.GetPixel(0, 0));
+            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage1bppRgbCustom.GetPixel(1, 0));
+
+            using Bitmap resultImage24bppEmpty = Assert.IsType<Bitmap>(collection[4]);
+            Assert.NotSame(image24bppRgbEmpty, resultImage24bppEmpty);
+            Assert.Equal(new Size(16, 16), resultImage24bppEmpty.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage24bppEmpty.PixelFormat);
+            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage24bppEmpty.GetPixel(0, 0));
+            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage24bppEmpty.GetPixel(1, 0));
+
+            using Bitmap resultImage24bppRgbCustom = Assert.IsType<Bitmap>(collection[5]);
+            Assert.NotSame(image24bppRgbCustom, resultImage24bppRgbCustom);
+            Assert.Equal(new Size(16, 16), resultImage24bppRgbCustom.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage24bppRgbCustom.PixelFormat);
+            Assert.Equal(Color.FromArgb(0xFF, 0xFF, 0x00, 0x00), resultImage24bppRgbCustom.GetPixel(0, 0));
+            Assert.Equal(Color.FromArgb(0xFF, 50, 75, 100), resultImage24bppRgbCustom.GetPixel(1, 0));
+
+            using Bitmap resultImage32bppEmpty = Assert.IsType<Bitmap>(collection[4]);
+            Assert.NotSame(image32bppRgbEmpty, resultImage32bppEmpty);
+            Assert.Equal(new Size(16, 16), resultImage32bppEmpty.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppEmpty.PixelFormat);
+            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage32bppEmpty.GetPixel(0, 0));
+            Assert.Equal(Color.FromArgb(0xFF, 0x00, 0x00, 0x00), resultImage32bppEmpty.GetPixel(1, 0));
+
+            using Bitmap resultImage32bppRgbCustom = Assert.IsType<Bitmap>(collection[5]);
+            Assert.NotSame(image32bppRgbCustom, resultImage32bppRgbCustom);
+            Assert.Equal(new Size(16, 16), resultImage32bppRgbCustom.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppRgbCustom.PixelFormat);
+            Assert.Equal(Color.FromArgb(0xFF, 0xFF, 0x00, 0x00), resultImage32bppRgbCustom.GetPixel(0, 0));
+            Assert.Equal(Color.FromArgb(0xFF, 50, 75, 100), resultImage32bppRgbCustom.GetPixel(1, 0));
+
+            using Bitmap resultImage32bppArgbEmpty = Assert.IsType<Bitmap>(collection[6]);
+            Assert.NotSame(image32bppArgbEmpty, resultImage32bppArgbEmpty);
+            Assert.Equal(new Size(16, 16), resultImage32bppArgbEmpty.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppArgbEmpty.PixelFormat);
+            Assert.Equal(Color.FromArgb(0x00, 0x00, 0x00, 0x00), resultImage32bppArgbEmpty.GetPixel(0, 0));
+            Assert.Equal(Color.FromArgb(0x00, 0x00, 0x00, 0x00), resultImage32bppArgbEmpty.GetPixel(1, 0));
+
+            using Bitmap resultImage32bppArgbCustom = Assert.IsType<Bitmap>(collection[7]);
+            Assert.NotSame(image32bppArgbCustom, resultImage32bppArgbCustom);
+            Assert.Equal(new Size(16, 16), resultImage32bppArgbCustom.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppArgbCustom.PixelFormat);
+            Assert.Equal(Color.FromArgb(0xFF, 0xFF, 0x00, 0x00), resultImage32bppArgbCustom.GetPixel(0, 0));
+            Assert.Equal(Color.FromArgb(0xC8, 0x55, 0x68, 0x7B), resultImage32bppArgbCustom.GetPixel(1, 0));
+
+            using Bitmap resultImage32bppPargbEmpty = Assert.IsType<Bitmap>(collection[8]);
+            Assert.NotSame(image32bppPargbEmpty, resultImage32bppPargbEmpty);
+            Assert.Equal(new Size(16, 16), resultImage32bppPargbEmpty.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppPargbEmpty.PixelFormat);
+            Assert.Equal(Color.FromArgb(0x00, 0x00, 0x00, 0x00), resultImage32bppPargbEmpty.GetPixel(0, 0));
+            Assert.Equal(Color.FromArgb(0x00, 0x00, 0x00, 0x00), resultImage32bppPargbEmpty.GetPixel(1, 0));
+
+            using Bitmap resultImage32bppPargbCustom = Assert.IsType<Bitmap>(collection[9]);
+            Assert.NotSame(image32bppPargbCustom, resultImage32bppPargbCustom);
+            Assert.Equal(new Size(16, 16), resultImage32bppPargbCustom.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage32bppPargbCustom.PixelFormat);
+            Assert.Equal(Color.FromArgb(0xFF, 0xFF, 0x00, 0x00), resultImage32bppPargbCustom.GetPixel(0, 0));
+            Assert.Equal(Color.FromArgb(0xC8, 0x55, 0x68, 0x7B), resultImage32bppPargbCustom.GetPixel(1, 0));
         }
 
         [WinFormsTheory]
@@ -373,9 +489,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.Add("Key1", value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal("Key1", Assert.Single(collection.Keys));
             Assert.False(list.HandleCreated);
@@ -420,9 +534,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.Add("Key1", value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal("Key1", Assert.Single(collection.Keys));
             Assert.True(list.HandleCreated);
@@ -466,9 +578,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.Add(value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.False(list.HandleCreated);
@@ -493,9 +603,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.Add(value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.True(list.HandleCreated);
@@ -539,9 +647,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.Add(value, transparentColor);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.False(list.HandleCreated);
@@ -566,9 +672,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.Add(value, transparentColor);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.True(list.HandleCreated);
@@ -600,9 +704,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.Add("Key1", value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal("Key1", Assert.Single(collection.Keys));
             Assert.False(list.HandleCreated);
@@ -647,9 +749,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.Add("Key1", value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal("Key1", Assert.Single(collection.Keys));
             Assert.True(list.HandleCreated);
@@ -693,9 +793,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.Add(value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.False(list.HandleCreated);
@@ -720,9 +818,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.Add(value);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(string.Empty, Assert.Single(collection.Keys));
             Assert.True(list.HandleCreated);
@@ -859,9 +955,7 @@ namespace System.Windows.Forms.Tests
             ImageList.ImageCollection collection = list.Images;
 
             collection.AddStrip(value);
-#pragma warning disable xUnit2013
             Assert.Equal(expectedCount, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(Enumerable.Repeat(string.Empty, expectedCount), collection.Keys.Cast<string>());
             Assert.False(list.HandleCreated);
@@ -879,9 +973,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, list.Handle);
 
             collection.AddStrip(value);
-#pragma warning disable xUnit2013
             Assert.Equal(expectedCount, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(Enumerable.Repeat(string.Empty, expectedCount), collection.Keys.Cast<string>());
             Assert.True(list.HandleCreated);
@@ -927,19 +1019,15 @@ namespace System.Windows.Forms.Tests
 
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.False(list.HandleCreated);
 
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.False(list.HandleCreated);
         }
 
@@ -953,19 +1041,15 @@ namespace System.Windows.Forms.Tests
 
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.False(list.HandleCreated);
 
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.False(list.HandleCreated);
         }
 
@@ -978,19 +1062,15 @@ namespace System.Windows.Forms.Tests
 
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
 
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
         }
 
@@ -1005,19 +1085,15 @@ namespace System.Windows.Forms.Tests
 
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
 
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
             Assert.True(collection.Empty);
-#pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
         }
 
@@ -1291,17 +1367,13 @@ namespace System.Windows.Forms.Tests
             // Remove first.
             collection.RemoveAt(0);
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
 
             // Remove last.
             collection.RemoveAt(0);
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
             Assert.True(collection.Empty);
         }
 
@@ -1335,18 +1407,14 @@ namespace System.Windows.Forms.Tests
             // Remove first.
             collection.RemoveAt(0);
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(color3, ((Bitmap)collection[0]).GetPixel(0, 0));
 
             // Remove last.
             collection.RemoveAt(0);
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
             Assert.True(collection.Empty);
         }
 
@@ -1403,17 +1471,13 @@ namespace System.Windows.Forms.Tests
             // Remove first.
             collection.RemoveByKey("image1");
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
 
             // Remove last.
             collection.RemoveByKey("IMAGE3");
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
             Assert.True(collection.Empty);
         }
 
@@ -1455,18 +1519,14 @@ namespace System.Windows.Forms.Tests
             // Remove first.
             collection.RemoveByKey("image1");
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(1, collection.Count);
-#pragma warning restore xUnit2013
             Assert.False(collection.Empty);
             Assert.Equal(color3, ((Bitmap)collection[0]).GetPixel(0, 0));
 
             // Remove last.
             collection.RemoveByKey("IMAGE3");
             Assert.True(list.HandleCreated);
-#pragma warning disable xUnit2013
             Assert.Equal(0, collection.Count);
-#pragma warning restore xUnit2013
             Assert.True(collection.Empty);
         }
 

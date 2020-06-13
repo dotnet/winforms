@@ -171,11 +171,10 @@ namespace System.Drawing.Design
             }
 
             // Copy the original stream to a new memory stream to avoid locking the file.
-            using (var memoryStream = new MemoryStream())
-            {
-                stream.CopyTo(memoryStream);
-                return Image.FromStream(memoryStream);
-            }
+            // The created image will take over ownership of the stream.
+            var memoryStream = new MemoryStream();
+            stream.CopyTo(memoryStream);
+            return Image.FromStream(memoryStream);
         }
 
         /// <summary>

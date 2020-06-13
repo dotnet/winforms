@@ -6358,7 +6358,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
         <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
-        <target state="new">Event raised when the CollapsedState property of a ListViewGroup changes.</target>
+        <target state="translated">Evento que se desencadena cuando cambia la propiedad CollapsedState de un elemento ListViewGroup.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6379,6 +6379,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="ListViewGroupNameDescr">
         <source>The name of this group.</source>
         <target state="translated">Nombre de este grupo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
@@ -9153,7 +9158,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="TaskDialogCollectionAlreadyBound">
         <source>One of the collections of this {0} is already bound to a {1} instance.</source>
-        <target state="translated">Una de las colecciones de este elemento de {0} ya está enlazada a una instancia de {1}.</target>
+        <target state="translated">Una de las colecciones de esta página {0} ya está enlazada a una instancia de {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogControlAlreadyAddedToCollection">

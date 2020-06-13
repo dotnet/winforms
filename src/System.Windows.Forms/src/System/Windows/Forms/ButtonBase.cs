@@ -357,7 +357,7 @@ namespace System.Windows.Forms
                 image = value;
                 if (image != null)
                 {
-                    ImageIndex = -1;
+                    ImageIndex = ImageList.Indexer.DefaultIndex;
                     ImageList = null;
                 }
 
@@ -410,7 +410,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndex.Index != -1 && imageList != null && imageIndex.Index >= imageList.Images.Count)
+                if (imageIndex.Index != ImageList.Indexer.DefaultIndex && imageList != null && imageIndex.Index >= imageList.Images.Count)
                 {
                     return imageList.Images.Count - 1;
                 }
@@ -422,7 +422,8 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
-                if (value == imageIndex.Index)
+
+                if (value == imageIndex.Index && value != ImageList.Indexer.DefaultIndex)
                 {
                     return;
                 }
@@ -458,7 +459,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == ImageKey)
+                if (value == imageIndex.Key && !string.Equals(value, ImageList.Indexer.DefaultKey))
                 {
                     return;
                 }
@@ -556,12 +557,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  The area of the button encompassing any changes between the button's
+        ///  The area of the button encompassing any changes between the button's
         ///  resting appearance and its appearance when the mouse is over it.
-                ///  Consider overriding this property if you override any painting methods,
+        ///  Consider overriding this property if you override any painting methods,
         ///  or your button may not paint correctly or may have flicker. Returning
         ///  ClientRectangle is safe for correct painting but may still cause flicker.
-            /// </summary>
+        /// </summary>
         internal virtual Rectangle OverChangeRectangle
         {
             get
@@ -588,12 +589,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  The area of the button encompassing any changes between the button's
+        ///  The area of the button encompassing any changes between the button's
         ///  appearance when the mouse is over it but not pressed and when it is pressed.
-                ///  Consider overriding this property if you override any painting methods,
+        ///  Consider overriding this property if you override any painting methods,
         ///  or your button may not paint correctly or may have flicker. Returning
         ///  ClientRectangle is safe for correct painting but may still cause flicker.
-            /// </summary>
+        /// </summary>
         internal virtual Rectangle DownChangeRectangle
         {
             get

@@ -13,11 +13,11 @@ namespace System.Windows.Forms
     {
         public class SelectedIndexCollection : IList
         {
-            private readonly ListBox owner;
+            private readonly ListBox _owner;
 
             public SelectedIndexCollection(ListBox owner)
             {
-                this.owner = owner;
+                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
             /// <summary>
@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return owner.SelectedItems.Count;
+                    return _owner.SelectedItems.Count;
                 }
             }
 
@@ -166,8 +166,8 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    owner.SelectedItems.EnsureUpToDate();
-                    return ((ObjectCollection)owner.Items).InnerArray;
+                    _owner.SelectedItems.EnsureUpToDate();
+                    return ((ObjectCollection)_owner.Items).InnerArray;
                 }
             }
 
@@ -182,22 +182,22 @@ namespace System.Windows.Forms
 
             public void Clear()
             {
-                if (owner != null)
+                if (_owner != null)
                 {
-                    owner.ClearSelected();
+                    _owner.ClearSelected();
                 }
             }
 
             public void Add(int index)
             {
-                if (owner != null)
+                if (_owner != null)
                 {
-                    ObjectCollection items = owner.Items;
+                    ObjectCollection items = _owner.Items;
                     if (items != null)
                     {
                         if (index != -1 && !Contains(index))
                         {
-                            owner.SetSelected(index, true);
+                            _owner.SetSelected(index, true);
                         }
                     }
                 }
@@ -205,14 +205,14 @@ namespace System.Windows.Forms
 
             public void Remove(int index)
             {
-                if (owner != null)
+                if (_owner != null)
                 {
-                    ObjectCollection items = owner.Items;
+                    ObjectCollection items = _owner.Items;
                     if (items != null)
                     {
                         if (index != -1 && Contains(index))
                         {
-                            owner.SetSelected(index, false);
+                            _owner.SetSelected(index, false);
                         }
                     }
                 }

@@ -217,7 +217,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridViewRow);
             }
-            Debug.Assert(!dataGridViewCell.ReadOnly);
+
             return AddInternal(dataGridViewCell);
         }
 

@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using static Interop;
 
 namespace System.ComponentModel.Design
 {
@@ -421,12 +422,20 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Initializes the ansi string variable that will be assigned to the edit box.
         /// </summary>
-        private void InitAnsi()
+        private unsafe void InitAnsi()
         {
-            int size = _dataBuf.Length;
-            char[] text = new char[size + 1];
-            size = Interop.Kernel32.MultiByteToWideChar(0, 0, _dataBuf, size, text, size);
-            text[size] = (char)0;
+            char[] text;
+            int size;
+            fixed (byte* pDataBuff = _dataBuf)
+            {
+                size = Kernel32.MultiByteToWideChar(Kernel32.CP.ACP, 0, pDataBuff, _dataBuf.Length, null, 0);
+                text = new char[size + 1];
+                fixed (char* pText = text)
+                {
+                    size = Kernel32.MultiByteToWideChar(Kernel32.CP.ACP, 0, pDataBuff, size, pText, size);
+                }
+            }
+            text[size] = '\0';
 
             for (int i = 0; i < size; i++)
             {
