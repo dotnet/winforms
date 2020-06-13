@@ -4,8 +4,6 @@
 
 using System;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.InteropServices;
 using Xunit;
 
 namespace Microsoft.VisualBasic.ApplicationServices.Tests
@@ -14,9 +12,16 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
     {
         private static string GetAppID(Assembly assembly)
         {
-            var method = typeof(WindowsFormsApplicationBase).GetMethod("GetApplicationInstanceID",
-                                            BindingFlags.NonPublic | BindingFlags.Static);
-            return (string)method.Invoke(null, new object[] { assembly });
+            var testAccessor = typeof(WindowsFormsApplicationBase).TestAccessor();
+            return testAccessor.Dynamic.GetApplicationInstanceID(assembly);
+        }
+
+        [Fact]
+        public void GetApplicationInstanceID()
+        {
+            var assembly = typeof(WindowsFormsApplicationBaseTests).Assembly;
+            var expectedId = assembly.ManifestModule.ModuleVersionId.ToString();
+            Assert.Equal(expectedId, GetAppID(assembly));
         }
 
         private static string GetUniqueIDFromAssembly(string guid, Version version)
@@ -29,14 +34,6 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
                 new[] { attributeBuilder });
             assemblyBuilder.DefineDynamicModule(Guid.NewGuid().ToString());
             return GetAppID(assemblyBuilder);
-        }
-
-        [Fact]
-        public void GetApplicationInstanceID()
-        {
-            var assembly = typeof(WindowsFormsApplicationBaseTests).Assembly;
-            var expectedId = assembly.ManifestModule.ModuleVersionId.ToString();
-            Assert.Equal(expectedId, GetAppID(assembly));
         }
 
         [Fact]
