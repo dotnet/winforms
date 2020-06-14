@@ -103,7 +103,10 @@ namespace System.Windows.Forms
                 // to make them not visible but still present.
                 cp.Style |= (int)(User32.WS.VSCROLL | User32.WS.HSCROLL);
                 cp.ExStyle |= (int)User32.WS_EX.CLIENTEDGE;
-                cp.Param = new NativeMethods.CLIENTCREATESTRUCT(IntPtr.Zero, 1);
+                cp.Param = new User32.CLIENTCREATESTRUCT
+                {
+                    idFirstChild = 1
+                };
                 ISite site = ParentInternal?.Site;
                 if (site != null && site.DesignMode)
                 {
