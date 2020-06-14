@@ -1337,7 +1337,7 @@ namespace System.Windows.Forms
             {
                 switch ((User32.WM)m.Msg)
                 {
-                    case User32.WM.REFLECT | User32.WM.COMMAND:
+                    case User32.WM.REFLECT_COMMAND:
                         if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);

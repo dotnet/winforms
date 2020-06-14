@@ -2296,7 +2296,7 @@ namespace System.Windows.Forms
         {
             switch (msg.Msg)
             {
-                case (int)(User32.WM.REFLECT | User32.WM.NOTIFY):
+                case (int)(User32.WM.REFLECT_NOTIFY):
                     User32.NMHDR nmhdr = (User32.NMHDR)msg.GetLParam(typeof(User32.NMHDR));
                     if (nmhdr.code == (int)TTN.SHOW && !_trackPosition)
                     {

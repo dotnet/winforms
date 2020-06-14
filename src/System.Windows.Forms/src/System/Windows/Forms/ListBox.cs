@@ -2474,13 +2474,13 @@ namespace System.Windows.Forms
         {
             switch ((WM)m.Msg)
             {
-                case WM.REFLECT | WM.COMMAND:
+                case WM.REFLECT_COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case WM.REFLECT | WM.DRAWITEM:
+                case WM.REFLECT_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
-                case WM.REFLECT | WM.MEASUREITEM:
+                case WM.REFLECT_MEASUREITEM:
                     WmReflectMeasureItem(ref m);
                     break;
                 case WM.PRINT:

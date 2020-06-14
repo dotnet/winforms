@@ -846,7 +846,7 @@ namespace System.Windows.Forms.Design
 
             protected unsafe override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)(User32.WM.REFLECT | User32.WM.NOTIFY))
+                if (m.Msg == (int)(User32.WM.REFLECT_NOTIFY))
                 {
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
                     if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)

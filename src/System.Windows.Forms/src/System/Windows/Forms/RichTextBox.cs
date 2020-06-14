@@ -3568,11 +3568,11 @@ namespace System.Windows.Forms
         {
             switch ((User32.WM)m.Msg)
             {
-                case User32.WM.REFLECT | User32.WM.NOTIFY:
+                case User32.WM.REFLECT_NOTIFY:
                     WmReflectNotify(ref m);
                     break;
 
-                case User32.WM.REFLECT | User32.WM.COMMAND:
+                case User32.WM.REFLECT_COMMAND:
                     WmReflectCommand(ref m);
                     break;
 
