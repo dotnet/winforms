@@ -548,7 +548,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The default image index for nodes in the tree view.
         /// </summary>
-        [DefaultValue(-1)]
+        [DefaultValue(ImageList.Indexer.DefaultIndex)]
         [SRCategory(nameof(SR.CatBehavior))]
         [Localizable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
@@ -562,7 +562,7 @@ namespace System.Windows.Forms
             {
                 if (imageList == null)
                 {
-                    return -1;
+                    return ImageList.Indexer.DefaultIndex;
                 }
                 if (ImageIndexer.Index >= imageList.Images.Count)
                 {
@@ -577,7 +577,7 @@ namespace System.Windows.Forms
                 // mean image index 0. This is because a treeview must always have an image index -
                 // even if no imagelist exists we want the image index to be 0.
                 //
-                if (value == -1)
+                if (value == ImageList.Indexer.DefaultIndex)
                 {
                     value = 0;
                 }
@@ -605,7 +605,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [TypeConverter(typeof(ImageKeyConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
-        [DefaultValue("")]
+        [DefaultValue(ImageList.Indexer.DefaultKey)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRDescription(nameof(SR.TreeViewImageKeyDescr))]
         [RelatedImageList("ImageList")]
@@ -623,7 +623,7 @@ namespace System.Windows.Forms
                     ImageIndexer.Key = value;
                     if (string.IsNullOrEmpty(value) || value.Equals(SR.toStringNone))
                     {
-                        ImageIndex = (ImageList != null) ? 0 : -1;
+                        ImageIndex = (ImageList != null) ? 0 : ImageList.Indexer.DefaultIndex;
                     }
                     if (IsHandleCreated)
                     {
@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms
         ///  The image index that a node will display when selected.
         ///  The index applies to the ImageList referred to by the imageList property,
         /// </summary>
-        [DefaultValue(-1)]
+        [DefaultValue(ImageList.Indexer.DefaultIndex)]
         [SRCategory(nameof(SR.CatBehavior))]
         [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
         [Localizable(true)]
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms
             {
                 if (imageList == null)
                 {
-                    return -1;
+                    return ImageList.Indexer.DefaultIndex;
                 }
                 if (SelectedImageIndexer.Index >= imageList.Images.Count)
                 {
@@ -1092,7 +1092,7 @@ namespace System.Windows.Forms
                 // mean image index 0. This is because a treeview must always have an image index -
                 // even if no imagelist exists we want the image index to be 0.
                 //
-                if (value == -1)
+                if (value == ImageList.Indexer.DefaultIndex)
                 {
                     value = 0;
                 }
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         [TypeConverter(typeof(ImageKeyConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
-        [DefaultValue("")]
+        [DefaultValue(ImageList.Indexer.DefaultKey)]
         [RefreshProperties(RefreshProperties.Repaint)]
         [SRDescription(nameof(SR.TreeViewSelectedImageKeyDescr))]
         [RelatedImageList("ImageList")]
@@ -1138,7 +1138,7 @@ namespace System.Windows.Forms
 
                     if (string.IsNullOrEmpty(value) || value.Equals(SR.toStringNone))
                     {
-                        SelectedImageIndex = (ImageList != null) ? 0 : -1;
+                        SelectedImageIndex = (ImageList != null) ? 0 : ImageList.Indexer.DefaultIndex;
                     }
                     if (IsHandleCreated)
                     {
@@ -2394,7 +2394,7 @@ namespace System.Windows.Forms
             {
                 return (SelectedImageIndex != 0);
             }
-            return (SelectedImageIndex != -1);
+            return (SelectedImageIndex != ImageList.Indexer.DefaultIndex);
         }
 
         private bool ShouldSerializeImageIndex()
@@ -2403,7 +2403,7 @@ namespace System.Windows.Forms
             {
                 return (ImageIndex != 0);
             }
-            return (ImageIndex != -1);
+            return (ImageIndex != ImageList.Indexer.DefaultIndex);
         }
 
         /// <summary>
