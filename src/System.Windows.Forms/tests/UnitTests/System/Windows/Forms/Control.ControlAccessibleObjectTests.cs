@@ -884,6 +884,48 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => accessibleObject.RaiseLiveRegionChanged());
         }
 
+        [WinFormsTheory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void ControlAccessibleObject_RaiseAutomationEvent_IsHandleCreatedFlag(bool isHandleCreated)
+        {
+            using var ownerControl = new Control();
+            var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(ownerControl.IsHandleCreated);
+
+            if (isHandleCreated)
+            {
+                Assert.NotEqual(IntPtr.Zero, ownerControl.Handle);
+            }
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            // Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId));
+            // Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void ControlAccessibleObject_RaiseAutomationPropertyChangedEvent_IsHandleCreatedFlag(bool isHandleCreated)
+        {
+            using var ownerControl = new Control();
+            var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(ownerControl.IsHandleCreated);
+
+            if (isHandleCreated)
+            {
+                Assert.NotEqual(IntPtr.Zero, ownerControl.Handle);
+            }
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            // Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, ownerControl.Name, ownerControl.Name));
+            // Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
+        }
+
         [WinFormsFact]
         public void ControlAccessibleObject_ToString_Invoke_Success()
         {
