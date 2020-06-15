@@ -2536,12 +2536,12 @@ namespace System.Windows.Forms
                 this,
                 (User32.WM)RichEditMessages.EM_SETEVENTMASK,
                 IntPtr.Zero,
-                (IntPtr)(RichTextBoxConstants.ENM_PROTECTED | RichTextBoxConstants.ENM_SELCHANGE |
-                        RichTextBoxConstants.ENM_DROPFILES | RichTextBoxConstants.ENM_REQUESTRESIZE |
-                        RichTextBoxConstants.ENM_IMECHANGE | RichTextBoxConstants.ENM_CHANGE |
-                        RichTextBoxConstants.ENM_UPDATE | RichTextBoxConstants.ENM_SCROLL |
-                        RichTextBoxConstants.ENM_KEYEVENTS | RichTextBoxConstants.ENM_MOUSEEVENTS |
-                        RichTextBoxConstants.ENM_SCROLLEVENTS | RichTextBoxConstants.ENM_LINK));
+                (IntPtr)(ENM.PROTECTED | ENM.SELCHANGE |
+                         ENM.DROPFILES | ENM.REQUESTRESIZE |
+                         ENM.IMECHANGE | ENM.CHANGE |
+                         ENM.UPDATE | ENM.SCROLL |
+                         ENM.KEYEVENTS | ENM.MOUSEEVENTS |
+                         ENM.SCROLLEVENTS | ENM.LINK));
 
             int rm = rightMargin;
             rightMargin = 0;

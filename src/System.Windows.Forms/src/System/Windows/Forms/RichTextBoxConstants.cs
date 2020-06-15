@@ -16,28 +16,6 @@ namespace System.Windows.Forms
 
         /* RichTextBox messages */
 
-        // Event notification masks */
-        internal const int ENM_NONE = 0x00000000;
-        internal const int ENM_CHANGE = 0x00000001;
-        internal const int ENM_UPDATE = 0x00000002;
-        internal const int ENM_SCROLL = 0x00000004;
-        internal const int ENM_KEYEVENTS = 0x00010000;
-        internal const int ENM_MOUSEEVENTS = 0x00020000;
-        internal const int ENM_REQUESTRESIZE = 0x00040000;
-        internal const int ENM_SELCHANGE = 0x00080000;
-        internal const int ENM_DROPFILES = 0x00100000;
-        internal const int ENM_PROTECTED = 0x00200000;
-        internal const int ENM_CORRECTTEXT = 0x00400000;   /* PenWin specific */
-        internal const int ENM_SCROLLEVENTS = 0x00000008;
-        internal const int ENM_DRAGDROPDONE = 0x00000010;
-        internal const int ENM_PARAGRAPHEXPANDED = 0x00000020;
-
-        /* Asia specific notification mask */
-        internal const int ENM_IMECHANGE = 0x00800000;   /* unused by RE2.0 */
-        internal const int ENM_LANGCHANGE = 0x01000000;
-        internal const int ENM_OBJECTPOSITIONS = 0x02000000;
-        internal const int ENM_LINK = 0x04000000;
-
         /* New edit control styles */
         internal const int ES_SAVESEL = 0x00008000;
         internal const int ES_SUNKEN = 0x00004000;
