@@ -119,7 +119,7 @@ namespace System.Windows.Forms
 
         private IntPtr GetCompatibleBitmap(Bitmap bm)
         {
-            using ScreenDC hDC = ScreenDC.Create();
+            using var screenDC = User32.GetDcScope.ScreenDC;
 
             // GDI+ returns a DIBSECTION based HBITMAP. The clipboard deals well
             // only with bitmaps created using CreateCompatibleBitmap(). So, we
@@ -127,34 +127,27 @@ namespace System.Windows.Forms
             IntPtr hBitmap = bm.GetHbitmap();
 
             // Create a compatible DC to render the source bitmap.
-            IntPtr dcSrc = Gdi32.CreateCompatibleDC(hDC);
-            IntPtr srcOld = Gdi32.SelectObject(dcSrc, hBitmap);
+            var sourceDC = new Gdi32.CreateDcScope(screenDC);
+            var sourceBitmapSelection = new Gdi32.SelectObjectScope(sourceDC, hBitmap);
 
             // Create a compatible DC and a new compatible bitmap.
-            IntPtr dcDest = Gdi32.CreateCompatibleDC(hDC);
-            IntPtr hBitmapNew = Gdi32.CreateCompatibleBitmap(hDC, bm.Size.Width, bm.Size.Height);
+            var destinationDC = new Gdi32.CreateDcScope(screenDC);
+            IntPtr bitmap = Gdi32.CreateCompatibleBitmap(screenDC, bm.Size.Width, bm.Size.Height);
 
             // Select the new bitmap into a compatible DC and render the blt the original bitmap.
-            IntPtr destOld = Gdi32.SelectObject(dcDest, hBitmapNew);
+            var destinationBitmapSelection = new Gdi32.SelectObjectScope(destinationDC, bitmap);
             Gdi32.BitBlt(
-                dcDest,
+                destinationDC,
                 0,
                 0,
                 bm.Size.Width,
                 bm.Size.Height,
-                dcSrc,
+                sourceDC,
                 0,
                 0,
                 Gdi32.ROP.SRCCOPY);
 
-            // Clear the source and destination compatible DCs.
-            Gdi32.SelectObject(dcSrc, srcOld);
-            Gdi32.SelectObject(dcDest, destOld);
-
-            Gdi32.DeleteDC(dcSrc);
-            Gdi32.DeleteDC(dcDest);
-
-            return hBitmapNew;
+            return bitmap;
         }
 
         /// <summary>

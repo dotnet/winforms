@@ -96,7 +96,7 @@ namespace System.Windows.Forms
             {
                 if (logPixelsX == -1)
                 {
-                    using ScreenDC dc = ScreenDC.Create();
+                    using var dc = User32.GetDcScope.ScreenDC;
                     logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
                 }
                 return logPixelsX;
@@ -110,7 +110,7 @@ namespace System.Windows.Forms
             {
                 if (logPixelsY == -1)
                 {
-                    using ScreenDC dc = ScreenDC.Create();
+                    using var dc = User32.GetDcScope.ScreenDC;
                     logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
                 }
                 return logPixelsY;

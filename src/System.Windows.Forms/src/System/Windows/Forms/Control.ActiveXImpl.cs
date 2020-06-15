@@ -250,7 +250,7 @@ namespace System.Windows.Forms
                     if (s_logPixels.IsEmpty)
                     {
                         s_logPixels = new Point();
-                        using ScreenDC dc = ScreenDC.Create();
+                        using var dc = User32.GetDcScope.ScreenDC;
                         s_logPixels.X = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
                         s_logPixels.Y = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
                     }
