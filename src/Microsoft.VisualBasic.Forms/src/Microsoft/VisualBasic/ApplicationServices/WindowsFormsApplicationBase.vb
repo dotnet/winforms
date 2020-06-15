@@ -322,7 +322,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             'Prime the command line args with what we receive from Main() so that Click-Once windows apps don't have to do a System.Environment call which would require permissions.
             InternalCommandLine = New ReadOnlyCollection(Of String)(commandLine)
 
-            If Not Me.IsSingleInstance Then
+            If Not IsSingleInstance Then
                 DoApplicationModel()
             Else 'This is a Single-Instance application
                 Dim ApplicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly) 'Note: Must pass the calling assembly from here so we can get the running app.  Otherwise, can break single instance.
@@ -841,9 +841,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _finishedOnInitilaize As Boolean 'Whether we have made it through the processing of OnInitialize
         Private _networkAvailabilityEventHandlers As ArrayList
         Private _networkObject As Devices.Network
+#Disable Warning IDE0032 ' Use auto property, Justification:=<Public API>
         Private _isSingleInstance As Boolean 'whether this app runs using Word like instancing behavior
         Private _shutdownStyle As ShutdownMode 'defines when the application decides to close
-#Disable Warning IDE0032 ' Use auto property, Justification:=<Public API>
         Private _enableVisualStyles As Boolean 'whether to use Windows XP styles
         Private _didSplashScreen As Boolean 'we only need to show the splash screen once.  Protect the user from himself if they are overriding our app model.
         Private Delegate Sub DisposeDelegate() 'used to marshal a call to Dispose on the Splash Screen
@@ -902,7 +902,20 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' Generates the name for the remote singleton that we use to channel multiple instances
         ''' to the same application model thread.
         ''' </summary>
+        ''' <returns>A string unique to the application that should be the same for versions of
+        '''  the application that have the same Major and Minor Version Number
+        ''' </returns>
+        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId</remarks>
         Private Shared Function GetApplicationInstanceID(ByVal Entry As Assembly) As String
+            Dim guidAttrib As GuidAttribute = Entry.GetCustomAttribute(Of GuidAttribute)()
+            If guidAttrib IsNot Nothing Then
+                Dim version As Version = Entry.GetName.Version
+                If version IsNot Nothing Then
+                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
+                Else
+                    Return guidAttrib.Value
+                End If
+            End If
             Return Entry.ManifestModule.ModuleVersionId.ToString()
         End Function
 
