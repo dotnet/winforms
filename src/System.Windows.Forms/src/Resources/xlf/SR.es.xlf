@@ -8201,11 +8201,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">{0} seleccionado.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridRemotedObject">
-        <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">El objeto {0} está siendo tratado como remoto por un proxy que no admite la detección de interfaz. No se admite este tipo de objeto remoto.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
         <target state="translated">Las pestañas estáticas no se pueden quitar de PropertyGrid.</target>

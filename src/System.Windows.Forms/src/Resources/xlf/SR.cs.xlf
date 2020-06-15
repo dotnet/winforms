@@ -8201,11 +8201,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Vybráno: {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridRemotedObject">
-        <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">Objekt {0} je vzdáleně ovládán proxy serverem, který nepodporuje zjišťování rozhraní. Tento typ vzdáleného objektu není podporován.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
         <target state="translated">Statické karty nelze z mřížky PropertyGrid odebrat.</target>

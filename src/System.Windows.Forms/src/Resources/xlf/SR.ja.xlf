@@ -8201,11 +8201,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">{0} が選択されました。</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridRemotedObject">
-        <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">オブジェクト {0} は、インターフェイス探索をサポートしていないプロキシによってリモートされています。  この種類のリモート オブジェクトはサポートされていません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
         <target state="translated">スタティックのタブを PropertyGrid から削除することはできません。</target>

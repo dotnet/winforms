@@ -8201,11 +8201,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Wybrano: {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridRemotedObject">
-        <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">Obiekt {0} jest zdalnie sterowany przez serwer proxy, który nie obsługuje odnajdowania interfejsu. Ten typ zdalnie sterowanego obiektu nie jest obsługiwany.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
         <target state="translated">Kart Static nie można usunąć z elementu PropertyGrid.</target>
