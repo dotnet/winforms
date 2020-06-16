@@ -237,10 +237,7 @@ namespace System.Windows.Forms
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            if (IsHandleCreated)
-            {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            }
+            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
