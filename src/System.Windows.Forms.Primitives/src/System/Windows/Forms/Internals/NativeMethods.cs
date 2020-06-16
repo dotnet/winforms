@@ -218,45 +218,6 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public class COMRECT
-        {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
-
-            public COMRECT()
-            {
-            }
-
-            public COMRECT(Rectangle r)
-            {
-                left = r.X;
-                top = r.Y;
-                right = r.Right;
-                bottom = r.Bottom;
-            }
-
-            public override string ToString()
-            {
-                return "Left = " + left + " Top " + top + " Right = " + right + " Bottom = " + bottom;
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class CLIENTCREATESTRUCT
-        {
-            public IntPtr hWindowMenu;
-            public int idFirstChild;
-
-            public CLIENTCREATESTRUCT(IntPtr hmenu, int idFirst)
-            {
-                hWindowMenu = hmenu;
-                idFirstChild = idFirst;
-            }
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         public class ENLINK
         {
             public User32.NMHDR nmhdr;
