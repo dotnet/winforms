@@ -812,10 +812,10 @@ namespace System.Windows.Forms
             {
                 caption = Path.GetFileName(
                     UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef)
-                    .ToString());
+                                       .ToString());
             }
 
-            User32.SetWindowTextW(Handle, caption);
+            User32.SetWindowTextW(Handle, caption ?? string.Empty);
         }
 
         private HRESULT HandleTaskDialogCallback(

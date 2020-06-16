@@ -667,7 +667,7 @@ namespace System.Windows.Forms
 
         internal virtual bool IsReadOnly => false;
 
-        internal virtual void SetValue(string newValue)
+        internal virtual void SetValue(string? newValue)
         {
             Value = newValue;
         }
@@ -832,12 +832,14 @@ namespace System.Windows.Forms
 
         IAccessible? UiaCore.ILegacyIAccessibleProvider.GetIAccessible() => AsIAccessible(this);
 
-        object?[] UiaCore.ILegacyIAccessibleProvider.GetSelection()
+        object[]? UiaCore.ILegacyIAccessibleProvider.GetSelection()
         {
-            return new UiaCore.IRawElementProviderSimple?[]
+            if (GetSelected() is UiaCore.IRawElementProviderSimple selected)
             {
-                GetSelected() as UiaCore.IRawElementProviderSimple
-            };
+                return new UiaCore.IRawElementProviderSimple[] { selected };
+            }
+
+            return null;
         }
 
         void UiaCore.ILegacyIAccessibleProvider.Select(int flagsSelect) => Select((AccessibleSelection)flagsSelect);
@@ -856,7 +858,7 @@ namespace System.Windows.Forms
 
         string? UiaCore.IValueProvider.Value => Value;
 
-        void UiaCore.IValueProvider.SetValue(string newValue) => SetValue(newValue);
+        void UiaCore.IValueProvider.SetValue(string? newValue) => SetValue(newValue);
 
         void UiaCore.IToggleProvider.Toggle() => Toggle();
 

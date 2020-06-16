@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         ///  If the given object is an AccessibleObject return it as a InternalAccessibleObject
         ///  This ensures we wrap all AccessibleObjects before handing them out to OLEACC
         /// </summary>
-        private object AsNativeAccessible(object accObject)
+        private object? AsNativeAccessible(object? accObject)
         {
             if (accObject is AccessibleObject accessibleObject)
             {
@@ -122,7 +122,7 @@ namespace System.Windows.Forms
             {
                 for (int i = 0; i < accObjectArray.Length; i++)
                 {
-                    accObjectArray[i] = AsNativeAccessible(accObjectArray[i]);
+                    accObjectArray[i] = AsNativeAccessible(accObjectArray[i])!;
                 }
             }
 
@@ -132,57 +132,57 @@ namespace System.Windows.Forms
         void IAccessibleInternal.accDoDefaultAction(object childID)
             => publicIAccessible.accDoDefaultAction(childID);
 
-        object IAccessibleInternal.accHitTest(int xLeft, int yTop)
+        object? IAccessibleInternal.accHitTest(int xLeft, int yTop)
             => AsNativeAccessible(publicIAccessible.accHitTest(xLeft, yTop));
 
         void IAccessibleInternal.accLocation(out int l, out int t, out int w, out int h, object childID)
             => publicIAccessible.accLocation(out l, out t, out w, out h, childID);
 
-        object IAccessibleInternal.accNavigate(int navDir, object childID)
+        object? IAccessibleInternal.accNavigate(int navDir, object childID)
             => AsNativeAccessible(publicIAccessible.accNavigate(navDir, childID));
 
         void IAccessibleInternal.accSelect(int flagsSelect, object childID)
             => publicIAccessible.accSelect(flagsSelect, childID);
 
-        object IAccessibleInternal.get_accChild(object childID)
+        object? IAccessibleInternal.get_accChild(object childID)
             => AsNativeAccessible(publicIAccessible.get_accChild(childID));
 
         int IAccessibleInternal.get_accChildCount() => publicIAccessible.accChildCount;
 
-        string IAccessibleInternal.get_accDefaultAction(object childID)
+        string? IAccessibleInternal.get_accDefaultAction(object childID)
             => publicIAccessible.get_accDefaultAction(childID);
 
-        string IAccessibleInternal.get_accDescription(object childID)
+        string? IAccessibleInternal.get_accDescription(object childID)
             => publicIAccessible.get_accDescription(childID);
 
-        object IAccessibleInternal.get_accFocus()
+        object? IAccessibleInternal.get_accFocus()
             => AsNativeAccessible(publicIAccessible.accFocus);
 
-        string IAccessibleInternal.get_accHelp(object childID)
+        string? IAccessibleInternal.get_accHelp(object childID)
             => publicIAccessible.get_accHelp(childID);
 
         int IAccessibleInternal.get_accHelpTopic(out string pszHelpFile, object childID)
             => publicIAccessible.get_accHelpTopic(out pszHelpFile, childID);
 
-        string IAccessibleInternal.get_accKeyboardShortcut(object childID)
+        string? IAccessibleInternal.get_accKeyboardShortcut(object childID)
             => publicIAccessible.get_accKeyboardShortcut(childID);
 
-        string IAccessibleInternal.get_accName(object childID)
+        string? IAccessibleInternal.get_accName(object childID)
             => publicIAccessible.get_accName(childID);
 
-        object IAccessibleInternal.get_accParent()
+        object? IAccessibleInternal.get_accParent()
             => AsNativeAccessible(publicIAccessible.accParent);
 
-        object IAccessibleInternal.get_accRole(object childID)
+        object? IAccessibleInternal.get_accRole(object childID)
             => publicIAccessible.get_accRole(childID);
 
-        object IAccessibleInternal.get_accSelection()
+        object? IAccessibleInternal.get_accSelection()
             => AsNativeAccessible(publicIAccessible.accSelection);
 
-        object IAccessibleInternal.get_accState(object childID)
+        object? IAccessibleInternal.get_accState(object childID)
             => publicIAccessible.get_accState(childID);
 
-        string IAccessibleInternal.get_accValue(object childID)
+        string? IAccessibleInternal.get_accValue(object childID)
             => publicIAccessible.get_accValue(childID);
 
         void IAccessibleInternal.set_accName(object childID, string newName)
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
         void IAccessibleInternal.set_accValue(object childID, string newValue)
             => publicIAccessible.set_accValue(childID, newValue);
 
-        HRESULT Oleaut32.IEnumVariant.Clone(Oleaut32.IEnumVariant[] ppEnum)
+        HRESULT Oleaut32.IEnumVariant.Clone(Oleaut32.IEnumVariant[]? ppEnum)
             => publicIEnumVariant.Clone(ppEnum);
 
         unsafe HRESULT Oleaut32.IEnumVariant.Next(uint celt, IntPtr rgVar, uint* pCeltFetched)
@@ -254,7 +254,7 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        IAccessibleEx IAccessibleEx.GetObjectForChild(int idChild)
+        IAccessibleEx? IAccessibleEx.GetObjectForChild(int idChild)
         {
             return publicIAccessibleEx.GetObjectForChild(idChild);
         }
@@ -273,15 +273,15 @@ namespace System.Windows.Forms
             return HRESULT.S_OK;
         }
 
-        int[] IAccessibleEx.GetRuntimeId() => publicIAccessibleEx.GetRuntimeId();
+        int[]? IAccessibleEx.GetRuntimeId() => publicIAccessibleEx.GetRuntimeId();
 
-        HRESULT IAccessibleEx.ConvertReturnedElement(IRawElementProviderSimple pIn, out IAccessibleEx ppRetValOut)
+        HRESULT IAccessibleEx.ConvertReturnedElement(IRawElementProviderSimple pIn, out IAccessibleEx? ppRetValOut)
             => publicIAccessibleEx.ConvertReturnedElement(pIn, out ppRetValOut);
 
         ProviderOptions IRawElementProviderSimple.ProviderOptions
             => publicIRawElementProviderSimple.ProviderOptions;
 
-        IRawElementProviderSimple IRawElementProviderSimple.HostRawElementProvider
+        IRawElementProviderSimple? IRawElementProviderSimple.HostRawElementProvider
             => publicIRawElementProviderSimple.HostRawElementProvider;
 
         object? IRawElementProviderSimple.GetPatternProvider(UIA patternId)
@@ -353,13 +353,13 @@ namespace System.Windows.Forms
             }
         }
 
-        object IRawElementProviderSimple.GetPropertyValue(UIA propertyID)
+        object? IRawElementProviderSimple.GetPropertyValue(UIA propertyID)
             => publicIRawElementProviderSimple.GetPropertyValue(propertyID);
 
-        object IRawElementProviderFragment.Navigate(NavigateDirection direction)
+        object? IRawElementProviderFragment.Navigate(NavigateDirection direction)
             => AsNativeAccessible(publicIRawElementProviderFragment.Navigate(direction));
 
-        int[] IRawElementProviderFragment.GetRuntimeId()
+        int[]? IRawElementProviderFragment.GetRuntimeId()
             => publicIRawElementProviderFragment.GetRuntimeId();
 
         object[]? IRawElementProviderFragment.GetEmbeddedFragmentRoots()
@@ -371,37 +371,37 @@ namespace System.Windows.Forms
         UiaRect IRawElementProviderFragment.BoundingRectangle
             => publicIRawElementProviderFragment.BoundingRectangle;
 
-        IRawElementProviderFragmentRoot IRawElementProviderFragment.FragmentRoot
+        IRawElementProviderFragmentRoot? IRawElementProviderFragment.FragmentRoot
             => publicIRawElementProviderFragment.FragmentRoot;
 
-        object IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y)
+        object? IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y)
             => AsNativeAccessible(publicIRawElementProviderFragmentRoot.ElementProviderFromPoint(x, y));
 
-        object IRawElementProviderFragmentRoot.GetFocus()
+        object? IRawElementProviderFragmentRoot.GetFocus()
             => AsNativeAccessible(publicIRawElementProviderFragmentRoot.GetFocus());
 
-        string ILegacyIAccessibleProvider.DefaultAction => publicILegacyIAccessibleProvider.DefaultAction;
+        string? ILegacyIAccessibleProvider.DefaultAction => publicILegacyIAccessibleProvider.DefaultAction;
 
-        string ILegacyIAccessibleProvider.Description => publicILegacyIAccessibleProvider.Description;
+        string? ILegacyIAccessibleProvider.Description => publicILegacyIAccessibleProvider.Description;
 
-        string ILegacyIAccessibleProvider.Help => publicILegacyIAccessibleProvider.Help;
+        string? ILegacyIAccessibleProvider.Help => publicILegacyIAccessibleProvider.Help;
 
-        string ILegacyIAccessibleProvider.KeyboardShortcut => publicILegacyIAccessibleProvider.KeyboardShortcut;
+        string? ILegacyIAccessibleProvider.KeyboardShortcut => publicILegacyIAccessibleProvider.KeyboardShortcut;
 
-        string ILegacyIAccessibleProvider.Name => publicILegacyIAccessibleProvider.Name;
+        string? ILegacyIAccessibleProvider.Name => publicILegacyIAccessibleProvider.Name;
 
         uint ILegacyIAccessibleProvider.Role => publicILegacyIAccessibleProvider.Role;
 
         uint ILegacyIAccessibleProvider.State => publicILegacyIAccessibleProvider.State;
 
-        string ILegacyIAccessibleProvider.Value => publicILegacyIAccessibleProvider.Value;
+        string? ILegacyIAccessibleProvider.Value => publicILegacyIAccessibleProvider.Value;
 
         int ILegacyIAccessibleProvider.ChildId => publicILegacyIAccessibleProvider.ChildId;
 
         void ILegacyIAccessibleProvider.DoDefaultAction()
             => publicILegacyIAccessibleProvider.DoDefaultAction();
 
-        IAccessible ILegacyIAccessibleProvider.GetIAccessible()
+        IAccessible? ILegacyIAccessibleProvider.GetIAccessible()
             => publicILegacyIAccessibleProvider.GetIAccessible();
 
         object[]? ILegacyIAccessibleProvider.GetSelection()
@@ -417,9 +417,9 @@ namespace System.Windows.Forms
 
         BOOL IValueProvider.IsReadOnly => publicIValueProvider.IsReadOnly;
 
-        string IValueProvider.Value => publicIValueProvider.Value;
+        string? IValueProvider.Value => publicIValueProvider.Value;
 
-        void IValueProvider.SetValue(string newValue)
+        void IValueProvider.SetValue(string? newValue)
             => publicIValueProvider.SetValue(newValue);
 
         BOOL IRangeValueProvider.IsReadOnly => publicIValueProvider.IsReadOnly;
@@ -462,7 +462,7 @@ namespace System.Windows.Forms
         object[]? ITableItemProvider.GetColumnHeaderItems()
             => AsArrayOfNativeAccessibles(publicITableItemProvider.GetColumnHeaderItems());
 
-        object IGridProvider.GetItem(int row, int column)
+        object? IGridProvider.GetItem(int row, int column)
             => AsNativeAccessible(publicIGridProvider.GetItem(row, column));
 
         int IGridProvider.RowCount => publicIGridProvider.RowCount;
@@ -477,14 +477,14 @@ namespace System.Windows.Forms
 
         int IGridItemProvider.ColumnSpan => publicIGridItemProvider.ColumnSpan;
 
-        IRawElementProviderSimple IGridItemProvider.ContainingGrid
+        IRawElementProviderSimple? IGridItemProvider.ContainingGrid
             => publicIGridItemProvider.ContainingGrid;
 
         /// <summary>
         ///  Get the currently selected elements
         /// </summary>
         /// <returns>An AutomationElement array containing the currently selected elements</returns>
-        object[] ISelectionProvider.GetSelection() => publicISelectionProvider.GetSelection();
+        object[]? ISelectionProvider.GetSelection() => publicISelectionProvider.GetSelection();
 
         /// <summary>
         ///  Indicates whether the control allows more than one element to be selected
@@ -528,7 +528,7 @@ namespace System.Windows.Forms
         ///  The logical element that supports the SelectionPattern for this Item.
         /// </summary>
         /// <returns>Returns a IRawElementProviderSimple.</returns>
-        IRawElementProviderSimple ISelectionItemProvider.SelectionContainer
+        IRawElementProviderSimple? ISelectionItemProvider.SelectionContainer
             => publicISelectionItemProvider.SelectionContainer;
 
         /// <summary>
@@ -537,7 +537,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <param name="hwnd">The window handle of the component.</param>
         /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
-        IRawElementProviderSimple IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
+        IRawElementProviderSimple? IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
             => publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
     }
 }
