@@ -9,9 +9,9 @@ namespace System.Windows.Forms.Tests
 {
     public class FileDialogCustomPlacesCollectionTests
     {
-        public static TheoryData<string> GetStringWithNullTheoryData()
+        public static TheoryData<string?> GetStringWithNullTheoryData()
         {
-            var data = new TheoryData<string>
+            var data = new TheoryData<string?>
             {
                 null,
                 string.Empty,
@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(GetStringWithNullTheoryData))]
-        public void FileDialogCustomPlacesCollection_Add_String_Success(string path)
+        public void FileDialogCustomPlacesCollection_Add_String_Success(string? path)
         {
             var collection = new FileDialogCustomPlacesCollection
             {

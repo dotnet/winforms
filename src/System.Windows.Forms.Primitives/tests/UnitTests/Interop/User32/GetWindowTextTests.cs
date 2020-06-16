@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -46,13 +46,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
 
         private class ChangeWindowTextClass : WindowClass
         {
-            public Func<string> BeforeGetTextLengthCallback
+            public Func<string>? BeforeGetTextLengthCallback
             {
                 get;
                 set;
             }
 
-            public Func<string> BeforeGetTextCallback
+            public Func<string>? BeforeGetTextCallback
             {
                 get;
                 set;
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                 switch (msg)
                 {
                     case WM.GETTEXTLENGTH:
-                        string text = BeforeGetTextLengthCallback?.Invoke();
+                        string? text = BeforeGetTextLengthCallback?.Invoke();
                         if (text != null)
                         {
                             SetWindowTextW(hWnd, text);

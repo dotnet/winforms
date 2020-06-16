@@ -9,9 +9,9 @@ namespace System.Windows.Forms.Tests
 {
     public class FileDialogCustomPlaceTests
     {
-        public static TheoryData<string> GetStringWithNullTheoryData()
+        public static TheoryData<string?> GetStringWithNullTheoryData()
         {
-            var data = new TheoryData<string>
+            var data = new TheoryData<string?>
             {
                 null,
                 string.Empty,
@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(GetStringWithNullTheoryData))]
-        public void FileDialogCustomPlace_Ctor_String(string path)
+        public void FileDialogCustomPlace_Ctor_String(string? path)
         {
             var place = new FileDialogCustomPlace(path);
             Assert.Equal(Guid.Empty, place.KnownFolderGuid);
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(GetStringWithNullTheoryData))]
-        public void FileDialogCustomPlace_Path_Set_GetReturnsExpected(string value)
+        public void FileDialogCustomPlace_Path_Set_GetReturnsExpected(string? value)
         {
             var place = new FileDialogCustomPlace(Guid.NewGuid())
             {

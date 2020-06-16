@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
             using Bitmap bitmap = icon.ToBitmap();
             IPicture picture = MockAxHost.GetIPictureFromPicture(bitmap);
             Assert.NotNull(picture);
-            using Image image = MockAxHost.GetPictureFromIPicture(picture);
+            using Image image = MockAxHost.GetPictureFromIPicture(picture)!;
             Assert.NotNull(image);
             Assert.Equal(bitmap.Size, image.Size);
         }
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Ole32
             using Bitmap bitmap = new Bitmap(100, 200);
             IPictureDisp picture = MockAxHost.GetIPictureDispFromPicture(bitmap);
             Assert.NotNull(picture);
-            using Image image = MockAxHost.GetPictureFromIPictureDisp(picture);
+            using Image image = MockAxHost.GetPictureFromIPictureDisp(picture)!;
             Assert.NotNull(image);
             Assert.Equal(bitmap.Size, image.Size);
         }

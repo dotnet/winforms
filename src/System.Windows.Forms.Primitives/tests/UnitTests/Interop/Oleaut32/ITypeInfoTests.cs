@@ -412,9 +412,9 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
         // to an error so manual release is required to avoid running into this condition.
         private struct ComRefReleaser : IDisposable
         {
-            private object _reference;
+            private object? _reference;
 
-            public ComRefReleaser(object reference)
+            public ComRefReleaser(object? reference)
             {
                 _reference = reference;
             }
