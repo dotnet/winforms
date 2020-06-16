@@ -1,3 +1,4 @@
+#nullable enable
 System.Windows.Forms.Automation.AutomationLiveSetting
 System.Windows.Forms.Automation.AutomationLiveSetting.Assertive = 2 -> System.Windows.Forms.Automation.AutomationLiveSetting
 System.Windows.Forms.Automation.AutomationLiveSetting.Off = 0 -> System.Windows.Forms.Automation.AutomationLiveSetting
@@ -16,14 +17,14 @@ System.Windows.Forms.Automation.AutomationNotificationProcessing.ImportantMostRe
 System.Windows.Forms.Automation.AutomationNotificationProcessing.MostRecent = 3 -> System.Windows.Forms.Automation.AutomationNotificationProcessing
 System.Windows.Forms.FileDialogCustomPlace
 System.Windows.Forms.FileDialogCustomPlace.FileDialogCustomPlace(System.Guid knownFolderGuid) -> void
-System.Windows.Forms.FileDialogCustomPlace.FileDialogCustomPlace(string path) -> void
+System.Windows.Forms.FileDialogCustomPlace.FileDialogCustomPlace(string? path) -> void
 System.Windows.Forms.FileDialogCustomPlace.KnownFolderGuid.get -> System.Guid
 System.Windows.Forms.FileDialogCustomPlace.KnownFolderGuid.set -> void
-System.Windows.Forms.FileDialogCustomPlace.Path.get -> string
+System.Windows.Forms.FileDialogCustomPlace.Path.get -> string!
 System.Windows.Forms.FileDialogCustomPlace.Path.set -> void
 System.Windows.Forms.FileDialogCustomPlacesCollection
 System.Windows.Forms.FileDialogCustomPlacesCollection.Add(System.Guid knownFolderGuid) -> void
-System.Windows.Forms.FileDialogCustomPlacesCollection.Add(string path) -> void
+System.Windows.Forms.FileDialogCustomPlacesCollection.Add(string? path) -> void
 System.Windows.Forms.FileDialogCustomPlacesCollection.FileDialogCustomPlacesCollection() -> void
 System.Windows.Forms.HighDpiMode
 System.Windows.Forms.HighDpiMode.DpiUnaware = 0 -> System.Windows.Forms.HighDpiMode
@@ -32,7 +33,7 @@ System.Windows.Forms.HighDpiMode.PerMonitor = 2 -> System.Windows.Forms.HighDpiM
 System.Windows.Forms.HighDpiMode.PerMonitorV2 = 3 -> System.Windows.Forms.HighDpiMode
 System.Windows.Forms.HighDpiMode.SystemAware = 1 -> System.Windows.Forms.HighDpiMode
 System.Windows.Forms.Message
-System.Windows.Forms.Message.GetLParam(System.Type cls) -> object
+System.Windows.Forms.Message.GetLParam(System.Type! cls) -> object?
 System.Windows.Forms.Message.HWnd.get -> System.IntPtr
 System.Windows.Forms.Message.HWnd.set -> void
 System.Windows.Forms.Message.LParam.get -> System.IntPtr
@@ -138,21 +139,21 @@ System.Windows.Forms.VisualStyles.ThemeSizeType
 System.Windows.Forms.VisualStyles.ThemeSizeType.Draw = 2 -> System.Windows.Forms.VisualStyles.ThemeSizeType
 System.Windows.Forms.VisualStyles.ThemeSizeType.Minimum = 0 -> System.Windows.Forms.VisualStyles.ThemeSizeType
 System.Windows.Forms.VisualStyles.ThemeSizeType.True = 1 -> System.Windows.Forms.VisualStyles.ThemeSizeType
-override System.Windows.Forms.FileDialogCustomPlace.ToString() -> string
-override System.Windows.Forms.Message.Equals(object o) -> bool
+override System.Windows.Forms.FileDialogCustomPlace.ToString() -> string!
+override System.Windows.Forms.Message.Equals(object? o) -> bool
 override System.Windows.Forms.Message.GetHashCode() -> int
-override System.Windows.Forms.Message.ToString() -> string
-override System.Windows.Forms.Padding.Equals(object other) -> bool
+override System.Windows.Forms.Message.ToString() -> string!
+override System.Windows.Forms.Padding.Equals(object? other) -> bool
 override System.Windows.Forms.Padding.GetHashCode() -> int
-override System.Windows.Forms.Padding.ToString() -> string
-override System.Windows.Forms.PaddingConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-override System.Windows.Forms.PaddingConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-override System.Windows.Forms.PaddingConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-override System.Windows.Forms.PaddingConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-override System.Windows.Forms.PaddingConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues) -> object
-override System.Windows.Forms.PaddingConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-override System.Windows.Forms.PaddingConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object value, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-override System.Windows.Forms.PaddingConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.Padding.ToString() -> string!
+override System.Windows.Forms.PaddingConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.PaddingConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type! destinationType) -> bool
+override System.Windows.Forms.PaddingConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value) -> object?
+override System.Windows.Forms.PaddingConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.PaddingConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext? context, System.Collections.IDictionary! propertyValues) -> object!
+override System.Windows.Forms.PaddingConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.PaddingConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! value, System.Attribute![]! attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+override System.Windows.Forms.PaddingConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 static System.Windows.Forms.Message.Create(System.IntPtr hWnd, int msg, System.IntPtr wparam, System.IntPtr lparam) -> System.Windows.Forms.Message
 static System.Windows.Forms.Message.operator !=(System.Windows.Forms.Message a, System.Windows.Forms.Message b) -> bool
 static System.Windows.Forms.Message.operator ==(System.Windows.Forms.Message a, System.Windows.Forms.Message b) -> bool

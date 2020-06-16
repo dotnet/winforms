@@ -20,7 +20,7 @@ namespace System.Windows.Forms
                 try
                 {
                     IShellItem? shellItem = customPlace.GetNativePath();
-                    if (null != shellItem)
+                    if (shellItem is object)
                     {
                         dialog.AddPlace(shellItem, 0);
                     }

@@ -14,6 +14,6 @@ internal static partial class Interop
         ///  Calling with ("DISPLAY", null, null, IntPtr.Zero) will retrieve a DC for the entire desktop.
         /// </remarks>
         [DllImport(Libraries.Gdi32, SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr CreateDC(string lpszDriver, string lpszDeviceName, string lpszOutput, IntPtr devMode);
+        public static extern IntPtr CreateDC(string lpszDriver, string? lpszDeviceName, string? lpszOutput, IntPtr devMode);
     }
 }

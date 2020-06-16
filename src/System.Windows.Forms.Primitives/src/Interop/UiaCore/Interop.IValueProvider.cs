@@ -18,10 +18,10 @@ internal static partial class Interop
             ///  Request to set the value that this UI element is representing
             /// </summary>
             /// <param name="value">Value to set the UI to</param>
-            void SetValue([MarshalAs(UnmanagedType.LPWStr)] string value);
+            void SetValue([MarshalAs(UnmanagedType.LPWStr)] string? value);
 
             /// <summary>Value of a value control, as a a string.</summary>
-            string Value { get; }
+            string? Value { get; }
 
             /// <summary>Indicates that the value can only be read, not modified.
             ///returns True if the control is read-only</summary>

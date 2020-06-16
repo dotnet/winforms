@@ -17,7 +17,7 @@ internal static partial class Interop
             [return: MarshalAs(UnmanagedType.IDispatch)]
             [DispId(unchecked((int)0xFFFFEC78))]
             [TypeLibFunc(0x0040)]
-            object get_accParent();
+            object? get_accParent();
 
             [DispId(unchecked((int)0xFFFFEC77))]
             [TypeLibFunc(0x0040)]
@@ -26,39 +26,39 @@ internal static partial class Interop
             [return: MarshalAs(UnmanagedType.IDispatch)]
             [TypeLibFunc(0x0040)]
             [DispId(unchecked((int)0xFFFFEC76))]
-            object get_accChild(
+            object? get_accChild(
                 [MarshalAs(UnmanagedType.Struct)] object varChild);
 
             [DispId(unchecked((int)0xFFFFEC75))]
             [TypeLibFunc(0x0040)]
-            string get_accName(
+            string? get_accName(
                 [Optional][MarshalAs(UnmanagedType.Struct)] object varChild);
 
             [TypeLibFunc(0x0040)]
             [DispId(unchecked((int)0xFFFFEC74))]
-            string get_accValue(
+            string? get_accValue(
                 [Optional][MarshalAs(UnmanagedType.Struct)] object varChild);
 
             [DispId(unchecked((int)0xFFFFEC73))]
             [TypeLibFunc(0x0040)]
-            string get_accDescription(
+            string? get_accDescription(
                 [Optional][MarshalAs(UnmanagedType.Struct)] object varChild);
 
             [return: MarshalAs(UnmanagedType.Struct)]
             [DispId(unchecked((int)0xFFFFEC72))]
             [TypeLibFunc(0x0040)]
-            object get_accRole(
+            object? get_accRole(
                 [Optional][MarshalAs(UnmanagedType.Struct)] object varChild);
 
             [return: MarshalAs(UnmanagedType.Struct)]
             [TypeLibFunc(0x0040)]
             [DispId(unchecked((int)0xFFFFEC71))]
-            object get_accState(
+            object? get_accState(
                 [Optional][MarshalAs(UnmanagedType.Struct)] object varChild);
 
             [TypeLibFunc(0x0040)]
             [DispId(unchecked((int)0xFFFFEC70))]
-            string get_accHelp(
+            string? get_accHelp(
                 [Optional][MarshalAs(UnmanagedType.Struct)] object varChild);
 
             [DispId(unchecked((int)0xFFFFEC6F))]
@@ -69,23 +69,23 @@ internal static partial class Interop
 
             [DispId(unchecked((int)0xFFFFEC6E))]
             [TypeLibFunc(0x0040)]
-            string get_accKeyboardShortcut(
+            string? get_accKeyboardShortcut(
                 [Optional][MarshalAs(UnmanagedType.Struct)] object varChild);
 
             [return: MarshalAs(UnmanagedType.Struct)]
             [DispId(unchecked((int)0xFFFFEC6D))]
             [TypeLibFunc(0x0040)]
-            object get_accFocus();
+            object? get_accFocus();
 
             [return: MarshalAs(UnmanagedType.Struct)]
             [DispId(unchecked((int)0xFFFFEC6C))]
             [TypeLibFunc(0x0040)]
-            object get_accSelection();
+            object? get_accSelection();
 
             [return: MarshalAs(UnmanagedType.BStr)]
             [TypeLibFunc(0x0040)]
             [DispId(unchecked((int)0xFFFFEC6B))]
-            string get_accDefaultAction(
+            string? get_accDefaultAction(
                 [Optional][MarshalAs(UnmanagedType.Struct)] object varChild);
 
             [DispId(unchecked((int)0xFFFFEC6A))]
@@ -106,14 +106,14 @@ internal static partial class Interop
             [return: MarshalAs(UnmanagedType.Struct)]
             [TypeLibFunc(0x0040)]
             [DispId(unchecked((int)0xFFFFEC68))]
-            object accNavigate(
+            object? accNavigate(
                 int navDir,
                 [Optional][MarshalAs(UnmanagedType.Struct)] object varStart);
 
             [return: MarshalAs(UnmanagedType.Struct)]
             [TypeLibFunc(0x0040)]
             [DispId(unchecked((int)0xFFFFEC67))]
-            object accHitTest(
+            object? accHitTest(
                 int xLeft,
                 int yTop);
 

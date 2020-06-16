@@ -11,9 +11,9 @@ internal static partial class Interop
     internal static partial class Shell32
     {
         [DllImport(Libraries.Shell32, ExactSpelling = true, EntryPoint = "DragQueryFileW", CharSet = CharSet.Unicode)]
-        private static extern uint DragQueryFileWInternal(IntPtr hDrop, uint iFile, StringBuilder lpszFile, uint cch);
+        private static extern uint DragQueryFileWInternal(IntPtr hDrop, uint iFile, StringBuilder? lpszFile, uint cch);
 
-        public static uint DragQueryFileW(IntPtr hDrop, uint iFile, StringBuilder lpszFile)
+        public static uint DragQueryFileW(IntPtr hDrop, uint iFile, StringBuilder? lpszFile)
         {
             if (lpszFile == null || lpszFile.Capacity == 0 || iFile == 0xFFFFFFFF)
             {

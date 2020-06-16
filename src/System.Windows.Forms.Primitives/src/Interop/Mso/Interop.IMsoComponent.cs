@@ -145,7 +145,7 @@ internal static partial class Interop
             /// </param>
             [PreserveSig]
             void OnActivationChange(
-                IMsoComponent pic,
+                IMsoComponent? pic,
                 BOOL fSameComponent,
                 MSOCRINFO* pcrinfo,
                 BOOL fHostIsActivating,

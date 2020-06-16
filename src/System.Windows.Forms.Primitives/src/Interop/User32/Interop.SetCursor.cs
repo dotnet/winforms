@@ -13,7 +13,7 @@ internal static partial class Interop
         [DllImport(Libraries.User32, ExactSpelling = true)]
         private static extern IntPtr SetCursor(IntPtr hCursor);
 
-        public static IntPtr SetCursor(IHandle hCursor)
+        public static IntPtr SetCursor(IHandle? hCursor)
         {
             IntPtr result = SetCursor(hCursor?.Handle ?? IntPtr.Zero);
             GC.KeepAlive(hCursor);

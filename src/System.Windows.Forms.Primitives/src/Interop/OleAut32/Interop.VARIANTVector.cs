@@ -13,7 +13,7 @@ internal static partial class Interop
         {
             public VARIANT[] Variants;
 
-            public VARIANTVector(object[] values)
+            public VARIANTVector(object[]? values)
             {
                 if (values == null)
                 {
