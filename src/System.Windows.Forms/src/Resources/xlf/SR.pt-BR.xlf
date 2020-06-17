@@ -6383,7 +6383,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="ListViewGroupTaskLinkClickDescr">
         <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
-        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
+        <target state="translated">Evento gerado quando a propriedade TaskLink de um ListViewGroup é clicada.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
