@@ -815,7 +815,7 @@ namespace System.Windows.Forms
                                        .ToString());
             }
 
-            User32.SetWindowTextW(Handle, caption ?? string.Empty);
+            User32.SetWindowTextW(Handle, caption);
         }
 
         private HRESULT HandleTaskDialogCallback(
