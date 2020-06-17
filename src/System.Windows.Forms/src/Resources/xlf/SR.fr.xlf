@@ -6383,7 +6383,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="ListViewGroupTaskLinkClickDescr">
         <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
-        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
+        <target state="translated">Événement déclenché quand un utilisateur clique sur la propriété TaskLink d'un ListViewGroup.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupsDescr">

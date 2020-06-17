@@ -6383,7 +6383,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupTaskLinkClickDescr">
         <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
-        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
+        <target state="translated">ListViewGroup의 TaskLink 속성이 클릭되면 이벤트가 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupsDescr">

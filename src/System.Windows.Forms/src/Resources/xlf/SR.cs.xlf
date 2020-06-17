@@ -6383,7 +6383,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ListViewGroupTaskLinkClickDescr">
         <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
-        <target state="new">Event raised when the TaskLink property of a ListViewGroup is clicked.</target>
+        <target state="translated">Událost aktivovaná ve chvíli, kdy se klikne na vlastnost TaskLink položky ListViewGroup</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
