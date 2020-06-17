@@ -2337,7 +2337,7 @@ namespace System.Windows.Forms
                     }
                     catch (Exception exception)
                     {
-                        if (ClientUtils.IsSecurityOrCriticalException(exception))
+                        if (ClientUtils.IsCriticalException(exception))
                         {
                             throw;
                         }
@@ -2745,7 +2745,7 @@ namespace System.Windows.Forms
                 // Note: Sometimes the above operation throws but it successfully sets the
                 // data in the clipboard. This usually happens when the Application's Main
                 // is not attributed with [STAThread].
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                if (ClientUtils.IsCriticalException(ex))
                 {
                     throw;
                 }
@@ -2884,7 +2884,7 @@ namespace System.Windows.Forms
             }
             catch (Exception ex)
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                if (ClientUtils.IsCriticalException(ex))
                 {
                     throw;
                 }

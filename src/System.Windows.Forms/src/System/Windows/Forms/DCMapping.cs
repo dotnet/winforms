@@ -124,7 +124,7 @@ namespace System.Windows.Forms
                                 selectResult == RegionType.NULLREGION),
                                 "SIMPLEREGION or NULLLREGION expected.");
             }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
                 _dc.RestoreHdc();
                 _dc.Dispose();

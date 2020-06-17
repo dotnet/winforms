@@ -152,7 +152,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex)
                 {
-                    if (ClientUtils.IsSecurityOrCriticalException(ex))
+                    if (ClientUtils.IsCriticalException(ex))
                     {
                         throw;
                     }
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex)
                 {
-                    if (ClientUtils.IsSecurityOrCriticalException(ex))
+                    if (ClientUtils.IsCriticalException(ex))
                     {
                         throw;
                     }
@@ -202,7 +202,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex)
                 {
-                    if (ClientUtils.IsSecurityOrCriticalException(ex))
+                    if (ClientUtils.IsCriticalException(ex))
                     {
                         throw;
                     }
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex)
                 {
-                    if (ClientUtils.IsSecurityOrCriticalException(ex))
+                    if (ClientUtils.IsCriticalException(ex))
                     {
                         throw;
                     }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex)
                 {
-                    if (ClientUtils.IsSecurityOrCriticalException(ex))
+                    if (ClientUtils.IsCriticalException(ex))
                     {
                         throw;
                     }
@@ -464,7 +464,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
             }
 
@@ -585,7 +585,7 @@ namespace System.Windows.Forms
             }
             catch (Exception ex)
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                if (ClientUtils.IsCriticalException(ex))
                 {
                     throw;
                 }

@@ -480,7 +480,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
-            catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
             }
 

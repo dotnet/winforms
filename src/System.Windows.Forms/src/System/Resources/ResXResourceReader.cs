@@ -402,7 +402,7 @@ namespace System.Resources
                 }
                 catch (Exception e)
                 {
-                    if (ClientUtils.IsSecurityOrCriticalException(e))
+                    if (ClientUtils.IsCriticalException(e))
                     {
                         throw;
                     }

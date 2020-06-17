@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Internal
                 }
                 catch (Exception ex)
                 {
-                    if (ClientUtils.IsSecurityOrCriticalException(ex))
+                    if (ClientUtils.IsCriticalException(ex))
                     {
                         throw; // rethrow the original exception.
                     }

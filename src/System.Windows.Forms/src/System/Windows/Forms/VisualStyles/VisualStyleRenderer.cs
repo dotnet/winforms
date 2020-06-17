@@ -681,7 +681,7 @@ namespace System.Windows.Forms.VisualStyles
             }
             catch (Exception e)
             {
-                if (ClientUtils.IsSecurityOrCriticalException(e))
+                if (ClientUtils.IsCriticalException(e))
                 {
                     throw;
                 }
@@ -1075,7 +1075,7 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     hTheme = OpenThemeData(hWndRef, className);
                 }
-                catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
+                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                 {
                     if (throwExceptionOnFail)
                     {

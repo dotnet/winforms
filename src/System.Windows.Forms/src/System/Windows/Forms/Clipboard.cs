@@ -385,7 +385,7 @@ namespace System.Windows.Forms
                 {
                     Path.GetFullPath(path);
                 }
-                catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
+                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                 {
                     throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, "filePaths"), e);
                 }
