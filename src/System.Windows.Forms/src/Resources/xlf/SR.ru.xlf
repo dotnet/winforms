@@ -232,11 +232,6 @@
         <target state="translated">&amp;Применить</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArraysNotSameSize">
-        <source>Arrays '{0}' and '{1}' must be the same size.</source>
-        <target state="translated">Массивы '{0}' и '{1}' должны быть одинакового размера.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">Невозможно инициализировать autoComplete с данным пользовательским источником.</target>

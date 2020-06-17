@@ -232,11 +232,6 @@
         <target state="translated">適用(&amp;A)</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArraysNotSameSize">
-        <source>Arrays '{0}' and '{1}' must be the same size.</source>
-        <target state="translated">配列 '{0}' と '{1}' は同じサイズでなければなりません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">指定されたカスタム ソースを使用して、autoComplete を初期化できません。</target>

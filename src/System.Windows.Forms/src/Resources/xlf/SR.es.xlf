@@ -232,11 +232,6 @@
         <target state="translated">&amp;Aplicar</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArraysNotSameSize">
-        <source>Arrays '{0}' and '{1}' must be the same size.</source>
-        <target state="translated">Las matrices '{0}' y '{1}' deben tener el mismo tamaño.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">No se puede inicializar autoComplete con el origen personalizado dado.</target>
