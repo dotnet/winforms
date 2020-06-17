@@ -6718,6 +6718,16 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void RichTextBox_TextLength_GetHiddenText_ReturnsExpected()
+        {
+            using var control = new RichTextBox
+            {
+                Rtf = "{\\rtf1\\ansi{Sample for {\\v HIDDEN }text}}"
+            };
+            Assert.Equal(22, control.TextLength);
+        }
+
         [WinFormsTheory]
         [InlineData("", 0)]
         [InlineData("a\0b", 1)]
@@ -6778,6 +6788,28 @@ namespace System.Windows.Forms.Tests
 
                 base.WndProc(ref m);
             }
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Text_GetRtfText_ReturnsExpected()
+        {
+            using var control = new RichTextBox
+            {
+                Rtf = "{\\rtf1\\ansi{Sample text}}"
+            };
+            Assert.Equal("Sample text", control.Text);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Text_GetHiddenRtfText_ReturnsExpected()
+        {
+            using var control = new RichTextBox
+            {
+                Rtf = "{\\rtf1\\ansi{Sample for {\\v HIDDEN }text}}"
+            };
+            Assert.Equal("Sample for HIDDEN text", control.Text);
+            Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -7766,6 +7798,16 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expected, control.Find(str));
             Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Find_InvokeHiddenText_GetReturnsExpected()
+        {
+            using var control = new RichTextBox
+            {
+                Rtf = "{\\rtf1\\ansi{Sample for {\\v HIDDEN }text}}"
+            };
+            Assert.Equal(11, control.Find("HIDDEN"));
         }
 
         public static IEnumerable<object[]> Find_String_RichTextBoxFinds_TestData()
