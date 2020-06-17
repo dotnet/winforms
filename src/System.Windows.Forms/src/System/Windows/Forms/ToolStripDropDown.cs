@@ -17,8 +17,6 @@ using static Interop;
 namespace System.Windows.Forms
 {
     [Designer("System.Windows.Forms.Design.ToolStripDropDownDesigner, " + AssemblyRef.SystemDesign)]
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ToolStripDropDown : ToolStrip
     {
         private ToolStripItem ownerItem = null;
@@ -2228,7 +2226,6 @@ namespace System.Windows.Forms
 
         #endregion DropDownSpecific
 
-        [ComVisible(true)]
         public class ToolStripDropDownAccessibleObject : ToolStripAccessibleObject
         {
             private readonly ToolStripDropDown owner;

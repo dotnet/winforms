@@ -3009,7 +3009,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        [ComVisible(true)]
         public class GridEntryAccessibleObject : AccessibleObject
         {
             protected GridEntry owner = null;

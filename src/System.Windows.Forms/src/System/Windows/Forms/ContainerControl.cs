@@ -18,8 +18,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Defines a base class for controls that can parent other controls.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ContainerControl : ScrollableControl, IContainerControl
     {
         private Control _activeControl;

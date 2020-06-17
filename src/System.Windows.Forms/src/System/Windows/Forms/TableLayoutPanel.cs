@@ -22,8 +22,6 @@ namespace System.Windows.Forms
     [DesignerSerializer("System.Windows.Forms.Design.TableLayoutPanelCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
     [Docking(DockingBehavior.Never)]
     [Designer("System.Windows.Forms.Design.TableLayoutPanelDesigner, " + AssemblyRef.SystemDesign)]
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [SRDescription(nameof(SR.DescriptionTableLayoutPanel))]
     public class TableLayoutPanel : Panel, IExtenderProvider
     {

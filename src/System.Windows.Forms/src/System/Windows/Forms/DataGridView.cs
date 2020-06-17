@@ -14,8 +14,6 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.DataGridViewDesigner, " + AssemblyRef.SystemDesign)]
     [DefaultEvent(nameof(CellContentClick))]
     [ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]

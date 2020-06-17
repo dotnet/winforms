@@ -14,7 +14,6 @@ namespace System.Windows.Forms
 {
     public partial class MonthCalendar
     {
-        [ComVisible(true)]
         internal class MonthCalendarAccessibleObject : ControlAccessibleObject
         {
             internal const int MAX_DAYS = 7;

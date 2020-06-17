@@ -28,8 +28,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Wraps ActiveX controls and exposes them as fully featured windows forms controls.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
     [DefaultEvent(nameof(Enter))]

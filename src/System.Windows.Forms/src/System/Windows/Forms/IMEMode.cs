@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     ///  Specifies a value that determines the IME (Input Method Editor) status
     ///  of the object when that object is selected.
     /// </summary>
-    [ComVisible(true)]
     public enum ImeMode
     {
         /// <summary>

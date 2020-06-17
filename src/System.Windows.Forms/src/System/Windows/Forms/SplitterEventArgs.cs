@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides data for splitter events.
     /// </summary>
-    [ComVisible(true)]
     public class SplitterEventArgs : EventArgs
     {
         /// <summary>

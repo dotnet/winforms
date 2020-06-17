@@ -23,8 +23,6 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
     public class PropertyGrid : ContainerControl, IComPropertyBrowser, Ole32.IPropertyNotifySink
@@ -5486,7 +5484,6 @@ namespace System.Windows.Forms
     ///  Represents the PropertyGrid accessibility object.
     ///  Is used only in Accessibility Improvements of level3 to show correct accessible hierarchy.
     /// </summary>
-    [ComVisible(true)]
     internal class PropertyGridAccessibleObject : Control.ControlAccessibleObject
     {
         private readonly PropertyGrid _owningPropertyGrid;
@@ -5773,7 +5770,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents the PropertyGridToolStrip control accessibility object.
     /// </summary>
-    [ComVisible(true)]
     internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject
     {
         private readonly PropertyGrid _parentPropertyGrid;

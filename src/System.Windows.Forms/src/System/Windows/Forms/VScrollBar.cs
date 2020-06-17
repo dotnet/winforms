@@ -12,8 +12,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a standard Windows vertical scroll bar.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [SRDescription(nameof(SR.DescriptionVScrollBar))]
     public class VScrollBar : ScrollBar
     {

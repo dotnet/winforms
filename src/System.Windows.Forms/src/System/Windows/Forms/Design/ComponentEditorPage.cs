@@ -15,8 +15,6 @@ namespace System.Windows.Forms.Design
     /// <summary>
     ///  Provides a base implementation for a <see cref='ComponentEditorPage'/>.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public abstract class ComponentEditorPage : Panel
     {
         private Icon _icon;

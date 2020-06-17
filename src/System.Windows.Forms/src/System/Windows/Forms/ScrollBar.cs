@@ -12,8 +12,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Implements the basic functionality of a scroll bar control.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Value))]
     [DefaultEvent(nameof(Scroll))]
     public abstract class ScrollBar : Control

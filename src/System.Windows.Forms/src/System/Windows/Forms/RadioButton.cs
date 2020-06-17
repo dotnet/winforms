@@ -18,8 +18,6 @@ namespace System.Windows.Forms
     ///  standard
     ///  Windows radio button (option button).
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Checked))]
     [DefaultEvent(nameof(CheckedChanged))]
     [DefaultBindingProperty(nameof(Checked))]
@@ -603,7 +601,6 @@ namespace System.Windows.Forms
             return s + ", Checked: " + Checked.ToString();
         }
 
-        [ComVisible(true)]
         public class RadioButtonAccessibleObject : ButtonBaseAccessibleObject
         {
             public RadioButtonAccessibleObject(RadioButton owner) : base(owner)

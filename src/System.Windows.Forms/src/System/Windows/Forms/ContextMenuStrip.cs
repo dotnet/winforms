@@ -13,8 +13,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This class is just a conceptual wrapper around ToolStripDropDownMenu.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultEvent(nameof(Opening))]
     [SRDescription(nameof(SR.DescriptionContextMenuStrip))]
     public class ContextMenuStrip : ToolStripDropDownMenu

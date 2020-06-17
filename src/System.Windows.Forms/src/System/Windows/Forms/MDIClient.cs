@@ -20,8 +20,6 @@ namespace System.Windows.Forms
     ///  Don't create an <see cref="MdiClient"/> control.
     ///  A form creates and uses the <see cref="MdiClient"/> when you set the <see cref="Form.IsMdiContainer"/> property to <see langword="true"/>.
     /// </remarks>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
     public sealed class MdiClient : Control
@@ -423,7 +421,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of controls...
         /// </summary>
-        [ComVisible(false)]
         new public class ControlCollection : Control.ControlCollection
         {
             private readonly MdiClient owner;

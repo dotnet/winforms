@@ -18,8 +18,6 @@ namespace System.Windows.Forms
     ///  Represents a
     ///  Windows button.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [SRDescription(nameof(SR.DescriptionButton))]
     [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
     public class Button : ButtonBase, IButtonControl

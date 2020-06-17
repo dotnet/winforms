@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides a format-independent mechanism for transferring data.
     /// </summary>
-    [ComVisible(true)]
     public interface IDataObject
     {
         /// <summary>

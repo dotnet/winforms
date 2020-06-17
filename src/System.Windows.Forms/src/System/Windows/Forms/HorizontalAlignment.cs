@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     ///  Specifies how an object or text in a control is horizontally aligned
     ///  relative to an element of the control.
     /// </summary>
-    [ComVisible(true)]
     public enum HorizontalAlignment
     {
         /// <summary>

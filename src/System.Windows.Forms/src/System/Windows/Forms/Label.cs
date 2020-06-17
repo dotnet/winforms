@@ -20,8 +20,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a standard Windows label.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Text))]
     [DefaultBindingProperty(nameof(Text))]
     [Designer("System.Windows.Forms.Design.LabelDesigner, " + AssemblyRef.SystemDesign)]
@@ -1649,7 +1647,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         internal class LabelAccessibleObject : ControlAccessibleObject
         {
             public LabelAccessibleObject(Label owner) : base(owner)

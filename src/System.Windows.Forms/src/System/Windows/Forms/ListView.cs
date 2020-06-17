@@ -24,8 +24,6 @@ namespace System.Windows.Forms
     ///  Displays a list of items in one of four
     ///  views. Each item displays a caption and optionally an image.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Docking(DockingBehavior.Ask)]
     [Designer("System.Windows.Forms.Design.ListViewDesigner, " + AssemblyRef.SystemDesign)]
     [DefaultProperty(nameof(Items))]

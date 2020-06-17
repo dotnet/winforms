@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides data for the <see cref='Control.GiveFeedback'/> event.
     /// </summary>
-    [ComVisible(true)]
     public class GiveFeedbackEventArgs : EventArgs
     {
         /// <summary>

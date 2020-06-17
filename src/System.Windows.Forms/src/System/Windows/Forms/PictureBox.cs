@@ -22,8 +22,6 @@ namespace System.Windows.Forms
     ///  Displays an image that can be a graphic from a bitmap, icon, or metafile, as well as from
     ///  an enhanced metafile, JPEG, or GIF files.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Image))]
     [DefaultBindingProperty(nameof(Image))]
     [Docking(DockingBehavior.Ask)]

@@ -16,7 +16,6 @@ namespace System.Windows.Forms
     [Flags]
     [TypeConverter(typeof(KeysConverter))]
     [Editor("System.Windows.Forms.Design.ShortcutKeysEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
-    [ComVisible(true)]
     public enum Keys
     {
         /// <summary>

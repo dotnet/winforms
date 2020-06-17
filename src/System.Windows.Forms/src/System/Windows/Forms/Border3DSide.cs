@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Specifies the sides of a rectangle to apply a three-dimensional border to.
     /// </summary>
-    [ComVisible(true)]
     [Flags]
     public enum Border3DSide
     {

@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides data for the <see cref='RichTextBox.LinkClicked'/> event.
     /// </summary>
-    [ComVisible(true)]
     public class LinkClickedEventArgs : EventArgs
     {
         /// <summary>

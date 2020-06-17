@@ -1122,7 +1122,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             return new PropertyDescriptorGridEntryAccessibleObject(this);
         }
 
-        [ComVisible(true)]
         protected class PropertyDescriptorGridEntryAccessibleObject : GridEntryAccessibleObject
         {
             private readonly PropertyDescriptorGridEntry _owningPropertyDescriptorGridEntry;

@@ -9,7 +9,6 @@ namespace System.Windows.Forms
 {
     public partial class GroupBox
     {
-        [ComVisible(true)]
         internal class GroupBoxAccessibleObject : ControlAccessibleObject
         {
             internal GroupBoxAccessibleObject(GroupBox owner) : base(owner)

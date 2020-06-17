@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Specifies the appearance of a control.
     /// </summary>
-    [ComVisible(true)]
     public enum Appearance
     {
         /// <summary>

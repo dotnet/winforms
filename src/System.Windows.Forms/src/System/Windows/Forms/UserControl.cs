@@ -18,8 +18,6 @@ namespace System.Windows.Forms
     ///  the standard positioning and mnemonic handling code that is necessary
     ///  in a user control.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.UserControlDocumentDesigner, " + AssemblyRef.SystemDesign, typeof(IRootDesigner))]
     [Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign)]
     [DesignerCategory("UserControl")]

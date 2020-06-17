@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Specifies the style of a three-dimensional border.
     /// </summary>
-    [ComVisible(true)]
     public enum Border3DStyle
     {
         /// <summary>

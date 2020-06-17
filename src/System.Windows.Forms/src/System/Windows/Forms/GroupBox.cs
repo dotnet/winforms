@@ -19,8 +19,6 @@ namespace System.Windows.Forms
     ///  a standard Windows(r) group
     ///  box.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultEvent(nameof(Enter))]
     [DefaultProperty(nameof(Text))]
     [Designer("System.Windows.Forms.Design.GroupBoxDesigner, " + AssemblyRef.SystemDesign)]

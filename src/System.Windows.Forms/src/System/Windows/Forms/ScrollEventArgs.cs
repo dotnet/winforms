@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     ///  Provides data for the <see cref='ScrollBar.Scroll'/>
     ///  event.
     /// </summary>
-    [ComVisible(true)]
     public class ScrollEventArgs : EventArgs
     {
         /// <summary>

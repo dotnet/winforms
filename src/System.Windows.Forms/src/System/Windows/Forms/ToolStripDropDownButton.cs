@@ -214,7 +214,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  An implementation of Accessibleobject for use with ToolStripDropDownButton
         /// </summary>
-        [Runtime.InteropServices.ComVisible(true)]
         internal class ToolStripDropDownButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
         {
             private readonly ToolStripDropDownButton ownerItem = null;

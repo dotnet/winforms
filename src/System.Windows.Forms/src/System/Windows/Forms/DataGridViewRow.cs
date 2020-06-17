@@ -1770,7 +1770,6 @@ namespace System.Windows.Forms
             return sb.ToString();
         }
 
-        [ComVisible(true)]
         protected class DataGridViewRowAccessibleObject : AccessibleObject
         {
             private int[] runtimeId;

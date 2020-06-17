@@ -18,8 +18,6 @@ namespace System.Windows.Forms
     ///  Represents a Windows
     ///  check box.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Checked))]
     [DefaultEvent(nameof(CheckedChanged))]
     [DefaultBindingProperty(nameof(CheckState))]
@@ -648,7 +646,6 @@ namespace System.Windows.Forms
             return s + ", CheckState: " + checkState.ToString(CultureInfo.InvariantCulture);
         }
 
-        [ComVisible(true)]
         public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject
         {
             public CheckBoxAccessibleObject(Control owner) : base(owner)

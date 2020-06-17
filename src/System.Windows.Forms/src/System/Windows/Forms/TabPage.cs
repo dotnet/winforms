@@ -17,8 +17,6 @@ namespace System.Windows.Forms
     ///  TabPage implements a single page of a tab control. It is essentially a Panel with TabItem
     ///  properties.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.TabPageDesigner, " + AssemblyRef.SystemDesign)]
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
@@ -564,7 +562,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Our control collection will throw an exception if you try to add other tab pages.
         /// </summary>
-        [ComVisible(false)]
         public class TabPageControlCollection : ControlCollection
         {
             /// <summary>

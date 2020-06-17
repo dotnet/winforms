@@ -22,8 +22,6 @@ namespace System.Windows.Forms
     ///  The TabControl.  This control has a lot of the functionality of a TabStrip
     ///  but manages a list of TabPages which are the 'pages' that appear on each tab.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(TabPages))]
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [Designer("System.Windows.Forms.Design.TabControlDesigner, " + AssemblyRef.SystemDesign)]

@@ -11,7 +11,6 @@ namespace System.Windows.Forms
 {
     public partial class TabControl
     {
-        [ComVisible(false)]
         public new class ControlCollection : Control.ControlCollection
         {
             private readonly TabControl _owner;

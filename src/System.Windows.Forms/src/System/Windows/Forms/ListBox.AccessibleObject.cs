@@ -19,7 +19,6 @@ namespace System.Windows.Forms
         ///  This inherits from the base ListBoxExAccessibleObject and ListBoxAccessibleObject
         ///  to have all base functionality.
         /// </summary>
-        [ComVisible(true)]
         internal class ListBoxAccessibleObject : ControlAccessibleObject
         {
             private readonly Dictionary<ItemArray.Entry, ListBoxItemAccessibleObject> _itemAccessibleObjects;

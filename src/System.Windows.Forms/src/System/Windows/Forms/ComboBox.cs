@@ -28,8 +28,6 @@ namespace System.Windows.Forms
     ///  list or to enter new text. Displays only the editing field until the user
     ///  explicitly displays the list.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [DefaultProperty(nameof(Items))]
     [DefaultBindingProperty(nameof(Text))]
@@ -3961,7 +3959,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         private class ComboBoxChildNativeWindow : NativeWindow
         {
             private readonly ComboBox _owner;
@@ -4553,7 +4550,6 @@ namespace System.Windows.Forms
             }
         } // end ObjectCollection
 
-        [ComVisible(true)]
         public class ChildAccessibleObject : AccessibleObject
         {
             readonly ComboBox owner;
@@ -4578,7 +4574,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Represents the ComboBox item accessible object.
         /// </summary>
-        [ComVisible(true)]
         internal class ComboBoxItemAccessibleObject : AccessibleObject
         {
             private readonly ComboBox _owningComboBox;
@@ -4894,7 +4889,6 @@ namespace System.Windows.Forms
         ///  This inherits from the base ComboBoxExAccessibleObject and ComboBoxAccessibleObject
         ///  to have all base functionality.
         /// </summary>
-        [ComVisible(true)]
         internal class ComboBoxAccessibleObject : ControlAccessibleObject
         {
             private const int COMBOBOX_ACC_ITEM_INDEX = 1;
@@ -5360,7 +5354,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Represents the ComboBox's child (inner) list native window control accessible object with UI Automation provider functionality.
         /// </summary>
-        [ComVisible(true)]
         internal class ComboBoxChildListUiaProvider : ChildAccessibleObject
         {
             private const string COMBO_BOX_LIST_AUTOMATION_ID = "1000";
@@ -5602,7 +5595,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Represents the ComboBox's child text (is used instead of inner Edit when style is DropDownList but not DropDown) accessible object.
         /// </summary>
-        [ComVisible(true)]
         internal class ComboBoxChildTextUiaProvider : AccessibleObject
         {
             private const int COMBOBOX_TEXT_ACC_ITEM_INDEX = 1;
@@ -5777,7 +5769,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Represents the ComboBox child (inner) DropDown button accessible object with UI Automation functionality.
         /// </summary>
-        [ComVisible(true)]
         internal class ComboBoxChildDropDownButtonUiaProvider : AccessibleObject
         {
             private const int COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX = 2;

@@ -6912,7 +6912,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        [ComVisible(true)]
         private class GridViewListBoxItemAccessibleObject : AccessibleObject
         {
             private readonly GridViewListBox _owningGridViewListBox;
@@ -7174,7 +7173,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Represents the PropertyGridView ListBox accessibility object.
         /// </summary>
-        [ComVisible(true)]
         private class GridViewListBoxAccessibleObject : ControlAccessibleObject
         {
             private readonly GridViewListBox _owningGridViewListBox;
@@ -7724,7 +7722,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return fInSetText;
             }
 
-            [ComVisible(true)]
             protected class GridViewEditAccessibleObject : ControlAccessibleObject
             {
                 private readonly PropertyGridView propertyGridView;
@@ -8159,7 +8156,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  The accessible object class for a PropertyGridView. The child accessible objects
         ///  are accessible objects corresponding to the property grid entries.
         /// </summary>
-        [ComVisible(true)]
         internal class PropertyGridViewAccessibleObject : ControlAccessibleObject
         {
             private readonly PropertyGridView _owningPropertyGridView;

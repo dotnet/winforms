@@ -11,7 +11,6 @@ namespace System.Windows.Forms.Design
     /// <summary>
     ///  Provides access to get and set option values for a designer.
     /// </summary>
-    [ComVisible(true)]
     public class DesignerOptions
     {
         private const int MinGridSize = 2;

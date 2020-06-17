@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Specifies how a form window is displayed.
     /// </summary>
-    [ComVisible(true)]
     public enum FormWindowState
     {
         /// <summary>

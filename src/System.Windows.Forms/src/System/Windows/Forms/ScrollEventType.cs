@@ -10,7 +10,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Specifies the type of action used to raise the <see cref='ScrollBar.Scroll'/> event.
     /// </summary>
-    [ComVisible(true)]
     public enum ScrollEventType
     {
         /// <summary>

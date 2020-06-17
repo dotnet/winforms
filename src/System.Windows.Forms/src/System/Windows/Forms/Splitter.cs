@@ -18,8 +18,6 @@ namespace System.Windows.Forms
     ///  edge. The splitter will then resize the control that is previous in the docking
     ///  order.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultEvent(nameof(SplitterMoved))]
     [DefaultProperty(nameof(Dock))]
     [SRDescription(nameof(SR.DescriptionSplitter))]

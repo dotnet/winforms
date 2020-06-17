@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Collection of controls...
         /// </summary>
-        [ListBindable(false), ComVisible(false)]
+        [ListBindable(false)]
         public class ControlCollection : ArrangedElementCollection, IList, ICloneable
         {
             ///  A caching mechanism for key accessor

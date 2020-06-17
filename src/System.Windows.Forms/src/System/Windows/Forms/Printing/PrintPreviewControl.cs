@@ -18,8 +18,6 @@ namespace System.Windows.Forms
     ///  Most PrintPreviewControl's are found on PrintPreviewDialog's,
     ///  but they don't have to be.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPrintPreviewControl))]
     public class PrintPreviewControl : Control

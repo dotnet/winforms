@@ -18,8 +18,6 @@ namespace System.Windows.Forms
     ///  Implements a dialog box that is displayed when an unhandled exception occurs in
     ///  a thread.
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ThreadExceptionDialog : Form
     {
         private const string DownBitmapName = "down";

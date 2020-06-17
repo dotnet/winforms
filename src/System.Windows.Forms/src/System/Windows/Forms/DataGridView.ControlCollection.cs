@@ -11,7 +11,6 @@ namespace System.Windows.Forms
 {
     public partial class DataGridView
     {
-        [ComVisible(false)]
         public class DataGridViewControlCollection : ControlCollection
         {
             readonly DataGridView owner;

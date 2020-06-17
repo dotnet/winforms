@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
     public class NavigateEventArgs : EventArgs
     {
         public NavigateEventArgs(bool isForward)

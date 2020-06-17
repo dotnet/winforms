@@ -9,7 +9,6 @@ namespace System.ComponentModel.Design
     /// <summary>
     ///  An enum that defines what type of action happend to the related object's <see cref="DesignerActionListCollection">designer action lists collection</see>.
     /// </summary>
-    [ComVisible(true)]
     public enum DesignerActionListsChangedType
     {
         /// <summary>

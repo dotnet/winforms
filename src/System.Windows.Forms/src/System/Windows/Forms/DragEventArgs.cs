@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     ///  Provides data for the <see cref='Control.DragDrop'/>, <see cref='Control.DragEnter'/>,
     ///  or <see cref='Control.DragOver'/> event.
     /// </summary>
-    [ComVisible(true)]
     public class DragEventArgs : EventArgs
     {
         /// <summary>

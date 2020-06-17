@@ -12,10 +12,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
-     [ClassInterface(ClassInterfaceType.AutoDispatch)]
-     [SRDescription(nameof(SR.DescriptionMenuStrip))
-    ]
+    [SRDescription(nameof(SR.DescriptionMenuStrip))]
     public class MenuStrip : ToolStrip
     {
         private ToolStripMenuItem mdiWindowListItem = null;
@@ -263,7 +260,6 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
         }
 
-        [ComVisible(true)]
         internal class MenuStripAccessibleObject : ToolStripAccessibleObject
         {
             public MenuStripAccessibleObject(MenuStrip owner)

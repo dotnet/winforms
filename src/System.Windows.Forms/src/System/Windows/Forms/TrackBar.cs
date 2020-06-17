@@ -22,8 +22,6 @@ namespace System.Windows.Forms
     ///  aligned horizontally or vertically. You can also configure how many
     ///  'ticks' are shown for the total range of values
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Value))]
     [DefaultEvent(nameof(Scroll))]
     [DefaultBindingProperty(nameof(Value))]

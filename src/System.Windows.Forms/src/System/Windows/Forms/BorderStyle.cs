@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Specifies the border style for a control or form.
     /// </summary>
-    [ComVisible(true)]
     public enum BorderStyle
     {
         /// <summary>

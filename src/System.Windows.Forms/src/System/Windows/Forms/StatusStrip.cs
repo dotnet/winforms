@@ -13,10 +13,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
-     [ClassInterface(ClassInterfaceType.AutoDispatch)]
-     [SRDescription(nameof(SR.DescriptionStatusStrip))
-    ]
+    [SRDescription(nameof(SR.DescriptionStatusStrip))]
     public class StatusStrip : ToolStrip
     {
         private const AnchorStyles AllAnchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
@@ -649,7 +646,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         internal class StatusStripAccessibleObject : ToolStripAccessibleObject
         {
             public StatusStripAccessibleObject(StatusStrip owner) : base(owner)

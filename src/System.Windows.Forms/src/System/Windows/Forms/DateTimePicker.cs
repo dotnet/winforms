@@ -19,8 +19,6 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Date/DateTime picker control
     /// </summary>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [DefaultProperty(nameof(Value))]
     [DefaultEvent(nameof(ValueChanged))]
     [DefaultBindingProperty(nameof(Value))]
@@ -1687,7 +1685,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [ComVisible(true)]
         public class DateTimePickerAccessibleObject : ControlAccessibleObject
         {
             public DateTimePickerAccessibleObject(DateTimePicker owner) : base(owner)
