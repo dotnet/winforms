@@ -36,12 +36,7 @@ internal static partial class Interop
 
         private static BOOL HandleEnumThreadWindowsNativeCallback(IntPtr hWnd, IntPtr lParam)
         {
-            if (GCHandle.FromIntPtr(lParam).Target is EnumThreadWindowsCallback callback)
-            {
-                return callback(hWnd);
-            }
-
-            return BOOL.FALSE;
+            return ((EnumThreadWindowsCallback)GCHandle.FromIntPtr(lParam).Target!)(hWnd);
         }
     }
 }
