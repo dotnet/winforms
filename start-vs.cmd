@@ -1,5 +1,5 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
 
 :: This command launches a Visual Studio solution with environment variables required to use a local version of the .NET Core SDK.
 
@@ -19,13 +19,20 @@ if not exist "%DOTNET_ROOT%\dotnet.exe" (
 )
 
 :: Prefer the VS in the developer command prompt if we're in one, followed by whatever shows up in the current search path.
-set DEVENV="%DevEnvDir%devenv.exe"
-if not exist %DEVENV% (
-    set DEVENV="devenv.exe"
-    if not exist %DEVENV% (
+set "DEVENV=%DevEnvDir%devenv.exe"
+
+if exist "%DEVENV%" (
+    :: Fully qualified works
+    set "COMMAND="%ComSpec%" /S /C ""%DEVENV%" "%~dp0Winforms.sln"""
+) else (
+    where devenv.exe /Q
+    if !errorlevel! equ 0 (
+        :: On the PATH, use that.
+        set "COMMAND="%ComSpec%" /S /C "devenv.exe "%~dp0Winforms.sln"""
+    ) else (
         :: Can't find devenv.exe, let file associations take care of it
-        set DEVENV=""
+        set "COMMAND=start /B .\Winforms.sln"
     )
 )
 
-start %DEVENV% "Winforms.sln"
+%COMMAND%
