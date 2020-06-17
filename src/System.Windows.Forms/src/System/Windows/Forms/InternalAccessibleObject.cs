@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -103,6 +104,7 @@ namespace System.Windows.Forms
         ///  If the given object is an AccessibleObject return it as a InternalAccessibleObject
         ///  This ensures we wrap all AccessibleObjects before handing them out to OLEACC
         /// </summary>
+        [return: NotNullIfNotNull("accObject")]
         private object? AsNativeAccessible(object? accObject)
         {
             if (accObject is AccessibleObject accessibleObject)
@@ -122,7 +124,7 @@ namespace System.Windows.Forms
             {
                 for (int i = 0; i < accObjectArray.Length; i++)
                 {
-                    accObjectArray[i] = AsNativeAccessible(accObjectArray[i])!;
+                    accObjectArray[i] = AsNativeAccessible(accObjectArray[i]);
                 }
             }
 
