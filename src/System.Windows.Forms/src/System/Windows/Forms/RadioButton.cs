@@ -407,11 +407,8 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
             // UIA events:
-            if (IsHandleCreated)
-            {
-                AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.SelectionItemIsSelectedPropertyId, Checked, !Checked);
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
-            }
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.SelectionItemIsSelectedPropertyId, Checked, !Checked);
+            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
 
             ((EventHandler)Events[EVENT_CHECKEDCHANGED])?.Invoke(this, e);
         }

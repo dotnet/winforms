@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -20,45 +18,23 @@ namespace System.Windows.Forms
             }
 
             public override string DefaultAction
-            {
-                get
-                {
-                    string defaultAction = Owner.AccessibleDefaultActionDescription;
-                    if (defaultAction != null)
-                    {
-                        return defaultAction;
-                    }
-
-                    return SR.AccessibleActionCheck;
-                }
-            }
+                => Owner.AccessibleDefaultActionDescription ?? SR.AccessibleActionCheck;
 
             public override AccessibleRole Role
             {
                 get
                 {
                     AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.RadioButton;
+                    return role != AccessibleRole.Default
+                        ? role
+                        : AccessibleRole.RadioButton;
                 }
             }
 
             public override AccessibleStates State
-            {
-                get
-                {
-                    if (_owningRadioButton.Checked)
-                    {
-                        return AccessibleStates.Checked | base.State;
-                    }
-
-                    return base.State;
-                }
-            }
+                => _owningRadioButton.Checked
+                    ? AccessibleStates.Checked | base.State
+                    : base.State;
 
             internal override bool IsItemSelected
                 => _owningRadioButton.Checked;
@@ -71,7 +47,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
                     UiaCore.UIA.NamePropertyId
@@ -91,12 +67,11 @@ namespace System.Windows.Forms
                     _ => base.GetPropertyValue(propertyID)
                 };
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
-                patternId switch
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+                => patternId switch
                 {
                     var p when
-                        p == UiaCore.UIA.SelectionItemPatternId ||
-                        p == UiaCore.UIA.LegacyIAccessiblePatternId => true,
+                        p == UiaCore.UIA.SelectionItemPatternId => true,
                     _ => base.IsPatternSupported(patternId)
                 };
         }
