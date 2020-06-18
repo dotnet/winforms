@@ -232,11 +232,6 @@
         <target state="translated">&amp;Použít</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArraysNotSameSize">
-        <source>Arrays '{0}' and '{1}' must be the same size.</source>
-        <target state="translated">Pole {0} a {1} musí mít stejnou velikost.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">Funkci autoComplete nelze s daným vlastním zdrojem inicializovat.</target>

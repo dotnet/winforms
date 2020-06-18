@@ -232,11 +232,6 @@
         <target state="translated">적용(&amp;A)</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArraysNotSameSize">
-        <source>Arrays '{0}' and '{1}' must be the same size.</source>
-        <target state="translated">'{0}' 배열과 '{1}' 배열은 크기가 같아야 합니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">지정된 사용자 지정 소스를 사용하여 autoComplete를 초기화할 수 없습니다.</target>

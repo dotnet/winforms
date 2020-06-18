@@ -388,7 +388,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     childEntries = new GridEntry[propList.Count];
                     propList.CopyTo(childEntries, 0);
-                    StringSorter.Sort(childEntries);
+                    Array.Sort(childEntries, GridEntryComparer.Default);
 
                     ChildCollection.Clear();
                     ChildCollection.AddRange(childEntries);
