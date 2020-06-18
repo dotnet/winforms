@@ -26,8 +26,7 @@ internal static partial class Interop
             /// </summary>
             /// <returns>An AutomationElement array containing the currently selected elements</returns>
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
-            /* IRawElementProviderSimple */
-            object[] GetSelection();
+            object[]? /* IRawElementProviderSimple */ GetSelection();
 
             /// <summary>
             ///  Indicates whether the control allows more than one element to be selected

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using static Interop;
 
@@ -590,7 +591,7 @@ namespace System.Windows.Forms
             BoundDialog.Navigate(page);
         }
 
-        internal static bool IsNativeStringNullOrEmpty(string? str)
+        internal static bool IsNativeStringNullOrEmpty([NotNullWhen(false)] string? str)
         {
             // From a native point of view, the string is empty if its first
             // character is a NUL char.

@@ -15,10 +15,10 @@ internal static partial class Interop
         public interface ITableItemProvider
         {
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
-            object[] /*IRawElementProviderSimple[]*/ GetRowHeaderItems();
+            object[]? /*IRawElementProviderSimple[]*/ GetRowHeaderItems();
 
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
-            object[] /*IRawElementProviderSimple[]*/ GetColumnHeaderItems();
+            object[]? /*IRawElementProviderSimple[]*/ GetColumnHeaderItems();
         }
     }
 }

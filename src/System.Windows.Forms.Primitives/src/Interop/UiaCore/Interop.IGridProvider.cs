@@ -15,7 +15,7 @@ internal static partial class Interop
         public interface IGridProvider
         {
             [return: MarshalAs(UnmanagedType.IUnknown)]
-            object /*IRawElementProviderSimple*/ GetItem(int row, int column);
+            object? /*IRawElementProviderSimple*/ GetItem(int row, int column);
 
             int RowCount { get; }
 

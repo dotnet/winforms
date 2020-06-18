@@ -14,20 +14,20 @@ internal static partial class Interop
         public sealed class QACONTAINER
         {
             public uint cbSize;
-            public IOleClientSite pClientSite;
-            public IAdviseSink pAdviseSink;
-            public IPropertyNotifySink pPropertyNotifySink;
+            public IOleClientSite? pClientSite;
+            public IAdviseSink? pAdviseSink;
+            public IPropertyNotifySink? pPropertyNotifySink;
             [MarshalAs(UnmanagedType.Interface)]
-            public object pUnkEventSink;
+            public object? pUnkEventSink;
             public QACONTAINERFLAGS dwAmbientFlags;
             public uint colorFore;
             public uint colorBack;
-            public IFont pFont;
+            public IFont? pFont;
             public IntPtr pUndoMgr;
             public uint dwAppearance;
             public int lcid;
             public IntPtr hpal;
-            public IServiceProvider pBindHost;
+            public IServiceProvider? pBindHost;
         }
     }
 }

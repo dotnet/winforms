@@ -19,8 +19,8 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    IShellItem shellItem = customPlace.GetNativePath();
-                    if (null != shellItem)
+                    IShellItem? shellItem = customPlace.GetNativePath();
+                    if (shellItem != null)
                     {
                         dialog.AddPlace(shellItem, 0);
                     }
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public void Add(string path) => Add(new FileDialogCustomPlace(path));
+        public void Add(string? path) => Add(new FileDialogCustomPlace(path));
 
         public void Add(Guid knownFolderGuid) => Add(new FileDialogCustomPlace(knownFolderGuid));
     }

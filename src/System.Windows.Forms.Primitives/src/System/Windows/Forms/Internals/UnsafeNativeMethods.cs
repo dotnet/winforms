@@ -56,6 +56,6 @@ namespace System.Windows.Forms
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
 
         [DllImport(Libraries.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
-        public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
+        public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object? pAcc);
     }
 }

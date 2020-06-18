@@ -14,8 +14,8 @@ namespace System.Windows.Forms.Tests.Interop_Mso
     {
         private IMsoComponentManager CreateComponentManager()
             => (IMsoComponentManager)Activator.CreateInstance(
-                typeof(Application).Assembly.GetType("System.Windows.Forms.Application+ComponentManager"),
-                nonPublic: true);
+                typeof(Application).Assembly.GetType("System.Windows.Forms.Application+ComponentManager")!,
+                nonPublic: true)!;
 
         [Fact]
         public void FDebugMessage_ReturnsTrue()

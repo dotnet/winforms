@@ -17,7 +17,7 @@ internal static partial class Interop
             private const int CCHFORMNAME = 32;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHDEVICENAME)]
-            public string dmDeviceName;
+            public string? dmDeviceName;
             public ushort dmSpecVersion;
             public ushort dmDriverVersion;
             public ushort dmSize;
@@ -33,7 +33,7 @@ internal static partial class Interop
             public short dmTTOption;
             public short dmCollate;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = CCHFORMNAME)]
-            public string dmFormName;
+            public string? dmFormName;
             public ushort dmLogPixels;
             public uint dmBitsPerPel;
             public uint dmPelsWidth;

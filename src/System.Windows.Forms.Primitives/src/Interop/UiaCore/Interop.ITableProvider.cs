@@ -15,10 +15,10 @@ internal static partial class Interop
         public interface ITableProvider
         {
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
-            object[] /*IRawElementProviderSimple[]*/ GetRowHeaders();
+            object[]? /*IRawElementProviderSimple[]*/ GetRowHeaders();
 
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
-            object[] /*IRawElementProviderSimple[]*/ GetColumnHeaders();
+            object[]? /*IRawElementProviderSimple[]*/ GetColumnHeaders();
 
             RowOrColumnMajor RowOrColumnMajor { get; }
         }

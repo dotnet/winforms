@@ -30,7 +30,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the <see cref='LParam'/> value, and converts the value to an object.
         /// </summary>
-        public object GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
+        public object? GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
 
         internal static Message Create(IntPtr hWnd, User32.WM msg, IntPtr wparam, IntPtr lparam)
             => Create(hWnd, (int)msg, wparam, lparam);
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
             return m;
         }
 
-        public override bool Equals(object o)
+        public override bool Equals(object? o)
         {
             if (!(o is Message m))
             {

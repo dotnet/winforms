@@ -12,7 +12,7 @@ internal static partial class Interop
         [DllImport(Libraries.Shell32, ExactSpelling = true)]
         private static extern BOOL SHGetPathFromIDListEx(IntPtr pidl, IntPtr pszPath, int cchPath, int flags);
 
-        public static bool SHGetPathFromIDListLongPath(IntPtr pidl, out string path)
+        public static bool SHGetPathFromIDListLongPath(IntPtr pidl, out string? path)
         {
             IntPtr pszPath = Marshal.AllocHGlobal((Kernel32.MAX_PATH + 1) * sizeof(char));
             int length = Kernel32.MAX_PATH;

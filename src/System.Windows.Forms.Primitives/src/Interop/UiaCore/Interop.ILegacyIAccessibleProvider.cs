@@ -21,27 +21,27 @@ internal static partial class Interop
 
             void SetValue([MarshalAs(UnmanagedType.LPWStr)] string szValue);
 
-            IAccessible GetIAccessible();
+            IAccessible? GetIAccessible();
 
             int ChildId { get; }
 
-            string Name { get; }
+            string? Name { get; }
 
-            string Value { get; }
+            string? Value { get; }
 
-            string Description { get; }
+            string? Description { get; }
 
             uint Role { get; }
 
             uint State { get; }
 
-            string Help { get; }
+            string? Help { get; }
 
-            string KeyboardShortcut { get; }
+            string? KeyboardShortcut { get; }
 
-            object[] /* IRawElementProviderSimple[] */ GetSelection();
+            object[]? /* IRawElementProviderSimple[] */ GetSelection();
 
-            string DefaultAction { get; }
+            string? DefaultAction { get; }
         }
     }
 }

@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
             return (IPicture)OleCreatePictureIndirect(ref desc, ref ipicture_Guid, fOwn: BOOL.TRUE);
         }
 
-        public static Image GetPictureFromIPicture(object picture)
+        public static Image? GetPictureFromIPicture(object picture)
         {
             int hPal = default;
             IPicture pict = (IPicture)picture;
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
             return GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
         }
 
-        public static Image GetPictureFromIPictureDisp(object picture)
+        public static Image? GetPictureFromIPictureDisp(object picture)
         {
             if (picture == null)
             {
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
                 }
             }
 
-            Image image = GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
+            Image? image = GetPictureFromParams(pict.Handle, type, hPal, pict.Width, pict.Height);
             GC.KeepAlive(pict);
             return image;
         }
@@ -97,7 +97,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
             throw new ArgumentException("AXUnknownImage", nameof(image));
         }
 
-        private static Image GetPictureFromParams(
+        private static Image? GetPictureFromParams(
             int handle,
             PICTYPE type,
             int paletteHandle,

@@ -22,7 +22,7 @@ internal static partial class Interop
 
             int ColumnSpan { get; }
 
-            IRawElementProviderSimple ContainingGrid { get; }
+            IRawElementProviderSimple? ContainingGrid { get; }
         }
     }
 }

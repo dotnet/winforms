@@ -16,7 +16,7 @@ internal static partial class Interop
             public BITMAPINFOHEADER bmiHeader;
 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxColorSize * 4)]
-            public byte[] bmiColors; // RGBQUAD structs: repeating Blue-Green-Red-Reserved
+            public byte[]? bmiColors; // RGBQUAD structs: repeating Blue-Green-Red-Reserved
         }
     }
 }

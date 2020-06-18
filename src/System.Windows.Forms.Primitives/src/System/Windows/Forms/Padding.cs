@@ -130,7 +130,7 @@ namespace System.Windows.Forms
 
         public static Padding Subtract(Padding p1, Padding p2) => p1 - p2;
 
-        public override bool Equals(object other)
+        public override bool Equals(object? other)
         {
             if (!(other is Padding otherPadding))
             {

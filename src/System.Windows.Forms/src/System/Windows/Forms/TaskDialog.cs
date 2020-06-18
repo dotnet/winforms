@@ -812,7 +812,7 @@ namespace System.Windows.Forms
             {
                 caption = Path.GetFileName(
                     UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef)
-                    .ToString());
+                                       .ToString());
             }
 
             User32.SetWindowTextW(Handle, caption);

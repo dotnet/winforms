@@ -50,7 +50,7 @@ internal static partial class Interop
 
         private static BOOL HandleEnumChildWindowsNativeCallback(IntPtr hWnd, IntPtr lParam)
         {
-            return ((EnumChildWindowsCallback)GCHandle.FromIntPtr(lParam).Target)(hWnd);
+            return ((EnumChildWindowsCallback)GCHandle.FromIntPtr(lParam).Target!)(hWnd);
         }
     }
 }

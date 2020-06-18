@@ -4,6 +4,7 @@
     <AssemblyName>System.Windows.Forms.Primitives.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>$(NoWarn);618</NoWarn>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -27,10 +28,11 @@ internal static partial class Interop
             where T : IHandle
         {
             public TTOOLINFOW Info;
-            public string Text { get; set; }
+            public string? Text { get; set; }
+            [MaybeNull]
             private readonly T _handle;
 
-            public unsafe ToolInfoWrapper(T handle, TTF flags = default, string text = null)
+            public unsafe ToolInfoWrapper(T handle, TTF flags = default, string? text = null)
             {
                 Info = new TTOOLINFOW
                 {
@@ -42,7 +44,7 @@ internal static partial class Interop
                 _handle = handle;
             }
 
-            public unsafe ToolInfoWrapper(T handle, IntPtr id, TTF flags = default, string text = null, RECT rect = default)
+            public unsafe ToolInfoWrapper(T handle, IntPtr id, TTF flags = default, string? text = null, RECT rect = default)
             {
                 Info = new TTOOLINFOW
                 {

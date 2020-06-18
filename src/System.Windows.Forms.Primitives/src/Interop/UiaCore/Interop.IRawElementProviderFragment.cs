@@ -29,7 +29,7 @@ internal static partial class Interop
             /// <param name="direction">Indicates the direction in which to navigate</param>
             /// <returns>Returns the element in the specified direction</returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
-            object /*IRawElementProviderFragment*/ Navigate(NavigateDirection direction);
+            object? /*IRawElementProviderFragment*/ Navigate(NavigateDirection direction);
 
             /// <summary>
             ///  Gets the runtime ID of an elemenent. This should be unique
@@ -41,7 +41,7 @@ internal static partial class Interop
             ///  with AutomationInteropProvider.AppendRuntimeId, followed by values
             ///  which are then unique within that proxy's HWNDs.
             /// </remarks>
-            int[] GetRuntimeId();
+            int[]? GetRuntimeId();
 
             /// <summary>
             ///  Return a bounding rectangle of this element
@@ -56,7 +56,7 @@ internal static partial class Interop
             ///  If this UI does not host other UI, it may return null.
             /// </summary>
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
-            object[] /*IRawElementProviderSimple[]*/ GetEmbeddedFragmentRoots();
+            object[]? /*IRawElementProviderSimple[]*/ GetEmbeddedFragmentRoots();
 
             /// <summary>
             ///  Request that focus is set to this item.
@@ -69,7 +69,7 @@ internal static partial class Interop
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            IRawElementProviderFragmentRoot FragmentRoot { get; }
+            IRawElementProviderFragmentRoot? FragmentRoot { get; }
         }
     }
 }
