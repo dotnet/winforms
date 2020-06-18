@@ -13005,14 +13005,14 @@ namespace System.Windows.Forms
                 // forms edit or something hosted as an AX control somewhere, there isn't anyone to reflect
                 // these back.  If they went ahead and just sent them back, some controls don't like that
                 // and end up recursing.  Our code handles it fine because we just pick the HWND out of the LPARAM.
-                case User32.WM.REFLECT | User32.WM.CTLCOLOR:
-                case User32.WM.REFLECT | User32.WM.CTLCOLORBTN:
-                case User32.WM.REFLECT | User32.WM.CTLCOLORDLG:
-                case User32.WM.REFLECT | User32.WM.CTLCOLORMSGBOX:
-                case User32.WM.REFLECT | User32.WM.CTLCOLORSCROLLBAR:
-                case User32.WM.REFLECT | User32.WM.CTLCOLOREDIT:
-                case User32.WM.REFLECT | User32.WM.CTLCOLORLISTBOX:
-                case User32.WM.REFLECT | User32.WM.CTLCOLORSTATIC:
+                case User32.WM.REFLECT_CTLCOLOR:
+                case User32.WM.REFLECT_CTLCOLORBTN:
+                case User32.WM.REFLECT_CTLCOLORDLG:
+                case User32.WM.REFLECT_CTLCOLORMSGBOX:
+                case User32.WM.REFLECT_CTLCOLORSCROLLBAR:
+                case User32.WM.REFLECT_CTLCOLOREDIT:
+                case User32.WM.REFLECT_CTLCOLORLISTBOX:
+                case User32.WM.REFLECT_CTLCOLORSTATIC:
                     WmCtlColorControl(ref m);
                     break;
 
@@ -13130,7 +13130,7 @@ namespace System.Windows.Forms
                     WmNotifyFormat(ref m);
                     break;
 
-                case User32.WM.REFLECT | User32.WM.NOTIFYFORMAT:
+                case User32.WM.REFLECT_NOTIFYFORMAT:
                     m.Result = (IntPtr)User32.NFR.UNICODE;
                     break;
 

@@ -1043,8 +1043,8 @@ namespace System.Windows.Forms
         {
             switch ((User32.WM)m.Msg)
             {
-                case User32.WM.REFLECT | User32.WM.HSCROLL:
-                case User32.WM.REFLECT | User32.WM.VSCROLL:
+                case User32.WM.REFLECT_HSCROLL:
+                case User32.WM.REFLECT_VSCROLL:
                     switch (PARAM.LOWORD(m.WParam))
                     {
                         case NativeMethods.TB_LINEUP:

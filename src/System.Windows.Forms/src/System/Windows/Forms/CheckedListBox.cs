@@ -1010,10 +1010,10 @@ namespace System.Windows.Forms
         {
             switch ((WM)m.Msg)
             {
-                case WM.REFLECT | WM.CHARTOITEM:
+                case WM.REFLECT_CHARTOITEM:
                     m.Result = NativeMethods.InvalidIntPtr;
                     break;
-                case WM.REFLECT | WM.VKEYTOITEM:
+                case WM.REFLECT_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
                 default:

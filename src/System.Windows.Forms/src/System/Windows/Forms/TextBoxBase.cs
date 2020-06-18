@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms
                     doubleClickFired = true;
                     base.WndProc(ref m);
                     break;
-                case WM.REFLECT | WM.COMMAND:
+                case WM.REFLECT_COMMAND:
                     WmReflectCommand(ref m);
                     break;
                 case WM.GETDLGCODE:

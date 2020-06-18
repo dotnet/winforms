@@ -2173,7 +2173,7 @@ namespace System.Windows.Forms
                 case User32.WM.GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case User32.WM.REFLECT | User32.WM.NOTIFY:
+                case User32.WM.REFLECT_NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;

@@ -3167,7 +3167,7 @@ namespace System.Windows.Forms
                             break;
                     }
                     break;
-                case (int)(User32.WM.REFLECT | User32.WM.NOTIFY):
+                case (int)(User32.WM.REFLECT_NOTIFY):
                     WmNotify(ref m);
                     break;
                 case (int)User32.WM.LBUTTONDBLCLK:

@@ -307,7 +307,7 @@ namespace System.ComponentModel.Design
                             clickSeen = false;
                         }
                         break;
-                    case User32.WM.REFLECT | User32.WM.NOTIFY:
+                    case User32.WM.REFLECT_NOTIFY:
                         User32.NMHDR* nmtv = (User32.NMHDR*)m.LParam;
                         if (nmtv->code == (int)ComCtl32.NM.CLICK)
                         {
