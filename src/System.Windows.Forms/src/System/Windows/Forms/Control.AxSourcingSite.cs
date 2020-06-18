@@ -66,7 +66,7 @@ namespace System.Windows.Forms
                 get => _name;
                 set
                 {
-                    if (value == null || _name == null)
+                    if (value is null || _name is null)
                     {
                         _name = value;
                     }

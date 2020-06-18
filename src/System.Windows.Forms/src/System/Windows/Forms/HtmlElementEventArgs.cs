@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         internal HtmlElementEventArgs(HtmlShimManager shimManager, IHTMLEventObj eventObj)
         {
             NativeHTMLEventObj = eventObj;
-            Debug.Assert(NativeHTMLEventObj != null, "The event object should implement IHTMLEventObj");
+            Debug.Assert(NativeHTMLEventObj is not null, "The event object should implement IHTMLEventObj");
 
             _shimManager = shimManager;
         }
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
             get
             {
                 object obj = NativeHTMLEventObj.GetReturnValue();
-                return obj == null ? true : (bool)obj;
+                return obj is null ? true : (bool)obj;
             }
             set => NativeHTMLEventObj.SetReturnValue(value);
         }
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElement htmlElement = NativeHTMLEventObj.GetFromElement();
-                return htmlElement == null ? null : new HtmlElement(_shimManager, htmlElement);
+                return htmlElement is null ? null : new HtmlElement(_shimManager, htmlElement);
             }
         }
 
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElement htmlElement = NativeHTMLEventObj.GetToElement();
-                return htmlElement == null ? null : new HtmlElement(_shimManager, htmlElement);
+                return htmlElement is null ? null : new HtmlElement(_shimManager, htmlElement);
             }
         }
     }

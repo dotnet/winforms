@@ -171,7 +171,7 @@ namespace System.Windows.Forms
         {
             Text = text;
             Image = image;
-            if (onClick != null)
+            if (onClick is not null)
             {
                 Click += onClick;
             }
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
             get
             {
                 AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
-                if (accessibleObject == null)
+                if (accessibleObject is null)
                 {
                     accessibleObject = CreateAccessibilityInstance();
                     Properties.SetObject(s_accessibilityProperty, accessibleObject);
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
                 {
                     _alignment = value;
 
-                    if (ParentInternal != null && ParentInternal.IsHandleCreated)
+                    if (ParentInternal is not null && ParentInternal.IsHandleCreated)
                     {
                         ParentInternal.PerformLayout();
                     }
@@ -467,7 +467,7 @@ namespace System.Windows.Forms
                 }
 
                 Control p = ParentInternal;
-                if (p != null)
+                if (p is not null)
                 {
                     return p.BackColor;
                 }
@@ -565,7 +565,7 @@ namespace System.Windows.Forms
                 {
                     // since we dont support DefaultLayout go directly against the CommonProperties
                     CommonProperties.xSetAnchor(this, value);
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayout(this, ParentInternal, PropertyNames.Anchor);
                     }
@@ -596,7 +596,7 @@ namespace System.Windows.Forms
                 {
                     // since we dont support DefaultLayout go directly against the CommonProperties
                     CommonProperties.xSetDock(this, value);
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayout(this, ParentInternal, PropertyNames.Dock);
                     }
@@ -617,7 +617,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Owner != null && Owner is StatusStrip)
+                if (Owner is not null && Owner is StatusStrip)
                 {
                     return _scaledDefaultStatusStripMargin;
                 }
@@ -762,7 +762,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if ((ParentInternal != null) && (ParentInternal.AllowItemReorder) && (ParentInternal.ItemReorderDropSource != null))
+                if ((ParentInternal is not null) && (ParentInternal.AllowItemReorder) && (ParentInternal.ItemReorderDropSource is not null))
                 {
                     return new DropSource(ParentInternal.ItemReorderDropSource);
                 }
@@ -783,7 +783,7 @@ namespace System.Windows.Forms
             get
             {
                 bool parentEnabled = true;
-                if (Owner != null)
+                if (Owner is not null)
                 {
                     parentEnabled = Owner.Enabled;
                 }
@@ -831,7 +831,7 @@ namespace System.Windows.Forms
 
         private void EnsureParentDropTargetRegistered()
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 ParentInternal.DropTargetManager.EnsureRegistered(this);
             }
@@ -854,7 +854,7 @@ namespace System.Windows.Forms
                 }
 
                 Control p = ParentInternal;
-                if (p != null)
+                if (p is not null)
                 {
                     return p.ForeColor;
                 }
@@ -895,13 +895,13 @@ namespace System.Windows.Forms
             get
             {
                 Font font = (Font)Properties.GetObject(s_fontProperty);
-                if (font != null)
+                if (font is not null)
                 {
                     return font;
                 }
 
                 Font f = GetOwnerFont();
-                if (f != null)
+                if (f is not null)
                 {
                     return f;
                 }
@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms
             get
             {
                 Image image = (Image)Properties.GetObject(s_imageProperty);
-                if (image == null && (Owner != null) && (Owner.ImageList != null) && ImageIndexer.ActualIndex >= 0)
+                if (image is null && (Owner is not null) && (Owner.ImageList is not null) && ImageIndexer.ActualIndex >= 0)
                 {
                     if (ImageIndexer.ActualIndex < Owner.ImageList.Images.Count)
                     {
@@ -1048,7 +1048,7 @@ namespace System.Windows.Forms
 
                         value = bmp;
                     }
-                    if (value != null)
+                    if (value is not null)
                     {
                         ImageIndex = ImageList.Indexer.DefaultIndex;
                     }
@@ -1101,7 +1101,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if ((Owner != null) && ImageIndexer.Index != ImageList.Indexer.DefaultIndex && Owner.ImageList != null && ImageIndexer.Index >= Owner.ImageList.Images.Count)
+                if ((Owner is not null) && ImageIndexer.Index != ImageList.Indexer.DefaultIndex && Owner.ImageList is not null && ImageIndexer.Index >= Owner.ImageList.Images.Count)
                 {
                     return Owner.ImageList.Images.Count - 1;
                 }
@@ -1191,7 +1191,7 @@ namespace System.Windows.Forms
                 }
 
                 Control parent = ParentInternal;
-                if (parent != null)
+                if (parent is not null)
                 {
                     return parent.ShouldSerializeForeColor();
                 }
@@ -1213,11 +1213,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ParentInternal != null)
+                if (ParentInternal is not null)
                 {
                     return ParentInternal.IsDropDown;
                 }
-                else if (Owner != null && Owner.IsDropDown)
+                else if (Owner is not null && Owner.IsDropDown)
                 {
                     return true;
                 }
@@ -1422,11 +1422,11 @@ namespace System.Windows.Forms
             {
                 if (_owner != value)
                 {
-                    if (_owner != null)
+                    if (_owner is not null)
                     {
                         _owner.Items.Remove(this);
                     }
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.Items.Add(this);
                     }
@@ -1445,17 +1445,17 @@ namespace System.Windows.Forms
             get
             {
                 ToolStripDropDown currentParent = null;
-                if (ParentInternal != null)
+                if (ParentInternal is not null)
                 {
                     currentParent = ParentInternal as ToolStripDropDown;
                 }
-                else if (Owner != null)
+                else if (Owner is not null)
                 {
                     // parent may be null, but we may be "owned" by a collection.
                     currentParent = Owner as ToolStripDropDown;
                 }
 
-                if (currentParent != null)
+                if (currentParent is not null)
                 {
                     return currentParent.OwnerItem;
                 }
@@ -1516,7 +1516,7 @@ namespace System.Windows.Forms
                 if (_overflow != value)
                 {
                     _overflow = value;
-                    if (Owner != null)
+                    if (Owner is not null)
                     {
                         LayoutTransaction.DoLayout(Owner, Owner, "Overflow");
                     }
@@ -1575,12 +1575,12 @@ namespace System.Windows.Forms
                 }
 
                 Image image = (Image)Properties.GetObject(s_imageProperty);
-                bool usingImageList = ((Owner != null) && (Owner.ImageList != null) && (ImageIndexer.ActualIndex >= 0));
+                bool usingImageList = ((Owner is not null) && (Owner.ImageList is not null) && (ImageIndexer.ActualIndex >= 0));
 
                 if (ImageScaling == ToolStripItemImageScaling.SizeToFit)
                 {
                     ToolStrip ownerToolStrip = Owner;
-                    if (ownerToolStrip != null && (image != null || usingImageList))
+                    if (ownerToolStrip is not null && (image is not null || usingImageList))
                     {
                         return ownerToolStrip.ImageScalingSize;
                     }
@@ -1593,7 +1593,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    imageSize = (image == null) ? Size.Empty : image.Size;
+                    imageSize = (image is null) ? Size.Empty : image.Size;
                 }
 
                 return imageSize;
@@ -1641,7 +1641,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Owner != null)
+                if (Owner is not null)
                 {
                     return Owner.Renderer;
                 }
@@ -1670,11 +1670,11 @@ namespace System.Windows.Forms
 
                 if (((RightToLeft)rightToLeft) == RightToLeft.Inherit)
                 {
-                    if (Owner != null)
+                    if (Owner is not null)
                     {
                         rightToLeft = (int)Owner.RightToLeft;
                     }
-                    else if (ParentInternal != null)
+                    else if (ParentInternal is not null)
                     {
                         // case for Overflow & Grip
                         rightToLeft = (int)ParentInternal.RightToLeft;
@@ -1739,7 +1739,7 @@ namespace System.Windows.Forms
                 if (_state[s_stateInvalidMirroredImage])
                 {
                     Image image = Image;
-                    if (image == null)
+                    if (image is null)
                     {
                         return null;
                     }
@@ -1785,7 +1785,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual bool Selected
             => CanSelect && !DesignMode && (_state[s_stateSelected] ||
-                (ParentInternal != null && ParentInternal.IsSelectionSuspended &&
+                (ParentInternal is not null && ParentInternal.IsSelectionSuspended &&
                  ParentInternal.LastMouseDownedItem == this));
 
         protected internal virtual bool ShowKeyboardCues
@@ -1927,14 +1927,14 @@ namespace System.Windows.Forms
 
                 if (textDirection == ToolStripTextDirection.Inherit)
                 {
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         // in the case we're on a ToolStripOverflow
                         textDirection = ParentInternal.TextDirection;
                     }
                     else
                     {
-                        textDirection = (Owner == null) ? ToolStripTextDirection.Horizontal : Owner.TextDirection;
+                        textDirection = (Owner is null) ? ToolStripTextDirection.Horizontal : Owner.TextDirection;
                     }
                 }
 
@@ -2011,7 +2011,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ToolStripItemVisibleDescr))]
         public bool Visible
         {
-            get => (ParentInternal != null) && (ParentInternal.Visible) && Available;
+            get => (ParentInternal is not null) && (ParentInternal.Visible) && Available;
             set => SetVisibleCore(value);
         }
 
@@ -2042,7 +2042,7 @@ namespace System.Windows.Forms
 
         internal void AccessibilityNotifyClients(AccessibleEvents accEvent)
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 int index = ParentInternal.DisplayedItems.IndexOf(this);
                 ParentInternal.AccessibilityNotifyClients(accEvent, index);
@@ -2050,7 +2050,7 @@ namespace System.Windows.Forms
         }
 
         private void Animate()
-            => Animate(!DesignMode && Visible && Enabled && ParentInternal != null);
+            => Animate(!DesignMode && Visible && Enabled && ParentInternal is not null);
 
         private void StopAnimate() => Animate(false);
 
@@ -2060,7 +2060,7 @@ namespace System.Windows.Forms
             {
                 if (animate)
                 {
-                    if (Image != null)
+                    if (Image is not null)
                     {
                         ImageAnimator.Animate(Image, new EventHandler(OnAnimationFrameChanged));
                         _state[s_stateCurrentlyAnimatingImage] = animate;
@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (Image != null)
+                    if (Image is not null)
                     {
                         ImageAnimator.StopAnimate(Image, new EventHandler(OnAnimationFrameChanged));
                         _state[s_stateCurrentlyAnimatingImage] = animate;
@@ -2117,7 +2117,7 @@ namespace System.Windows.Forms
             {
                 _state[s_stateDisposing] = true;
 
-                if (Owner != null)
+                if (Owner is not null)
                 {
                     StopAnimate();
                     Debug.Assert(Owner.Items.Contains(this), "How can there be a owner and not be in the collection?");
@@ -2160,7 +2160,7 @@ namespace System.Windows.Forms
             IComDataObject dataObject = null;
 
             dataObject = data as IComDataObject;
-            if (dataObject == null)
+            if (dataObject is null)
             {
                 DataObject iwdata = null;
                 if (data is IDataObject idataObject)
@@ -2210,7 +2210,7 @@ namespace System.Windows.Forms
                 case ToolStripItemEventType.MouseHover:
                     // disabled toolstrip items should show tooltips.
                     // we wont raise mouse events though.
-                    if (!Enabled && ParentInternal != null && !string.IsNullOrEmpty(ToolTipText))
+                    if (!Enabled && ParentInternal is not null && !string.IsNullOrEmpty(ToolTipText))
                     {
                         ParentInternal.UpdateToolTip(this);
                     }
@@ -2225,7 +2225,7 @@ namespace System.Windows.Forms
                 case ToolStripItemEventType.MouseLeave:
                     // disabled toolstrip items should also clear tooltips.
                     // we wont raise mouse events though.
-                    if (!Enabled && ParentInternal != null)
+                    if (!Enabled && ParentInternal is not null)
                     {
                         ParentInternal.UpdateToolTip(null);
                     }
@@ -2237,7 +2237,7 @@ namespace System.Windows.Forms
                 case ToolStripItemEventType.MouseMove:
                     // Disabled items typically dont get mouse move
                     // but they should be allowed to re-order if the ALT key is pressed
-                    if (!Enabled && ParentInternal != null)
+                    if (!Enabled && ParentInternal is not null)
                     {
                         BeginDragForItemReorder();
                     }
@@ -2293,7 +2293,7 @@ namespace System.Windows.Forms
 
         internal ToolStripDropDown GetCurrentParentDropDown()
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 return ParentInternal as ToolStripDropDown;
             }
@@ -2342,7 +2342,7 @@ namespace System.Windows.Forms
         {
             _toolStripItemInternalLayout = null;
 
-            if (Owner != null)
+            if (Owner is not null)
             {
                 LayoutTransaction.DoLayout(Owner, this, affectedProperty);
                 Owner.Invalidate();
@@ -2379,7 +2379,7 @@ namespace System.Windows.Forms
                 // time before it gets pumped again.
                 InvokePaint();
 
-                if (SupportsItemClick && Owner != null)
+                if (SupportsItemClick && Owner is not null)
                 {
                     Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] HandleItemClick");
                     Owner.HandleItemClick(this);
@@ -2387,7 +2387,7 @@ namespace System.Windows.Forms
 
                 OnClick(e);
 
-                if (SupportsItemClick && Owner != null)
+                if (SupportsItemClick && Owner is not null)
                 {
                     Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] HandleItemClicked");
                     Owner.HandleItemClicked(this);
@@ -2416,7 +2416,7 @@ namespace System.Windows.Forms
         {
             if (!DesignMode)
             {
-                if (ParentInternal != null
+                if (ParentInternal is not null
                      && ParentInternal.CanHotTrack
                      && ParentInternal.ShouldSelectItem())
                 {
@@ -2461,7 +2461,7 @@ namespace System.Windows.Forms
 
             if (Enabled && CanSelect && !Selected)
             {
-                if (ParentInternal != null
+                if (ParentInternal is not null
                      && ParentInternal.CanHotTrack
                      && ParentInternal.ShouldSelectItem())
                 {
@@ -2626,7 +2626,7 @@ namespace System.Windows.Forms
         private void OnAnimationFrameChanged(object o, EventArgs e)
         {
             ToolStrip parent = ParentInternal;
-            if (parent != null)
+            if (parent is not null)
             {
                 if (parent.Disposing || parent.IsDisposed)
                 {
@@ -2769,7 +2769,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnMouseHover(EventArgs e)
         {
-            if (ParentInternal != null && !string.IsNullOrEmpty(ToolTipText))
+            if (ParentInternal is not null && !string.IsNullOrEmpty(ToolTipText))
             {
                 ParentInternal.UpdateToolTip(this);
             }
@@ -2817,11 +2817,11 @@ namespace System.Windows.Forms
         protected virtual void OnParentChanged(ToolStrip oldParent, ToolStrip newParent)
         {
             SetAmbientMargin();
-            if ((oldParent != null) && (oldParent.DropTargetManager != null))
+            if ((oldParent is not null) && (oldParent.DropTargetManager is not null))
             {
                 oldParent.DropTargetManager.EnsureUnRegistered(this);
             }
-            if (AllowDrop && (newParent != null))
+            if (AllowDrop && (newParent is not null))
             {
                 EnsureParentDropTargetRegistered();
             }
@@ -2842,7 +2842,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal virtual void OnOwnerFontChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_fontProperty) == null)
+            if (Properties.GetObject(s_fontProperty) is null)
             {
                 OnFontChanged(e);
             }
@@ -2874,7 +2874,7 @@ namespace System.Windows.Forms
         {
             RaiseEvent(s_ownerChangedEvent, e);
             SetAmbientMargin();
-            if (Owner != null)
+            if (Owner is not null)
             {
                 // check if we need to fire OnRightToLeftChanged
                 int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
@@ -2927,7 +2927,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnVisibleChanged(EventArgs e)
         {
-            if (Owner != null && !(Owner.IsDisposed || Owner.Disposing))
+            if (Owner is not null && !(Owner.IsDisposed || Owner.Disposing))
             {
                 Owner.OnItemVisibleChanged(new ToolStripItemEventArgs(this), performLayout: true);
             }
@@ -2972,7 +2972,7 @@ namespace System.Windows.Forms
             if (keyData == Keys.Enter || (_state[s_stateSupportsSpaceKey] && keyData == Keys.Space))
             {
                 FireEvent(ToolStripItemEventType.Click);
-                if (ParentInternal != null && !ParentInternal.IsDropDown && Enabled)
+                if (ParentInternal is not null && !ParentInternal.IsDropDown && Enabled)
                 {
                     ParentInternal.RestoreFocusInternal();
                 }
@@ -3049,12 +3049,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (Owner != null && Owner.IsCurrentlyDragging)
+            if (Owner is not null && Owner.IsCurrentlyDragging)
             {
                 // make sure we dont select during a drag operation.
                 return;
             }
-            if (ParentInternal != null && ParentInternal.IsSelectionSuspended)
+            if (ParentInternal is not null && ParentInternal.IsSelectionSuspended)
             {
                 Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[Selection DBG] BAILING, selection is currently suspended");
                 return;
@@ -3063,14 +3063,14 @@ namespace System.Windows.Forms
             if (!Selected)
             {
                 _state[s_stateSelected] = true;
-                if (ParentInternal != null)
+                if (ParentInternal is not null)
                 {
                     ParentInternal.NotifySelectionChange(this);
                     Debug.Assert(_state[s_stateSelected], "calling notify selection change changed the selection state of this item");
                 }
                 if (IsOnDropDown)
                 {
-                    if (OwnerItem != null && OwnerItem.IsOnDropDown)
+                    if (OwnerItem is not null && OwnerItem.IsOnDropDown)
                     {
                         // ensure the selection is moved back to our owner item.
                         OwnerItem.Select();
@@ -3092,19 +3092,19 @@ namespace System.Windows.Forms
             {
                 Font f = this.Font;
 
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     _owner.rescaleConstsCallbackDelegate -= ToolStrip_RescaleConstants;
                 }
                 _owner = newOwner;
 
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     _owner.rescaleConstsCallbackDelegate += ToolStrip_RescaleConstants;
                 }
 
                 // clear the parent if the owner is null.
-                if (newOwner == null)
+                if (newOwner is null)
                 {
                     this.ParentInternal = null;
                 }
@@ -3215,7 +3215,7 @@ namespace System.Windows.Forms
         internal virtual bool ShouldSerializeFont()
         {
             object font = Properties.GetObject(s_fontProperty, out bool found);
-            return (found && font != null);
+            return (found && font is not null);
         }
 
         /// <summary>
@@ -3240,21 +3240,21 @@ namespace System.Windows.Forms
         ///  Determines if the <see cref='Image'/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private bool ShouldSerializeImage() => Image != null && ImageIndexer.ActualIndex < 0;
+        private bool ShouldSerializeImage() => Image is not null && ImageIndexer.ActualIndex < 0;
 
         /// <summary>
         ///  Determines if the <see cref='Image'/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeImageKey()
-            => Image != null && ImageIndexer.ActualIndex >= 0 && !string.IsNullOrEmpty(ImageIndexer.Key);
+            => Image is not null && ImageIndexer.ActualIndex >= 0 && !string.IsNullOrEmpty(ImageIndexer.Key);
 
         /// <summary>
         ///  Determines if the <see cref='Image'/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeImageIndex()
-            => Image != null && ImageIndexer.ActualIndex >= 0 && ImageIndexer.Index != ImageList.Indexer.DefaultIndex;
+            => Image is not null && ImageIndexer.ActualIndex >= 0 && ImageIndexer.Index != ImageList.Indexer.DefaultIndex;
 
         /// <summary>
         ///  Determines if the <see cref='RightToLeft'/> property needs to be persisted.
@@ -3344,11 +3344,11 @@ namespace System.Windows.Forms
         {
             ToolStrip parent = ParentInternal;
 
-            if (parent == null)
+            if (parent is null)
             {
-                parent = (IsOnOverflow && Owner != null) ? Owner.OverflowButton.DropDown : Owner;
+                parent = (IsOnOverflow && Owner is not null) ? Owner.OverflowButton.DropDown : Owner;
             }
-            if (parent == null)
+            if (parent is null)
             {
                 // should not throw here as it's an internal function call.
                 return fromPoint;
@@ -3415,7 +3415,7 @@ namespace System.Windows.Forms
             get
             {
                 ToolStripItem item = this;
-                while (item.OwnerItem != null)
+                while (item.OwnerItem is not null)
                 {
                     item = item.OwnerItem;
                 }
@@ -3446,7 +3446,7 @@ namespace System.Windows.Forms
                 if (Available)
                 {
                     Invalidate();
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         ParentInternal.NotifySelectionChange(this);
                     }
@@ -3457,14 +3457,14 @@ namespace System.Windows.Forms
         }
 
         bool IKeyboardToolTip.CanShowToolTipsNow()
-            => Visible && _parent != null && ((IKeyboardToolTip)_parent).AllowsChildrenToShowToolTips();
+            => Visible && _parent is not null && ((IKeyboardToolTip)_parent).AllowsChildrenToShowToolTips();
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
 
         IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
         {
             List<Rectangle> neighbors = new List<Rectangle>(3);
-            if (_parent != null)
+            if (_parent is not null)
             {
                 ToolStripItemCollection items = _parent.DisplayedItems;
                 int i = 0, count = items.Count;
@@ -3494,7 +3494,7 @@ namespace System.Windows.Forms
                 Debug.Assert(i < count, "Item has a parent set but the parent doesn't own the item");
             }
 
-            if (_parent is ToolStripDropDown dropDown && dropDown.OwnerItem != null)
+            if (_parent is ToolStripDropDown dropDown && dropDown.OwnerItem is not null)
             {
                 neighbors.Add(((IKeyboardToolTip)dropDown.OwnerItem).GetNativeScreenRectangle());
             }
@@ -3506,13 +3506,13 @@ namespace System.Windows.Forms
             => ((IKeyboardToolTip)this).GetNativeScreenRectangle().Contains(Control.MousePosition);
 
         bool IKeyboardToolTip.HasRtlModeEnabled()
-            => _parent != null && ((IKeyboardToolTip)_parent).HasRtlModeEnabled();
+            => _parent is not null && ((IKeyboardToolTip)_parent).HasRtlModeEnabled();
 
         bool IKeyboardToolTip.AllowsToolTip() => true;
 
         IWin32Window IKeyboardToolTip.GetOwnerWindow()
         {
-            Debug.Assert(ParentInternal != null, "Tool Strip Item Parent is null");
+            Debug.Assert(ParentInternal is not null, "Tool Strip Item Parent is null");
             return ParentInternal;
         }
 

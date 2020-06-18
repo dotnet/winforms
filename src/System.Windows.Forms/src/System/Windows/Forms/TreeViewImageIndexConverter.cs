@@ -51,7 +51,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (destinationType is null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
@@ -80,13 +80,13 @@ namespace System.Windows.Forms
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (context != null && context.Instance != null)
+            if (context is not null && context.Instance is not null)
             {
                 object instance = context.Instance;
 
                 PropertyDescriptor imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
 
-                while (instance != null && imageListProp == null)
+                while (instance is not null && imageListProp is null)
                 {
                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance);
 
@@ -99,13 +99,13 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (imageListProp == null)
+                    if (imageListProp is null)
                     {
                         // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
                         //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
-                        if (parentProp != null)
+                        if (parentProp is not null)
                         {
                             instance = parentProp.GetValue(instance);
                         }
@@ -118,11 +118,11 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (imageListProp != null)
+                if (imageListProp is not null)
                 {
                     ImageList imageList = (ImageList)imageListProp.GetValue(instance);
 
-                    if (imageList != null)
+                    if (imageList is not null)
                     {
                         // Create array to contain standard values
                         //

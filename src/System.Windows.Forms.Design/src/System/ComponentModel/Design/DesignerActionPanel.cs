@@ -82,7 +82,7 @@ namespace System.ComponentModel.Design
             _toolTip = new ToolTip();
             // Try to get the font from the IUIService, otherwise, use the default
             IUIService uiService = (IUIService)ServiceProvider.GetService(typeof(IUIService));
-            if (uiService != null)
+            if (uiService is not null)
             {
                 Font = (Font)uiService.Styles["DialogFont"];
                 if (uiService.Styles["VsColorPanelGradientDark"] is Color)
@@ -151,7 +151,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_filteredCommandIDs == null)
+                if (_filteredCommandIDs is null)
                 {
                     _filteredCommandIDs = new CommandID[] {
                         StandardCommands.Copy,
@@ -201,7 +201,7 @@ namespace System.ComponentModel.Design
             get
             {
                 Control activeControl = ActiveControl;
-                if (activeControl != null)
+                if (activeControl is not null)
                 {
                     return activeControl.Tag as Line;
                 }
@@ -281,20 +281,20 @@ namespace System.ComponentModel.Design
         private void AddToCategories(LineInfo lineInfo, ListDictionary categories)
         {
             string categoryName = lineInfo.Item.Category;
-            if (categoryName == null)
+            if (categoryName is null)
             {
                 categoryName = string.Empty;
             }
 
             ListDictionary category = (ListDictionary)categories[categoryName];
-            if (category == null)
+            if (category is null)
             {
                 category = new ListDictionary();
                 categories.Add(categoryName, category);
             }
 
             List<LineInfo> categoryList = (List<LineInfo>)category[lineInfo.List];
-            if (categoryList == null)
+            if (categoryList is null)
             {
                 categoryList = new List<LineInfo>();
                 category.Add(lineInfo.List, categoryList);
@@ -476,7 +476,7 @@ namespace System.ComponentModel.Design
             {
                 return true;
             }
-            return (pd.ComponentType.GetProperty(pd.Name).GetSetMethod() == null);
+            return (pd.ComponentType.GetProperty(pd.Name).GetSetMethod() is null);
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -493,11 +493,11 @@ namespace System.ComponentModel.Design
 
         private void OnFormClosing(object sender, CancelEventArgs e)
         {
-            if (!e.Cancel && TopLevelControl != null)
+            if (!e.Cancel && TopLevelControl is not null)
             {
                 Debug.Assert(TopLevelControl is Form, "DesignerActionPanel must be hosted on a Form.");
                 Form form = (Form)TopLevelControl;
-                if (form != null)
+                if (form is not null)
                 {
                     form.Closing -= new CancelEventHandler(OnFormClosing);
                 }
@@ -597,7 +597,7 @@ namespace System.ComponentModel.Design
         {
             // TODO: RightToLeft management for left/right arrow keys (from old DesignerActionPanel)
             Line focusedLine = FocusedLine;
-            if (focusedLine != null)
+            if (focusedLine is not null)
             {
                 if (focusedLine.ProcessDialogKey(keyData))
                 {
@@ -615,25 +615,25 @@ namespace System.ComponentModel.Design
 
         private void ProcessLists(DesignerActionListCollection lists, ListDictionary categories)
         {
-            if (lists == null)
+            if (lists is null)
             {
                 return;
             }
             foreach (DesignerActionList list in lists)
             {
-                if (list != null)
+                if (list is not null)
                 {
                     IEnumerable items = list.GetSortedActionItems();
-                    if (items != null)
+                    if (items is not null)
                     {
                         foreach (DesignerActionItem item in items)
                         {
-                            if (item == null)
+                            if (item is null)
                             {
                                 continue;
                             }
                             LineInfo lineInfo = ProcessTaskItem(list, item);
-                            if (lineInfo == null)
+                            if (lineInfo is null)
                             {
                                 continue;
                             }
@@ -651,10 +651,10 @@ namespace System.ComponentModel.Design
                                     relatedComponent = methodItem.RelatedComponent;
                                 }
                             }
-                            if (relatedComponent != null)
+                            if (relatedComponent is not null)
                             {
                                 IEnumerable<LineInfo> relatedLineInfos = ProcessRelatedTaskItems(relatedComponent);
-                                if (relatedLineInfos != null)
+                                if (relatedLineInfos is not null)
                                 {
                                     foreach (LineInfo relatedLineInfo in relatedLineInfos)
                                     {
@@ -671,10 +671,10 @@ namespace System.ComponentModel.Design
         private IEnumerable<LineInfo> ProcessRelatedTaskItems(IComponent relatedComponent)
         {
             // Add the related tasks
-            Debug.Assert(relatedComponent != null);
+            Debug.Assert(relatedComponent is not null);
             DesignerActionListCollection relatedLists = null;
             DesignerActionService actionService = (DesignerActionService)ServiceProvider.GetService(typeof(DesignerActionService));
-            if (actionService != null)
+            if (actionService is not null)
             {
                 relatedLists = actionService.GetComponentActions(relatedComponent);
             }
@@ -682,12 +682,12 @@ namespace System.ComponentModel.Design
             {
                 // Try to use the component's service provider if it exists so that we end up getting the right IDesignerHost.
                 IServiceProvider serviceProvider = relatedComponent.Site;
-                if (serviceProvider == null)
+                if (serviceProvider is null)
                 {
                     serviceProvider = ServiceProvider;
                 }
                 IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
                     if (host.GetDesigner(relatedComponent) is ComponentDesigner componentDesigner)
                     {
@@ -698,23 +698,23 @@ namespace System.ComponentModel.Design
 
             List<LineInfo> lineInfos = new List<LineInfo>();
 
-            if (relatedLists != null)
+            if (relatedLists is not null)
             {
                 foreach (DesignerActionList relatedList in relatedLists)
                 {
-                    if (relatedList != null)
+                    if (relatedList is not null)
                     {
                         IEnumerable items = relatedList.GetSortedActionItems();
-                        if (items != null)
+                        if (items is not null)
                         {
                             foreach (DesignerActionItem relatedItem in items)
                             {
-                                if (relatedItem != null)
+                                if (relatedItem is not null)
                                 {
                                     if (relatedItem.AllowAssociate)
                                     {
                                         LineInfo lineInfo = ProcessTaskItem(relatedList, relatedItem);
-                                        if (lineInfo != null)
+                                        if (lineInfo is not null)
                                         {
                                             lineInfos.Add(lineInfo);
                                         }
@@ -738,7 +738,7 @@ namespace System.ComponentModel.Design
             else if (item is DesignerActionPropertyItem pti)
             {
                 PropertyDescriptor pd = TypeDescriptor.GetProperties(list)[pti.MemberName];
-                if (pd == null)
+                if (pd is null)
                 {
                     throw new InvalidOperationException(string.Format(SR.DesignerActionPanel_CouldNotFindProperty, pti.MemberName, list.GetType().FullName));
                 }
@@ -746,7 +746,7 @@ namespace System.ComponentModel.Design
                 TypeDescriptorContext context = new TypeDescriptorContext(_serviceProvider, pd, list);
                 UITypeEditor editor = (UITypeEditor)pd.GetEditor(typeof(UITypeEditor));
                 bool standardValuesSupported = pd.Converter.GetStandardValuesSupported(context);
-                if (editor == null)
+                if (editor is null)
                 {
                     if (pd.PropertyType == typeof(bool))
                     {
@@ -800,7 +800,7 @@ namespace System.ComponentModel.Design
         private void ShowError(string errorMessage)
         {
             IUIService uiService = (IUIService)ServiceProvider.GetService(typeof(IUIService));
-            if (uiService != null)
+            if (uiService is not null)
             {
                 uiService.ShowError(errorMessage);
             }
@@ -880,7 +880,7 @@ namespace System.ComponentModel.Design
                 // Store the focus state
                 string focusId = string.Empty;
                 Line focusedLine = FocusedLine;
-                if (focusedLine != null)
+                if (focusedLine is not null)
                 {
                     focusId = focusedLine.FocusId;
                 }
@@ -998,7 +998,7 @@ namespace System.ComponentModel.Design
 
             public LineInfo(DesignerActionList list, DesignerActionItem item, Line line)
             {
-                Debug.Assert(line != null);
+                Debug.Assert(line is not null);
                 Line = line;
                 Item = item;
                 List = list;
@@ -1042,7 +1042,7 @@ namespace System.ComponentModel.Design
 
             public bool OnComponentChanging()
             {
-                if (ComponentChangeService != null)
+                if (ComponentChangeService is not null)
                 {
                     try
                     {
@@ -1062,7 +1062,7 @@ namespace System.ComponentModel.Design
 
             public void OnComponentChanged()
             {
-                if (ComponentChangeService != null)
+                if (ComponentChangeService is not null)
                 {
                     ComponentChangeService.OnComponentChanged(_instance, _propDesc, null, null);
                 }
@@ -1230,7 +1230,7 @@ namespace System.ComponentModel.Design
 
             private void OnParentControlFontChanged(object sender, EventArgs e)
             {
-                if (_titleLabel != null && _subtitleLabel != null)
+                if (_titleLabel is not null && _subtitleLabel is not null)
                 {
                     _titleLabel.Font = new Font(ActionPanel.Font, FontStyle.Bold);
                     _subtitleLabel.Font = ActionPanel.Font;
@@ -1391,7 +1391,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_propDesc == null)
+                    if (_propDesc is null)
                     {
                         _propDesc = TypeDescriptor.GetProperties(_actionList)[_propertyItem.MemberName];
                     }
@@ -1408,7 +1408,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_typeDescriptorContext == null)
+                    if (_typeDescriptorContext is null)
                     {
                         _typeDescriptorContext = new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList);
                     }
@@ -1435,13 +1435,13 @@ namespace System.ComponentModel.Design
                 try
                 {
                     // Only push the change if the values are different
-                    if (newValue != null)
+                    if (newValue is not null)
                     {
                         Type valueType = newValue.GetType();
                         // If it's not assignable, try to convert it
                         if (!PropertyDescriptor.PropertyType.IsAssignableFrom(valueType))
                         {
-                            if (PropertyDescriptor.Converter != null)
+                            if (PropertyDescriptor.Converter is not null)
                             {
                                 // If we can't convert it, show an error
                                 if (!PropertyDescriptor.Converter.CanConvertFrom(_typeDescriptorContext, valueType))
@@ -1727,7 +1727,7 @@ namespace System.ComponentModel.Design
             protected TypeConverter.StandardValuesCollection GetStandardValues()
             {
                 TypeConverter converter = PropertyDescriptor.Converter;
-                if (converter != null &&
+                if (converter is not null &&
                     converter.GetStandardValuesSupported(TypeDescriptorContext))
                 {
                     return converter.GetStandardValues(TypeDescriptorContext);
@@ -1742,7 +1742,7 @@ namespace System.ComponentModel.Design
                     e.Handled = true;
                     // Try to find the existing value and then pick the one after it
                     TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
-                    if (standardValues != null)
+                    if (standardValues is not null)
                     {
                         for (int i = 0; i < standardValues.Count; i++)
                         {
@@ -1769,7 +1769,7 @@ namespace System.ComponentModel.Design
                     e.Handled = true;
                     // Try to find the existing value and then pick the one before it
                     TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
-                    if (standardValues != null)
+                    if (standardValues is not null)
                     {
                         for (int i = 0; i < standardValues.Count; i++)
                         {
@@ -1917,7 +1917,7 @@ namespace System.ComponentModel.Design
 
             private void ActivateDropDown()
             {
-                if (_editor != null)
+                if (_editor is not null)
                 {
                     try
                     {
@@ -1939,14 +1939,14 @@ namespace System.ComponentModel.Design
                     };
                     listBox.KeyDown += new KeyEventHandler(OnListBoxKeyDown);
                     TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
-                    if (standardValues != null)
+                    if (standardValues is not null)
                     {
                         foreach (object o in standardValues)
                         {
                             string newItem = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, CultureInfo.CurrentCulture, o);
                             listBox.Items.Add(newItem);
 
-                            if ((o != null) && o.Equals(Value))
+                            if ((o is not null) && o.Equals(Value))
                             {
                                 listBox.SelectedItem = newItem;
                             }
@@ -1998,7 +1998,7 @@ namespace System.ComponentModel.Design
 
                     if (!_ignoreDropDownValue)
                     {
-                        if (listBox.SelectedItem != null)
+                        if (listBox.SelectedItem is not null)
                         {
                             SetValue(listBox.SelectedItem);
                         }
@@ -2015,7 +2015,7 @@ namespace System.ComponentModel.Design
 
             private void CloseDropDown()
             {
-                if (_dropDownHolder != null)
+                if (_dropDownHolder is not null)
                 {
                     _dropDownHolder.Visible = false;
                 }
@@ -2109,7 +2109,7 @@ namespace System.ComponentModel.Design
             {
                 _editor = (UITypeEditor)PropertyDescriptor.GetEditor(typeof(UITypeEditor));
                 base.OnPropertyTaskItemUpdated(toolTip, ref currentTabIndex);
-                if (_editor != null)
+                if (_editor is not null)
                 {
                     _button.Ellipsis = (_editor.GetEditStyle(TypeDescriptorContext) == UITypeEditorEditStyle.Modal);
                     _hasSwatch = _editor.GetPaintValueSupported(TypeDescriptorContext);
@@ -2167,7 +2167,7 @@ namespace System.ComponentModel.Design
                 base.PaintLine(g, lineWidth, lineHeight);
                 if (_hasSwatch)
                 {
-                    if (_swatch == null)
+                    if (_swatch is null)
                     {
                         int width = EditRegionSize.Height - EditorLineSwatchPadding * 2;
                         int height = width - 1;
@@ -2284,7 +2284,7 @@ namespace System.ComponentModel.Design
             DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
             {
                 IUIService uiService = (IUIService)ServiceProvider.GetService(typeof(IUIService));
-                if (uiService != null)
+                if (uiService is not null)
                 {
                     return uiService.ShowDialog(dialog);
                 }
@@ -2383,7 +2383,7 @@ namespace System.ComponentModel.Design
                         cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                         cp.Style |= unchecked((int)(User32.WS.POPUP | User32.WS.BORDER));
                         cp.ClassStyle |= (int)User32.CS.SAVEBITS;
-                        if (_parentControl != null)
+                        if (_parentControl is not null)
                         {
                             if (!_parentControl.IsDisposed)
                             {
@@ -2396,7 +2396,7 @@ namespace System.ComponentModel.Design
 
                 public virtual void FocusComponent()
                 {
-                    if (_hostedControl != null && Visible)
+                    if (_hostedControl is not null && Visible)
                     {
                         _hostedControl.Focus();
                     }
@@ -2466,7 +2466,7 @@ namespace System.ComponentModel.Design
                         User32.SetWindowLong(this, User32.GWL.HWNDPARENT, IntPtr.Zero);
 
                         // sometimes activation goes to LALA land - if our parent control is still  around, remind it to take focus.
-                        if (parent != null && parent.Visible)
+                        if (parent is not null && parent.Visible)
                         {
                             parent.Focus();
                         }
@@ -2490,7 +2490,7 @@ namespace System.ComponentModel.Design
                                         // if it's a toolstrip dropdown let it know that we have a specific close reason.
                                         dropDown.Close();
                                     }
-                                    else if (toplevel != null)
+                                    else if (toplevel is not null)
                                     {
                                         toplevel.Visible = false;
                                     }
@@ -2630,7 +2630,7 @@ namespace System.ComponentModel.Design
                                     }
                                     finally
                                     {
-                                        if (attrs != null)
+                                        if (attrs is not null)
                                         {
                                             attrs.Dispose();
                                         }
@@ -2638,7 +2638,7 @@ namespace System.ComponentModel.Design
                                 }
                                 finally
                                 {
-                                    if (icon != null)
+                                    if (icon is not null)
                                     {
                                         icon.Dispose();
                                     }
@@ -2708,7 +2708,7 @@ namespace System.ComponentModel.Design
 
             private void OnParentControlFontChanged(object sender, EventArgs e)
             {
-                if (_label != null && _label.Font != null)
+                if (_label is not null && _label.Font is not null)
                 {
                     _label.Font = GetFont();
                 }

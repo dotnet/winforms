@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_menuService == null)
+                if (_menuService is null)
                 {
                     _menuService = (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
                 }
@@ -44,9 +44,9 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_statusRectCommand == null)
+                if (_statusRectCommand is null)
                 {
-                    if (MenuService != null)
+                    if (MenuService is not null)
                     {
                         _statusRectCommand = MenuService.FindCommand(MenuCommands.SetStatusRectangle);
                     }
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void SetStatusInformation(Component selectedComponent, Point location)
         {
-            if (selectedComponent == null)
+            if (selectedComponent is null)
             {
                 return;
             }
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Design
             else
             {
                 PropertyDescriptor BoundsProp = TypeDescriptor.GetProperties(selectedComponent)["Bounds"];
-                if (BoundsProp != null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
+                if (BoundsProp is not null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
                 {
                     bounds = (Rectangle)BoundsProp.GetValue(selectedComponent);
                 }
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.Design
                 bounds.X = location.X;
                 bounds.Y = location.Y;
             }
-            if (StatusRectCommand != null)
+            if (StatusRectCommand is not null)
             {
                 StatusRectCommand.Invoke(bounds);
             }
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void SetStatusInformation(Component selectedComponent)
         {
-            if (selectedComponent == null)
+            if (selectedComponent is null)
             {
                 return;
             }
@@ -105,12 +105,12 @@ namespace System.Windows.Forms.Design
             else
             {
                 PropertyDescriptor BoundsProp = TypeDescriptor.GetProperties(selectedComponent)["Bounds"];
-                if (BoundsProp != null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
+                if (BoundsProp is not null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
                 {
                     bounds = (Rectangle)BoundsProp.GetValue(selectedComponent);
                 }
             }
-            if (StatusRectCommand != null)
+            if (StatusRectCommand is not null)
             {
                 StatusRectCommand.Invoke(bounds);
             }
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void SetStatusInformation(Rectangle bounds)
         {
-            if (StatusRectCommand != null)
+            if (StatusRectCommand is not null)
             {
                 StatusRectCommand.Invoke(bounds);
             }

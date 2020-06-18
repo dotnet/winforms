@@ -267,22 +267,22 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 finally
                 {
-                    if (penTopLeft != null)
+                    if (penTopLeft is not null)
                     {
                         penTopLeft.Dispose();
                     }
 
-                    if (penBottomRight != null)
+                    if (penBottomRight is not null)
                     {
                         penBottomRight.Dispose();
                     }
 
-                    if (insetPen != null)
+                    if (insetPen is not null)
                     {
                         insetPen.Dispose();
                     }
 
-                    if (bottomRightInsetPen != null)
+                    if (bottomRightInsetPen is not null)
                     {
                         bottomRightInsetPen.Dispose();
                     }
@@ -584,7 +584,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             finally
             {
-                if (!stockBorder && brush != null)
+                if (!stockBorder && brush is not null)
                 {
                     brush.Dispose();
                 }
@@ -618,7 +618,7 @@ namespace System.Windows.Forms.ButtonInternal
         /// </summary>
         void DrawImage(Graphics graphics, LayoutData layout)
         {
-            if (Control.Image != null)
+            if (Control.Image is not null)
             {
                 //setup new clip region & draw
                 DrawImageCore(graphics, Control.Image, layout.imageBounds, layout.imageStart, layout);
@@ -784,7 +784,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal void PaintButtonBackground(PaintEventArgs e, Rectangle bounds, Brush background)
         {
-            if (background == null)
+            if (background is null)
             {
                 Control.PaintBackground(e, bounds);
             }
@@ -1487,7 +1487,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
 
                 // Compute the final image and text bounds.
-                if (imageSize == Size.Empty || text == null || text.Length == 0 || textImageRelation == TextImageRelation.Overlay)
+                if (imageSize == Size.Empty || text is null || text.Length == 0 || textImageRelation == TextImageRelation.Overlay)
                 {
                     // Do not worry about text/image overlaying
                     Size textSize = GetTextSize(maxBounds.Size);
@@ -1693,7 +1693,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             internal LayoutData(LayoutOptions options)
             {
-                Debug.Assert(options != null, "must have options");
+                Debug.Assert(options is not null, "must have options");
                 this.options = options;
             }
         }
@@ -1746,7 +1746,7 @@ namespace System.Windows.Forms.ButtonInternal
                 focusOddEvenFixup = false,
                 font = Control.Font,
                 text = Control.Text,
-                imageSize = (Control.Image == null) ? Size.Empty : Control.Image.Size,
+                imageSize = (Control.Image is null) ? Size.Empty : Control.Image.Size,
                 checkSize = 0,
                 checkPaddingSize = 0,
                 checkAlign = ContentAlignment.TopLeft,

@@ -524,7 +524,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            if (e != null)
+            if (e is not null)
             {
                 _wheelDelta += e.Delta;
 

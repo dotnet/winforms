@@ -87,7 +87,7 @@ namespace System.Windows.Forms
         /// </summary>
         private StringSorter(CultureInfo culture, string[] keys, object[] items, int options)
         {
-            if (keys == null)
+            if (keys is null)
             {
                 if (items is string[])
                 {
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < items.Length; i++)
                     {
                         object item = items[i];
-                        if (item != null)
+                        if (item is not null)
                         {
                             keys[i] = item.ToString();
                         }
@@ -109,14 +109,14 @@ namespace System.Windows.Forms
             }
             this.keys = keys;
             this.items = items;
-            lcid = culture == null ? unchecked((int)Kernel32.GetThreadLocale()) : culture.LCID;
+            lcid = culture is null ? unchecked((int)Kernel32.GetThreadLocale()) : culture.LCID;
             this.options = options & CompareOptions;
             descending = (options & Descending) != 0;
         }
 
         internal static int ArrayLength(object[] array)
         {
-            if (array == null)
+            if (array is null)
             {
                 return 0;
             }
@@ -165,12 +165,12 @@ namespace System.Windows.Forms
 
         private static int Compare(int lcid, string s1, string s2, int options)
         {
-            if (s1 == null)
+            if (s1 is null)
             {
-                return s2 == null ? 0 : -1;
+                return s2 is null ? 0 : -1;
             }
 
-            if (s2 == null)
+            if (s2 is null)
             {
                 return 1;
             }
@@ -219,7 +219,7 @@ namespace System.Windows.Forms
                         string key = keys[i];
                         keys[i] = keys[j];
                         keys[j] = key;
-                        if (items != null)
+                        if (items is not null)
                         {
                             object item = items[i];
                             items[i] = items[j];
@@ -396,8 +396,8 @@ namespace System.Windows.Forms
         {
             // keys and items have to be the same length
             //
-            if ((items == null)
-                || ((keys != null) && (keys.Length != items.Length)))
+            if ((items is null)
+                || ((keys is not null) && (keys.Length != items.Length)))
             {
                 throw new ArgumentException(string.Format(SR.ArraysNotSameSize,
                                                                    "keys",

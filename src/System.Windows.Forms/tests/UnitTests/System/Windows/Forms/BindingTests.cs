@@ -397,7 +397,7 @@ namespace System.Windows.Forms.Tests
 
             binding.BindingComplete += handler;
             Assert.Throws(exception.GetType(), () => binding.OnBindingComplete(eventArgs));
-            if (eventArgs != null)
+            if (eventArgs is not null)
             {
                 Assert.False(eventArgs.Cancel);
             }
@@ -422,7 +422,7 @@ namespace System.Windows.Forms.Tests
 
             binding.BindingComplete += handler;
             binding.OnBindingComplete(eventArgs);
-            if (eventArgs != null)
+            if (eventArgs is not null)
             {
                 Assert.True(eventArgs.Cancel);
             }
@@ -471,7 +471,7 @@ namespace System.Windows.Forms.Tests
             };
 
             binding.Format += handler;
-            if (eventArgs != null)
+            if (eventArgs is not null)
             {
                 eventArgs.Value = oldValue;
             }
@@ -481,7 +481,7 @@ namespace System.Windows.Forms.Tests
 
             // Should not call if the handler is removed.
             binding.Format -= handler;
-            if (eventArgs != null)
+            if (eventArgs is not null)
             {
                 eventArgs.Value = oldValue;
             }
@@ -514,7 +514,7 @@ namespace System.Windows.Forms.Tests
             };
 
             binding.Parse += handler;
-            if (eventArgs != null)
+            if (eventArgs is not null)
             {
                 eventArgs.Value = oldValue;
             }
@@ -524,7 +524,7 @@ namespace System.Windows.Forms.Tests
 
             // Should not call if the handler is removed.
             binding.Parse -= handler;
-            if (eventArgs != null)
+            if (eventArgs is not null)
             {
                 eventArgs.Value = oldValue;
             }

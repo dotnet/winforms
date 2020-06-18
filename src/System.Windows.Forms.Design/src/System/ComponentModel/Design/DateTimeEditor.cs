@@ -17,14 +17,14 @@ namespace System.ComponentModel.Design
     {
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
 
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
 
-            if (edSvc == null)
+            if (edSvc is null)
             {
                 return value;
             }
@@ -126,7 +126,7 @@ namespace System.ComponentModel.Design
                 _edSvc = edSvc;
                 _value = value;
 
-                if (value != null)
+                if (value is not null)
                 {
                     DateTime dt = (DateTime)value;
                     _monthCalendar.SetDate((dt.Equals(DateTime.MinValue)) ? DateTime.Today : dt);

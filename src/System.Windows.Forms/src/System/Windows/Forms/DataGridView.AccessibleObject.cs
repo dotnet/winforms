@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (topRowAccessibilityObject == null)
+                    if (topRowAccessibilityObject is null)
                     {
                         topRowAccessibilityObject = new DataGridViewTopRowAccessibleObject(owner);
                     }
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (selectedCellsAccessibilityObject == null)
+                    if (selectedCellsAccessibilityObject is null)
                     {
                         selectedCellsAccessibilityObject = new DataGridViewSelectedCellsAccessibleObject(owner);
                     }
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetFocused()
             {
-                if (owner.Focused && owner.CurrentCell != null)
+                if (owner.Focused && owner.CurrentCell is not null)
                 {
                     return owner.CurrentCell.AccessibilityObject;
                 }
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (runtimeId == null)
+                    if (runtimeId is null)
                     {
                         runtimeId = new int[2];
                         runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a

@@ -23,7 +23,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             get
             {
-                if (buttonAdapter == null)
+                if (buttonAdapter is null)
                 {
                     buttonAdapter = CreateButtonAdapter();
                 }
@@ -89,12 +89,12 @@ namespace System.Windows.Forms.ButtonInternal
         internal static double GetDpiScaleRatio(Graphics g, Control control)
         {
             if (DpiHelper.IsPerMonitorV2Awareness
-                && control != null && control.IsHandleCreated)
+                && control is not null && control.IsHandleCreated)
             {
                 return control._deviceDpi / DpiHelper.LogicalDpi;
             }
 
-            if (g == null)
+            if (g is null)
             {
                 return 1.0F;
             }

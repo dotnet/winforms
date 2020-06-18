@@ -111,12 +111,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         string IEventBindingService.CreateUniqueMethodName(IComponent component, EventDescriptor e)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
 
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -130,7 +130,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         ICollection IEventBindingService.GetCompatibleMethods(EventDescriptor e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -157,21 +157,21 @@ namespace System.ComponentModel.Design
         /// </summary>
         private bool HasGenericArgument(EventDescriptor ed)
         {
-            if (ed == null || ed.ComponentType == null)
+            if (ed is null || ed.ComponentType is null)
             {
                 return false;
             }
 
             EventInfo evInfo = ed.ComponentType.GetEvent(ed.Name);
 
-            if (evInfo == null || !evInfo.EventHandlerType.IsGenericType)
+            if (evInfo is null || !evInfo.EventHandlerType.IsGenericType)
             {
                 return false;
             }
 
             Type[] args = evInfo.EventHandlerType.GetGenericArguments();
 
-            if (args != null && args.Length > 0)
+            if (args is not null && args.Length > 0)
             {
                 for (int i = 0; i < args.Length; i++)
                 {
@@ -190,7 +190,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         PropertyDescriptorCollection IEventBindingService.GetEventProperties(EventDescriptorCollection events)
         {
-            if (events == null)
+            if (events is null)
             {
                 throw new ArgumentNullException(nameof(events));
             }
@@ -218,7 +218,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         PropertyDescriptor IEventBindingService.GetEventProperty(EventDescriptor e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -252,12 +252,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool IEventBindingService.ShowCode(IComponent component, EventDescriptor e)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
 
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -265,12 +265,12 @@ namespace System.ComponentModel.Design
             PropertyDescriptor prop = ((IEventBindingService)this).GetEventProperty(e);
             string methodName = (string)prop.GetValue(component);
 
-            if (methodName == null)
+            if (methodName is null)
             {
                 return false;   // the event is not bound to a method.
             }
 
-            Debug.Assert(_showCodeComponent == null && _showCodeEventDescriptor == null && _showCodeMethodName == null, "show code already pending");
+            Debug.Assert(_showCodeComponent is null && _showCodeEventDescriptor is null && _showCodeMethodName is null, "show code already pending");
             _showCodeComponent = component;
             _showCodeEventDescriptor = e;
             _showCodeMethodName = methodName;

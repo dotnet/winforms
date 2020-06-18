@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override string GetDisplayText(object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return string.Empty;
             }
@@ -36,10 +36,10 @@ namespace System.Windows.Forms.Design
             string text;
 
             PropertyDescriptor prop = TypeDescriptor.GetProperties(value)["Name"];
-            if (prop != null)
+            if (prop is not null)
             {
                 text = (string)prop.GetValue(value);
-                if (text != null && text.Length > 0)
+                if (text is not null && text.Length > 0)
                 {
                     return text;
                 }
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Design
         protected override object[] GetItems(object editValue)
         {
             var source = editValue as ImageList.ImageCollection;
-            if (source == null)
+            if (source is null)
             {
                 return base.GetItems(editValue);
             }
@@ -109,13 +109,13 @@ namespace System.Windows.Forms.Design
         protected override object SetItems(object editValue, object[] value)
         {
             var source = editValue as ImageList.ImageCollection;
-            if (source == null)
+            if (source is null)
             {
                 return base.SetItems(editValue, value);
             }
 
             source.Clear();
-            if (value == null || value.Length == 0)
+            if (value is null || value.Length == 0)
             {
                 return source;
             }

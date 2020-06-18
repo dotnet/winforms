@@ -89,7 +89,7 @@ namespace System
             if (moduleInstance == IntPtr.Zero)
                 Marshal.GetHINSTANCE(Assembly.GetCallingAssembly().Modules.First());
 
-            if (menuId != 0 && menuName != null)
+            if (menuId != 0 && menuName is not null)
                 throw new ArgumentException($"Can't set both {nameof(menuName)} and {nameof(menuId)}.");
 
             _windowProcedure = WNDPROC;

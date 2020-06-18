@@ -309,7 +309,7 @@ namespace System.Windows.Forms.Tests
         public void ToolStripDropDownItem_Ctor_String_Image_ToolStripItemArray(string text, Image image, ToolStripItem[] dropDownItems, ToolStripItem[] expectedDropDownItems)
         {
             using var item = new SubToolStripDropDownItem(text, image, dropDownItems);
-            Assert.Equal(dropDownItems != null, item.HasDropDown);
+            Assert.Equal(dropDownItems is not null, item.HasDropDown);
             Assert.NotNull(item.AccessibilityObject);
             Assert.Null(item.AccessibleDefaultActionDescription);
             Assert.Null(item.AccessibleDescription);

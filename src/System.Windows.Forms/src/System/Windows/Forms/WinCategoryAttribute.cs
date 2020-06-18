@@ -34,13 +34,13 @@ namespace System.Windows.Forms
         protected override string GetLocalizedString(string value)
         {
             string localizedValue = base.GetLocalizedString(value);
-            if (localizedValue == null)
+            if (localizedValue is null)
             {
                 localizedValue = (string)GetSRObject("WinFormsCategory" + value);
             }
             // This attribute is internal, and we should never have a missing resource string.
             //
-            Debug.Assert(localizedValue != null, "All Windows Forms category attributes should have localized strings.  Category '" + value + "' not found.");
+            Debug.Assert(localizedValue is not null, "All Windows Forms category attributes should have localized strings.  Category '" + value + "' not found.");
             return localizedValue;
         }
 

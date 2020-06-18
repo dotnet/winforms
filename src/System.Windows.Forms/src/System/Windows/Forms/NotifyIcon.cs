@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         /// </summary>
         public NotifyIcon(IContainer container) : this()
         {
-            if (container == null)
+            if (container is null)
             {
                 throw new ArgumentNullException(nameof(container));
             }
@@ -247,14 +247,14 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
 
-                if (value != null && !value.Equals(text))
+                if (value is not null && !value.Equals(text))
                 {
-                    if (value != null && value.Length > 63)
+                    if (value is not null && value.Length > 63)
                     {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, SR.TrayIcon_TextTooLong);
                     }
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (window != null)
+                if (window is not null)
                 {
                     icon = null;
                     Text = string.Empty;
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
                 // This same post is done in ControlNativeWindow's finalize method, so if you change
                 // it, change it there too.
                 //
-                if (window != null && window.Handle != IntPtr.Zero)
+                if (window is not null && window.Handle != IntPtr.Zero)
                 {
                     User32.PostMessageW(window, User32.WM.CLOSE);
                     window.ReleaseHandle();
@@ -620,7 +620,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowContextMenu()
         {
-            if (contextMenuStrip != null)
+            if (contextMenuStrip is not null)
             {
                 User32.GetCursorPos(out Point pt);
 
@@ -666,7 +666,7 @@ namespace System.Windows.Forms
                     }
                 }
                 data.hWnd = window.Handle;
-                if (icon != null)
+                if (icon is not null)
                 {
                     data.uFlags |= NIF.ICON;
                     data.hIcon = icon.Handle;
@@ -674,7 +674,7 @@ namespace System.Windows.Forms
                 data.uFlags |= NIF.TIP;
                 data.Tip = text;
 
-                if (showIconInTray && icon != null)
+                if (showIconInTray && icon is not null)
                 {
                     if (!added)
                     {
@@ -772,7 +772,7 @@ namespace System.Windows.Forms
                             WmMouseDown(ref msg, MouseButtons.Right, 1);
                             break;
                         case (int)User32.WM.RBUTTONUP:
-                            if (contextMenuStrip != null)
+                            if (contextMenuStrip is not null)
                             {
                                 ShowContextMenu();
                             }
@@ -881,7 +881,7 @@ namespace System.Windows.Forms
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                Debug.Assert(reference != null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
+                Debug.Assert(reference is not null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
                 reference.WndProc(ref m);
             }
         }

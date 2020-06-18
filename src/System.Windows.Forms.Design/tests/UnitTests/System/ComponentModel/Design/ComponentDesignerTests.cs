@@ -487,16 +487,16 @@ namespace System.ComponentModel.Design.Tests
             mockDesignerHost.Verify(h => h.RootComponent, Times.Once());
             mockDesignerHost.Verify(h => h.GetDesigner(rootComponent), Times.Never());
 
-            Assert.Same(rootComponent == null ? null : designer, treeDesigner.Parent);
-            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(rootComponent == null ? 2 : 3));
+            Assert.Same(rootComponent is null ? null : designer, treeDesigner.Parent);
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(rootComponent is null ? 2 : 3));
             mockDesignerHost.Verify(h => h.RootComponent, Times.Exactly(2));
-            mockDesignerHost.Verify(h => h.GetDesigner(rootComponent), Times.Exactly(rootComponent == null ? 0 : 1));
+            mockDesignerHost.Verify(h => h.GetDesigner(rootComponent), Times.Exactly(rootComponent is null ? 0 : 1));
 
             // Get again.
-            Assert.Same(rootComponent == null ? null : designer, treeDesigner.Parent);
-            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(rootComponent == null ? 3 : 5));
+            Assert.Same(rootComponent is null ? null : designer, treeDesigner.Parent);
+            mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(rootComponent is null ? 3 : 5));
             mockDesignerHost.Verify(h => h.RootComponent, Times.Exactly(3));
-            mockDesignerHost.Verify(h => h.GetDesigner(rootComponent), Times.Exactly(rootComponent == null ? 0 : 2));
+            mockDesignerHost.Verify(h => h.GetDesigner(rootComponent), Times.Exactly(rootComponent is null ? 0 : 2));
         }
 
         [Fact]

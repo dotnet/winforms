@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms
             // We want to check printer settings before we push the modal message loop,
             // so the user has a chance to catch the exception instead of letting go to
             // the windows forms exception dialog.
-            if (Document != null && !Document.PrinterSettings.IsValid)
+            if (Document is not null && !Document.PrinterSettings.IsValid)
             {
                 throw new InvalidPrinterException(Document.PrinterSettings);
             }
@@ -1400,7 +1400,7 @@ namespace System.Windows.Forms
 
         void OnprintToolStripButtonClick(object sender, EventArgs e)
         {
-            if (previewControl.Document != null)
+            if (previewControl.Document is not null)
             {
                 previewControl.Document.Print();
             }

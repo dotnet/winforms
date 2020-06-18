@@ -2482,7 +2482,7 @@ namespace System.ComponentModel.Design.Tests
 
             // Replace placeholders for "this"
             ActiveDesignerEventArgs actualEventArgs = null;
-            if (eventArgs != null)
+            if (eventArgs is not null)
             {
                 IDesignerHost newDesigner = eventArgs.NewDesigner == s_placeholderHost ? host : eventArgs.NewDesigner;
                 IDesignerHost oldDesigner = eventArgs.OldDesigner == s_placeholderHost ? host : eventArgs.OldDesigner;

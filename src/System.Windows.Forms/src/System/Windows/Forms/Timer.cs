@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Timer(IContainer container) : this()
         {
-            if (container == null)
+            if (container is null)
             {
                 throw new ArgumentNullException(nameof(container));
             }
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.TimerEnabledDescr))]
         public virtual bool Enabled
         {
-            get => _timerWindow == null ? _enabled : _timerWindow.IsTimerRunning;
+            get => _timerWindow is null ? _enabled : _timerWindow.IsTimerRunning;
             set
             {
                 lock (_syncObj)
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                             if (value)
                             {
                                 // Create the timer window if needed.
-                                if (_timerWindow == null)
+                                if (_timerWindow is null)
                                 {
                                     _timerWindow = new TimerNativeWindow(this);
                                 }
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
                         if (Enabled)
                         {
                             // Change the timer value, don't tear down the timer itself.
-                            if (!DesignMode && _timerWindow != null)
+                            if (!DesignMode && _timerWindow is not null)
                             {
                                 _timerWindow.RestartTimer(value);
                             }

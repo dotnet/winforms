@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Design
             _serviceProvider = serviceProvider;
             _comp = comp;
 
-            if (_serviceProvider != null)
+            if (_serviceProvider is not null)
             {
                 _helpService = (IHelpService)serviceProvider.GetService(typeof(IHelpService));
             }
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (_components != null)
+                if (_components is not null)
                 {
                     _components.Dispose();
                 }
@@ -349,7 +349,7 @@ namespace System.Windows.Forms.Design
             DialogDataGridViewCellAccessibleObject _accObj = null;
             protected override AccessibleObject CreateAccessibilityInstance()
             {
-                if (_accObj == null)
+                if (_accObj is null)
                 {
                     _accObj = new DialogDataGridViewCellAccessibleObject(this);
                 }

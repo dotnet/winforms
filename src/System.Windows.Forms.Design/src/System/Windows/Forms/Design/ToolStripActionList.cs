@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Design
             {
                 // Make sure the component is not being inherited -- we can't delete these!
                 InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(_toolStrip)[typeof(InheritanceAttribute)];
-                if (ia == null || ia.InheritanceLevel == InheritanceLevel.NotInherited)
+                if (ia is null || ia.InheritanceLevel == InheritanceLevel.NotInherited)
                 {
                     return true;
                 }
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Design
             {
                 // Make sure the component is not being inherited -- we can't delete these!
                 InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(_toolStrip)[typeof(InheritanceAttribute)];
-                if (ia == null || ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                if (ia is null || ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
                 {
                     return true;
                 }
@@ -65,8 +65,8 @@ namespace System.Windows.Forms.Design
         private object GetProperty(string propertyName)
         {
             PropertyDescriptor getProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
-            Debug.Assert(getProperty != null, "Could not find given property in control.");
-            if (getProperty != null)
+            Debug.Assert(getProperty is not null, "Could not find given property in control.");
+            if (getProperty is not null)
             {
                 return getProperty.GetValue(_toolStrip);
             }
@@ -77,8 +77,8 @@ namespace System.Windows.Forms.Design
         private void ChangeProperty(string propertyName, object value)
         {
             PropertyDescriptor changingProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
-            Debug.Assert(changingProperty != null, "Could not find given property in control.");
-            if (changingProperty != null)
+            Debug.Assert(changingProperty is not null, "Could not find given property in control.");
+            if (changingProperty is not null)
             {
                 changingProperty.SetValue(_toolStrip, value);
             }
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Design
         {
             // Hide the Panel...
             DesignerActionUIService actionUIService = (DesignerActionUIService)_toolStrip.Site.GetService(typeof(DesignerActionUIService));
-            if (actionUIService != null)
+            if (actionUIService is not null)
             {
                 actionUIService.HideUI(_toolStrip);
             }

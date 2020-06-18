@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public override bool OnMouseUp(Glyph g, MouseButtons button)
         {
-            if (button != MouseButtons.Left || ParentUI == null)
+            if (button != MouseButtons.Left || ParentUI is null)
             {
                 return true;
             }
@@ -125,10 +125,10 @@ namespace System.Windows.Forms.Design.Behavior
             }
             else if (!_ignoreNextMouseUp)
             {
-                if (_serviceProvider != null)
+                if (_serviceProvider is not null)
                 {
                     ISelectionService selectionService = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
-                    if (selectionService != null)
+                    if (selectionService is not null)
                     {
                         if (selectionService.PrimarySelection != RelatedComponent)
                         {

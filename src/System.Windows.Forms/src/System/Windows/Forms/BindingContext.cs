@@ -110,11 +110,11 @@ namespace System.Windows.Forms
         /// </remarks>
         protected virtual void AddCore(object dataSource, BindingManagerBase listManager)
         {
-            if (dataSource == null)
+            if (dataSource is null)
             {
                 throw new ArgumentNullException(nameof(dataSource));
             }
-            if (listManager == null)
+            if (listManager is null)
             {
                 throw new ArgumentNullException(nameof(listManager));
             }
@@ -191,11 +191,11 @@ namespace System.Windows.Forms
 
             internal HashKey(object dataSource, string dataMember)
             {
-                if (dataSource == null)
+                if (dataSource is null)
                 {
                     throw new ArgumentNullException(nameof(dataSource));
                 }
-                if (dataMember == null)
+                if (dataMember is null)
                 {
                     dataMember = string.Empty;
                 }
@@ -262,7 +262,7 @@ namespace System.Windows.Forms
         {
             BindingManagerBase bindingManagerBase = null;
 
-            if (dataMember == null)
+            if (dataMember is null)
             {
                 dataMember = string.Empty;
             }
@@ -272,7 +272,7 @@ namespace System.Windows.Forms
             if (dataSource is ICurrencyManagerProvider currencyManagerProvider)
             {
                 bindingManagerBase = currencyManagerProvider.GetRelatedCurrencyManager(dataMember);
-                if (bindingManagerBase != null)
+                if (bindingManagerBase is not null)
                 {
                     return bindingManagerBase;
                 }
@@ -281,11 +281,11 @@ namespace System.Windows.Forms
             // Check for previously created binding manager
             HashKey key = GetKey(dataSource, dataMember);
             WeakReference wRef = _listManagers[key] as WeakReference;
-            if (wRef != null)
+            if (wRef is not null)
             {
                 bindingManagerBase = (BindingManagerBase)wRef.Target;
             }
-            if (bindingManagerBase != null)
+            if (bindingManagerBase is not null)
             {
                 return bindingManagerBase;
             }
@@ -314,7 +314,7 @@ namespace System.Windows.Forms
                 BindingManagerBase formerManager = EnsureListManager(dataSource, dataPath);
 
                 PropertyDescriptor prop = formerManager.GetItemProperties().Find(dataField, true);
-                if (prop == null)
+                if (prop is null)
                 {
                     throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
                 }
@@ -329,9 +329,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            // if wRef == null, then it is the first time we want this bindingManagerBase: so add it
-            // if wRef != null, then the bindingManagerBase was GC'ed at some point: keep the old wRef and change its target
-            if (wRef == null)
+            // if wRef is null, then it is the first time we want this bindingManagerBase: so add it
+            // if wRef is not null, then the bindingManagerBase was GC'ed at some point: keep the old wRef and change its target
+            if (wRef is null)
             {
                 _listManagers.Add(key, new WeakReference(bindingManagerBase, false));
             }
@@ -347,10 +347,10 @@ namespace System.Windows.Forms
 
         private static void CheckPropertyBindingCycles(BindingContext newBindingContext, Binding propBinding)
         {
-            Debug.Assert(newBindingContext != null, "Always called with a non-null BindingContext");
-            Debug.Assert(propBinding != null, "Always called with a non-null Binding.");
+            Debug.Assert(newBindingContext is not null, "Always called with a non-null BindingContext");
+            Debug.Assert(propBinding is not null, "Always called with a non-null Binding.");
 
-            if (propBinding.BindableComponent != null && newBindingContext.Contains(propBinding.BindableComponent, string.Empty))
+            if (propBinding.BindableComponent is not null && newBindingContext.Contains(propBinding.BindableComponent, string.Empty))
             {
                 // this way we do not add a bindingManagerBase to the
                 // bindingContext if there isn't one already
@@ -379,9 +379,9 @@ namespace System.Windows.Forms
             foreach (DictionaryEntry de in _listManagers)
             {
                 WeakReference wRef = (WeakReference)de.Value;
-                if (wRef.Target == null)
+                if (wRef.Target is null)
                 {
-                    if (cleanupList == null)
+                    if (cleanupList is null)
                     {
                         cleanupList = new ArrayList();
                     }
@@ -389,7 +389,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (cleanupList != null)
+            if (cleanupList is not null)
             {
                 foreach (object o in cleanupList)
                 {
@@ -405,18 +405,18 @@ namespace System.Windows.Forms
         /// </summary>
         public static void UpdateBinding(BindingContext newBindingContext, Binding binding)
         {
-            if (binding == null)
+            if (binding is null)
             {
                 throw new ArgumentNullException(nameof(binding));
             }
 
             BindingManagerBase oldManager = binding.BindingManagerBase;
-            if (oldManager != null)
+            if (oldManager is not null)
             {
                 oldManager.Bindings.Remove(binding);
             }
 
-            if (newBindingContext != null)
+            if (newBindingContext is not null)
             {
                 // we need to first check for cycles before adding this binding to the collection
                 // of bindings.

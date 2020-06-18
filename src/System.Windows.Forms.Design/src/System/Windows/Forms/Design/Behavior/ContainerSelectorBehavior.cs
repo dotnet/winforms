@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void Init(Control containerControl, IServiceProvider serviceProvider)
         {
             _behaviorService = (BehaviorService)serviceProvider.GetService(typeof(BehaviorService));
-            if (_behaviorService == null)
+            if (_behaviorService is null)
             {
                 Debug.Fail("Could not get the BehaviorService from ContainerSelectroBehavior!");
                 return;
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 //select our component
                 ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
-                if (selSvc != null && !_containerControl.Equals(selSvc.PrimarySelection as Control))
+                if (selSvc is not null && !_containerControl.Equals(selSvc.PrimarySelection as Control))
                 {
                     selSvc.SetSelectedComponents(new object[] { _containerControl }, SelectionTypes.Primary | SelectionTypes.Toggle);
                     // Setting the selected component will create a new glyph, so this instance of the glyph won't receive any more mouse messages. So we need to tell the new glyph what the initialDragPoint and okToMove are.
@@ -191,7 +191,7 @@ namespace System.Windows.Forms.Design.Behavior
             //need to grab a hold of some services
             ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
             IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-            if (selSvc == null || host == null)
+            if (selSvc is null || host is null)
             {
                 Debug.Fail("Can't drag this Container! Either SelectionService is null or DesignerHost is null");
                 return;
@@ -203,7 +203,7 @@ namespace System.Windows.Forms.Design.Behavior
             //create our list of controls-to-drag
             foreach (IComponent comp in selComps)
             {
-                if ((comp is Control ctrl) && (ctrl.Parent != null))
+                if ((comp is Control ctrl) && (ctrl.Parent is not null))
                 {
                     if (!ctrl.Parent.Equals(requiredParent))
                     {

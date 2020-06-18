@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     {
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor, Color backColor)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor, TextFormatFlags flags)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor, Color backColor, TextFormatFlags flags)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor, Color backColor)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor, TextFormatFlags flags)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -149,7 +149,7 @@ namespace System.Windows.Forms
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor, Color backColor, TextFormatFlags flags)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
 
         public static Size MeasureText(IDeviceContext dc, string? text, Font? font)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -235,7 +235,7 @@ namespace System.Windows.Forms
 
         public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -262,7 +262,7 @@ namespace System.Windows.Forms
 
         public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize, TextFormatFlags flags)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }

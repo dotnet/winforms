@@ -269,7 +269,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             if (direction == UiaCore.NavigateDirection.Parent &&
-                _owningPropertyGrid.SelectedGridEntry != null &&
+                _owningPropertyGrid.SelectedGridEntry is not null &&
                 _owningDropDownButton.Visible)
             {
                 return _owningPropertyGrid.SelectedGridEntry?.AccessibilityObject;

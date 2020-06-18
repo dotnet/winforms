@@ -374,7 +374,7 @@ namespace System.Windows.Forms
         protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
             Image image = e.Image;
-            if (image != null)
+            if (image is not null)
             {
                 if (Image.GetPixelFormatSize(image.PixelFormat) > 16)
                 {

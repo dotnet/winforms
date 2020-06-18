@@ -398,7 +398,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnDropDown(EventArgs e)
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.SuspendMenuMode();
@@ -407,7 +407,7 @@ namespace System.Windows.Forms
         }
         protected virtual void OnDropDownClosed(EventArgs e)
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 // PERF,
 
@@ -501,7 +501,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner != null)
+                    if (Owner is not null)
                     {
                         if (Owner.Renderer is ToolStripProfessionalRenderer renderer)
                         {
@@ -537,9 +537,9 @@ namespace System.Windows.Forms
                 private static bool UseBaseAdapter(ComboBox comboBox)
                 {
                     ToolStripComboBoxControl toolStripComboBox = comboBox as ToolStripComboBoxControl;
-                    if (toolStripComboBox == null || !(toolStripComboBox.Owner.Renderer is ToolStripProfessionalRenderer))
+                    if (toolStripComboBox is null || !(toolStripComboBox.Owner.Renderer is ToolStripProfessionalRenderer))
                     {
-                        Debug.Assert(toolStripComboBox != null, "Why are we here and not a toolstrip combo?");
+                        Debug.Assert(toolStripComboBox is not null, "Why are we here and not a toolstrip combo?");
                         return true;
                     }
                     return false;
@@ -547,7 +547,7 @@ namespace System.Windows.Forms
 
                 private static ProfessionalColorTable GetColorTable(ToolStripComboBoxControl toolStripComboBoxControl)
                 {
-                    if (toolStripComboBoxControl != null)
+                    if (toolStripComboBoxControl is not null)
                     {
                         return toolStripComboBoxControl.ColorTable;
                     }

@@ -76,7 +76,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (disabledImageColorMatrix == null)
+                if (disabledImageColorMatrix is null)
                 {
                     // this is the result of a GreyScale matrix multiplied by a transparency matrix of .5
 
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (events == null)
+                if (events is null)
                 {
                     events = new EventHandlerList();
                 }
@@ -597,12 +597,12 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
 
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderArrow(e);
                 return;
@@ -673,7 +673,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderToolStripBackground(e);
                 return;
@@ -685,7 +685,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderToolStripBorder(e);
                 return;
@@ -697,7 +697,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderGrip(ToolStripGripRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderGrip(e);
                 return;
@@ -709,7 +709,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderItemBackground(e);
                 return;
@@ -721,7 +721,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderImageMargin(ToolStripRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderImageMargin(e);
                 return;
@@ -732,7 +732,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderButtonBackground(e);
                 return;
@@ -744,7 +744,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderDropDownButtonBackground(e);
                 return;
@@ -756,7 +756,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderOverflowButtonBackground(e);
                 return;
@@ -768,12 +768,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
 
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderItemImage(e);
                 return;
@@ -782,7 +782,7 @@ namespace System.Windows.Forms
             Rectangle imageRect = e.ImageRectangle;
             Image image = e.Image;
 
-            if (imageRect != Rectangle.Empty && image != null)
+            if (imageRect != Rectangle.Empty && image is not null)
             {
                 bool disposeImage = false;
                 if (e.ShiftOnPress && e.Item.Pressed)
@@ -812,12 +812,12 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
 
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderItemCheck(e);
                 return;
@@ -826,7 +826,7 @@ namespace System.Windows.Forms
             Rectangle imageRect = e.ImageRectangle;
             Image image = e.Image;
 
-            if (imageRect != Rectangle.Empty && image != null)
+            if (imageRect != Rectangle.Empty && image is not null)
             {
                 if (!e.Item.Enabled)
                 {
@@ -844,12 +844,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
 
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderItemText(e);
                 return;
@@ -892,7 +892,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderLabelBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderLabelBackground(e);
                 return;
@@ -903,7 +903,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderMenuItemBackground(e);
                 return;
@@ -916,7 +916,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderSeparator(e);
                 return;
@@ -925,7 +925,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderToolStripPanelBackground(ToolStripPanelRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderToolStripPanelBackground(e);
                 return;
@@ -934,7 +934,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderToolStripContentPanelBackground(ToolStripContentPanelRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderToolStripContentPanelBackground(e);
                 return;
@@ -943,7 +943,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderToolStripStatusLabelBackground(e);
                 return;
@@ -952,12 +952,12 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
 
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderStatusStripSizingGrip(e);
                 return;
@@ -1007,7 +1007,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride != null)
+            if (RendererOverride is not null)
             {
                 RendererOverride.OnRenderSplitButtonBackground(e);
                 return;
@@ -1017,17 +1017,17 @@ namespace System.Windows.Forms
         // Only paint background effects if no backcolor has been set or no background image has been set.
         internal bool ShouldPaintBackground(Control control)
         {
-            return (control.RawBackColor == Color.Empty && control.BackgroundImage == null);
+            return (control.RawBackColor == Color.Empty && control.BackgroundImage is null);
         }
 
         private static Image CreateDisabledImage(Image normalImage, ImageAttributes imgAttrib)
         {
-            if (normalImage == null)
+            if (normalImage is null)
             {
                 throw new ArgumentNullException(nameof(normalImage));
             }
 
-            if (imgAttrib == null)
+            if (imgAttrib is null)
             {
                 imgAttrib = new ImageAttributes();
             }

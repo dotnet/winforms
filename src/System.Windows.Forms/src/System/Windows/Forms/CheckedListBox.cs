@@ -122,7 +122,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (checkedIndexCollection == null)
+                if (checkedIndexCollection is null)
                 {
                     checkedIndexCollection = new CheckedIndexCollection(this);
                 }
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (checkedItemCollection == null)
+                if (checkedItemCollection is null)
                 {
                     checkedItemCollection = new CheckedItemCollection(this);
                 }
@@ -295,7 +295,7 @@ namespace System.Windows.Forms
 
                     // see if we have some items, and only invalidate if we do.
                     ObjectCollection items = (ObjectCollection)Items;
-                    if ((items != null) && (items.Count > 0))
+                    if ((items is not null) && (items.Count > 0))
                     {
                         Invalidate();
                     }

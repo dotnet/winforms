@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_behaviorService == null)
+                if (_behaviorService is null)
                 {
                     _behaviorService = (BehaviorService)GetService(typeof(BehaviorService));
                 }
@@ -101,9 +101,9 @@ namespace System.Windows.Forms.Design
                 ArrayList sitedChildren = null;
                 foreach (Control c in Control.Controls)
                 {
-                    if (c.Site != null)
+                    if (c.Site is not null)
                     {
-                        if (sitedChildren == null)
+                        if (sitedChildren is null)
                         {
                             sitedChildren = new ArrayList();
                         }
@@ -111,7 +111,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (sitedChildren != null)
+                if (sitedChildren is not null)
                 {
                     return sitedChildren;
                 }
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (accessibilityObj == null)
+                if (accessibilityObj is null)
                 {
                     accessibilityObj = new ControlDesignerAccessibleObject(this, Control);
                 }
@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (Component is Control c && c.Parent != null)
+                if (Component is Control c && c.Parent is not null)
                 {
                     return c.Parent;
                 }
@@ -188,7 +188,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_subclassedChildren == null)
+                if (_subclassedChildren is null)
                 {
                     _subclassedChildren = new Dictionary<IntPtr, bool>();
                 }
@@ -209,13 +209,13 @@ namespace System.Windows.Forms.Design
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(component);
                 PropertyDescriptor autoSizeProp = props["AutoSize"];
                 PropertyDescriptor autoSizeModeProp = props["AutoSizeMode"];
-                if ((prop = props["Location"]) != null &&
+                if ((prop = props["Location"]) is not null &&
                     !prop.IsReadOnly)
                 {
                     rules |= SelectionRules.Moveable;
                 }
 
-                if ((prop = props["Size"]) != null && !prop.IsReadOnly)
+                if ((prop = props["Size"]) is not null && !prop.IsReadOnly)
                 {
                     if (AutoResizeHandles && Component != _host.RootComponent)
                     {
@@ -228,11 +228,11 @@ namespace System.Windows.Forms.Design
                 }
 
                 PropertyDescriptor propDock = props["Dock"];
-                if (propDock != null)
+                if (propDock is not null)
                 {
                     DockStyle dock = (DockStyle)(int)propDock.GetValue(component);
                     //gotta adjust if the control's parent is mirrored... this is just such that we add the right resize handles. We need to do it this way, since resize glyphs are added in  AdornerWindow coords, and the AdornerWindow is never mirrored.
-                    if (Control.Parent != null && Control.Parent.IsMirrored)
+                    if (Control.Parent is not null && Control.Parent.IsMirrored)
                     {
                         if (dock == DockStyle.Left)
                         {
@@ -264,7 +264,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 PropertyDescriptor pd = props["Locked"];
-                if (pd != null)
+                if (pd is not null)
                 {
                     object value = pd.GetValue(component);
                     // make sure that value is a boolean, in case someone else added this property
@@ -301,14 +301,14 @@ namespace System.Windows.Forms.Design
             bool resizable = true;
             bool autoSize = false;
             bool growOnly = false;
-            if (autoSizeProp != null &&
+            if (autoSizeProp is not null &&
                 !(autoSizeProp.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden) ||
                   autoSizeProp.Attributes.Contains(BrowsableAttribute.No)))
             {
                 autoSize = (bool)autoSizeProp.GetValue(component);
             }
 
-            if (autoSizeModeProp != null)
+            if (autoSizeModeProp is not null)
             {
                 AutoSizeMode mode = (AutoSizeMode)autoSizeModeProp.GetValue(component);
                 growOnly = mode == AutoSizeMode.GrowOnly;
@@ -370,10 +370,10 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                Debug.Assert(Component != null, "this.component needs to be set before this method is valid.");
+                Debug.Assert(Component is not null, "this.component needs to be set before this method is valid.");
                 bool isRoot = false;
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null && Component == host.RootComponent)
+                if (host is not null && Component == host.RootComponent)
                 {
                     isRoot = true;
                 }
@@ -415,14 +415,14 @@ namespace System.Windows.Forms.Design
         protected void DisplayError(Exception e)
         {
             IUIService uis = (IUIService)GetService(typeof(IUIService));
-            if (uis != null)
+            if (uis is not null)
             {
                 uis.ShowError(e);
             }
             else
             {
                 string message = e.Message;
-                if (message == null || message.Length == 0)
+                if (message is null || message.Length == 0)
                 {
                     message = e.ToString();
                 }
@@ -437,14 +437,14 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (Control != null)
+                if (Control is not null)
                 {
-                    if (_dataBindingsCollectionChanged != null)
+                    if (_dataBindingsCollectionChanged is not null)
                     {
                         Control.DataBindings.CollectionChanged -= _dataBindingsCollectionChanged;
                     }
 
-                    if (Inherited && _inheritanceUI != null)
+                    if (Inherited && _inheritanceUI is not null)
                     {
                         _inheritanceUI.RemoveInheritedControl(Control);
                     }
@@ -452,7 +452,7 @@ namespace System.Windows.Forms.Design
                     if (_removalNotificationHooked)
                     {
                         IComponentChangeService csc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                        if (csc != null)
+                        if (csc is not null)
                         {
                             csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                         }
@@ -462,7 +462,7 @@ namespace System.Windows.Forms.Design
                     UnhookChildControls(Control);
                 }
 
-                if (_designerTarget != null)
+                if (_designerTarget is not null)
                 {
                     _designerTarget.Dispose();
                 }
@@ -479,7 +479,7 @@ namespace System.Windows.Forms.Design
 
         private void OnControlAdded(object sender, ControlEventArgs e)
         {
-            if (e.Control != null && _host != null)
+            if (e.Control is not null && _host is not null)
             {
                 if (!(_host.GetDesigner(e.Control) is ControlDesigner))
                 {
@@ -530,7 +530,7 @@ namespace System.Windows.Forms.Design
                 if (ctl.DataBindings.Count == 0)
                 {
                     IComponentChangeService csc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                    if (csc != null)
+                    if (csc is not null)
                     {
                         csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                     }
@@ -545,12 +545,12 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected bool EnableDesignMode(Control child, string name)
         {
-            if (child == null)
+            if (child is null)
             {
                 throw new ArgumentNullException("child");
             }
 
-            if (name == null)
+            if (name is null)
             {
                 throw new ArgumentNullException("name");
             }
@@ -578,7 +578,7 @@ namespace System.Windows.Forms.Design
         protected void EnableDragDrop(bool value)
         {
             Control rc = Control;
-            if (rc == null)
+            if (rc is null)
             {
                 return;
             }
@@ -624,7 +624,7 @@ namespace System.Windows.Forms.Design
 
         private void OnDragEnter(object s, DragEventArgs e)
         {
-            if (BehaviorService != null)
+            if (BehaviorService is not null)
             {
                 //Tell the BehaviorService to monitor mouse messages so it can send appropriate drag notifications.
                 BehaviorService.StartDragNotification();
@@ -639,7 +639,7 @@ namespace System.Windows.Forms.Design
 
         private void OnDragDrop(object s, DragEventArgs e)
         {
-            if (BehaviorService != null)
+            if (BehaviorService is not null)
             {
                 //this will cause the BehSvc to return from 'drag mode'
                 BehaviorService.EndDragNotification();
@@ -651,7 +651,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_moveBehavior == null)
+                if (_moveBehavior is null)
                 {
                     _moveBehavior = new ContainerSelectorBehavior(Control, Component.Site);
                 }
@@ -672,7 +672,7 @@ namespace System.Windows.Forms.Design
             //create our glyph, and set its cursor appropriately
             ControlBodyGlyph g = null;
             Control parent = Control.Parent;
-            if (parent != null && _host != null && _host.RootComponent != Component)
+            if (parent is not null && _host is not null && _host.RootComponent != Component)
             {
                 Rectangle parentRect = parent.RectangleToScreen(parent.ClientRectangle);
                 Rectangle controlRect = Control.RectangleToScreen(Control.ClientRectangle);
@@ -681,7 +681,7 @@ namespace System.Windows.Forms.Design
                     //since the parent is completely clipping the control, the control cannot be a drop target, and it will not get mouse messages. So we don't have to give the glyph a transparentbehavior (default for ControlBodyGlyph). But we still would like to be able to move the control, so push a MoveBehavior. If we didn't we wouldn't be able to move the control, since it won't get any mouse messages.
 
                     ISelectionService sel = (ISelectionService)GetService(typeof(ISelectionService));
-                    if (sel != null && sel.GetComponentSelected(Control))
+                    if (sel is not null && sel.GetComponentSelected(Control))
                     {
                         g = new ControlBodyGlyph(translatedBounds, cursor, Control, MoveBehavior);
                     }
@@ -693,7 +693,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (g == null)
+            if (g is null)
             {
                 //we are not totally clipped by the parent
                 g = new ControlBodyGlyph(translatedBounds, cursor, Control, this);
@@ -734,10 +734,10 @@ namespace System.Windows.Forms.Design
                     glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Left, MoveBehavior));
                     glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Right, MoveBehavior));
                     // enable the designeractionpanel for this control if it needs one
-                    if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes) && _behaviorService.DesignerActionUI != null)
+                    if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes) && _behaviorService.DesignerActionUI is not null)
                     {
                         Glyph dapGlyph = _behaviorService.DesignerActionUI.GetDesignerActionGlyph(Component);
-                        if (dapGlyph != null)
+                        if (dapGlyph is not null)
                         {
                             glyphs.Insert(0, dapGlyph); //we WANT to be in front of the other UI
                         }
@@ -788,10 +788,10 @@ namespace System.Windows.Forms.Design
                     glyphs.Add(new SelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Left, StandardBehavior));
                     glyphs.Add(new SelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Right, StandardBehavior));
                     // enable the designeractionpanel for this control if it needs one
-                    if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes) && _behaviorService.DesignerActionUI != null)
+                    if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes) && _behaviorService.DesignerActionUI is not null)
                     {
                         Glyph dapGlyph = _behaviorService.DesignerActionUI.GetDesignerActionGlyph(Component);
-                        if (dapGlyph != null)
+                        if (dapGlyph is not null)
                         {
                             glyphs.Insert(0, dapGlyph); //we WANT to be in front of the other UI
                         }
@@ -805,7 +805,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_resizeBehavior == null)
+                if (_resizeBehavior is null)
                 {
                     _resizeBehavior = new ResizeBehavior(Component.Site);
                 }
@@ -833,7 +833,7 @@ namespace System.Windows.Forms.Design
         {
             foreach (Control child in firstChild.Controls)
             {
-                if (child != null && _host != null)
+                if (child is not null && _host is not null)
                 {
                     if (!(_host.GetDesigner(child) is ControlDesigner))
                     {
@@ -865,9 +865,9 @@ namespace System.Windows.Forms.Design
         {
             Control child = sender as Control;
 
-            Debug.Assert(child != null);
+            Debug.Assert(child is not null);
 
-            if (child != null)
+            if (child is not null)
             {
                 Debug.Assert(child.IsHandleCreated);
                 HookChildHandles(child.Handle);
@@ -882,7 +882,7 @@ namespace System.Windows.Forms.Design
             // Visibility works as follows:  If the control's property is not actually set, then set our shadow to true.  Otherwise, grab the shadow value from the control directly and then set the control to be visible if it is not the root component.  Root components will be set to visible = true in their own time by the view.
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(component.GetType());
             PropertyDescriptor visibleProp = props["Visible"];
-            if (visibleProp == null || visibleProp.PropertyType != typeof(bool) || !visibleProp.ShouldSerializeValue(component))
+            if (visibleProp is null || visibleProp.PropertyType != typeof(bool) || !visibleProp.ShouldSerializeValue(component))
             {
                 Visible = true;
             }
@@ -892,7 +892,7 @@ namespace System.Windows.Forms.Design
             }
 
             PropertyDescriptor enabledProp = props["Enabled"];
-            if (enabledProp == null || enabledProp.PropertyType != typeof(bool) || !enabledProp.ShouldSerializeValue(component))
+            if (enabledProp is null || enabledProp.PropertyType != typeof(bool) || !enabledProp.ShouldSerializeValue(component))
             {
                 Enabled = true;
             }
@@ -907,7 +907,7 @@ namespace System.Windows.Forms.Design
             // this is to create the action in the DAP for this component if it requires docking/undocking logic
             AttributeCollection attributes = TypeDescriptor.GetAttributes(Component);
             DockingAttribute dockingAttribute = (DockingAttribute)attributes[typeof(DockingAttribute)];
-            if (dockingAttribute != null && dockingAttribute.DockingBehavior != DockingBehavior.Never)
+            if (dockingAttribute is not null && dockingAttribute.DockingBehavior != DockingBehavior.Never)
             {
                 // create the action for this control
                 _dockingAction = new DockingActionList(this);
@@ -938,17 +938,17 @@ namespace System.Windows.Forms.Design
             }
 
             // If we are an inherited control, notify our inheritance UI
-            if (Inherited && _host != null && _host.RootComponent != component)
+            if (Inherited && _host is not null && _host.RootComponent != component)
             {
                 _inheritanceUI = (InheritanceUI)GetService(typeof(InheritanceUI));
-                if (_inheritanceUI != null)
+                if (_inheritanceUI is not null)
                 {
                     _inheritanceUI.AddInheritedControl(Control, InheritanceAttribute.InheritanceLevel);
                 }
             }
 
             // When we drag one control from one form to another, we will end up here. In this case we do not want to set the control to visible, so check ForceVisible.
-            if ((_host == null || _host.RootComponent != component) && ForceVisible)
+            if ((_host is null || _host.RootComponent != component) && ForceVisible)
             {
                 Control.Visible = true;
             }
@@ -969,7 +969,7 @@ namespace System.Windows.Forms.Design
             System.ComponentModel.Design.Serialization.ComponentCache cache =
                 (System.ComponentModel.Design.Serialization.ComponentCache)GetService(typeof(System.ComponentModel.Design.Serialization.ComponentCache));
             object component = Component;
-            if (cache != null && component != null)
+            if (cache is not null && component is not null)
             {
                 cache.RemoveEntry(component);
             }
@@ -980,7 +980,7 @@ namespace System.Windows.Forms.Design
             System.ComponentModel.Design.Serialization.ComponentCache cache =
                 (System.ComponentModel.Design.Serialization.ComponentCache)GetService(typeof(System.ComponentModel.Design.Serialization.ComponentCache));
             object component = Component;
-            if (cache != null && component != null)
+            if (cache is not null && component is not null)
             {
                 cache.RemoveEntry(component);
             }
@@ -996,7 +996,7 @@ namespace System.Windows.Forms.Design
 
         private void OnControlRemoved(object sender, ControlEventArgs e)
         {
-            if (e.Control != null)
+            if (e.Control is not null)
             {
                 // No, no designer means we must replace the window target in this control.
                 if (e.Control.WindowTarget is ChildWindowTarget oldTarget)
@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms.Design
                 {
                     // remove the notification for the ComponentRemoved event
                     IComponentChangeService csc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                    if (csc != null)
+                    if (csc is not null)
                     {
                         csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                     }
@@ -1026,7 +1026,7 @@ namespace System.Windows.Forms.Design
                 {
                     // add he notification for the ComponentRemoved event
                     IComponentChangeService csc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                    if (csc != null)
+                    if (csc is not null)
                     {
                         csc.ComponentRemoved += new ComponentEventHandler(DataSource_ComponentRemoved);
                     }
@@ -1078,10 +1078,10 @@ namespace System.Windows.Forms.Design
             // unhook any sited children that got ChildWindowTargets
             foreach (Control c in Control.Controls)
             {
-                if (c != null)
+                if (c is not null)
                 {
                     ISite site = c.Site;
-                    if (site != null && c.WindowTarget is ChildWindowTarget target)
+                    if (site is not null && c.WindowTarget is ChildWindowTarget target)
                     {
                         c.WindowTarget = target.OldWindowTarget;
                     }
@@ -1095,16 +1095,16 @@ namespace System.Windows.Forms.Design
         public override void InitializeNewComponent(IDictionary defaultValues)
         {
             ISite site = Component.Site;
-            if (site != null)
+            if (site is not null)
             {
                 PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
-                if (textProp != null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
+                if (textProp is not null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
                 {
                     textProp.SetValue(Component, site.Name);
                 }
             }
 
-            if (defaultValues != null)
+            if (defaultValues is not null)
             {
                 if (defaultValues["Parent"] is IComponent parent && GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
@@ -1118,7 +1118,7 @@ namespace System.Windows.Forms.Design
                         // Some containers are docked differently (instead of DockStyle.None) when they are added through the designer
                         AttributeCollection attributes = TypeDescriptor.GetAttributes(Component);
                         DockingAttribute dockingAttribute = (DockingAttribute)attributes[typeof(DockingAttribute)];
-                        if (dockingAttribute != null && dockingAttribute.DockingBehavior != DockingBehavior.Never)
+                        if (dockingAttribute is not null && dockingAttribute.DockingBehavior != DockingBehavior.Never)
                         {
                             if (dockingAttribute.DockingBehavior == DockingBehavior.AutoDock)
                             {
@@ -1135,7 +1135,7 @@ namespace System.Windows.Forms.Design
                                 if (onlyNonDockedChild)
                                 {
                                     PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
-                                    if (dockProp != null && dockProp.IsBrowsable)
+                                    if (dockProp is not null && dockProp.IsBrowsable)
                                     {
                                         dockProp.SetValue(Component, DockStyle.Fill);
                                     }
@@ -1155,10 +1155,10 @@ namespace System.Windows.Forms.Design
         public override void OnSetComponentDefaults()
         {
             ISite site = Component.Site;
-            if (site != null)
+            if (site is not null)
             {
                 PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
-                if (textProp != null && textProp.IsBrowsable)
+                if (textProp is not null && textProp.IsBrowsable)
                 {
                     textProp.SetValue(Component, site.Name);
                 }
@@ -1259,7 +1259,7 @@ namespace System.Windows.Forms.Design
         protected virtual void OnMouseDragBegin(int x, int y)
         {
             // Ignore another mouse down if we are already in a drag.
-            if (BehaviorService == null && _mouseDragLast != InvalidPoint)
+            if (BehaviorService is null && _mouseDragLast != InvalidPoint)
             {
                 return;
             }
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms.Design
             _ctrlSelect = (Control.ModifierKeys & Keys.Control) != 0;
             ISelectionService sel = (ISelectionService)GetService(typeof(ISelectionService));
             // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
-            if (!_ctrlSelect && sel != null)
+            if (!_ctrlSelect && sel is not null)
             {
                 sel.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
             }
@@ -1288,9 +1288,9 @@ namespace System.Windows.Forms.Design
                 {
                     ISelectionService sel = (ISelectionService)GetService(typeof(ISelectionService));
                     bool shiftSelect = (Control.ModifierKeys & Keys.Shift) != 0;
-                    if (!shiftSelect && (_ctrlSelect || (sel != null && !sel.GetComponentSelected(Component))))
+                    if (!shiftSelect && (_ctrlSelect || (sel is not null && !sel.GetComponentSelected(Component))))
                     {
-                        if (sel != null)
+                        if (sel is not null)
                         {
                             sel.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
                         }
@@ -1302,17 +1302,17 @@ namespace System.Windows.Forms.Design
             _mouseDragMoved = false;
             _ctrlSelect = false;
             // And now finish the drag.
-            if (BehaviorService != null && BehaviorService.Dragging && cancel)
+            if (BehaviorService is not null && BehaviorService.Dragging && cancel)
             {
                 BehaviorService.CancelDrag = true;
             }
             // Leave this here in case we are doing a ComponentTray drag
-            if (_selectionUISvc == null)
+            if (_selectionUISvc is null)
             {
                 _selectionUISvc = (ISelectionUIService)GetService(typeof(ISelectionUIService));
             }
 
-            if (_selectionUISvc == null)
+            if (_selectionUISvc is null)
             {
                 return;
             }
@@ -1353,12 +1353,12 @@ namespace System.Windows.Forms.Design
             // Make sure the component is selected
             // But only select it if it is not already the primary selection, and we want to toggle the current primary selection.
             ISelectionService sel = (ISelectionService)GetService(typeof(ISelectionService));
-            if (sel != null && !Component.Equals(sel.PrimarySelection))
+            if (sel is not null && !Component.Equals(sel.PrimarySelection))
             {
                 sel.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary | SelectionTypes.Toggle);
             }
 
-            if (BehaviorService != null && sel != null)
+            if (BehaviorService is not null && sel is not null)
             {
                 //create our list of controls-to-drag
                 ArrayList dragControls = new ArrayList();
@@ -1369,7 +1369,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (comp is Control control)
                     {
-                        if (requiredParent == null)
+                        if (requiredParent is null)
                         {
                             requiredParent = control.Parent;
                         }
@@ -1408,10 +1408,10 @@ namespace System.Windows.Forms.Design
             Control ctl = Control;
             Control parent = ctl;
             object parentDesigner = null;
-            while (parentDesigner == null && parent != null)
+            while (parentDesigner is null && parent is not null)
             {
                 parent = parent.Parent;
-                if (parent != null)
+                if (parent is not null)
                 {
                     object d = _host.GetDesigner(parent);
                     if (d != this)
@@ -1437,10 +1437,10 @@ namespace System.Windows.Forms.Design
             Control ctl = Control;
             Control parent = ctl;
             object parentDesigner = null;
-            while (parentDesigner == null && parent != null)
+            while (parentDesigner is null && parent is not null)
             {
                 parent = parent.Parent;
-                if (parent != null)
+                if (parent is not null)
                 {
                     object d = _host.GetDesigner(parent);
                     if (d != this)
@@ -1464,10 +1464,10 @@ namespace System.Windows.Forms.Design
             Control ctl = Control;
             Control parent = ctl;
             object parentDesigner = null;
-            while (parentDesigner == null && parent != null)
+            while (parentDesigner is null && parent is not null)
             {
                 parent = parent.Parent;
-                if (parent != null)
+                if (parent is not null)
                 {
                     object d = _host.GetDesigner(parent);
                     if (d != this)
@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms.Design
         protected virtual void OnPaintAdornments(PaintEventArgs pe)
         {
             // If this control is being inherited, paint it
-            if (_inheritanceUI != null && pe.ClipRectangle.IntersectsWith(_inheritanceUI.InheritanceGlyphRectangle))
+            if (_inheritanceUI is not null && pe.ClipRectangle.IntersectsWith(_inheritanceUI.InheritanceGlyphRectangle))
             {
                 pe.Graphics.DrawImage(_inheritanceUI.InheritanceGlyph, 0, 0);
             }
@@ -1510,12 +1510,12 @@ namespace System.Windows.Forms.Design
             }
             else
             {
-                if (_toolboxSvc == null)
+                if (_toolboxSvc is null)
                 {
                     _toolboxSvc = (IToolboxService)GetService(typeof(IToolboxService));
                 }
 
-                if (_toolboxSvc != null && _toolboxSvc.SetCursor())
+                if (_toolboxSvc is not null && _toolboxSvc.SetCursor())
                 {
                     return;
                 }
@@ -1525,7 +1525,7 @@ namespace System.Windows.Forms.Design
                     _locationChecked = true;
                     try
                     {
-                        _hasLocation = TypeDescriptor.GetProperties(Component)["Location"] != null;
+                        _hasLocation = TypeDescriptor.GetProperties(Component)["Location"] is not null;
                     }
                     catch
                     {
@@ -1567,7 +1567,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop != null)
+                if (prop is not null)
                 {
                     properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ControlDesigner), prop, empty);
                 }
@@ -1576,7 +1576,7 @@ namespace System.Windows.Forms.Design
             // replace this one seperately because it is of a different type (DesignerControlCollection) than the original property (ControlCollection)
             PropertyDescriptor controlsProp = (PropertyDescriptor)properties["Controls"];
 
-            if (controlsProp != null)
+            if (controlsProp is not null)
             {
                 Attribute[] attrs = new Attribute[controlsProp.Attributes.Count];
                 controlsProp.Attributes.CopyTo(attrs, 0);
@@ -1584,7 +1584,7 @@ namespace System.Windows.Forms.Design
             }
 
             PropertyDescriptor sizeProp = (PropertyDescriptor)properties["Size"];
-            if (sizeProp != null)
+            if (sizeProp is not null)
             {
                 properties["Size"] = new CanResetSizePropertyDescriptor(sizeProp);
             }
@@ -1598,7 +1598,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void UnhookChildControls(Control firstChild)
         {
-            if (_host == null)
+            if (_host is null)
             {
                 _host = (IDesignerHost)GetService(typeof(IDesignerHost));
             }
@@ -1606,7 +1606,7 @@ namespace System.Windows.Forms.Design
             foreach (Control child in firstChild.Controls)
             {
                 IWindowTarget oldTarget = null;
-                if (child != null)
+                if (child is not null)
                 {
                     // No, no designer means we must replace the window target in this control.
                     oldTarget = child.WindowTarget;
@@ -1693,11 +1693,11 @@ namespace System.Windows.Forms.Design
                 || (m.Msg >= (int)User32.WM.NCMOUSEMOVE && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
                 || m.Msg == (int)User32.WM.SETCURSOR)
             {
-                if (_eventSvc == null)
+                if (_eventSvc is null)
                 {
                     _eventSvc = (IEventHandlerService)GetService(typeof(IEventHandlerService));
                 }
-                if (_eventSvc != null)
+                if (_eventSvc is not null)
                 {
                     mouseHandler = (IMouseHandler)_eventSvc.GetHandler(typeof(IMouseHandler));
                 }
@@ -1741,7 +1741,7 @@ namespace System.Windows.Forms.Design
                         // Get an Lresult for the accessibility Object for this control
                         IntPtr punkAcc;
                         IAccessible iacc = (IAccessible)AccessibilityObject;
-                        if (iacc == null)
+                        if (iacc is null)
                         {
                             // Accessibility is not supported on this control
                             m.Result = (IntPtr)0;
@@ -1778,7 +1778,7 @@ namespace System.Windows.Forms.Design
                     // We intentionally eat these messages.
                     break;
                 case User32.WM.MOUSEHOVER:
-                    if (mouseHandler != null)
+                    if (mouseHandler is not null)
                     {
                         mouseHandler.OnMouseHover(Component);
                     }
@@ -1806,7 +1806,7 @@ namespace System.Windows.Forms.Design
                     if (button == MouseButtons.Left)
                     {
                         // We handle doubleclick messages, and we also process our own simulated double clicks for controls that don't specify CS_WANTDBLCLKS.
-                        if (mouseHandler != null)
+                        if (mouseHandler is not null)
                         {
                             mouseHandler.OnMouseDoubleClick(Component);
                         }
@@ -1833,7 +1833,7 @@ namespace System.Windows.Forms.Design
                     // We simulate doubleclick for things that don't...
                     if (button == MouseButtons.Left && IsDoubleClick(x, y))
                     {
-                        if (mouseHandler != null)
+                        if (mouseHandler is not null)
                         {
                             mouseHandler.OnMouseDoubleClick(Component);
                         }
@@ -1847,12 +1847,12 @@ namespace System.Windows.Forms.Design
                         _toolPassThrough = false;
                         if (!EnableDragRect && button == MouseButtons.Left)
                         {
-                            if (_toolboxSvc == null)
+                            if (_toolboxSvc is null)
                             {
                                 _toolboxSvc = (IToolboxService)GetService(typeof(IToolboxService));
                             }
 
-                            if (_toolboxSvc != null && _toolboxSvc.GetSelectedToolboxItem((IDesignerHost)GetService(typeof(IDesignerHost))) != null)
+                            if (_toolboxSvc is not null && _toolboxSvc.GetSelectedToolboxItem((IDesignerHost)GetService(typeof(IDesignerHost))) is not null)
                             {
                                 // there is a tool to be dragged, so set passthrough and pass to the parent.
                                 _toolPassThrough = true;
@@ -1869,7 +1869,7 @@ namespace System.Windows.Forms.Design
                             return;
                         }
 
-                        if (mouseHandler != null)
+                        if (mouseHandler is not null)
                         {
                             mouseHandler.OnMouseDown(Component, button, x, y);
                         }
@@ -1880,7 +1880,7 @@ namespace System.Windows.Forms.Design
                         else if (button == MouseButtons.Right)
                         {
                             ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
-                            if (selSvc != null)
+                            if (selSvc is not null)
                             {
                                 selSvc.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
                             }
@@ -1914,7 +1914,7 @@ namespace System.Windows.Forms.Design
                             return;
                         }
 
-                        if (mouseHandler != null)
+                        if (mouseHandler is not null)
                         {
                             mouseHandler.OnMouseMove(Component, x, y);
                         }
@@ -1947,7 +1947,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     // And terminate the drag.
-                    if (mouseHandler != null)
+                    if (mouseHandler is not null)
                     {
                         mouseHandler.OnMouseUp(Component, button);
                     }
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms.Design
                         User32.ValidateRect(m.HWnd, null);
                         break;
                     }
-                    if (Control == null)
+                    if (Control is null)
                     {
                         break;
                     }
@@ -2001,7 +2001,7 @@ namespace System.Windows.Forms.Design
                     try
                     {
                         // Call the base class to do its own painting.
-                        if (_thrownException == null)
+                        if (_thrownException is null)
                         {
                             DefWndProc(ref m);
                         }
@@ -2024,7 +2024,7 @@ namespace System.Windows.Forms.Design
                             try
                             {
                                 gr.Clip = r;
-                                if (_thrownException == null)
+                                if (_thrownException is null)
                                 {
                                     OnPaintAdornments(pevent);
                                 }
@@ -2052,7 +2052,7 @@ namespace System.Windows.Forms.Design
                         Gdi32.DeleteObject(hrgn);
                     }
 
-                    if (OverlayService != null)
+                    if (OverlayService is not null)
                     {
                         // this will allow any Glyphs to re-paint after this control and its designer has painted
                         paintRect.Location = Control.PointToScreen(paintRect.Location);
@@ -2065,15 +2065,15 @@ namespace System.Windows.Forms.Design
                     {
                         DefWndProc(ref m);
                     }
-                    else if (_thrownException == null)
+                    else if (_thrownException is null)
                     {
                         DefWndProc(ref m);
                     }
 
                     // For some reason we dont always get an NCPAINT with the WM_NCACTIVATE usually this repros with themes on.... this can happen when someone calls RedrawWindow without the flags to send an NCPAINT.  So that we dont double process this event, our calls to redraw window should not have RDW_ERASENOW | RDW_UPDATENOW.
-                    if (OverlayService != null)
+                    if (OverlayService is not null)
                     {
-                        if (Control != null && Control.Size != Control.ClientSize && Control.Parent != null)
+                        if (Control is not null && Control.Size != Control.ClientSize && Control.Parent is not null)
                         {
                             // we have a non-client region to invalidate
                             Rectangle controlScreenBounds = new Rectangle(Control.Parent.PointToScreen(Control.Location), Control.Size);
@@ -2098,7 +2098,7 @@ namespace System.Windows.Forms.Design
                         break;
                     }
 
-                    if (mouseHandler != null)
+                    if (mouseHandler is not null)
                     {
                         mouseHandler.OnSetCursor(Component);
                     }
@@ -2108,7 +2108,7 @@ namespace System.Windows.Forms.Design
                     }
                     break;
                 case User32.WM.SIZE:
-                    if (_thrownException != null)
+                    if (_thrownException is not null)
                     {
                         Control.Invalidate();
                     }
@@ -2127,7 +2127,7 @@ namespace System.Windows.Forms.Design
                     //    DefWndProc(ref m);
                     //}
                     //else
-                    if (_host != null && _host.RootComponent != null)
+                    if (_host is not null && _host.RootComponent is not null)
                     {
                         if (_host.GetDesigner(_host.RootComponent) is IRootDesigner rd)
                         {
@@ -2154,7 +2154,7 @@ namespace System.Windows.Forms.Design
 
                     ToolStripKeyboardHandlingService keySvc = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
                     bool handled = false;
-                    if (keySvc != null)
+                    if (keySvc is not null)
                     {
                         handled = keySvc.OnContextMenu(x, y);
                     }
@@ -2261,7 +2261,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_overlayService == null)
+                if (_overlayService is null)
                 {
                     _overlayService = (IOverlayService)GetService(typeof(IOverlayService));
                 }
@@ -2385,7 +2385,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (_host == null)
+                    if (_host is null)
                     {
                         _host = (IDesignerHost)_designer.GetService(typeof(IDesignerHost));
                     }
@@ -2417,7 +2417,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (_selSvc == null)
+                    if (_selSvc is null)
                     {
                         _selSvc = (ISelectionService)_designer.GetService(typeof(ISelectionService));
                     }
@@ -2431,7 +2431,7 @@ namespace System.Windows.Forms.Design
                 {
                     AccessibleStates state = _control.AccessibilityObject.State;
                     ISelectionService s = SelectionService;
-                    if (s != null)
+                    if (s is not null)
                     {
                         if (s.GetComponentSelected(_control))
                         {
@@ -2457,7 +2457,7 @@ namespace System.Windows.Forms.Design
                 if (_control.AccessibilityObject.GetChild(index) is Control.ControlAccessibleObject childAccObj)
                 {
                     AccessibleObject cao = GetDesignerAccessibleObject(childAccObj);
-                    if (cao != null)
+                    if (cao is not null)
                     {
                         return cao;
                     }
@@ -2469,7 +2469,7 @@ namespace System.Windows.Forms.Design
 
             private AccessibleObject GetDesignerAccessibleObject(Control.ControlAccessibleObject cao)
             {
-                if (cao == null)
+                if (cao is null)
                 {
                     return null;
                 }
@@ -2536,7 +2536,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public override void OnDragEnter(Glyph g, DragEventArgs e)
             {
-                if (_designer != null && _designer.Control != null)
+                if (_designer is not null && _designer.Control is not null)
                 {
                     _controlRect = _designer.Control.RectangleToScreen(_designer.Control.ClientRectangle);
                 }
@@ -2558,7 +2558,7 @@ namespace System.Windows.Forms.Design
             public override void OnDragOver(Glyph g, DragEventArgs e)
             {
                 // If we are not over a valid drop area, then do not allow the drag/drop. Now that all dragging/dropping is done via the behavior service and adorner window, we have to do our own validation, and cannot rely on the OS to do it for us.
-                if (e != null && _controlRect != Rectangle.Empty && !_controlRect.Contains(new Point(e.X, e.Y)))
+                if (e is not null && _controlRect != Rectangle.Empty && !_controlRect.Contains(new Point(e.X, e.Y)))
                 {
                     e.Effect = DragDropEffects.None;
                     return;
@@ -2587,7 +2587,7 @@ namespace System.Windows.Forms.Design
 
                 // Is it a control?
                 Control child = Control.FromHandle(hwndChild);
-                if (child == null)
+                if (child is null)
                 {
                     // No control.  We must subclass this control.
                     if (!SubclassedChildWindows.ContainsKey(hwndChild))
@@ -2606,7 +2606,7 @@ namespace System.Windows.Forms.Design
                 // UserControl is a special ContainerControl which should "hook to all the WindowHandles"
                 // Since it doesnt allow the Mouse to pass through any of its contained controls.
                 // Please refer to VsWhidbey : 293117
-                if (child == null || Control is UserControl)
+                if (child is null || Control is UserControl)
                 {
                     // Now do the children of this window.
                     HookChildHandles(User32.GetWindow(hwndChild, User32.GW.CHILD));
@@ -2652,7 +2652,7 @@ namespace System.Windows.Forms.Design
             public ChildSubClass(ControlDesigner designer, IntPtr hwnd)
             {
                 _designer = designer;
-                if (designer != null)
+                if (designer is not null)
                 {
                     designer.DisposingHandler += new EventHandler(OnDesignerDisposing);
                 }
@@ -2667,7 +2667,7 @@ namespace System.Windows.Forms.Design
 
             protected override void WndProc(ref Message m)
             {
-                if (_designer == null)
+                if (_designer is null)
                 {
                     DefWndProc(ref m);
                     return;
@@ -2697,7 +2697,7 @@ namespace System.Windows.Forms.Design
                 finally
                 {
                     // make sure the designer wasn't destroyed
-                    if (_designer != null && _designer.Component != null)
+                    if (_designer is not null && _designer.Component is not null)
                     {
                         _designer.DesignerTarget = designerTarget;
                     }
@@ -2733,7 +2733,7 @@ namespace System.Windows.Forms.Design
 
             public void Dispose()
             {
-                if (_designer != null)
+                if (_designer is not null)
                 {
                     _designer.Control.WindowTarget = _oldTarget;
                     _designer = null;
@@ -2753,7 +2753,7 @@ namespace System.Windows.Forms.Design
             {
                 // We want these messages to go through the designer's WndProc method, and we want people to be able to do default processing with the designer's DefWndProc.  So, we stuff ourselves into the designers window target and call their WndProc.
                 ControlDesigner currentDesigner = _designer;
-                if (currentDesigner != null)
+                if (currentDesigner is not null)
                 {
                     IDesignerTarget designerTarget = currentDesigner.DesignerTarget;
                     currentDesigner.DesignerTarget = this;
@@ -2812,7 +2812,7 @@ namespace System.Windows.Forms.Design
             public void OnMessage(ref Message m)
             {
                 // If the designer has jumped ship, the continue partying on messages, but send them back to the original control.
-                if (_designer.Component == null)
+                if (_designer.Component is null)
                 {
                     _oldWindowTarget.OnMessage(ref m);
                     return;
@@ -2833,7 +2833,7 @@ namespace System.Windows.Forms.Design
                 finally
                 {
                     // If the designer disposed us, then we should follow suit.
-                    if (_designer.DesignerTarget == null)
+                    if (_designer.DesignerTarget is null)
                     {
                         designerTarget.Dispose();
                     }
@@ -2854,10 +2854,10 @@ namespace System.Windows.Forms.Design
 
         internal void SetUnhandledException(Control owner, Exception exception)
         {
-            if (_thrownException == null)
+            if (_thrownException is null)
             {
                 _thrownException = exception;
-                if (owner == null)
+                if (owner is null)
                 {
                     owner = Control;
                 }
@@ -2957,8 +2957,8 @@ namespace System.Windows.Forms.Design
             {
                 for (int i = _realCollection.Count - 1; i >= 0; i--)
                 {
-                    if (_realCollection[i] != null &&
-                        _realCollection[i].Site != null &&
+                    if (_realCollection[i] is not null &&
+                        _realCollection[i].Site is not null &&
                         TypeDescriptor.GetAttributes(_realCollection[i]).Contains(InheritanceAttribute.NotInherited))
                     {
                         _realCollection.RemoveAt(i);
@@ -2974,11 +2974,11 @@ namespace System.Windows.Forms.Design
             protected override object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
             {
                 ArrayList subset = new ArrayList();
-                if (valuesToSerialize != null && valuesToSerialize.Count > 0)
+                if (valuesToSerialize is not null && valuesToSerialize.Count > 0)
                 {
                     foreach (object val in valuesToSerialize)
                     {
-                        if (val is IComponent comp && comp.Site != null && !(comp.Site is INestedSite))
+                        if (val is IComponent comp && comp.Site is not null && !(comp.Site is INestedSite))
                         {
                             subset.Add(comp);
                         }
@@ -3002,7 +3002,7 @@ namespace System.Windows.Forms.Design
             private string GetActionName()
             {
                 PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
-                if (dockProp != null)
+                if (dockProp is not null)
                 {
                     DockStyle dockStyle = (DockStyle)dockProp.GetValue(Component);
                     if (dockStyle == DockStyle.Fill)
@@ -3021,7 +3021,7 @@ namespace System.Windows.Forms.Design
             {
                 DesignerActionItemCollection items = new DesignerActionItemCollection();
                 string actionName = GetActionName();
-                if (actionName != null)
+                if (actionName is not null)
                 {
                     items.Add(new DesignerActionVerbItem(new DesignerVerb(GetActionName(), OnDockActionClick)));
                 }
@@ -3030,7 +3030,7 @@ namespace System.Windows.Forms.Design
 
             private void OnDockActionClick(object sender, EventArgs e)
             {
-                if (sender is DesignerVerb designerVerb && _host != null)
+                if (sender is DesignerVerb designerVerb && _host is not null)
                 {
                     using (DesignerTransaction t = _host.CreateTransaction(designerVerb.Text))
                     {

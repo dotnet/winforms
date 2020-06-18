@@ -49,7 +49,7 @@ namespace System.Windows.Forms
 
             ~ThreadMethodEntry()
             {
-                if (_resetEvent != null)
+                if (_resetEvent is not null)
                 {
                     _resetEvent.Close();
                 }
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_resetEvent == null)
+                    if (_resetEvent is null)
                     {
                         // Locking 'this' here is ok since this is an internal class.
                         lock (_invokeSyncObject)
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
                             // BeginInvoke hangs on Multi-proc system:
                             // taking the lock prevents a race condition between IsCompleted
                             // boolean flag and resetEvent mutex in multiproc scenarios.
-                            if (_resetEvent == null)
+                            if (_resetEvent is null)
                             {
                                 _resetEvent = new ManualResetEvent(false);
                                 if (IsCompleted)
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                 lock (_invokeSyncObject)
                 {
                     IsCompleted = true;
-                    if (_resetEvent != null)
+                    if (_resetEvent is not null)
                     {
                         _resetEvent.Set();
                     }

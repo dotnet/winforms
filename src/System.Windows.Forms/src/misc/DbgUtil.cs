@@ -188,7 +188,7 @@ namespace System.Windows.Forms.Internal
                 {
                     StackFrame sf = st.GetFrame(dbgUtilFrameCount);
 
-                    if (sf == null || sf.GetMethod().DeclaringType != typeof(DbgUtil))
+                    if (sf is null || sf.GetMethod().DeclaringType != typeof(DbgUtil))
                     {
                         break;
                     }
@@ -207,14 +207,14 @@ namespace System.Windows.Forms.Internal
                 {
                     StackFrame sf = st.GetFrame(i);
 
-                    if (sf == null)
+                    if (sf is null)
                     {
                         continue;
                     }
 
                     MethodBase mi = sf.GetMethod();
 
-                    if (mi == null)
+                    if (mi is null)
                     {
                         continue;
                     }
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Internal
                     string args = string.Empty;
                     string fileName = sf.GetFileName();
 
-                    int backSlashIndex = fileName == null ? -1 : fileName.LastIndexOf('\\');
+                    int backSlashIndex = fileName is null ? -1 : fileName.LastIndexOf('\\');
 
                     if (backSlashIndex != -1)
                     {

@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_actions == null)
+                if (_actions is null)
                 {
                     _actions = new DesignerActionListCollection();
                     _actions.Add(new MaskedTextBoxDesignerActionList(this));
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
         internal static MaskedTextBox GetDesignMaskedTextBox(MaskedTextBox maskedTextBox)
         {
             MaskedTextBox designMaskedTextBox;
-            if (maskedTextBox == null)
+            if (maskedTextBox is null)
             {
                 // return a default control.
                 designMaskedTextBox = new MaskedTextBox();
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design
             {
                 MaskedTextProvider maskedTextProvider = maskedTextBox.MaskedTextProvider;
 
-                if (maskedTextProvider == null)
+                if (maskedTextProvider is null)
                 {
                     designMaskedTextBox = new MaskedTextBox();
                     designMaskedTextBox.Text = maskedTextBox.Text;
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop != null)
+                if (prop is not null)
                 {
                     properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(MaskedTextBoxDesigner), prop, empty);
                 }
@@ -204,7 +204,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 MaskedTextBox maskedTextBox = Control as MaskedTextBox;
-                Debug.Assert(maskedTextBox != null, "Designed control is not a MaskedTextBox.");
+                Debug.Assert(maskedTextBox is not null, "Designed control is not a MaskedTextBox.");
 
                 if (maskedTextBox.UseSystemPasswordChar)
                 {
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Design
             set
             {
                 MaskedTextBox maskedTextBox = Control as MaskedTextBox;
-                Debug.Assert(maskedTextBox != null, "Designed control is not a MaskedTextBox.");
+                Debug.Assert(maskedTextBox is not null, "Designed control is not a MaskedTextBox.");
 
                 maskedTextBox.PasswordChar = value;
             }
@@ -241,7 +241,7 @@ namespace System.Windows.Forms.Design
             {
                 // Return text w/o literals or prompt.
                 MaskedTextBox maskedTextBox = Control as MaskedTextBox;
-                Debug.Assert(maskedTextBox != null, "Designed control is not a MaskedTextBox.");
+                Debug.Assert(maskedTextBox is not null, "Designed control is not a MaskedTextBox.");
 
                 // Text w/o prompt or literals.
                 if (string.IsNullOrEmpty(maskedTextBox.Mask))
@@ -253,7 +253,7 @@ namespace System.Windows.Forms.Design
             set
             {
                 MaskedTextBox maskedTextBox = Control as MaskedTextBox;
-                Debug.Assert(maskedTextBox != null, "Designed control is not a MaskedTextBox.");
+                Debug.Assert(maskedTextBox is not null, "Designed control is not a MaskedTextBox.");
 
                 if (string.IsNullOrEmpty(maskedTextBox.Mask))
                 {
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_verbs == null)
+                if (_verbs is null)
                 {
                     _verbs = new DesignerVerbCollection();
                     _verbs.Add(new DesignerVerb(SR.MaskedTextBoxDesignerVerbsSetMaskDesc, new EventHandler(OnVerbSetMask)));

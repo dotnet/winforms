@@ -40,7 +40,7 @@ namespace AccessibilityTests
             dataGridView1.Rows[0].Cells[4].Value = "Item2";
             dataGridView1.BeginEdit(false);
             DataGridViewComboBoxEditingControl cbox = dataGridView1.EditingControl as DataGridViewComboBoxEditingControl;
-            if (cbox != null)
+            if (cbox is not null)
                 cbox.DroppedDown = true;
         }
     }

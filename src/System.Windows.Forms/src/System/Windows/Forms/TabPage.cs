@@ -358,7 +358,7 @@ namespace System.Windows.Forms
             get => _toolTipText;
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -395,7 +395,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal override void AssignParent(Control value)
         {
-            if (value != null && !(value is TabControl))
+            if (value is not null && !(value is TabControl))
             {
                 throw new ArgumentException(string.Format(SR.TabControlTabPageNotOnTabControl, value.GetType().FullName));
             }
@@ -414,7 +414,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            while (c != null && !(c is TabPage))
+            while (c is not null && !(c is TabPage))
             {
                 c = c.ParentInternal;
             }
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
 
                 // TabRenderer does not support painting the background image on the panel, so
                 // draw it ourselves.
-                if (BackgroundImage != null)
+                if (BackgroundImage is not null)
                 {
                     ControlPaint.DrawBackgroundImage(e.Graphics, BackgroundImage, bkcolor, BackgroundImageLayout, inflateRect, inflateRect, DisplayRectangle.Location);
                 }

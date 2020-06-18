@@ -47,7 +47,7 @@ namespace System.Windows.Forms
             {
                 // OleInitialize needs to be called before we can call ActivateKeyboardLayout.
                 Application.OleRequired();
-                if (value == null)
+                if (value is null)
                 {
                     value = DefaultInputLanguage;
                 }
@@ -166,7 +166,7 @@ namespace System.Windows.Forms
 
                     // Default back to our legacy codepath and obtain the name
                     // directly through the registry value
-                    if (layoutName == null)
+                    if (layoutName is null)
                     {
                         layoutName = (string)key.GetValue("Layout Text");
                     }
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
                     // Look for a substitution
                     RegistryKey substitutions = Registry.CurrentUser.OpenSubKey("Keyboard Layout\\Substitutes");
                     string[] encodings = null;
-                    if (substitutions != null)
+                    if (substitutions is not null)
                     {
                         encodings = substitutions.GetValueNames();
 
@@ -200,7 +200,7 @@ namespace System.Windows.Forms
                     }
 
                     RegistryKey layouts = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts");
-                    if (layouts != null)
+                    if (layouts is not null)
                     {
                         encodings = layouts.GetSubKeyNames();
 
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
 
                                 // Default back to our legacy codepath and obtain the name
                                 // directly through the registry value
-                                if (layoutName == null)
+                                if (layoutName is null)
                                 {
                                     layoutName = (string)key.GetValue("Layout Text");
                                 }
@@ -228,7 +228,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (layoutName == null)
+                    if (layoutName is null)
                     {
                         // No luck there.  Match the language first, then try to find a layout ID
                         foreach (string encoding in encodings)
@@ -238,7 +238,7 @@ namespace System.Windows.Forms
                             {
                                 RegistryKey key = layouts.OpenSubKey(encoding);
                                 string codeValue = (string)key.GetValue("Layout Id");
-                                if (codeValue != null)
+                                if (codeValue is not null)
                                 {
                                     int value = Convert.ToInt32(codeValue, 16);
                                     if (value == device)
@@ -248,14 +248,14 @@ namespace System.Windows.Forms
 
                                         // Default back to our legacy codepath and obtain the name
                                         // directly through the registry value
-                                        if (layoutName == null)
+                                        if (layoutName is null)
                                         {
                                             layoutName = (string)key.GetValue("Layout Text");
                                         }
                                     }
                                 }
                                 key.Close();
-                                if (layoutName != null)
+                                if (layoutName is not null)
                                 {
                                     break;
                                 }
@@ -277,7 +277,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static string GetLocalizedKeyboardLayoutName(string layoutDisplayName)
         {
-            if (layoutDisplayName != null)
+            if (layoutDisplayName is not null)
             {
                 var sb = new StringBuilder(512);
                 HRESULT res = Shlwapi.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);
@@ -323,7 +323,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static InputLanguage FromCulture(CultureInfo culture)
         {
-            if (culture == null)
+            if (culture is null)
             {
                 throw new ArgumentNullException(nameof(culture));
             }

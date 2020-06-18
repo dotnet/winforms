@@ -416,7 +416,7 @@ namespace System.Windows.Forms
 
             public override void Add(Control value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }

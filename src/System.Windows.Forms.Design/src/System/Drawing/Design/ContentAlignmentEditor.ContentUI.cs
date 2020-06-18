@@ -322,7 +322,7 @@ namespace System.Drawing.Design
                 _edSvc = edSvc;
                 Value = value;
 
-                Align = (value == null) ? ContentAlignment.MiddleLeft : (ContentAlignment)value;
+                Align = (value is null) ? ContentAlignment.MiddleLeft : (ContentAlignment)value;
             }
 
             /// <summary>

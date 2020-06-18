@@ -48,29 +48,29 @@ namespace System.Windows.Forms
 
                 DataStoreEntry dse = (DataStoreEntry)data[format];
                 object baseVar = null;
-                if (dse != null)
+                if (dse is not null)
                 {
                     baseVar = dse.data;
                 }
                 object original = baseVar;
 
                 if (autoConvert
-                    && (dse == null || dse.autoConvert)
-                    && (baseVar == null || baseVar is MemoryStream))
+                    && (dse is null || dse.autoConvert)
+                    && (baseVar is null || baseVar is MemoryStream))
                 {
                     string[] mappedFormats = GetMappedFormats(format);
-                    if (mappedFormats != null)
+                    if (mappedFormats is not null)
                     {
                         for (int i = 0; i < mappedFormats.Length; i++)
                         {
                             if (!format.Equals(mappedFormats[i]))
                             {
                                 DataStoreEntry found = (DataStoreEntry)data[mappedFormats[i]];
-                                if (found != null)
+                                if (found is not null)
                                 {
                                     baseVar = found.data;
                                 }
-                                if (baseVar != null && !(baseVar is MemoryStream))
+                                if (baseVar is not null && !(baseVar is MemoryStream))
                                 {
                                     original = null;
                                     break;
@@ -80,7 +80,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (original != null)
+                if (original is not null)
                 {
                     return original;
                 }
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
                 if (string.IsNullOrWhiteSpace(format))
                 {
-                    if (format == null)
+                    if (format is null)
                     {
                         throw new ArgumentNullException(nameof(format));
                     }
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
             public virtual void SetData(Type format, object data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
-                if (format == null)
+                if (format is null)
                 {
                     throw new ArgumentNullException(nameof(format));
                 }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
             public virtual void SetData(object data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + data?.ToString() ?? "(null)");
-                if (data == null)
+                if (data is null)
                 {
                     throw new ArgumentNullException(nameof(data));
                 }
@@ -184,17 +184,17 @@ namespace System.Windows.Forms
 
                 if (!autoConvert)
                 {
-                    Debug.Assert(data != null, "data must be non-null");
+                    Debug.Assert(data is not null, "data must be non-null");
                     return data.ContainsKey(format);
                 }
                 else
                 {
                     string[] formats = GetFormats(autoConvert);
                     Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore:  got " + formats.Length.ToString(CultureInfo.InvariantCulture) + " formats from get formats");
-                    Debug.Assert(formats != null, "Null returned from GetFormats");
+                    Debug.Assert(formats is not null, "Null returned from GetFormats");
                     for (int i = 0; i < formats.Length; i++)
                     {
-                        Debug.Assert(formats[i] != null, "Null format inside of formats at index " + i.ToString(CultureInfo.InvariantCulture));
+                        Debug.Assert(formats[i] is not null, "Null format inside of formats at index " + i.ToString(CultureInfo.InvariantCulture));
                         if (format.Equals(formats[i]))
                         {
                             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetDataPresent: returning true");
@@ -215,12 +215,12 @@ namespace System.Windows.Forms
             public virtual string[] GetFormats(bool autoConvert)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetFormats: " + autoConvert.ToString());
-                Debug.Assert(data != null, "data collection can't be null");
-                Debug.Assert(data.Keys != null, "data Keys collection can't be null");
+                Debug.Assert(data is not null, "data collection can't be null");
+                Debug.Assert(data.Keys is not null, "data Keys collection can't be null");
 
                 string[] baseVar = new string[data.Keys.Count];
                 data.Keys.CopyTo(baseVar, 0);
-                Debug.Assert(baseVar != null, "Collections should never return NULL arrays!!!");
+                Debug.Assert(baseVar is not null, "Collections should never return NULL arrays!!!");
                 if (autoConvert)
                 {
                     Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: applying autoConvert");
@@ -228,11 +228,11 @@ namespace System.Windows.Forms
                     ArrayList formats = new ArrayList();
                     for (int i = 0; i < baseVar.Length; i++)
                     {
-                        Debug.Assert(data[baseVar[i]] != null, "Null item in data collection with key '" + baseVar[i] + "'");
+                        Debug.Assert(data[baseVar[i]] is not null, "Null item in data collection with key '" + baseVar[i] + "'");
                         if (((DataStoreEntry)data[baseVar[i]]).autoConvert)
                         {
                             string[] cur = GetMappedFormats(baseVar[i]);
-                            Debug.Assert(cur != null, "GetMappedFormats returned null for '" + baseVar[i] + "'");
+                            Debug.Assert(cur is not null, "GetMappedFormats returned null for '" + baseVar[i] + "'");
                             for (int j = 0; j < cur.Length; j++)
                             {
                                 formats.Add(cur[j]);

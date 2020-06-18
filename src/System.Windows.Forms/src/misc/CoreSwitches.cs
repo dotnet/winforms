@@ -17,7 +17,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (perfTrack == null)
+                if (perfTrack is null)
                 {
                     perfTrack = new BooleanSwitch("PERFTRACK", "Debug performance critical sections.");
                 }
@@ -26,4 +26,3 @@ namespace System.ComponentModel
         }
     }
 }
-

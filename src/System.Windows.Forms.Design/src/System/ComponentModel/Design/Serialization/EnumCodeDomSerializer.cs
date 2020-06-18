@@ -26,7 +26,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_defaultSerializer == null)
+                if (s_defaultSerializer is null)
                 {
                     s_defaultSerializer = new EnumCodeDomSerializer();
                 }
@@ -43,13 +43,13 @@ namespace System.ComponentModel.Design.Serialization
 
             using (TraceScope("EnumCodeDomSerializer::" + nameof(Serialize)))
             {
-                Trace("Type: {0}", (value == null ? "(null)" : value.GetType().Name));
+                Trace("Type: {0}", (value is null ? "(null)" : value.GetType().Name));
                 if (value is Enum)
                 {
                     bool needCast = false;
                     Enum[] values;
                     TypeConverter converter = TypeDescriptor.GetConverter(value);
-                    if (converter != null && converter.CanConvertTo(typeof(Enum[])))
+                    if (converter is not null && converter.CanConvertTo(typeof(Enum[])))
                     {
                         values = (Enum[])converter.ConvertTo(value, typeof(Enum[]));
                         needCast = (values.Length > 1);
@@ -82,9 +82,9 @@ namespace System.ComponentModel.Design.Serialization
                         string termString = enumConverter?.ConvertToString(term);
                         CodeExpression newExpression = !String.IsNullOrEmpty(termString) ? new CodeFieldReferenceExpression(enumType, termString) : null;
 
-                        if (newExpression != null)
+                        if (newExpression is not null)
                         {
-                            if (expression == null)
+                            if (expression is null)
                             {
                                 expression = newExpression;
                             }
@@ -97,7 +97,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     // If we had to combine multiple names, wrap the result in an appropriate cast.
                     //
-                    if (expression != null && needCast)
+                    if (expression is not null && needCast)
                     {
                         expression = new CodeCastExpression(value.GetType(), expression);
                     }
@@ -105,7 +105,7 @@ namespace System.ComponentModel.Design.Serialization
                 else
                 {
                     Debug.Fail("Enum serializer called for non-enum object.");
-                    TraceError("Enum serializer called for non-enum object {0}", (value == null ? "(null)" : value.GetType().Name));
+                    TraceError("Enum serializer called for non-enum object {0}", (value is null ? "(null)" : value.GetType().Name));
                 }
             }
 

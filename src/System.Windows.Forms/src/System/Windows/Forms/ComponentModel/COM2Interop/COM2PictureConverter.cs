@@ -46,7 +46,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
         {
-            if (nativeValue == null)
+            if (nativeValue is null)
             {
                 return null;
             }
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             IPicture nativePicture = (IPicture)nativeValue;
             IntPtr handle = (IntPtr)nativePicture.Handle;
 
-            if (_lastManaged != null && handle == _lastNativeHandle)
+            if (_lastManaged is not null && handle == _lastNativeHandle)
             {
                 return _lastManaged;
             }
@@ -100,14 +100,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (_lastManaged?.Equals(managedValue) == true)
             {
                 object target = _pictureRef?.Target;
-                if (target != null)
+                if (target is not null)
                 {
                     return target;
                 }
             }
 
             // We have to build an IPicture
-            if (managedValue != null)
+            if (managedValue is not null)
             {
                 BOOL own = BOOL.FALSE;
 

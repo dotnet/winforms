@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner.OwningRow == null)
+                    if (Owner.OwningRow is null)
                     {
                         return Rectangle.Empty;
                     }
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (ParentPrivate != null)
+                    if (ParentPrivate is not null)
                     {
                         return ParentPrivate.Name;
                     }
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner.OwningRow == null)
+                    if (Owner.OwningRow is null)
                     {
                         return null;
                     }
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
                     if (Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
                         Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
                     {
-                        if (Owner.OwningRow != null && Owner.OwningRow.Selected)
+                        if (Owner.OwningRow is not null && Owner.OwningRow.Selected)
                         {
                             resultState |= AccessibleStates.Selected;
                         }
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
             {
                 if ((Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
                     Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect) &&
-                    Owner.OwningRow != null)
+                    Owner.OwningRow is not null)
                 {
                     Owner.OwningRow.Selected = true;
                 }
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
                 switch (navigationDirection)
                 {
                     case AccessibleNavigation.Next:
-                        if (Owner.OwningRow != null && Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) > 0)
+                        if (Owner.OwningRow is not null && Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) > 0)
                         {
                             // go to the next sibling
                             return ParentPrivate.GetChild(1);
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                             return null;
                         }
                     case AccessibleNavigation.Down:
-                        if (Owner.OwningRow == null)
+                        if (Owner.OwningRow is null)
                         {
                             return null;
                         }
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
                     case AccessibleNavigation.Previous:
                         return null;
                     case AccessibleNavigation.Up:
-                        if (Owner.OwningRow == null)
+                        if (Owner.OwningRow is null)
                         {
                             return null;
                         }
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
 
             public override void Select(AccessibleSelection flags)
             {
-                if (Owner == null)
+                if (Owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
                 DataGridViewRowHeaderCell dataGridViewCell = (DataGridViewRowHeaderCell)Owner;
                 DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (dataGridView == null)
+                if (dataGridView is null)
                 {
                     return;
                 }
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
                 {
                     dataGridView.Focus();
                 }
-                if (dataGridViewCell.OwningRow != null &&
+                if (dataGridViewCell.OwningRow is not null &&
                     (dataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
                      dataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect))
                 {
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (Owner.OwningRow == null)
+                if (Owner.OwningRow is null)
                 {
                     return null;
                 }

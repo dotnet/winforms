@@ -182,7 +182,7 @@ namespace System.Windows.Forms
 
             public void Clear()
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     _owner.ClearSelected();
                 }
@@ -190,10 +190,10 @@ namespace System.Windows.Forms
 
             public void Add(int index)
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     ObjectCollection items = _owner.Items;
-                    if (items != null)
+                    if (items is not null)
                     {
                         if (index != -1 && !Contains(index))
                         {
@@ -205,10 +205,10 @@ namespace System.Windows.Forms
 
             public void Remove(int index)
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     ObjectCollection items = _owner.Items;
-                    if (items != null)
+                    if (items is not null)
                     {
                         if (index != -1 && Contains(index))
                         {

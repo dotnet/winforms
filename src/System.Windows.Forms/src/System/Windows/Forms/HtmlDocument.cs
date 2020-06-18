@@ -33,7 +33,7 @@ namespace System.Windows.Forms
         internal HtmlDocument(HtmlShimManager shimManager, IHTMLDocument doc)
         {
             htmlDocument2 = (IHTMLDocument2)doc;
-            Debug.Assert(NativeHtmlDocument2 != null, "The document should implement IHtmlDocument2");
+            Debug.Assert(NativeHtmlDocument2 is not null, "The document should implement IHtmlDocument2");
 
             this.shimManager = shimManager;
         }
@@ -50,10 +50,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ShimManager != null)
+                if (ShimManager is not null)
                 {
                     HtmlDocumentShim shim = ShimManager.GetDocumentShim(this);
-                    if (shim == null)
+                    if (shim is null)
                     {
                         shimManager.AddDocumentShim(this);
                         shim = ShimManager.GetDocumentShim(this);
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElement iHtmlElement = NativeHtmlDocument2.GetActiveElement();
-                return iHtmlElement != null ? new HtmlElement(ShimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(ShimManager, iHtmlElement) : null;
             }
         }
 
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElement iHtmlElement = NativeHtmlDocument2.GetBody();
-                return iHtmlElement != null ? new HtmlElement(ShimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(ShimManager, iHtmlElement) : null;
             }
         }
 
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLLocation iHtmlLocation = NativeHtmlDocument2.GetLocation();
-                string stringLocation = (iHtmlLocation == null) ? "" : iHtmlLocation.GetHref();
+                string stringLocation = (iHtmlLocation is null) ? "" : iHtmlLocation.GetHref();
                 return string.IsNullOrEmpty(stringLocation) ? null : new Uri(stringLocation);
             }
         }
@@ -137,7 +137,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLWindow2 iHTMLWindow2 = NativeHtmlDocument2.GetParentWindow();
-                return iHTMLWindow2 != null ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+                return iHTMLWindow2 is not null ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
             }
         }
 
@@ -331,7 +331,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElementCollection iHTMLElementCollection = NativeHtmlDocument2.GetAll();
-                return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
+                return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
             }
         }
 
@@ -340,7 +340,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElementCollection iHTMLElementCollection = NativeHtmlDocument2.GetLinks();
-                return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
+                return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
             }
         }
 
@@ -349,7 +349,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElementCollection iHTMLElementCollection = NativeHtmlDocument2.GetImages();
-                return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
+                return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
             }
         }
 
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElementCollection iHTMLElementCollection = NativeHtmlDocument2.GetForms();
-                return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
+                return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
             }
         }
 
@@ -387,19 +387,19 @@ namespace System.Windows.Forms
         public HtmlElement GetElementById(string id)
         {
             IHTMLElement iHTMLElement = ((IHTMLDocument3)NativeHtmlDocument2).GetElementById(id);
-            return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
+            return iHTMLElement is not null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
         public HtmlElement GetElementFromPoint(Point point)
         {
             IHTMLElement iHTMLElement = NativeHtmlDocument2.ElementFromPoint(point.X, point.Y);
-            return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
+            return iHTMLElement is not null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
         public HtmlElementCollection GetElementsByTagName(string tagName)
         {
             IHTMLElementCollection iHTMLElementCollection = ((IHTMLDocument3)NativeHtmlDocument2).GetElementsByTagName(tagName);
-            return iHTMLElementCollection != null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
+            return iHTMLElementCollection is not null ? new HtmlElementCollection(ShimManager, iHTMLElementCollection) : new HtmlElementCollection(ShimManager);
         }
 
         public HtmlDocument OpenNew(bool replaceInHistory)
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
         public HtmlElement CreateElement(string elementTag)
         {
             IHTMLElement iHTMLElement = NativeHtmlDocument2.CreateElement(elementTag);
-            return iHTMLElement != null ? new HtmlElement(ShimManager, iHTMLElement) : null;
+            return iHTMLElement is not null ? new HtmlElement(ShimManager, iHTMLElement) : null;
         }
 
         public unsafe object InvokeScript(string scriptName, object[] args)
@@ -431,7 +431,7 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    if (args != null)
+                    if (args is not null)
                     {
                         // Reverse the arg order so that they read naturally after IDispatch.
                         Array.Reverse(args);
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
         public void AttachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
-            if (shim != null)
+            if (shim is not null)
             {
                 shim.AttachEventHandler(eventName, eventHandler);
             }
@@ -488,7 +488,7 @@ namespace System.Windows.Forms
         public void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
             HtmlDocumentShim shim = DocumentShim;
-            if (shim != null)
+            if (shim is not null)
             {
                 shim.DetachEventHandler(eventName, eventHandler);
             }
@@ -617,10 +617,10 @@ namespace System.Windows.Forms
             {
                 this.htmlDocument = htmlDocument;
                 // snap our associated window so we know when to disconnect.
-                if (this.htmlDocument != null)
+                if (this.htmlDocument is not null)
                 {
                     HtmlWindow window = htmlDocument.Window;
-                    if (window != null)
+                    if (window is not null)
                     {
                         associatedWindow = window.NativeHtmlWindow;
                     }
@@ -657,7 +657,7 @@ namespace System.Windows.Forms
             public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
-                if (proxy != null)
+                if (proxy is not null)
                 {
                     ((IHTMLDocument3)NativeHtmlDocument2).DetachEvent(eventName, proxy);
                 }
@@ -668,7 +668,7 @@ namespace System.Windows.Forms
             //
             public override void ConnectToEvents()
             {
-                if (cookie == null || !cookie.Connected)
+                if (cookie is null || !cookie.Connected)
                 {
                     cookie = new AxHost.ConnectionPointCookie(NativeHtmlDocument2,
                                                                           new HTMLDocumentEvents2(htmlDocument),
@@ -686,7 +686,7 @@ namespace System.Windows.Forms
             //
             public override void DisconnectFromEvents()
             {
-                if (cookie != null)
+                if (cookie is not null)
                 {
                     cookie.Disconnect();
                     cookie = null;
@@ -698,7 +698,7 @@ namespace System.Windows.Forms
                 base.Dispose(disposing);
                 if (disposing)
                 {
-                    if (htmlDocument != null)
+                    if (htmlDocument is not null)
                     {
                         Marshal.FinalReleaseComObject(htmlDocument.NativeHtmlDocument2);
                     }
@@ -728,7 +728,7 @@ namespace System.Windows.Forms
 
             private void FireEvent(object key, EventArgs e)
             {
-                if (parent != null)
+                if (parent is not null)
                 {
                     parent.DocumentShim.FireEvent(key, e);
                 }

@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         internal HtmlHistory(IOmHistory history)
         {
             htmlHistory = history;
-            Debug.Assert(NativeOmHistory != null, "The history object should implement IOmHistory");
+            Debug.Assert(NativeOmHistory is not null, "The history object should implement IOmHistory");
         }
 
         private IOmHistory NativeOmHistory

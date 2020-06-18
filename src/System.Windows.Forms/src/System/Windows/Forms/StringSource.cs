@@ -34,12 +34,12 @@ namespace System.Windows.Forms
         {
             Array.Clear(strings, 0, size);
 
-            if (strings != null)
+            if (strings is not null)
             {
                 this.strings = strings;
             }
             current = 0;
-            size = (strings == null) ? 0 : strings.Length;
+            size = (strings is null) ? 0 : strings.Length;
 
             Guid iid_iunknown = typeof(Shell32.IAutoComplete2).GUID;
             HRESULT hr = Ole32.CoCreateInstance(
@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Bind(HandleRef edit, Shell32.AUTOCOMPLETEOPTIONS options)
         {
-            if (_autoCompleteObject2 == null)
+            if (_autoCompleteObject2 is null)
             {
                 return false;
             }
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
 
         public void ReleaseAutoComplete()
         {
-            if (_autoCompleteObject2 != null)
+            if (_autoCompleteObject2 is not null)
             {
                 Marshal.ReleaseComObject(_autoCompleteObject2);
                 _autoCompleteObject2 = null;
@@ -89,12 +89,12 @@ namespace System.Windows.Forms
         {
             Array.Clear(strings, 0, size);
 
-            if (strings != null)
+            if (strings is not null)
             {
                 strings = newSource;
             }
             current = 0;
-            size = (strings == null) ? 0 : strings.Length;
+            size = (strings is null) ? 0 : strings.Length;
         }
 
         #region IEnumString Members

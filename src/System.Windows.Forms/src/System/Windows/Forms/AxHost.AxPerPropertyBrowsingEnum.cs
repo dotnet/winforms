@@ -79,7 +79,7 @@ namespace System.Windows.Forms
                     Oleaut32.IPerPropertyBrowsing ppb = (Oleaut32.IPerPropertyBrowsing)owner.GetPerPropertyBrowsing();
                     int itemCount = 0;
 
-                    Debug.Assert(cookieItems != null && nameItems != null, "An item array is null");
+                    Debug.Assert(cookieItems is not null && nameItems is not null, "An item array is null");
 
                     if (nameItems.Length > 0)
                     {
@@ -92,9 +92,9 @@ namespace System.Windows.Forms
                         for (int i = 0; i < nameItems.Length; i++)
                         {
                             cookie = (int)cookieItems[i];
-                            if (nameItems[i] == null || !(nameItems[i] is string))
+                            if (nameItems[i] is null || !(nameItems[i] is string))
                             {
-                                Debug.Fail("Bad IPerPropertyBrowsing item [" + i.ToString(CultureInfo.InvariantCulture) + "], name=" + (nameItems == null ? "(unknown)" : nameItems[i].ToString()));
+                                Debug.Fail("Bad IPerPropertyBrowsing item [" + i.ToString(CultureInfo.InvariantCulture) + "], name=" + (nameItems is null ? "(unknown)" : nameItems[i].ToString()));
                                 continue;
                             }
                             using var var = new Oleaut32.VARIANT();

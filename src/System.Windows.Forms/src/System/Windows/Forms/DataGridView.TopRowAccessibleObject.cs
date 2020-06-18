@@ -31,7 +31,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner == null)
+                    if (owner is null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                     }
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerAlreadySet);
                     }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner == null)
+                    if (owner is null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                     }
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (runtimeId == null)
+                    if (runtimeId is null)
                     {
                         runtimeId = new int[3];
                         runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetChild(int index)
             {
-                if (owner == null)
+                if (owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                 }
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
 
             public override int GetChildCount()
             {
-                if (owner == null)
+                if (owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                 }
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
-                if (owner == null)
+                if (owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                 }

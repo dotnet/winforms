@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Layout
 
                 foreach (TableLayoutSettings.ControlInformation c in tableLayoutSettings.GetControlsInformation())
                 {
-                    if (c.Name == null)
+                    if (c.Name is null)
                     {
                         throw new InvalidOperationException(SR.TableLayoutSettingsConverterNoName);
                     }
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Layout
         private string GetAttributeValue(XmlNode node, string attribute)
         {
             XmlAttribute attr = node.Attributes[attribute];
-            if (attr != null)
+            if (attr is not null)
             {
                 return attr.Value;
             }

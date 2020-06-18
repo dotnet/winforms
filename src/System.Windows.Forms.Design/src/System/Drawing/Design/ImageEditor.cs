@@ -29,7 +29,7 @@ namespace System.Drawing.Design
 
         protected static string CreateExtensionsString(string[] extensions, string sep)
         {
-            if (extensions == null || extensions.Length == 0)
+            if (extensions is null || extensions.Length == 0)
             {
                 return null;
             }
@@ -56,7 +56,7 @@ namespace System.Drawing.Design
 
         protected static string CreateFilterEntry(ImageEditor e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -70,25 +70,25 @@ namespace System.Drawing.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider is not null)
             {
                 if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
-                    if (_fileDialog == null)
+                    if (_fileDialog is null)
                     {
                         _fileDialog = new OpenFileDialog();
                         string filter = CreateFilterEntry(this);
                         foreach (Type extender in GetImageExtenders())
                         {
                             // Skip invalid extenders.
-                            if (extender == null || !typeof(ImageEditor).IsAssignableFrom(extender))
+                            if (extender is null || !typeof(ImageEditor).IsAssignableFrom(extender))
                             {
                                 continue;
                             }
 
                             ImageEditor e = (ImageEditor)Activator.CreateInstance(extender, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
                             Type myClass = GetType();
-                            if (!myClass.Equals(e.GetType()) && e != null && myClass.IsInstanceOfType(e))
+                            if (!myClass.Equals(e.GetType()) && e is not null && myClass.IsInstanceOfType(e))
                             {
                                 filter += "|" + CreateFilterEntry(e);
                             }
@@ -138,7 +138,7 @@ namespace System.Drawing.Design
             foreach (Type extender in GetImageExtenders())
             {
                 // Skip invalid extenders.
-                if (extender == null || !typeof(ImageEditor).IsAssignableFrom(extender))
+                if (extender is null || !typeof(ImageEditor).IsAssignableFrom(extender))
                 {
                     continue;
                 }
@@ -147,7 +147,7 @@ namespace System.Drawing.Design
                 if (e.GetType() != typeof(ImageEditor))
                 {
                     string[] extensions = e.GetExtensions();
-                    if (extensions != null)
+                    if (extensions is not null)
                     {
                         list.AddRange(extensions);
                     }
@@ -165,7 +165,7 @@ namespace System.Drawing.Design
 
         protected virtual Image LoadFromStream(Stream stream)
         {
-            if (stream == null)
+            if (stream is null)
             {
                 throw new ArgumentNullException(nameof(stream));
             }

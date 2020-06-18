@@ -39,7 +39,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (moduleBuilder == null)
+                if (moduleBuilder is null)
                 {
                     AssemblyName assemblyName = new AssemblyName
                     {
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // typeinfo from the IDispatch. In the case of many Oleaut32 operations, the CoClass
             // doesn't have the interface members on it, although in the shell it usually does, so
             // we need to re-order the lookup if we *actually* want the CoClass if it's available.
-            for (int i = 0; pTypeInfo == null && i < 2; i++)
+            for (int i = 0; pTypeInfo is null && i < 2; i++)
             {
                 if (wantCoClass == (i == 0))
                 {
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             continue;
                         }
 
-                        Debug.Assert(result != null, "IProvideMultipleClassInfo::GetInfoOfIndex returned S_OK for ITypeInfo index " + i + ", this is a issue in the object that's being browsed, NOT the property browser.");
+                        Debug.Assert(result is not null, "IProvideMultipleClassInfo::GetInfoOfIndex returned S_OK for ITypeInfo index " + i + ", this is a issue in the object that's being browsed, NOT the property browser.");
                         typeInfos[i] = result;
                     }
 
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             ITypeInfo temp = FindTypeInfo(obj, wantCoClass);
-            if (temp != null)
+            if (temp is not null)
             {
                 return new ITypeInfo[] { temp };
             }
@@ -161,7 +161,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // now get the dispid of the one that worked...
-            if (names != null)
+            if (names is not null)
             {
                 DispatchID pDispid = DispatchID.UNKNOWN;
                 Guid g = Guid.Empty;
@@ -183,7 +183,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties");
 
-            if (obj == null || !Marshal.IsComObject(obj))
+            if (obj is null || !Marshal.IsComObject(obj))
             {
                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties returning null: Object is not a com Object");
                 return null;
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // oops, looks like this guy doesn't surface any type info
             // this is okay, so we just say it has no props
-            if (typeInfos == null || typeInfos.Length == 0)
+            if (typeInfos is null || typeInfos.Length == 0)
             {
                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties :: Didn't get typeinfo");
                 return null;
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 ITypeInfo ti = typeInfos[i];
 
-                if (ti == null)
+                if (ti is null)
                 {
                     continue;
                 }
@@ -216,7 +216,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 uint[] versions = new uint[2];
                 Guid typeGuid = GetGuidForTypeInfo(ti, versions);
                 PropertyDescriptor[] props = null;
-                bool dontProcess = typeGuid != Guid.Empty && processedLibraries != null && processedLibraries.Contains(typeGuid);
+                bool dontProcess = typeGuid != Guid.Empty && processedLibraries is not null && processedLibraries.Contains(typeGuid);
 
                 if (dontProcess)
                 {
@@ -246,7 +246,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         defaultProp = temp;
                     }
 
-                    if (processedLibraries == null)
+                    if (processedLibraries is null)
                     {
                         processedLibraries = new Hashtable();
                     }
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
 
-                if (props != null)
+                if (props is not null)
                 {
                     propList.AddRange(props);
                 }
@@ -283,7 +283,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                if (versions != null)
+                if (versions is not null)
                 {
                     versions[0] = pTypeAttr->wMajorVerNum;
                     versions[1] = pTypeAttr->wMinorVerNum;
@@ -328,7 +328,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 case VARENUM.PTR:
                     // we'll need to recurse into a user defined reference typeinfo
-                    Debug.Assert(typeDesc.union.lptdesc != null, "typeDesc doesn't contain an refTypeDesc!");
+                    Debug.Assert(typeDesc.union.lptdesc is not null, "typeDesc doesn't contain an refTypeDesc!");
                     if (typeDesc.union.lptdesc->vt == VARENUM.VARIANT)
                     {
                         return VTToType(typeDesc.union.lptdesc->vt);
@@ -350,7 +350,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // here is where we look at the next level type info.
                 // if we get an enum, process it, otherwise we will recurse
                 // or get a dispatch.
-                if (refTypeInfo != null)
+                if (refTypeInfo is not null)
                 {
                     TYPEATTR* pTypeAttr = null;
                     hr = refTypeInfo.GetTypeAttr(&pTypeAttr);
@@ -400,7 +400,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private static PropertyDescriptor[] InternalGetProperties(object obj, ITypeInfo typeInfo, DispatchID dispidToGet, ref int defaultIndex)
         {
-            if (typeInfo == null)
+            if (typeInfo is null)
             {
                 return null;
             }
@@ -518,7 +518,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // now we can create our struct... make sure we don't already have one
             PropInfo pi = (PropInfo)propInfoList[name];
 
-            if (pi == null)
+            if (pi is null)
             {
                 pi = new PropInfo
                 {
@@ -537,7 +537,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // figure out the value type
-            if (pi.ValueType == null)
+            if (pi.ValueType is null)
             {
                 object[] pTypeData = new object[1];
                 try
@@ -552,7 +552,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // if we can't resolve the type, mark the property as nonbrowsable
                 // from the browser
                 //
-                if (pi.ValueType == null)
+                if (pi.ValueType is null)
                 {
                     pi.NonBrowsable = true;
                 }
@@ -562,7 +562,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     flags |= VARFLAGS.FNONBROWSABLE;
                 }
 
-                if (pTypeData[0] != null)
+                if (pTypeData[0] is not null)
                 {
                     pi.TypeData = pTypeData[0];
                 }
@@ -610,7 +610,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
-            if (!hr.Succeeded() || pTypeAttr == null)
+            if (!hr.Succeeded() || pTypeAttr is null)
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
@@ -624,7 +624,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     FUNCDESC* pFuncDesc = null;
                     hr = typeInfo.GetFuncDesc(i, &pFuncDesc);
-                    if (!hr.Succeeded() || pFuncDesc == null)
+                    if (!hr.Succeeded() || pFuncDesc is null)
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring function item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
                         continue;
@@ -661,8 +661,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                         else
                         {
-                            Debug.Assert(pFuncDesc->lprgelemdescParam != null, "ELEMDESC param is null!");
-                            if (pFuncDesc->lprgelemdescParam == null || pFuncDesc->cParams != 1)
+                            Debug.Assert(pFuncDesc->lprgelemdescParam is not null, "ELEMDESC param is null!");
+                            if (pFuncDesc->lprgelemdescParam is null || pFuncDesc->cParams != 1)
                             {
                                 continue;
                             }
@@ -675,7 +675,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         pi = ProcessDataCore(typeInfo, propInfoList, pFuncDesc->memid, nameDispID, in typeDesc, (VARFLAGS)pFuncDesc->wFuncFlags);
 
                         // if we got a setmethod, it's not readonly
-                        if (pi != null && !isPropGet)
+                        if (pi is not null && !isPropGet)
                         {
                             pi.ReadOnly = PropInfo.ReadOnlyFalse;
                         }
@@ -700,7 +700,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum entered");
 
-            if (enumTypeInfo == null)
+            if (enumTypeInfo is null)
             {
                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum got a NULL enumTypeInfo");
                 return null;
@@ -710,7 +710,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 TYPEATTR* pTypeAttr = null;
                 HRESULT hr = enumTypeInfo.GetTypeAttr(&pTypeAttr);
-                if (!hr.Succeeded() || pTypeAttr == null)
+                if (!hr.Succeeded() || pTypeAttr is null)
                 {
                     throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
                 }
@@ -736,7 +736,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         VARDESC* pVarDesc = null;
                         hr = enumTypeInfo.GetVarDesc(i, &pVarDesc);
-                        if (!hr.Succeeded() || pVarDesc == null)
+                        if (!hr.Succeeded() || pVarDesc is null)
                         {
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetVarDesc returned hr=0x{1:X} or NULL", i, hr));
                             continue;
@@ -786,7 +786,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                             else
                             {
-                                Debug.Assert(name != null, "No name for VARDESC member, but GetDocumentation returned S_OK!");
+                                Debug.Assert(name is not null, "No name for VARDESC member, but GetDocumentation returned S_OK!");
                                 nameString = name;
                             }
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: adding name value=" + nameString);
@@ -810,7 +810,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         {
                             string enumName = pTypeInfoUnk.ToString() + "_" + enumNameBstr.String.ToString();
 
-                            if (builtEnums == null)
+                            if (builtEnums is null)
                             {
                                 builtEnums = new Hashtable();
                             }
@@ -821,7 +821,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                             Type enumType = typeof(int);
 
-                            if (vars.Count > 0 && vars[0] != null)
+                            if (vars.Count > 0 && vars[0] is not null)
                             {
                                 enumType = vars[0].GetType();
                             }
@@ -859,7 +859,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             TYPEATTR* pTypeAttr = null;
             HRESULT hr = typeInfo.GetTypeAttr(&pTypeAttr);
-            if (!hr.Succeeded() || pTypeAttr == null)
+            if (!hr.Succeeded() || pTypeAttr is null)
             {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), (int)hr);
             }
@@ -870,7 +870,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     VARDESC* pVarDesc = null;
                     hr = typeInfo.GetVarDesc(i, &pVarDesc);
-                    if (!hr.Succeeded() || pVarDesc == null)
+                    if (!hr.Succeeded() || pVarDesc is null)
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring variable item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
                         continue;

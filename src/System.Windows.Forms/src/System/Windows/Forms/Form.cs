@@ -223,7 +223,7 @@ namespace System.Windows.Forms
             get
             {
                 Form parentForm = ParentForm;
-                if (parentForm == null)
+                if (parentForm is null)
                 {
                     return formState[FormStateIsActive] != 0;
                 }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
                         // Check if validation has been cancelled to avoid raising Validation event multiple times.
                         if (!ValidationCancelled)
                         {
-                            if (ActiveControl == null)
+                            if (ActiveControl is null)
                             {
                                 // If no control is selected focus will go to form
                                 SelectNextControl(null, true, true, true, false);
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
             {
                 IntPtr hwnd = User32.GetForegroundWindow();
                 Control c = Control.FromHandle(hwnd);
-                if (c != null && c is Form)
+                if (c is not null && c is Form)
                 {
                     return (Form)c;
                 }
@@ -310,16 +310,16 @@ namespace System.Windows.Forms
                 // arises when the user has an event handler that is raised during this process; in that case we ask
                 // Windows for it (see ActiveMdiChildFromWindows).
 
-                if (mdiChild == null)
+                if (mdiChild is null)
                 {
-                    // If this.MdiClient != null it means this.IsMdiContainer == true.
-                    if (ctlClient != null && ctlClient.IsHandleCreated)
+                    // If this.MdiClient is not null it means this.IsMdiContainer == true.
+                    if (ctlClient is not null && ctlClient.IsHandleCreated)
                     {
                         IntPtr hwnd = User32.SendMessageW(ctlClient, User32.WM.MDIGETACTIVE);
                         mdiChild = Control.FromHandle(hwnd) as Form;
                     }
                 }
-                if (mdiChild != null && mdiChild.Visible && mdiChild.Enabled)
+                if (mdiChild is not null && mdiChild.Visible && mdiChild.Enabled)
                 {
                     return mdiChild;
                 }
@@ -561,9 +561,9 @@ namespace System.Windows.Forms
                 if (GetAutoSizeMode() != value)
                 {
                     SetAutoSizeMode(value);
-                    Control toLayout = DesignMode || ParentInternal == null ? this : ParentInternal;
+                    Control toLayout = DesignMode || ParentInternal is null ? this : ParentInternal;
 
-                    if (toLayout != null)
+                    if (toLayout is not null)
                     {
                         // DefaultLayout does not keep anchor information until it needs to.  When
                         // AutoSize became a common property, we could no longer blindly call into
@@ -741,7 +741,7 @@ namespace System.Windows.Forms
             {
                 Properties.SetObject(PropCancelButton, value);
 
-                if (value != null && value.DialogResult == DialogResult.None)
+                if (value is not null && value.DialogResult == DialogResult.None)
                 {
                     value.DialogResult = DialogResult.Cancel;
                 }
@@ -804,7 +804,7 @@ namespace System.Windows.Forms
                 }
 
                 IWin32Window dialogOwner = (IWin32Window)Properties.GetObject(PropDialogOwner);
-                if (dialogOwner != null)
+                if (dialogOwner is not null)
                 {
                     cp.Parent = Control.GetSafeHandle(dialogOwner);
                 }
@@ -836,7 +836,7 @@ namespace System.Windows.Forms
                         Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
                         Form form = formMdiParent.ActiveMdiChildInternal;
 
-                        if (form != null
+                        if (form is not null
                             && form.WindowState == FormWindowState.Maximized)
                         {
                             cp.Style |= (int)User32.WS.MAXIMIZE;
@@ -895,14 +895,14 @@ namespace System.Windows.Forms
             {
                 // Avoid locking if the value is filled in...
                 //
-                if (defaultIcon == null)
+                if (defaultIcon is null)
                 {
                     lock (internalSyncObject)
                     {
                         // Once we grab the lock, we re-check the value to avoid a
                         // race condition.
                         //
-                        if (defaultIcon == null)
+                        if (defaultIcon is null)
                         {
                             defaultIcon = new Icon(typeof(Form), "wfc");
                         }
@@ -1074,10 +1074,10 @@ namespace System.Windows.Forms
                     }
 
                     // If null is passed, reset the icon.
-                    formState[FormStateIconSet] = value == null ? 0 : 1;
+                    formState[FormStateIconSet] = value is null ? 0 : 1;
                     icon = value;
 
-                    if (smallIcon != null)
+                    if (smallIcon is not null)
                     {
                         smallIcon.Dispose();
                         smallIcon = null;
@@ -1125,7 +1125,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Properties.GetObject(PropFormMdiParent) != null);
+                return (Properties.GetObject(PropFormMdiParent) is not null);
             }
         }
 
@@ -1161,7 +1161,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ctlClient != null;
+                return ctlClient is not null;
             }
 
             set
@@ -1173,13 +1173,13 @@ namespace System.Windows.Forms
 
                 if (value)
                 {
-                    Debug.Assert(ctlClient == null, "why isn't ctlClient null");
+                    Debug.Assert(ctlClient is null, "why isn't ctlClient null");
                     AllowTransparency = false;
                     Controls.Add(new MdiClient());
                 }
                 else
                 {
-                    Debug.Assert(ctlClient != null, "why is ctlClient null");
+                    Debug.Assert(ctlClient is not null, "why is ctlClient null");
                     ActiveMdiChildInternal = null;
                     ctlClient.Dispose();
                 }
@@ -1497,7 +1497,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ctlClient != null)
+                if (ctlClient is not null)
                 {
                     return ctlClient.MdiChildren;
                 }
@@ -1547,12 +1547,12 @@ namespace System.Windows.Forms
             set
             {
                 Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
-                if (value == formMdiParent && (value != null || ParentInternal == null))
+                if (value == formMdiParent && (value is not null || ParentInternal is null))
                 {
                     return;
                 }
 
-                if (value != null && CreateThreadId != value.CreateThreadId)
+                if (value is not null && CreateThreadId != value.CreateThreadId)
                 {
                     throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
                 }
@@ -1562,7 +1562,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (value == null)
+                    if (value is null)
                     {
                         ParentInternal = null;
                         SetTopLevel(true);
@@ -1678,7 +1678,7 @@ namespace System.Windows.Forms
             get
             {
                 object opacity = Properties.GetObject(PropOpacity);
-                if (opacity != null)
+                if (opacity is not null)
                 {
                     return Convert.ToDouble(opacity, CultureInfo.InvariantCulture);
                 }
@@ -1783,7 +1783,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value != null && !TopLevel)
+                if (value is not null && !TopLevel)
                 {
                     throw new ArgumentException(SR.NonTopLevelCantHaveOwner, "value");
                 }
@@ -1793,14 +1793,14 @@ namespace System.Windows.Forms
 
                 Properties.SetObject(PropOwner, null);
 
-                if (ownerOld != null)
+                if (ownerOld is not null)
                 {
                     ownerOld.RemoveOwnedForm(this);
                 }
 
                 Properties.SetObject(PropOwner, value);
 
-                if (value != null)
+                if (value is not null)
                 {
                     value.AddOwnedForm(this);
                 }
@@ -1875,7 +1875,7 @@ namespace System.Windows.Forms
             get => base.ParentInternal;
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     Owner = null;
                 }
@@ -2083,7 +2083,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ownerWindow == null)
+                if (ownerWindow is null)
                 {
                     ownerWindow = new NativeWindow();
                 }
@@ -2165,7 +2165,7 @@ namespace System.Windows.Forms
             get
             {
                 object key = Properties.GetObject(PropTransparencyKey);
-                if (key != null)
+                if (key is not null)
                 {
                     return (Color)key;
                 }
@@ -2284,7 +2284,7 @@ namespace System.Windows.Forms
                     // anchor settings for this mdi child window will be honored.
                     MdiParentInternal.MdiClient.PerformLayout();
 
-                    if (ParentInternal != null && ParentInternal.Visible)
+                    if (ParentInternal is not null && ParentInternal.Visible)
                     {
                         SuspendLayout();
                         try
@@ -2313,7 +2313,7 @@ namespace System.Windows.Forms
 
             if (value && !IsMdiChild && (WindowState == FormWindowState.Maximized || TopMost))
             {
-                if (ActiveControl == null)
+                if (ActiveControl is null)
                 {
                     SelectNextControl(null, true, true, true, false);
                 }
@@ -2576,7 +2576,7 @@ namespace System.Windows.Forms
 
         protected void ActivateMdiChild(Form form)
         {
-            if (FormerlyActiveMdiChild != null && !FormerlyActiveMdiChild.IsClosing)
+            if (FormerlyActiveMdiChild is not null && !FormerlyActiveMdiChild.IsClosing)
             {
                 FormerlyActiveMdiChild.UpdateWindowIcon(true);
                 FormerlyActiveMdiChild = null;
@@ -2590,7 +2590,7 @@ namespace System.Windows.Forms
 
             // Don't believe we ever hit this with non-null, but leaving it intact in
             // case removing it would cause a problem.
-            if (activeMdiChild != null)
+            if (activeMdiChild is not null)
             {
                 activeMdiChild.Active = false;
             }
@@ -2598,7 +2598,7 @@ namespace System.Windows.Forms
             activeMdiChild = form;
             ActiveMdiChildInternal = form;
 
-            if (activeMdiChild != null)
+            if (activeMdiChild is not null)
             {
                 activeMdiChild.IsMdiChildFocusable = true;
                 activeMdiChild.Active = true;
@@ -2620,7 +2620,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddOwnedForm(Form ownedForm)
         {
-            if (ownedForm == null)
+            if (ownedForm is null)
             {
                 return;
             }
@@ -2643,7 +2643,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (ownedForms == null)
+            if (ownedForms is null)
             {
                 ownedForms = new Form[4];
                 Properties.SetObject(PropOwnedForms, ownedForms);
@@ -2923,7 +2923,7 @@ namespace System.Windows.Forms
             // formMDIParent as well.
             //
             Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
-            if (formMdiParent != null && formMdiParent.MdiClient != value)
+            if (formMdiParent is not null && formMdiParent.MdiClient != value)
             {
                 Properties.SetObject(PropFormMdiParent, null);
             }
@@ -3088,7 +3088,7 @@ namespace System.Windows.Forms
             // child is created maximized, the menu ends up with two sets of
             // MDI child ornaments.
             Form form = (Form)Properties.GetObject(PropFormMdiParent);
-            if (form != null)
+            if (form is not null)
             {
                 form.SuspendUpdateMenuHandles();
             }
@@ -3100,7 +3100,7 @@ namespace System.Windows.Forms
                 if (IsMdiChild && MdiParentInternal.IsHandleCreated)
                 {
                     MdiClient mdiClient = MdiParentInternal.MdiClient;
-                    if (mdiClient != null && !mdiClient.IsHandleCreated)
+                    if (mdiClient is not null && !mdiClient.IsHandleCreated)
                     {
                         mdiClient.CreateControl();
                     }
@@ -3151,14 +3151,14 @@ namespace System.Windows.Forms
                 // In order for a window not to have a taskbar entry, it must
                 // be owned.
                 //
-                if (!ShowInTaskbar && OwnerInternal == null && TopLevel)
+                if (!ShowInTaskbar && OwnerInternal is null && TopLevel)
                 {
                     User32.SetWindowLong(this, User32.GWL.HWNDPARENT, TaskbarOwner);
 
                     // Make sure the large icon is set so the ALT+TAB icon
                     // reflects the real icon of the application
                     Icon icon = Icon;
-                    if (icon != null && TaskbarOwner.Handle != IntPtr.Zero)
+                    if (icon is not null && TaskbarOwner.Handle != IntPtr.Zero)
                     {
                         User32.SendMessageW(TaskbarOwner, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, icon.Handle);
                     }
@@ -3171,7 +3171,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (form != null)
+                if (form is not null)
                 {
                     form.ResumeUpdateMenuHandles();
                 }
@@ -3237,7 +3237,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void DefWndProc(ref Message m)
         {
-            if (ctlClient != null && ctlClient.IsHandleCreated && ctlClient.ParentInternal == this)
+            if (ctlClient is not null && ctlClient.IsHandleCreated && ctlClient.ParentInternal == this)
             {
                 m.Result = User32.DefFrameProcW(m.HWnd, ctlClient.Handle, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
@@ -3283,26 +3283,26 @@ namespace System.Windows.Forms
                     Properties.SetObject(PropActiveMdiChild, null);
                 }
 
-                if (MdiWindowListStrip != null)
+                if (MdiWindowListStrip is not null)
                 {
                     MdiWindowListStrip.Dispose();
                     MdiWindowListStrip = null;
                 }
 
-                if (MdiControlStrip != null)
+                if (MdiControlStrip is not null)
                 {
                     MdiControlStrip.Dispose();
                     MdiControlStrip = null;
                 }
 
-                if (MainMenuStrip != null)
+                if (MainMenuStrip is not null)
                 {
                     // should NOT call dispose on MainMenuStrip - it's likely NOT to be in the form's control collection.
                     MainMenuStrip = null;
                 }
 
                 Form owner = (Form)Properties.GetObject(PropOwner);
-                if (owner != null)
+                if (owner is not null)
                 {
                     owner.RemoveOwnedForm(this);
                     Properties.SetObject(PropOwner, null);
@@ -3313,14 +3313,14 @@ namespace System.Windows.Forms
 
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
-                    if (ownedForms[i] != null)
+                    if (ownedForms[i] is not null)
                     {
                         // it calls remove and removes itself.
                         ownedForms[i].Dispose();
                     }
                 }
 
-                if (smallIcon != null)
+                if (smallIcon is not null)
                 {
                     smallIcon.Dispose();
                     smallIcon = null;
@@ -3472,9 +3472,9 @@ namespace System.Windows.Forms
                     {
                         Screen desktop = null;
                         IWin32Window dialogOwner = (IWin32Window)Properties.GetObject(PropDialogOwner);
-                        if ((OwnerInternal != null) || (dialogOwner != null))
+                        if ((OwnerInternal is not null) || (dialogOwner is not null))
                         {
-                            IntPtr ownerHandle = (dialogOwner != null) ? Control.GetSafeHandle(dialogOwner) : OwnerInternal.Handle;
+                            IntPtr ownerHandle = (dialogOwner is not null) ? Control.GetSafeHandle(dialogOwner) : OwnerInternal.Handle;
                             desktop = Screen.FromHandle(ownerHandle);
                         }
                         else
@@ -3701,7 +3701,7 @@ namespace System.Windows.Forms
         {
             Point p = new Point();
             Screen desktop = null;
-            if (OwnerInternal != null)
+            if (OwnerInternal is not null)
             {
                 desktop = Screen.FromControl(OwnerInternal);
             }
@@ -3859,7 +3859,7 @@ namespace System.Windows.Forms
                 // Make sure we activate the active control.
                 Control activeControl = ActiveControl;
 
-                if (activeControl == null)
+                if (activeControl is null)
                 {
                     SelectNextControl(this, true, true, true, true);
                 }
@@ -4001,7 +4001,7 @@ namespace System.Windows.Forms
             // There is no good way to explain this event except to say
             // that it's just another name for OnControlCreated.
             EventHandler handler = (EventHandler)Events[EVENT_LOAD];
-            if (handler != null)
+            if (handler is not null)
             {
                 string text = Text;
 
@@ -4080,7 +4080,7 @@ namespace System.Windows.Forms
         {
             UpdateRenderSizeGrip();
             Form mdiParent = MdiParentInternal;
-            if (mdiParent != null)
+            if (mdiParent is not null)
             {
                 mdiParent.UpdateMdiWindowListStrip();
             }
@@ -4093,7 +4093,7 @@ namespace System.Windows.Forms
             bool data = false;
             if (IsHandleCreated
                     && Visible
-                    && (AcceptButton != null)
+                    && (AcceptButton is not null)
                     && User32.SystemParametersInfoW(User32.SPI.GETSNAPTODEFBUTTON, ref data)
                     && data)
             {
@@ -4149,7 +4149,7 @@ namespace System.Windows.Forms
                 Size sz = ClientSize;
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (sizeGripRenderer == null)
+                    if (sizeGripRenderer is null)
                     {
                         sizeGripRenderer = new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
                     }
@@ -4375,7 +4375,7 @@ namespace System.Windows.Forms
             // Process MDI accelerator keys.
             bool retValue = false;
             User32.MSG win32Message = msg;
-            if (ctlClient != null && ctlClient.Handle != IntPtr.Zero &&
+            if (ctlClient is not null && ctlClient.Handle != IntPtr.Zero &&
                 User32.TranslateMDISysAccel(ctlClient.Handle, ref win32Message).IsTrue())
             {
                 retValue = true;
@@ -4406,7 +4406,7 @@ namespace System.Windows.Forms
                 {
                     case Keys.Return:
                         button = (IButtonControl)Properties.GetObject(PropDefaultButton);
-                        if (button != null)
+                        if (button is not null)
                         {
                             //PerformClick now checks for validationcancelled...
                             if (button is Control)
@@ -4418,7 +4418,7 @@ namespace System.Windows.Forms
                         break;
                     case Keys.Escape:
                         button = (IButtonControl)Properties.GetObject(PropCancelButton);
-                        if (button != null)
+                        if (button is not null)
                         {
                             // In order to keep the behavior in sync with native
                             // and MFC dialogs, we want to not give the cancel button
@@ -4491,7 +4491,7 @@ namespace System.Windows.Forms
 
             // I've added a special case for UserControls because they shouldn't cycle back to the
             // beginning if they don't have a parent form, such as when they're on an ActiveXBridge.
-            if (IsMdiChild || ParentForm == null)
+            if (IsMdiChild || ParentForm is null)
             {
                 bool selected = SelectNextControl(null, forward, true, true, false);
 
@@ -4520,7 +4520,7 @@ namespace System.Windows.Forms
                     FormClosedEventArgs fce = new FormClosedEventArgs(CloseReason.FormOwnerClosing);
                     for (int i = ownedFormsCount - 1; i >= 0; i--)
                     {
-                        if (ownedForms[i] != null && !Application.OpenForms.Contains(ownedForms[i]))
+                        if (ownedForms[i] is not null && !Application.OpenForms.Contains(ownedForms[i]))
                         {
                             ownedForms[i].OnFormClosed(fce);
                         }
@@ -4549,7 +4549,7 @@ namespace System.Windows.Forms
                     FormClosingEventArgs fce = new FormClosingEventArgs(CloseReason.FormOwnerClosing, false);
                     for (int i = ownedFormsCount - 1; i >= 0; i--)
                     {
-                        if (ownedForms[i] != null && !Application.OpenForms.Contains(ownedForms[i]))
+                        if (ownedForms[i] is not null && !Application.OpenForms.Contains(ownedForms[i]))
                         {
                             ownedForms[i].OnFormClosing(fce);
                             if (fce.Cancel)
@@ -4598,7 +4598,7 @@ namespace System.Windows.Forms
 
             base.RecreateHandleCore();
 
-            if (etwcb != null)
+            if (etwcb is not null)
             {
                 // Set the owner of the windows in the list back to the new Form's handle
                 etwcb.SetOwners(new HandleRef(this, Handle));
@@ -4621,12 +4621,12 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveOwnedForm(Form ownedForm)
         {
-            if (ownedForm == null)
+            if (ownedForm is null)
             {
                 return;
             }
 
-            if (ownedForm.OwnerInternal != null)
+            if (ownedForm.OwnerInternal is not null)
             {
                 ownedForm.Owner = null; // NOTE: this will call RemoveOwnedForm again, bypassing if.
                 return;
@@ -4635,7 +4635,7 @@ namespace System.Windows.Forms
             Form[] ownedForms = (Form[])Properties.GetObject(PropOwnedForms);
             int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
 
-            if (ownedForms != null)
+            if (ownedForms is not null)
             {
                 for (int i = 0; i < ownedFormsCount; i++)
                 {
@@ -4666,7 +4666,7 @@ namespace System.Windows.Forms
         private void ResetIcon()
         {
             icon = null;
-            if (smallIcon != null)
+            if (smallIcon is not null)
             {
                 smallIcon.Dispose();
                 smallIcon = null;
@@ -4787,7 +4787,7 @@ namespace System.Windows.Forms
             else
             {
                 Form form = ParentForm;
-                if (form != null)
+                if (form is not null)
                 {
                     form.ActiveControl = this;
                 }
@@ -4825,7 +4825,7 @@ namespace System.Windows.Forms
 
                 foreach (Control control in Controls)
                 {
-                    if (control != null)
+                    if (control is not null)
                     {
 #pragma warning disable 618
                         control.Scale(x, y);
@@ -4865,7 +4865,7 @@ namespace System.Windows.Forms
             try
             {
                 // don't scale the location of MDI child forms
-                if (MdiParentInternal != null)
+                if (MdiParentInternal is not null)
                 {
                     specified &= ~BoundsSpecified.Location;
                 }
@@ -4950,7 +4950,7 @@ namespace System.Windows.Forms
             if (borderStyle != FormBorderStyle.None
                 && borderStyle != FormBorderStyle.FixedToolWindow
                 && borderStyle != FormBorderStyle.SizableToolWindow
-                && ParentInternal == null)
+                && ParentInternal is null)
             {
                 Size min = SystemInformation.MinWindowTrackSize;
                 if (height < min.Height)
@@ -4976,13 +4976,13 @@ namespace System.Windows.Forms
 
             if (defaultButton != button)
             {
-                if (defaultButton != null)
+                if (defaultButton is not null)
                 {
                     defaultButton.NotifyDefault(false);
                 }
 
                 Properties.SetObject(PropDefaultButton, button);
-                if (button != null)
+                if (button is not null)
                 {
                     button.NotifyDefault(true);
                 }
@@ -5073,7 +5073,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner != null) && ((int)User32.GetWindowLong(new HandleRef(owner, Control.GetSafeHandle(owner)), User32.GWL.EXSTYLE)
+            if ((owner is not null) && ((int)User32.GetWindowLong(new HandleRef(owner, Control.GetSafeHandle(owner)), User32.GWL.EXSTYLE)
                      & (int)User32.WS_EX.TOPMOST) == 0)
             {   // It's not the top-most window
                 if (owner is Control ownerControl)
@@ -5083,7 +5083,7 @@ namespace System.Windows.Forms
             }
 
             IntPtr hWndActive = User32.GetActiveWindow();
-            IntPtr hWndOwner = owner == null ? hWndActive : Control.GetSafeHandle(owner);
+            IntPtr hWndOwner = owner is null ? hWndActive : Control.GetSafeHandle(owner);
             IntPtr hWndOldOwner = IntPtr.Zero;
             Properties.SetObject(PropDialogOwner, owner);
             Form oldOwner = OwnerInternal;
@@ -5150,7 +5150,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner != null) && ((int)User32.GetWindowLong(new HandleRef(owner, GetSafeHandle(owner)), User32.GWL.EXSTYLE)
+            if ((owner is not null) && ((int)User32.GetWindowLong(new HandleRef(owner, GetSafeHandle(owner)), User32.GWL.EXSTYLE)
                      & (int)User32.WS_EX.TOPMOST) == 0)
             {   // It's not the top-most window
                 if (owner is Control ownerControl)
@@ -5172,7 +5172,7 @@ namespace System.Windows.Forms
                 User32.ReleaseCapture();
             }
             IntPtr hWndActive = User32.GetActiveWindow();
-            IntPtr hWndOwner = owner == null ? hWndActive : Control.GetSafeHandle(owner);
+            IntPtr hWndOwner = owner is null ? hWndActive : Control.GetSafeHandle(owner);
 
             Form oldOwner = OwnerInternal;
 
@@ -5259,7 +5259,7 @@ namespace System.Windows.Forms
                     {
                         // If this is a dialog opened from an MDI Container, then invalidate
                         // so that child windows will be properly updated.
-                        if (OwnerInternal != null &&
+                        if (OwnerInternal is not null &&
                             OwnerInternal.IsMdiContainer)
                         {
                             OwnerInternal.Invalidate(true);
@@ -5427,7 +5427,7 @@ namespace System.Windows.Forms
             while (cc.ActiveControl is ContainerControl)
             {
                 cc = cc.ActiveControl as ContainerControl;
-                Debug.Assert(cc != null);
+                Debug.Assert(cc is not null);
 
                 if (cc is Form)
                 {
@@ -5460,7 +5460,7 @@ namespace System.Windows.Forms
 
                 Form owner = (Form)Properties.GetObject(PropOwner);
 
-                if (owner != null)
+                if (owner is not null)
                 {
                     ownerHwnd = new HandleRef(owner, owner.Handle);
                 }
@@ -5516,7 +5516,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (ctlClient == null || !ctlClient.IsHandleCreated)
+            if (ctlClient is null || !ctlClient.IsHandleCreated)
             {
                 User32.SetMenu(this, NativeMethods.NullHandleRef);
             }
@@ -5528,7 +5528,7 @@ namespace System.Windows.Forms
 
                 MenuStrip mainMenuStrip = MainMenuStrip;
                 // (New fix: Only destroy Win32 Menu if using a MenuStrip)
-                if (mainMenuStrip != null)
+                if (mainMenuStrip is not null)
                 {
                     // If MainMenuStrip, we need to remove any Win32 Menu to make room for it.
                     IntPtr hMenu = User32.GetMenu(this);
@@ -5543,7 +5543,7 @@ namespace System.Windows.Forms
                         // once we clear the main menu we're in trouble - this eats the close, minimize, maximize gadgets
                         // of the child form. (See WM_MDISETMENU in MSDN)
                         Form activeMdiChild = ActiveMdiChildInternal;
-                        if (activeMdiChild != null && activeMdiChild.WindowState == FormWindowState.Maximized)
+                        if (activeMdiChild is not null && activeMdiChild.WindowState == FormWindowState.Maximized)
                         {
                             activeMdiChild.RecreateHandle();
                         }
@@ -5596,7 +5596,7 @@ namespace System.Windows.Forms
             ArrayList childrenToolStrips = ToolStripManager.FindMergeableToolStrips(ActiveMdiChildInternal);
 
             // revert any previous merge
-            if (thisToolstrip != null)
+            if (thisToolstrip is not null)
             {
                 ToolStripManager.RevertMerge(thisToolstrip);
             }
@@ -5605,16 +5605,16 @@ namespace System.Windows.Forms
             // names of all the MDI child forms.
             UpdateMdiWindowListStrip();
 
-            if (ActiveMdiChildInternal != null)
+            if (ActiveMdiChildInternal is not null)
             {
                 // do the new merging
                 foreach (ToolStrip sourceToolStrip in childrenToolStrips)
                 {
                     Type closestMatchingSourceType = FindClosestStockType(sourceToolStrip.GetType());
-                    if (thisToolstrip != null)
+                    if (thisToolstrip is not null)
                     {
                         Type closestMatchingTargetType = FindClosestStockType(thisToolstrip.GetType());
-                        if (closestMatchingTargetType != null && closestMatchingSourceType != null &&
+                        if (closestMatchingTargetType is not null && closestMatchingSourceType is not null &&
                             closestMatchingSourceType == closestMatchingTargetType &&
                             thisToolstrip.GetType().IsAssignableFrom(sourceToolStrip.GetType()))
                         {
@@ -5627,7 +5627,7 @@ namespace System.Windows.Forms
 
             // add in the control gadgets for the mdi child form to the first menu strip
             Form activeMdiForm = ActiveMdiChildInternal;
-            UpdateMdiControlStrip(activeMdiForm != null && activeMdiForm.IsMaximized);
+            UpdateMdiControlStrip(activeMdiForm is not null && activeMdiForm.IsMaximized);
         }
 
         private void UpdateMdiControlStrip(bool maximized)
@@ -5644,13 +5644,13 @@ namespace System.Windows.Forms
             {
                 MdiControlStrip mdiControlStrip = MdiControlStrip;
 
-                if (MdiControlStrip != null)
+                if (MdiControlStrip is not null)
                 {
-                    if (mdiControlStrip.MergedMenu != null)
+                    if (mdiControlStrip.MergedMenu is not null)
                     {
 #if DEBUG
                         int numWindowListItems = 0;
-                        if (MdiWindowListStrip != null && MdiWindowListStrip.MergedMenu != null && MdiWindowListStrip.MergedMenu.MdiWindowListItem != null)
+                        if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null && MdiWindowListStrip.MergedMenu.MdiWindowListItem is not null)
                         {
                             numWindowListItems = MdiWindowListStrip.MergedMenu.MdiWindowListItem.DropDownItems.Count;
                         }
@@ -5660,7 +5660,7 @@ namespace System.Windows.Forms
 
 #if DEBUG
                         // double check that RevertMerge doesnt accidentally revert more than it should.
-                        if (MdiWindowListStrip != null && MdiWindowListStrip.MergedMenu != null && MdiWindowListStrip.MergedMenu.MdiWindowListItem != null)
+                        if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null && MdiWindowListStrip.MergedMenu.MdiWindowListItem is not null)
                         {
                             Debug.Assert(numWindowListItems == MdiWindowListStrip.MergedMenu.MdiWindowListItem.DropDownItems.Count, "Calling RevertMerge modified the mdiwindowlistitem");
                         }
@@ -5671,7 +5671,7 @@ namespace System.Windows.Forms
                     MdiControlStrip = null;
                 }
 
-                if (ActiveMdiChildInternal != null && maximized)
+                if (ActiveMdiChildInternal is not null && maximized)
                 {
                     if (ActiveMdiChildInternal.ControlBox)
                     {
@@ -5683,7 +5683,7 @@ namespace System.Windows.Forms
                         if (hMenu == IntPtr.Zero)
                         {
                             MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
-                            if (sourceMenuStrip != null)
+                            if (sourceMenuStrip is not null)
                             {
                                 MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
                                 Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "UpdateMdiControlStrip: built up an MDI control strip for " + ActiveMdiChildInternal.Text + " with " + MdiControlStrip.Items.Count.ToString(CultureInfo.InvariantCulture) + " items.");
@@ -5706,15 +5706,15 @@ namespace System.Windows.Forms
         {
             if (IsMdiContainer)
             {
-                if (MdiWindowListStrip != null && MdiWindowListStrip.MergedMenu != null)
+                if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null)
                 {
                     ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip,/*revertMdiStuff*/true);
                 }
 
                 MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
-                if (sourceMenuStrip != null && sourceMenuStrip.MdiWindowListItem != null)
+                if (sourceMenuStrip is not null && sourceMenuStrip.MdiWindowListItem is not null)
                 {
-                    if (MdiWindowListStrip == null)
+                    if (MdiWindowListStrip is null)
                     {
                         MdiWindowListStrip = new MdiWindowListStrip();
                     }
@@ -5781,9 +5781,9 @@ namespace System.Windows.Forms
                     icon = Icon;
                 }
 
-                if (icon != null)
+                if (icon is not null)
                 {
-                    if (smallIcon == null)
+                    if (smallIcon is null)
                     {
                         try
                         {
@@ -5794,7 +5794,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (smallIcon != null)
+                    if (smallIcon is not null)
                     {
                         User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, smallIcon.Handle);
                     }
@@ -6046,7 +6046,7 @@ namespace System.Windows.Forms
                     for (int i = ownedFormsCount - 1; i >= 0; i--)
                     {
                         FormClosingEventArgs cfe = new FormClosingEventArgs(CloseReason.FormOwnerClosing, e.Cancel);
-                        if (ownedForms[i] != null)
+                        if (ownedForms[i] is not null)
                         {
                             //Call OnFormClosing on the child forms.
                             ownedForms[i].OnFormClosing(cfe);
@@ -6067,7 +6067,7 @@ namespace System.Windows.Forms
                 {
                     m.Result = (IntPtr)(e.Cancel ? 0 : 1);
                 }
-                else if (e.Cancel && (MdiParent != null))
+                else if (e.Cancel && (MdiParent is not null))
                 {
                     // This is the case of an MDI child close event being canceled by the user.
                     CloseReason = CloseReason.None;
@@ -6112,7 +6112,7 @@ namespace System.Windows.Forms
                     for (int i = ownedFormsCount - 1; i >= 0; i--)
                     {
                         fc = new FormClosedEventArgs(CloseReason.FormOwnerClosing);
-                        if (ownedForms[i] != null)
+                        if (ownedForms[i] is not null)
                         {
                             //Call OnClosed and OnFormClosed on the child forms.
                             ownedForms[i].OnClosed(fc);
@@ -6238,12 +6238,12 @@ namespace System.Windows.Forms
         private void WmMdiActivate(ref Message m)
         {
             base.WndProc(ref m);
-            Debug.Assert(Properties.GetObject(PropFormMdiParent) != null, "how is formMdiParent null?");
+            Debug.Assert(Properties.GetObject(PropFormMdiParent) is not null, "how is formMdiParent null?");
             Debug.Assert(IsHandleCreated, "how is handle 0?");
 
             Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
 
-            if (formMdiParent != null)
+            if (formMdiParent is not null)
             {
                 // This message is propagated twice by the MDIClient window. Once to the
                 // window being deactivated and once to the window being activated.
@@ -6265,7 +6265,7 @@ namespace System.Windows.Forms
                 Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
                 if (formMdiParent.ActiveMdiChildInternal == this)
                 {
-                    if (ActiveControl != null && !ActiveControl.ContainsFocus)
+                    if (ActiveControl is not null && !ActiveControl.ContainsFocus)
                     {
                         InnerMostActiveContainerControl.FocusActiveControlInternal();
                     }
@@ -6286,7 +6286,7 @@ namespace System.Windows.Forms
             // that point our handle is not actually destroyed so
             // destroying our parent actually causes a recursive
             // WM_DESTROY.
-            if (ownerWindow != null)
+            if (ownerWindow is not null)
             {
                 ownerWindow.DestroyHandle();
                 ownerWindow = null;
@@ -6410,10 +6410,10 @@ namespace System.Windows.Forms
             // window proc. We handle resizing the MDIClient window ourselves
             // (using ControlDock.FILL).
             //
-            if (ctlClient == null)
+            if (ctlClient is null)
             {
                 base.WndProc(ref m);
-                if (MdiControlStrip == null && MdiParentInternal != null && MdiParentInternal.ActiveMdiChildInternal == this)
+                if (MdiControlStrip is null && MdiParentInternal is not null && MdiParentInternal.ActiveMdiChildInternal == this)
                 {
                     int wParam = m.WParam.ToInt32();
                     MdiParentInternal.UpdateMdiControlStrip(wParam == (int)User32.WINDOW_SIZE.MAXIMIZED);
@@ -6564,7 +6564,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override void Add(Control value)
             {
-                if (value is MdiClient && owner.ctlClient == null)
+                if (value is MdiClient && owner.ctlClient is null)
                 {
                     if (!owner.TopLevel && !owner.DesignMode)
                     {
@@ -6580,14 +6580,14 @@ namespace System.Windows.Forms
 
                 // make sure we don't add a form that has a valid mdi parent
                 //
-                if (value is Form && ((Form)value).MdiParentInternal != null)
+                if (value is Form && ((Form)value).MdiParentInternal is not null)
                 {
                     throw new ArgumentException(SR.FormMDIParentCannotAdd, "value");
                 }
 
                 base.Add(value);
 
-                if (owner.ctlClient != null)
+                if (owner.ctlClient is not null)
                 {
                     owner.ctlClient.SendToBack();
                 }
@@ -6628,7 +6628,7 @@ namespace System.Windows.Forms
                 {
                     // Enumerated window is owned by this Form.
                     // Store it in a list for further treatment.
-                    if (ownedWindows == null)
+                    if (ownedWindows is null)
                     {
                         ownedWindows = new List<HandleRef>();
                     }
@@ -6640,7 +6640,7 @@ namespace System.Windows.Forms
             // Resets the owner of all the windows owned by this Form before handle recreation.
             internal void ResetOwners()
             {
-                if (ownedWindows != null)
+                if (ownedWindows is not null)
                 {
                     foreach (HandleRef hRef in ownedWindows)
                     {
@@ -6652,7 +6652,7 @@ namespace System.Windows.Forms
             // Sets the owner of the windows back to this Form after its handle recreation.
             internal void SetOwners(HandleRef hRefOwner)
             {
-                if (ownedWindows != null)
+                if (ownedWindows is not null)
                 {
                     foreach (HandleRef hRef in ownedWindows)
                     {

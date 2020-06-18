@@ -471,7 +471,7 @@ namespace System.Windows.Forms
         /// <returns>The accessible name.</returns>
         internal string GetAccessibleName(string baseName)
         {
-            if (baseName == null)
+            if (baseName is null)
             {
                 return SR.SpinnerAccessibleName;
             }
@@ -848,14 +848,14 @@ namespace System.Windows.Forms
             clientArea.Inflate(-borderWidth, -borderWidth);
 
             // Reposition and resize the upDownEdit control
-            if (_upDownEdit != null)
+            if (_upDownEdit is not null)
             {
                 upDownEditBounds = clientArea;
                 upDownEditBounds.Size = new Size(clientArea.Width - _defaultButtonsWidth, clientArea.Height);
             }
 
             // Reposition and resize the updown buttons
-            if (_upDownButtons != null)
+            if (_upDownButtons is not null)
             {
                 int borderFixup = (themed) ? 1 : 2;
                 if (borderStyle == BorderStyle.None)
@@ -883,11 +883,11 @@ namespace System.Windows.Forms
             }
 
             // Apply locations
-            if (_upDownEdit != null)
+            if (_upDownEdit is not null)
             {
                 _upDownEdit.Bounds = upDownEditBounds;
             }
-            if (_upDownButtons != null)
+            if (_upDownButtons is not null)
             {
                 _upDownButtons.Bounds = upDownButtonsBounds;
                 _upDownButtons.Invalidate();
@@ -904,7 +904,7 @@ namespace System.Windows.Forms
         /// </summary>
         private MouseEventArgs TranslateMouseEvent(Control child, MouseEventArgs e)
         {
-            if (child != null && IsHandleCreated)
+            if (child is not null && IsHandleCreated)
             {
                 // Same control as PointToClient or PointToScreen, just
                 // with two specific controls in mind.
@@ -949,7 +949,7 @@ namespace System.Windows.Forms
                 case User32.WM.SETFOCUS:
                     if (!HostedInWin32DialogManager)
                     {
-                        if (ActiveControl == null)
+                        if (ActiveControl is null)
                         {
                             SetActiveControl(TextBox);
                         }

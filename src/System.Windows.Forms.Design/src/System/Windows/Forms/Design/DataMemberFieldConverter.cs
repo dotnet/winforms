@@ -16,12 +16,12 @@ namespace System.Windows.Forms.Design
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            return value != null && value.Equals(SR.None) ? string.Empty : value;
+            return value is not null && value.Equals(SR.None) ? string.Empty : value;
         }
 
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == typeof(string) && (value == null || value.Equals(string.Empty)))
+            if (destinationType == typeof(string) && (value is null || value.Equals(string.Empty)))
                 return SR.None_lc;
 
             return base.ConvertTo(context, culture, value, destinationType);

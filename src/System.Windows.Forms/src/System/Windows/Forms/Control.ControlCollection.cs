@@ -47,7 +47,7 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual void Add(Control value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     return;
                 }
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                 }
 
                 // Remove the new control from its old parent (if any)
-                if (value._parent != null)
+                if (value._parent is not null)
                 {
                     value._parent.Controls.Remove(value);
                 }
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual void AddRange(Control[] controls)
             {
-                if (controls == null)
+                if (controls is null)
                 {
                     throw new ArgumentNullException(nameof(controls));
                 }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
             /// </summary>
             private ArrayList FindInternal(string key, bool searchAllChildren, ControlCollection controlsToLookIn, ArrayList foundControls)
             {
-                if ((controlsToLookIn == null) || (foundControls == null))
+                if ((controlsToLookIn is null) || (foundControls is null))
                 {
                     return null;
                 }
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
                     // to the same parent close to each other.
                     for (int i = 0; i < controlsToLookIn.Count; i++)
                     {
-                        if (controlsToLookIn[i] == null)
+                        if (controlsToLookIn[i] is null)
                         {
                             continue;
                         }
@@ -254,11 +254,11 @@ namespace System.Windows.Forms
                     {
                         for (int i = 0; i < controlsToLookIn.Count; i++)
                         {
-                            if (controlsToLookIn[i] == null)
+                            if (controlsToLookIn[i] is null)
                             {
                                 continue;
                             }
-                            if ((controlsToLookIn[i].Controls != null) && controlsToLookIn[i].Controls.Count > 0)
+                            if ((controlsToLookIn[i].Controls is not null) && controlsToLookIn[i].Controls.Count > 0)
                             {
                                 // if it has a valid child collecion, append those results to our collection
                                 foundControls = FindInternal(key, searchAllChildren, controlsToLookIn[i].Controls, foundControls);
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
             public virtual void Remove(Control value)
             {
                 // Sanity check parameter
-                if (value == null)
+                if (value is null)
                 {
                     return;     // Don't do anything
                 }
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
                     }
 
                     Control control = (Control)InnerList[index];
-                    Debug.Assert(control != null, "Why are we returning null controls from a valid index?");
+                    Debug.Assert(control is not null, "Why are we returning null controls from a valid index?");
                     return control;
                 }
             }
@@ -492,7 +492,7 @@ namespace System.Windows.Forms
             internal virtual void SetChildIndexInternal(Control child, int newIndex)
             {
                 // Sanity check parameters
-                if (child == null)
+                if (child is null)
                 {
                     throw new ArgumentNullException(nameof(child));
                 }

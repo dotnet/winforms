@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (visualStyleRenderer == null)
+                    if (visualStyleRenderer is null)
                     {
                         visualStyleRenderer = new VisualStyleRenderer(HeaderElement);
                     }

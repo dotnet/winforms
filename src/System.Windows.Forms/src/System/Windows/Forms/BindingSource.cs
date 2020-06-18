@@ -108,7 +108,7 @@ namespace System.Windows.Forms
 
         public BindingSource(IContainer container) : this()
         {
-            if (container == null)
+            if (container is null)
             {
                 throw new ArgumentNullException(nameof(container));
             }
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
 
         private bool IsListWriteable(bool checkConstructor)
         {
-            return !List.IsReadOnly && !List.IsFixedSize && (!checkConstructor || _itemConstructor != null);
+            return !List.IsReadOnly && !List.IsFixedSize && (!checkConstructor || _itemConstructor is not null);
         }
 
         [Browsable(false)]
@@ -181,7 +181,7 @@ namespace System.Windows.Forms
         private BindingSource GetRelatedBindingSource(string dataMember)
         {
             // Auto-create the binding source cache on first use
-            if (_relatedBindingSources == null)
+            if (_relatedBindingSources is null)
             {
                 _relatedBindingSources = new Dictionary<string, BindingSource>();
             }
@@ -214,7 +214,7 @@ namespace System.Windows.Forms
             get => _dataMember;
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -480,7 +480,7 @@ namespace System.Windows.Forms
 
         private static string BuildSortString(ListSortDescriptionCollection sortsColln)
         {
-            if (sortsColln == null)
+            if (sortsColln is null)
             {
                 return string.Empty;
             }
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
         {
             BindingSource bindingSource = newDataSource as BindingSource;
 
-            while (bindingSource != null)
+            while (bindingSource is not null)
             {
                 if (bindingSource == this)
                 {
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
                 instanceException = ex; // No default ctor defined
             }
 
-            if (instanceException != null)
+            if (instanceException is not null)
             {
                 throw new NotSupportedException(SR.BindingSourceInstanceError, instanceException);
             }
@@ -664,7 +664,7 @@ namespace System.Windows.Forms
         public int Find(string propertyName, object key)
         {
             PropertyDescriptor pd = _itemShape?.Find(propertyName, true);
-            if (pd == null)
+            if (pd is null)
             {
                 throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, propertyName));
             }
@@ -705,7 +705,7 @@ namespace System.Windows.Forms
 
             foreach (object item in enumerable)
             {
-                if (list == null)
+                if (list is null)
                 {
                     list = CreateBindingList(item.GetType());
                 }
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
             // See if data member corresponds to a valid property on the specified data source
             PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(_dataSource);
             PropertyDescriptor dmProp = dsProps[_dataMember];
-            if (dmProp != null)
+            if (dmProp is not null)
             {
                 return true;
             }
@@ -921,20 +921,20 @@ namespace System.Windows.Forms
                     // If parent list has a current item, get the sub-list from the relevant property on that item
                     PropertyDescriptorCollection dsProps = cm.GetItemProperties();
                     PropertyDescriptor dmProp = dsProps[_dataMember];
-                    if (dmProp != null)
+                    if (dmProp is not null)
                     {
                         currentValue = ListBindingHelper.GetList(dmProp.GetValue(cm.Current));
                         currentList = currentValue as IList;
                     }
                 }
 
-                if (currentList != null)
+                if (currentList is not null)
                 {
                     // Yippeeee, the current item gave us a list to bind to!
                     // [NOTE: Specify applySortAndFilter=TRUE to apply our sort/filter settings to new list]
                     SetList(currentList, false, true);
                 }
-                else if (currentValue != null)
+                else if (currentValue is not null)
                 {
                     // Ok, we didn't get a list, but we did get something, so wrap it in a list
                     // [NOTE: Specify applySortAndFilter=FALSE to stop BindingList<T> from throwing]
@@ -1024,7 +1024,7 @@ namespace System.Windows.Forms
 
                 // Find the property
                 PropertyDescriptor prop = props.Find(current, true);
-                if (prop == null)
+                if (prop is null)
                 {
                     throw new ArgumentException(SR.BindingSourceSortStringPropertyNotInIBindingList);
                 }
@@ -1131,15 +1131,15 @@ namespace System.Windows.Forms
 
                     // GetListFromEnumerable returns null if there are no elements
                     // Don't consider it a list of enumerables in this case
-                    if (bindingList != null)
+                    if (bindingList is not null)
                     {
                         _listExtractedFromEnumerable = true;
                     }
                 }
                 // If it's not an IList, IListSource or IEnumerable
-                if (bindingList == null)
+                if (bindingList is null)
                 {
-                    if (list != null)
+                    if (list is not null)
                     {
                         // If its some random non-list object, just wrap it in a list
                         bindingList = WrapObjectInBindingList(list);
@@ -1152,7 +1152,7 @@ namespace System.Windows.Forms
                         // same item type. If the item type cannot be determined, we end up with an item type of 'Object'.
                         Type type = ListBindingHelper.GetListItemType(_dataSource, _dataMember);
                         bindingList = GetListFromType(type);
-                        if (bindingList == null)
+                        if (bindingList is null)
                         {
                             bindingList = CreateBindingList(type);
                         }
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetList(IList list, bool metaDataChanged, bool applySortAndFilter)
         {
-            if (list == null)
+            if (list is null)
             {
                 // The list argument should never be null! We will handle null gracefully
                 // at run-time, but we will complain bitterly about this in debug builds!
@@ -1231,11 +1231,11 @@ namespace System.Windows.Forms
             // because the sort or filter values were invalid).
             if (applySortAndFilter)
             {
-                if (Sort != null)
+                if (Sort is not null)
                 {
                     InnerListSort = Sort;
                 }
-                if (Filter != null)
+                if (Filter is not null)
                 {
                     InnerListFilter = Filter;
                 }
@@ -1257,7 +1257,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void HookItemChangedEventsForNewCurrent()
         {
-            Debug.Assert(_currentItemHookedForItemChange == null, "BindingSource trying to hook new current item before unhooking old current item!");
+            Debug.Assert(_currentItemHookedForItemChange is null, "BindingSource trying to hook new current item before unhooking old current item!");
 
             if (!_listRaisesItemChangedEvents)
             {
@@ -1287,7 +1287,7 @@ namespace System.Windows.Forms
 
         private void WireCurrencyManager(CurrencyManager cm)
         {
-            Debug.Assert(cm != null);
+            Debug.Assert(cm is not null);
 
             cm.PositionChanged += new EventHandler(CurrencyManager_PositionChanged);
             cm.CurrentChanged += new EventHandler(CurrencyManager_CurrentChanged);
@@ -1298,7 +1298,7 @@ namespace System.Windows.Forms
 
         private void UnwireCurrencyManager(CurrencyManager cm)
         {
-            Debug.Assert(cm != null);
+            Debug.Assert(cm is not null);
 
             cm.PositionChanged -= new EventHandler(CurrencyManager_PositionChanged);
             cm.CurrentChanged -= new EventHandler(CurrencyManager_CurrentChanged);
@@ -1312,7 +1312,7 @@ namespace System.Windows.Forms
             if (_dataSource is ICurrencyManagerProvider provider)
             {
                 CurrencyManager cm = provider.CurrencyManager;
-                if (cm != null)
+                if (cm is not null)
                 {
                     cm.CurrentItemChanged += new EventHandler(ParentCurrencyManager_CurrentItemChanged);
                     cm.MetaDataChanged += new EventHandler(ParentCurrencyManager_MetaDataChanged);
@@ -1325,7 +1325,7 @@ namespace System.Windows.Forms
             if (_dataSource is ICurrencyManagerProvider provider)
             {
                 CurrencyManager cm = provider.CurrencyManager;
-                if (cm != null)
+                if (cm is not null)
                 {
                     cm.CurrentItemChanged -= new EventHandler(ParentCurrencyManager_CurrentItemChanged);
                     cm.MetaDataChanged -= new EventHandler(ParentCurrencyManager_MetaDataChanged);
@@ -1351,7 +1351,7 @@ namespace System.Windows.Forms
 
         private void WirePropertyChangedEvents(object item)
         {
-            if (item != null && _itemShape != null)
+            if (item is not null && _itemShape is not null)
             {
                 for (int j = 0; j < _itemShape.Count; j++)
                 {
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms
 
         private void UnwirePropertyChangedEvents(object item)
         {
-            if (item != null && _itemShape != null)
+            if (item is not null && _itemShape is not null)
             {
                 for (int j = 0; j < _itemShape.Count; j++)
                 {
@@ -1488,18 +1488,18 @@ namespace System.Windows.Forms
 
             // Special case: If no data source has been assigned, the inner list will just
             // be an empty un-typed binding list.
-            if (_dataSource == null && List.Count == 0)
+            if (_dataSource is null && List.Count == 0)
             {
-                SetList(CreateBindingList((value == null) ? typeof(object) : value.GetType()), true, true);
+                SetList(CreateBindingList((value is null) ? typeof(object) : value.GetType()), true, true);
             }
 
             // Throw if user tries to add items to list that don't match the current item type
-            if (value != null && !_itemType.IsAssignableFrom(value.GetType()))
+            if (value is not null && !_itemType.IsAssignableFrom(value.GetType()))
             {
                 throw new InvalidOperationException(SR.BindingSourceItemTypeMismatchOnAdd);
             }
 
-            if (value == null && _itemType.IsValueType)
+            if (value is null && _itemType.IsValueType)
             {
                 throw new InvalidOperationException(SR.BindingSourceItemTypeIsValueType);
             }
@@ -1595,7 +1595,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(
                     SR.BindingSourceBindingListWrapperNeedToSetAllowNew,
-                    _itemType == null ? "(null)" : _itemType.FullName
+                    _itemType is null ? "(null)" : _itemType.FullName
                     ));
             }
 
@@ -1618,7 +1618,7 @@ namespace System.Windows.Forms
             object addNewItem = addingNew.NewObject;
 
             // If no item came back from AddingNew event, we must create the new item ourselves...
-            if (addNewItem == null)
+            if (addNewItem is null)
             {
                 // If the inner list is an IBindingList, let it create and add the new item for us.
                 // Then make the new item the current item (...assuming, as CurrencyManager does,
@@ -1631,11 +1631,11 @@ namespace System.Windows.Forms
                 }
 
                 // Throw if we don't know how to create items of the current item type
-                if (_itemConstructor == null)
+                if (_itemConstructor is null)
                 {
                     throw new InvalidOperationException(string.Format(
                         SR.BindingSourceBindingListWrapperNeedAParameterlessConstructor,
-                        _itemType == null ? "(null)" : _itemType.FullName
+                        _itemType is null ? "(null)" : _itemType.FullName
                         ));
                 }
 

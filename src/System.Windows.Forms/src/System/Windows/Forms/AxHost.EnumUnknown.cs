@@ -22,7 +22,7 @@ namespace System.Windows.Forms
                 //if (AxHTraceSwitch.TraceVerbose) Debug.WriteObject(arr);
                 this.arr = arr;
                 loc = 0;
-                size = (arr == null) ? 0 : arr.Length;
+                size = (arr is null) ? 0 : arr.Length;
             }
 
             private EnumUnknown(object[] arr, int loc) : this(arr)
@@ -32,7 +32,7 @@ namespace System.Windows.Forms
 
             unsafe HRESULT Ole32.IEnumUnknown.Next(uint celt, IntPtr rgelt, uint* pceltFetched)
             {
-                if (pceltFetched != null)
+                if (pceltFetched is not null)
                 {
                     *pceltFetched = 0;
                 }
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                 {
                     for (; loc < size && fetched < celt; ++loc)
                     {
-                        if (arr[loc] != null)
+                        if (arr[loc] is not null)
                         {
                             Marshal.WriteIntPtr(rgelt, Marshal.GetIUnknownForObject(arr[loc]));
                             rgelt = (IntPtr)((long)rgelt + (long)sizeof(IntPtr));
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (pceltFetched != null)
+                if (pceltFetched is not null)
                 {
                     *pceltFetched = fetched;
                 }

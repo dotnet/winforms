@@ -23,7 +23,7 @@ namespace WinForms.Common.Tests
 
         protected override object[] ConvertDataItem(MethodInfo testMethod, object item)
         {
-            if (item == null)
+            if (item is null)
             {
                 return null;
             }

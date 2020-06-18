@@ -119,7 +119,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_controlItem != null)
+                if (_controlItem is not null)
                 {
                     return true;
                 }

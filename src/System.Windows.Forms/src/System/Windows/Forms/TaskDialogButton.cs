@@ -301,7 +301,7 @@ namespace System.Windows.Forms
 
         internal override bool IsCreatable => base.IsCreatable && _visible;
 
-        internal bool IsStandardButton => _standardButtonResult != null;
+        internal bool IsStandardButton => _standardButtonResult is not null;
 
         internal TaskDialogResult StandardButtonResult => _standardButtonResult ?? throw new InvalidOperationException();
 
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
 
         internal ComCtl32.TDF Bind(TaskDialogPage page, int customButtonID)
         {
-            if (_standardButtonResult != null)
+            if (_standardButtonResult is not null)
                 throw new InvalidOperationException();
 
             ComCtl32.TDF result = Bind(page);

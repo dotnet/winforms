@@ -19,12 +19,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void AddRange(GridEntry[] value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
 
-            Debug.Assert(_entries != null, "Entries is initialized in the base class constructor.");
+            Debug.Assert(_entries is not null, "Entries is initialized in the base class constructor.");
             var newArray = new GridEntry[_entries.Length + value.Length];
             _entries.CopyTo(newArray, 0);
             value.CopyTo(newArray, _entries.Length);
@@ -49,11 +49,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (disposing)
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     for (int i = 0; i < _entries.Length; i++)
                     {
-                        if (_entries[i] != null)
+                        if (_entries[i] is not null)
                         {
                             ((GridEntry)_entries[i]).Dispose();
                             _entries[i] = null;

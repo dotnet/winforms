@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design
                 return value;
             }
 
-            if (_dockUI == null)
+            if (_dockUI is null)
             {
                 _dockUI = new DockUI(this);
             }
@@ -361,7 +361,7 @@ namespace System.Windows.Forms.Design
 
                 e.Handled = true;
 
-                if (target != null && target != sender)
+                if (target is not null && target != sender)
                 {
                     target.Focus();
                 }

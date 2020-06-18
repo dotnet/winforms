@@ -93,13 +93,13 @@ namespace System.ComponentModel.Design
             }
 
             DisplayNameAttribute dispNameAttr = GetCustomAttribute(info, typeof(DisplayNameAttribute)) as DisplayNameAttribute;
-            if (dispNameAttr != null)
+            if (dispNameAttr is not null)
             {
                 displayName = dispNameAttr.DisplayName;
             }
 
             CategoryAttribute catAttr = GetCustomAttribute(info, typeof(CategoryAttribute)) as CategoryAttribute;
-            if (dispNameAttr != null)
+            if (dispNameAttr is not null)
             {
                 category = catAttr.Category;
             }

@@ -33,7 +33,7 @@ namespace System.Windows.Forms
         {
             HtmlDocument.HtmlDocumentShim shim = null;
 
-            if (htmlDocumentShims == null)
+            if (htmlDocumentShims is null)
             {
                 htmlDocumentShims = new Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim>();
                 shim = new HtmlDocument.HtmlDocumentShim(doc);
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
                 shim = new HtmlDocument.HtmlDocumentShim(doc);
                 htmlDocumentShims[doc] = shim;
             }
-            if (shim != null)
+            if (shim is not null)
             {
                 OnShimAdded(shim);
             }
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         public void AddWindowShim(HtmlWindow window)
         {
             HtmlWindow.HtmlWindowShim shim = null;
-            if (htmlWindowShims == null)
+            if (htmlWindowShims is null)
             {
                 htmlWindowShims = new Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim>();
                 shim = new HtmlWindow.HtmlWindowShim(window);
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
                 shim = new HtmlWindow.HtmlWindowShim(window);
                 htmlWindowShims[window] = shim;
             }
-            if (shim != null)
+            if (shim is not null)
             {
                 // strictly not necessary, but here for future use.
                 OnShimAdded(shim);
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         {
             HtmlElement.HtmlElementShim shim = null;
 
-            if (htmlElementShims == null)
+            if (htmlElementShims is null)
             {
                 htmlElementShims = new Dictionary<HtmlElement, HtmlElement.HtmlElementShim>();
                 shim = new HtmlElement.HtmlElementShim(element);
@@ -92,7 +92,7 @@ namespace System.Windows.Forms
                 shim = new HtmlElement.HtmlElementShim(element);
                 htmlElementShims[element] = shim;
             }
-            if (shim != null)
+            if (shim is not null)
             {
                 OnShimAdded(shim);
             }
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
 
         internal HtmlDocument.HtmlDocumentShim GetDocumentShim(HtmlDocument document)
         {
-            if (htmlDocumentShims == null)
+            if (htmlDocumentShims is null)
             {
                 return null;
             }
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
 
         internal HtmlElement.HtmlElementShim GetElementShim(HtmlElement element)
         {
-            if (htmlElementShims == null)
+            if (htmlElementShims is null)
             {
                 return null;
             }
@@ -126,7 +126,7 @@ namespace System.Windows.Forms
 
         internal HtmlWindow.HtmlWindowShim GetWindowShim(HtmlWindow window)
         {
-            if (htmlWindowShims == null)
+            if (htmlWindowShims is null)
             {
                 return null;
             }
@@ -139,8 +139,8 @@ namespace System.Windows.Forms
 
         private void OnShimAdded(HtmlShim addedShim)
         {
-            Debug.Assert(addedShim != null, "Why are we calling this with a null shim?");
-            if (addedShim != null)
+            Debug.Assert(addedShim is not null, "Why are we calling this with a null shim?");
+            if (addedShim is not null)
             {
                 if (!(addedShim is HtmlWindow.HtmlWindowShim))
                 {
@@ -158,13 +158,13 @@ namespace System.Windows.Forms
         /// </summary>
         internal void OnWindowUnloaded(HtmlWindow unloadedWindow)
         {
-            Debug.Assert(unloadedWindow != null, "Why are we calling this with a null window?");
-            if (unloadedWindow != null)
+            Debug.Assert(unloadedWindow is not null, "Why are we calling this with a null window?");
+            if (unloadedWindow is not null)
             {
                 //
                 // prune documents
                 //
-                if (htmlDocumentShims != null)
+                if (htmlDocumentShims is not null)
                 {
                     HtmlDocument.HtmlDocumentShim[] shims = new HtmlDocument.HtmlDocumentShim[htmlDocumentShims.Count];
                     htmlDocumentShims.Values.CopyTo(shims, 0);
@@ -181,7 +181,7 @@ namespace System.Windows.Forms
                 //
                 // prune elements
                 //
-                if (htmlElementShims != null)
+                if (htmlElementShims is not null)
                 {
                     HtmlElement.HtmlElementShim[] shims = new HtmlElement.HtmlElementShim[htmlElementShims.Count];
                     htmlElementShims.Values.CopyTo(shims, 0);
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
                 //
                 // prune the particular window from the list.
                 //
-                if (htmlWindowShims != null)
+                if (htmlWindowShims is not null)
                 {
                     if (htmlWindowShims.ContainsKey(unloadedWindow))
                     {
@@ -220,14 +220,14 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (htmlElementShims != null)
+                if (htmlElementShims is not null)
                 {
                     foreach (HtmlElement.HtmlElementShim shim in htmlElementShims.Values)
                     {
                         shim.Dispose();
                     }
                 }
-                if (htmlDocumentShims != null)
+                if (htmlDocumentShims is not null)
                 {
                     foreach (HtmlDocument.HtmlDocumentShim shim in htmlDocumentShims.Values)
                     {
@@ -235,7 +235,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (htmlWindowShims != null)
+                if (htmlWindowShims is not null)
                 {
                     foreach (HtmlWindow.HtmlWindowShim shim in htmlWindowShims.Values)
                     {

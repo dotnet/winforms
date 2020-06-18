@@ -53,13 +53,13 @@ namespace System.Windows.Forms.Internal
             // y-coord of lower-right corner of rectangle
             HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
-            if (pen != null)
+            if (pen is not null)
             {
                 // 1. Select the pen in the DC
                 Gdi32.SelectObject(hdc, new HandleRef(pen, pen.HPen));
             }
 
-            if (brush != null)
+            if (brush is not null)
             {
                 Gdi32.SelectObject(hdc, new HandleRef(brush, brush.HBrush));
             }
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.Internal
                 DeviceContext.TextColor = foreColor;
             }
 
-            if (font != null)
+            if (font is not null)
             {
                 DeviceContext.SelectFont(font);
             }
@@ -202,7 +202,7 @@ namespace System.Windows.Forms.Internal
 
             WindowsFont? tmpfont = font;
 
-            if (tmpfont == null)
+            if (tmpfont is null)
             {
                 tmpfont = DeviceContext.Font;
             }
@@ -272,7 +272,7 @@ namespace System.Windows.Forms.Internal
             }
 
             Size size = new Size();
-            if (font != null)
+            if (font is not null)
             {
                 DeviceContext.SelectFont(font);
             }
@@ -281,7 +281,7 @@ namespace System.Windows.Forms.Internal
 
             // Unselect, but not from Measurement DC as it keeps the same
             // font selected for perf reasons.
-            if (font != null && !MeasurementDCInfo.IsMeasurementDC(DeviceContext))
+            if (font is not null && !MeasurementDCInfo.IsMeasurementDC(DeviceContext))
             {
                 DeviceContext.ResetFont();
             }
@@ -358,7 +358,7 @@ namespace System.Windows.Forms.Internal
             }
 
             var rect = new RECT(0, 0, proposedSize.Width, proposedSize.Height);
-            if (font != null)
+            if (font is not null)
             {
                 DeviceContext.SelectFont(font);
             }
@@ -448,11 +448,11 @@ namespace System.Windows.Forms.Internal
 
         public void DrawRectangle(WindowsPen pen, int x, int y, int width, int height)
         {
-            Debug.Assert(pen != null, "pen == null");
+            Debug.Assert(pen is not null, "pen == null");
 
             HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
 
-            if (pen != null)
+            if (pen is not null)
             {
                 DeviceContext.SelectObject(pen.HPen, GdiObjectType.Pen);
             }
@@ -484,7 +484,7 @@ namespace System.Windows.Forms.Internal
 
         public void FillRectangle(WindowsBrush brush, int x, int y, int width, int height)
         {
-            Debug.Assert(brush != null, "brush == null");
+            Debug.Assert(brush is not null, "brush == null");
             var rect = new RECT(x, y, x + width, y + height);
             User32.FillRect(
                 new HandleRef(DeviceContext, DeviceContext.Hdc),
@@ -519,7 +519,7 @@ namespace System.Windows.Forms.Internal
                 bckMode = DeviceContext.SetBackgroundMode(Gdi32.BKMODE.TRANSPARENT);
             }
 
-            if (pen != null)
+            if (pen is not null)
             {
                 DeviceContext.SelectObject(pen.HPen, GdiObjectType.Pen);
             }

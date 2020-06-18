@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design
     {
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (context?.Instance == null || provider == null)
+            if (context?.Instance is null || provider is null)
             {
                 return value;
             }
@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design
             }
 
             MaskedTextBox maskedTextBox = context.Instance as MaskedTextBox;
-            if (maskedTextBox == null)
+            if (maskedTextBox is null)
             {
                 maskedTextBox = new MaskedTextBox();
                 maskedTextBox.Text = value as string;
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
             MaskedTextBoxTextEditorDropDown dropDown = new MaskedTextBoxTextEditorDropDown(maskedTextBox);
             editorService.DropDownControl(dropDown);
 
-            if (dropDown.Value != null)
+            if (dropDown.Value is not null)
             {
                 value = dropDown.Value;
             }
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
-            if (context != null && context.Instance != null)
+            if (context is not null && context.Instance is not null)
             {
                 return UITypeEditorEditStyle.DropDown;
             }
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Design
 
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
-            if (context != null && context.Instance != null)
+            if (context is not null && context.Instance is not null)
             {
                 return false;
             }

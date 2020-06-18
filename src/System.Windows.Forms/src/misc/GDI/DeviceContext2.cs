@@ -87,15 +87,15 @@ namespace System.Windows.Forms.Internal
                 if (MeasurementDCInfo.IsMeasurementDC(this))
                 {
                     WindowsFont? font = MeasurementDCInfo.LastUsedFont;
-                    if (font != null && (font.Hfont != IntPtr.Zero))
+                    if (font is not null && (font.Hfont != IntPtr.Zero))
                     {
 #if DEBUG
                         WindowsFont currentDCFont = WindowsFont.FromHdc(Hdc);
                         if (!font.Equals(currentDCFont))
                         {
                             // just use the face name, as ToString will call here re-entrantly.
-                            string lastUsedFontInfo = (font != null) ? font.Name : "null";
-                            string currentFontInfo = (currentDCFont != null) ? currentDCFont.Name : "null";
+                            string lastUsedFontInfo = (font is not null) ? font.Name : "null";
+                            string currentFontInfo = (currentDCFont is not null) ? currentDCFont.Name : "null";
                             Debug.Fail($"Font does not match... Current: {currentFontInfo} Last known: {lastUsedFontInfo}");
                         }
 
@@ -124,7 +124,7 @@ namespace System.Windows.Forms.Internal
                 DeviceContexts.RemoveDeviceContext(this);
             }
 
-            if (ActiveFont != null && ActiveFont.Hfont != IntPtr.Zero)
+            if (ActiveFont is not null && ActiveFont.Hfont != IntPtr.Zero)
             {
                 IntPtr hCurrentFont = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_FONT);
                 if (hCurrentFont == ActiveFont.Hfont)
@@ -162,7 +162,7 @@ namespace System.Windows.Forms.Internal
             // the measurement DC always leaves fonts selected for pref reasons.
             // in this case, we need to diposse the font since the original
             // creator didn't fully dispose.
-            if (previousFont != null)
+            if (previousFont is not null)
             {
                 if (MeasurementDCInfo.IsMeasurementDC(this))
                 {
@@ -204,7 +204,7 @@ namespace System.Windows.Forms.Internal
 
         public bool IsFontOnContextStack(WindowsFont wf)
         {
-            if (_contextStack == null)
+            if (_contextStack is null)
             {
                 return false;
             }

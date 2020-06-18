@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Internal
             string familyName = font.FontFamily.Name;
 
             // Strip vertical-font mark from the name if needed.
-            if (familyName != null && familyName.Length > 1 && familyName[0] == '@')
+            if (familyName is not null && familyName.Length > 1 && familyName[0] == '@')
             {
                 familyName = familyName.Substring(1);
             }
@@ -387,7 +387,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public static Gdi32.QUALITY WindowsFontQualityFromTextRenderingHint(Graphics? g)
         {
-            if (g == null)
+            if (g is null)
             {
                 return Gdi32.QUALITY.DEFAULT;
             }

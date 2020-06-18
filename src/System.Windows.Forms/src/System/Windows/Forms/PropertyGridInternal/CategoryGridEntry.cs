@@ -27,10 +27,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 #if DEBUG
             for (int n = 0; n < childGridEntries.Length; n++)
             {
-                Debug.Assert(childGridEntries[n] != null, "Null item in category subproperty list");
+                Debug.Assert(childGridEntries[n] is not null, "Null item in category subproperty list");
             }
 #endif
-            if (categoryStates == null)
+            if (categoryStates is null)
             {
                 categoryStates = new Hashtable();
             }
@@ -75,13 +75,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (disposing)
             {
-                if (backBrush != null)
+                if (backBrush is not null)
                 {
                     backBrush.Dispose();
                     backBrush = null;
                 }
 
-                if (ChildCollection != null)
+                if (ChildCollection is not null)
                 {
                     ChildCollection = null;
                 }
@@ -347,19 +347,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     var parent = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
-                    if (parent == null)
+                    if (parent is null)
                     {
                         return -1;
                     }
 
                     var gridView = parent.Owner as PropertyGridView;
-                    if (gridView == null || gridView.OwnerGrid == null || !gridView.OwnerGrid.SortedByCategories)
+                    if (gridView is null || gridView.OwnerGrid is null || !gridView.OwnerGrid.SortedByCategories)
                     {
                         return -1;
                     }
 
                     var topLevelGridEntries = gridView.TopLevelGridEntries;
-                    if (topLevelGridEntries == null)
+                    if (topLevelGridEntries is null)
                     {
                         return -1;
                     }

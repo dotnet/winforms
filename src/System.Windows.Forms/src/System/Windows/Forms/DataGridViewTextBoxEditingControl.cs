@@ -99,7 +99,7 @@ namespace System.Windows.Forms
 
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
-            if (dataGridViewCellStyle == null)
+            if (dataGridViewCellStyle is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewCellStyle));
             }
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
                 BackColor = opaqueBackColor;
 
-                if (dataGridView != null)
+                if (dataGridView is not null)
                 {
                     dataGridView.EditingPanel.BackColor = opaqueBackColor;
                 }
@@ -342,7 +342,7 @@ namespace System.Windows.Forms
             get
             {
                 string name = Owner.AccessibleName;
-                if (name != null)
+                if (name is not null)
                 {
                     return name;
                 }

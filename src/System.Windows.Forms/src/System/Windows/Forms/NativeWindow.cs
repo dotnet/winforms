@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                 {
                     uint id = User32.GetWindowThreadProcessId(handle, out uint lpdwProcessId);
                     Application.ThreadContext ctx = Application.ThreadContext.FromId(id);
-                    IntPtr threadHandle = (ctx == null ? IntPtr.Zero : ctx.GetHandle());
+                    IntPtr threadHandle = (ctx is null ? IntPtr.Zero : ctx.GetHandle());
 
                     if (threadHandle != IntPtr.Zero)
                     {
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
                         if (oldRoot.Target is NativeWindow target)
                         {
                             window.PreviousWindow = target;
-                            Debug.Assert(window.PreviousWindow._nextWindow == null, "Last window in chain should have null next ptr");
+                            Debug.Assert(window.PreviousWindow._nextWindow is null, "Last window in chain should have null next ptr");
                             window.PreviousWindow._nextWindow = window;
                         }
                         oldRoot.Free();
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (_weakThisPtr.IsAlive && _weakThisPtr.Target != null)
+                if (_weakThisPtr.IsAlive && _weakThisPtr.Target is not null)
                 {
                     WndProc(ref m);
                 }
@@ -452,7 +452,7 @@ namespace System.Windows.Forms
                                 // CreateWindowEx throws if WindowText is greater than the max
                                 // length of a 16 bit int (32767).
                                 // If it exceeds the max, we should take the substring....
-                                if (cp.Caption != null && cp.Caption.Length > short.MaxValue)
+                                if (cp.Caption is not null && cp.Caption.Length > short.MaxValue)
                                 {
                                     cp.Caption = cp.Caption.Substring(0, short.MaxValue);
                                 }
@@ -501,7 +501,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DefWndProc(ref Message m)
         {
-            if (PreviousWindow == null)
+            if (PreviousWindow is null)
             {
                 if (_priorWindowProcHandle == IntPtr.Zero)
                 {
@@ -626,7 +626,7 @@ namespace System.Windows.Forms
                             if (entry.Value.IsAllocated)
                             {
                                 NativeWindow w = (NativeWindow)entry.Value.Target;
-                                if (w != null)
+                                if (w is not null)
                                 {
                                     w.Handle = IntPtr.Zero;
                                 }
@@ -689,7 +689,7 @@ namespace System.Windows.Forms
 
                 Handle = IntPtr.Zero;
 
-                if (_weakThisPtr.IsAlive && _weakThisPtr.Target != null)
+                if (_weakThisPtr.IsAlive && _weakThisPtr.Target is not null)
                 {
                     // We're not already finalizing.
                     OnHandleChange();
@@ -712,20 +712,20 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (window.PreviousWindow != null)
+                if (window.PreviousWindow is not null)
                 {
                     // Connect the prior window directly to the next window (if any)
                     window.PreviousWindow._nextWindow = window._nextWindow;
                 }
 
-                if (window._nextWindow != null)
+                if (window._nextWindow is not null)
                 {
                     // Connect the next window to the prior window
                     window._nextWindow._priorWindowProcHandle = window._priorWindowProcHandle;
                     window._nextWindow.PreviousWindow = window.PreviousWindow;
                 }
 
-                if (window._nextWindow == null)
+                if (window._nextWindow is null)
                 {
                     // We're the last NativeWindow for this HWND, remove the key or reassign
                     // the value to the prior NativeWindow if it exists.
@@ -735,7 +735,7 @@ namespace System.Windows.Forms
                         root.Free();
                     }
 
-                    if (window.PreviousWindow != null)
+                    if (window.PreviousWindow is not null)
                     {
                         s_windowHandles[handle] = GCHandle.Alloc(window.PreviousWindow, GCHandleType.Weak);
                     }
@@ -836,7 +836,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void UnSubclass()
         {
-            bool finalizing = (!_weakThisPtr.IsAlive || _weakThisPtr.Target == null);
+            bool finalizing = (!_weakThisPtr.IsAlive || _weakThisPtr.Target is null);
 
             // Don't touch if the current window proc is not ours.
 
@@ -845,7 +845,7 @@ namespace System.Windows.Forms
             {
                 // The current window proc is ours
 
-                if (PreviousWindow == null)
+                if (PreviousWindow is null)
                 {
                     // This is the first NativeWindow registered for this HWND, just put back the prior handle we stashed away.
                     User32.SetWindowLong(this, User32.GWL.WNDPROC, _priorWindowProcHandle);
@@ -882,7 +882,7 @@ namespace System.Windows.Forms
                 // If we find previouswindow pointing to us, then we can let RemoveWindowFromTable reassign the
                 // defwndproc pointers properly when this guy gets removed (thereby unsubclassing ourselves)
 
-                if (_nextWindow == null || _nextWindow._priorWindowProcHandle != _windowProcHandle)
+                if (_nextWindow is null || _nextWindow._priorWindowProcHandle != _windowProcHandle)
                 {
                     // we didn't find it... let's unhook anyway and cut the chain... this prevents crashes
                     User32.SetWindowLong(this, User32.GWL.WNDPROC, DefaultWindowProc);

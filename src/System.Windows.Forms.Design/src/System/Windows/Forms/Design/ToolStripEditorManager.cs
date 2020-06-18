@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Design
             if (item != _currentItem)
             {
                 // Remove old editor
-                if (_editor != null)
+                if (_editor is not null)
                 {
                     _behaviorService.AdornerWindowControl.Controls.Remove(_editor);
                     _behaviorService.Invalidate(_editor.Bounds);
@@ -58,22 +58,22 @@ namespace System.Windows.Forms.Design
                     _itemDesigner.IsEditorActive = false;
 
                     // Show the previously edited glyph
-                    if (_currentItem != null)
+                    if (_currentItem is not null)
                     {
                         _currentItem = null;
                     }
                 }
-                if (item != null)
+                if (item is not null)
                 {
                     // Add new editor from the item...
                     _currentItem = item;
-                    if (_designerHost != null)
+                    if (_designerHost is not null)
                     {
                         _itemDesigner = (ToolStripItemDesigner)_designerHost.GetDesigner(_currentItem);
                     }
                     _editorUI = (ToolStripTemplateNode)_itemDesigner.Editor;
                     // If we got an editor, position and focus it.
-                    if (_editorUI != null)
+                    if (_editorUI is not null)
                     {
                         // Hide this glyph while it's being edited
                         _itemDesigner.IsEditorActive = true;
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Design
         {
             // THIS IS CURRENTLY DISABLE !!!!! TO DO !! SHOULD WE SUPPORT AUTOSIZED INSITU ?????
             _behaviorService.Invalidate(_lastKnownEditorBounds);
-            if (_editor != null)
+            if (_editor is not null)
             {
                 _lastKnownEditorBounds = _editor.Bounds;
             }

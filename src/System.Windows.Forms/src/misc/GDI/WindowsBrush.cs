@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Internal
 
         protected virtual void Dispose(bool disposing)
         {
-            if (DC != null && _nativeHandle != IntPtr.Zero)
+            if (DC is not null && _nativeHandle != IntPtr.Zero)
             {
                 DC.DeleteObject(_nativeHandle, GdiObjectType.Brush);
 

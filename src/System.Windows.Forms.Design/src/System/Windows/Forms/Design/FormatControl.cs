@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Design
             {
                 FormatTypeClass formatType = formatTypeListBox.SelectedItem as FormatTypeClass;
 
-                if (formatType != null)
+                if (formatType is not null)
                 {
                     return formatType.ToString();
                 }
@@ -246,7 +246,7 @@ namespace System.Windows.Forms.Design
 
         private void UpdateControlVisibility(FormatTypeClass formatType)
         {
-            if (formatType == null)
+            if (formatType is null)
             {
                 explanationLabel.Visible = false;
                 sampleLabel.Visible = false;
@@ -440,11 +440,11 @@ namespace System.Windows.Forms.Design
             FormatStringDialog fsd = null;
             Control ctl = Parent;
 
-            while (ctl != null)
+            while (ctl is not null)
             {
                 fsd = ctl as FormatStringDialog;
 
-                if (fsd != null)
+                if (fsd is not null)
                 {
                     break;
                 }
@@ -452,7 +452,7 @@ namespace System.Windows.Forms.Design
                 ctl = ctl.Parent;
             }
 
-            if (fsd != null)
+            if (fsd is not null)
             {
                 fsd.FormatControlFinishedLoading();
             }
@@ -866,7 +866,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (_owner.dateTimeFormatsListBox.SelectedItem == null)
+                    if (_owner.dateTimeFormatsListBox.SelectedItem is null)
                     {
                         return "";
                     }

@@ -14,7 +14,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
         {
             var user = new User();
             Assert.Equal(System.Threading.Thread.CurrentPrincipal, user.CurrentPrincipal);
-            if (user.CurrentPrincipal != null)
+            if (user.CurrentPrincipal is not null)
             {
                 Assert.Equal(System.Threading.Thread.CurrentPrincipal.Identity.Name, user.Name);
                 Assert.Equal(System.Threading.Thread.CurrentPrincipal.Identity.IsAuthenticated, user.IsAuthenticated);

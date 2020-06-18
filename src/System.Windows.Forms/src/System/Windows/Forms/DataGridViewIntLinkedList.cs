@@ -30,7 +30,7 @@ namespace System.Windows.Forms
 
         public DataGridViewIntLinkedList(DataGridViewIntLinkedList source)
         {
-            Debug.Assert(source != null);
+            Debug.Assert(source is not null);
             int elements = source.Count;
             for (int element = 0; element < elements; element++)
             {
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(headElement != null);
+                Debug.Assert(headElement is not null);
                 return headElement.Int;
             }
         }
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
         public void Add(int integer)
         {
             DataGridViewIntLinkedListElement newHead = new DataGridViewIntLinkedListElement(integer);
-            if (headElement != null)
+            if (headElement is not null)
             {
                 newHead.Next = headElement;
             }
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         {
             int index = 0;
             DataGridViewIntLinkedListElement tmp = headElement;
-            while (tmp != null)
+            while (tmp is not null)
             {
                 if (tmp.Int == integer)
                 {
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
         public bool Remove(int integer)
         {
             DataGridViewIntLinkedListElement tmp1 = null, tmp2 = headElement;
-            while (tmp2 != null)
+            while (tmp2 is not null)
             {
                 if (tmp2.Int == integer)
                 {
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
             if (tmp2.Int == integer)
             {
                 DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
-                if (tmp1 == null)
+                if (tmp1 is null)
                 {
                     headElement = tmp3;
                 }
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
                 index--;
             }
             DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
-            if (tmp1 == null)
+            if (tmp1 is null)
             {
                 headElement = tmp3;
             }
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(current != null); // Since this is for internal use only.
+                Debug.Assert(current is not null); // Since this is for internal use only.
                 return current.Int;
             }
         }
@@ -230,16 +230,16 @@ namespace System.Windows.Forms
         {
             if (reset)
             {
-                Debug.Assert(current == null);
+                Debug.Assert(current is null);
                 current = headElement;
                 reset = false;
             }
             else
             {
-                Debug.Assert(current != null); // Since this is for internal use only.
+                Debug.Assert(current is not null); // Since this is for internal use only.
                 current = current.Next;
             }
-            return (current != null);
+            return (current is not null);
         }
 
         void IEnumerator.Reset()

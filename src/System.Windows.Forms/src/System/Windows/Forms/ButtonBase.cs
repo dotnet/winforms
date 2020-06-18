@@ -98,7 +98,7 @@ namespace System.Windows.Forms
                 SetFlag(FlagAutoEllipsis, value);
                 if (value)
                 {
-                    if (textToolTip == null)
+                    if (textToolTip is null)
                     {
                         textToolTip = new ToolTip();
                     }
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (flatAppearance == null)
+                if (flatAppearance is null)
                 {
                     flatAppearance = new FlatButtonAppearance(this);
                 }
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (image == null && imageList != null)
+                if (image is null && imageList is not null)
                 {
                     int actualIndex = imageIndex.ActualIndex;
 
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
                     {
                         return imageList.Images[actualIndex];
                     }
-                    Debug.Assert(image == null, "We expect to be returning null.");
+                    Debug.Assert(image is null, "We expect to be returning null.");
                 }
                 return image;
             }
@@ -353,7 +353,7 @@ namespace System.Windows.Forms
                 StopAnimate();
 
                 image = value;
-                if (image != null)
+                if (image is not null)
                 {
                     ImageIndex = ImageList.Indexer.DefaultIndex;
                     ImageList = null;
@@ -408,7 +408,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndex.Index != ImageList.Indexer.DefaultIndex && imageList != null && imageIndex.Index >= imageList.Images.Count)
+                if (imageIndex.Index != ImageList.Indexer.DefaultIndex && imageList is not null && imageIndex.Index >= imageList.Images.Count)
                 {
                     return imageList.Images.Count - 1;
                 }
@@ -462,7 +462,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value != null)
+                if (value is not null)
                 {
                     // Image.set calls ImageIndex = -1
                     image = null;
@@ -499,7 +499,7 @@ namespace System.Windows.Forms
 
                 // Detach old event handlers
                 //
-                if (imageList != null)
+                if (imageList is not null)
                 {
                     imageList.RecreateHandle -= recreateHandler;
                     imageList.Disposed -= disposedHandler;
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
 
                 // Make sure we don't have an Image as well as an ImageList
                 //
-                if (value != null)
+                if (value is not null)
                 {
                     image = null; // Image.set calls ImageList = null
                 }
@@ -517,7 +517,7 @@ namespace System.Windows.Forms
 
                 // Wire up new event handlers
                 //
-                if (value != null)
+                if (value is not null)
                 {
                     value.RecreateHandle += recreateHandler;
                     value.Disposed += disposedHandler;
@@ -743,7 +743,7 @@ namespace System.Windows.Forms
 
         private void Animate()
         {
-            Animate(!DesignMode && Visible && Enabled && ParentInternal != null);
+            Animate(!DesignMode && Visible && Enabled && ParentInternal is not null);
         }
 
         private void StopAnimate()
@@ -757,7 +757,7 @@ namespace System.Windows.Forms
             {
                 if (animate)
                 {
-                    if (image != null)
+                    if (image is not null)
                     {
                         ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
@@ -765,7 +765,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (image != null)
+                    if (image is not null)
                     {
                         ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
@@ -789,12 +789,12 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 StopAnimate();
-                if (imageList != null)
+                if (imageList is not null)
                 {
                     imageList.Disposed -= new EventHandler(DetachImageList);
                 }
                 //Dipose the tooltip if one present..
-                if (textToolTip != null)
+                if (textToolTip is not null)
                 {
                     textToolTip.Dispose();
                     textToolTip = null;
@@ -846,7 +846,7 @@ namespace System.Windows.Forms
         {
             SetFlag(FlagMouseOver, true);
             Invalidate();
-            if (!DesignMode && AutoEllipsis && ShowToolTip && textToolTip != null)
+            if (!DesignMode && AutoEllipsis && ShowToolTip && textToolTip is not null)
             {
                 textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
             }
@@ -861,7 +861,7 @@ namespace System.Windows.Forms
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             SetFlag(FlagMouseOver, false);
-            if (textToolTip != null)
+            if (textToolTip is not null)
             {
                 textToolTip.Hide(this);
             }
@@ -975,7 +975,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_adapter == null || FlatStyle != _cachedAdapterType)
+                if (_adapter is null || FlatStyle != _cachedAdapterType)
                 {
                     switch (FlatStyle)
                     {
@@ -1019,7 +1019,7 @@ namespace System.Windows.Forms
 
         internal virtual StringFormat CreateStringFormat()
         {
-            if (Adapter == null)
+            if (Adapter is null)
             {
                 Debug.Fail("Adapter not expected to be null at this point");
                 return new StringFormat();
@@ -1029,7 +1029,7 @@ namespace System.Windows.Forms
 
         internal virtual TextFormatFlags CreateTextFormatFlags()
         {
-            if (Adapter == null)
+            if (Adapter is null)
             {
                 Debug.Fail("Adapter not expected to be null at this point");
                 return TextFormatFlags.Default;
@@ -1194,7 +1194,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeImage()
         {
-            return image != null;
+            return image is not null;
         }
 
         private void UpdateOwnerDraw()

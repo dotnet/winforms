@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Design
                 return value;
             }
 
-            if (_shortcutKeysUI == null)
+            if (_shortcutKeysUI is null)
             {
                 _shortcutKeysUI = new ShortcutKeysUI(this)
                 {
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
             _shortcutKeysUI.Start(edSvc, value);
             edSvc.DropDownControl(_shortcutKeysUI);
 
-            if (_shortcutKeysUI.Value != null)
+            if (_shortcutKeysUI.Value is not null)
             {
                 value = _shortcutKeysUI.Value;
             }
@@ -142,12 +142,12 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (keysConverter == null)
+                    if (keysConverter is null)
                     {
                         keysConverter = TypeDescriptor.GetConverter(typeof(Keys));
                     }
 
-                    Debug.Assert(keysConverter != null);
+                    Debug.Assert(keysConverter is not null);
                     return keysConverter;
                 }
             }
@@ -432,7 +432,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
-                Debug.Assert(edSvc != null);
+                Debug.Assert(edSvc is not null);
                 Debug.Assert(!updateCurrentValue);
                 EditorService = edSvc;
                 originalValue = currentValue = value;

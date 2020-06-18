@@ -125,7 +125,7 @@ namespace System.Windows.Forms
         /// </summary>
         public MaskedTextBox(string mask)
         {
-            if (mask == null)
+            if (mask is null)
             {
                 throw new ArgumentNullException();
             }
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
         /// </summary>
         public MaskedTextBox(MaskedTextProvider maskedTextProvider)
         {
-            if (maskedTextProvider == null)
+            if (maskedTextProvider is null)
             {
                 throw new ArgumentNullException();
             }
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void Initialize(MaskedTextProvider maskedTextProvider)
         {
-            Debug.Assert(maskedTextProvider != null, "Initializing from a null MaskProvider ref.");
+            Debug.Assert(maskedTextProvider is not null, "Initializing from a null MaskProvider ref.");
 
             this.maskedTextProvider = maskedTextProvider;
 
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException();
                 }
@@ -730,8 +730,8 @@ namespace System.Windows.Forms
                     maskedTextProvider.PasswordChar,
                     maskedTextProvider.AsciiOnly);
 
-                //text == null when setting to a different mask value or when resetting the mask to null.
-                //text != null only when setting the mask from null to some value.
+                //text is null when setting to a different mask value or when resetting the mask to null.
+                //text is not null only when setting the mask from null to some value.
                 SetMaskedTextProvider(newProvider, text);
             }
         }
@@ -1352,7 +1352,7 @@ namespace System.Windows.Forms
                     IncludeLiterals = include;
                 }
 
-                if (oldText != null && oldText != TextOutput)
+                if (oldText is not null && oldText != TextOutput)
                 {
                     OnTextChanged(EventArgs.Empty);
                 }
@@ -2146,7 +2146,7 @@ namespace System.Windows.Forms
         private void Replace(string text, int startPosition, int selectionLen)
         {
             Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
-            Debug.Assert(text != null, "text is null.");
+            Debug.Assert(text is not null, "text is null.");
 
             // Clone the MaskedTextProvider so text properties are not modified until the paste operation is
             // completed.  This is needed in case one of these properties is retreived in a MaskedInputRejected
@@ -2302,7 +2302,7 @@ namespace System.Windows.Forms
         {
             object parseRetVal = null;
 
-            if (validatingType != null)
+            if (validatingType is not null)
             {
                 string message = null;
 
@@ -2342,7 +2342,7 @@ namespace System.Windows.Forms
                             throw;
                         }
 
-                        if (exception.InnerException != null) // Outer exception is a generic TargetInvocationException.
+                        if (exception.InnerException is not null) // Outer exception is a generic TargetInvocationException.
                         {
                             exception = exception.InnerException;
                         }
@@ -2352,7 +2352,7 @@ namespace System.Windows.Forms
                 }
 
                 bool isValidInput = false;
-                if (message == null)
+                if (message is null)
                 {
                     isValidInput = true;
                     message = SR.MaskedTextBoxTypeValidationSucceeded;
@@ -2361,7 +2361,7 @@ namespace System.Windows.Forms
                 TypeValidationEventArgs tve = new TypeValidationEventArgs(validatingType, isValidInput, parseRetVal, message);
                 OnTypeValidationCompleted(tve);
 
-                if (e != null)
+                if (e is not null)
                 {
                     e.Cancel = tve.Cancel;
                 }
@@ -2497,7 +2497,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetMaskedTextProvider(MaskedTextProvider newProvider, string textOnInitializingMask)
         {
-            Debug.Assert(newProvider != null, "Initializing from a null MaskProvider ref.");
+            Debug.Assert(newProvider is not null, "Initializing from a null MaskProvider ref.");
 
             // Set R/W properties.
             newProvider.IncludePrompt = maskedTextProvider.IncludePrompt;
@@ -2508,7 +2508,7 @@ namespace System.Windows.Forms
 
             // If mask not initialized and not initializing it, the new provider is just a property backend.
             // Change won't have any effect in text.
-            if (flagState[IS_NULL_MASK] && textOnInitializingMask == null)
+            if (flagState[IS_NULL_MASK] && textOnInitializingMask is null)
             {
                 maskedTextProvider = newProvider;
                 return;
@@ -2528,7 +2528,7 @@ namespace System.Windows.Forms
 
             // NOTE: Whenever changing the MTP, the text is lost if any character in the old text violates the new provider's mask.
 
-            if (textOnInitializingMask != null) // Changing Mask (from null), which is the only RO property that requires passing text.
+            if (textOnInitializingMask is not null) // Changing Mask (from null), which is the only RO property that requires passing text.
             {
                 oldText = textOnInitializingMask;
                 raiseOnMaskInputRejected = !newProvider.Set(textOnInitializingMask, out testPos, out hint);
@@ -2606,7 +2606,7 @@ namespace System.Windows.Forms
 
             EventArgs e = EventArgs.Empty;
 
-            if (textOnInitializingMask != null /*changing mask from null*/ || oldProvider.Mask != newProvider.Mask)
+            if (textOnInitializingMask is not null /*changing mask from null*/ || oldProvider.Mask != newProvider.Mask)
             {
                 OnMaskChanged(e);
             }

@@ -168,7 +168,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (columnName == null)
+                if (columnName is null)
                 {
                     throw new ArgumentNullException(nameof(columnName));
                 }
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int Add(DataGridViewColumn dataGridViewColumn)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             if (DataGridView.NoDimensionChangeAllowed)
             {
                 throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
@@ -244,19 +244,19 @@ namespace System.Windows.Forms
             DataGridView.OnAddedColumn(dataGridViewColumn);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewColumn), false /*changeIsInsertion*/, new Point(-1, -1));
 #if DEBUG
-            Debug.Assert(itemsSorted == null || VerifyColumnOrderCache());
+            Debug.Assert(itemsSorted is null || VerifyColumnOrderCache());
 #endif
             return index;
         }
 
         public virtual void AddRange(params DataGridViewColumn[] dataGridViewColumns)
         {
-            if (dataGridViewColumns == null)
+            if (dataGridViewColumns is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumns));
             }
 
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             if (DataGridView.NoDimensionChangeAllowed)
             {
                 throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
@@ -335,7 +335,7 @@ namespace System.Windows.Forms
 
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null), false /*changeIsInsertion*/, new Point(-1, -1));
 #if DEBUG
-            Debug.Assert(itemsSorted == null || VerifyColumnOrderCache());
+            Debug.Assert(itemsSorted is null || VerifyColumnOrderCache());
 #endif
         }
 
@@ -380,7 +380,7 @@ namespace System.Windows.Forms
                 }
                 OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null), false /*changeIsInsertion*/, new Point(-1, -1));
 #if DEBUG
-                Debug.Assert(itemsSorted == null || VerifyColumnOrderCache());
+                Debug.Assert(itemsSorted is null || VerifyColumnOrderCache());
 #endif
             }
         }
@@ -390,7 +390,7 @@ namespace System.Windows.Forms
             // map the column index to the actual display index
             DataGridViewColumn dataGridViewColumn = GetFirstColumn(includeFilter);
             int actualDisplayIndex = 0;
-            while (dataGridViewColumn != null && dataGridViewColumn.Index != columnIndex)
+            while (dataGridViewColumn is not null && dataGridViewColumn.Index != columnIndex)
             {
                 dataGridViewColumn = GetNextColumn(dataGridViewColumn, includeFilter, DataGridViewElementStates.None);
                 actualDisplayIndex++;
@@ -408,7 +408,7 @@ namespace System.Windows.Forms
 
         public virtual bool Contains(string columnName)
         {
-            if (columnName == null)
+            if (columnName is null)
             {
                 throw new ArgumentNullException(nameof(columnName));
             }
@@ -537,7 +537,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewColumn = GetNextColumn(dataGridViewColumn, includeFilter,
                     DataGridViewElementStates.None);
-                Debug.Assert(dataGridViewColumn != null);
+                Debug.Assert(dataGridViewColumn is not null);
                 if (dataGridViewColumn.StateIncludes(includeFilter))
                 {
                     jumpColumns++;
@@ -548,8 +548,8 @@ namespace System.Windows.Forms
 
         private int GetColumnSortedIndex(DataGridViewColumn dataGridViewColumn)
         {
-            Debug.Assert(dataGridViewColumn != null);
-            Debug.Assert(itemsSorted != null);
+            Debug.Assert(dataGridViewColumn is not null);
+            Debug.Assert(itemsSorted is not null);
             Debug.Assert(lastAccessedSortedIndex == -1 ||
                 lastAccessedSortedIndex < Count);
 
@@ -646,7 +646,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
             }
 
-            if (itemsSorted == null)
+            if (itemsSorted is null)
             {
                 UpdateColumnOrderCache();
             }
@@ -685,7 +685,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
             }
 
-            if (itemsSorted == null)
+            if (itemsSorted is null)
             {
                 UpdateColumnOrderCache();
             }
@@ -721,7 +721,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
             }
 
-            if (itemsSorted == null)
+            if (itemsSorted is null)
             {
                 UpdateColumnOrderCache();
             }
@@ -747,7 +747,7 @@ namespace System.Windows.Forms
                                                 DataGridViewElementStates includeFilter,
                                                 DataGridViewElementStates excludeFilter)
         {
-            if (dataGridViewColumnStart == null)
+            if (dataGridViewColumnStart is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumnStart));
             }
@@ -762,7 +762,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
             }
 
-            if (itemsSorted == null)
+            if (itemsSorted is null)
             {
                 UpdateColumnOrderCache();
             }
@@ -818,7 +818,7 @@ namespace System.Windows.Forms
                                                              DataGridViewElementStates includeFilter,
                                                              DataGridViewElementStates excludeFilter)
         {
-            if (dataGridViewColumnStart == null)
+            if (dataGridViewColumnStart is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumnStart));
             }
@@ -833,7 +833,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
             }
 
-            if (itemsSorted == null)
+            if (itemsSorted is null)
             {
                 UpdateColumnOrderCache();
             }
@@ -894,7 +894,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void Insert(int columnIndex, DataGridViewColumn dataGridViewColumn)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             if (DataGridView.NoDimensionChangeAllowed)
             {
                 throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
@@ -904,7 +904,7 @@ namespace System.Windows.Forms
                 // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
                 throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
             }
-            if (dataGridViewColumn == null)
+            if (dataGridViewColumn is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumn));
             }
@@ -930,7 +930,7 @@ namespace System.Windows.Forms
             DataGridView.OnInsertedColumn_PreNotification(dataGridViewColumn);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewColumn), true /*changeIsInsertion*/, newCurrentCell);
 #if DEBUG
-            Debug.Assert(itemsSorted == null || VerifyColumnOrderCache());
+            Debug.Assert(itemsSorted is null || VerifyColumnOrderCache());
 #endif
         }
 
@@ -1004,13 +1004,13 @@ namespace System.Windows.Forms
 
         private void OnCollectionChanged_PreNotification(CollectionChangeEventArgs ccea)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             DataGridView.OnColumnCollectionChanged_PreNotification(ccea);
         }
 
         private void OnCollectionChanged_PostNotification(CollectionChangeEventArgs ccea, bool changeIsInsertion, Point newCurrentCell)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)ccea.Element;
             if (ccea.Action == CollectionChangeAction.Add && changeIsInsertion)
             {
@@ -1026,7 +1026,7 @@ namespace System.Windows.Forms
 
         public virtual void Remove(DataGridViewColumn dataGridViewColumn)
         {
-            if (dataGridViewColumn == null)
+            if (dataGridViewColumn is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumn));
             }
@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms
                 {
                     RemoveAt(i);
 #if DEBUG
-                    Debug.Assert(itemsSorted == null || VerifyColumnOrderCache());
+                    Debug.Assert(itemsSorted is null || VerifyColumnOrderCache());
 #endif
                     return;
                 }
@@ -1054,7 +1054,7 @@ namespace System.Windows.Forms
 
         public virtual void Remove(string columnName)
         {
-            if (columnName == null)
+            if (columnName is null)
             {
                 throw new ArgumentNullException(nameof(columnName));
             }
@@ -1094,7 +1094,7 @@ namespace System.Windows.Forms
 
             RemoveAtInternal(index, false /*force*/);
 #if DEBUG
-            Debug.Assert(itemsSorted == null || VerifyColumnOrderCache());
+            Debug.Assert(itemsSorted is null || VerifyColumnOrderCache());
 #endif
         }
 
@@ -1103,7 +1103,7 @@ namespace System.Windows.Forms
             // If force is true, the underlying data is gone and can't be accessed anymore.
 
             Debug.Assert(index >= 0 && index < Count);
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             Debug.Assert(!DataGridView.NoDimensionChangeAllowed);
             Debug.Assert(!DataGridView.InDisplayIndexAdjustments);
 
@@ -1176,7 +1176,7 @@ namespace System.Windows.Forms
         {
             for (int columnDisplayIndex = 0; columnDisplayIndex < items.Count; columnDisplayIndex++)
             {
-                if (GetColumnAtDisplayIndex(columnDisplayIndex) == null)
+                if (GetColumnAtDisplayIndex(columnDisplayIndex) is null)
                 {
                     return false;
                 }
@@ -1186,7 +1186,7 @@ namespace System.Windows.Forms
 
         private bool VerifyColumnOrderCache()
         {
-            if (itemsSorted == null)
+            if (itemsSorted is null)
             {
                 return false;
             }
@@ -1219,14 +1219,14 @@ namespace System.Windows.Forms
 
             public int Compare(object x, object y)
             {
-                Debug.Assert(x != null);
-                Debug.Assert(y != null);
+                Debug.Assert(x is not null);
+                Debug.Assert(y is not null);
 
                 DataGridViewColumn dataGridViewColumn1 = x as DataGridViewColumn;
                 DataGridViewColumn dataGridViewColumn2 = y as DataGridViewColumn;
 
-                Debug.Assert(dataGridViewColumn1 != null);
-                Debug.Assert(dataGridViewColumn2 != null);
+                Debug.Assert(dataGridViewColumn1 is not null);
+                Debug.Assert(dataGridViewColumn2 is not null);
 
                 return dataGridViewColumn1.DisplayIndex - dataGridViewColumn2.DisplayIndex;
             }

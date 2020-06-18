@@ -56,17 +56,17 @@ namespace System.ComponentModel.Design.Serialization
             {
                 TypeConverter modifierConverter = null;
 
-                if (context != null)
+                if (context is not null)
                 {
                     CodeDomProvider provider = (CodeDomProvider)context.GetService(typeof(CodeDomProvider));
 
-                    if (provider != null)
+                    if (provider is not null)
                     {
                         modifierConverter = provider.GetConverter(typeof(MemberAttributes));
                     }
                 }
 
-                if (modifierConverter == null)
+                if (modifierConverter is null)
                 {
                     modifierConverter = TypeDescriptor.GetConverter(typeof(MemberAttributes));
                 }
@@ -107,7 +107,7 @@ namespace System.ComponentModel.Design.Serialization
                 // We restrict the set of standard values to those within the access mask.
                 StandardValuesCollection values = GetConverter(context).GetStandardValues(context);
 
-                if (values != null && values.Count > 0)
+                if (values is not null && values.Count > 0)
                 {
                     bool needMassage = false;
 

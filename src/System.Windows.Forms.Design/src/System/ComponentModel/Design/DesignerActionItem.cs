@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design
 
         public DesignerActionItem(string displayName, string category, string description)
         {
-            DisplayName = displayName == null ? null : Regex.Replace(displayName, @"\(\&.\)", "");
+            DisplayName = displayName is null ? null : Regex.Replace(displayName, @"\(\&.\)", "");
             Category = category;
             Description = description;
         }

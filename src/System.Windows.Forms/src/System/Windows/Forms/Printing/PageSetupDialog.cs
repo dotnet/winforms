@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionPageSetupDialog))]
     public sealed class PageSetupDialog : CommonDialog
     {
-        // If PrintDocument != null, pageSettings == printDocument.PageSettings
+        // If PrintDocument is not null, pageSettings == printDocument.PageSettings
         private PrintDocument _printDocument = null;
         private PageSettings _pageSettings = null;
         private PrinterSettings _printerSettings = null;
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             set
             {
                 _printDocument = value;
-                if (_printDocument != null)
+                if (_printDocument is not null)
                 {
                     _pageSettings = _printDocument.DefaultPageSettings;
                     _printerSettings = _printDocument.PrinterSettings;
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
                 flags |= Comdlg32.PSD.DISABLEPAPER;
             }
 
-            if (!AllowPrinter || _printerSettings == null)
+            if (!AllowPrinter || _printerSettings is null)
             {
                 flags |= Comdlg32.PSD.DISABLEPRINTER;
             }
@@ -197,12 +197,12 @@ namespace System.Windows.Forms
                 flags |= Comdlg32.PSD.NONETWORKBUTTON;
             }
 
-            if (_minMargins != null)
+            if (_minMargins is not null)
             {
                 flags |= Comdlg32.PSD.MINMARGINS;
             }
 
-            if (_pageSettings.Margins != null)
+            if (_pageSettings.Margins is not null)
             {
                 flags |= Comdlg32.PSD.MARGINS;
             }
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
                                            PrinterSettings printerSettings)
         {
             pageSettings.SetHdevmode(data.hDevMode);
-            if (printerSettings != null)
+            if (printerSettings is not null)
             {
                 printerSettings.SetHdevmode(data.hDevMode);
                 printerSettings.SetHdevnames(data.hDevNames);
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
         protected override bool RunDialog(IntPtr hwndOwner)
         {
             var hookProcPtr = new User32.WNDPROCINT(HookProc);
-            if (_pageSettings == null)
+            if (_pageSettings is null)
             {
                 throw new ArgumentException(SR.PSDcantShowWithoutPage);
             }
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (MinMargins != null)
+            if (MinMargins is not null)
             {
                 Margins margins = PrinterUnitConvert.Convert(MinMargins, PrinterUnit.Display, toUnit);
                 data.rtMinMargin.left = margins.Left;
@@ -308,7 +308,7 @@ namespace System.Windows.Forms
                 data.rtMinMargin.bottom = margins.Bottom;
             }
 
-            if (_pageSettings.Margins != null)
+            if (_pageSettings.Margins is not null)
             {
                 Margins margins = PrinterUnitConvert.Convert(_pageSettings.Margins, PrinterUnit.Display, toUnit);
                 data.rtMargin.left = margins.Left;

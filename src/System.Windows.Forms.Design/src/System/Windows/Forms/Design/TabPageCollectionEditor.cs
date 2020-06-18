@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Design
             object instance = base.CreateInstance(itemType);
 
             TabPage tabPage = instance as TabPage;
-            Debug.Assert(tabPage != null);
+            Debug.Assert(tabPage is not null);
             tabPage.UseVisualStyleBackColor = true;
 
             return tabPage;

@@ -67,7 +67,7 @@ namespace System.Windows.Forms
 
             object result = FormatObjectInternal(value, targetType, sourceConverter, targetConverter, formatString, formatInfo, formattedNullValue);
 
-            if (oldTargetType.IsValueType && result == null && !isNullableTargetType)
+            if (oldTargetType.IsValueType && result is null && !isNullableTargetType)
             {
                 throw new FormatException(GetCantConvertMessage(value, targetType));
             }
@@ -91,12 +91,12 @@ namespace System.Windows.Forms
                                                    IFormatProvider formatInfo,
                                                    object formattedNullValue)
         {
-            if (value == System.DBNull.Value || value == null)
+            if (value == System.DBNull.Value || value is null)
             {
                 //
                 // Convert DBNull to the formatted representation of 'null' (if possible)
                 //
-                if (formattedNullValue != null)
+                if (formattedNullValue is not null)
                 {
                     return formattedNullValue;
                 }
@@ -135,13 +135,13 @@ namespace System.Windows.Forms
             //type's TypeConverter.  We're punting the case where the property-provided converter is the same as the type's converter.
             Type sourceType = value.GetType();
             TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverter(sourceType);
-            if (sourceConverter != null && sourceConverter != sourceTypeTypeConverter && sourceConverter.CanConvertTo(targetType))
+            if (sourceConverter is not null && sourceConverter != sourceTypeTypeConverter && sourceConverter.CanConvertTo(targetType))
             {
                 return sourceConverter.ConvertTo(null, GetFormatterCulture(formatInfo), value, targetType);
             }
 
             TypeConverter targetTypeTypeConverter = TypeDescriptor.GetConverter(targetType);
-            if (targetConverter != null && targetConverter != targetTypeTypeConverter && targetConverter.CanConvertFrom(sourceType))
+            if (targetConverter is not null && targetConverter != targetTypeTypeConverter && targetConverter.CanConvertFrom(sourceType))
             {
                 return targetConverter.ConvertFrom(null, GetFormatterCulture(formatInfo), value);
             }
@@ -154,11 +154,11 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (sourceConverter == null)
+                    if (sourceConverter is null)
                     {
                         sourceConverter = sourceTypeTypeConverter;
                     }
-                    if (sourceConverter != null && sourceConverter.CanConvertTo(booleanType))
+                    if (sourceConverter is not null && sourceConverter.CanConvertTo(booleanType))
                     {
                         return (bool)sourceConverter.ConvertTo(null, GetFormatterCulture(formatInfo), value, booleanType)
                             ? CheckState.Checked : CheckState.Unchecked;
@@ -175,12 +175,12 @@ namespace System.Windows.Forms
             // If explicit type converters not provided, supply default ones instead
             //
 
-            if (sourceConverter == null)
+            if (sourceConverter is null)
             {
                 sourceConverter = sourceTypeTypeConverter;
             }
 
-            if (targetConverter == null)
+            if (targetConverter is null)
             {
                 targetConverter = targetTypeTypeConverter;
             }
@@ -189,11 +189,11 @@ namespace System.Windows.Forms
             // Standardized conversions
             //
 
-            if (sourceConverter != null && sourceConverter.CanConvertTo(targetType))
+            if (sourceConverter is not null && sourceConverter.CanConvertTo(targetType))
             {
                 return sourceConverter.ConvertTo(null, GetFormatterCulture(formatInfo), value, targetType);
             }
-            else if (targetConverter != null && targetConverter.CanConvertFrom(sourceType))
+            else if (targetConverter is not null && targetConverter.CanConvertFrom(sourceType))
             {
                 return targetConverter.ConvertFrom(null, GetFormatterCulture(formatInfo), value);
             }
@@ -291,13 +291,13 @@ namespace System.Windows.Forms
             //
 
             TypeConverter targetTypeTypeConverter = TypeDescriptor.GetConverter(targetType);
-            if (targetConverter != null && targetTypeTypeConverter != targetConverter && targetConverter.CanConvertFrom(sourceType))
+            if (targetConverter is not null && targetTypeTypeConverter != targetConverter && targetConverter.CanConvertFrom(sourceType))
             {
                 return targetConverter.ConvertFrom(null, GetFormatterCulture(formatInfo), value);
             }
 
             TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverter(sourceType);
-            if (sourceConverter != null && sourceTypeTypeConverter != sourceConverter && sourceConverter.CanConvertTo(targetType))
+            if (sourceConverter is not null && sourceTypeTypeConverter != sourceConverter && sourceConverter.CanConvertTo(targetType))
             {
                 return sourceConverter.ConvertTo(null, GetFormatterCulture(formatInfo), value, targetType);
             }
@@ -322,16 +322,16 @@ namespace System.Windows.Forms
                 {
                     return (state == CheckState.Checked);
                 }
-                if (targetConverter == null)
+                if (targetConverter is null)
                 {
                     targetConverter = targetTypeTypeConverter;
                 }
-                if (targetConverter != null && targetConverter.CanConvertFrom(booleanType))
+                if (targetConverter is not null && targetConverter.CanConvertFrom(booleanType))
                 {
                     return targetConverter.ConvertFrom(null, GetFormatterCulture(formatInfo), state == CheckState.Checked);
                 }
             }
-            else if (value != null && targetType.IsAssignableFrom(value.GetType()))
+            else if (value is not null && targetType.IsAssignableFrom(value.GetType()))
             {
                 // If value is already of a compatible type, just go ahead and use it
                 return value;
@@ -341,12 +341,12 @@ namespace System.Windows.Forms
             // If explicit type converters not provided, supply default ones instead
             //
 
-            if (targetConverter == null)
+            if (targetConverter is null)
             {
                 targetConverter = targetTypeTypeConverter;
             }
 
-            if (sourceConverter == null)
+            if (sourceConverter is null)
             {
                 sourceConverter = sourceTypeTypeConverter;
             }
@@ -355,11 +355,11 @@ namespace System.Windows.Forms
             // Standardized conversions
             //
 
-            if (targetConverter != null && targetConverter.CanConvertFrom(sourceType))
+            if (targetConverter is not null && targetConverter.CanConvertFrom(sourceType))
             {
                 return targetConverter.ConvertFrom(null, GetFormatterCulture(formatInfo), value);
             }
-            else if (sourceConverter != null && sourceConverter.CanConvertTo(targetType))
+            else if (sourceConverter is not null && sourceConverter.CanConvertTo(targetType))
             {
                 return sourceConverter.ConvertTo(null, GetFormatterCulture(formatInfo), value, targetType);
             }
@@ -382,7 +382,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                if (formatInfo == null)
+                if (formatInfo is null)
                 {
                     formatInfo = CultureInfo.CurrentCulture;
                 }
@@ -422,7 +422,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static string GetCantConvertMessage(object value, Type targetType)
         {
-            string stringResId = (value == null) ? SR.Formatter_CantConvertNull : SR.Formatter_CantConvert;
+            string stringResId = (value is null) ? SR.Formatter_CantConvertNull : SR.Formatter_CantConvert;
             return string.Format(CultureInfo.CurrentCulture, stringResId, value, targetType.Name);
         }
 
@@ -455,7 +455,7 @@ namespace System.Windows.Forms
                                         null,
                                         new Type[] { stringType, typeof(NumberStyles), typeof(IFormatProvider) },
                                         null);
-                if (mi != null)
+                if (mi is not null)
                 {
                     return mi.Invoke(null, new object[] { (string)value, NumberStyles.Any, formatInfo });
                 }
@@ -465,7 +465,7 @@ namespace System.Windows.Forms
                                         null,
                                         new Type[] { stringType, typeof(IFormatProvider) },
                                         null);
-                if (mi != null)
+                if (mi is not null)
                 {
                     return mi.Invoke(null, new object[] { (string)value, formatInfo });
                 }
@@ -475,7 +475,7 @@ namespace System.Windows.Forms
                                         null,
                                         new Type[] { stringType },
                                         null);
-                if (mi != null)
+                if (mi is not null)
                 {
                     return mi.Invoke(null, new object[] { (string)value });
                 }
@@ -493,7 +493,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool IsNullData(object value, object dataSourceNullValue)
         {
-            return value == null ||
+            return value is null ||
                    value == System.DBNull.Value ||
                    Object.Equals(value, NullData(value.GetType(), dataSourceNullValue));
         }
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
             {
                 // For nullable types, null is represented by an instance of that type with no assigned value.
                 // The value could also be DBNull.Value (the default for dataSourceNullValue).
-                if (dataSourceNullValue == null || dataSourceNullValue == DBNull.Value)
+                if (dataSourceNullValue is null || dataSourceNullValue == DBNull.Value)
                 {
                     // We don't have a special value that represents null on the data source:
                     // use the Nullable<T>'s representation
@@ -551,7 +551,7 @@ namespace System.Windows.Forms
 
         public static object GetDefaultDataSourceNullValue(Type type)
         {
-            return (type != null && !type.IsValueType) ? null : defaultDataSourceNullValue;
+            return (type is not null && !type.IsValueType) ? null : defaultDataSourceNullValue;
         }
     }
 }

@@ -36,7 +36,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (converter == null)
+                if (converter is null)
                 {
                     converter = new TypeConverter();
                 }
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (editorBaseType == typeof(UITypeEditor))
             {
-                if (editor == null)
+                if (editor is null)
                 {
                     editor = new AboutBoxUITypeEditor();
                 }

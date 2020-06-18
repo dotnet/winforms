@@ -191,7 +191,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner == null)
+            if (Owner is null)
             {
                 return;
             }

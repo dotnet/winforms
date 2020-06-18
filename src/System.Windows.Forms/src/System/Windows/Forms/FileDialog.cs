@@ -117,7 +117,7 @@ namespace System.Windows.Forms
             get => _defaultExt ?? string.Empty;
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     if (value.StartsWith("."))
                     {
@@ -159,14 +159,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_fileNames == null || string.IsNullOrEmpty(_fileNames[0]))
+                if (_fileNames is null || string.IsNullOrEmpty(_fileNames[0]))
                 {
                     return string.Empty;
                 }
 
                 return _fileNames[0];
             }
-            set => _fileNames = value != null ? new string[] { value } : null;
+            set => _fileNames = value is not null ? new string[] { value } : null;
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FDFileNamesDescr))]
         public string[] FileNames
         {
-            get => _fileNames != null ? (string[])_fileNames.Clone() : Array.Empty<string>();
+            get => _fileNames is not null ? (string[])_fileNames.Clone() : Array.Empty<string>();
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace System.Windows.Forms
                     if (!string.IsNullOrEmpty(value))
                     {
                         string[] formats = value.Split('|');
-                        if (formats == null || formats.Length % 2 != 0)
+                        if (formats is null || formats.Length % 2 != 0)
                         {
                             throw new ArgumentException(SR.FileDialogInvalidFilter, nameof(value));
                         }
@@ -227,12 +227,12 @@ namespace System.Windows.Forms
 
                 // First extension is the default one. It's not expected that DefaultExt
                 // is not in the filters list, but this is legal.
-                if (_defaultExt != null)
+                if (_defaultExt is not null)
                 {
                     extensions.Add(_defaultExt);
                 }
 
-                if (filter != null)
+                if (filter is not null)
                 {
                     string[] tokens = filter.Split('|');
 
@@ -593,7 +593,7 @@ namespace System.Windows.Forms
                 {
                     s = " |*.*";
                 }
-                else if (s == null)
+                else if (s is null)
                 {
                     return null;
                 }
@@ -768,7 +768,7 @@ namespace System.Windows.Forms
             try
             {
                 _charBuffer = new UnicodeCharBuffer(FileBufferSize);
-                if (_fileNames != null)
+                if (_fileNames is not null)
                 {
                     _charBuffer.PutString(_fileNames[0]);
                 }
@@ -784,7 +784,7 @@ namespace System.Windows.Forms
                 ofn.Flags = Options | (int)(Comdlg32.OFN.EXPLORER | Comdlg32.OFN.ENABLEHOOK | Comdlg32.OFN.ENABLESIZING);
                 ofn.lpfnHook = hookProcPtr;
                 ofn.FlagsEx = (int)Comdlg32.OFN_EX.NONE;
-                if (_defaultExt != null && AddExtension)
+                if (_defaultExt is not null && AddExtension)
                 {
                     ofn.lpstrDefExt = _defaultExt;
                 }

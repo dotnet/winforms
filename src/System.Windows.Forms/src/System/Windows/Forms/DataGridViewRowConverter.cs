@@ -25,7 +25,7 @@ namespace System.Windows.Forms
 
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (destinationType is null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             if (value is DataGridView row && destinationType == typeof(InstanceDescriptor))
             {
                 ConstructorInfo ctor = row.GetType().GetConstructor(Array.Empty<Type>());
-                if (ctor != null)
+                if (ctor is not null)
                 {
                     return new InstanceDescriptor(ctor, Array.Empty<object>(), isComplete: false);
                 }

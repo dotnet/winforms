@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (!_checkedBmp && _bitmap == null)
+                if (!_checkedBmp && _bitmap is null)
                 {
                     string bmpName = GetType().Name;
                     try
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (_bitmap != null)
+                if (_bitmap is not null)
                 {
                     _bitmap.Dispose();
                     _bitmap = null;

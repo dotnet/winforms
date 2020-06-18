@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         internal HtmlElement(HtmlShimManager shimManager, IHTMLElement element)
         {
             htmlElement = element;
-            Debug.Assert(NativeHtmlElement != null, "The element object should implement IHTMLElement");
+            Debug.Assert(NativeHtmlElement is not null, "The element object should implement IHTMLElement");
 
             this.shimManager = shimManager;
         }
@@ -103,10 +103,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ShimManager != null)
+                if (ShimManager is not null)
                 {
                     HtmlElementShim shim = ShimManager.GetElementShim(this);
-                    if (shim == null)
+                    if (shim is null)
                     {
                         shimManager.AddElementShim(this);
                         shim = ShimManager.GetElementShim(this);
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
                 {
                     iHtmlElement = iHtmlDomNode.FirstChild() as IHTMLElement;
                 }
-                return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
         }
 
@@ -219,7 +219,7 @@ namespace System.Windows.Forms
                 {
                     iHtmlElement = iHtmlDomNode.NextSibling() as IHTMLElement;
                 }
-                return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
         }
 
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElement iHtmlElement = NativeHtmlElement.GetOffsetParent();
-                return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
         }
 
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElement iHtmlElement = NativeHtmlElement.GetParentElement();
-                return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
         }
 
@@ -412,19 +412,19 @@ namespace System.Windows.Forms
         public string GetAttribute(string attributeName)
         {
             object oAttributeValue = NativeHtmlElement.GetAttribute(attributeName, 0);
-            return oAttributeValue == null ? "" : oAttributeValue.ToString();
+            return oAttributeValue is null ? "" : oAttributeValue.ToString();
         }
 
         public HtmlElementCollection GetElementsByTagName(string tagName)
         {
             IHTMLElementCollection iHTMLElementCollection = ((IHTMLElement2)NativeHtmlElement).GetElementsByTagName(tagName);
-            return iHTMLElementCollection != null ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
+            return iHTMLElementCollection is not null ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
         }
         public HtmlElement InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
         {
             IHTMLElement iHtmlElement = ((IHTMLElement2)NativeHtmlElement).InsertAdjacentElement(orient.ToString(),
                 (IHTMLElement)newElement.DomElement);
-            return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
+            return iHtmlElement is not null ? new HtmlElement(shimManager, iHtmlElement) : null;
         }
 
         public object InvokeMember(string methodName)
@@ -447,7 +447,7 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    if (parameter != null)
+                    if (parameter is not null)
                     {
                         // Reverse the parameter order so that they read naturally after IDispatch.
                         Array.Reverse(parameter);
@@ -673,7 +673,7 @@ namespace System.Windows.Forms
             }
             private void FireEvent(object key, EventArgs e)
             {
-                if (parent != null)
+                if (parent is not null)
                 {
                     parent.ElementShim.FireEvent(key, e);
                 }
@@ -1044,13 +1044,13 @@ namespace System.Windows.Forms
                 htmlElement = element;
 
                 // snap our associated window so we know when to disconnect.
-                if (htmlElement != null)
+                if (htmlElement is not null)
                 {
                     HtmlDocument doc = htmlElement.Document;
-                    if (doc != null)
+                    if (doc is not null)
                     {
                         HtmlWindow window = doc.Window;
-                        if (window != null)
+                        if (window is not null)
                         {
                             associatedWindow = window.NativeHtmlWindow;
                         }
@@ -1086,9 +1086,9 @@ namespace System.Windows.Forms
 
             public override void ConnectToEvents()
             {
-                if (cookie == null || !cookie.Connected)
+                if (cookie is null || !cookie.Connected)
                 {
-                    for (int i = 0; i < dispInterfaceTypes.Length && cookie == null; i++)
+                    for (int i = 0; i < dispInterfaceTypes.Length && cookie is null; i++)
                     {
                         cookie = new AxHost.ConnectionPointCookie(NativeHtmlElement,
                                                                                   new HTMLElementEvents2(htmlElement),
@@ -1106,7 +1106,7 @@ namespace System.Windows.Forms
             public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
-                if (proxy != null)
+                if (proxy is not null)
                 {
                     ((IHTMLElement2)NativeHtmlElement).DetachEvent(eventName, proxy);
                 }
@@ -1114,7 +1114,7 @@ namespace System.Windows.Forms
 
             public override void DisconnectFromEvents()
             {
-                if (cookie != null)
+                if (cookie is not null)
                 {
                     cookie.Disconnect();
                     cookie = null;
@@ -1123,7 +1123,7 @@ namespace System.Windows.Forms
             protected override void Dispose(bool disposing)
             {
                 base.Dispose(disposing);
-                if (htmlElement != null)
+                if (htmlElement is not null)
                 {
                     Marshal.FinalReleaseComObject(htmlElement.NativeHtmlElement);
                 }

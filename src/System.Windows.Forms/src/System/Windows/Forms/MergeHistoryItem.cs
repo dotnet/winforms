@@ -28,6 +28,6 @@ namespace System.Windows.Forms
         public ToolStripItemCollection IndexCollection { get; set; }
 
         public override string ToString()
-            => $"MergeAction: {MergeAction} | TargetItem: {(TargetItem == null ? "null" : TargetItem.Text)} Index: {Index}";
+            => $"MergeAction: {MergeAction} | TargetItem: {(TargetItem is null ? "null" : TargetItem.Text)} Index: {Index}";
     }
 }

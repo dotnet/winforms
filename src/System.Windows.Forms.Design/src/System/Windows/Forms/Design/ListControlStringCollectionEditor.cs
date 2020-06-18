@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design
         {
             // If we're trying to edit the items in an object that has a DataSource set, throw an exception
             ListControl control = context.Instance as ListControl;
-            if (control?.DataSource != null)
+            if (control?.DataSource is not null)
             {
                 throw new ArgumentException(SR.DataSourceLocksItems);
             }

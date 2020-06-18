@@ -657,7 +657,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string defaultAction = Owner.AccessibleDefaultActionDescription;
-                    if (defaultAction != null)
+                    if (defaultAction is not null)
                     {
                         return defaultAction;
                     }
@@ -706,7 +706,7 @@ namespace System.Windows.Forms
             {
                 CheckBox cb = Owner as CheckBox;
 
-                if (cb != null)
+                if (cb is not null)
                 {
                     cb.AccObjDoDefaultAction = true;
                 }
@@ -717,7 +717,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (cb != null)
+                    if (cb is not null)
                     {
                         cb.AccObjDoDefaultAction = false;
                     }

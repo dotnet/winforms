@@ -18,11 +18,11 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider is not null)
             {
                 if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
-                    if (_openFileDialog == null)
+                    if (_openFileDialog is null)
                     {
                         _openFileDialog = new OpenFileDialog();
                         InitializeDialog(_openFileDialog);
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual void InitializeDialog(OpenFileDialog openFileDialog)
         {
-            if (openFileDialog == null)
+            if (openFileDialog is null)
             {
                 throw new ArgumentNullException(nameof(openFileDialog));
             }

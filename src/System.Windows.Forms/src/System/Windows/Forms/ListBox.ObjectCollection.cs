@@ -32,7 +32,7 @@ namespace System.Windows.Forms
             /// </summary>
             public ObjectCollection(ListBox owner, ObjectCollection value) : this(owner)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -45,7 +45,7 @@ namespace System.Windows.Forms
             /// </summary>
             public ObjectCollection(ListBox owner, object[] value) : this(owner)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (items == null)
+                    if (items is null)
                     {
                         items = new ItemArray(owner);
                     }
@@ -130,7 +130,7 @@ namespace System.Windows.Forms
 
             private int AddInternal(object item)
             {
-                if (item == null)
+                if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
                         {
                             owner.NativeInsert(index, item);
                             owner.UpdateMaxItemWidth(item, false);
-                            if (owner.selectedItems != null)
+                            if (owner.selectedItems is not null)
                             {
                                 // Sorting may throw the LB contents and the selectedItem array out of synch.
                                 owner.selectedItems.Dirty();
@@ -204,7 +204,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ObjectCollection value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
 
             public void AddRange(object[] items)
             {
-                if (items == null)
+                if (items is null)
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
 
             internal void AddRangeInternal(ICollection items)
             {
-                Debug.Assert(items != null);
+                Debug.Assert(items is not null);
 
                 owner.BeginUpdate();
                 try
@@ -311,7 +311,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
-                if (destination == null)
+                if (destination is null)
                 {
                     throw new ArgumentNullException(nameof(destination));
                 }
@@ -325,7 +325,7 @@ namespace System.Windows.Forms
 
             void ICollection.CopyTo(Array destination, int index)
             {
-                if (destination == null)
+                if (destination is null)
                 {
                     throw new ArgumentNullException(nameof(destination));
                 }
@@ -347,7 +347,7 @@ namespace System.Windows.Forms
 
             public int IndexOf(object value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -357,7 +357,7 @@ namespace System.Windows.Forms
 
             internal int IndexOfIdentifier(object value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                if (item == null)
+                if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
@@ -463,7 +463,7 @@ namespace System.Windows.Forms
 
             internal void SetItemInternal(int index, object value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }

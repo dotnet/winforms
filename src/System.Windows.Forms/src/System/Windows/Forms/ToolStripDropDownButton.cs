@@ -130,8 +130,8 @@ namespace System.Windows.Forms
                 else
                 {
                     // opening should happen on mouse down.
-                    Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
-                    openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
+                    Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
+                    openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                     ShowDropDown(/*mousePush =*/true);
                 }
             }
@@ -143,8 +143,8 @@ namespace System.Windows.Forms
             if ((Control.ModifierKeys != Keys.Alt) &&
                 (e.Button == MouseButtons.Left))
             {
-                Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
-                byte closeMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
+                Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
+                byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                 if (closeMouseId != openMouseId)
                 {
                     openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner != null)
+            if (Owner is not null)
             {
                 ToolStripRenderer renderer = Renderer;
                 Graphics g = e.Graphics;

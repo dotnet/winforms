@@ -51,22 +51,22 @@ namespace System.ComponentModel.Design.Serialization
             {
                 IComponent baseComponent = null;
 
-                if (c == null)
+                if (c is null)
                 {
                     return null;
                 }
 
-                if (_host == null)
+                if (_host is null)
                 {
                     ISite site = c.Site;
 
-                    if (site != null)
+                    if (site is not null)
                     {
                         _host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
                     }
                 }
 
-                if (_host != null)
+                if (_host is not null)
                 {
                     baseComponent = _host.RootComponent;
                 }
@@ -89,14 +89,14 @@ namespace System.ComponentModel.Design.Serialization
             {
                 ISite site = comp.Site;
 
-                if (site == null)
+                if (site is null)
                 {
                     return true;
                 }
 
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                if (dictionary != null)
+                if (dictionary is not null)
                 {
                     object value = dictionary.GetValue("GenerateMember");
 
@@ -126,11 +126,11 @@ namespace System.ComponentModel.Design.Serialization
             {
                 ISite site = comp.Site;
 
-                if (site != null)
+                if (site is not null)
                 {
                     IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                    if (dictionary != null)
+                    if (dictionary is not null)
                     {
                         object value = dictionary.GetValue("Modifiers");
 
@@ -146,7 +146,7 @@ namespace System.ComponentModel.Design.Serialization
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
                 PropertyDescriptor prop = props["DefaultModifiers"];
 
-                if (prop != null && prop.PropertyType == typeof(MemberAttributes))
+                if (prop is not null && prop.PropertyType == typeof(MemberAttributes))
                 {
                     return (MemberAttributes)prop.GetValue(comp);
                 }
@@ -164,7 +164,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 ISite site = comp.Site;
 
-                if (site == null)
+                if (site is null)
                 {
                     return;
                 }
@@ -172,7 +172,7 @@ namespace System.ComponentModel.Design.Serialization
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
                 bool oldValue = GetGenerateMember(comp);
 
-                if (dictionary != null)
+                if (dictionary is not null)
                 {
                     dictionary.SetValue("GenerateMember", generate);
                 }
@@ -187,7 +187,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 string compName = site.Name;
 
-                if (!(site.GetService(typeof(CodeTypeDeclaration)) is CodeTypeDeclaration typeDecl) || compName == null)
+                if (!(site.GetService(typeof(CodeTypeDeclaration)) is CodeTypeDeclaration typeDecl) || compName is null)
                 {
                     return;
                 }
@@ -212,14 +212,14 @@ namespace System.ComponentModel.Design.Serialization
             {
                 ISite site = comp.Site;
 
-                if (site == null)
+                if (site is null)
                 {
                     return;
                 }
 
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                if (dictionary != null)
+                if (dictionary is not null)
                 {
                     dictionary.SetValue("Modifiers", modifiers);
                 }

@@ -25,19 +25,19 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal CollectionEditVerbManager(string text, ComponentDesigner designer, PropertyDescriptor prop, bool addToDesignerVerbs)
         {
-            Debug.Assert(designer != null, "Can't have a CollectionEditVerbManager without an associated designer");
+            Debug.Assert(designer is not null, "Can't have a CollectionEditVerbManager without an associated designer");
             _designer = designer;
             _targetProperty = prop;
-            if (prop == null)
+            if (prop is null)
             {
                 prop = TypeDescriptor.GetDefaultProperty(designer.Component);
-                if (prop != null && typeof(ICollection).IsAssignableFrom(prop.PropertyType))
+                if (prop is not null && typeof(ICollection).IsAssignableFrom(prop.PropertyType))
                 {
                     _targetProperty = prop;
                 }
             }
-            Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collectoin edtior with.");
-            if (text == null)
+            Debug.Assert(_targetProperty is not null, "Need PropertyDescriptor for ICollection property to associate collectoin edtior with.");
+            if (text is null)
             {
                 text = SR.ToolStripItemCollectionEditorVerb;
             }
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_componentChangeSvc == null)
+                if (_componentChangeSvc is null)
                 {
                     _componentChangeSvc = (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
                 }
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_designer.Component.Site != null)
+                if (_designer.Component.Site is not null)
                 {
                     return _designer.Component.Site.Container;
                 }
@@ -134,7 +134,7 @@ namespace System.Windows.Forms.Design
             {
                 return this;
             }
-            if (_designer.Component.Site != null)
+            if (_designer.Component.Site is not null)
             {
                 return _designer.Component.Site.GetService(serviceType);
             }
@@ -166,7 +166,7 @@ namespace System.Windows.Forms.Design
         DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
         {
             IUIService uiSvc = (IUIService)((IServiceProvider)this).GetService(typeof(IUIService));
-            if (uiSvc != null)
+            if (uiSvc is not null)
             {
                 return uiSvc.ShowDialog(dialog);
             }
@@ -182,18 +182,18 @@ namespace System.Windows.Forms.Design
         private void OnEditItems(object sender, EventArgs e)
         {
             DesignerActionUIService actionUIService = (DesignerActionUIService)((IServiceProvider)this).GetService(typeof(DesignerActionUIService));
-            if (actionUIService != null)
+            if (actionUIService is not null)
             {
                 actionUIService.HideUI(_designer.Component);
             }
             object propertyValue = _targetProperty.GetValue(_designer.Component);
-            if (propertyValue == null)
+            if (propertyValue is null)
             {
                 return;
             }
             CollectionEditor itemsEditor = TypeDescriptor.GetEditor(propertyValue, typeof(UITypeEditor)) as CollectionEditor;
-            Debug.Assert(itemsEditor != null, "Didn't get a collection editor for type '" + _targetProperty.PropertyType.FullName + "'");
-            if (itemsEditor != null)
+            Debug.Assert(itemsEditor is not null, "Didn't get a collection editor for type '" + _targetProperty.PropertyType.FullName + "'");
+            if (itemsEditor is not null)
             {
                 itemsEditor.EditValue(this, this, propertyValue);
             }

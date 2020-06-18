@@ -34,7 +34,7 @@ namespace System.Windows.Forms
             {
                 // apply row,column,rowspan,colspan
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(settings.Owner);
-                if (containerInfo.Container is Control appliedControl && _controlsInfo != null)
+                if (containerInfo.Container is Control appliedControl && _controlsInfo is not null)
                 {
                     // we store the control names, look up the controls
                     // in the appliedControl's control collection and apply the row,column settings.
@@ -47,11 +47,11 @@ namespace System.Windows.Forms
                         // because the Name property is shadowed at design time
                         foreach (Control tableControl in appliedControl.Controls)
                         {
-                            if (tableControl != null)
+                            if (tableControl is not null)
                             {
                                 string name = null;
                                 PropertyDescriptor prop = TypeDescriptor.GetProperties(tableControl)["Name"];
-                                if (prop != null && prop.PropertyType == typeof(string))
+                                if (prop is not null && prop.PropertyType == typeof(string))
                                 {
                                     name = prop.GetValue(tableControl) as string;
                                 }
@@ -84,7 +84,7 @@ namespace System.Windows.Forms
 
             internal List<ControlInformation> GetControlsInformation()
             {
-                if (_controlsInfo == null)
+                if (_controlsInfo is null)
                 {
                     return new List<ControlInformation>();
                 }
@@ -102,7 +102,7 @@ namespace System.Windows.Forms
 
             private ControlInformation GetControlInformation(object controlName)
             {
-                if (_controlsInfo == null)
+                if (_controlsInfo is null)
                 {
                     return s_defaultControlInfo;
                 }

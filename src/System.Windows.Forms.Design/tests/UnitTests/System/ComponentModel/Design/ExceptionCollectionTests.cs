@@ -25,7 +25,7 @@ namespace System.ComponentModel.Design.Tests
         public void ExceptionCollection_Ctor_ArrayList(ArrayList exceptions)
         {
             var collection = new ExceptionCollection(exceptions);
-            if (exceptions == null)
+            if (exceptions is null)
             {
                 Assert.Null(collection.Exceptions);
             }

@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal static string EditMask(ITypeDiscoveryService discoverySvc, IUIService uiSvc, MaskedTextBox instance, IHelpService helpService)
         {
-            Debug.Assert(instance != null, "Null masked text box.");
+            Debug.Assert(instance is not null, "Null masked text box.");
             string mask = null;
 
             // Launching modal dialog in System aware mode.
@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Design
                 dlg.DiscoverMaskDescriptors(discoverySvc);  // fine if service is null.
 
                 // Show dialog from VS.
-                DialogResult dlgResult = uiSvc != null ? uiSvc.ShowDialog(dlg) : dlg.ShowDialog();
+                DialogResult dlgResult = uiSvc is not null ? uiSvc.ShowDialog(dlg) : dlg.ShowDialog();
                 if (dlgResult == DialogResult.OK)
                 {
                     mask = dlg.Mask;
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (context == null || provider == null)
+            if (context is null || provider is null)
             {
                 return value;
             }
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Design
             IHelpService helpService = (IHelpService)provider.GetService(typeof(IHelpService));
             string mask = MaskPropertyEditor.EditMask(discoverySvc, uiSvc, context.Instance as MaskedTextBox, helpService);
 
-            if (mask != null)
+            if (mask is not null)
             {
                 return mask;
             }

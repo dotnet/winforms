@@ -27,13 +27,13 @@ namespace System.Windows.Forms
                 string[] pathInfo = relILAttr.RelatedImageList.Split('.');
                 for (int i = 0; i < pathInfo.Length; i++)
                 {
-                    if (parentInstance == null)
+                    if (parentInstance is null)
                     {
                         Debug.Fail("A property specified in the path is null or not yet instanciated at this time");
                         break; // path is wrong
                     }
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(parentInstance)[pathInfo[i]];
-                    if (prop == null)
+                    if (prop is null)
                     {
                         Debug.Fail("The path specified to the property is wrong");
                         break; // path is wrong
@@ -59,4 +59,3 @@ namespace System.Windows.Forms
         }
     }
 }
-

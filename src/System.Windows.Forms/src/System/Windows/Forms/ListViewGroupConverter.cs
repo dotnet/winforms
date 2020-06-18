@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            if (sourceType == typeof(string) && context != null && context.Instance is ListViewItem)
+            if (sourceType == typeof(string) && context is not null && context.Instance is ListViewItem)
             {
                 return true;
             }
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
-            if (destinationType == typeof(string) && context != null && context.Instance is ListViewItem)
+            if (destinationType == typeof(string) && context is not null && context.Instance is ListViewItem)
             {
                 return true;
             }
@@ -59,9 +59,9 @@ namespace System.Windows.Forms
             if (value is string)
             {
                 string text = ((string)value).Trim();
-                if (context != null && context.Instance != null)
+                if (context is not null && context.Instance is not null)
                 {
-                    if (context.Instance is ListViewItem item && item.ListView != null)
+                    if (context.Instance is ListViewItem item && item.ListView is not null)
                     {
                         foreach (ListViewGroup group in item.ListView.Groups)
                         {
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (value == null || value.Equals(SR.toStringNone))
+            if (value is null || value.Equals(SR.toStringNone))
             {
                 return null;
             }
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (destinationType is null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
@@ -103,11 +103,11 @@ namespace System.Windows.Forms
 
                 // Header
                 ctor = typeof(ListViewGroup).GetConstructor(new Type[] { typeof(string), typeof(HorizontalAlignment) });
-                Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                 return new InstanceDescriptor(ctor, new object[] { group.Header, group.HeaderAlignment }, false);
             }
 
-            if (destinationType == typeof(string) && value == null)
+            if (destinationType == typeof(string) && value is null)
             {
                 return SR.toStringNone;
             }
@@ -122,7 +122,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (context != null && context.Instance is ListViewItem item && item.ListView != null)
+            if (context is not null && context.Instance is ListViewItem item && item.ListView is not null)
             {
                 var list = new ArrayList();
                 foreach (ListViewGroup group in item.ListView.Groups)

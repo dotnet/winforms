@@ -70,7 +70,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_behaviorService == null)
+                if (_behaviorService is null)
                 {
                     _behaviorService = (BehaviorService)_serviceProvider.GetService(typeof(BehaviorService));
                 }
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Design.Behavior
             if ((rules & SelectionRules.BottomSizeable) != 0)
             {
                 lines.Add(new SnapLine(SnapLineType.Bottom, loc.Y - 1));
-                if (_primaryControl != null)
+                if (_primaryControl is not null)
                 {
                     lines.Add(new SnapLine(SnapLineType.Horizontal, loc.Y + _primaryControl.Margin.Bottom, SnapLine.MarginBottom, SnapLinePriority.Always));
                 }
@@ -172,7 +172,7 @@ namespace System.Windows.Forms.Design.Behavior
             else if ((rules & SelectionRules.TopSizeable) != 0)
             {
                 lines.Add(new SnapLine(SnapLineType.Top, loc.Y));
-                if (_primaryControl != null)
+                if (_primaryControl is not null)
                 {
                     lines.Add(new SnapLine(SnapLineType.Horizontal, loc.Y - _primaryControl.Margin.Top, SnapLine.MarginTop, SnapLinePriority.Always));
                 }
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Design.Behavior
             if ((rules & SelectionRules.RightSizeable) != 0)
             {
                 lines.Add(new SnapLine(SnapLineType.Right, loc.X - 1));
-                if (_primaryControl != null)
+                if (_primaryControl is not null)
                 {
                     lines.Add(new SnapLine(SnapLineType.Vertical, loc.X + _primaryControl.Margin.Right, SnapLine.MarginRight, SnapLinePriority.Always));
                 }
@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Design.Behavior
             else if ((rules & SelectionRules.LeftSizeable) != 0)
             {
                 lines.Add(new SnapLine(SnapLineType.Left, loc.X));
-                if (_primaryControl != null)
+                if (_primaryControl is not null)
                 {
                     lines.Add(new SnapLine(SnapLineType.Vertical, loc.X - _primaryControl.Margin.Left, SnapLine.MarginLeft, SnapLinePriority.Always));
                 }
@@ -234,13 +234,13 @@ namespace System.Windows.Forms.Design.Behavior
             BehaviorService.EnableAllAdorners(false);
             //build up our resize transaction
             IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-            if (host != null)
+            if (host is not null)
             {
                 string locString;
                 if (_resizeComponents.Length == 1)
                 {
                     string name = TypeDescriptor.GetComponentName(_resizeComponents[0].resizeControl);
-                    if (name == null || name.Length == 0)
+                    if (name is null || name.Length == 0)
                     {
                         name = _resizeComponents[0].resizeControl.GetType().Name;
                     }
@@ -262,13 +262,13 @@ namespace System.Windows.Forms.Design.Behavior
             else if (_resizeComponents.Length > 0)
             {
                 //try to get the parents grid and snap settings
-                if (_resizeComponents[0].resizeControl is Control control && control.Parent != null)
+                if (_resizeComponents[0].resizeControl is Control control && control.Parent is not null)
                 {
                     PropertyDescriptor snapProp = TypeDescriptor.GetProperties(control.Parent)["SnapToGrid"];
-                    if (snapProp != null && (bool)snapProp.GetValue(control.Parent))
+                    if (snapProp is not null && (bool)snapProp.GetValue(control.Parent))
                     {
                         PropertyDescriptor gridProp = TypeDescriptor.GetProperties(control.Parent)["GridSize"];
-                        if (gridProp != null)
+                        if (gridProp is not null)
                         {
                             //cache of the gridsize and the location of the parent on the adornerwindow
                             _parentGridSize = (Size)gridProp.GetValue(control.Parent);
@@ -307,7 +307,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
-            if (selSvc == null)
+            if (selSvc is null)
             {
                 return false;
             }
@@ -325,7 +325,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     //don't drag locked controls
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(o)["Locked"];
-                    if (prop != null)
+                    if (prop is not null)
                     {
                         if ((bool)prop.GetValue(o))
                         {
@@ -362,8 +362,8 @@ namespace System.Windows.Forms.Design.Behavior
             if (_pushedBehavior)
             {
                 _pushedBehavior = false;
-                Debug.Assert(BehaviorService != null, "We should have a behavior service.");
-                if (BehaviorService != null)
+                Debug.Assert(BehaviorService is not null, "We should have a behavior service.");
+                if (BehaviorService is not null)
                 {
                     if (_dragging)
                     {
@@ -392,7 +392,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                     BehaviorService.PopBehavior(this);
 
-                    if (_lastResizeRegion != null)
+                    if (_lastResizeRegion is not null)
                     {
                         BehaviorService.Invalidate(_lastResizeRegion); //might be the same, might not.
                         _lastResizeRegion.Dispose();
@@ -403,7 +403,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             Debug.Assert(!_dragging, "How can we be dragging without pushing a behavior?");
             // If we still have a transaction, roll it back.
-            if (_resizeTransaction != null)
+            if (_resizeTransaction is not null)
             {
                 DesignerTransaction t = _resizeTransaction;
                 _resizeTransaction = null;
@@ -417,13 +417,13 @@ namespace System.Windows.Forms.Design.Behavior
         internal static int AdjustPixelsForIntegralHeight(Control control, int pixelsMoved)
         {
             PropertyDescriptor propIntegralHeight = TypeDescriptor.GetProperties(control)["IntegralHeight"];
-            if (propIntegralHeight != null)
+            if (propIntegralHeight is not null)
             {
                 object value = propIntegralHeight.GetValue(control);
                 if (value is bool && (bool)value == true)
                 {
                     PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(control)["ItemHeight"];
-                    if (propItemHeight != null)
+                    if (propItemHeight is not null)
                     {
                         if (pixelsMoved >= 0)
                         {
@@ -452,7 +452,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             bool altKeyPressed = Control.ModifierKeys == Keys.Alt;
-            if (altKeyPressed && _dragManager != null)
+            if (altKeyPressed && _dragManager is not null)
             {
                 //erase any snaplines (if we had any)
                 _dragManager.EraseSnapLines();
@@ -464,7 +464,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             // When DesignerWindowPane has scrollbars and we resize, shrinking the the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
-            if (_lastMouseAbs != null)
+            if (_lastMouseAbs is not null)
             {
                 var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
                 User32.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref mouseLocAbs);
@@ -487,7 +487,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            if (_resizeComponents == null || _resizeComponents.Length == 0)
+            if (_resizeComponents is null || _resizeComponents.Length == 0)
             {
                 return false;
             }
@@ -506,22 +506,22 @@ namespace System.Windows.Forms.Design.Behavior
                 propLeft = TypeDescriptor.GetProperties(_resizeComponents[0].resizeControl)["Left"];
 
                 // validate each of the property descriptors.
-                if (propWidth != null && !typeof(int).IsAssignableFrom(propWidth.PropertyType))
+                if (propWidth is not null && !typeof(int).IsAssignableFrom(propWidth.PropertyType))
                 {
                     propWidth = null;
                 }
 
-                if (propHeight != null && !typeof(int).IsAssignableFrom(propHeight.PropertyType))
+                if (propHeight is not null && !typeof(int).IsAssignableFrom(propHeight.PropertyType))
                 {
                     propHeight = null;
                 }
 
-                if (propTop != null && !typeof(int).IsAssignableFrom(propTop.PropertyType))
+                if (propTop is not null && !typeof(int).IsAssignableFrom(propTop.PropertyType))
                 {
                     propTop = null;
                 }
 
-                if (propLeft != null && !typeof(int).IsAssignableFrom(propLeft.PropertyType))
+                if (propLeft is not null && !typeof(int).IsAssignableFrom(propLeft.PropertyType))
                 {
                     propLeft = null;
                 }
@@ -533,7 +533,7 @@ namespace System.Windows.Forms.Design.Behavior
             User32.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref _lastMouseAbs);
             int minHeight = Math.Max(targetControl.MinimumSize.Height, MINSIZE);
             int minWidth = Math.Max(targetControl.MinimumSize.Width, MINSIZE);
-            if (_dragManager != null)
+            if (_dragManager is not null)
             {
                 bool shouldSnap = true;
                 bool shouldSnapHorizontally = true;
@@ -551,7 +551,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                 //if the targetControl has IntegralHeight turned on, then don't snap if the control can be resized vertically
                 PropertyDescriptor propIntegralHeight = TypeDescriptor.GetProperties(targetControl)["IntegralHeight"];
-                if (propIntegralHeight != null)
+                if (propIntegralHeight is not null)
                 {
                     object value = propIntegralHeight.GetValue(targetControl);
                     if (value is bool && (bool)value == true)
@@ -583,7 +583,7 @@ namespace System.Windows.Forms.Design.Behavior
             // IF WE ARE SNAPPING TO A CONTROL, then we also need to adjust for the offset between the initialPoint (where the MouseDown happened) and the edge of the control otherwise we would be those pixels off when resizing the control. Remember that snaplines are based on the targetControl, so we need to use the targetControl to figure out the offset.
             Rectangle controlBounds = new Rectangle(_resizeComponents[0].resizeBounds.X, _resizeComponents[0].resizeBounds.Y,
                                                       _resizeComponents[0].resizeBounds.Width, _resizeComponents[0].resizeBounds.Height);
-            if ((_didSnap) && (targetControl.Parent != null))
+            if ((_didSnap) && (targetControl.Parent is not null))
             {
                 controlBounds.Location = _behaviorService.MapAdornerWindowPoint(targetControl.Parent.Handle, controlBounds.Location);
                 if (targetControl.Parent.IsMirrored)
@@ -595,7 +595,7 @@ namespace System.Windows.Forms.Design.Behavior
             Rectangle newBorderRect = Rectangle.Empty;
             Rectangle targetBorderRect = Rectangle.Empty;
             bool drawSnapline = true;
-            Color backColor = targetControl.Parent != null ? targetControl.Parent.BackColor : Color.Empty;
+            Color backColor = targetControl.Parent is not null ? targetControl.Parent.BackColor : Color.Empty;
             for (int i = 0; i < _resizeComponents.Length; i++)
             {
                 Control control = _resizeComponents[i].resizeControl as Control;
@@ -611,7 +611,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     bool fRTL = false;
                     // If the container is mirrored the control origin is in upper-right, so we need to adjust our math for that. Remember that mouse coords have origin in upper left.
-                    if (control.Parent != null && control.Parent.IsMirrored)
+                    if (control.Parent is not null && control.Parent.IsMirrored)
                     {
                         fRTL = true;
                     }
@@ -702,25 +702,25 @@ namespace System.Windows.Forms.Design.Behavior
                     // 1. Create a form and add 2 buttons. Make sure that they are snapped to the left edge. Now grab the left edge of button 1, and start resizing to the left, past the snapline you will initially get, and then back to the right. What you would expect is to get the left edge snapline again. But without the specified check you wouldn't. This is because the bounds.<foo> != resizeBounds[i].<foo> checks would fail, since the new size would now be the original size. We could probably live with that, except that we draw the snapline below, since we correctly identified one. We could hack it so that we didn't draw the snapline, but that would confuse the user even more.
                     // 2. Create a form and add a single button. Place it at 100,100. Now start resizing it to the left and then back to the right. Note that with the original check (see diff), you would never be able to resize it back to position 100,100. You would get to 99,100 and then to 101,100.
                     if (((specified & BoundsSpecified.Width) == BoundsSpecified.Width) &&
-                        _dragging && _initialResize && propWidth != null)
+                        _dragging && _initialResize && propWidth is not null)
                     {
                         propWidth.SetValue(_resizeComponents[i].resizeControl, bounds.Width);
                     }
 
                     if (((specified & BoundsSpecified.Height) == BoundsSpecified.Height) &&
-                        _dragging && _initialResize && propHeight != null)
+                        _dragging && _initialResize && propHeight is not null)
                     {
                         propHeight.SetValue(_resizeComponents[i].resizeControl, bounds.Height);
                     }
 
                     if (((specified & BoundsSpecified.X) == BoundsSpecified.X) &&
-                        _dragging && _initialResize && propLeft != null)
+                        _dragging && _initialResize && propLeft is not null)
                     {
                         propLeft.SetValue(_resizeComponents[i].resizeControl, bounds.X);
                     }
 
                     if (((specified & BoundsSpecified.Y) == BoundsSpecified.Y) &&
-                        _dragging && _initialResize && propTop != null)
+                        _dragging && _initialResize && propTop is not null)
                     {
                         propTop.SetValue(_resizeComponents[i].resizeControl, bounds.Y);
                     }
@@ -749,7 +749,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                     }
 
-                    if (control == _primaryControl && _statusCommandUI != null)
+                    if (control == _primaryControl && _statusCommandUI is not null)
                     {
                         _statusCommandUI.SetStatusInformation(control as Component);
                     }
@@ -762,7 +762,7 @@ namespace System.Windows.Forms.Design.Behavior
                     if (needToUpdate)
                     {
                         Control parent = control.Parent;
-                        if (parent != null)
+                        if (parent is not null)
                         {
                             control.Invalidate(/* invalidateChildren = */ true);
                             parent.Invalidate(oldBounds, /* invalidateChildren = */ true);
@@ -795,7 +795,7 @@ namespace System.Windows.Forms.Design.Behavior
                             {
                                 using (Graphics graphics = BehaviorService.AdornerWindowGraphics)
                                 {
-                                    if (_lastResizeRegion != null)
+                                    if (_lastResizeRegion is not null)
                                     {
                                         if (!_lastResizeRegion.Equals(newRegion, graphics))
                                         {
@@ -807,7 +807,7 @@ namespace System.Windows.Forms.Design.Behavior
                                     }
                                     DesignerUtils.DrawResizeBorder(graphics, newRegion, backColor);
                                 }
-                                if (_lastResizeRegion == null)
+                                if (_lastResizeRegion is null)
                                 {
                                     _lastResizeRegion = newRegion.Clone(); //we will need to dispose it later.
                                 }
@@ -817,7 +817,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            if ((drawSnapline) && (!altKeyPressed) && (_dragManager != null))
+            if ((drawSnapline) && (!altKeyPressed) && (_dragManager is not null))
             {
                 _dragManager.RenderSnapLinesInternal(targetBorderRect);
             }
@@ -835,7 +835,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (_dragging)
                 {
-                    if (_dragManager != null)
+                    if (_dragManager is not null)
                     {
                         _dragManager.OnMouseUp();
                         _dragManager = null;
@@ -843,7 +843,7 @@ namespace System.Windows.Forms.Design.Behavior
                         _didSnap = false;
                     }
 
-                    if (_resizeComponents != null && _resizeComponents.Length > 0)
+                    if (_resizeComponents is not null && _resizeComponents.Length > 0)
                     {
                         // we do these separately so as not to disturb the cached sizes for values we're not actually changing.  For example, if a control is docked top and we modify the height, the width shouldn't be modified.
                         PropertyDescriptor propWidth = TypeDescriptor.GetProperties(_resizeComponents[0].resizeControl)["Width"];
@@ -852,25 +852,25 @@ namespace System.Windows.Forms.Design.Behavior
                         PropertyDescriptor propLeft = TypeDescriptor.GetProperties(_resizeComponents[0].resizeControl)["Left"];
                         for (int i = 0; i < _resizeComponents.Length; i++)
                         {
-                            if (propWidth != null && ((Control)_resizeComponents[i].resizeControl).Width != _resizeComponents[i].resizeBounds.Width)
+                            if (propWidth is not null && ((Control)_resizeComponents[i].resizeControl).Width != _resizeComponents[i].resizeBounds.Width)
                             {
                                 propWidth.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Width);
                             }
-                            if (propHeight != null && ((Control)_resizeComponents[i].resizeControl).Height != _resizeComponents[i].resizeBounds.Height)
+                            if (propHeight is not null && ((Control)_resizeComponents[i].resizeControl).Height != _resizeComponents[i].resizeBounds.Height)
                             {
                                 propHeight.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Height);
                             }
 
-                            if (propTop != null && ((Control)_resizeComponents[i].resizeControl).Top != _resizeComponents[i].resizeBounds.Y)
+                            if (propTop is not null && ((Control)_resizeComponents[i].resizeControl).Top != _resizeComponents[i].resizeBounds.Y)
                             {
                                 propTop.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Top);
                             }
-                            if (propLeft != null && ((Control)_resizeComponents[i].resizeControl).Left != _resizeComponents[i].resizeBounds.X)
+                            if (propLeft is not null && ((Control)_resizeComponents[i].resizeControl).Left != _resizeComponents[i].resizeBounds.X)
                             {
                                 propLeft.SetValue(_resizeComponents[i].resizeControl, ((Control)_resizeComponents[i].resizeControl).Left);
                             }
 
-                            if (_resizeComponents[i].resizeControl == _primaryControl && _statusCommandUI != null)
+                            if (_resizeComponents[i].resizeControl == _primaryControl && _statusCommandUI is not null)
                             {
                                 _statusCommandUI.SetStatusInformation(_primaryControl as Component);
                             }
@@ -878,7 +878,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
 
-                if (_resizeTransaction != null)
+                if (_resizeTransaction is not null)
                 {
                     DesignerTransaction t = _resizeTransaction;
                     _resizeTransaction = null;

@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             set
             {
                 webBrowserState[WEBBROWSERSTATE_allowNavigation] = value;
-                if (webBrowserEvent != null)
+                if (webBrowserEvent is not null)
                 {
                     webBrowserEvent.AllowNavigation = value;
                 }
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
             get
             {
                 object objDoc = AxIWebBrowser2.Document;
-                if (objDoc != null)
+                if (objDoc is not null)
                 {
                     // Document is not necessarily an IHTMLDocument, it might be an office document as well.
                     IHTMLDocument2 iHTMLDocument2 = null;
@@ -251,10 +251,10 @@ namespace System.Windows.Forms
                     catch (InvalidCastException)
                     {
                     }
-                    if (iHTMLDocument2 != null)
+                    if (iHTMLDocument2 is not null)
                     {
                         IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
-                        if (iHTMLLocation != null)
+                        if (iHTMLLocation is not null)
                         {
                             string href = iHTMLLocation.GetHref();
                             if (!string.IsNullOrEmpty(href))
@@ -280,15 +280,15 @@ namespace System.Windows.Forms
             get
             {
                 HtmlDocument htmlDocument = Document;
-                if (htmlDocument == null)
+                if (htmlDocument is null)
                 {
                     return null;
                 }
                 else
                 {
                     Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
-                    Debug.Assert(psi != null, "Object isn't an IPersistStreamInit!");
-                    if (psi == null)
+                    Debug.Assert(psi is not null, "Object isn't an IPersistStreamInit!");
+                    if (psi is null)
                     {
                         return null;
                     }
@@ -327,7 +327,7 @@ namespace System.Windows.Forms
             get
             {
                 using Stream stream = DocumentStream;
-                if (stream == null)
+                if (stream is null)
                 {
                     return string.Empty;
                 }
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -366,14 +366,14 @@ namespace System.Windows.Forms
                 string documentTitle;
 
                 HtmlDocument htmlDocument = Document;
-                if (htmlDocument == null)
+                if (htmlDocument is null)
                 {
                     documentTitle = AxIWebBrowser2.LocationName;
                 }
                 else
                 {
                     IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
-                    Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
+                    Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
                     try
                     {
                         documentTitle = htmlDocument2.GetTitle();
@@ -399,10 +399,10 @@ namespace System.Windows.Forms
             {
                 string docType = string.Empty;
                 HtmlDocument htmlDocument = Document;
-                if (htmlDocument != null)
+                if (htmlDocument is not null)
                 {
                     IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
-                    Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
+                    Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
                     try
                     {
                         docType = htmlDocument2.GetMimeType();
@@ -426,7 +426,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Document == null)
+                if (Document is null)
                 {
                     encryptionLevel = WebBrowserEncryptionLevel.Unknown;
                 }
@@ -443,7 +443,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Document == null)
+                if (Document is null)
                 {
                     return false;
                 }
@@ -506,7 +506,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     if (!Marshal.IsTypeVisibleFromCom(value.GetType()))
                     {
@@ -548,7 +548,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Document == null)
+                if (Document is null)
                 {
                     return WebBrowserReadyState.Uninitialized;
                 }
@@ -571,7 +571,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Document == null)
+                if (Document is null)
                 {
                     statusText = string.Empty;
                 }
@@ -611,7 +611,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && value.ToString() == "")
+                if (value is not null && value.ToString() == "")
                 {
                     value = null;
                 }
@@ -1074,7 +1074,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (htmlShimManager != null)
+                if (htmlShimManager is not null)
                 {
                     htmlShimManager.Dispose();
                 }
@@ -1125,7 +1125,7 @@ namespace System.Windows.Forms
         protected override void CreateSink()
         {
             object ax = activeXInstance;
-            if (ax != null)
+            if (ax is not null)
             {
                 webBrowserEvent = new WebBrowserEvent(this)
                 {
@@ -1141,7 +1141,7 @@ namespace System.Windows.Forms
         protected override void DetachSink()
         {
             // If we have a cookie get rid of it
-            if (cookie != null)
+            if (cookie is not null)
             {
                 cookie.Disconnect();
                 cookie = null;
@@ -1254,7 +1254,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (htmlShimManager == null)
+                if (htmlShimManager is null)
                 {
                     htmlShimManager = new HtmlShimManager();
                 }
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms
         private string ReadyNavigateToUrl(Uri url)
         {
             string urlString;
-            if (url == null)
+            if (url is null)
             {
                 urlString = "about:blank";
             }
@@ -1340,7 +1340,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Url == null || Url.AbsoluteUri == "about:blank";
+                return Url is null || Url.AbsoluteUri == "about:blank";
             }
         }
 
@@ -1356,7 +1356,7 @@ namespace System.Windows.Forms
         private bool ShowContextMenu(int x, int y)
         {
             ContextMenuStrip contextMenuStrip = ContextMenuStrip;
-            if (contextMenuStrip != null)
+            if (contextMenuStrip is not null)
             {
                 Point client;
                 bool keyboardActivated = false;
@@ -1374,7 +1374,7 @@ namespace System.Windows.Forms
 
                 if (ClientRectangle.Contains(client))
                 {
-                    if (contextMenuStrip != null)
+                    if (contextMenuStrip is not null)
                     {
                         contextMenuStrip.ShowInternal(this, client, keyboardActivated);
                     }
@@ -1415,7 +1415,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (axIWebBrowser2 == null)
+                if (axIWebBrowser2 is null)
                 {
                     if (!IsDisposed)
                     {
@@ -1428,7 +1428,7 @@ namespace System.Windows.Forms
                     }
                 }
                 // We still don't have this.axIWebBrowser2. Throw an exception.
-                if (axIWebBrowser2 == null)
+                if (axIWebBrowser2 is null)
                 {
                     throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
                 }
@@ -1463,7 +1463,7 @@ namespace System.Windows.Forms
                     return HRESULT.S_FALSE;
                 }
 
-                if (pt == null)
+                if (pt is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -1482,7 +1482,7 @@ namespace System.Windows.Forms
 
             unsafe HRESULT IDocHostUIHandler.GetHostInfo(DOCHOSTUIINFO* pInfo)
             {
-                if (pInfo == null)
+                if (pInfo is null)
                 {
                     return HRESULT.E_POINTER;
                 }
@@ -1576,7 +1576,7 @@ namespace System.Windows.Forms
 
             unsafe HRESULT IDocHostUIHandler.TranslateAccelerator(User32.MSG* lpMsg, Guid* pguidCmdGroup, uint nCmdID)
             {
-                if (lpMsg == null || pguidCmdGroup == null)
+                if (lpMsg is null || pguidCmdGroup is null)
                 {
                     return HRESULT.E_POINTER;
                 }
@@ -1651,29 +1651,29 @@ namespace System.Windows.Forms
 
             public void BeforeNavigate2(object pDisp, ref object urlObject, ref object flags, ref object targetFrameName, ref object postData, ref object headers, ref bool cancel)
             {
-                Debug.Assert(_parent != null, "Parent should have been set");
+                Debug.Assert(_parent is not null, "Parent should have been set");
                 //Note: we want to allow navigation if we haven't already navigated.
                 if (AllowNavigation || !_haveNavigated)
                 {
-                    Debug.Assert(urlObject == null || urlObject is string, "invalid url type");
-                    Debug.Assert(targetFrameName == null || targetFrameName is string, "invalid targetFrameName type");
-                    Debug.Assert(headers == null || headers is string, "invalid headers type");
+                    Debug.Assert(urlObject is null || urlObject is string, "invalid url type");
+                    Debug.Assert(targetFrameName is null || targetFrameName is string, "invalid targetFrameName type");
+                    Debug.Assert(headers is null || headers is string, "invalid headers type");
                     //
                     // If during running interop code, the variant.bstr value gets set
                     // to -1 on return back to native code, if the original value was null, we
                     // have to set targetFrameName and headers to "".
-                    if (targetFrameName == null)
+                    if (targetFrameName is null)
                     {
                         targetFrameName = string.Empty;
                     }
-                    if (headers == null)
+                    if (headers is null)
                     {
                         headers = string.Empty;
                     }
 
-                    string urlString = urlObject == null ? "" : (string)urlObject;
+                    string urlString = urlObject is null ? "" : (string)urlObject;
                     WebBrowserNavigatingEventArgs e = new WebBrowserNavigatingEventArgs(
-                        new Uri(urlString), targetFrameName == null ? "" : (string)targetFrameName);
+                        new Uri(urlString), targetFrameName is null ? "" : (string)targetFrameName);
                     _parent.OnNavigating(e);
                     cancel = e.Cancel;
                 }
@@ -1685,15 +1685,15 @@ namespace System.Windows.Forms
 
             public void DocumentComplete(object pDisp, ref object urlObject)
             {
-                Debug.Assert(urlObject == null || urlObject is string, "invalid url");
+                Debug.Assert(urlObject is null || urlObject is string, "invalid url");
                 _haveNavigated = true;
-                if (_parent.documentStreamToSetOnLoad != null && (string)urlObject == "about:blank")
+                if (_parent.documentStreamToSetOnLoad is not null && (string)urlObject == "about:blank")
                 {
                     HtmlDocument htmlDocument = _parent.Document;
-                    if (htmlDocument != null)
+                    if (htmlDocument is not null)
                     {
                         Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
-                        Debug.Assert(psi != null, "The Document does not implement IPersistStreamInit");
+                        Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
                         Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(
                                                     _parent.documentStreamToSetOnLoad);
                         psi.Load(iStream);
@@ -1703,7 +1703,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    string urlString = urlObject == null ? "" : urlObject.ToString();
+                    string urlString = urlObject is null ? "" : urlObject.ToString();
                     WebBrowserDocumentCompletedEventArgs e = new WebBrowserDocumentCompletedEventArgs(
                             new Uri(urlString));
                     _parent.OnDocumentCompleted(e);
@@ -1723,8 +1723,8 @@ namespace System.Windows.Forms
 
             public void NavigateComplete2(object pDisp, ref object urlObject)
             {
-                Debug.Assert(urlObject == null || urlObject is string, "invalid url type");
-                string urlString = urlObject == null ? "" : (string)urlObject;
+                Debug.Assert(urlObject is null || urlObject is string, "invalid url type");
+                string urlString = urlObject is null ? "" : (string)urlObject;
                 WebBrowserNavigatedEventArgs e = new WebBrowserNavigatedEventArgs(
                         new Uri(urlString));
                 _parent.OnNavigated(e);

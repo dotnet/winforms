@@ -137,14 +137,14 @@ namespace System.Windows.Forms
             {
                 if (focusLink != value)
                 {
-                    if (focusLink != null)
+                    if (focusLink is not null)
                     {
                         InvalidateLink(focusLink);
                     }
 
                     focusLink = value;
 
-                    if (focusLink != null)
+                    if (focusLink is not null)
                     {
                         InvalidateLink(focusLink);
 
@@ -331,7 +331,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (linkCollection == null)
+                if (linkCollection is null)
                 {
                     linkCollection = new LinkCollection(this);
                 }
@@ -598,7 +598,7 @@ namespace System.Windows.Forms
             }
             if (string.IsNullOrEmpty(text))
             {
-                Debug.Assert(text != null, "string should not be null");
+                Debug.Assert(text is not null, "string should not be null");
                 //do no conversion, just return the original value passed in
                 return index;
             }
@@ -631,7 +631,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            if (textRegion != null)
+            if (textRegion is not null)
             {
                 textRegion.Dispose();
                 textRegion = null;
@@ -656,7 +656,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (g == null)
+                    if (g is null)
                     {
                         g = created = CreateGraphicsInternal();
                     }
@@ -719,7 +719,7 @@ namespace System.Windows.Forms
                         //
 
                         Region visualRegion = new Region(visualRectangle);
-                        if (links != null && links.Count == 1)
+                        if (links is not null && links.Count == 1)
                         {
                             Links[0].VisualRegion = visualRegion;
                         }
@@ -731,7 +731,7 @@ namespace System.Windows.Forms
                     alwaysUnderlined.Dispose();
                     alwaysUnderlined = null;
 
-                    if (created != null)
+                    if (created is not null)
                     {
                         created.Dispose();
                         created = null;
@@ -800,7 +800,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool IsOneLink()
         {
-            if (links == null || links.Count != 1 || Text == null)
+            if (links is null || links.Count != 1 || Text is null)
             {
                 return false;
             }
@@ -825,7 +825,7 @@ namespace System.Windows.Forms
                 EnsureRun(g);
                 foreach (Link link in links)
                 {
-                    if (link.VisualRegion != null && link.VisualRegion.IsVisible(x, y, g))
+                    if (link.VisualRegion is not null && link.VisualRegion.IsVisible(x, y, g))
                     {
                         hit = link;
                         break;
@@ -849,7 +849,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                if (link == null || link.VisualRegion == null || IsOneLink())
+                if (link is null || link.VisualRegion is null || IsOneLink())
                 {
                     Invalidate();
                 }
@@ -866,12 +866,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void InvalidateLinkFonts()
         {
-            if (linkFont != null)
+            if (linkFont is not null)
             {
                 linkFont.Dispose();
             }
 
-            if (hoverLinkFont != null && hoverLinkFont != linkFont)
+            if (hoverLinkFont is not null && hoverLinkFont != linkFont)
             {
                 hoverLinkFont.Dispose();
             }
@@ -932,7 +932,7 @@ namespace System.Windows.Forms
             try
             {
                 Link focusLink = FocusLink;
-                if (focusLink == null)
+                if (focusLink is null)
                 {
                     // Set focus on first link.
                     // This will raise the OnGotFocus event again but it will not be processed because processingOnGotFocus is true.
@@ -961,7 +961,7 @@ namespace System.Windows.Forms
         {
             base.OnLostFocus(e);
 
-            if (FocusLink != null)
+            if (FocusLink is not null)
             {
                 InvalidateLink(FocusLink);
             }
@@ -977,7 +977,7 @@ namespace System.Windows.Forms
 
             if (e.KeyCode == Keys.Enter)
             {
-                if (FocusLink != null && FocusLink.Enabled)
+                if (FocusLink is not null && FocusLink.Enabled)
                 {
                     OnLinkClicked(new LinkLabelLinkClickedEventArgs(FocusLink));
                 }
@@ -1075,7 +1075,7 @@ namespace System.Windows.Forms
 
                     Link clicked = PointInLink(e.X, e.Y);
 
-                    if (clicked != null && clicked == FocusLink && clicked.Enabled)
+                    if (clicked is not null && clicked == FocusLink && clicked.Enabled)
                     {
                         OnLinkClicked(new LinkLabelLinkClickedEventArgs(clicked, e.Button));
                     }
@@ -1110,11 +1110,11 @@ namespace System.Windows.Forms
 
             if (pointIn != hoverLink)
             {
-                if (hoverLink != null)
+                if (hoverLink is not null)
                 {
                     hoverLink.State &= ~LinkState.Hover;
                 }
-                if (pointIn != null)
+                if (pointIn is not null)
                 {
                     pointIn.State |= LinkState.Hover;
                     if (pointIn.Enabled)
@@ -1129,11 +1129,11 @@ namespace System.Windows.Forms
 
                 if (hoverLinkFont != linkFont)
                 {
-                    if (hoverLink != null)
+                    if (hoverLink is not null)
                     {
                         InvalidateLink(hoverLink);
                     }
-                    if (pointIn != null)
+                    if (pointIn is not null)
                     {
                         InvalidateLink(pointIn);
                     }
@@ -1212,7 +1212,7 @@ namespace System.Windows.Forms
                                 //exclude the area to draw the focus rectangle
                                 e.Graphics.Clip = originalClip;
                                 RectangleF[] rects = ((Link)links[0]).VisualRegion.GetRegionScans(e.Graphics.Transform);
-                                if (rects != null && rects.Length > 0)
+                                if (rects is not null && rects.Length > 0)
                                 {
                                     if (UseCompatibleTextRendering)
                                     {
@@ -1247,7 +1247,7 @@ namespace System.Windows.Forms
                             {
                                 foreach (Link link in links)
                                 {
-                                    if (link.VisualRegion != null)
+                                    if (link.VisualRegion is not null)
                                     {
                                         e.Graphics.ExcludeClip(link.VisualRegion);
                                     }
@@ -1345,7 +1345,7 @@ namespace System.Windows.Forms
         {
             Image i = Image;
 
-            if (i != null)
+            if (i is not null)
             {
                 Region oldClip = e.Graphics.Clip;
                 Rectangle imageBounds = CalcImageRenderBounds(i, ClientRectangle, RtlTranslateAlignment(ImageAlign));
@@ -1433,15 +1433,15 @@ namespace System.Windows.Forms
         {
             // link = null means paint the whole text
 
-            Debug.Assert(g != null, "Must pass valid graphics");
-            Debug.Assert(foreBrush != null, "Must pass valid foreBrush");
-            Debug.Assert(linkBrush != null, "Must pass valid linkBrush");
+            Debug.Assert(g is not null, "Must pass valid graphics");
+            Debug.Assert(foreBrush is not null, "Must pass valid foreBrush");
+            Debug.Assert(linkBrush is not null, "Must pass valid linkBrush");
 
             Font font = Font;
 
-            if (link != null)
+            if (link is not null)
             {
-                if (link.VisualRegion != null)
+                if (link.VisualRegion is not null)
                 {
                     Color brushColor = Color.Empty;
                     LinkState linkState = link.State;
@@ -1526,7 +1526,7 @@ namespace System.Windows.Forms
                         // Get the rectangles making up the visual region, and draw
                         // each one.
                         RectangleF[] rects = link.VisualRegion.GetRegionScans(g.Transform);
-                        if (rects != null && rects.Length > 0)
+                        if (rects is not null && rects.Length > 0)
                         {
                             Rectangle focusRect;
 
@@ -1600,7 +1600,7 @@ namespace System.Windows.Forms
         {
             // If a link is not currently focused, focus on the first link
             //
-            if (FocusLink == null && Links.Count > 0)
+            if (FocusLink is null && Links.Count > 0)
             {
                 string text = Text;
                 foreach (Link link in Links)
@@ -1617,7 +1617,7 @@ namespace System.Windows.Forms
 
             // Act as if the focused link was clicked
             //
-            if (FocusLink != null)
+            if (FocusLink is not null)
             {
                 OnLinkClicked(new LinkLabelLinkClickedEventArgs(FocusLink));
             }
@@ -1674,7 +1674,7 @@ namespace System.Windows.Forms
         private bool FocusNextLink(bool forward)
         {
             int focusIndex = -1;
-            if (focusLink != null)
+            if (focusLink is not null)
             {
                 for (int i = 0; i < links.Count; i++)
                 {
@@ -1722,7 +1722,7 @@ namespace System.Windows.Forms
                     {
                         test = null;
                     }
-                } while (test != null
+                } while (test is not null
                          && !test.Enabled
                          && LinkInText(charStart, charEnd - charStart));
             }
@@ -1741,7 +1741,7 @@ namespace System.Windows.Forms
                     {
                         test = null;
                     }
-                } while (test != null
+                } while (test is not null
                          && !test.Enabled
                          && LinkInText(charStart, charEnd - charStart));
             }
@@ -1810,7 +1810,7 @@ namespace System.Windows.Forms
                     // Find which link is currently focused
                     //
                     int focusIndex = -1;
-                    if (FocusLink != null)
+                    if (FocusLink is not null)
                     {
                         focusIndex = links.IndexOf(FocusLink);
                     }
@@ -1970,7 +1970,7 @@ namespace System.Windows.Forms
             {
                 // If a link is currently focused, de-select it
                 //
-                if (FocusLink != null)
+                if (FocusLink is not null)
                 {
                     FocusLink = null;
                 }
@@ -2017,7 +2017,7 @@ namespace System.Windows.Forms
             //
             if (m.WParam == InternalHandle && PARAM.LOWORD(m.LParam) == (int)User32.HT.CLIENT)
             {
-                if (OverrideCursor != null)
+                if (OverrideCursor is not null)
                 {
                     Cursor.Current = OverrideCursor;
                 }
@@ -2214,7 +2214,7 @@ namespace System.Windows.Forms
 
             public int Add(Link value)
             {
-                if (value != null && value.Length != 0)
+                if (value is not null && value.Length != 0)
                 {
                     linksAdded = true;
                 }
@@ -2398,7 +2398,7 @@ namespace System.Windows.Forms
 
             public IEnumerator GetEnumerator()
             {
-                if (owner.links != null)
+                if (owner.links is not null)
                 {
                     return owner.links.GetEnumerator();
                 }
@@ -2431,7 +2431,7 @@ namespace System.Windows.Forms
                 owner.InvalidateTextLayout();
                 owner.Invalidate();
 
-                if (owner.FocusLink == null && owner.links.Count > 0)
+                if (owner.FocusLink is null && owner.links.Count > 0)
                 {
                     owner.FocusLink = (Link)owner.links[0];
                 }
@@ -2511,7 +2511,7 @@ namespace System.Windows.Forms
                         if ((int)(State & (LinkState.Hover | LinkState.Active)) != 0)
                         {
                             State &= ~(LinkState.Hover | LinkState.Active);
-                            if (Owner != null)
+                            if (Owner is not null)
                             {
                                 Owner.OverrideCursor = null;
                             }
@@ -2528,7 +2528,7 @@ namespace System.Windows.Forms
                 {
                     if (_length == -1)
                     {
-                        if (Owner != null && !string.IsNullOrEmpty(Owner.Text))
+                        if (Owner is not null && !string.IsNullOrEmpty(Owner.Text))
                         {
                             StringInfo stringInfo = new StringInfo(Owner.Text);
                             return stringInfo.LengthInTextElements - Start;
@@ -2546,7 +2546,7 @@ namespace System.Windows.Forms
                     if (_length != value)
                     {
                         _length = value;
-                        if (Owner != null)
+                        if (Owner is not null)
                         {
                             Owner.InvalidateTextLayout();
                             Owner.Invalidate();
@@ -2586,7 +2586,7 @@ namespace System.Windows.Forms
                     {
                         _start = value;
 
-                        if (Owner != null)
+                        if (Owner is not null)
                         {
                             Owner.links.Sort(LinkLabel.linkComparer);
                             Owner.InvalidateTextLayout();
@@ -2633,7 +2633,7 @@ namespace System.Windows.Forms
         {
             int IComparer.Compare(object link1, object link2)
             {
-                Debug.Assert(link1 != null && link2 != null, "Null objects sent for comparison");
+                Debug.Assert(link1 is not null && link2 is not null, "Null objects sent for comparison");
 
                 int pos1 = ((Link)link1).Start;
                 int pos2 = ((Link)link2).Start;
@@ -2683,7 +2683,7 @@ namespace System.Windows.Forms
             {
                 Point p = Owner.PointToClient(new Point(x, y));
                 Link hit = ((LinkLabel)Owner).PointInLink(p.X, p.Y);
-                if (hit != null)
+                if (hit is not null)
                 {
                     return new LinkAccessibleObject(hit);
                 }
@@ -2720,11 +2720,11 @@ namespace System.Windows.Forms
 
                     // Make sure we have a region for this link
                     //
-                    if (region == null)
+                    if (region is null)
                     {
                         link.Owner.EnsureRun(g);
                         region = link.VisualRegion;
-                        if (region == null)
+                        if (region is null)
                         {
                             g.Dispose();
                             return Rectangle.Empty;

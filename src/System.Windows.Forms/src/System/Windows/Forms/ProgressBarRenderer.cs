@@ -92,7 +92,7 @@ namespace System.Windows.Forms
 
         private static void InitializeRenderer(VisualStyleElement element)
         {
-            if (visualStyleRenderer == null)
+            if (visualStyleRenderer is null)
             {
                 visualStyleRenderer = new VisualStyleRenderer(element);
             }

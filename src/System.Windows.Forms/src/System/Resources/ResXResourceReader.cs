@@ -196,13 +196,13 @@ namespace System.Resources
         {
             if (disposing)
             {
-                if (_fileName != null && _stream != null)
+                if (_fileName is not null && _stream is not null)
                 {
                     _stream.Close();
                     _stream = null;
                 }
 
-                if (_reader != null)
+                if (_reader is not null)
                 {
                     _reader.Close();
                     _reader = null;
@@ -234,7 +234,7 @@ namespace System.Resources
         /// </summary>
         private void EnsureResData()
         {
-            if (_resData == null)
+            if (_resData is null)
             {
                 _resData = new ListDictionary();
                 _resMetadata = new ListDictionary();
@@ -244,17 +244,17 @@ namespace System.Resources
                 try
                 {
                     // Read data in any which way
-                    if (_fileContents != null)
+                    if (_fileContents is not null)
                     {
                         contentReader = new XmlTextReader(new StringReader(_fileContents));
                     }
-                    else if (_reader != null)
+                    else if (_reader is not null)
                     {
                         contentReader = new XmlTextReader(_reader);
                     }
-                    else if (_fileName != null || _stream != null)
+                    else if (_fileName is not null || _stream is not null)
                     {
-                        if (_stream == null)
+                        if (_stream is null)
                         {
                             _stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                         }
@@ -268,7 +268,7 @@ namespace System.Resources
                 }
                 finally
                 {
-                    if (_fileName != null && _stream != null)
+                    if (_fileName is not null && _stream is not null)
                     {
                         _stream.Close();
                         _stream = null;
@@ -432,17 +432,17 @@ namespace System.Resources
 
                 string readerTypeName = _resHeaderReaderType;
                 string writerTypeName = _resHeaderWriterType;
-                if (readerTypeName != null && readerTypeName.IndexOf(',') != -1)
+                if (readerTypeName is not null && readerTypeName.IndexOf(',') != -1)
                 {
                     readerTypeName = readerTypeName.Split(',')[0].Trim();
                 }
-                if (writerTypeName != null && writerTypeName.IndexOf(',') != -1)
+                if (writerTypeName is not null && writerTypeName.IndexOf(',') != -1)
                 {
                     writerTypeName = writerTypeName.Split(',')[0].Trim();
                 }
 
-                if (readerTypeName != null &&
-                    writerTypeName != null &&
+                if (readerTypeName is not null &&
+                    writerTypeName is not null &&
                     readerTypeName.Equals(readerType.FullName) &&
                     writerTypeName.Equals(writerType.FullName))
                 {
@@ -461,7 +461,7 @@ namespace System.Resources
         private void ParseResHeaderNode(XmlReader reader)
         {
             string name = reader[ResXResourceWriter.NameStr];
-            if (name != null)
+            if (name is not null)
             {
                 reader.ReadStartElement();
 
@@ -600,7 +600,7 @@ namespace System.Resources
                 assemblyName = _aliasResolver.ResolveAlias(alias);
             }
 
-            if (assemblyName != null)
+            if (assemblyName is not null)
             {
                 nodeInfo.TypeName = GetTypeFromTypeName(typeName) + ", " + assemblyName.FullName;
             }
@@ -660,7 +660,7 @@ namespace System.Resources
                 }
             }
 
-            if (nodeInfo.Name == null)
+            if (nodeInfo.Name is null)
             {
                 throw new ArgumentException(string.Format(SR.InvalidResXResourceNoName, nodeInfo.ValueData));
             }
@@ -674,7 +674,7 @@ namespace System.Resources
             else
             {
                 IDictionary data = (isMetaData ? _resMetadata : _resData);
-                if (_assemblyNames == null)
+                if (_assemblyNames is null)
                 {
                     data[nodeInfo.Name] = dataNode.GetValue(_typeResolver);
                 }

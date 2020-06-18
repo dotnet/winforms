@@ -39,7 +39,7 @@ namespace System.ComponentModel.Design
             ///  If there is just a reset method, this always returns true.  If none of these
             ///  cases apply, this returns false.
             /// </summary>
-            public override bool CanResetValue(object component) => GetValue(component) != null;
+            public override bool CanResetValue(object component) => GetValue(component) is not null;
 
             /// <summary>
             ///  Retrieves the type of the component this PropertyDescriptor is bound to.
@@ -53,7 +53,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_converter == null)
+                    if (_converter is null)
                     {
                         _converter = new EventConverter(Event);
                     }
@@ -84,7 +84,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public override object GetValue(object component)
             {
-                if (component == null)
+                if (component is null)
                 {
                     throw new ArgumentNullException(nameof(component));
                 }
@@ -98,20 +98,20 @@ namespace System.ComponentModel.Design
                     site = ((IComponent)component).Site;
                 }
 
-                if (site == null)
+                if (site is null)
                 {
                     if (_eventSvc._provider.GetService(typeof(IReferenceService)) is IReferenceService rs)
                     {
                         IComponent baseComponent = rs.GetComponent(component);
 
-                        if (baseComponent != null)
+                        if (baseComponent is not null)
                         {
                             site = baseComponent.Site;
                         }
                     }
                 }
 
-                if (site == null)
+                if (site is null)
                 {
                     // Object not sited, so we weren't able to set a value on it.  Setting a value will fail.
                     return null;
@@ -119,7 +119,7 @@ namespace System.ComponentModel.Design
 
                 IDictionaryService ds = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                if (ds == null)
+                if (ds is null)
                 {
                     // No dictionary service, so we weren't able to set a value on it. Setting a value will fail.
                     return null;
@@ -157,7 +157,7 @@ namespace System.ComponentModel.Design
                     throw ex;
                 }
 
-                if (value != null && !(value is string))
+                if (value is not null && !(value is string))
                 {
                     Exception ex = new ArgumentException(string.Format(SR.EventBindingServiceBadArgType, Name, typeof(string).Name));
                     ex.HelpLink = SR.EventBindingServiceBadArgType;
@@ -167,7 +167,7 @@ namespace System.ComponentModel.Design
 
                 string name = (string)value;
 
-                if (name != null && name.Length == 0)
+                if (name is not null && name.Length == 0)
                 {
                     name = null;
                 }
@@ -181,17 +181,17 @@ namespace System.ComponentModel.Design
                     site = ((IComponent)component).Site;
                 }
 
-                if (site == null && (_eventSvc._provider.GetService(typeof(IReferenceService)) is IReferenceService rs))
+                if (site is null && (_eventSvc._provider.GetService(typeof(IReferenceService)) is IReferenceService rs))
                 {
                     IComponent baseComponent = rs.GetComponent(component);
 
-                    if (baseComponent != null)
+                    if (baseComponent is not null)
                     {
                         site = baseComponent.Site;
                     }
                 }
 
-                if (site == null)
+                if (site is null)
                 {
                     Exception ex = new InvalidOperationException(SR.EventBindingServiceNoSite);
                     ex.HelpLink = SR.EventBindingServiceNoSite;
@@ -217,13 +217,13 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                if (oldName != null && name != null && oldName.Equals(name))
+                if (oldName is not null && name is not null && oldName.Equals(name))
                 {
                     return;
                 }
 
                 // Before we continue our work, ensure that the name is actually valid.
-                if (name != null)
+                if (name is not null)
                 {
                     _eventSvc.ValidateMethodName(name);
                 }
@@ -244,7 +244,7 @@ namespace System.ComponentModel.Design
                     // sure it's OK to perform the change.
                     IComponentChangeService change = site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
 
-                    if (change != null)
+                    if (change is not null)
                     {
                         try
                         {
@@ -265,19 +265,19 @@ namespace System.ComponentModel.Design
                     // Less chance of success of adding a new method name, so
                     // don't release the old name until we verify that adding
                     // the new one actually succeeded.
-                    if (name != null)
+                    if (name is not null)
                     {
                         _eventSvc.UseMethod((IComponent)component, Event, name);
                     }
 
-                    if (oldName != null)
+                    if (oldName is not null)
                     {
                         _eventSvc.FreeMethod((IComponent)component, Event, oldName);
                     }
 
                     ds.SetValue(key, name);
 
-                    if (change != null)
+                    if (change is not null)
                     {
                         change.OnComponentChanged(component, Event, null, null);
                         change.OnComponentChanged(component, this, oldName, name);
@@ -285,14 +285,14 @@ namespace System.ComponentModel.Design
 
                     OnValueChanged(component, EventArgs.Empty);
 
-                    if (trans != null)
+                    if (trans is not null)
                     {
                         trans.Commit();
                     }
                 }
                 finally
                 {
-                    if (trans != null)
+                    if (trans is not null)
                     {
                         ((IDisposable)trans).Dispose();
                     }
@@ -358,7 +358,7 @@ namespace System.ComponentModel.Design
                 /// </summary>
                 public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
                 {
-                    if (value == null)
+                    if (value is null)
                     {
                         return value;
                     }
@@ -404,11 +404,11 @@ namespace System.ComponentModel.Design
                     // We cannot cache this because it depends on the contents of the source file.
                     string[] eventMethods = null;
 
-                    if (context != null)
+                    if (context is not null)
                     {
                         IEventBindingService ebs = (IEventBindingService)context.GetService(typeof(IEventBindingService));
 
-                        if (ebs != null)
+                        if (ebs is not null)
                         {
                             ICollection methods = ebs.GetCompatibleMethods(_evt);
                             eventMethods = new string[methods.Count];

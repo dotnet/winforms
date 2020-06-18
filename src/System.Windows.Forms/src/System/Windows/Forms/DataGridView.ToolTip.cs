@@ -43,7 +43,7 @@ namespace System.Windows.Forms
                 }
 
                 // Create the tool tip handle on demand.
-                if (activate && toolTip == null)
+                if (activate && toolTip is null)
                 {
                     toolTip = new ToolTip
                     {
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                     toolTip.Active = true;
                     toolTip.Show(dataGridView.ToolTipPrivate, dataGridView);
                 }
-                else if (toolTip != null)
+                else if (toolTip is not null)
                 {
                     toolTip.Hide(dataGridView);
                     toolTip.Active = false;
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
 
             public void Dispose()
             {
-                if (toolTip != null)
+                if (toolTip is not null)
                 {
                     toolTip.Dispose();
                     toolTip = null;

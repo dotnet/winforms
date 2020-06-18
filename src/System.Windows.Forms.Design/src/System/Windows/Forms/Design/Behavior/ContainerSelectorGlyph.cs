@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_glyph == null)
+                if (_glyph is null)
                 {
                     _glyph = new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph").ToBitmap();
                 }

@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && value.IsStub)
+                if (value is not null && value.IsStub)
                 {
                     // WINRES only scenario.
                     // we only support table layout settings that have been created from a type converter.
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
         private bool ShouldSerializeControls()
         {
             TableLayoutControlCollection collection = Controls;
-            return collection != null && collection.Count > 0;
+            return collection is not null && collection.Count > 0;
         }
 
         #region Extended Properties
@@ -314,7 +314,7 @@ namespace System.Windows.Forms
         public int[] GetColumnWidths()
         {
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
-            if (containerInfo.Columns == null)
+            if (containerInfo.Columns is null)
             {
                 return Array.Empty<int>();
             }
@@ -335,7 +335,7 @@ namespace System.Windows.Forms
         public int[] GetRowHeights()
         {
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
-            if (containerInfo.Rows == null)
+            if (containerInfo.Rows is null)
             {
                 return Array.Empty<int>();
             }
@@ -388,7 +388,7 @@ namespace System.Windows.Forms
             TableLayout.Strip[] rowStrips = containerInfo.Rows;
             TableLayoutPanelCellBorderStyle cellBorderStyle = CellBorderStyle;
 
-            if (colStrips == null || rowStrips == null)
+            if (colStrips is null || rowStrips is null)
             {
                 return;
             }

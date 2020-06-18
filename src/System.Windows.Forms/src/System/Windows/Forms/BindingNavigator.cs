@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public BindingNavigator(IContainer container) : this(false)
         {
-            if (container == null)
+            if (container is null)
             {
                 throw new ArgumentNullException(nameof(container));
             }
@@ -266,7 +266,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (moveFirstItem != null && moveFirstItem.IsDisposed)
+                if (moveFirstItem is not null && moveFirstItem.IsDisposed)
                 {
                     moveFirstItem = null;
                 }
@@ -289,7 +289,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (movePreviousItem != null && movePreviousItem.IsDisposed)
+                if (movePreviousItem is not null && movePreviousItem.IsDisposed)
                 {
                     movePreviousItem = null;
                 }
@@ -313,7 +313,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (moveNextItem != null && moveNextItem.IsDisposed)
+                if (moveNextItem is not null && moveNextItem.IsDisposed)
                 {
                     moveNextItem = null;
                 }
@@ -336,7 +336,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (moveLastItem != null && moveLastItem.IsDisposed)
+                if (moveLastItem is not null && moveLastItem.IsDisposed)
                 {
                     moveLastItem = null;
                 }
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (addNewItem != null && addNewItem.IsDisposed)
+                if (addNewItem is not null && addNewItem.IsDisposed)
                 {
                     addNewItem = null;
                 }
@@ -368,7 +368,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (addNewItem != value && value != null)
+                if (addNewItem != value && value is not null)
                 {
                     value.InternalEnabledChanged += new EventHandler(OnAddNewItemEnabledChanged);
                     addNewItemUserEnabled = value.Enabled;
@@ -387,7 +387,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (deleteItem != null && deleteItem.IsDisposed)
+                if (deleteItem is not null && deleteItem.IsDisposed)
                 {
                     deleteItem = null;
                 }
@@ -396,7 +396,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (deleteItem != value && value != null)
+                if (deleteItem != value && value is not null)
                 {
                     value.InternalEnabledChanged += new EventHandler(OnDeleteItemEnabledChanged);
                     deleteItemUserEnabled = value.Enabled;
@@ -415,7 +415,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (positionItem != null && positionItem.IsDisposed)
+                if (positionItem is not null && positionItem.IsDisposed)
                 {
                     positionItem = null;
                 }
@@ -438,7 +438,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (countItem != null && countItem.IsDisposed)
+                if (countItem is not null && countItem.IsDisposed)
                 {
                     countItem = null;
                 }
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
             bool allowNew, allowRemove;
 
             // Get state info from the binding source (if any)
-            if (bindingSource == null)
+            if (bindingSource is null)
             {
                 count = 0;
                 position = 0;
@@ -513,27 +513,27 @@ namespace System.Windows.Forms
             // Enable or disable items (except when in design mode)
             if (!DesignMode)
             {
-                if (MoveFirstItem != null)
+                if (MoveFirstItem is not null)
                 {
                     moveFirstItem.Enabled = (position > 1);
                 }
 
-                if (MovePreviousItem != null)
+                if (MovePreviousItem is not null)
                 {
                     movePreviousItem.Enabled = (position > 1);
                 }
 
-                if (MoveNextItem != null)
+                if (MoveNextItem is not null)
                 {
                     moveNextItem.Enabled = (position < count);
                 }
 
-                if (MoveLastItem != null)
+                if (MoveLastItem is not null)
                 {
                     moveLastItem.Enabled = (position < count);
                 }
 
-                if (AddNewItem != null)
+                if (AddNewItem is not null)
                 {
                     EventHandler handler = new EventHandler(OnAddNewItemEnabledChanged);
                     addNewItem.InternalEnabledChanged -= handler;
@@ -541,7 +541,7 @@ namespace System.Windows.Forms
                     addNewItem.InternalEnabledChanged += handler;
                 }
 
-                if (DeleteItem != null)
+                if (DeleteItem is not null)
                 {
                     EventHandler handler = new EventHandler(OnDeleteItemEnabledChanged);
                     deleteItem.InternalEnabledChanged -= handler;
@@ -549,25 +549,25 @@ namespace System.Windows.Forms
                     deleteItem.InternalEnabledChanged += handler;
                 }
 
-                if (PositionItem != null)
+                if (PositionItem is not null)
                 {
                     positionItem.Enabled = (position > 0 && count > 0);
                 }
 
-                if (CountItem != null)
+                if (CountItem is not null)
                 {
                     countItem.Enabled = (count > 0);
                 }
             }
 
             // Update current position indicator
-            if (positionItem != null)
+            if (positionItem is not null)
             {
                 positionItem.Text = position.ToString(CultureInfo.CurrentCulture);
             }
 
             // Update record count indicator
-            if (countItem != null)
+            if (countItem is not null)
             {
                 countItem.Text = DesignMode ? CountItemFormat : string.Format(CultureInfo.CurrentCulture, CountItemFormat, count);
             }
@@ -602,7 +602,7 @@ namespace System.Windows.Forms
         private void AcceptNewPosition()
         {
             // If no position item or binding source, do nothing
-            if (positionItem == null || bindingSource == null)
+            if (positionItem is null || bindingSource is null)
             {
                 return;
             }
@@ -653,7 +653,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (bindingSource is not null)
                 {
                     bindingSource.MoveFirst();
                     RefreshItemsInternal();
@@ -668,7 +668,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (bindingSource is not null)
                 {
                     bindingSource.MovePrevious();
                     RefreshItemsInternal();
@@ -683,7 +683,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (bindingSource is not null)
                 {
                     bindingSource.MoveNext();
                     RefreshItemsInternal();
@@ -698,7 +698,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (bindingSource is not null)
                 {
                     bindingSource.MoveLast();
                     RefreshItemsInternal();
@@ -713,7 +713,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (bindingSource is not null)
                 {
                     bindingSource.AddNew();
                     RefreshItemsInternal();
@@ -728,7 +728,7 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (bindingSource is not null)
                 {
                     bindingSource.RemoveCurrent();
                     RefreshItemsInternal();
@@ -803,7 +803,7 @@ namespace System.Windows.Forms
 
         private void OnAddNewItemEnabledChanged(object sender, EventArgs e)
         {
-            if (AddNewItem != null)
+            if (AddNewItem is not null)
             {
                 addNewItemUserEnabled = addNewItem.Enabled;
             }
@@ -811,7 +811,7 @@ namespace System.Windows.Forms
 
         private void OnDeleteItemEnabledChanged(object sender, EventArgs e)
         {
-            if (DeleteItem != null)
+            if (DeleteItem is not null)
             {
                 deleteItemUserEnabled = deleteItem.Enabled;
             }
@@ -828,12 +828,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (oldButton != null)
+            if (oldButton is not null)
             {
                 oldButton.Click -= clickHandler;
             }
 
-            if (newButton != null)
+            if (newButton is not null)
             {
                 newButton.Click += clickHandler;
             }
@@ -888,7 +888,7 @@ namespace System.Windows.Forms
         {
             if (oldBindingSource != newBindingSource)
             {
-                if (oldBindingSource != null)
+                if (oldBindingSource is not null)
                 {
                     oldBindingSource.PositionChanged -= new EventHandler(OnBindingSourceStateChanged);
                     oldBindingSource.CurrentChanged -= new EventHandler(OnBindingSourceStateChanged);
@@ -898,7 +898,7 @@ namespace System.Windows.Forms
                     oldBindingSource.ListChanged -= new ListChangedEventHandler(OnBindingSourceListChanged);
                 }
 
-                if (newBindingSource != null)
+                if (newBindingSource is not null)
                 {
                     newBindingSource.PositionChanged += new EventHandler(OnBindingSourceStateChanged);
                     newBindingSource.CurrentChanged += new EventHandler(OnBindingSourceStateChanged);

@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Add(NumericUpDownAcceleration acceleration)
         {
-            if (acceleration == null)
+            if (acceleration is null)
             {
                 throw new ArgumentNullException(nameof(acceleration));
             }
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddRange(params NumericUpDownAcceleration[] accelerations)
         {
-            if (accelerations == null)
+            if (accelerations is null)
             {
                 throw new ArgumentNullException(nameof(accelerations));
             }
@@ -129,7 +129,7 @@ namespace System.Windows.Forms
             // Accept the range only if ALL elements in the array are not null.
             foreach (NumericUpDownAcceleration acceleration in accelerations)
             {
-                if (acceleration == null)
+                if (acceleration is null)
                 {
                     throw new ArgumentNullException(SR.NumericUpDownAccelerationCollectionAtLeastOneEntryIsNull);
                 }

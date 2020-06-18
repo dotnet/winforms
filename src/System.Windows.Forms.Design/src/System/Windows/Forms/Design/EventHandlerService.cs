@@ -45,12 +45,12 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public object GetHandler(Type handlerType)
         {
-            if (handlerType == null)
+            if (handlerType is null)
             {
                 throw new ArgumentNullException(nameof(handlerType));
             }
 
-            if (_lastHandlerType == null)
+            if (_lastHandlerType is null)
             {
                 return null;
             }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
 
             object handler = _handlers.FirstOrDefault(h => handlerType.IsInstanceOfType(h));
 
-            if (handler != null)
+            if (handler is not null)
             {
                 _lastHandler = handler;
                 _lastHandlerType = handlerType;
@@ -78,13 +78,13 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void PopHandler(object handler)
         {
-            if (handler == null)
+            if (handler is null)
             {
                 throw new ArgumentNullException(nameof(handler));
             }
 
             var node = _handlers.Find(handler);
-            if (node != null)
+            if (node is not null)
             {
                 _handlers.Remove(node);
                 _lastHandler = null;
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void PushHandler(object handler)
         {
-            if (handler == null)
+            if (handler is null)
             {
                 throw new ArgumentNullException(nameof(handler));
             }

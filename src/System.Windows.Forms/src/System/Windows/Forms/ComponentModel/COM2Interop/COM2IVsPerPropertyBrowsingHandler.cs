@@ -52,7 +52,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
         {
-            if (propDesc == null)
+            if (propDesc is null)
             {
                 return;
             }
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // should we localize this?
             string[] pHelpString = new string[1];
             HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, CultureInfo.CurrentCulture.LCID, null, pHelpString);
-            if (hr == HRESULT.S_OK && pHelpString[0] != null)
+            if (hr == HRESULT.S_OK && pHelpString[0] is not null)
             {
                 attrEvent.Add(new DescriptionAttribute(pHelpString[0]));
             }
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         private unsafe void OnCanResetPropertyValue(Com2PropertyDescriptor sender, GetBoolValueEvent boolEvent)
@@ -138,7 +138,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         /// <summary>
@@ -151,13 +151,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // get the localized name, if applicable
                 string[] pNameString = new string[1];
                 HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, CultureInfo.CurrentCulture.LCID, pNameString, null);
-                if (hr == HRESULT.S_OK && pNameString[0] != null)
+                if (hr == HRESULT.S_OK && pNameString[0] is not null)
                 {
                     nameItem.Name = pNameString[0];
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         private unsafe void OnResetPropertyValue(Com2PropertyDescriptor sender, EventArgs e)
@@ -218,7 +218,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         private unsafe void OnShouldSerializeValue(Com2PropertyDescriptor sender, GetBoolValueEvent gbvevent)
@@ -235,7 +235,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
     }
 }

@@ -27,7 +27,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_defaultSerializer == null)
+                if (s_defaultSerializer is null)
                 {
                     s_defaultSerializer = new PrimitiveCodeDomSerializer();
                 }
@@ -42,12 +42,12 @@ namespace System.ComponentModel.Design.Serialization
         {
             using (TraceScope("PrimitiveCodeDomSerializer::" + nameof(Serialize)))
             {
-                Trace("Value: {0}", (value == null ? "(null)" : value.ToString()));
+                Trace("Value: {0}", (value is null ? "(null)" : value.ToString()));
             }
 
             CodeExpression expression = new CodePrimitiveExpression(value);
 
-            if (value == null)
+            if (value is null)
             {
                 return expression;
             }

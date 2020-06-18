@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_dropSource == null)
+                if (_dropSource is null)
                 {
                     _dropSource = new Control();
                 }
@@ -66,16 +66,16 @@ namespace System.Windows.Forms.Design
             }
             // Dont paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(item);
-            if (keyService != null && keyService.TemplateNodeActive)
+            if (keyService is not null && keyService.TemplateNodeActive)
             {
                 return;
             }
 
             // stuff away the lastInsertionMarkRect  and clear it out _before_ we call paint OW the call to invalidate wont help as it will get repainted.
-            if (item != null && item.Site != null)
+            if (item is not null && item.Site is not null)
             {
                 IDesignerHost designerHost = (IDesignerHost)item.Site.GetService(typeof(IDesignerHost));
-                if (designerHost != null)
+                if (designerHost is not null)
                 {
                     Rectangle bounds = GetPaintingBounds(designerHost, item);
                     bounds.Inflate(GLYPHBORDER, GLYPHBORDER);
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Design
                         bounds.Inflate(-GLYPHINSET, -GLYPHINSET);
                         rgn.Exclude(bounds);
                         BehaviorService bSvc = GetBehaviorService(item);
-                        if (bSvc != null && bounds != Rectangle.Empty)
+                        if (bSvc is not null && bounds != Rectangle.Empty)
                         {
                             bSvc.Invalidate(rgn);
                         }
@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Design
         // Tries to put the item in the Insitu edit mode after the double click timer has ticked
         private void EnterInSituMode(ToolStripItemGlyph glyph)
         {
-            if (glyph.ItemDesigner != null && !glyph.ItemDesigner.IsEditorActive)
+            if (glyph.ItemDesigner is not null && !glyph.ItemDesigner.IsEditorActive)
             {
                 glyph.ItemDesigner.ShowEditNode(false);
             }
@@ -111,11 +111,11 @@ namespace System.Windows.Forms.Design
         // Gets the Selection Service.
         private ISelectionService GetSelectionService(ToolStripItem item)
         {
-            Debug.Assert(item != null, "Item passed is null, SelectionService cannot be obtained");
-            if (item.Site != null)
+            Debug.Assert(item is not null, "Item passed is null, SelectionService cannot be obtained");
+            if (item.Site is not null)
             {
                 ISelectionService selSvc = (ISelectionService)item.Site.GetService(typeof(ISelectionService));
-                Debug.Assert(selSvc != null, "Failed to get Selection Service!");
+                Debug.Assert(selSvc is not null, "Failed to get Selection Service!");
                 return selSvc;
             }
             return null;
@@ -124,11 +124,11 @@ namespace System.Windows.Forms.Design
         // Gets the Behavior Service.
         private BehaviorService GetBehaviorService(ToolStripItem item)
         {
-            Debug.Assert(item != null, "Item passed is null, BehaviorService cannot be obtained");
-            if (item.Site != null)
+            Debug.Assert(item is not null, "Item passed is null, BehaviorService cannot be obtained");
+            if (item.Site is not null)
             {
                 BehaviorService behaviorSvc = (BehaviorService)item.Site.GetService(typeof(BehaviorService));
-                Debug.Assert(behaviorSvc != null, "Failed to get Behavior Service!");
+                Debug.Assert(behaviorSvc is not null, "Failed to get Behavior Service!");
                 return behaviorSvc;
             }
             return null;
@@ -137,11 +137,11 @@ namespace System.Windows.Forms.Design
         // Gets the ToolStripKeyBoardHandling Service.
         private ToolStripKeyboardHandlingService GetKeyBoardHandlingService(ToolStripItem item)
         {
-            Debug.Assert(item != null, "Item passed is null, ToolStripKeyBoardHandlingService cannot be obtained");
-            if (item.Site != null)
+            Debug.Assert(item is not null, "Item passed is null, ToolStripKeyBoardHandlingService cannot be obtained");
+            if (item.Site is not null)
             {
                 ToolStripKeyboardHandlingService keyBoardSvc = (ToolStripKeyboardHandlingService)item.Site.GetService(typeof(ToolStripKeyboardHandlingService));
-                Debug.Assert(keyBoardSvc != null, "Failed to get ToolStripKeyboardHandlingService!");
+                Debug.Assert(keyBoardSvc is not null, "Failed to get ToolStripKeyboardHandlingService!");
                 return keyBoardSvc;
             }
             return null;
@@ -167,28 +167,28 @@ namespace System.Windows.Forms.Design
         private bool MouseHandlerPresent(ToolStripItem item)
         {
             IMouseHandler mouseHandler = null;
-            if (_eventSvc == null)
+            if (_eventSvc is null)
             {
                 _eventSvc = (IEventHandlerService)item.Site.GetService(typeof(IEventHandlerService));
             }
-            if (_eventSvc != null)
+            if (_eventSvc is not null)
             {
                 mouseHandler = (IMouseHandler)_eventSvc.GetHandler(typeof(IMouseHandler));
             }
-            return (mouseHandler != null);
+            return (mouseHandler is not null);
         }
 
         // Occurs when the timer ticks after user has doubleclicked an item
         private void OnDoubleClickTimerTick(object sender, EventArgs e)
         {
-            if (_timer != null)
+            if (_timer is not null)
             {
                 _timer.Enabled = false;
                 _timer.Tick -= new System.EventHandler(OnDoubleClickTimerTick);
                 _timer.Dispose();
                 _timer = null;
                 // Enter Insitu ...
-                if (_selectedGlyph != null && _selectedGlyph.Item is ToolStripMenuItem)
+                if (_selectedGlyph is not null && _selectedGlyph.Item is ToolStripMenuItem)
                 {
                     EnterInSituMode(_selectedGlyph);
                 }
@@ -217,10 +217,10 @@ namespace System.Windows.Forms.Design
             SetParentDesignerValuesForDragDrop(glyphItem, false, Point.Empty);
             if (_doubleClickFired)
             {
-                if (glyph != null && button == MouseButtons.Left)
+                if (glyph is not null && button == MouseButtons.Left)
                 {
                     ISelectionService selSvc = GetSelectionService(glyphItem);
-                    if (selSvc == null)
+                    if (selSvc is null)
                     {
                         return false;
                     }
@@ -229,8 +229,8 @@ namespace System.Windows.Forms.Design
                     // Check if this item is already selected ...
                     if (selectedItem == glyphItem)
                     {
-                        // If timer != null.. we are in DoubleClick before the "InSitu Timer" so KILL IT.
-                        if (_timer != null)
+                        // If timer is not null.. we are in DoubleClick before the "InSitu Timer" so KILL IT.
+                        if (_timer is not null)
                         {
                             _timer.Enabled = false;
                             _timer.Tick -= new System.EventHandler(OnDoubleClickTimerTick);
@@ -238,10 +238,10 @@ namespace System.Windows.Forms.Design
                             _timer = null;
                         }
                         // If the Selecteditem is already in editmode ... bail out
-                        if (selectedItem != null)
+                        if (selectedItem is not null)
                         {
                             ToolStripItemDesigner selectedItemDesigner = glyph.ItemDesigner;
-                            if (selectedItemDesigner != null && selectedItemDesigner.IsEditorActive)
+                            if (selectedItemDesigner is not null && selectedItemDesigner.IsEditorActive)
                             {
                                 return false;
                             }
@@ -267,7 +267,7 @@ namespace System.Windows.Forms.Design
             ISelectionService selSvc = GetSelectionService(glyphItem);
             BehaviorService bSvc = GetBehaviorService(glyphItem);
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(glyphItem);
-            if ((button == MouseButtons.Left) && (keyService != null) && (keyService.TemplateNodeActive))
+            if ((button == MouseButtons.Left) && (keyService is not null) && (keyService.TemplateNodeActive))
             {
                 if (keyService.ActiveTemplateNode.IsSystemContextMenuDisplayed)
                 {
@@ -277,11 +277,11 @@ namespace System.Windows.Forms.Design
             }
 
             IDesignerHost designerHost = (IDesignerHost)glyphItem.Site.GetService(typeof(IDesignerHost));
-            Debug.Assert(designerHost != null, "Invalid DesignerHost");
+            Debug.Assert(designerHost is not null, "Invalid DesignerHost");
 
             //Cache original selection
             ICollection originalSelComps = null;
-            if (selSvc != null)
+            if (selSvc is not null)
             {
                 originalSelComps = selSvc.GetSelectedComponents();
             }
@@ -290,13 +290,13 @@ namespace System.Windows.Forms.Design
             ArrayList origSel = new ArrayList(originalSelComps);
             if (origSel.Count == 0)
             {
-                if (keyService != null && keyService.SelectedDesignerControl != null)
+                if (keyService is not null && keyService.SelectedDesignerControl is not null)
                 {
                     origSel.Add(keyService.SelectedDesignerControl);
                 }
             }
 
-            if (keyService != null)
+            if (keyService is not null)
             {
                 keyService.SelectedDesignerControl = null;
                 if (keyService.TemplateNodeActive)
@@ -311,24 +311,24 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (selSvc == null || MouseHandlerPresent(glyphItem))
+            if (selSvc is null || MouseHandlerPresent(glyphItem))
             {
                 return false;
             }
 
-            if (glyph != null && button == MouseButtons.Left)
+            if (glyph is not null && button == MouseButtons.Left)
             {
                 ToolStripItem selectedItem = selSvc.PrimarySelection as ToolStripItem;
                 // Always set the Drag-Rect for Drag-Drop...
                 SetParentDesignerValuesForDragDrop(glyphItem, true, mouseLoc);
                 // Check if this item is already selected ...
-                if (selectedItem != null && selectedItem == glyphItem)
+                if (selectedItem is not null && selectedItem == glyphItem)
                 {
                     // If the Selecteditem is already in editmode ... bail out
-                    if (selectedItem != null)
+                    if (selectedItem is not null)
                     {
                         ToolStripItemDesigner selectedItemDesigner = glyph.ItemDesigner;
-                        if (selectedItemDesigner != null && selectedItemDesigner.IsEditorActive)
+                        if (selectedItemDesigner is not null && selectedItemDesigner.IsEditorActive)
                         {
                             return false;
                         }
@@ -371,7 +371,7 @@ namespace System.Windows.Forms.Design
                         _doubleClickFired = false;
                         //Implementing Shift + Click....
                         // we have 2 items, namely, selectedItem (current PrimarySelection) and glyphItem (item which has received mouseDown) FIRST check if they have common parent...  IF YES then get the indices of the two and SELECT all items from LOWER index to the HIGHER index.
-                        if (shiftPressed && (selectedItem != null && CommonParent(selectedItem, glyphItem)))
+                        if (shiftPressed && (selectedItem is not null && CommonParent(selectedItem, glyphItem)))
                         {
                             ToolStrip parent = null;
                             if (glyphItem.IsOnOverflow)
@@ -411,7 +411,7 @@ namespace System.Windows.Forms.Design
                             {
                                 //Invalidate glyh only if we are in ShiftState...
                                 ToolStripDesigner.s_shiftState = false;
-                                if (bSvc != null)
+                                if (bSvc is not null)
                                 {
                                     bSvc.Invalidate(glyphItem.Owner.Bounds);
                                 }
@@ -419,7 +419,7 @@ namespace System.Windows.Forms.Design
                             selSvc.SetSelectedComponents(new IComponent[] { glyphItem }, SelectionTypes.Auto);
                         }
                         // Set the appropriate object.
-                        if (keyService != null)
+                        if (keyService is not null)
                         {
                             keyService.ShiftPrimaryItem = glyphItem;
                         }
@@ -432,7 +432,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (glyph != null && button == MouseButtons.Right)
+            if (glyph is not null && button == MouseButtons.Right)
             {
                 if (!selSvc.GetComponentSelected(glyphItem))
                 {
@@ -459,7 +459,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 ISelectionService selSvc = GetSelectionService(glyphItem);
-                if (selSvc != null)
+                if (selSvc is not null)
                 {
                     if (!selSvc.GetComponentSelected(glyphItem))
                     {
@@ -483,7 +483,7 @@ namespace System.Windows.Forms.Design
                     return false;
                 }
                 ISelectionService selSvc = GetSelectionService(glyphItem);
-                if (selSvc != null)
+                if (selSvc is not null)
                 {
                     if (!selSvc.GetComponentSelected(glyphItem))
                     {
@@ -503,7 +503,7 @@ namespace System.Windows.Forms.Design
             ToolStripItemGlyph glyph = g as ToolStripItemGlyph;
             ToolStripItem glyphItem = glyph.Item;
             ISelectionService selSvc = GetSelectionService(glyphItem);
-            if (selSvc == null || glyphItem.Site == null || MouseHandlerPresent(glyphItem))
+            if (selSvc is null || glyphItem.Site is null || MouseHandlerPresent(glyphItem))
             {
                 return false;
             }
@@ -513,11 +513,11 @@ namespace System.Windows.Forms.Design
                 retVal = false;
             }
 
-            if (button == MouseButtons.Left && glyph != null && glyph.ItemDesigner != null && !glyph.ItemDesigner.IsEditorActive)
+            if (button == MouseButtons.Left && glyph is not null && glyph.ItemDesigner is not null && !glyph.ItemDesigner.IsEditorActive)
             {
                 Rectangle dragBox = Rectangle.Empty;
                 IDesignerHost designerHost = (IDesignerHost)glyphItem.Site.GetService(typeof(IDesignerHost));
-                Debug.Assert(designerHost != null, "Invalid DesignerHost");
+                Debug.Assert(designerHost is not null, "Invalid DesignerHost");
                 if (glyphItem.Placement == ToolStripItemPlacement.Overflow || (glyphItem.Placement == ToolStripItemPlacement.Main && !(glyphItem.IsOnDropDown)))
                 {
                     ToolStripItemDesigner itemDesigner = glyph.ItemDesigner;
@@ -542,7 +542,7 @@ namespace System.Windows.Forms.Design
                 // If the mouse moves outside the rectangle, start the drag.
                 if (dragBox != Rectangle.Empty && !dragBox.Contains(mouseLoc.X, mouseLoc.Y))
                 {
-                    if (_timer != null)
+                    if (_timer is not null)
                     {
                         _timer.Enabled = false;
                         _timer.Tick -= new System.EventHandler(OnDoubleClickTimerTick);
@@ -609,15 +609,15 @@ namespace System.Windows.Forms.Design
         {
             ToolStripItem currentDropItem = ToolStripDesigner.s_dragItem;
             // Ensure that the list item index is contained in the data.
-            if (e.Data is ToolStripItemDataObject && currentDropItem != null)
+            if (e.Data is ToolStripItemDataObject && currentDropItem is not null)
             {
                 ToolStripItemDataObject data = (ToolStripItemDataObject)e.Data;
                 // Get the PrimarySelection before the Drag operation...
                 ToolStripItem selectedItem = data.PrimarySelection;
                 IDesignerHost designerHost = (IDesignerHost)currentDropItem.Site.GetService(typeof(IDesignerHost));
-                Debug.Assert(designerHost != null, "Invalid DesignerHost");
+                Debug.Assert(designerHost is not null, "Invalid DesignerHost");
                 //Do DragDrop only if currentDropItem has changed.
-                if (currentDropItem != selectedItem && designerHost != null)
+                if (currentDropItem != selectedItem && designerHost is not null)
                 {
                     ArrayList components = data.DragComponents;
                     ToolStrip parentToolStrip = currentDropItem.GetCurrentParent() as ToolStrip;
@@ -627,7 +627,7 @@ namespace System.Windows.Forms.Design
                     if (components.Count == 1)
                     {
                         string name = TypeDescriptor.GetComponentName(components[0]);
-                        if (name == null || name.Length == 0)
+                        if (name is null || name.Length == 0)
                         {
                             name = components[0].GetType().Name;
                         }
@@ -642,7 +642,7 @@ namespace System.Windows.Forms.Design
                     try
                     {
                         IComponentChangeService changeSvc = (IComponentChangeService)currentDropItem.Site.GetService(typeof(IComponentChangeService));
-                        if (changeSvc != null)
+                        if (changeSvc is not null)
                         {
                             if (parentToolStrip is ToolStripDropDown dropDown)
                             {
@@ -659,17 +659,17 @@ namespace System.Windows.Forms.Design
                         if (copy)
                         {
                             // Remember the primary selection if we had one
-                            if (selectedItem != null)
+                            if (selectedItem is not null)
                             {
                                 primaryIndex = components.IndexOf(selectedItem);
                             }
                             ToolStripKeyboardHandlingService keyboardHandlingService = GetKeyBoardHandlingService(selectedItem);
-                            if (keyboardHandlingService != null)
+                            if (keyboardHandlingService is not null)
                             {
                                 keyboardHandlingService.CopyInProgress = true;
                             }
                             components = DesignerUtils.CopyDragObjects(components, currentDropItem.Site) as ArrayList;
-                            if (keyboardHandlingService != null)
+                            if (keyboardHandlingService is not null)
                             {
                                 keyboardHandlingService.CopyInProgress = false;
                             }
@@ -682,7 +682,7 @@ namespace System.Windows.Forms.Design
                         if (e.Effect == DragDropEffects.Move || copy)
                         {
                             ISelectionService selSvc = GetSelectionService(currentDropItem);
-                            if (selSvc != null)
+                            if (selSvc is not null)
                             {
                                 // Insert the item.
                                 if (parentToolStrip is ToolStripOverflow)
@@ -694,7 +694,7 @@ namespace System.Windows.Forms.Design
                                 if (indexOfItemUnderMouseToDrop != -1)
                                 {
                                     int indexOfPrimarySelection = 0;
-                                    if (selectedItem != null)
+                                    if (selectedItem is not null)
                                     {
                                         indexOfPrimarySelection = parentToolStrip.Items.IndexOf(selectedItem);
                                     }
@@ -711,10 +711,10 @@ namespace System.Windows.Forms.Design
                                 selSvc.SetSelectedComponents(new IComponent[] { selectedItem }, SelectionTypes.Primary | SelectionTypes.Replace);
                             }
                         }
-                        if (changeSvc != null)
+                        if (changeSvc is not null)
                         {
                             ToolStripDropDown dropDown = parentToolStrip as ToolStripDropDown;
-                            if (dropDown != null)
+                            if (dropDown is not null)
                             {
                                 ToolStripItem ownerItem = dropDown.OwnerItem;
                                 changeSvc.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"], null, null);
@@ -727,7 +727,7 @@ namespace System.Windows.Forms.Design
                             //fire extra changing/changed events.
                             if (copy)
                             {
-                                if (dropDown != null)
+                                if (dropDown is not null)
                                 {
                                     ToolStripItem ownerItem = dropDown.OwnerItem;
                                     changeSvc.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
@@ -765,14 +765,14 @@ namespace System.Windows.Forms.Design
                         }
                         // Refresh on SelectionManager...
                         BehaviorService bSvc = GetBehaviorService(currentDropItem);
-                        if (bSvc != null)
+                        if (bSvc is not null)
                         {
                             bSvc.SyncSelection();
                         }
                     }
                     catch (Exception ex)
                     {
-                        if (designerTransaction != null)
+                        if (designerTransaction is not null)
                         {
                             designerTransaction.Cancel();
                             designerTransaction = null;
@@ -784,7 +784,7 @@ namespace System.Windows.Forms.Design
                     }
                     finally
                     {
-                        if (designerTransaction != null)
+                        if (designerTransaction is not null)
                         {
                             designerTransaction.Commit();
                             designerTransaction = null;
@@ -861,21 +861,21 @@ namespace System.Windows.Forms.Design
             }
             // Dont paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(item);
-            if (keyService != null && keyService.TemplateNodeActive)
+            if (keyService is not null && keyService.TemplateNodeActive)
             {
                 return;
             }
 
             //Start from fresh State...
-            if (item != null && item.Site != null)
+            if (item is not null && item.Site is not null)
             {
                 ToolStripDesigner.s_lastCursorPosition = Cursor.Position;
                 IDesignerHost designerHost = (IDesignerHost)item.Site.GetService(typeof(IDesignerHost));
-                if (designerHost != null)
+                if (designerHost is not null)
                 {
                     Rectangle bounds = GetPaintingBounds(designerHost, item);
                     BehaviorService bSvc = GetBehaviorService(item);
-                    if (bSvc != null)
+                    if (bSvc is not null)
                     {
                         Graphics g = bSvc.AdornerWindowGraphics;
                         try
@@ -911,7 +911,7 @@ namespace System.Windows.Forms.Design
                 ToolStripItem item = sender as ToolStripItem;
                 SetParentDesignerValuesForDragDrop(item, false, Point.Empty);
                 ISelectionService selSvc = GetSelectionService(item);
-                if (selSvc != null)
+                if (selSvc is not null)
                 {
                     selSvc.SetSelectedComponents(new IComponent[] { item }, SelectionTypes.Auto);
                 }
@@ -922,7 +922,7 @@ namespace System.Windows.Forms.Design
         // Set values before initiating the Drag-Drop
         private void SetParentDesignerValuesForDragDrop(ToolStripItem glyphItem, bool setValues, Point mouseLoc)
         {
-            if (glyphItem.Site == null)
+            if (glyphItem.Site is null)
             {
                 return;
             }
@@ -930,7 +930,7 @@ namespace System.Windows.Forms.Design
             Size dragSize = new Size(1, 1);
 
             IDesignerHost designerHost = (IDesignerHost)glyphItem.Site.GetService(typeof(IDesignerHost));
-            Debug.Assert(designerHost != null, "Invalid DesignerHost");
+            Debug.Assert(designerHost is not null, "Invalid DesignerHost");
 
             // implement Drag Drop for individual ToolStrip Items While this item is getting selected.. Get the index of the item the mouse is below.
             if (glyphItem.Placement == ToolStripItemPlacement.Overflow || (glyphItem.Placement == ToolStripItemPlacement.Main && !(glyphItem.IsOnDropDown)))

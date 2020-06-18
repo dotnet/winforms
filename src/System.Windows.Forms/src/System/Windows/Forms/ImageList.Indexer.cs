@@ -52,7 +52,7 @@ namespace System.Windows.Forms
                         return Index;
                     }
 
-                    if (ImageList != null)
+                    if (ImageList is not null)
                     {
                         return ImageList.Images.IndexOfKey(Key);
                     }

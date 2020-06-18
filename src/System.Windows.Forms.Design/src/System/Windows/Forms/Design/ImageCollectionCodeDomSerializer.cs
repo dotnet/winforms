@@ -22,15 +22,15 @@ namespace System.Windows.Forms.Design
         public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
             // REVIEW: Please look at this carefully - This is just copied from ControlCodeDomSerializer
-            if (manager == null || codeObject == null)
+            if (manager is null || codeObject is null)
             {
-                throw new ArgumentNullException(manager == null ? "manager" : "codeObject");
+                throw new ArgumentNullException(manager is null ? "manager" : "codeObject");
             }
 
             // Find our base class's serializer.
             CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));
 
-            if (serializer == null)
+            if (serializer is null)
             {
                 Debug.Fail("Unable to find a CodeDom serializer for 'Component'.  Has someone tampered with the serialization providers?");
 
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Design
             object codeObject = baseSerializer.Serialize(manager, value);
             ImageList imageList = value as ImageList;
 
-            if (imageList != null)
+            if (imageList is not null)
             {
                 StringCollection imageKeys = imageList.Images.Keys;
 
@@ -57,15 +57,15 @@ namespace System.Windows.Forms.Design
                 {
                     CodeExpression imageListObject = GetExpression(manager, value);
 
-                    if (imageListObject != null)
+                    if (imageListObject is not null)
                     {
                         CodeExpression imageListImagesProperty = new CodePropertyReferenceExpression(imageListObject, "Images");
 
-                        if (imageListImagesProperty != null)
+                        if (imageListImagesProperty is not null)
                         {
                             for (int i = 0; i < imageKeys.Count; i++)
                             {
-                                if ((imageKeys[i] != null) || (imageKeys[i].Length != 0))
+                                if ((imageKeys[i] is not null) || (imageKeys[i].Length != 0))
                                 {
                                     CodeMethodInvokeExpression setNameMethodCall = new CodeMethodInvokeExpression(imageListImagesProperty, "SetKeyName",
                                                                                    new CodeExpression[] {

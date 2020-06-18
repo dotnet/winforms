@@ -234,7 +234,7 @@ namespace System.Windows.Forms
             get
             {
                 int value = startPage;
-                if (pageInfo != null)
+                if (pageInfo is not null)
                 {
                     value = Math.Min(value, pageInfo.Length - (rows * columns));
                 }
@@ -376,7 +376,7 @@ namespace System.Windows.Forms
         // This function computes everything in terms of physical size (millimeters), not pixels
         private void ComputeLayout()
         {
-            Debug.Assert(pageInfo != null, "Must call ComputePreview first");
+            Debug.Assert(pageInfo is not null, "Must call ComputePreview first");
             layoutOk = true;
             if (pageInfo.Length == 0)
             {
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
         {
             int oldStart = StartPage;
 
-            if (document == null)
+            if (document is null)
             {
                 pageInfo = Array.Empty<PreviewPageInfo>();
             }
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
 
                 document.Print();
                 pageInfo = previewController.GetPreviewPageInfo();
-                Debug.Assert(pageInfo != null, "ReviewPrintController did not give us preview info");
+                Debug.Assert(pageInfo is not null, "ReviewPrintController did not give us preview info");
 
                 document.PrintController = oldController;
             }
@@ -474,7 +474,7 @@ namespace System.Windows.Forms
             pageInfoCalcPending = true;
             try
             {
-                if (pageInfo == null)
+                if (pageInfo is null)
                 {
                     try
                     {
@@ -507,11 +507,11 @@ namespace System.Windows.Forms
 
             try
             {
-                if (pageInfo == null || pageInfo.Length == 0)
+                if (pageInfo is null || pageInfo.Length == 0)
                 {
                     pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
 
-                    if (pageInfo != null || exceptionPrinting)
+                    if (pageInfo is not null || exceptionPrinting)
                     {
                         // Calculate formats
                         StringFormat format = new StringFormat
@@ -626,7 +626,7 @@ namespace System.Windows.Forms
                                 pevent.Graphics.FillRectangle(brush, box);
                             }
                             box.Inflate(-1, -1);
-                            if (pageInfo[i + StartPage].Image != null)
+                            if (pageInfo[i + StartPage].Image is not null)
                             {
                                 pevent.Graphics.DrawImage(pageInfo[i + StartPage].Image, box);
                             }

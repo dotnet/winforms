@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design
 
         internal GlyphCollection GetGlyphs(ToolStrip parent, GlyphCollection glyphs, System.Windows.Forms.Design.Behavior.Behavior standardBehavior)
         {
-            if (_behaviorService == null)
+            if (_behaviorService is null)
             {
                 _behaviorService = (BehaviorService)parent.Site.GetService(typeof(BehaviorService));
             }

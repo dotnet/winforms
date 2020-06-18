@@ -29,7 +29,7 @@ namespace System.Windows.Forms
             htmlElementCollection = elements;
             elementsArray = null;
             this.shimManager = shimManager;
-            Debug.Assert(NativeHtmlElementCollection != null, "The element collection object should implement IHTMLElementCollection");
+            Debug.Assert(NativeHtmlElementCollection is not null, "The element collection object should implement IHTMLElementCollection");
         }
 
         internal HtmlElementCollection(HtmlShimManager shimManager, HtmlElement[] array)
@@ -57,11 +57,11 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
                 }
 
-                if (NativeHtmlElementCollection != null)
+                if (NativeHtmlElementCollection is not null)
                 {
                     return (NativeHtmlElementCollection.Item((object)index, (object)0) is IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
                 }
-                else if (elementsArray != null)
+                else if (elementsArray is not null)
                 {
                     return elementsArray[index];
                 }
@@ -76,11 +76,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (NativeHtmlElementCollection != null)
+                if (NativeHtmlElementCollection is not null)
                 {
                     return (NativeHtmlElementCollection.Item((object)elementId, (object)0) is IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
                 }
-                else if (elementsArray != null)
+                else if (elementsArray is not null)
                 {
                     int count = elementsArray.Length;
                     for (int i = 0; i < count; i++)
@@ -138,11 +138,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (NativeHtmlElementCollection != null)
+                if (NativeHtmlElementCollection is not null)
                 {
                     return NativeHtmlElementCollection.GetLength();
                 }
-                else if (elementsArray != null)
+                else if (elementsArray is not null)
                 {
                     return elementsArray.Length;
                 }

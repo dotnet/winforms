@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Design
                 return value;
             }
 
-            if (_borderSidesEditorUI == null)
+            if (_borderSidesEditorUI is null)
             {
                 _borderSidesEditorUI = new BorderSidesEditorUI(this);
             }
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Design
             _borderSidesEditorUI.Start(edSvc, value);
             edSvc.DropDownControl(_borderSidesEditorUI);
 
-            if (_borderSidesEditorUI.Value != null)
+            if (_borderSidesEditorUI.Value is not null)
             {
                 value = _borderSidesEditorUI.Value;
             }
@@ -413,7 +413,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
-                Debug.Assert(edSvc != null);
+                Debug.Assert(edSvc is not null);
 
                 EditorService = edSvc;
                 originalValue = Value = value;

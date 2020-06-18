@@ -85,7 +85,7 @@ namespace System.Windows.Forms
             get
             {
                 int imgIndex = imageIndexer.ActualIndex;
-                if (ImageList == null || ImageList.Images == null || imgIndex >= ImageList.Images.Count)
+                if (ImageList is null || ImageList.Images is null || imgIndex >= ImageList.Images.Count)
                 {
                     // the ImageIndex equivalent of a ImageKey that does not exist in the ImageList
                     return -1;
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                 // When the list is being deserialized we need
                 // to take the display index as is. ListView
                 // does correctly synchronize the indices.
-                if (listview == null)
+                if (listview is null)
                 {
                     DisplayIndexInternal = value;
                     return;
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listview != null)
+                if (listview is not null)
                 {
                     return listview.GetColumnIndex(this);
                 }
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndexer.Index != ImageList.Indexer.DefaultIndex && ImageList != null && imageIndexer.Index >= ImageList.Images.Count)
+                if (imageIndexer.Index != ImageList.Indexer.DefaultIndex && ImageList is not null && imageIndexer.Index >= ImageList.Images.Count)
                 {
                     return ImageList.Images.Count - 1;
                 }
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
 
                 imageIndexer.Index = value;
 
-                if (ListView != null && ListView.IsHandleCreated)
+                if (ListView is not null && ListView.IsHandleCreated)
                 {
                     ListView.SetColumnInfo(LVCF.IMAGE, this);
                 }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
 
                 imageIndexer.Key = value;
 
-                if (ListView != null && ListView.IsHandleCreated)
+                if (ListView is not null && ListView.IsHandleCreated)
                 {
                     ListView.SetColumnInfo(LVCF.IMAGE, this);
                 }
@@ -284,7 +284,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     name = string.Empty;
                 }
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
                 {
                     name = value;
                 }
-                if (Site != null)
+                if (Site is not null)
                 {
                     Site.Name = value;
                 }
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     text = string.Empty;
                 }
@@ -320,7 +320,7 @@ namespace System.Windows.Forms
                 {
                     text = value;
                 }
-                if (listview != null)
+                if (listview is not null)
                 {
                     listview.SetColumnInfo(LVCF.TEXT, this);
                 }
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!textAlignInitialized && (listview != null))
+                if (!textAlignInitialized && (listview is not null))
                 {
                     textAlignInitialized = true;
                     // See below for an explanation of (Index != 0)
@@ -365,7 +365,7 @@ namespace System.Windows.Forms
                     textAlign = HorizontalAlignment.Left;
                 }
 
-                if (listview != null)
+                if (listview is not null)
                 {
                     listview.SetColumnInfo(LVCF.FMT, this);
                     listview.Invalidate();
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
                 // we don't get notified when the user changes it, we need to get this info
                 // from the underlying control every time we're asked.
                 // The underlying control will only report the correct width if it's in Report view
-                if (listview != null && listview.IsHandleCreated && !listview.Disposing && listview.View == View.Details)
+                if (listview is not null && listview.IsHandleCreated && !listview.Disposing && listview.View == View.Details)
                 {
                     // Make sure this column has already been added to the ListView, else just return width
                     IntPtr hwndHdr = User32.SendMessageW(listview, (User32.WM)LVM.GETHEADER);
@@ -432,7 +432,7 @@ namespace System.Windows.Forms
             set
             {
                 width = value;
-                if (listview != null)
+                if (listview is not null)
                 {
                     listview.SetColumnWidth(Index, ColumnHeaderAutoResizeStyle.None);
                 }
@@ -446,7 +446,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
             }
 
-            if (listview != null)
+            if (listview is not null)
             {
                 listview.AutoResizeColumn(Index, headerAutoResize);
             }
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (listview != null)
+                if (listview is not null)
                 {
                     int index = Index;
                     if (index != -1)
@@ -520,7 +520,7 @@ namespace System.Windows.Forms
 
         internal bool ShouldSerializeText()
         {
-            return text != null;
+            return text is not null;
         }
 
         /// <summary>

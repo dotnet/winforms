@@ -421,7 +421,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
 
             public void Dispose()
             {
-                if (_reference != null)
+                if (_reference is not null)
                 {
                     Marshal.ReleaseComObject(_reference);
                     _reference = null;

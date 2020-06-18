@@ -240,7 +240,7 @@ namespace System.Windows.Forms
 
         public virtual void AddRange(TreeNode[] nodes)
         {
-            if (nodes == null)
+            if (nodes is null)
             {
                 throw new ArgumentNullException(nameof(nodes));
             }
@@ -250,7 +250,7 @@ namespace System.Windows.Forms
             }
 
             TreeView tv = owner.TreeView;
-            if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
+            if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
                 tv.BeginUpdate();
             }
@@ -261,7 +261,7 @@ namespace System.Windows.Forms
                 AddInternal(nodes[i], i);
             }
             owner.Nodes.FixedIndex = -1;
-            if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
+            if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
                 tv.EndUpdate();
             }
@@ -280,7 +280,7 @@ namespace System.Windows.Forms
 
         private ArrayList FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, ArrayList foundTreeNodes)
         {
-            if ((treeNodeCollectionToLookIn == null) || (foundTreeNodes == null))
+            if ((treeNodeCollectionToLookIn is null) || (foundTreeNodes is null))
             {
                 return null;
             }
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
 
             for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++)
             {
-                if (treeNodeCollectionToLookIn[i] == null)
+                if (treeNodeCollectionToLookIn[i] is null)
                 {
                     continue;
                 }
@@ -307,11 +307,11 @@ namespace System.Windows.Forms
             {
                 for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++)
                 {
-                    if (treeNodeCollectionToLookIn[i] == null)
+                    if (treeNodeCollectionToLookIn[i] is null)
                     {
                         continue;
                     }
-                    if ((treeNodeCollectionToLookIn[i].Nodes != null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
+                    if ((treeNodeCollectionToLookIn[i].Nodes is not null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
                     {
                         // if it has a valid child collecion, append those results to our collection
                         foundTreeNodes = FindInternal(key, searchAllChildren, treeNodeCollectionToLookIn[i].Nodes, foundTreeNodes);
@@ -331,7 +331,7 @@ namespace System.Windows.Forms
 
         private int AddInternal(TreeNode node, int delta)
         {
-            if (node == null)
+            if (node is null)
             {
                 throw new ArgumentNullException(nameof(node));
             }
@@ -345,7 +345,7 @@ namespace System.Windows.Forms
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
-            if (tv != null && tv.Sorted)
+            if (tv is not null && tv.Sorted)
             {
                 return owner.AddSorted(node);
             }
@@ -366,12 +366,12 @@ namespace System.Windows.Forms
             owner.childCount++;
             node.Realize(false);
 
-            if (tv != null && node == tv.selectedNode)
+            if (tv is not null && node == tv.selectedNode)
             {
                 tv.SelectedNode = node; // communicate this to the handle
             }
 
-            if (tv != null && tv.TreeViewNodeSorter != null)
+            if (tv is not null && tv.TreeViewNodeSorter is not null)
             {
                 tv.Sort();
             }
@@ -381,7 +381,7 @@ namespace System.Windows.Forms
 
         int IList.Add(object node)
         {
-            if (node == null)
+            if (node is null)
             {
                 throw new ArgumentNullException(nameof(node));
             }
@@ -494,7 +494,7 @@ namespace System.Windows.Forms
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
-            if (tv != null && tv.Sorted)
+            if (tv is not null && tv.Sorted)
             {
                 owner.AddSorted(node);
                 return;

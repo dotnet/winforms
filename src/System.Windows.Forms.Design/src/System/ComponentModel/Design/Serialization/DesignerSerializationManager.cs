@@ -62,7 +62,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (container == null)
+                if (container is null)
                 {
                     if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
                     {
@@ -86,7 +86,7 @@ namespace System.ComponentModel.Design.Serialization
             get
             {
                 CheckSession();
-                if (errorList == null)
+                if (errorList is null)
                 {
                     errorList = new ArrayList();
                 }
@@ -172,7 +172,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private void CheckNoSession()
         {
-            if (session != null)
+            if (session is not null)
             {
                 throw new InvalidOperationException(SR.SerializationManagerWithinSession);
             }
@@ -183,7 +183,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private void CheckSession()
         {
-            if (session == null)
+            if (session is null)
             {
                 throw new InvalidOperationException(SR.SerializationManagerNoSession);
             }
@@ -195,7 +195,7 @@ namespace System.ComponentModel.Design.Serialization
         protected virtual object CreateInstance(Type type, ICollection arguments, string name, bool addToContainer)
         {
             object[] argArray = null;
-            if (arguments != null && arguments.Count > 0)
+            if (arguments is not null && arguments.Count > 0)
             {
                 argArray = new object[arguments.Count];
                 arguments.CopyTo(argArray, 0);
@@ -203,19 +203,19 @@ namespace System.ComponentModel.Design.Serialization
 
             object instance = null;
             // If we have been asked to recycle instances, look in our nametable and container first for an object matching this name and type.  If we find it, we will use it.
-            if (RecycleInstances && name != null)
+            if (RecycleInstances && name is not null)
             {
-                if (instancesByName != null)
+                if (instancesByName is not null)
                 {
                     instance = instancesByName[name];
                 }
 
-                if (instance == null && addToContainer && Container != null)
+                if (instance is null && addToContainer && Container is not null)
                 {
                     instance = Container.Components[name];
                 }
 
-                if (instance != null && ValidateRecycledTypes && instance.GetType() != type)
+                if (instance is not null && ValidateRecycledTypes && instance.GetType() != type)
                 {
                     // We got an instance, but it is not of the correct type.  We don't allow this.
                     instance = null;
@@ -228,21 +228,21 @@ namespace System.ComponentModel.Design.Serialization
             // 3.  The type has a null ctor or an IContainer ctor.
             // 4.  The host is available and its container matches our container.
             // The reason for this is that if we went through activator, and if the object already specified a constructor that took an IContainer, our deserialization mechanism would equate the container to the designer host.  This is the correct thing to do, but it has the side effect of adding the compnent to the designer host twice -- once with a default name, and a second time with the name we provide.  This equates to a component rename, which isn't cheap,  so we don't want to do it when we load each and every component.
-            if (instance == null && addToContainer && typeof(IComponent).IsAssignableFrom(type) && (argArray == null || argArray.Length == 0 || (argArray.Length == 1 && argArray[0] == Container)))
+            if (instance is null && addToContainer && typeof(IComponent).IsAssignableFrom(type) && (argArray is null || argArray.Length == 0 || (argArray.Length == 1 && argArray[0] == Container)))
             {
                 if (GetService(typeof(IDesignerHost)) is IDesignerHost host && host.Container == Container)
                 {
                     bool ignoreName = false;
-                    if (!PreserveNames && name != null)
+                    if (!PreserveNames && name is not null)
                     {
                         // Check if this name exists in the container.  If so, don't use it.
-                        if (Container.Components[name] != null)
+                        if (Container.Components[name] is not null)
                         {
                             ignoreName = true;
                         }
                     }
 
-                    if (name == null || ignoreName)
+                    if (name is null || ignoreName)
                     {
                         instance = host.CreateComponent(type);
                     }
@@ -254,7 +254,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // Default case, just create the component through reflection.
-            if (instance == null)
+            if (instance is null)
             {
                 try
                 {
@@ -270,7 +270,7 @@ namespace System.ComponentModel.Design.Serialization
                         // first, get the types of the arguments we've got.
                         for (int index = 0; index < argArray.Length; index++)
                         {
-                            if (argArray[index] != null)
+                            if (argArray[index] is not null)
                             {
                                 types[index] = argArray[index].GetType();
                             }
@@ -282,13 +282,13 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             ParameterInfo[] pi = ci.GetParameters();
                             // obviously the count has to match
-                            if (pi != null && pi.Length == types.Length)
+                            if (pi is not null && pi.Length == types.Length)
                             {
                                 bool match = true;
                                 // now walk every type of argument and compare it to the corresponding argument.  if it matches up exactly or is a derived type, great. otherwise, we'll try to use IConvertible to make it into the right thing.
                                 for (int t = 0; t < types.Length; t++)
                                 {
-                                    if (types[t] == null || pi[t].ParameterType.IsAssignableFrom(types[t]))
+                                    if (types[t] is null || pi[t].ParameterType.IsAssignableFrom(types[t]))
                                     {
                                         tempArgs[t] = argArray[t];
                                         continue;
@@ -319,7 +319,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                         // we still failed...rethrow the original exception.
-                        if (instance == null)
+                        if (instance is null)
                         {
                             throw;
                         }
@@ -335,7 +335,7 @@ namespace System.ComponentModel.Design.Serialization
                             argTypes.Append(", ");
                         }
 
-                        if (o != null)
+                        if (o is not null)
                         {
                             argTypes.Append(o.GetType().Name);
                         }
@@ -352,19 +352,19 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 // Now, if we needed to add this to the container, do so .
-                if (addToContainer && instance is IComponent && Container != null)
+                if (addToContainer && instance is IComponent && Container is not null)
                 {
                     bool ignoreName = false;
-                    if (!PreserveNames && name != null)
+                    if (!PreserveNames && name is not null)
                     {
                         // Check if this name exists in the container.  If so, don't use it.
-                        if (Container.Components[name] != null)
+                        if (Container.Components[name] is not null)
                         {
                             ignoreName = true;
                         }
                     }
 
-                    if (name == null || ignoreName)
+                    if (name is null || ignoreName)
                     {
                         Container.Add((IComponent)instance);
                     }
@@ -382,7 +382,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public IDisposable CreateSession()
         {
-            if (session != null)
+            if (session is not null)
             {
                 throw new InvalidOperationException(SR.SerializationManagerAreadyInSession);
             }
@@ -397,26 +397,26 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public object GetSerializer(Type objectType, Type serializerType)
         {
-            if (serializerType == null)
+            if (serializerType is null)
             {
                 throw new ArgumentNullException(nameof(serializerType));
             }
 
             object serializer = null;
-            if (objectType != null)
+            if (objectType is not null)
             {
-                if (serializers != null)
+                if (serializers is not null)
                 {
                     // I don't double hash here.  It will be a very rare day where multiple types of serializers will be used in the same scheme. We still handle it, but we just don't cache.
                     serializer = serializers[objectType];
-                    if (serializer != null && !serializerType.IsAssignableFrom(serializer.GetType()))
+                    if (serializer is not null && !serializerType.IsAssignableFrom(serializer.GetType()))
                     {
                         serializer = null;
                     }
                 }
 
                 // Now actually look in the type's metadata.
-                if (serializer == null)
+                if (serializer is null)
                 {
                     AttributeCollection attributes = TypeDescriptor.GetAttributes(objectType);
                     foreach (Attribute attr in attributes)
@@ -426,13 +426,13 @@ namespace System.ComponentModel.Design.Serialization
                             string typeName = da.SerializerBaseTypeName;
 
                             // This serializer must support the correct base type or we're not interested.
-                            if (typeName != null)
+                            if (typeName is not null)
                             {
                                 Type baseType = GetRuntimeType(typeName);
-                                if (baseType == serializerType && da.SerializerTypeName != null && da.SerializerTypeName.Length > 0)
+                                if (baseType == serializerType && da.SerializerTypeName is not null && da.SerializerTypeName.Length > 0)
                                 {
                                     Type type = GetRuntimeType(da.SerializerTypeName);
-                                    if (type != null)
+                                    if (type is not null)
                                     {
                                         serializer = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
                                         break;
@@ -442,9 +442,9 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
                     // And stash this little guy for later, but only if we're in a session. If we're outside of a session this should still be useable for resolving serializers, but we don't cache them.
-                    if (serializer != null && session != null)
+                    if (serializer is not null && session is not null)
                     {
-                        if (serializers == null)
+                        if (serializers is null)
                         {
                             serializers = new Hashtable();
                         }
@@ -454,14 +454,14 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // Check for a default serialization provider
-            if (defaultProviderTable == null || !defaultProviderTable.ContainsKey(serializerType))
+            if (defaultProviderTable is null || !defaultProviderTable.ContainsKey(serializerType))
             {
                 Type defaultSerializerType = null;
                 DefaultSerializationProviderAttribute a = (DefaultSerializationProviderAttribute)TypeDescriptor.GetAttributes(serializerType)[typeof(DefaultSerializationProviderAttribute)];
-                if (a != null)
+                if (a is not null)
                 {
                     defaultSerializerType = GetRuntimeType(a.ProviderTypeName);
-                    if (defaultSerializerType != null && typeof(IDesignerSerializationProvider).IsAssignableFrom(defaultSerializerType))
+                    if (defaultSerializerType is not null && typeof(IDesignerSerializationProvider).IsAssignableFrom(defaultSerializerType))
                     {
                         IDesignerSerializationProvider p = (IDesignerSerializationProvider)Activator.CreateInstance(
                             defaultSerializerType, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
@@ -469,7 +469,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (defaultProviderTable == null)
+                if (defaultProviderTable is null)
                 {
                     defaultProviderTable = new Hashtable();
                 }
@@ -477,7 +477,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // Designer serialization providers can override our metadata discovery. We loop until we reach steady state.  This breaks order dependencies by allowing all providers a chance to party on each other's serializers.
-            if (designerSerializationProviders != null)
+            if (designerSerializationProviders is not null)
             {
                 bool continueLoop = true;
                 for (int i = 0; continueLoop && i < designerSerializationProviders.Count; i++)
@@ -486,7 +486,7 @@ namespace System.ComponentModel.Design.Serialization
                     foreach (IDesignerSerializationProvider provider in designerSerializationProviders)
                     {
                         object newSerializer = provider.GetSerializer(this, serializer, objectType, serializerType);
-                        if (newSerializer != null)
+                        if (newSerializer is not null)
                         {
                             continueLoop = (serializer != newSerializer);
                             serializer = newSerializer;
@@ -507,7 +507,7 @@ namespace System.ComponentModel.Design.Serialization
                 return Container;
             }
 
-            if (provider != null)
+            if (provider is not null)
             {
                 return provider.GetService(serviceType);
             }
@@ -520,12 +520,12 @@ namespace System.ComponentModel.Design.Serialization
         protected virtual Type GetType(string typeName)
         {
             Type type = GetRuntimeType(typeName);
-            if (type != null)
+            if (type is not null)
             {
                 if (GetService(typeof(TypeDescriptionProviderService)) is TypeDescriptionProviderService typeProviderService)
                 {
                     TypeDescriptionProvider typeProvider = typeProviderService.GetProvider(type);
-                    if (typeProvider != null && !typeProvider.IsSupportedType(type))
+                    if (typeProvider is not null && !typeProvider.IsSupportedType(type))
                     {
                         type = null;
                     }
@@ -539,14 +539,14 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public Type GetRuntimeType(string typeName)
         {
-            if (typeResolver == null && !searchedTypeResolver)
+            if (typeResolver is null && !searchedTypeResolver)
             {
                 typeResolver = GetService(typeof(ITypeResolutionService)) as ITypeResolutionService;
                 searchedTypeResolver = true;
             }
 
             Type type;
-            if (typeResolver == null)
+            if (typeResolver is null)
             {
                 type = Type.GetType(typeName);
             }
@@ -607,7 +607,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private PropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
         {
-            if (property == null)
+            if (property is null)
             {
                 throw new ArgumentNullException(nameof(property));
             }
@@ -622,7 +622,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (contextStack == null)
+                if (contextStack is null)
                 {
                     CheckSession();
                     contextStack = new ContextStack();
@@ -638,11 +638,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (properties == null)
+                if (properties is null)
                 {
                     object propObject = PropertyProvider;
                     PropertyDescriptor[] propArray;
-                    if (propObject == null)
+                    if (propObject is null)
                     {
                         propArray = Array.Empty<PropertyDescriptor>();
                     }
@@ -692,7 +692,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         void IDesignerSerializationManager.AddSerializationProvider(IDesignerSerializationProvider provider)
         {
-            if (designerSerializationProviders == null)
+            if (designerSerializationProviders is null)
             {
                 designerSerializationProviders = new ArrayList();
             }
@@ -709,9 +709,9 @@ namespace System.ComponentModel.Design.Serialization
         {
             CheckSession();
             // If we were given a name verify that the name doesn't already exist.  We do not verify uniqueness in our parent container here because CreateInstance may modify the name for us.  If it didn't, the container itself will throw, so we're covered.
-            if (name != null)
+            if (name is not null)
             {
-                if (instancesByName != null && instancesByName.ContainsKey(name))
+                if (instancesByName is not null && instancesByName.ContainsKey(name))
                 {
                     Exception ex = new SerializationException(string.Format(SR.SerializationManagerDuplicateComponentDecl, name))
                     {
@@ -723,11 +723,11 @@ namespace System.ComponentModel.Design.Serialization
 
             object instance = CreateInstance(type, arguments, name, addToContainer);
             // If we have a name save it into our own nametable.  We do this even for objects that were added to the container, because containers reserve the right to change the name in case of collision. Changing the name is fine, but it would be very difficult to map that to the rest of the serializers.  Instead, we keep the old name in our local nametable so a serializer can ask for an object by the old name.  Because the old nametable is searched first, the old name is preserved.  Note that this technique is ONLY valid if RecycleInstances is false.  If it is true, we cannot store in the old nametable because it would be possible to fetch the wrong value from the container. Consider a request for "button1' that results in the creation of an object in the container called "button2" due to a collision.  If a request later came in for "button2", the wrong object would be returned because RecycleInstances checks the container first.  So, it is only safe to store the local value if RecycleInstances is false. When RecycleInstances is true if there was a collision the object would have been returned, so there is no need to store locally.
-            if (name != null // If we were given a name
+            if (name is not null // If we were given a name
                 && (!(instance is IComponent) // And it's not an icomponent
                     || !RecycleInstances))
             { // Or it is an icomponent but recycle instances is turned off
-                if (instancesByName == null)
+                if (instancesByName is null)
                 {
                     instancesByName = new Hashtable();
                     namesByInstance = new Hashtable(new ReferenceComparer());
@@ -744,24 +744,24 @@ namespace System.ComponentModel.Design.Serialization
         object IDesignerSerializationManager.GetInstance(string name)
         {
             object instance = null;
-            if (name == null)
+            if (name is null)
             {
                 throw new ArgumentNullException(nameof(name));
             }
 
             CheckSession();
             // Check our local nametable first
-            if (instancesByName != null)
+            if (instancesByName is not null)
             {
                 instance = instancesByName[name];
             }
 
-            if (instance == null && PreserveNames && Container != null)
+            if (instance is null && PreserveNames && Container is not null)
             {
                 instance = Container.Components[name];
             }
 
-            if (instance == null)
+            if (instance is null)
             {
                 ResolveNameEventArgs e = new ResolveNameEventArgs(name);
                 OnResolveName(e);
@@ -776,22 +776,22 @@ namespace System.ComponentModel.Design.Serialization
         string IDesignerSerializationManager.GetName(object value)
         {
             string name = null;
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
 
             CheckSession();
             // Check our local nametable first
-            if (namesByInstance != null)
+            if (namesByInstance is not null)
             {
                 name = (string)namesByInstance[value];
             }
 
-            if (name == null && value is IComponent)
+            if (name is null && value is IComponent)
             {
                 ISite site = ((IComponent)value).Site;
-                if (site != null)
+                if (site is not null)
                 {
                     if (site is INestedSite nestedSite)
                     {
@@ -821,10 +821,10 @@ namespace System.ComponentModel.Design.Serialization
         {
             CheckSession();
             Type t = null;
-            while (t == null)
+            while (t is null)
             {
                 t = GetType(typeName);
-                if (t == null)
+                if (t is null)
                 {
                     if (string.IsNullOrEmpty(typeName))
                     {
@@ -847,7 +847,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         void IDesignerSerializationManager.RemoveSerializationProvider(IDesignerSerializationProvider provider)
         {
-            if (designerSerializationProviders != null)
+            if (designerSerializationProviders is not null)
             {
                 designerSerializationProviders.Remove(provider);
             }
@@ -859,7 +859,7 @@ namespace System.ComponentModel.Design.Serialization
         void IDesignerSerializationManager.ReportError(object errorInformation)
         {
             CheckSession();
-            if (errorInformation != null)
+            if (errorInformation is not null)
             {
                 Errors.Add(errorInformation);
             }
@@ -867,7 +867,7 @@ namespace System.ComponentModel.Design.Serialization
 
         internal ArrayList SerializationProviders
         {
-            get => (designerSerializationProviders != null) ? designerSerializationProviders.Clone() as ArrayList : new ArrayList();
+            get => (designerSerializationProviders is not null) ? designerSerializationProviders.Clone() as ArrayList : new ArrayList();
         }
 
         /// <summary>
@@ -876,28 +876,28 @@ namespace System.ComponentModel.Design.Serialization
         void IDesignerSerializationManager.SetName(object instance, string name)
         {
             CheckSession();
-            if (instance == null)
+            if (instance is null)
             {
                 throw new ArgumentNullException(nameof(instance));
             }
 
-            if (name == null)
+            if (name is null)
             {
                 throw new ArgumentNullException(nameof(name));
             }
 
-            if (instancesByName == null)
+            if (instancesByName is null)
             {
                 instancesByName = new Hashtable();
                 namesByInstance = new Hashtable(new ReferenceComparer());
             }
 
-            if (instancesByName[name] != null)
+            if (instancesByName[name] is not null)
             {
                 throw new ArgumentException(string.Format(SR.SerializationManagerNameInUse, name), nameof(name));
             }
 
-            if (namesByInstance[instance] != null)
+            if (namesByInstance[instance] is not null)
             {
                 throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]), nameof(instance));
             }
@@ -943,7 +943,7 @@ namespace System.ComponentModel.Design.Serialization
 
             int IEqualityComparer.GetHashCode(object x)
             {
-                if (x != null)
+                if (x is not null)
                 {
                     return x.GetHashCode();
                 }

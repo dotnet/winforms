@@ -46,7 +46,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owningListBox == null)
+                    if (_owningListBox is null)
                     {
                         return base.RuntimeId;
                     }
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject element = HitTest((int)x, (int)y);
 
-                if (element != null)
+                if (element is not null)
                 {
                     return element;
                 }
@@ -166,7 +166,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderSimple[] GetSelection()
             {
                 AccessibleObject itemAccessibleObject = GetSelected();
-                if (itemAccessibleObject != null)
+                if (itemAccessibleObject is not null)
                 {
                     return new UiaCore.IRawElementProviderSimple[]
                     {
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_owningListBox != null)
+                if (_owningListBox is not null)
                 {
                     return true;
                 }

@@ -86,7 +86,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public static bool IsElementDefined(VisualStyleElement element)
         {
-            if (element == null)
+            if (element is null)
             {
                 throw new ArgumentNullException(nameof(element));
             }
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 using (ThemeHandle? tHandle = ThemeHandle.Create(className, false))
                 {
-                    if (tHandle != null)
+                    if (tHandle is not null)
                     {
                         returnVal = IsThemePartDefined(tHandle, part, 0).IsTrue();
                     }
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public VisualStyleRenderer(string className, int part, int state)
         {
-            if (className == null)
+            if (className is null)
             {
                 throw new ArgumentNullException(nameof(className));
             }
@@ -239,7 +239,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void SetParameters(VisualStyleElement element)
         {
-            if (element == null)
+            if (element is null)
             {
                 throw new ArgumentNullException(nameof(element));
             }
@@ -274,7 +274,7 @@ namespace System.Windows.Forms.VisualStyles
 
         internal unsafe void DrawBackground(IDeviceContext dc, Rectangle bounds, IntPtr hWnd)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -312,7 +312,7 @@ namespace System.Windows.Forms.VisualStyles
 
         internal unsafe void DrawBackground(IDeviceContext dc, Rectangle bounds, Rectangle clipRectangle, IntPtr hWnd)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -351,7 +351,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Rectangle DrawEdge(IDeviceContext dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -385,12 +385,12 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, Image image)
         {
-            if (g == null)
+            if (g is null)
             {
                 throw new ArgumentNullException(nameof(g));
             }
 
-            if (image == null)
+            if (image is null)
             {
                 throw new ArgumentNullException(nameof(image));
             }
@@ -409,12 +409,12 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, ImageList imageList, int imageIndex)
         {
-            if (g == null)
+            if (g is null)
             {
                 throw new ArgumentNullException(nameof(g));
             }
 
-            if (imageList == null)
+            if (imageList is null)
             {
                 throw new ArgumentNullException(nameof(imageList));
             }
@@ -441,11 +441,11 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
-            if (childControl == null)
+            if (childControl is null)
             {
                 throw new ArgumentNullException(nameof(childControl));
             }
@@ -485,7 +485,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawText(IDeviceContext dc, Rectangle bounds, string? textToDraw, bool drawDisabled, TextFormatFlags flags)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -510,7 +510,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Rectangle GetBackgroundContentRectangle(IDeviceContext dc, Rectangle bounds)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -531,7 +531,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Rectangle GetBackgroundExtent(IDeviceContext dc, Rectangle contentBounds)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -554,7 +554,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Region? GetBackgroundRegion(IDeviceContext dc, Rectangle bounds)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -655,7 +655,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Font? GetFont(IDeviceContext dc, FontProperty prop)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -717,7 +717,7 @@ namespace System.Windows.Forms.VisualStyles
 
         internal unsafe Size GetPartSize(IDeviceContext dc, ThemeSizeType type, IntPtr hWnd)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -748,7 +748,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Size GetPartSize(IDeviceContext dc, Rectangle bounds, ThemeSizeType type)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -786,7 +786,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Padding GetMargins(IDeviceContext dc, MarginProperty prop)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -828,7 +828,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Rectangle GetTextExtent(IDeviceContext dc, string textToDraw, TextFormatFlags flags)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -849,7 +849,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Rectangle GetTextExtent(IDeviceContext dc, Rectangle bounds, string textToDraw, TextFormatFlags flags)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -871,7 +871,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public TextMetrics GetTextMetrics(IDeviceContext dc)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -887,7 +887,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, Point pt, HitTestOptions options)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -904,11 +904,11 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public HitTestCode HitTestBackground(Graphics g, Rectangle backgroundRectangle, Region region, Point pt, HitTestOptions options)
         {
-            if (g == null)
+            if (g is null)
             {
                 throw new ArgumentNullException(nameof(g));
             }
-            if (region == null)
+            if (region is null)
             {
                 throw new ArgumentNullException(nameof(region));
             }
@@ -922,7 +922,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, IntPtr hRgn, Point pt, HitTestOptions options)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -987,7 +987,7 @@ namespace System.Windows.Forms.VisualStyles
         {
             ThemeHandle? tHandle = null;
 
-            if (themeHandles != null)
+            if (themeHandles is not null)
             {
                 string[] classNames = new string[themeHandles.Keys.Count];
                 themeHandles.Keys.CopyTo(classNames, 0);
@@ -995,7 +995,7 @@ namespace System.Windows.Forms.VisualStyles
                 foreach (string className in classNames)
                 {
                     tHandle = (ThemeHandle?)themeHandles[className];
-                    if (tHandle != null)
+                    if (tHandle is not null)
                     {
                         tHandle.Dispose();
                     }
@@ -1005,7 +1005,7 @@ namespace System.Windows.Forms.VisualStyles
                     if (AreClientAreaVisualStylesSupported)
                     {
                         tHandle = ThemeHandle.Create(className, false);
-                        if (tHandle != null)
+                        if (tHandle is not null)
                         {
                             themeHandles[className] = tHandle;
                         }
@@ -1025,7 +1025,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         private static IntPtr GetHandle(string className, bool throwExceptionOnFail)
         {
-            if (themeHandles == null)
+            if (themeHandles is null)
             {
                 CreateThemeHandleHashtable();
             }
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 // See if it is already in cache
                 ThemeHandle? tHandle = ThemeHandle.Create(className, throwExceptionOnFail);
-                if (tHandle == null)
+                if (tHandle is null)
                 {
                     return IntPtr.Zero;
                 }

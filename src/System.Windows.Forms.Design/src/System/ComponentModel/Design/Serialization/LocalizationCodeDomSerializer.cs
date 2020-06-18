@@ -51,7 +51,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             ApplyMethodTable table = (ApplyMethodTable)manager.Context[typeof(ApplyMethodTable)];
 
-            if (table == null)
+            if (table is null)
             {
                 table = new ApplyMethodTable();
                 manager.Context.Append(table);
@@ -74,7 +74,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             PropertyDescriptor desc = (PropertyDescriptor)manager.Context[typeof(PropertyDescriptor)];
             ExpressionContext tree = (ExpressionContext)manager.Context[typeof(ExpressionContext)];
-            bool isSerializable = (value != null) ? GetReflectionTypeHelper(manager, value).IsSerializable : true;
+            bool isSerializable = (value is not null) ? GetReflectionTypeHelper(manager, value).IsSerializable : true;
 
             // If value is not serializable, we have no option but to call the original serializer,
             // since we cannot push this into resources.
@@ -83,12 +83,12 @@ namespace System.ComponentModel.Design.Serialization
             // Compat: If we are serializing content, we need to skip property reflection to preserve compatibility,
             //         since tools like WinRes expect items in collections (like TreeNodes and ListViewItems)
             //         to be serialized as binary blobs.
-            bool serializingContent = (desc != null && desc.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content));
+            bool serializingContent = (desc is not null && desc.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content));
 
             // We also skip back to the original serializer if there is a preset value for this object.
             if (!callExistingSerializer)
             {
-                callExistingSerializer = tree != null && tree.PresetValue != null && tree.PresetValue == value;
+                callExistingSerializer = tree is not null && tree.PresetValue is not null && tree.PresetValue == value;
             }
 
             if (_model == CodeDomLocalizationModel.PropertyReflection && !serializingContent && !callExistingSerializer)
@@ -105,26 +105,26 @@ namespace System.ComponentModel.Design.Serialization
                 bool skipPropertyReflect = false;
                 ExtenderProvidedPropertyAttribute attr = null;
 
-                if (desc != null)
+                if (desc is not null)
                 {
                     attr = desc.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
 
-                    if (attr != null && attr.ExtenderProperty != null)
+                    if (attr is not null && attr.ExtenderProperty is not null)
                     {
                         skipPropertyReflect = true;
                     }
                 }
 
-                if (!skipPropertyReflect && tree != null && statements != null)
+                if (!skipPropertyReflect && tree is not null && statements is not null)
                 {
                     string name = manager.GetName(tree.Owner);
                     CodeExpression ownerExpression = SerializeToExpression(manager, tree.Owner);
 
-                    if (name != null && ownerExpression != null)
+                    if (name is not null && ownerExpression is not null)
                     {
                         RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
 
-                        if (rootCxt != null && rootCxt.Value == tree.Owner)
+                        if (rootCxt is not null && rootCxt.Value == tree.Owner)
                         {
                             name = "$this";
                         }
@@ -136,9 +136,9 @@ namespace System.ComponentModel.Design.Serialization
                         if (EmitApplyMethod(manager, tree.Owner))
                         {
                             ResourceManager rm = manager.Context[typeof(ResourceManager)] as ResourceManager;
-                            Debug.Assert(rm != null, "No resource manager available in context.");
+                            Debug.Assert(rm is not null, "No resource manager available in context.");
                             CodeExpression rmExpression = GetExpression(manager, rm);
-                            Debug.Assert(rmExpression != null, "No expression available for resource manager.");
+                            Debug.Assert(rmExpression is not null, "No expression available for resource manager.");
 
                             CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(rmExpression, "ApplyResources");
                             CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();

@@ -549,7 +549,7 @@ namespace System.Windows.Forms.Tests
 
             protected override void WndProc(ref Message m)
             {
-                if (MessageTypePredicate == null || MessageTypePredicate(m.Msg))
+                if (MessageTypePredicate is null || MessageTypePredicate(m.Msg))
                 {
                     Messages.Add(m);
                 }

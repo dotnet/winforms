@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         private ImageListStreamer(SerializationInfo info, StreamingContext context)
         {
             SerializationInfoEnumerator sie = info.GetEnumerator();
-            if (sie == null)
+            if (sie is null)
             {
                 return;
             }
@@ -47,7 +47,7 @@ namespace System.Windows.Forms
                     {
 #endif
                         byte[] dat = (byte[])sie.Value;
-                        if (dat != null)
+                        if (dat is not null)
                         {
                             // We enclose this imagelist handle create in a theming scope.
                             IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
@@ -210,11 +210,11 @@ namespace System.Windows.Forms
             MemoryStream stream = new MemoryStream();
 
             IntPtr handle = IntPtr.Zero;
-            if (imageList != null)
+            if (imageList is not null)
             {
                 handle = imageList.Handle;
             }
-            else if (nativeImageList != null)
+            else if (nativeImageList is not null)
             {
                 handle = nativeImageList.Handle;
             }
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (nativeImageList != null)
+                if (nativeImageList is not null)
                 {
                     nativeImageList.Dispose();
                     nativeImageList = null;

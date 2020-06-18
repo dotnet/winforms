@@ -151,24 +151,24 @@ namespace System.Resources
 
         private void InitializeWriter()
         {
-            if (_xmlTextWriter == null)
+            if (_xmlTextWriter is null)
             {
                 bool writeHeaderRequired = false;
 
-                if (_textWriter != null)
+                if (_textWriter is not null)
                 {
                     _textWriter.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                     writeHeaderRequired = true;
 
                     _xmlTextWriter = new XmlTextWriter(_textWriter);
                 }
-                else if (_stream != null)
+                else if (_stream is not null)
                 {
                     _xmlTextWriter = new XmlTextWriter(_stream, System.Text.Encoding.UTF8);
                 }
                 else
                 {
-                    Debug.Assert(_fileName != null, "Nothing to output to");
+                    Debug.Assert(_fileName is not null, "Nothing to output to");
                     _xmlTextWriter = new XmlTextWriter(_fileName, System.Text.Encoding.UTF8);
                 }
 
@@ -257,12 +257,12 @@ namespace System.Resources
         /// </summary>
         public virtual void AddAlias(string aliasName, AssemblyName assemblyName)
         {
-            if (assemblyName == null)
+            if (assemblyName is null)
             {
                 throw new ArgumentNullException(nameof(assemblyName));
             }
 
-            if (_cachedAliases == null)
+            if (_cachedAliases is null)
             {
                 _cachedAliases = new Hashtable();
             }
@@ -390,7 +390,7 @@ namespace System.Resources
         {
             // if it's a null string, set it here as a resxnullref
             string typeName =
-                value == null
+                value is null
                     ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), _typeNameConverter)
                     : null;
             AddDataRow(elementName, name, value, typeName, null, null);
@@ -420,7 +420,7 @@ namespace System.Resources
                         {
                             type = null;
                         }
-                        else if (typeObject != null)
+                        else if (typeObject is not null)
                         {
                             assemblyName = GetFullName(MultitargetUtil.GetAssemblyQualifiedName(typeObject, _typeNameConverter));
                             alias = GetAliasFromName(new AssemblyName(assemblyName));
@@ -450,18 +450,18 @@ namespace System.Resources
                 }
                 else
                 {
-                    if (type != null)
+                    if (type is not null)
                     {
                         Writer.WriteAttributeString(TypeStr, type);
                     }
                 }
 
-                if (mimeType != null)
+                if (mimeType is not null)
                 {
                     Writer.WriteAttributeString(MimeTypeStr, mimeType);
                 }
 
-                if ((type == null && mimeType == null) || (type != null && type.StartsWith("System.Char", StringComparison.Ordinal)))
+                if ((type is null && mimeType is null) || (type is not null && type.StartsWith("System.Char", StringComparison.Ordinal)))
                 {
                     Writer.WriteAttributeString("xml", "space", null, "preserve");
                 }
@@ -506,7 +506,7 @@ namespace System.Resources
 
         private string GetAliasFromName(AssemblyName assemblyName)
         {
-            if (_cachedAliases == null)
+            if (_cachedAliases is null)
             {
                 _cachedAliases = new Hashtable();
             }
@@ -546,19 +546,19 @@ namespace System.Resources
                     Generate();
                 }
 
-                if (_xmlTextWriter != null)
+                if (_xmlTextWriter is not null)
                 {
                     _xmlTextWriter.Close();
                     _xmlTextWriter = null;
                 }
 
-                if (_stream != null)
+                if (_stream is not null)
                 {
                     _stream.Close();
                     _stream = null;
                 }
 
-                if (_textWriter != null)
+                if (_textWriter is not null)
                 {
                     _textWriter.Close();
                     _textWriter = null;

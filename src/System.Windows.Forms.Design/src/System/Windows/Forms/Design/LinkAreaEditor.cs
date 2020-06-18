@@ -18,18 +18,18 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
 
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            if (edSvc == null)
+            if (edSvc is null)
             {
                 return value;
             }
 
-            if (_linkAreaUI == null)
+            if (_linkAreaUI is null)
             {
                 IHelpService helpService = (IHelpService)provider.GetService(typeof(IHelpService));
 
@@ -40,10 +40,10 @@ namespace System.Windows.Forms.Design
             string text = string.Empty;
             PropertyDescriptor prop = null;
 
-            if (context != null && context.Instance != null)
+            if (context is not null && context.Instance is not null)
             {
                 prop = TypeDescriptor.GetProperties(context.Instance)["Text"];
-                if (prop != null && prop.PropertyType == typeof(string))
+                if (prop is not null && prop.PropertyType == typeof(string))
                 {
                     text = (string)prop.GetValue(context.Instance);
                 }
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design
                 value = _linkAreaUI.Value;
 
                 text = _linkAreaUI.SampleText;
-                if (!originalText.Equals(text) && prop != null && prop.PropertyType == typeof(string))
+                if (!originalText.Equals(text) && prop is not null && prop.PropertyType == typeof(string))
                 {
                     prop.SetValue(context.Instance, text);
                 }

@@ -30,7 +30,7 @@ internal static partial class Interop
 
             public void Dispose()
             {
-                if (HDC != null)
+                if (HDC is not null)
                 {
                     DeleteDC(HDC);
                 }

@@ -161,7 +161,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (onCollectionChanged != null);
+                return (onCollectionChanged is not null);
             }
         }
 
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
                         // Simply update the index and return the current row without cloning it.
                         dataGridViewRow.Index = 0;
                         dataGridViewRow.State = SharedRowState(0);
-                        if (DataGridView != null)
+                        if (DataGridView is not null)
                         {
                             DataGridView.OnRowUnshared(dataGridViewRow);
                         }
@@ -243,7 +243,7 @@ namespace System.Windows.Forms
                         newDataGridViewRow.HeaderCell.DataGridView = dataGridViewRow.DataGridView;
                         newDataGridViewRow.HeaderCell.OwningRow = newDataGridViewRow;
                     }
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         DataGridView.OnRowUnshared(newDataGridViewRow);
                     }
@@ -265,7 +265,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int Add()
         {
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -280,7 +280,7 @@ namespace System.Windows.Forms
 
         internal int AddInternal(bool newRow, object[] values)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
             if (DataGridView.Columns.Count == 0)
             {
@@ -296,7 +296,7 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewRow.Cells.Count == DataGridView.Columns.Count);
             if (newRow)
             {
-                Debug.Assert(values == null);
+                Debug.Assert(values is null);
                 // Note that we allow the 'new' row to be frozen.
                 Debug.Assert((dataGridViewRow.State & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
                 // Make sure the 'new row' is visible even when the row template isn't
@@ -307,7 +307,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (values != null)
+            if (values is not null)
             {
                 dataGridViewRow.SetValuesInternal(values);
             }
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
             cachedRowHeightsAccessAllowed = false;
             cachedRowCountsAccessAllowed = false;
 #endif
-            if (values != null || !RowIsSharable(index) || RowHasValueOrToolTipText(dataGridViewRow) || IsCollectionChangedListenedTo)
+            if (values is not null || !RowIsSharable(index) || RowHasValueOrToolTipText(dataGridViewRow) || IsCollectionChangedListenedTo)
             {
                 dataGridViewRow.Index = index;
                 Debug.Assert(dataGridViewRow.State == SharedRowState(index));
@@ -360,8 +360,8 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int Add(params object[] values)
         {
-            Debug.Assert(DataGridView != null);
-            if (values == null)
+            Debug.Assert(DataGridView is not null);
+            if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
             }
@@ -371,7 +371,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.DataGridView_InvalidOperationInVirtualMode);
             }
 
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -394,7 +394,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_NoColumns);
             }
 
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -410,7 +410,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual int Add(int count)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
             if (count <= 0)
             {
@@ -422,7 +422,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_NoColumns);
             }
 
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -470,13 +470,13 @@ namespace System.Windows.Forms
 
         internal int AddInternal(DataGridViewRow dataGridViewRow)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
-            if (dataGridViewRow == null)
+            if (dataGridViewRow is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewRow));
             }
-            if (dataGridViewRow.DataGridView != null)
+            if (dataGridViewRow.DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridView_RowAlreadyBelongsToDataGridView);
             }
@@ -547,7 +547,7 @@ namespace System.Windows.Forms
 
         public virtual int AddCopy(int indexSource)
         {
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -562,7 +562,7 @@ namespace System.Windows.Forms
 
         internal int AddCopyInternal(int indexSource, DataGridViewElementStates dgvesAdd, DataGridViewElementStates dgvesRemove, bool newRow)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
             if (DataGridView.NewRowIndex != -1)
             {
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
             DataGridViewRow rowTemplate = SharedRow(indexSource);
             if (rowTemplate.Index == -1 && !IsCollectionChangedListenedTo && !newRow)
             {
-                Debug.Assert(DataGridView != null);
+                Debug.Assert(DataGridView is not null);
                 DataGridViewElementStates rowState = rowStates[indexSource] & ~dgvesRemove;
                 rowState |= dgvesAdd;
                 DataGridView.OnAddingRow(rowTemplate, rowState, true /*checkFrozenState*/);   // will throw an exception if the addition is illegal
@@ -612,7 +612,7 @@ namespace System.Windows.Forms
 
         public virtual int AddCopies(int indexSource, int count)
         {
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -738,7 +738,7 @@ namespace System.Windows.Forms
 
         private int AddDuplicateRow(DataGridViewRow rowTemplate, bool newRow)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
             DataGridViewRow dataGridViewRow = (DataGridViewRow)rowTemplate.Clone();
             dataGridViewRow.State = DataGridViewElementStates.None;
@@ -777,19 +777,19 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual void AddRange(params DataGridViewRow[] dataGridViewRows)
         {
-            if (dataGridViewRows == null)
+            if (dataGridViewRows is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewRows));
             }
 
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
             if (DataGridView.NoDimensionChangeAllowed)
             {
                 throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
             }
 
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -855,7 +855,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
             }
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 if (DataGridView.DataConnection.List is IBindingList list && list.AllowRemove && list.SupportsChangeNotification)
                 {
@@ -1373,9 +1373,9 @@ namespace System.Windows.Forms
 
         public virtual void Insert(int rowIndex, params object[] values)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
-            if (values == null)
+            if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
             }
@@ -1385,7 +1385,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.DataGridView_InvalidOperationInVirtualMode);
             }
 
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -1400,7 +1400,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void Insert(int rowIndex, DataGridViewRow dataGridViewRow)
         {
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -1415,7 +1415,7 @@ namespace System.Windows.Forms
 
         public virtual void Insert(int rowIndex, int count)
         {
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -1476,18 +1476,18 @@ namespace System.Windows.Forms
 
         internal void InsertInternal(int rowIndex, DataGridViewRow dataGridViewRow)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             if (rowIndex < 0 || Count < rowIndex)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex), SR.DataGridViewRowCollection_RowIndexOutOfRange);
             }
 
-            if (dataGridViewRow == null)
+            if (dataGridViewRow is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewRow));
             }
 
-            if (dataGridViewRow.DataGridView != null)
+            if (dataGridViewRow.DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridView_RowAlreadyBelongsToDataGridView);
             }
@@ -1519,10 +1519,10 @@ namespace System.Windows.Forms
 
         internal void InsertInternal(int rowIndex, DataGridViewRow dataGridViewRow, bool force)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             Debug.Assert(rowIndex >= 0 && rowIndex <= Count);
-            Debug.Assert(dataGridViewRow != null);
-            Debug.Assert(dataGridViewRow.DataGridView == null);
+            Debug.Assert(dataGridViewRow is not null);
+            Debug.Assert(dataGridViewRow.DataGridView is null);
             Debug.Assert(!DataGridView.NoDimensionChangeAllowed);
             Debug.Assert(DataGridView.NewRowIndex == -1 || rowIndex != Count);
             Debug.Assert(!dataGridViewRow.Selected);
@@ -1588,7 +1588,7 @@ namespace System.Windows.Forms
 
         public virtual void InsertCopies(int indexSource, int indexDestination, int count)
         {
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -1603,7 +1603,7 @@ namespace System.Windows.Forms
 
         private void InsertCopiesPrivate(int indexSource, int indexDestination, int count)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
             if (indexSource < 0 || Count <= indexSource)
             {
@@ -1728,7 +1728,7 @@ namespace System.Windows.Forms
 
         private void InsertDuplicateRow(int indexDestination, DataGridViewRow rowTemplate, bool firstInsertion, ref Point newCurrentCell)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
             DataGridViewRow dataGridViewRow = (DataGridViewRow)rowTemplate.Clone();
             dataGridViewRow.State = DataGridViewElementStates.None;
@@ -1766,9 +1766,9 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void InsertRange(int rowIndex, params DataGridViewRow[] dataGridViewRows)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
-            if (dataGridViewRows == null)
+            if (dataGridViewRows is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewRows));
             }
@@ -1796,7 +1796,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_NoInsertionAfterNewRow);
             }
 
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewRowCollection_AddUnboundRow);
             }
@@ -1933,7 +1933,7 @@ namespace System.Windows.Forms
             Point newCurrentCell = new Point(-1, -1);
             DataGridViewRow dataGridViewRow = (DataGridViewRow)e.Element;
             int originalIndex = 0;
-            if (dataGridViewRow != null && e.Action == CollectionChangeAction.Add)
+            if (dataGridViewRow is not null && e.Action == CollectionChangeAction.Add)
             {
                 originalIndex = SharedRow(rowIndex).Index;
             }
@@ -1957,7 +1957,7 @@ namespace System.Windows.Forms
         {
             DataGridViewRow dataGridViewRow = (DataGridViewRow)e.Element;
             int originalIndex = 0;
-            if (dataGridViewRow != null && e.Action == CollectionChangeAction.Add)
+            if (dataGridViewRow is not null && e.Action == CollectionChangeAction.Add)
             {
                 originalIndex = SharedRow(rowIndex).Index;
             }
@@ -1977,7 +1977,7 @@ namespace System.Windows.Forms
                                                          ref DataGridViewRow dataGridViewRow,
                                                          bool changeIsInsertion)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             bool useRowShortcut = false;
             bool computeVisibleRows = false;
             switch (cca)
@@ -2101,7 +2101,7 @@ namespace System.Windows.Forms
                                                           bool recreateNewRow,
                                                           Point newCurrentCell)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             if (changeIsDeletion)
             {
                 DataGridView.OnRowsRemovedInternal(rowIndex, rowCount);
@@ -2150,7 +2150,7 @@ namespace System.Windows.Forms
 
         public virtual void Remove(DataGridViewRow dataGridViewRow)
         {
-            if (dataGridViewRow == null)
+            if (dataGridViewRow is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewRow));
             }
@@ -2188,7 +2188,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
             }
 
-            if (DataGridView.DataSource != null)
+            if (DataGridView.DataSource is not null)
             {
                 if (DataGridView.DataConnection.List is IBindingList list && list.AllowRemove && list.SupportsChangeNotification)
                 {
@@ -2210,7 +2210,7 @@ namespace System.Windows.Forms
             // If force is true, the underlying data is gone and can't be accessed anymore.
 
             Debug.Assert(index >= 0 && index < Count);
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             Debug.Assert(!DataGridView.NoDimensionChangeAllowed);
 
             DataGridViewRow dataGridViewRow = SharedRow(index);
@@ -2222,7 +2222,7 @@ namespace System.Windows.Forms
             }
 
             dataGridViewRow = SharedRow(index);
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
             DataGridView.OnRemovingRow(index, out newCurrentCell, force);
             UpdateRowCaches(index, ref dataGridViewRow, false /*adding*/);
             if (dataGridViewRow.Index != -1)
@@ -2239,7 +2239,7 @@ namespace System.Windows.Forms
 
         private static bool RowHasValueOrToolTipText(DataGridViewRow dataGridViewRow)
         {
-            Debug.Assert(dataGridViewRow != null);
+            Debug.Assert(dataGridViewRow is not null);
             Debug.Assert(dataGridViewRow.Index == -1);
 
             DataGridViewCellCollection cells = dataGridViewRow.Cells;
@@ -2483,7 +2483,7 @@ namespace System.Windows.Forms
 
             public void CustomSort(RowComparer rowComparer)
             {
-                Debug.Assert(rowComparer != null);
+                Debug.Assert(rowComparer is not null);
                 Debug.Assert(Count > 0);
 
                 this.rowComparer = rowComparer;
@@ -2598,9 +2598,9 @@ namespace System.Windows.Forms
                 dataGridView = dataGridViewRows.DataGridView;
                 this.dataGridViewRows = dataGridViewRows;
                 dataGridViewSortedColumn = dataGridView.SortedColumn;
-                if (dataGridViewSortedColumn == null)
+                if (dataGridViewSortedColumn is null)
                 {
-                    Debug.Assert(customComparer != null);
+                    Debug.Assert(customComparer is not null);
                     sortedColumnIndex = -1;
                 }
                 else
@@ -2621,10 +2621,10 @@ namespace System.Windows.Forms
                         return max;
                     }
                 }
-                if (customComparer == null)
+                if (customComparer is null)
                 {
                     DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    Debug.Assert(dataGridViewRow != null);
+                    Debug.Assert(dataGridViewRow is not null);
                     Debug.Assert(sortedColumnIndex >= 0);
                     return dataGridViewRow.Cells[sortedColumnIndex].GetValueInternal(rowIndex);
                 }
@@ -2645,15 +2645,15 @@ namespace System.Windows.Forms
                     return -1;
                 }
                 int result = 0;
-                if (customComparer == null)
+                if (customComparer is null)
                 {
                     if (!dataGridView.OnSortCompare(dataGridViewSortedColumn, value1, value2, rowIndex1, rowIndex2, out result))
                     {
                         if (!(value1 is IComparable) && !(value2 is IComparable))
                         {
-                            if (value1 == null)
+                            if (value1 is null)
                             {
-                                if (value2 == null)
+                                if (value2 is null)
                                 {
                                     result = 0;
                                 }
@@ -2662,7 +2662,7 @@ namespace System.Windows.Forms
                                     result = 1;
                                 }
                             }
-                            else if (value2 == null)
+                            else if (value2 is null)
                             {
                                 result = -1;
                             }
@@ -2692,8 +2692,8 @@ namespace System.Windows.Forms
                 {
                     Debug.Assert(value1 is DataGridViewRow);
                     Debug.Assert(value2 is DataGridViewRow);
-                    Debug.Assert(value1 != null);
-                    Debug.Assert(value2 != null);
+                    Debug.Assert(value1 is not null);
+                    Debug.Assert(value2 is not null);
                     //
 
                     result = customComparer.Compare(value1, value2);

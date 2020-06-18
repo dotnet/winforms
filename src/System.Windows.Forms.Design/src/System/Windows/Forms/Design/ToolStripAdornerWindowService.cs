@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design
 
             //use the adornerWindow as an overlay
             _overlayService = (IOverlayService)serviceProvider.GetService(typeof(IOverlayService));
-            if (_overlayService != null)
+            if (_overlayService is not null)
             {
                 _overlayService.InsertOverlay(_toolStripAdornerWindow, indexToInsert);
             }
@@ -75,17 +75,17 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void Dispose()
         {
-            if (_overlayService != null)
+            if (_overlayService is not null)
             {
                 _overlayService.RemoveOverlay(_toolStripAdornerWindow);
             }
             _toolStripAdornerWindow.Dispose();
-            if (_behaviorService != null)
+            if (_behaviorService is not null)
             {
                 _behaviorService.Adorners.Remove(_dropDownAdorner);
                 _behaviorService = null;
             }
-            if (_dropDownAdorner != null)
+            if (_dropDownAdorner is not null)
             {
                 _dropDownAdorner.Glyphs.Clear();
                 _dropDownAdorner = null;
@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public Point ControlToAdornerWindow(Control c)
         {
-            if (c.Parent == null)
+            if (c.Parent is null)
             {
                 return Point.Empty;
             }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Design
             get => _dropDownCollection;
             set
             {
-                if (_dropDownCollection == null)
+                if (_dropDownCollection is null)
                 {
                     _dropDownCollection = new ArrayList();
                 }
@@ -223,7 +223,7 @@ namespace System.Windows.Forms.Design
             {
                 if (disposing)
                 {
-                    if (_designerFrame != null)
+                    if (_designerFrame is not null)
                     {
                         _designerFrame = null;
                     }
@@ -238,7 +238,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (_designerFrame == null || _designerFrame.IsDisposed || !_designerFrame.IsHandleCreated)
+                    if (_designerFrame is null || _designerFrame.IsDisposed || !_designerFrame.IsHandleCreated)
                     {
                         return false;
                     }

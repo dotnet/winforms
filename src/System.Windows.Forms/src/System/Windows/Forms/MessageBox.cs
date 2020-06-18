@@ -62,7 +62,7 @@ namespace System.Windows.Forms
                 // unfortunately, there's no easy way to obtain handle of a message box.
                 // we'll have to rely on the fact that modal message loops have to pop off in an orderly way.
 
-                if (helpInfoTable != null && helpInfoTable.Length > 0)
+                if (helpInfoTable is not null && helpInfoTable.Length > 0)
                 {
                     // the top of the stack is actually at the end of the array.
                     return helpInfoTable[helpInfoTable.Length - 1];
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
             // usually there's only going to be one message box shown at a time.  But if
             // someone shows two message boxes (say by launching them via a WM_TIMER message)
             // we've got to gracefully handle the current help info.
-            if (helpInfoTable == null)
+            if (helpInfoTable is null)
             {
                 Debug.Fail("Why are we being called when there's nothing to pop?");
             }
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
             int lastCount = 0;
             HelpInfo[] newTable;
 
-            if (helpInfoTable == null)
+            if (helpInfoTable is null)
             {
                 newTable = new HelpInfo[lastCount + 1];
             }
@@ -362,7 +362,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
-            if (owner != null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
+            if (owner is not null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
             {
                 throw new ArgumentException(SR.CantShowMBServiceWithOwner, "options");
             }
@@ -377,7 +377,7 @@ namespace System.Windows.Forms
             IntPtr handle = IntPtr.Zero;
             if (showHelp || ((options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0))
             {
-                if (owner == null)
+                if (owner is null)
                 {
                     handle = GetActiveWindow();
                 }

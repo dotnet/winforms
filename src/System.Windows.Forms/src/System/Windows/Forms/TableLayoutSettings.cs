@@ -226,7 +226,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_stub != null)
+                if (_stub is not null)
                 {
                     return true;
                 }
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
 
         public int GetColumnSpan(object control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
 
         public void SetColumnSpan(object control, int value)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -289,7 +289,7 @@ namespace System.Windows.Forms
             else
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container != null)
+                if (element.Container is not null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
 
         public int GetRowSpan(object control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -319,7 +319,7 @@ namespace System.Windows.Forms
 
         public void SetRowSpan(object control, int value)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -335,7 +335,7 @@ namespace System.Windows.Forms
             else
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container != null)
+                if (element.Container is not null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
@@ -353,7 +353,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public int GetRow(object control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -377,7 +377,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetRow(object control, int row)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -397,7 +397,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public TableLayoutPanelCellPosition GetCellPosition(object control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -429,7 +429,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public int GetColumn(object control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -453,7 +453,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetColumn(object control, int column)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -488,7 +488,7 @@ namespace System.Windows.Forms
             else
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container != null)
+                if (element.Container is not null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
@@ -552,7 +552,7 @@ namespace System.Windows.Forms
                         // We need to go through the PropertyDescriptor for the Name property
                         // since it is shadowed.
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(c)["Name"];
-                        if (prop != null && prop.PropertyType == typeof(string))
+                        if (prop is not null && prop.PropertyType == typeof(string))
                         {
                             controlInfo.Name = prop.GetValue(c);
                         }

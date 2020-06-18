@@ -42,7 +42,7 @@ namespace System.Windows.Forms
                 // Get the category for this dispid.
                 //
                 dispid = (DispIdAttribute)baseProp.Attributes[typeof(DispIdAttribute)];
-                if (dispid != null)
+                if (dispid is not null)
                 {
                     // Look to see if this property has a property page.
                     // If it does, then it needs to be Browsable(true).
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
 
                     // Use the CategoryAttribute provided by the OCX.
                     CategoryAttribute cat = owner.GetCategoryForDispid((Ole32.DispatchID)dispid.Value);
-                    if (cat != null)
+                    if (cat is not null)
                     {
                         AddAttribute(cat);
                     }
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (dispid != null)
+                    if (dispid is not null)
                     {
                         UpdateTypeConverterAndTypeEditorInternal(false, Dispid);
                     }
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                 get
                 {
                     DispIdAttribute dispid = (DispIdAttribute)baseProp.Attributes[typeof(DispIdAttribute)];
-                    if (dispid != null)
+                    if (dispid is not null)
                     {
                         return (Ole32.DispatchID)dispid.Value;
                     }
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
             {
                 UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)dispid.Value);
 
-                if (editorBaseType.Equals(typeof(UITypeEditor)) && editor != null)
+                if (editorBaseType.Equals(typeof(UITypeEditor)) && editor is not null)
                 {
                     return editor;
                 }
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
                 try
                 {
                     Oleaut32.IPerPropertyBrowsing ippb = owner.GetPerPropertyBrowsing();
-                    if (ippb == null)
+                    if (ippb is null)
                     {
                         return Guid.Empty;
                     }
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (owner.GetOcx() == null)
+                if (owner.GetOcx() is null)
                 {
                     return;
                 }
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
                 {
                     Oleaut32.IPerPropertyBrowsing ppb = owner.GetPerPropertyBrowsing();
 
-                    if (ppb != null)
+                    if (ppb is not null)
                     {
                         bool hasStrings = false;
 
@@ -380,7 +380,7 @@ namespace System.Windows.Forms
 
                             if (stringMarshaler.Count > 0 && intMarshaler.Count > 0)
                             {
-                                if (converter == null)
+                                if (converter is null)
                                 {
                                     converter = new AxEnumConverter(this, new AxPerPropertyBrowsingEnum(this, owner, stringMarshaler, intMarshaler, true));
                                 }
@@ -407,7 +407,7 @@ namespace System.Windows.Forms
                             // have a .Net Editor for this type.
                             //
                             ComAliasNameAttribute comAlias = (ComAliasNameAttribute)baseProp.Attributes[typeof(ComAliasNameAttribute)];
-                            if (comAlias == null)
+                            if (comAlias is null)
                             {
                                 Guid g = GetPropertyPage(dispid);
 
@@ -464,10 +464,10 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex1)
                 {
-                    if (provider != null)
+                    if (provider is not null)
                     {
                         IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
-                        if (uiSvc != null)
+                        if (uiSvc is not null)
                         {
                             uiSvc.ShowError(ex1, SR.ErrorTypeConverterFailed);
                         }

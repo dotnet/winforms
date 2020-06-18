@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             get
             {
                 object description = Properties.GetObject(PropImageCellDescription);
-                if (description != null)
+                if (description is not null)
                 {
                     return (string)description;
                 }
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (errorBmp == null)
+                if (errorBmp is null)
                 {
                     errorBmp = DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
                 }
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (errorIco == null)
+                if (errorIco is null)
                 {
                     errorIco = new Icon(typeof(DataGridView), "IconInError");
                 }
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
                 if (ValueIsIcon != value)
                 {
                     ValueIsIconInternal = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -209,7 +209,7 @@ namespace System.Windows.Forms
                     {
                         flags = (byte)(flags & ~DATAGRIDVIEWIMAGECELL_valueIsIcon);
                     }
-                    if (DataGridView != null &&
+                    if (DataGridView is not null &&
                         RowIndex != -1 &&
                         DataGridView.NewRowIndex == RowIndex &&
                         !DataGridView.VirtualMode)
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
             {
                 Type baseValueType = base.ValueType;
 
-                if (baseValueType != null)
+                if (baseValueType is not null)
                 {
                     return baseValueType;
                 }
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
             set
             {
                 base.ValueType = value;
-                ValueIsIcon = (value != null && defaultTypeIcon.IsAssignableFrom(value));
+                ValueIsIcon = (value is not null && defaultTypeIcon.IsAssignableFrom(value));
             }
         }
 
@@ -281,12 +281,12 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null || rowIndex < 0 || OwningColumn == null)
+            if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
                 return Rectangle.Empty;
             }
@@ -337,14 +337,14 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null ||
+            if (DataGridView is null ||
                 rowIndex < 0 ||
-                OwningColumn == null ||
+                OwningColumn is null ||
                 !DataGridView.ShowCellErrors ||
                 string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
             }
 
             object formattedValue = base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
-            if (formattedValue == null && cellStyle.NullValue == null)
+            if (formattedValue is null && cellStyle.NullValue is null)
             {
                 return null;
             }
@@ -427,12 +427,12 @@ namespace System.Windows.Forms
 
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return new Size(-1, -1);
             }
 
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -445,7 +445,7 @@ namespace System.Windows.Forms
             object formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize);
             Image img = formattedValue as Image;
             Icon ico = null;
-            if (img == null)
+            if (img is null)
             {
                 ico = formattedValue as Icon;
             }
@@ -453,9 +453,9 @@ namespace System.Windows.Forms
             if (freeDimension == DataGridViewFreeDimension.Height &&
                 ImageLayout == DataGridViewImageCellLayout.Zoom)
             {
-                if (img != null || ico != null)
+                if (img is not null || ico is not null)
                 {
-                    if (img != null)
+                    if (img is not null)
                     {
                         int imgWidthAllowed = constraintSize.Width - borderAndPaddingWidths;
                         if (imgWidthAllowed <= 0 || img.Width == 0)
@@ -488,9 +488,9 @@ namespace System.Windows.Forms
             else if (freeDimension == DataGridViewFreeDimension.Width &&
                      ImageLayout == DataGridViewImageCellLayout.Zoom)
             {
-                if (img != null || ico != null)
+                if (img is not null || ico is not null)
                 {
-                    if (img != null)
+                    if (img is not null)
                     {
                         int imgHeightAllowed = constraintSize.Height - borderAndPaddingHeights;
                         if (imgHeightAllowed <= 0 || img.Height == 0)
@@ -522,11 +522,11 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (img != null)
+                if (img is not null)
                 {
                     preferredSize = new Size(img.Width, img.Height);
                 }
-                else if (ico != null)
+                else if (ico is not null)
                 {
                     preferredSize = new Size(ico.Width, ico.Height);
                 }
@@ -568,14 +568,14 @@ namespace System.Windows.Forms
         protected override object GetValue(int rowIndex)
         {
             object valueBase = base.GetValue(rowIndex);
-            if (valueBase == null)
+            if (valueBase is null)
             {
                 if (OwningColumn is DataGridViewImageColumn owningImageColumn)
                 {
                     if (defaultTypeImage.IsAssignableFrom(ValueType))
                     {
                         Image image = owningImageColumn.Image;
-                        if (image != null)
+                        if (image is not null)
                         {
                             return image;
                         }
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
                     else if (defaultTypeIcon.IsAssignableFrom(ValueType))
                     {
                         Icon icon = owningImageColumn.Icon;
-                        if (icon != null)
+                        if (icon is not null)
                         {
                             return icon;
                         }
@@ -721,7 +721,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -769,7 +769,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle != null);
+            Debug.Assert(cellStyle is not null);
 
             if (paint && DataGridViewCell.PaintBorder(paintParts))
             {
@@ -807,11 +807,11 @@ namespace System.Windows.Forms
                 {
                     Image img = formattedValue as Image;
                     Icon ico = null;
-                    if (img == null)
+                    if (img is null)
                     {
                         ico = formattedValue as Icon;
                     }
-                    if (ico != null || img != null)
+                    if (ico is not null || img is not null)
                     {
                         DataGridViewImageCellLayout imageLayout = ImageLayout;
                         if (imageLayout == DataGridViewImageCellLayout.NotSet)
@@ -837,7 +837,7 @@ namespace System.Windows.Forms
                                 }
                                 if (DataGridViewCell.PaintContentForeground(paintParts))
                                 {
-                                    if (img != null)
+                                    if (img is not null)
                                     {
                                         //
 
@@ -858,7 +858,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Rectangle imgBounds2 = ImgBounds(imgBounds, (img == null) ? ico.Width : img.Width, (img == null) ? ico.Height : img.Height, imageLayout, cellStyle);
+                            Rectangle imgBounds2 = ImgBounds(imgBounds, (img is null) ? ico.Width : img.Width, (img is null) ? ico.Height : img.Height, imageLayout, cellStyle);
                             resultBounds = imgBounds2;
 
                             if (paint)
@@ -872,7 +872,7 @@ namespace System.Windows.Forms
                                     //paint the image
                                     Region reg = g.Clip;
                                     g.SetClip(Rectangle.Intersect(Rectangle.Intersect(imgBounds2, imgBounds), Rectangle.Truncate(g.VisibleClipBounds)));
-                                    if (img != null)
+                                    if (img is not null)
                                     {
                                         g.DrawImage(img, imgBounds2);
                                     }

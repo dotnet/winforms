@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             // Should null out obj pointer
             void* obj = (void*)0xDEADBEEF;
             Assert.Equal(HRESULT.E_NOINTERFACE, manager.QueryService(null, null, &obj));
-            Assert.True(obj == null);
+            Assert.True(obj is null);
         }
 
         [Fact]
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             // Should null out obj pointer
             void* obj = (void*)0xDEADBEEF;
             Assert.Equal(BOOL.FALSE, manager.FCreateSubComponentManager(default, default, null, &obj));
-            Assert.True(obj == null);
+            Assert.True(obj is null);
         }
 
         [Fact]
@@ -270,7 +270,7 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             // Should null out obj pointer
             void* obj = (void*)0xDEADBEEF;
             Assert.Equal(BOOL.FALSE, manager.FGetParentComponentManager(&obj));
-            Assert.True(obj == null);
+            Assert.True(obj is null);
         }
 
         [Fact]
@@ -317,7 +317,7 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             mock2.Setup(m => m.FQueryTerminate(BOOL.TRUE)).Returns(BOOL.TRUE);
             void* pUnk = default;
             Assert.Equal(BOOL.TRUE, manager.FGetActiveComponent(msogac.Tracking, &pUnk, &info, 0));
-            Assert.True(pUnk != null);
+            Assert.True(pUnk is not null);
             try
             {
                 var component = (IMsoComponent)Marshal.GetObjectForIUnknown((IntPtr)pUnk);

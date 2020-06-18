@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Internal
 
         public WindowsGraphics(DeviceContext dc)
         {
-            Debug.Assert(dc != null, "null dc!");
+            Debug.Assert(dc is not null, "null dc!");
             DeviceContext = dc;
             DeviceContext.SaveHdc();
         }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Internal
                     worldTransf = data[1] as Matrix;
                 }
 
-                if (worldTransf != null)
+                if (worldTransf is not null)
                 {
                     if ((properties & ApplyGraphicsProperties.TranslateTransform) != 0)
                     {
@@ -118,7 +118,7 @@ namespace System.Windows.Forms.Internal
                     worldTransf.Dispose();
                 }
 
-                if (clipRgn != null)
+                if (clipRgn is not null)
                 {
                     if ((properties & ApplyGraphicsProperties.Clipping) != 0)
                     {
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Internal
             wg._graphics = g;
 
             // Apply transform and clip
-            if (wr != null)
+            if (wr is not null)
             {
                 using (wr)
                 {
@@ -150,7 +150,7 @@ namespace System.Windows.Forms.Internal
                 }
             }
 
-            if (elements != null)
+            if (elements is not null)
             {
                 // elements (XFORM) = [eM11, eM12, eM21, eM22, eDx, eDy], eDx/eDy specify the translation offset.
                 wg.DeviceContext.TranslateTransform((int)elements[4], (int)elements[5]);
@@ -175,7 +175,7 @@ namespace System.Windows.Forms.Internal
 
         internal void Dispose(bool disposing)
         {
-            if (DeviceContext != null)
+            if (DeviceContext is not null)
             {
                 try
                 {
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.Internal
                         DeviceContext.Dispose(disposing);
                     }
 
-                    if (_graphics != null)    // if created from a Graphics object...
+                    if (_graphics is not null)    // if created from a Graphics object...
                     {
                         _graphics.ReleaseHdcInternal(DeviceContext.Hdc);
                         _graphics = null;

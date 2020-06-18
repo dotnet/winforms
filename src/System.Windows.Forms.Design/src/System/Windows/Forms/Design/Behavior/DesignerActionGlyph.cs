@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         public bool IsInComponentTray
         {
-            get => (_adorner == null); // adorner and alternative bounds are exclusive
+            get => (_adorner is null); // adorner and alternative bounds are exclusive
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_glyphImageClosed == null)
+                if (_glyphImageClosed is null)
                 {
                     _glyphImageClosed = new Icon(typeof(DesignerActionGlyph), "Close_left").ToBitmap();
 
@@ -108,7 +108,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_glyphImageOpened == null)
+                if (_glyphImageOpened is null)
                 {
                     _glyphImageOpened = new Icon(typeof(DesignerActionGlyph), "Open_left").ToBitmap();
 
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal void InvalidateOwnerLocation()
         {
-            if (_alternativeParent != null)
+            if (_alternativeParent is not null)
             { // alternative parent and adoner are exclusive...
                 _alternativeParent.Invalidate(_bounds);
             }
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.Design.Behavior
             IComponent relatedComponent = ((DesignerActionBehavior)Behavior).RelatedComponent;
             Point topRight = Point.Empty;
             //handle the case that our comp is a control
-            if (relatedComponent is Control relatedControl && !(relatedComponent is ToolStripDropDown) && _adorner != null)
+            if (relatedComponent is Control relatedControl && !(relatedComponent is ToolStripDropDown) && _adorner is not null)
             {
                 topRight = _adorner.BehaviorService.ControlToAdornerWindow(relatedControl);
                 topRight.X += relatedControl.Width;
@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (_alternativeParent is ComponentTray compTray)
                 {
                     ComponentTray.TrayControl trayControl = compTray.GetTrayControlFromComponent(relatedComponent);
-                    if (trayControl != null)
+                    if (trayControl is not null)
                     {
                         _alternativeBounds = trayControl.Bounds;
                     }
@@ -198,7 +198,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
                 IComponent panelComponent = ((DesignerActionUI)((DesignerActionBehavior)Behavior).ParentUI).LastPanelComponent;
                 IComponent relatedComponent = ((DesignerActionBehavior)Behavior).RelatedComponent;
-                if (panelComponent != null && panelComponent == relatedComponent)
+                if (panelComponent is not null && panelComponent == relatedComponent)
                 {
                     image = GlyphImageOpened;
                 }
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     _insidePaint = true;
                     pe.Graphics.DrawImage(image, _bounds.Left, _bounds.Top);
-                    if (MouseOver || (panelComponent != null && panelComponent == relatedComponent))
+                    if (MouseOver || (panelComponent is not null && panelComponent == relatedComponent))
                     {
                         pe.Graphics.FillRectangle(DesignerUtils.HoverBrush, Rectangle.Inflate(_bounds, -1, -1));
                     }

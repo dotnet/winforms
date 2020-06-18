@@ -49,7 +49,7 @@ namespace System.Windows.Forms
                 throw new Threading.ThreadStateException(SR.ThreadMustBeSTA);
             }
 
-            if (data == null)
+            if (data is null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
             }
             while (hr != 0);
 
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 if (dataObject is IDataObject ido && !Marshal.IsComObject(dataObject))
                 {
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
         public static bool ContainsAudio()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(DataFormats.WaveAudio, false);
             }
@@ -204,7 +204,7 @@ namespace System.Windows.Forms
             }
 
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(format, false);
             }
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
         public static bool ContainsFileDropList()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(DataFormats.FileDrop, true);
             }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
         public static bool ContainsImage()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(DataFormats.Bitmap, true);
             }
@@ -244,7 +244,7 @@ namespace System.Windows.Forms
             }
 
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(ConvertToDataFormats(format), false);
             }
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
         public static Stream GetAudioStream()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetData(DataFormats.WaveAudio, false) as Stream;
             }
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
             }
 
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetData(format);
             }
@@ -284,7 +284,7 @@ namespace System.Windows.Forms
             IDataObject dataObject = Clipboard.GetDataObject();
             StringCollection retVal = new StringCollection();
 
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 if (dataObject.GetData(DataFormats.FileDrop, true) is string[] strings)
                 {
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
         public static Image GetImage()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetData(DataFormats.Bitmap, true) as Image;
             }
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
             }
 
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 if (dataObject.GetData(ConvertToDataFormats(format), false) is string text)
                 {
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
 
         public static void SetAudio(byte[] audioBytes)
         {
-            if (audioBytes == null)
+            if (audioBytes is null)
             {
                 throw new ArgumentNullException(nameof(audioBytes));
             }
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
 
         public static void SetAudio(Stream audioStream)
         {
-            if (audioStream == null)
+            if (audioStream is null)
             {
                 throw new ArgumentNullException(nameof(audioStream));
             }
@@ -353,7 +353,7 @@ namespace System.Windows.Forms
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                if (format == null)
+                if (format is null)
                 {
                     throw new ArgumentNullException(nameof(format));
                 }
@@ -369,7 +369,7 @@ namespace System.Windows.Forms
 
         public static void SetFileDropList(StringCollection filePaths)
         {
-            if (filePaths == null)
+            if (filePaths is null)
             {
                 throw new ArgumentNullException(nameof(filePaths));
             }
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
 
         public static void SetImage(Image image)
         {
-            if (image == null)
+            if (image is null)
             {
                 throw new ArgumentNullException(nameof(image));
             }

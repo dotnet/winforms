@@ -42,20 +42,20 @@ namespace System.Windows.Forms
                 }
 
                 pVar = bag[pszPropName];
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\tValue=" + ((pVar == null) ? "<null>" : pVar.ToString()));
+                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\tValue=" + ((pVar is null) ? "<null>" : pVar.ToString()));
 
                 // The EE returns a VT_EMPTY for a null. The problem is that visual basic6 expects the caller to respect the
                 // "hint" it gives in the VariantType. For eg., for a VT_BSTR, it expects that the callee will null
                 // out the BSTR field of the variant. Since, the EE or us cannot do anything about this, we will return
                 // a E_INVALIDARG rather than let visual basic6 crash.
                 //
-                return (pVar == null) ? HRESULT.E_INVALIDARG : HRESULT.S_OK;
+                return (pVar is null) ? HRESULT.E_INVALIDARG : HRESULT.S_OK;
             }
 
             HRESULT Oleaut32.IPropertyBag.Write(string pszPropName, ref object pVar)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Writing property " + pszPropName + " [" + pVar + "] into OCXState propertybag.");
-                if (pVar != null && !pVar.GetType().IsSerializable)
+                if (pVar is not null && !pVar.GetType().IsSerializable)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t " + pVar.GetType().FullName + " is not serializable.");
                     return HRESULT.S_OK;

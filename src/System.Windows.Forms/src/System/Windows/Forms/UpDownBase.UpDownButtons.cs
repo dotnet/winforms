@@ -332,7 +332,7 @@ namespace System.Windows.Forms
             protected void StartTimer()
             {
                 _parent.OnStartTimer();
-                if (_timer == null)
+                if (_timer is null)
                 {
                     // Generates UpDown events
                     _timer = new Timer();
@@ -351,7 +351,7 @@ namespace System.Windows.Forms
             /// </summary>
             protected void StopTimer()
             {
-                if (_timer != null)
+                if (_timer is not null)
                 {
                     _timer.Stop();
                     _timer.Dispose();
@@ -379,7 +379,7 @@ namespace System.Windows.Forms
                 // process the mouse button up event, which results in timer being disposed
                 OnUpDown(new UpDownEventArgs((int)_pushed));
 
-                if (_timer != null)
+                if (_timer is not null)
                 {
                     // Accelerate timer.
                     _timerInterval *= 7;
@@ -409,7 +409,7 @@ namespace System.Windows.Forms
                 internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
                 {
                     AccessibleObject element = HitTest((int)x, (int)y);
-                    if (element != null)
+                    if (element is not null)
                     {
                         return element;
                     }
@@ -540,7 +540,7 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        if (_owner == null)
+                        if (_owner is null)
                         {
                             return base.RuntimeId;
                         }

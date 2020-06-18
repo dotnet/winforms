@@ -147,11 +147,11 @@ namespace System.Windows.Forms
 
         private void OnSystemMenuDropDownOpening(object sender, EventArgs e)
         {
-            if (!system.HasDropDownItems && (target != null))
+            if (!system.HasDropDownItems && (target is not null))
             {
                 system.DropDown = ToolStripDropDownMenu.FromHMenu(User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE), target);
             }
-            else if (MergedMenu == null)
+            else if (MergedMenu is null)
             {
                 system.DropDown.Dispose();
             }
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
 
         private void UnhookTarget()
         {
-            if (target != null)
+            if (target is not null)
             {
                 if (target is Control controlTarget)
                 {

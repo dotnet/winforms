@@ -106,7 +106,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (screens == null)
+                if (screens is null)
                 {
                     if (multiMonitorSupport)
                     {
@@ -331,7 +331,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static Screen FromControl(Control control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }

@@ -259,7 +259,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (splitButtonButton == null)
+                if (splitButtonButton is null)
                 {
                     splitButtonButton = new ToolStripSplitButtonButton(this);
                 }
@@ -282,8 +282,8 @@ namespace System.Windows.Forms
                 // For preferred size caching reasons, we need to keep our two
                 // internal layouts (button, dropdown button) in sync.
 
-                if (InternalLayout != null /*if layout is invalid - calls CreateInternalLayout - which resets splitButtonButtonLayout to null*/
-                    && splitButtonButtonLayout == null)
+                if (InternalLayout is not null /*if layout is invalid - calls CreateInternalLayout - which resets splitButtonButtonLayout to null*/
+                    && splitButtonButtonLayout is null)
                 {
                     splitButtonButtonLayout = new ToolStripSplitButtonButtonLayout(this);
                 }
@@ -462,8 +462,8 @@ namespace System.Windows.Forms
                 {
                     if (!DropDown.Visible)
                     {
-                        Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
-                        openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
+                        Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
+                        openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                         ShowDropDown(/*mousePress = */true);
                     }
                 }
@@ -489,8 +489,8 @@ namespace System.Windows.Forms
                 {
                     if (DropDown.Visible)
                     {
-                        Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
-                        byte closeMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
+                        Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
+                        byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                         if (closeMouseId != openMouseId)
                         {
                             openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
@@ -546,7 +546,7 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             ToolStripRenderer renderer = Renderer;
-            if (renderer != null)
+            if (renderer is not null)
             {
                 InvalidateSplitButtonLayout();
                 Graphics g = e.Graphics;
@@ -680,7 +680,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         return owner.Selected;
                     }
@@ -796,7 +796,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (ownerItem != null)
+                if (ownerItem is not null)
                 {
                     return true;
                 }
@@ -825,7 +825,7 @@ namespace System.Windows.Forms
 
             internal override void Collapse()
             {
-                if (ownerItem != null && ownerItem.DropDown != null && ownerItem.DropDown.Visible)
+                if (ownerItem is not null && ownerItem.DropDown is not null && ownerItem.DropDown.Visible)
                 {
                     ownerItem.DropDown.Close();
                 }

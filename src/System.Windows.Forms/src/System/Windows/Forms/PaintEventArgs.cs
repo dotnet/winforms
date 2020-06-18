@@ -69,7 +69,7 @@ namespace System.Windows.Forms
         ///  HDC, or the GDI+ Graphics object has been created (meaning GDI+ now owns the
         ///  HDC), 0 is returned.
         /// </summary>
-        internal IntPtr HDC => _graphics == null ? _dc : IntPtr.Zero;
+        internal IntPtr HDC => _graphics is null ? _dc : IntPtr.Zero;
 
         /// <summary>
         ///  Gets the <see cref='Drawing.Graphics'/> object used to paint.
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_graphics == null && _dc != IntPtr.Zero)
+                if (_graphics is null && _dc != IntPtr.Zero)
                 {
                     oldPal = Control.SetUpPalette(_dc, force: false, realizePalette: false);
                     _graphics = Graphics.FromHdcInternal(_dc);
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 // Only dispose the graphics object if we created it via the dc.
-                if (_graphics != null && _dc != IntPtr.Zero)
+                if (_graphics is not null && _dc != IntPtr.Zero)
                 {
                     _graphics.Dispose();
                 }
@@ -127,10 +127,10 @@ namespace System.Windows.Forms
         /// </summary>
         internal void ResetGraphics()
         {
-            if (_graphics != null)
+            if (_graphics is not null)
             {
-                Debug.Assert(_dc == IntPtr.Zero || _savedGraphicsState != null, "Called ResetGraphics more than once?");
-                if (_savedGraphicsState != null)
+                Debug.Assert(_dc == IntPtr.Zero || _savedGraphicsState is not null, "Called ResetGraphics more than once?");
+                if (_savedGraphicsState is not null)
                 {
                     _graphics.Restore(_savedGraphicsState);
                     _savedGraphicsState = null;

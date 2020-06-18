@@ -142,7 +142,7 @@ namespace System.Windows.Forms
                 if (state[stateVisible] != value)
                 {
                     state[stateVisible] = value;
-                    if (Parent != null)
+                    if (Parent is not null)
                     {
                         LayoutTransaction.DoLayout(Parent, this, PropertyNames.Visible);
                     }

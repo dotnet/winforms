@@ -42,7 +42,7 @@ namespace System.Windows.Forms
             get => (ListViewGroup)List[index];
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_list == null)
+                if (_list is null)
                 {
                     return null;
                 }
@@ -79,12 +79,12 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                if (_list == null)
+                if (_list is null)
                 {
                     // nothing to do
                     return;
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
 
         public int Add(ListViewGroup group)
         {
-            if (group == null)
+            if (group is null)
             {
                 throw new ArgumentNullException(nameof(group));
             }
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
 
         public void AddRange(ListViewGroup[] groups)
         {
-            if (groups == null)
+            if (groups is null)
             {
                 throw new ArgumentNullException(nameof(groups));
             }
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
 
         public void AddRange(ListViewGroupCollection groups)
         {
-            if (groups == null)
+            if (groups is null)
             {
                 throw new ArgumentNullException(nameof(groups));
             }
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < group.Items.Count; i++)
             {
                 ListViewItem item = group.Items[i];
-                if (item.ListView != null && item.ListView != _listView)
+                if (item.ListView is not null && item.ListView != _listView)
                 {
                     throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text));
                 }
@@ -251,7 +251,7 @@ namespace System.Windows.Forms
 
         public void Insert(int index, ListViewGroup group)
         {
-            if (group == null)
+            if (group is null)
             {
                 throw new ArgumentNullException(nameof(group));
             }

@@ -357,7 +357,7 @@ namespace System.Windows.Forms
                 // things.)
                 _scrollMargin = _requestedScrollMargin;
 
-                if (dockPadding != null)
+                if (dockPadding is not null)
                 {
                     _scrollMargin.Height += Padding.Bottom;
                     _scrollMargin.Width += Padding.Right;
@@ -376,7 +376,7 @@ namespace System.Windows.Forms
                     // In addition, this is the more correct thing, because
                     // we want to layout the children with respect to their
                     // "local" visibility, not the hierarchy.
-                    if (current != null && current.DesiredVisibility)
+                    if (current is not null && current.DesiredVisibility)
                     {
                         switch (((Control)current).Dock)
                         {
@@ -427,7 +427,7 @@ namespace System.Windows.Forms
 
                     // Same logic as the margin calc - you need to see if the
                     // control *will* be visible...
-                    if (current != null && current.DesiredVisibility)
+                    if (current is not null && current.DesiredVisibility)
                     {
                         if (defaultLayoutEngine)
                         {
@@ -603,7 +603,7 @@ namespace System.Windows.Forms
             // thus require a new layout. The result is that when you
             // affect a control's layout, we are forced to layout twice. There
             // isn't any noticible flicker, but this could be a perf problem...
-            if (levent != null && levent.AffectedControl != null && AutoScroll)
+            if (levent is not null && levent.AffectedControl is not null && AutoScroll)
             {
                 base.OnLayout(levent);
             }
@@ -671,7 +671,7 @@ namespace System.Windows.Forms
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             if ((HScroll || VScroll) &&
-                BackgroundImage != null &&
+                BackgroundImage is not null &&
                 (BackgroundImageLayout == ImageLayout.Zoom || BackgroundImageLayout == ImageLayout.Stretch || BackgroundImageLayout == ImageLayout.Center))
             {
                 if (ControlPaint.IsImageTransparent(BackgroundImage))
@@ -803,7 +803,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < Controls.Count; i++)
             {
                 Control ctl = Controls[i];
-                if (ctl != null && ctl.IsHandleCreated)
+                if (ctl is not null && ctl.IsHandleCreated)
                 {
                     ctl.UpdateBounds();
                 }
@@ -816,7 +816,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void ScrollControlIntoView(Control activeControl)
         {
-            if (activeControl == null)
+            if (activeControl is null)
             {
                 return;
             }
@@ -1491,7 +1491,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         if (_left == _right && _top == _bottom && _left == _top)
                         {
@@ -1521,7 +1521,7 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         _left = value;
                         _top = value;
@@ -1542,10 +1542,10 @@ namespace System.Windows.Forms
             [SRDescription(nameof(SR.PaddingBottomDescr))]
             public int Bottom
             {
-                get => _owner == null ? _bottom : _owner.Padding.Bottom;
+                get => _owner is null ? _bottom : _owner.Padding.Bottom;
                 set
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         _bottom = value;
                     }
@@ -1565,10 +1565,10 @@ namespace System.Windows.Forms
             [SRDescription(nameof(SR.PaddingLeftDescr))]
             public int Left
             {
-                get => _owner == null ? _left : _owner.Padding.Left;
+                get => _owner is null ? _left : _owner.Padding.Left;
                 set
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         _left = value;
                     }
@@ -1588,10 +1588,10 @@ namespace System.Windows.Forms
             [SRDescription(nameof(SR.PaddingRightDescr))]
             public int Right
             {
-                get => _owner == null ? _right : _owner.Padding.Right;
+                get => _owner is null ? _right : _owner.Padding.Right;
                 set
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         _right = value;
                     }
@@ -1611,10 +1611,10 @@ namespace System.Windows.Forms
             [SRDescription(nameof(SR.PaddingTopDescr))]
             public int Top
             {
-                get => _owner == null ? _top : _owner.Padding.Top;
+                get => _owner is null ? _top : _owner.Padding.Top;
                 set
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         _top = value;
                     }

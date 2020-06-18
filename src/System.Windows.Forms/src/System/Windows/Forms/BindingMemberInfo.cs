@@ -13,7 +13,7 @@ namespace System.Windows.Forms
 
         public BindingMemberInfo(string dataMember)
         {
-            if (dataMember == null)
+            if (dataMember is null)
             {
                 dataMember = string.Empty;
             }

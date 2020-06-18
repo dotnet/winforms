@@ -69,7 +69,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(ActiveLinkColor))
                 {
                     Properties.SetObject(PropLinkCellActiveLinkColor, value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
                 if (value != LinkBehavior)
                 {
                     Properties.SetInteger(PropLinkCellLinkBehavior, (int)value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -194,7 +194,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(LinkColor))
                 {
                     Properties.SetObject(PropLinkCellLinkColor, value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
                 if (value != LinkVisited)
                 {
                     linkVisited = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
                 if (value != TrackVisitedState)
                 {
                     Properties.SetInteger(PropLinkCellTrackVisitedState, value ? 1 : 0);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -388,7 +388,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(VisitedLinkColor))
                 {
                     Properties.SetObject(PropLinkCellVisitedLinkColor, value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -440,7 +440,7 @@ namespace System.Windows.Forms
             get
             {
                 Type valueType = base.ValueType;
-                if (valueType != null)
+                if (valueType is not null)
                 {
                     return valueType;
                 }
@@ -517,12 +517,12 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null || rowIndex < 0 || OwningColumn == null)
+            if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
                 return Rectangle.Empty;
             }
@@ -578,14 +578,14 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null ||
+            if (DataGridView is null ||
                 rowIndex < 0 ||
-                OwningColumn == null ||
+                OwningColumn is null ||
                 !DataGridView.ShowCellErrors ||
                 string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
@@ -616,12 +616,12 @@ namespace System.Windows.Forms
 
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return new Size(-1, -1);
             }
 
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -730,9 +730,9 @@ namespace System.Windows.Forms
         protected override object GetValue(int rowIndex)
         {
             if (UseColumnTextForLinkValue &&
-                DataGridView != null &&
+                DataGridView is not null &&
                 DataGridView.NewRowIndex != rowIndex &&
-                OwningColumn != null &&
+                OwningColumn is not null &&
                 OwningColumn is DataGridViewLinkColumn)
             {
                 return ((DataGridViewLinkColumn)OwningColumn).Text;
@@ -788,14 +788,14 @@ namespace System.Windows.Forms
 
         protected override void OnKeyUp(KeyEventArgs e, int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
             if (e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift)
             {
                 RaiseCellClick(new DataGridViewCellEventArgs(ColumnIndex, rowIndex));
-                if (DataGridView != null &&
+                if (DataGridView is not null &&
                     ColumnIndex < DataGridView.Columns.Count &&
                     rowIndex < DataGridView.Rows.Count)
                 {
@@ -811,7 +811,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -826,11 +826,11 @@ namespace System.Windows.Forms
 
         protected override void OnMouseLeave(int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
-            if (dataGridViewCursor != null)
+            if (dataGridViewCursor is not null)
             {
                 DataGridView.Cursor = dataGridViewCursor;
                 dataGridViewCursor = null;
@@ -846,7 +846,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseMove(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -858,7 +858,7 @@ namespace System.Windows.Forms
                     DataGridView.InvalidateCell(ColumnIndex, e.RowIndex);
                 }
 
-                if (dataGridViewCursor == null)
+                if (dataGridViewCursor is null)
                 {
                     dataGridViewCursor = DataGridView.UserSetCursor;
                 }
@@ -883,7 +883,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseUp(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -905,7 +905,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -953,7 +953,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle != null);
+            Debug.Assert(cellStyle is not null);
 
             if (paint && DataGridViewCell.PaintBorder(paintParts))
             {

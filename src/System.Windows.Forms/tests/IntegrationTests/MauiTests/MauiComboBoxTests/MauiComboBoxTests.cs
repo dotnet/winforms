@@ -201,7 +201,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             {
                 MeasureItemEventArgs e = _derivedComboBox.MeasureItemEventArgs[i];
 
-                if (e.Graphics == null)
+                if (e.Graphics is null)
                     return new ScenarioResult(false, $"Expected MeasureItemEventArgs[{i}].Graphics not null");
                 if (e.Index != i)
                     return new ScenarioResult(false, $"Expected MeasureItemEventArgs[{i}].Index to be {i}, received: {e.Index}");

@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design
 
         public void AddRange(DesignerActionList[] value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -41,7 +41,7 @@ namespace System.ComponentModel.Design
 
         public void AddRange(DesignerActionListCollection value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }

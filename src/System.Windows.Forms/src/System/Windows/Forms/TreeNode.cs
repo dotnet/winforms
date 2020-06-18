@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner.TreeView != null)
+                    if (owner.TreeView is not null)
                     {
                         if (imageListType == ImageListType.State)
                         {
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
             get
             {
                 //Demand create the imageIndexer
-                if (imageIndexer == null)
+                if (imageIndexer is null)
                 {
                     imageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
                 }
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
             get
             {
                 //Demand create the imageIndexer
-                if (selectedImageIndexer == null)
+                if (selectedImageIndexer is null)
                 {
                     selectedImageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
                 }
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
             get
             {
                 //Demand create the imageIndexer
-                if (stateImageIndexer == null)
+                if (stateImageIndexer is null)
                 {
                     stateImageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.State);
                 }
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (propBag == null)
+                if (propBag is null)
                 {
                     return Color.Empty;
                 }
@@ -236,7 +236,7 @@ namespace System.Windows.Forms
                 // useful data.
                 if (value.IsEmpty)
                 {
-                    if (propBag != null)
+                    if (propBag is not null)
                     {
                         propBag.BackColor = Color.Empty;
                         RemovePropBagIfEmpty();
@@ -251,7 +251,7 @@ namespace System.Windows.Forms
 
                 // Not the default, so if necessary create a new propBag, and fill it with the backcolor
 
-                if (propBag == null)
+                if (propBag is null)
                 {
                     propBag = new OwnerDrawPropertyBag();
                 }
@@ -274,7 +274,7 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                if (tv == null || tv.IsDisposed)
+                if (tv is null || tv.IsDisposed)
                 {
                     return Rectangle.Empty;
                 }
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
-                if (tv == null || tv.IsDisposed)
+                if (tv is null || tv.IsDisposed)
                 {
                     return Rectangle.Empty;
                 }
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
                 }
 
                 TreeView tv = TreeView;
-                if (tv == null || !tv.IsHandleCreated || tv.IsDisposed)
+                if (tv is null || !tv.IsHandleCreated || tv.IsDisposed)
                 {
                     return;
                 }
@@ -394,7 +394,7 @@ namespace System.Windows.Forms
             set
             {
                 TreeView tv = TreeView;
-                if (tv != null)
+                if (tv is not null)
                 {
                     bool eventReturn = tv.TreeViewBeforeCheck(this, TreeViewAction.Unknown);
                     if (!eventReturn)
@@ -451,7 +451,7 @@ namespace System.Windows.Forms
             get
             {
                 TreeNode node = this;
-                while (node != null && node.Bounds.IsEmpty)
+                while (node is not null && node.Bounds.IsEmpty)
                 {
                     node = node.Parent;
                 }
@@ -470,7 +470,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (propBag == null)
+                if (propBag is null)
                 {
                     return Color.Empty;
                 }
@@ -484,7 +484,7 @@ namespace System.Windows.Forms
                 // useful data.
                 if (value.IsEmpty)
                 {
-                    if (propBag != null)
+                    if (propBag is not null)
                     {
                         propBag.ForeColor = Color.Empty;
                         RemovePropBagIfEmpty();
@@ -499,7 +499,7 @@ namespace System.Windows.Forms
 
                 // Not the default, so if necessary create a new propBag, and fill it with the new forecolor
 
-                if (propBag == null)
+                if (propBag is null)
                 {
                     propBag = new OwnerDrawPropertyBag();
                 }
@@ -523,7 +523,7 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                if (tv != null)
+                if (tv is not null)
                 {
                     StringBuilder path = new StringBuilder();
                     GetFullPath(path, tv.PathSeparator);
@@ -545,7 +545,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (handle == IntPtr.Zero && TreeView != null)
+                if (handle == IntPtr.Zero && TreeView is not null)
                 {
                     TreeView.CreateControl(); // force handle creation
                 }
@@ -570,7 +570,7 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                if (ImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv != null && tv.ImageList != null && ImageIndexer.Index >= tv.ImageList.Images.Count)
+                if (ImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv is not null && tv.ImageList is not null && ImageIndexer.Index >= tv.ImageList.Images.Count)
                 {
                     return tv.ImageList.Images.Count - 1;
                 }
@@ -638,7 +638,7 @@ namespace System.Windows.Forms
             {
                 TreeView tv = TreeView;
 
-                if (tv != null)
+                if (tv is not null)
                 {
                     return tv.editNode == this;
                 }
@@ -738,7 +738,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Parent == null)
+                if (Parent is null)
                 {
                     return 0;
                 }
@@ -757,7 +757,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (parent != null && index + 1 < parent.Nodes.Count)
+                if (parent is not null && index + 1 < parent.Nodes.Count)
                 {
                     return parent.Nodes[index + 1];
                 }
@@ -781,14 +781,14 @@ namespace System.Windows.Forms
                 // So before sending, we check if this node is visible. If not, we find the first visible parent.
                 //
                 TreeView tv = TreeView;
-                if (tv == null || tv.IsDisposed)
+                if (tv is null || tv.IsDisposed)
                 {
                     return null;
                 }
 
                 TreeNode node = FirstVisibleParent;
 
-                if (node != null)
+                if (node is not null)
                 {
                     IntPtr next = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.NEXTVISIBLE, node.Handle);
                     if (next != IntPtr.Zero)
@@ -816,7 +816,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (propBag == null)
+                if (propBag is null)
                 {
                     return null;
                 }
@@ -828,14 +828,14 @@ namespace System.Windows.Forms
                 Font oldfont = NodeFont;
                 // If we're setting the font to the default again, delete the propBag if it doesn't contain
                 // useful data.
-                if (value == null)
+                if (value is null)
                 {
-                    if (propBag != null)
+                    if (propBag is not null)
                     {
                         propBag.Font = null;
                         RemovePropBagIfEmpty();
                     }
-                    if (oldfont != null)
+                    if (oldfont is not null)
                     {
                         InvalidateHostTree();
                     }
@@ -845,7 +845,7 @@ namespace System.Windows.Forms
 
                 // Not the default, so if necessary create a new propBag, and fill it with the font
 
-                if (propBag == null)
+                if (propBag is null)
                 {
                     propBag = new OwnerDrawPropertyBag();
                 }
@@ -864,7 +864,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (nodes == null)
+                if (nodes is null)
                 {
                     nodes = new TreeNodeCollection(this);
                 }
@@ -883,7 +883,7 @@ namespace System.Windows.Forms
                 TreeView tv = TreeView;
 
                 // Don't expose the virtual root publicly
-                if (tv != null && parent == tv.root)
+                if (tv is not null && parent == tv.root)
                 {
                     return null;
                 }
@@ -900,7 +900,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (parent == null)
+                if (parent is null)
                 {
                     return null;
                 }
@@ -940,9 +940,9 @@ namespace System.Windows.Forms
                 TreeNode node = FirstVisibleParent;
                 TreeView tv = TreeView;
 
-                if (node != null)
+                if (node is not null)
                 {
-                    if (tv == null || tv.IsDisposed)
+                    if (tv is null || tv.IsDisposed)
                     {
                         return null;
                     }
@@ -974,7 +974,7 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                if (SelectedImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv != null && tv.ImageList != null && SelectedImageIndexer.Index >= tv.ImageList.Images.Count)
+                if (SelectedImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv is not null && tv.ImageList is not null && SelectedImageIndexer.Index >= tv.ImageList.Images.Count)
                 {
                     return tv.ImageList.Images.Count - 1;
                 }
@@ -1038,7 +1038,7 @@ namespace System.Windows.Forms
                 }
 
                 TreeView tv = TreeView;
-                if (tv == null || tv.IsDisposed)
+                if (tv is null || tv.IsDisposed)
                 {
                     return 0;
                 }
@@ -1079,7 +1079,7 @@ namespace System.Windows.Forms
                 }
 
                 StateImageIndexer.Key = value;
-                if (treeView != null && !treeView.CheckBoxes)
+                if (treeView is not null && !treeView.CheckBoxes)
                 {
                     UpdateNode(TVIF.STATE);
                 }
@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                if (StateImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv != null && tv.StateImageList != null && StateImageIndexer.Index >= tv.StateImageList.Images.Count)
+                if (StateImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv is not null && tv.StateImageList is not null && StateImageIndexer.Index >= tv.StateImageList.Images.Count)
                 {
                     return tv.StateImageList.Images.Count - 1;
                 }
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms
                 }
 
                 StateImageIndexer.Index = value;
-                if (treeView != null && !treeView.CheckBoxes)
+                if (treeView is not null && !treeView.CheckBoxes)
                 {
                     UpdateNode(TVIF.STATE);
                 }
@@ -1207,7 +1207,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (treeView == null)
+                if (treeView is null)
                 {
                     treeView = FindTreeView();
                 }
@@ -1228,7 +1228,7 @@ namespace System.Windows.Forms
 
             if (childCount > 0)
             {
-                if (parentTreeView.TreeViewNodeSorter == null)
+                if (parentTreeView.TreeViewNodeSorter is null)
                 {
                     CompareInfo compare = Application.CurrentCulture.CompareInfo;
 
@@ -1294,7 +1294,7 @@ namespace System.Windows.Forms
             if (childCount > 0)
             {
                 TreeNode[] newOrder = new TreeNode[childCount];
-                if (parentTreeView == null || parentTreeView.TreeViewNodeSorter == null)
+                if (parentTreeView is null || parentTreeView.TreeViewNodeSorter is null)
                 {
                     CompareInfo compare = Application.CurrentCulture.CompareInfo;
                     for (int i = 0; i < childCount; i++)
@@ -1302,7 +1302,7 @@ namespace System.Windows.Forms
                         int min = -1;
                         for (int j = 0; j < childCount; j++)
                         {
-                            if (children[j] == null)
+                            if (children[j] is null)
                             {
                                 continue;
                             }
@@ -1334,7 +1334,7 @@ namespace System.Windows.Forms
                         int min = -1;
                         for (int j = 0; j < childCount; j++)
                         {
-                            if (children[j] == null)
+                            if (children[j] is null)
                             {
                                 continue;
                             }
@@ -1398,11 +1398,11 @@ namespace System.Windows.Forms
 
             try
             {
-                if (tv != null)
+                if (tv is not null)
                 {
                     tv.nodesCollectionClear = true;
 
-                    if (tv != null && childCount > MAX_TREENODES_OPS)
+                    if (tv is not null && childCount > MAX_TREENODES_OPS)
                     {
                         isBulkOperation = true;
                         tv.BeginUpdate();
@@ -1415,14 +1415,14 @@ namespace System.Windows.Forms
                 }
                 children = null;
 
-                if (tv != null && isBulkOperation)
+                if (tv is not null && isBulkOperation)
                 {
                     tv.EndUpdate();
                 }
             }
             finally
             {
-                if (tv != null)
+                if (tv is not null)
                 {
                     tv.nodesCollectionClear = false;
                 }
@@ -1485,7 +1485,7 @@ namespace System.Windows.Forms
 
             // Clone properties
             //
-            if (propBag != null)
+            if (propBag is not null)
             {
                 node.propBag = OwnerDrawPropertyBag.Copy(propBag);
             }
@@ -1502,7 +1502,7 @@ namespace System.Windows.Forms
             collapseOnRealization = false;
             expandOnRealization = false;
 
-            if (tv == null || !tv.IsHandleCreated)
+            if (tv is null || !tv.IsHandleCreated)
             {
                 collapseOnRealization = true;
                 return;
@@ -1634,7 +1634,7 @@ namespace System.Windows.Forms
             }
 
             // let imagekey take precidence
-            if (imageKey != null)
+            if (imageKey is not null)
             {
                 ImageKey = imageKey;
             }
@@ -1644,7 +1644,7 @@ namespace System.Windows.Forms
             }
 
             // let selectedimagekey take precidence
-            if (selectedImageKey != null)
+            if (selectedImageKey is not null)
             {
                 SelectedImageKey = selectedImageKey;
             }
@@ -1654,7 +1654,7 @@ namespace System.Windows.Forms
             }
 
             // let stateimagekey take precidence
-            if (stateImageKey != null)
+            if (stateImageKey is not null)
             {
                 StateImageKey = stateImageKey;
             }
@@ -1681,7 +1681,7 @@ namespace System.Windows.Forms
         public void EndEdit(bool cancel)
         {
             TreeView tv = TreeView;
-            if (tv == null || tv.IsDisposed)
+            if (tv is null || tv.IsDisposed)
             {
                 return;
             }
@@ -1699,7 +1699,7 @@ namespace System.Windows.Forms
             {
                 size = 4;
             }
-            if (children == null)
+            if (children is null)
             {
                 children = new TreeNode[size];
             }
@@ -1721,12 +1721,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void EnsureStateImageValue()
         {
-            if (treeView == null)
+            if (treeView is null)
             {
                 return;
             }
 
-            if (treeView.CheckBoxes && treeView.StateImageList != null)
+            if (treeView.CheckBoxes && treeView.StateImageList is not null)
             {
                 if (!string.IsNullOrEmpty(StateImageKey))
                 {
@@ -1747,7 +1747,7 @@ namespace System.Windows.Forms
         public void EnsureVisible()
         {
             TreeView tv = TreeView;
-            if (tv == null || tv.IsDisposed)
+            if (tv is null || tv.IsDisposed)
             {
                 return;
             }
@@ -1761,7 +1761,7 @@ namespace System.Windows.Forms
         public void Expand()
         {
             TreeView tv = TreeView;
-            if (tv == null || !tv.IsHandleCreated)
+            if (tv is null || !tv.IsHandleCreated)
             {
                 expandOnRealization = true;
                 return;
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms
         internal TreeView FindTreeView()
         {
             TreeNode node = this;
-            while (node.parent != null)
+            while (node.parent is not null)
             {
                 node = node.parent;
             }
@@ -1807,10 +1807,10 @@ namespace System.Windows.Forms
         /// </summary>
         private void GetFullPath(StringBuilder path, string pathSeparator)
         {
-            if (parent != null)
+            if (parent is not null)
             {
                 parent.GetFullPath(path, pathSeparator);
-                if (parent.parent != null)
+                if (parent.parent is not null)
                 {
                     path.Append(pathSeparator);
                 }
@@ -1842,7 +1842,7 @@ namespace System.Windows.Forms
         {
             TreeNode node = this;
 
-            while (node != null)
+            while (node is not null)
             {
                 if (node == candidateToAdd)
                 {
@@ -1868,7 +1868,7 @@ namespace System.Windows.Forms
             childCount++;
             node.Realize(false);
 
-            if (TreeView != null && node == TreeView.selectedNode)
+            if (TreeView is not null && node == TreeView.selectedNode)
             {
                 TreeView.SelectedNode = node; // communicate this to the handle
             }
@@ -1879,7 +1879,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void InvalidateHostTree()
         {
-            if (treeView != null && treeView.IsHandleCreated)
+            if (treeView is not null && treeView.IsHandleCreated)
             {
                 treeView.Invalidate();
             }
@@ -1888,12 +1888,12 @@ namespace System.Windows.Forms
         internal unsafe void Realize(bool insertFirst)
         {
             TreeView tv = TreeView;
-            if (tv == null || !tv.IsHandleCreated || tv.IsDisposed)
+            if (tv is null || !tv.IsHandleCreated || tv.IsDisposed)
             {
                 return;
             }
 
-            if (parent != null)
+            if (parent is not null)
             {
                 // Never realize the virtual root
                 if (tv.InvokeRequired)
@@ -1908,7 +1908,7 @@ namespace System.Windows.Forms
                 tvis.item.mask = insertMask;
 
                 TreeNode prev = PrevNode;
-                if (insertFirst || prev == null)
+                if (insertFirst || prev is null)
                 {
                     tvis.hInsertAfter = (IntPtr)TVI.FIRST;
                 }
@@ -1931,7 +1931,7 @@ namespace System.Windows.Forms
                     tvis.item.stateMask |= TVIS.STATEIMAGEMASK;
                     tvis.item.state |= CheckedInternal ? CHECKED : UNCHECKED;
                 }
-                else if (tv.StateImageList != null && StateImageIndexer.ActualIndex >= 0)
+                else if (tv.StateImageList is not null && StateImageIndexer.ActualIndex >= 0)
                 {
                     tvis.item.mask |= TVIF.STATE;
                     tvis.item.stateMask = TVIS.STATEIMAGEMASK;
@@ -1978,7 +1978,7 @@ namespace System.Windows.Forms
 
                 User32.InvalidateRect(new HandleRef(tv, tv.Handle), null, BOOL.FALSE);
 
-                if (parent.nodesCleared && (insertFirst || prev == null) && !tv.Scrollable)
+                if (parent.nodesCleared && (insertFirst || prev is null) && !tv.Scrollable)
                 {
                     // We need to Redraw the TreeView ...
                     // If and only If we are not scrollable ...
@@ -2032,7 +2032,7 @@ namespace System.Windows.Forms
             }
             // children = null;
             // unlink ourself
-            if (notify && parent != null)
+            if (notify && parent is not null)
             {
                 for (int i = index; i < parent.childCount - 1; ++i)
                 {
@@ -2048,7 +2048,7 @@ namespace System.Windows.Forms
 
             // unrealize ourself
             TreeView tv = TreeView;
-            if (tv == null || tv.IsDisposed)
+            if (tv is null || tv.IsDisposed)
             {
                 return;
             }
@@ -2071,7 +2071,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void RemovePropBagIfEmpty()
         {
-            if (propBag == null)
+            if (propBag is null)
             {
                 return;
             }
@@ -2115,7 +2115,7 @@ namespace System.Windows.Forms
         ///
         protected virtual void Serialize(SerializationInfo si, StreamingContext context)
         {
-            if (propBag != null)
+            if (propBag is not null)
             {
                 si.AddValue("PropBag", propBag, typeof(OwnerDrawPropertyBag));
             }
@@ -2129,12 +2129,12 @@ namespace System.Windows.Forms
             si.AddValue(nameof(SelectedImageIndex), SelectedImageIndexer.Index);
             si.AddValue(nameof(SelectedImageKey), SelectedImageIndexer.Key);
 
-            if (treeView != null && treeView.StateImageList != null)
+            if (treeView is not null && treeView.StateImageList is not null)
             {
                 si.AddValue("StateImageIndex", StateImageIndexer.Index);
             }
 
-            if (treeView != null && treeView.StateImageList != null)
+            if (treeView is not null && treeView.StateImageList is not null)
             {
                 si.AddValue(nameof(StateImageKey), StateImageIndexer.Key);
             }
@@ -2149,7 +2149,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (userData != null && userData.GetType().IsSerializable)
+            if (userData is not null && userData.GetType().IsSerializable)
             {
                 si.AddValue("UserData", userData, userData.GetType());
             }
@@ -2160,7 +2160,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Toggle()
         {
-            Debug.Assert(parent != null, "toggle on virtual root");
+            Debug.Assert(parent is not null, "toggle on virtual root");
 
             // I don't use the TVE_TOGGLE message 'cuz Windows TreeView doesn't send the appropriate
             // notifications when collapsing.
@@ -2193,7 +2193,7 @@ namespace System.Windows.Forms
             }
 
             TreeView tv = TreeView;
-            Debug.Assert(tv != null, "TreeNode has handle but no TreeView");
+            Debug.Assert(tv is not null, "TreeNode has handle but no TreeView");
             if (tv.IsDisposed)
             {
                 return;

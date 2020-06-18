@@ -46,7 +46,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (activeX == null)
+                if (activeX is null)
                 {
                     activeX = new TraceSwitch("ActiveX", "Debug ActiveX sourcing");
                 }
@@ -58,7 +58,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataCursor == null)
+                if (dataCursor is null)
                 {
                     dataCursor = new TraceSwitch("Microsoft.WFC.Data.DataCursor", "DataCursor");
                 }
@@ -70,7 +70,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataGridCursor == null)
+                if (dataGridCursor is null)
                 {
                     dataGridCursor = new TraceSwitch("DataGridCursor", "DataGrid cursor tracing");
                 }
@@ -82,7 +82,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataGridEditing == null)
+                if (dataGridEditing is null)
                 {
                     dataGridEditing = new TraceSwitch("DataGridEditing", "DataGrid edit related tracing");
                 }
@@ -94,7 +94,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataGridKeys == null)
+                if (dataGridKeys is null)
                 {
                     dataGridKeys = new TraceSwitch("DataGridKeys", "DataGrid keystroke management tracing");
                 }
@@ -106,7 +106,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataGridLayout == null)
+                if (dataGridLayout is null)
                 {
                     dataGridLayout = new TraceSwitch("DataGridLayout", "DataGrid layout tracing");
                 }
@@ -118,7 +118,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataGridPainting == null)
+                if (dataGridPainting is null)
                 {
                     dataGridPainting = new TraceSwitch("DataGridPainting", "DataGrid Painting related tracing");
                 }
@@ -130,7 +130,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataGridParents == null)
+                if (dataGridParents is null)
                 {
                     dataGridParents = new TraceSwitch("DataGridParents", "DataGrid parent rows");
                 }
@@ -142,7 +142,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataGridScrolling == null)
+                if (dataGridScrolling is null)
                 {
                     dataGridScrolling = new TraceSwitch("DataGridScrolling", "DataGrid scrolling");
                 }
@@ -154,7 +154,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataGridSelection == null)
+                if (dataGridSelection is null)
                 {
                     dataGridSelection = new TraceSwitch("DataGridSelection", "DataGrid selection management tracing");
                 }
@@ -166,7 +166,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataObject == null)
+                if (dataObject is null)
                 {
                     dataObject = new TraceSwitch("DataObject", "Enable tracing for the DataObject class.");
                 }
@@ -178,7 +178,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dataView == null)
+                if (dataView is null)
                 {
                     dataView = new TraceSwitch("DataView", "DataView");
                 }
@@ -190,7 +190,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (debugGridView == null)
+                if (debugGridView is null)
                 {
                     debugGridView = new TraceSwitch("PSDEBUGGRIDVIEW", "Debug PropertyGridView");
                 }
@@ -202,7 +202,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dgCaptionPaint == null)
+                if (dgCaptionPaint is null)
                 {
                     dgCaptionPaint = new TraceSwitch("DGCaptionPaint", "DataGridCaption");
                 }
@@ -214,7 +214,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dgEditColumnEditing == null)
+                if (dgEditColumnEditing is null)
                 {
                     dgEditColumnEditing = new TraceSwitch("DGEditColumnEditing", "Editing related tracing");
                 }
@@ -226,7 +226,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dgRelationShpRowLayout == null)
+                if (dgRelationShpRowLayout is null)
                 {
                     dgRelationShpRowLayout = new TraceSwitch("DGRelationShpRowLayout", "Relationship row layout");
                 }
@@ -238,7 +238,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dgRelationShpRowPaint == null)
+                if (dgRelationShpRowPaint is null)
                 {
                     dgRelationShpRowPaint = new TraceSwitch("DGRelationShpRowPaint", "Relationship row painting");
                 }
@@ -250,7 +250,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dgRowPaint == null)
+                if (dgRowPaint is null)
                 {
                     dgRowPaint = new TraceSwitch("DGRowPaint", "DataGrid Simple Row painting stuff");
                 }
@@ -262,7 +262,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (dragDrop == null)
+                if (dragDrop is null)
                 {
                     dragDrop = new TraceSwitch("DragDrop", "Debug OLEDragDrop support in Controls");
                 }
@@ -274,7 +274,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (flowLayout == null)
+                if (flowLayout is null)
                 {
                     flowLayout = new TraceSwitch("FlowLayout", "Debug flow layout");
                 }
@@ -286,7 +286,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (imeMode == null)
+                if (imeMode is null)
                 {
                     imeMode = new TraceSwitch("ImeMode", "Debug IME Mode");
                 }
@@ -298,7 +298,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (layoutPerformance == null)
+                if (layoutPerformance is null)
                 {
                     layoutPerformance = new TraceSwitch("LayoutPerformance", "Tracks layout events which impact performance.");
                 }
@@ -310,7 +310,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (layoutSuspendResume == null)
+                if (layoutSuspendResume is null)
                 {
                     layoutSuspendResume = new TraceSwitch("LayoutSuspendResume", "Tracks SuspendLayout/ResumeLayout.");
                 }
@@ -322,7 +322,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (lifetimeTracing == null)
+                if (lifetimeTracing is null)
                 {
                     lifetimeTracing = new BooleanSwitch("LifetimeTracing", "Track lifetime events. This will cause objects to track the stack at creation and dispose.");
                 }
@@ -334,7 +334,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (msaa == null)
+                if (msaa is null)
                 {
                     msaa = new TraceSwitch("MSAA", "Debug Microsoft Active Accessibility");
                 }
@@ -346,7 +346,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (msoComponentManager == null)
+                if (msoComponentManager is null)
                 {
                     msoComponentManager = new TraceSwitch("MSOComponentManager", "Debug MSO Component Manager support");
                 }
@@ -358,7 +358,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (richLayout == null)
+                if (richLayout is null)
                 {
                     richLayout = new TraceSwitch("RichLayout", "Debug layout in RichControls");
                 }
@@ -370,7 +370,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (setBounds == null)
+                if (setBounds is null)
                 {
                     setBounds = new TraceSwitch("SetBounds", "Trace changes to control size/position.");
                 }
@@ -382,7 +382,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (s_handleLeak == null)
+                if (s_handleLeak is null)
                 {
                     s_handleLeak = new TraceSwitch("HANDLELEAK", "HandleCollector: Track Win32 Handle Leaks");
                 }
@@ -394,7 +394,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (s_traceCollect == null)
+                if (s_traceCollect is null)
                 {
                     s_traceCollect = new BooleanSwitch("TRACECOLLECT", "HandleCollector: Trace HandleCollector operations");
                 }
@@ -406,7 +406,7 @@ namespace System.ComponentModel
         {
             get
             {
-                if (s_commonDesignerServices == null)
+                if (s_commonDesignerServices is null)
                 {
                     s_commonDesignerServices = new BooleanSwitch("CommonDesignerServices", "Assert if any common designer service is not found.");
                 }

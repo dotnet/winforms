@@ -19,7 +19,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
         {
-            if (propDesc == null)
+            if (propDesc is null)
             {
                 return;
             }
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (target is VSSDK.IVSMDPerPropertyBrowsing)
             {
                 Attribute[] attrs = GetComponentAttributes((VSSDK.IVSMDPerPropertyBrowsing)target, sender.DISPID);
-                if (attrs != null)
+                if (attrs is not null)
                 {
                     for (int i = 0; i < attrs.Length; i++)
                     {
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Oleaut32.VARIANT* pvars = null;
 
             HRESULT hr = target.GetPropertyAttributes(dispid, &cItems, &pbstrs, &pvars);
-            if (hr != HRESULT.S_OK || cItems == 0 || pvars == null)
+            if (hr != HRESULT.S_OK || cItems == 0 || pvars is null)
             {
                 return Array.Empty<Attribute>();
             }
@@ -83,12 +83,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Type t = Type.GetType(attrName);
                 Assembly a = null;
 
-                if (t != null)
+                if (t is not null)
                 {
                     a = t.Assembly;
                 }
 
-                if (t == null)
+                if (t is null)
                 {
                     // check for an assembly name.
                     //
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
 
                     // try to get the field value
-                    if (a == null)
+                    if (a is null)
                     {
                         t = Type.GetType(attrName.Substring(0, lastDot) + assemblyName);
                     }
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         t = a.GetType(attrName.Substring(0, lastDot) + assemblyName);
                     }
 
-                    if (t == null)
+                    if (t is null)
                     {
                         Debug.Fail("Failed load attribute '" + attrName + assemblyName + "'.  It's Type could not be found.");
                         continue;
@@ -137,12 +137,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         continue;
                     }
 
-                    if (t != null)
+                    if (t is not null)
                     {
                         FieldInfo fi = t.GetField(fieldName);
 
                         // only if it's static
-                        if (fi != null && fi.IsStatic)
+                        if (fi is not null && fi.IsStatic)
                         {
                             object fieldValue = fi.GetValue(null);
                             if (fieldValue is Attribute)
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // okay, if we got here, we need to build the attribute...
                 // get the initalizer value if we've got a one item ctor
 
-                if (!Convert.IsDBNull(varParams[i]) && varParams[i] != null)
+                if (!Convert.IsDBNull(varParams[i]) && varParams[i] is not null)
                 {
                     ConstructorInfo[] ctors = t.GetConstructors();
                     for (int c = 0; c < ctors.Length; c++)

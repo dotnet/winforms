@@ -55,7 +55,7 @@ namespace WinForms.Common.Tests
             switch (o)
             {
                 case CodeVariableDeclarationStatement v:
-                    if (v.InitExpression == null)
+                    if (v.InitExpression is null)
                     {
                         return $"new CodeVariableDeclarationStatement({GetType(v.Type)}, {GetString(v.Name)});";
                     }
@@ -87,7 +87,7 @@ namespace WinForms.Common.Tests
                     return $"new CodePropertyReferenceExpression({GetConstructionString(cpre.TargetObject)}, {GetString(cpre.PropertyName)})";
                 case CodePrimitiveExpression cpe:
                     {
-                        if (cpe.Value == null)
+                        if (cpe.Value is null)
                         {
                             return "new CodePrimitiveExpression(null)";
                         }
@@ -105,7 +105,7 @@ namespace WinForms.Common.Tests
 
             string GetString(string s)
             {
-                if (s == null)
+                if (s is null)
                 {
                     return "null";
                 }
@@ -120,7 +120,7 @@ namespace WinForms.Common.Tests
             string GetType(CodeTypeReference reference)
             {
                 Type result = Type.GetType(reference.BaseType);
-                if (result != null)
+                if (result is not null)
                 {
                     return $"typeof({result.Name})";
                 }

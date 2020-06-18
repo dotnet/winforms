@@ -288,7 +288,7 @@ namespace System.Windows.Forms
                     borderStyle = value;
                     Invalidate();
                     SetInnerMostBorder(this);
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         if (ParentInternal is SplitterPanel)
                         {
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
             set
             {
                 base.Dock = value;
-                if (ParentInternal != null)
+                if (ParentInternal is not null)
                 {
                     if (ParentInternal is SplitterPanel)
                     {
@@ -1116,7 +1116,7 @@ namespace System.Windows.Forms
             //Focus rect and reverible lines leave a trace behind on the splitter...
             using (Graphics g = CreateGraphicsInternal())
             {
-                if (BackgroundImage == null)
+                if (BackgroundImage is null)
                 {
                     using (SolidBrush brush = new SolidBrush(BackColor))
                     {
@@ -1234,7 +1234,7 @@ namespace System.Windows.Forms
                     // Focus the current splitter OnMouseDown.
                     splitterFocused = true;
                     IContainerControl c = ParentInternal.GetContainerControl();
-                    if (c != null)
+                    if (c is not null)
                     {
                         if (!(c is ContainerControl cc))
                         {
@@ -1623,7 +1623,7 @@ namespace System.Windows.Forms
         private bool ProcessArrowKey(bool forward)
         {
             Control group = this;
-            if (ActiveControl != null)
+            if (ActiveControl is not null)
             {
                 group = ActiveControl.ParentInternal;
             }
@@ -1638,7 +1638,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 Graphics g = CreateGraphicsInternal();
-                if (BackgroundImage != null)
+                if (BackgroundImage is not null)
                 {
                     using (TextureBrush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile))
                     {
@@ -1870,9 +1870,9 @@ namespace System.Windows.Forms
                 {
                     Control parent = ParentInternal;
                     selectNextControl = true;
-                    while (parent != null)
+                    while (parent is not null)
                     {
-                        if (parent.SelectNextControl(this, forward, true, true, parent.ParentInternal == null))
+                        if (parent.SelectNextControl(this, forward, true, true, parent.ParentInternal is null))
                         {
                             break;
                         }
@@ -1908,19 +1908,19 @@ namespace System.Windows.Forms
                 if (ctl is SplitterPanel panel && panel.Visible)
                 {
                     //We have crossed over to the second Panel...
-                    if (firstPanel != null)
+                    if (firstPanel is not null)
                     {
                         break;
                     }
                     firstPanel = panel;
                 }
-                if (!forward && firstPanel != null && ctl.ParentInternal != firstPanel)
+                if (!forward && firstPanel is not null && ctl.ParentInternal != firstPanel)
                 {
                     //goback to start correct re-ordering ....
                     ctl = firstPanel;
                     break;
                 }
-                if (ctl == null)
+                if (ctl is null)
                 {
                     break;
                 }
@@ -1939,13 +1939,13 @@ namespace System.Windows.Forms
                         return true;
                     }
                 }
-            } while (ctl != null);
-            if (ctl != null && TabStop)
+            } while (ctl is not null);
+            if (ctl is not null && TabStop)
             {
                 //we are on Splitter.....Focus it
                 splitterFocused = true;
                 IContainerControl c = ParentInternal.GetContainerControl();
-                if (c != null)
+                if (c is not null)
                 {
                     if (!(c is ContainerControl cc))
                     {
@@ -1967,7 +1967,7 @@ namespace System.Windows.Forms
                 if (!selected)
                 {
                     Control parent = ParentInternal;
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         try
                         {
@@ -2001,7 +2001,7 @@ namespace System.Windows.Forms
             do
             {
                 ctl = GetNextControl(ctl, forward);
-                if (ctl == null || (ctl is SplitterPanel && ctl.Visible))
+                if (ctl is null || (ctl is SplitterPanel && ctl.Visible))
                 {
                     break;
                 }
@@ -2020,10 +2020,10 @@ namespace System.Windows.Forms
                         return true;
                     }
                 }
-            } while (ctl != null);
+            } while (ctl is not null);
 
-            //If CTL == null .. we r out of the Current SplitContainer...
-            if (ctl == null || (ctl is SplitterPanel && !ctl.Visible))
+            //If CTL is null .. we r out of the Current SplitContainer...
+            if (ctl is null || (ctl is SplitterPanel && !ctl.Visible))
             {
                 callBaseVersion = true;
             }
@@ -2038,7 +2038,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (ctl == null || !(ctl.ParentInternal.Visible))
+                    if (ctl is null || !(ctl.ParentInternal.Visible))
                     {
                         callBaseVersion = true;
                     }
@@ -2057,10 +2057,10 @@ namespace System.Windows.Forms
             if (ctl is ContainerControl container)
             {
                 bool correctParentActiveControl = true;
-                if (container.ParentInternal != null)
+                if (container.ParentInternal is not null)
                 {
                     IContainerControl c = container.ParentInternal.GetContainerControl();
-                    if (c != null)
+                    if (c is not null)
                     {
                         c.ActiveControl = container;
                         correctParentActiveControl = (c.ActiveControl == container);
@@ -2151,7 +2151,7 @@ namespace System.Windows.Forms
             initialSplitterDistance = splitterDistance;
             initialSplitterRectangle = SplitterRectangle;
 
-            if (splitContainerMessageFilter == null)
+            if (splitContainerMessageFilter is null)
             {
                 splitContainerMessageFilter = new SplitContainerMessageFilter(this);
             }
@@ -2195,7 +2195,7 @@ namespace System.Windows.Forms
         private void SplitEnd(bool accept)
         {
             DrawSplitBar(DRAW_END);
-            if (splitContainerMessageFilter != null)
+            if (splitContainerMessageFilter is not null)
             {
                 Application.RemoveMessageFilter(splitContainerMessageFilter);
                 splitContainerMessageFilter = null;
@@ -2422,7 +2422,7 @@ namespace System.Windows.Forms
                 return base.ProcessTabKey(forward);
             }
 
-            if (nextActiveControl != null)
+            if (nextActiveControl is not null)
             {
                 SetActiveControl(nextActiveControl);
                 nextActiveControl = null;
@@ -2446,7 +2446,7 @@ namespace System.Windows.Forms
                     //We are om Splitter ......
                     splitterFocused = true;
                     IContainerControl c = ParentInternal.GetContainerControl();
-                    if (c != null)
+                    if (c is not null)
                     {
                         if (!(c is ContainerControl cc))
                         {
@@ -2466,7 +2466,7 @@ namespace System.Windows.Forms
         protected override void OnMouseCaptureChanged(EventArgs e)
         {
             base.OnMouseCaptureChanged(e);
-            if (splitContainerMessageFilter != null)
+            if (splitContainerMessageFilter is not null)
             {
                 Application.RemoveMessageFilter(splitContainerMessageFilter);
                 splitContainerMessageFilter = null;

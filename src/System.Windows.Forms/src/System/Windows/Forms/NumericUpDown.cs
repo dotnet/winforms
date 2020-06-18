@@ -96,7 +96,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (accelerations == null)
+                if (accelerations is null)
                 {
                     accelerations = new NumericUpDownAccelerationCollection();
                 }
@@ -260,7 +260,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return accelerations != null && buttonPressedStartTime != InvalidValue;
+                return accelerations is not null && buttonPressedStartTime != InvalidValue;
             }
         }
 
@@ -969,7 +969,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         return base.RuntimeId;
                     }

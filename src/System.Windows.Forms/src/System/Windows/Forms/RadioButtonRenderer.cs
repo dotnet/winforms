@@ -283,7 +283,7 @@ namespace System.Windows.Forms
                 part = VisualStyleElement.Button.RadioButton.HighContrastDisabledPart;
             }
 
-            if (visualStyleRenderer == null)
+            if (visualStyleRenderer is null)
             {
                 visualStyleRenderer = new VisualStyleRenderer(RadioElement.ClassName, part, state);
             }

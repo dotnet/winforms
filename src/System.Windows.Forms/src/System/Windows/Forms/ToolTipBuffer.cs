@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 
         public unsafe void SetText(string text)
         {
-            if (text == null)
+            if (text is null)
             {
                 text = string.Empty;
             }

@@ -30,7 +30,7 @@ namespace System.Resources
 
         public override Type BindToType(string assemblyName, string typeName)
         {
-            if (_typeResolver == null)
+            if (_typeResolver is null)
             {
                 return null;
             }
@@ -38,13 +38,13 @@ namespace System.Resources
             typeName = typeName + ", " + assemblyName;
 
             Type type = _typeResolver.GetType(typeName);
-            if (type == null)
+            if (type is null)
             {
                 string[] typeParts = typeName.Split(',');
 
                 // Break up the assembly name from the rest of the assembly strong name.
                 // we try 1) FQN 2) FQN without a version 3) just the short name
-                if (typeParts != null && typeParts.Length > 2)
+                if (typeParts is not null && typeParts.Length > 2)
                 {
                     string partialName = typeParts[0].Trim();
 
@@ -58,7 +58,7 @@ namespace System.Resources
                     }
 
                     type = _typeResolver.GetType(partialName);
-                    if (type == null)
+                    if (type is null)
                     {
                         type = _typeResolver.GetType(typeParts[0].Trim());
                     }
@@ -86,7 +86,7 @@ namespace System.Resources
             //
             // another example are singleton objects like DBNull.Value which are serialized by System.UnitySerializationHolder
             typeName = null;
-            if (_typeNameConverter != null)
+            if (_typeNameConverter is not null)
             {
                 string assemblyQualifiedTypeName = MultitargetUtil.GetAssemblyQualifiedName(serializedType, _typeNameConverter);
                 if (!string.IsNullOrEmpty(assemblyQualifiedTypeName))

@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Internal
 
         internal static bool IsFontInUse(WindowsFont? wf)
         {
-            if (wf == null || t_activeDeviceContexts == null)
+            if (wf is null || t_activeDeviceContexts is null)
             {
                 return false;
             }

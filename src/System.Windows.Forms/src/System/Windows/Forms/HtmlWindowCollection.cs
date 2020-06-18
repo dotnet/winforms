@@ -21,7 +21,7 @@ namespace System.Windows.Forms
             htmlFramesCollection2 = collection;
             this.shimManager = shimManager;
 
-            Debug.Assert(NativeHTMLFramesCollection2 != null, "The window collection object should implement IHTMLFramesCollection2");
+            Debug.Assert(NativeHTMLFramesCollection2 is not null, "The window collection object should implement IHTMLFramesCollection2");
         }
 
         private IHTMLFramesCollection2 NativeHTMLFramesCollection2
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(windowId), windowId), nameof(windowId));
                 }
-                return (htmlWindow2 != null) ? new HtmlWindow(shimManager, htmlWindow2) : null;
+                return (htmlWindow2 is not null) ? new HtmlWindow(shimManager, htmlWindow2) : null;
             }
         }
 

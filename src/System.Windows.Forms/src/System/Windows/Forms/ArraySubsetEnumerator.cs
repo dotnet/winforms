@@ -17,8 +17,8 @@ namespace System.Windows.Forms
 
         public ArraySubsetEnumerator(object[] array, int count)
         {
-            Debug.Assert(count == 0 || array != null, "if array is null, count should be 0");
-            Debug.Assert(array == null || count <= array.Length, "Trying to enumerate more than the array contains");
+            Debug.Assert(count == 0 || array is not null, "if array is null, count should be 0");
+            Debug.Assert(array is null || count <= array.Length, "Trying to enumerate more than the array contains");
             _array = array;
             _total = count;
             _current = -1;

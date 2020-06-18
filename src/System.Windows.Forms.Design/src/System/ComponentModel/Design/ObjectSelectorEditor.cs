@@ -40,7 +40,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -49,7 +49,7 @@ namespace System.ComponentModel.Design
                 return value;
             }
 
-            if (_selector == null)
+            if (_selector is null)
             {
                 _selector = new Selector(this);
 
@@ -77,7 +77,7 @@ namespace System.ComponentModel.Design
         /// <param name="treeView">The tree view control to modify</param>
         public static void ApplyTreeViewThemeStyles(TreeView treeView)
         {
-            if (treeView == null)
+            if (treeView is null)
             {
                 throw new ArgumentNullException(nameof(treeView));
             }
@@ -144,7 +144,7 @@ namespace System.ComponentModel.Design
             {
                 SelectorNode newNode = new SelectorNode(label, value);
 
-                if (parent != null)
+                if (parent is not null)
                 {
                     parent.Nodes.Add(newNode);
                 }
@@ -160,7 +160,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private bool ChooseSelectedNodeIfEqual()
             {
-                if (_editor != null && _edSvc != null)
+                if (_editor is not null && _edSvc is not null)
                 {
                     _editor.SetValue(((SelectorNode)SelectedNode).value);
                     if (_editor.EqualsToValue(((SelectorNode)SelectedNode).value))
@@ -239,7 +239,7 @@ namespace System.ComponentModel.Design
             {
                 TreeNode[] treeNodes;
 
-                if (nodes == null)
+                if (nodes is null)
                 {
                     treeNodes = new TreeNode[Nodes.Count];
                     Nodes.CopyTo(treeNodes, 0);
@@ -263,7 +263,7 @@ namespace System.ComponentModel.Design
                         SelectedNode = treeNodes[i];
                         return true;
                     }
-                    if ((treeNodes[i].Nodes != null) && (treeNodes[i].Nodes.Count != 0))
+                    if ((treeNodes[i].Nodes is not null) && (treeNodes[i].Nodes.Count != 0))
                     {
                         treeNodes[i].Expand();
                         if (SetSelection(value, treeNodes[i].Nodes))

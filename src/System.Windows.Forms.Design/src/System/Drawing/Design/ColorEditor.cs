@@ -29,7 +29,7 @@ namespace System.Drawing.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -38,7 +38,7 @@ namespace System.Drawing.Design
                 return value;
             }
 
-            if (_colorUI == null)
+            if (_colorUI is null)
             {
                 _colorUI = new ColorUI(this);
             }
@@ -575,7 +575,7 @@ namespace System.Drawing.Design
                         return null;
                     }
 
-                    if (cells[id] == null)
+                    if (cells[id] is null)
                     {
                         cells[id] = new ColorCellAccessibleObject(this, ColorPalette.GetColorFromCell(id), id);
                     }
@@ -689,7 +689,7 @@ namespace System.Drawing.Design
             {
                 get
                 {
-                    if (customColors == null)
+                    if (customColors is null)
                     {
                         customColors = new Color[ColorPalette.CELLS_CUSTOM];
                         for (int i = 0; i < ColorPalette.CELLS_CUSTOM; i++)
@@ -775,7 +775,7 @@ namespace System.Drawing.Design
                     if (prop.PropertyType == typeof(Color))
                     {
                         MethodInfo method = prop.GetGetMethod();
-                        if (method != null && (method.Attributes & attrs) == attrs)
+                        if (method is not null && (method.Attributes & attrs) == attrs)
                         {
                             object[] tempIndex = null;
                             colorList.Add(prop.GetValue(null, tempIndex));
@@ -867,7 +867,7 @@ namespace System.Drawing.Design
             private void OnListClick(object sender, EventArgs e)
             {
                 ListBox lb = (ListBox)sender;
-                if (lb.SelectedItem != null)
+                if (lb.SelectedItem is not null)
                 {
                     value = (Color)lb.SelectedItem;
                 }
@@ -941,7 +941,7 @@ namespace System.Drawing.Design
             {
                 TabPage selectedPage = tabControl.SelectedTab;
 
-                if (selectedPage != null && selectedPage.Controls.Count > 0)
+                if (selectedPage is not null && selectedPage.Controls.Count > 0)
                 {
                     selectedPage.Controls[0].Focus();
                 }
@@ -988,7 +988,7 @@ namespace System.Drawing.Design
 
                 // Now look for the current color so we can select the proper tab.
                 //
-                if (value != null)
+                if (value is not null)
                 {
                     object[] values = ColorValues;
                     TabPage selectedTab = paletteTabPage;
@@ -1043,7 +1043,7 @@ namespace System.Drawing.Design
                 protected override void OnGotFocus(EventArgs e)
                 {
                     TabPage selectedTab = this.SelectedTab;
-                    if (selectedTab != null && selectedTab.Controls.Count > 0)
+                    if (selectedTab is not null && selectedTab.Controls.Count > 0)
                     {
                         selectedTab.Controls[0].Focus();
                     }

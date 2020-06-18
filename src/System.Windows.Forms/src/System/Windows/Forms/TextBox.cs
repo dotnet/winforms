@@ -188,7 +188,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (autoCompleteCustomSource == null)
+                if (autoCompleteCustomSource is null)
                 {
                     autoCompleteCustomSource = new AutoCompleteStringCollection();
                     autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
@@ -199,14 +199,14 @@ namespace System.Windows.Forms
             {
                 if (autoCompleteCustomSource != value)
                 {
-                    if (autoCompleteCustomSource != null)
+                    if (autoCompleteCustomSource is not null)
                     {
                         autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
 
                     autoCompleteCustomSource = value;
 
-                    if (value != null)
+                    if (value is not null)
                     {
                         autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
@@ -517,11 +517,11 @@ namespace System.Windows.Forms
                 // so this will undo it, but on a dispose we'll be Destroying the window anyay.
 
                 ResetAutoComplete(true);
-                if (autoCompleteCustomSource != null)
+                if (autoCompleteCustomSource is not null)
                 {
                     autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
-                if (stringSource != null)
+                if (stringSource is not null)
                 {
                     stringSource.ReleaseAutoComplete();
                     stringSource = null;
@@ -639,7 +639,7 @@ namespace System.Windows.Forms
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            if (stringSource != null)
+            if (stringSource is not null)
             {
                 stringSource.ReleaseAutoComplete();
                 stringSource = null;
@@ -732,7 +732,7 @@ namespace System.Windows.Forms
 
                 if (AutoCompleteSource == AutoCompleteSource.CustomSource)
                 {
-                    if (IsHandleCreated && AutoCompleteCustomSource != null)
+                    if (IsHandleCreated && AutoCompleteCustomSource is not null)
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {
@@ -740,7 +740,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            if (stringSource == null)
+                            if (stringSource is null)
                             {
                                 stringSource = new StringSource(GetStringsForAutoComplete());
                                 if (!stringSource.Bind(new HandleRef(this, Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
@@ -833,7 +833,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }

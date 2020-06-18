@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if ((destinationThreadRef != null) && (destinationThreadRef.IsAlive))
+                if ((destinationThreadRef is not null) && (destinationThreadRef.IsAlive))
                 {
                     return destinationThreadRef.Target as Thread;
                 }
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     destinationThreadRef = new WeakReference(value);
                 }
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         }
         public void Dispose()
         {
-            if (controlToSendTo != null)
+            if (controlToSendTo is not null)
             {
                 if (!controlToSendTo.IsDisposed)
                 {
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         public override void Send(SendOrPostCallback d, object state)
         {
             Thread destinationThread = DestinationThread;
-            if (destinationThread == null || !destinationThread.IsAlive)
+            if (destinationThread is null || !destinationThread.IsAlive)
             {
                 throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
             }
@@ -121,12 +121,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (SynchronizationContext.Current == null)
+            if (SynchronizationContext.Current is null)
             {
                 previousSyncContext = null;
             }
 
-            if (previousSyncContext != null)
+            if (previousSyncContext is not null)
             {
                 return;
             }
@@ -136,7 +136,7 @@ namespace System.Windows.Forms
             {
                 SynchronizationContext currentContext = AsyncOperationManager.SynchronizationContext;
                 //Make sure we either have no sync context or that we have one of type SynchronizationContext
-                if (currentContext == null || currentContext.GetType() == typeof(SynchronizationContext))
+                if (currentContext is null || currentContext.GetType() == typeof(SynchronizationContext))
                 {
                     previousSyncContext = currentContext;
 
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        if (previousSyncContext == null)
+                        if (previousSyncContext is null)
                         {
                             AsyncOperationManager.SynchronizationContext = new SynchronizationContext();
                         }

@@ -331,7 +331,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Location is relative to its parent,
                 // therefore, we need to take its parent into consideration
                 Control parent = detailsBtn.Parent;
-                while (parent != null && !(parent is Form))
+                while (parent is not null && !(parent is Form))
                 {
                     y += parent.Location.Y;
                     parent = parent.Parent;
@@ -380,7 +380,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal override bool IsIAccessibleExSupported()
         {
-            Debug.Assert(ownerItem != null, "AccessibleObject owner cannot be null");
+            Debug.Assert(ownerItem is not null, "AccessibleObject owner cannot be null");
             return true;
         }
 
@@ -418,7 +418,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal override void Expand()
         {
-            if (ownerItem != null && !ownerItem.Expanded)
+            if (ownerItem is not null && !ownerItem.Expanded)
             {
                 DoDefaultAction();
             }
@@ -426,7 +426,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal override void Collapse()
         {
-            if (ownerItem != null && ownerItem.Expanded)
+            if (ownerItem is not null && ownerItem.Expanded)
             {
                 DoDefaultAction();
             }

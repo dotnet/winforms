@@ -80,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_host != null)
+                if (_host is not null)
                 {
                     return _host;
                 }
@@ -110,7 +110,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_serializationManager == null)
+                if (_serializationManager is null)
                 {
                     throw new InvalidOperationException(SR.BasicDesignerLoaderNotInitialized);
                 }
@@ -119,7 +119,7 @@ namespace System.ComponentModel.Design.Serialization
             }
             set
             {
-                if (_serializationManager == null)
+                if (_serializationManager is null)
                 {
                     throw new InvalidOperationException(SR.BasicDesignerLoaderNotInitialized);
                 }
@@ -143,7 +143,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void BeginLoad(IDesignerLoaderHost host)
         {
-            if (host == null)
+            if (host is null)
             {
                 throw new ArgumentNullException(nameof(host));
             }
@@ -156,7 +156,7 @@ namespace System.ComponentModel.Design.Serialization
                 throw ex;
             }
 
-            if (_host != null && _host != host)
+            if (_host is not null && _host != host)
             {
                 Exception ex = new InvalidOperationException(SR.BasicDesignerLoaderDifferentHost);
                 ex.HelpLink = SR.BasicDesignerLoaderDifferentHost;
@@ -167,7 +167,7 @@ namespace System.ComponentModel.Design.Serialization
             _state[s_stateLoaded | s_stateLoadFailed] = false;
             _loadDependencyCount = 0;
 
-            if (_host == null)
+            if (_host is null)
             {
                 _host = host;
                 _hostInitialized = true;
@@ -177,7 +177,7 @@ namespace System.ComponentModel.Design.Serialization
                 // it is not something the user can replace.
                 DesignSurfaceServiceContainer dsc = GetService(typeof(DesignSurfaceServiceContainer)) as DesignSurfaceServiceContainer;
 
-                if (dsc != null)
+                if (dsc is not null)
                 {
                     dsc.AddFixedService(typeof(IDesignerSerializationManager), _serializationManager);
                 }
@@ -185,7 +185,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
 
-                    if (sc == null)
+                    if (sc is null)
                     {
                         ThrowMissingService(typeof(IServiceContainer));
                     }
@@ -210,7 +210,7 @@ namespace System.ComponentModel.Design.Serialization
 
             try
             {
-                if (ls != null)
+                if (ls is not null)
                 {
                     ls.AddLoadDependency();
                 }
@@ -234,7 +234,7 @@ namespace System.ComponentModel.Design.Serialization
                 successful = false;
             }
 
-            if (ls != null)
+            if (ls is not null)
             {
                 ls.DependentLoadComplete(successful, localErrorList);
             }
@@ -263,7 +263,7 @@ namespace System.ComponentModel.Design.Serialization
             UnloadDocument();
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-            if (cs != null)
+            if (cs is not null)
             {
                 cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
                 cs.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
@@ -274,7 +274,7 @@ namespace System.ComponentModel.Design.Serialization
                 cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
             }
 
-            if (_host != null)
+            if (_host is not null)
             {
                 _host.RemoveService(typeof(IDesignerLoaderService));
                 _host.Activated -= new EventHandler(OnDesignerActivate);
@@ -307,13 +307,13 @@ namespace System.ComponentModel.Design.Serialization
             try
             {
                 IDesignerLoaderHost host = _host;
-                Debug.Assert(host != null, "designer loader was asked to flush after it has been disposed.");
+                Debug.Assert(host is not null, "designer loader was asked to flush after it has been disposed.");
 
                 // If the host has a null root component, it probably failed
                 // its last load.  In that case, there is nothing to flush.
                 bool shouldChangeModified = true;
 
-                if (host != null && host.RootComponent != null)
+                if (host is not null && host.RootComponent is not null)
                 {
                     using (_serializationManager.CreateSession())
                     {
@@ -333,7 +333,7 @@ namespace System.ComponentModel.Design.Serialization
 
                         ICollection errors = _serializationManager.Errors;
 
-                        if (errors != null && errors.Count > 0)
+                        if (errors is not null && errors.Count > 0)
                         {
                             ReportFlushErrors(errors);
                         }
@@ -359,7 +359,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             object service = null;
 
-            if (_host != null)
+            if (_host is not null)
             {
                 service = _host.GetService(serviceType);
             }
@@ -409,7 +409,7 @@ namespace System.ComponentModel.Design.Serialization
             EnableComponentNotification(false);
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-            if (cs == null)
+            if (cs is null)
             {
                 return;
             }
@@ -569,7 +569,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             _state[s_stateActiveDocument] = true;
 
-            if (!_state[s_stateDeferredReload] || _host == null)
+            if (!_state[s_stateDeferredReload] || _host is null)
             {
                 return;
             }
@@ -618,20 +618,20 @@ namespace System.ComponentModel.Design.Serialization
             //we don't want successful to be true here if there were load errors.
             //this may allow a situation where we have a dirtied WSOD and might allow
             //a user to save a partially loaded designer docdata.
-            successful = successful && (errors == null || errors.Count == 0)
-                                    && (_serializationManager.Errors == null
+            successful = successful && (errors is null || errors.Count == 0)
+                                    && (_serializationManager.Errors is null
                                     || _serializationManager.Errors.Count == 0);
             try
             {
                 _state[s_stateLoaded] = true;
                 IDesignerLoaderHost2 lh2 = GetService(typeof(IDesignerLoaderHost2)) as IDesignerLoaderHost2;
 
-                if (!successful && (lh2 == null || !lh2.IgnoreErrorsDuringReload))
+                if (!successful && (lh2 is null || !lh2.IgnoreErrorsDuringReload))
                 {
                     // Can we even show the Continue Ignore errors in DTEL?
-                    if (lh2 != null)
+                    if (lh2 is not null)
                     {
-                        lh2.CanReloadWithErrors = LoaderHost.RootComponent != null;
+                        lh2.CanReloadWithErrors = LoaderHost.RootComponent is not null;
                     }
 
                     UnloadDocument();
@@ -644,7 +644,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Inform the serialization manager that we are all done.  The serialization
                 // manager clears state at this point to help enforce a stateless serialization
                 // mechanism.
-                if (errors != null)
+                if (errors is not null)
                 {
                     foreach (object err in errors)
                     {
@@ -666,7 +666,7 @@ namespace System.ComponentModel.Design.Serialization
                 // to make the loader modified.
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-                if (cs != null)
+                if (cs is not null)
                 {
                     cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
                     cs.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
@@ -684,7 +684,7 @@ namespace System.ComponentModel.Design.Serialization
 
             // if we got errors in the load, set ourselves as modified so we'll regen code.  If this fails, we don't
             // care; the Modified bit was only a hint.
-            if (_state[s_stateModifyIfErrors] && errors != null && errors.Count > 0)
+            if (_state[s_stateModifyIfErrors] && errors is not null && errors.Count > 0)
             {
                 try
                 {
@@ -729,9 +729,9 @@ namespace System.ComponentModel.Design.Serialization
             //check to see if we are actually the active document.
             DesignSurfaceManager mgr = (DesignSurfaceManager)GetService(typeof(DesignSurfaceManager));
             DesignSurface thisSurface = (DesignSurface)GetService(typeof(DesignSurface));
-            Debug.Assert(mgr != null && thisSurface != null);
+            Debug.Assert(mgr is not null && thisSurface is not null);
 
-            if (mgr != null && thisSurface != null)
+            if (mgr is not null && thisSurface is not null)
             {
                 if (!object.ReferenceEquals(mgr.ActiveDesignSurface, thisSurface))
                 {
@@ -744,7 +744,7 @@ namespace System.ComponentModel.Design.Serialization
 
             IDesignerLoaderHost host = LoaderHost;
 
-            if (host == null)
+            if (host is null)
             {
                 return;
             }
@@ -848,16 +848,16 @@ namespace System.ComponentModel.Design.Serialization
                 lastError = e;
             }
 
-            Debug.Assert(lastError != null, "Someone embedded a null in the error collection");
+            Debug.Assert(lastError is not null, "Someone embedded a null in the error collection");
 
-            if (lastError == null)
+            if (lastError is null)
             {
                 return;
             }
 
             Exception ex = lastError as Exception;
 
-            if (ex == null)
+            if (ex is null)
             {
                 ex = new InvalidOperationException(lastError.ToString());
             }
@@ -874,7 +874,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SetBaseComponentClassName(string name)
         {
-            if (name == null)
+            if (name is null)
             {
                 throw new ArgumentNullException(nameof(name));
             }
@@ -914,7 +914,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         void IDesignerLoaderService.AddLoadDependency()
         {
-            if (_serializationManager == null)
+            if (_serializationManager is null)
             {
                 throw new InvalidOperationException();
             }
@@ -953,7 +953,7 @@ namespace System.ComponentModel.Design.Serialization
                 return;
             }
 
-            if (errorCollection == null)
+            if (errorCollection is null)
             {
                 return;
             }

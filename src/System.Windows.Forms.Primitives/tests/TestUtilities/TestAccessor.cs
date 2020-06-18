@@ -66,7 +66,7 @@ namespace System
 
             // To make it easier to write a class wrapper with a number of delegates,
             // we'll take the name from the delegate itself when unspecified.
-            if (methodName == null)
+            if (methodName is null)
                 methodName = type.Name;
 
             MethodInfo methodInfo = s_type.GetMethod(
@@ -76,7 +76,7 @@ namespace System
                 types,
                 modifiers: null);
 
-            if (methodInfo == null)
+            if (methodInfo is null)
                 throw new ArgumentException($"Could not find non public method {methodName}.");
 
             return (TDelegate)methodInfo.CreateDelegate(type, methodInfo.IsStatic ? (object)null : _instance);
@@ -118,7 +118,7 @@ namespace System
                             modifiers: null);
                     }
 
-                    if (methodInfo != null || type == typeof(object))
+                    if (methodInfo is not null || type == typeof(object))
                     {
                         // Found something, or already at the top of the type heirarchy
                         break;
@@ -128,7 +128,7 @@ namespace System
                     type = type.BaseType;
                 } while (true);
 
-                if (methodInfo == null)
+                if (methodInfo is null)
                     return false;
 
                 result = methodInfo.Invoke(_instance, args);
@@ -138,7 +138,7 @@ namespace System
             public override bool TrySetMember(SetMemberBinder binder, object value)
             {
                 MemberInfo info = GetFieldOrPropertyInfo(binder.Name);
-                if (info == null)
+                if (info is null)
                     return false;
 
                 SetValue(info, value);
@@ -150,7 +150,7 @@ namespace System
                 result = null;
 
                 MemberInfo info = GetFieldOrPropertyInfo(binder.Name);
-                if (info == null)
+                if (info is null)
                     return false;
 
                 result = GetValue(info);
@@ -171,7 +171,7 @@ namespace System
                             memberName,
                             BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
 
-                    if (info != null || type == typeof(object))
+                    if (info is not null || type == typeof(object))
                     {
                         // Found something, or already at the top of the type heirarchy
                         break;

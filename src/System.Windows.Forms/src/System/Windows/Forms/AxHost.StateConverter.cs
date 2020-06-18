@@ -70,14 +70,14 @@ namespace System.Windows.Forms
             /// </summary>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
             {
-                if (destinationType == null)
+                if (destinationType is null)
                 {
                     throw new ArgumentNullException(nameof(destinationType));
                 }
 
                 if (destinationType == typeof(byte[]))
                 {
-                    if (value != null)
+                    if (value is not null)
                     {
                         MemoryStream ms = new MemoryStream();
                         State state = (State)value;

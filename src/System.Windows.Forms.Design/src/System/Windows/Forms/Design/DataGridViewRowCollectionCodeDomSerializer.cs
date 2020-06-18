@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (s_defaultSerializer == null)
+                if (s_defaultSerializer is null)
                 {
                     s_defaultSerializer = new DataGridViewRowCollectionCodeDomSerializer();
                 }

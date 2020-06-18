@@ -435,7 +435,7 @@ namespace System.Windows.Forms.Layout
             {
                 get
                 {
-                    if (_elementProxy == null)
+                    if (_elementProxy is null)
                     {
                         _elementProxy = IsVertical ? new VerticalElementProxy() : new ElementProxy();
                     }
@@ -682,7 +682,7 @@ namespace System.Windows.Forms.Layout
             // We cannot apply any of these checks @ design-time since dragging new children into a FlowLayoutPanel
             // will attempt to set the children at the mouse position when the child was dropped - we rely on the controil
             // to reposition the children once added.
-            if (container is Control flp && flp.Site != null && flp.Site.DesignMode)
+            if (container is Control flp && flp.Site is not null && flp.Site.DesignMode)
             {
                 return;
             }

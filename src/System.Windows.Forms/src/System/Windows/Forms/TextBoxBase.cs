@@ -159,7 +159,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (shortcutsToDisable == null)
+                if (shortcutsToDisable is null)
                 {
                     shortcutsToDisable = new int[] {(int)Shortcut.CtrlZ, (int)Shortcut.CtrlC, (int)Shortcut.CtrlX,
                     (int)Shortcut.CtrlV, (int)Shortcut.CtrlA, (int)Shortcut.CtrlL, (int)Shortcut.CtrlR,
@@ -665,7 +665,7 @@ namespace System.Windows.Forms
             set
             {
                 //unparse this string list...
-                if (value != null && value.Length > 0)
+                if (value is not null && value.Length > 0)
                 {
                     // Using a StringBuilder instead of a String
                     // speeds things up approx 150 times
@@ -960,7 +960,7 @@ namespace System.Windows.Forms
 
                 end = start + length - 1;
 
-                if (t == null)
+                if (t is null)
                 {
                     len = 0;
                 }
@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms
                 CreateHandle();
             }
 
-            if (text == null)
+            if (text is null)
             {
                 text = string.Empty;
             }
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -1198,7 +1198,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void ForceWindowText(string value)
         {
-            if (value == null)
+            if (value is null)
             {
                 value = string.Empty;
             }
@@ -1548,7 +1548,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            if (mevent != null)
+            if (mevent is not null)
             {
                 Point pt = PointToScreen(mevent.Location);
 
@@ -2136,7 +2136,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmTextBoxContextMenu(ref Message m)
         {
-            if (ContextMenuStrip == null)
+            if (ContextMenuStrip is null)
             {
                 return;
             }

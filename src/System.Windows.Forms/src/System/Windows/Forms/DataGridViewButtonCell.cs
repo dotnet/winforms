@@ -159,7 +159,7 @@ namespace System.Windows.Forms
             get
             {
                 Type valueType = base.ValueType;
-                if (valueType != null)
+                if (valueType is not null)
                 {
                     return valueType;
                 }
@@ -193,12 +193,12 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null || rowIndex < 0 || OwningColumn == null)
+            if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
                 return Rectangle.Empty;
             }
@@ -252,14 +252,14 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null ||
+            if (DataGridView is null ||
                 rowIndex < 0 ||
-                OwningColumn == null ||
+                OwningColumn is null ||
                 !DataGridView.ShowCellErrors ||
                 string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
@@ -305,12 +305,12 @@ namespace System.Windows.Forms
 
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return new Size(-1, -1);
             }
 
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -436,9 +436,9 @@ namespace System.Windows.Forms
         protected override object GetValue(int rowIndex)
         {
             if (UseColumnTextForButtonValue &&
-                DataGridView != null &&
+                DataGridView is not null &&
                 DataGridView.NewRowIndex != rowIndex &&
-                OwningColumn != null &&
+                OwningColumn is not null &&
                 OwningColumn is DataGridViewButtonColumn)
             {
                 return ((DataGridViewButtonColumn)OwningColumn).Text;
@@ -478,7 +478,7 @@ namespace System.Windows.Forms
 
         protected override void OnKeyDown(KeyEventArgs e, int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -491,7 +491,7 @@ namespace System.Windows.Forms
 
         protected override void OnKeyUp(KeyEventArgs e, int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -501,7 +501,7 @@ namespace System.Windows.Forms
                 if (!e.Alt && !e.Control && !e.Shift)
                 {
                     RaiseCellClick(new DataGridViewCellEventArgs(ColumnIndex, rowIndex));
-                    if (DataGridView != null &&
+                    if (DataGridView is not null &&
                         ColumnIndex < DataGridView.Columns.Count &&
                         rowIndex < DataGridView.Rows.Count)
                     {
@@ -514,7 +514,7 @@ namespace System.Windows.Forms
 
         protected override void OnLeave(int rowIndex, bool throughMouseClick)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -527,7 +527,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -540,7 +540,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseLeave(int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -566,7 +566,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseMove(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -602,7 +602,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseUp(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -624,7 +624,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -672,7 +672,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle != null);
+            Debug.Assert(cellStyle is not null);
 
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             bool cellSelected = (elementState & DataGridViewElementStates.Selected) != 0;
@@ -976,7 +976,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (formattedString != null && paint && DataGridViewCell.PaintContentForeground(paintParts))
+                if (formattedString is not null && paint && DataGridViewCell.PaintContentForeground(paintParts))
                 {
                     // Font independent margins
                     valBounds.Offset(DATAGRIDVIEWBUTTONCELL_horizontalTextMargin, DATAGRIDVIEWBUTTONCELL_verticalTextMargin);

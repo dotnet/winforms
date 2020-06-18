@@ -36,7 +36,7 @@ namespace WinformsControlsTest.UserControls
     {
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType != null && destinationType.IsAssignableFrom(typeof(string)) && value != null && value is IList<int> list)
+            if (destinationType is not null && destinationType.IsAssignableFrom(typeof(string)) && value is not null && value is IList<int> list)
             {
                 var result = new StringBuilder("");
                 for (int i = 0; i < list.Count; i++)

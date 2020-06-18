@@ -44,7 +44,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public override void RemoveService(Type serviceType, bool promote)
         {
-            if (serviceType != null && _fixedServices.ContainsKey(serviceType))
+            if (serviceType is not null && _fixedServices.ContainsKey(serviceType))
             {
                 throw new InvalidOperationException(string.Format(SR.DesignSurfaceServiceIsFixed, serviceType.Name));
             }

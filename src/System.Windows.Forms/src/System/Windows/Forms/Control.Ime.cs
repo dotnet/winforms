@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                 if (cachedImeMode == ImeMode.Inherit)
                 {
                     Control parent = ParentInternal;
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         cachedImeMode = parent.CachedImeMode;
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "inherited from parent = " + parent.GetType());
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
                             ctl = FromChildHandle(User32.GetFocus());
                         }
 
-                        if (ctl != null && ctl.CanEnableIme)
+                        if (ctl is not null && ctl.CanEnableIme)
                         {
                             // Block ImeModeChanged since we are checking for it below.
                             DisableImeModeChangedCount++;
@@ -687,7 +687,7 @@ namespace System.Windows.Forms
 
             Form form = FindForm();
 
-            if (form != null)
+            if (form is not null)
             {
                 InputLanguageChangedEventArgs e = InputLanguage.CreateInputLanguageChangedEventArgs(m);
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Culture=" + e.Culture);
@@ -711,7 +711,7 @@ namespace System.Windows.Forms
             InputLanguageChangingEventArgs e = InputLanguage.CreateInputLanguageChangingEventArgs(m);
             Form form = FindForm();
 
-            if (form != null)
+            if (form is not null)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Culture=" + e.Culture);
                 form.PerformOnInputLanguageChanging(e);
@@ -834,7 +834,7 @@ namespace System.Windows.Forms
             Control topMostWinformsParent = TopMostParent;
             Form appForm = topMostWinformsParent as Form;
 
-            if ((appForm == null || appForm.Modal) && !topMostWinformsParent.ContainsFocus)
+            if ((appForm is null || appForm.Modal) && !topMostWinformsParent.ContainsFocus)
             {
                 // This means the winforms component container is not a WinForms host and it is no longer focused.
                 // Or it is not the main app host.
@@ -1008,7 +1008,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetConversionStatus(" + inputContext + ", conversion, sentence)");
             Imm32.ImmGetConversionStatus(inputContext, out Imm32.IME_CMODE conversion, out Imm32.IME_SMODE sentence);
 
-            Debug.Assert(countryTable != null, "countryTable is null");
+            Debug.Assert(countryTable is not null, "countryTable is null");
 
             if ((conversion & Imm32.IME_CMODE.NATIVE) != 0)
             {
@@ -1440,7 +1440,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imeModeConversionBits == null)
+                if (imeModeConversionBits is null)
                 {
                     // Create ImeModeConversionBits dictionary
                     imeModeConversionBits = new Dictionary<ImeMode, ImeModeConversion>(7);

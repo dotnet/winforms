@@ -32,7 +32,7 @@ namespace System.Windows.Forms
 
             internal ControlAccessibleObject(Control ownerControl, int accObjId)
             {
-                Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
+                Debug.Assert(ownerControl is not null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
 
                 AccessibleObjectId = accObjId; // ...must set this *before* setting the Handle property
                 Owner = ownerControl ?? throw new ArgumentNullException(nameof(ownerControl));
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
                         }
                         break;
                     case AccessibleNavigation.Previous:
-                        if (IsNonClientObject && parentControl != null)
+                        if (IsNonClientObject && parentControl is not null)
                         {
                             ctrls = parentControl.GetChildControlsInTabOrder(true);
                             index = Array.IndexOf(ctrls, Owner);
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
                         }
                         break;
                     case AccessibleNavigation.Next:
-                        if (IsNonClientObject && parentControl != null)
+                        if (IsNonClientObject && parentControl is not null)
                         {
                             ctrls = parentControl.GetChildControlsInTabOrder(true);
                             index = Array.IndexOf(ctrls, Owner);
@@ -137,7 +137,7 @@ namespace System.Windows.Forms
 
                 // Unsupported navigation operation for this object, or unexpected error.
                 // Return false to force fall back on default system navigation behavior.
-                if (ctrls == null || ctrls.Length == 0)
+                if (ctrls is null || ctrls.Length == 0)
                 {
                     return false;
                 }
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_runtimeId == null)
+                    if (_runtimeId is null)
                     {
                         _runtimeId = new int[] { 0x2a, (int)(long)Handle };
                     }
@@ -218,7 +218,7 @@ namespace System.Windows.Forms
                 get
                 {
                     QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
-                    if (handler != null)
+                    if (handler is not null)
                     {
                         QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
                         handler(Owner, args);
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
                     // Note: Any non-null value in AccessibleName overrides the default accessible name logic,
                     // even an empty string (this is the only way to *force* the accessible name to be blank).
                     string? name = Owner.AccessibleName;
-                    if (name != null)
+                    if (name is not null)
                     {
                         return name;
                     }
@@ -289,7 +289,7 @@ namespace System.Windows.Forms
 
                     // Otherwise use the text of the preceding Label control, if there is one
                     Label? previousLabel = PreviousLabel;
-                    if (previousLabel != null)
+                    if (previousLabel is not null)
                     {
                         string text = previousLabel.Text;
                         if (!string.IsNullOrEmpty(text))
@@ -317,7 +317,7 @@ namespace System.Windows.Forms
                     // Try to get to the parent of this control.
                     Control parent = Owner.ParentInternal;
 
-                    if (parent == null)
+                    if (parent is null)
                     {
                         return null;
                     }
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
 
                     // Walk backwards through peer controls...
                     for (Control previous = container.GetNextControl(Owner, false);
-                         previous != null;
+                         previous is not null;
                          previous = container.GetNextControl(previous, false))
                     {
                         // Stop when we hit a Label (whether visible or invisible)
@@ -365,7 +365,7 @@ namespace System.Windows.Forms
                 int topic = 0;
 
                 QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
-                if (handler == null)
+                if (handler is null)
                 {
                     return base.GetHelpTopic(out fileName);
                 }

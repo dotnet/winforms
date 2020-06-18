@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Ctor_InputLanguage_Byte_TestData))]
         public void Ctor_InputLanguage_Byte(InputLanguage inputLanguage, byte charSet)
         {
-            if (inputLanguage == null)
+            if (inputLanguage is null)
             {
                 // Couldn't get the language.
                 return;

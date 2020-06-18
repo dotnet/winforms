@@ -143,7 +143,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (rtlLayoutGrip == null)
+                if (rtlLayoutGrip is null)
                 {
                     rtlLayoutGrip = new RightToLeftLayoutGrip();
                 }
@@ -256,7 +256,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (rtlLayoutGrip != null)
+                if (rtlLayoutGrip is not null)
                 {
                     rtlLayoutGrip.Dispose();
                     rtlLayoutGrip = null;
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
-            else if (rtlLayoutGrip != null)
+            else if (rtlLayoutGrip is not null)
             {
                 if (Controls.Contains(rtlLayoutGrip))
                 {
@@ -333,7 +333,7 @@ namespace System.Windows.Forms
             bool inDisplayedItemCollecton = false;
             ToolStripItem item = levent.AffectedComponent as ToolStripItem;
             int itemCount = DisplayedItems.Count;
-            if (item != null)
+            if (item is not null)
             {
                 inDisplayedItemCollecton = DisplayedItems.Contains(item);
             }
@@ -344,7 +344,7 @@ namespace System.Windows.Forms
             }
             base.OnLayout(levent);
 
-            if (itemCount != DisplayedItems.Count || (item != null && (inDisplayedItemCollecton != DisplayedItems.Contains(item))))
+            if (itemCount != DisplayedItems.Count || (item is not null && (inDisplayedItemCollecton != DisplayedItems.Contains(item))))
             {
                 // calling OnLayout has changed the displayed items collection
                 // the SpringTableLayoutCore requires the count of displayed items to
@@ -392,7 +392,7 @@ namespace System.Windows.Forms
                             item.SetPlacement(ToolStripItemPlacement.None);
                         }
                     }
-                    else if (lastItem != null && (lastItemBounds.IntersectsWith(item.Bounds)))
+                    else if (lastItem is not null && (lastItemBounds.IntersectsWith(item.Bounds)))
                     {
                         // if it overlaps the previous element, set the location to nomansland.
                         SetItemLocation(item, noMansLand);
@@ -689,7 +689,7 @@ namespace System.Windows.Forms
                         for (int i = 0; i < GetChildCount(); i++)
                         {
                             firstChild = GetChild(i);
-                            if (firstChild != null && !(firstChild is ControlAccessibleObject))
+                            if (firstChild is not null && !(firstChild is ControlAccessibleObject))
                             {
                                 return firstChild;
                             }
@@ -701,7 +701,7 @@ namespace System.Windows.Forms
                         for (int i = GetChildCount() - 1; i >= 0; i--)
                         {
                             lastChild = GetChild(i);
-                            if (lastChild != null && !(lastChild is ControlAccessibleObject))
+                            if (lastChild is not null && !(lastChild is ControlAccessibleObject))
                             {
                                 return lastChild;
                             }

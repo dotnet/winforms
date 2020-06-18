@@ -72,7 +72,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (domainItems == null)
+                if (domainItems is null)
                 {
                     domainItems = new DomainUpDownItemCollection(this);
                 }
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
             {
                 // Treat null as selecting no item
                 //
-                if (value == null)
+                if (value is null)
                 {
                     SelectedIndex = -1;
                 }
@@ -249,7 +249,7 @@ namespace System.Windows.Forms
         {
             // Make sure domain values exist, and there are >0 items
             //
-            if (domainItems == null)
+            if (domainItems is null)
             {
                 return;
             }
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
         internal int MatchIndex(string text, bool complete, int startPosition)
         {
             // Make sure domain values exist
-            if (domainItems == null)
+            if (domainItems is null)
             {
                 return -1;
             }
@@ -422,9 +422,9 @@ namespace System.Windows.Forms
         {
             // Sanity check index
 
-            Debug.Assert(domainItems != null, "Domain values array is null");
+            Debug.Assert(domainItems is not null, "Domain values array is null");
             Debug.Assert(index < domainItems.Count && index >= -1, "SelectValue: index out of range");
-            if (domainItems == null || index < -1 || index >= domainItems.Count)
+            if (domainItems is null || index < -1 || index >= domainItems.Count)
             {
                 // Defensive programming
                 index = -1;
@@ -464,7 +464,7 @@ namespace System.Windows.Forms
                 // Sanity check
                 Debug.Assert(sorted, "Sorted == false");
 
-                if (domainItems != null)
+                if (domainItems is not null)
                 {
                     // Sort the domain values
                     ArrayList.Adapter(domainItems).Sort(new DomainUpDownItemCompare());
@@ -493,7 +493,7 @@ namespace System.Windows.Forms
         {
             string s = base.ToString();
 
-            if (Items != null)
+            if (Items is not null)
             {
                 s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
                 s += ", SelectedIndex: " + SelectedIndex.ToString(CultureInfo.CurrentCulture);
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
         public override void UpButton()
         {
             // Make sure domain values exist, and there are >0 items
-            if (domainItems == null)
+            if (domainItems is null)
             {
                 return;
             }
@@ -677,7 +677,7 @@ namespace System.Windows.Forms
                     return 0;
                 }
 
-                if (p == null || q == null)
+                if (p is null || q is null)
                 {
                     return 0;
                 }
@@ -734,7 +734,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (itemList == null)
+                    if (itemList is null)
                     {
                         itemList = new DomainItemListAccessibleObject(this);
                     }
@@ -786,7 +786,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         return base.RuntimeId;
                     }
@@ -820,7 +820,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string baseName = base.Name;
-                    if (baseName == null || baseName.Length == 0)
+                    if (baseName is null || baseName.Length == 0)
                     {
                         return "Items";
                     }

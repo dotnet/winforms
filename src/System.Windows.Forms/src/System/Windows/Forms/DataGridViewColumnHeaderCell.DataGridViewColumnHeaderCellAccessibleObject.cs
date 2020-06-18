@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner.OwningColumn != null)
+                    if (Owner.OwningColumn is not null)
                     {
                         if (Owner.OwningColumn.SortMode == DataGridViewColumnSortMode.Automatic)
                         {
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner.OwningColumn != null)
+                    if (Owner.OwningColumn is not null)
                     {
                         return Owner.OwningColumn.HeaderText;
                     }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                     if (Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                         Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
                     {
-                        if (Owner.OwningColumn != null && Owner.OwningColumn.Selected)
+                        if (Owner.OwningColumn is not null && Owner.OwningColumn.Selected)
                         {
                             resultState |= AccessibleStates.Selected;
                         }
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
                 DataGridViewColumnHeaderCell dataGridViewCell = (DataGridViewColumnHeaderCell)Owner;
                 DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (dataGridViewCell.OwningColumn != null)
+                if (dataGridViewCell.OwningColumn is not null)
                 {
                     if (dataGridViewCell.OwningColumn.SortMode == DataGridViewColumnSortMode.Automatic)
                     {
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
-                if (Owner.OwningColumn == null)
+                if (Owner.OwningColumn is null)
                 {
                     return null;
                 }
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
 
             public override void Select(AccessibleSelection flags)
             {
-                if (Owner == null)
+                if (Owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
                 DataGridViewColumnHeaderCell dataGridViewCell = (DataGridViewColumnHeaderCell)Owner;
                 DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (dataGridView == null)
+                if (dataGridView is null)
                 {
                     return;
                 }
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
                 {
                     dataGridView.Focus();
                 }
-                if (dataGridViewCell.OwningColumn != null &&
+                if (dataGridViewCell.OwningColumn is not null &&
                     (dataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                      dataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect))
                 {
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (Owner.OwningColumn == null)
+                if (Owner.OwningColumn is null)
                 {
                     return null;
                 }

@@ -28,11 +28,11 @@ namespace System.ComponentModel.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider is not null)
             {
                 if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
-                    if (_editorUI == null)
+                    if (_editorUI is null)
                     {
                         _editorUI = new MultilineStringEditorUI();
                     }
@@ -106,7 +106,7 @@ namespace System.ComponentModel.Design
             {
                 if (disposing)
                 {
-                    if (_watermarkBrush != null)
+                    if (_watermarkBrush is not null)
                     {
                         _watermarkBrush.Dispose();
                         _watermarkBrush = null;
@@ -296,7 +296,7 @@ namespace System.ComponentModel.Design
             public void ProcessSurrogateFonts(int start, int length)
             {
                 string value = Text;
-                if (value == null)
+                if (value is null)
                 {
                     return;
                 }
@@ -320,10 +320,10 @@ namespace System.ComponentModel.Design
                                     int planeNumber = (value[surrogates[i]] / 0x40) - (0xD800 / 0x40) + 1; //plane 0 is the default plane
                                     Font replaceFont = _fallbackFonts[planeNumber] as Font;
 
-                                    if (replaceFont == null)
+                                    if (replaceFont is null)
                                     {
                                         using RegistryKey regkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack\SurrogateFallback");
-                                        if (regkey != null)
+                                        if (regkey is not null)
                                         {
                                             string fallBackFontName = (string)regkey.GetValue("Plane" + planeNumber);
                                             if (!string.IsNullOrEmpty(fallBackFontName))
@@ -333,7 +333,7 @@ namespace System.ComponentModel.Design
                                             _fallbackFonts[planeNumber] = replaceFont;
                                         }
                                     }
-                                    if (replaceFont != null)
+                                    if (replaceFont is not null)
                                     {
                                         int selectionLength = (i == surrogates.Length - 1) ? value.Length - surrogates[i] : surrogates[i + 1] - surrogates[i];
                                         base.Select(surrogates[i], selectionLength);
@@ -410,7 +410,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_watermarkBrush == null)
+                    if (_watermarkBrush is null)
                     {
                         Color cw = SystemColors.Window;
                         Color ct = SystemColors.WindowText;
@@ -466,13 +466,13 @@ namespace System.ComponentModel.Design
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
 
                 Ole32.ILockBytes pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
-                Debug.Assert(pLockBytes != null, "pLockBytes is NULL!");
+                Debug.Assert(pLockBytes is not null, "pLockBytes is NULL!");
 
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
                     Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE,
                     0);
-                Debug.Assert(storage != null, "storage is NULL!");
+                Debug.Assert(storage is not null, "storage is NULL!");
 
                 return HRESULT.S_OK;
             }
@@ -562,7 +562,7 @@ namespace System.ComponentModel.Design
 
             public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
             {
-                if (pdwEffect == null)
+                if (pdwEffect is null)
                 {
                     return HRESULT.E_POINTER;
                 }

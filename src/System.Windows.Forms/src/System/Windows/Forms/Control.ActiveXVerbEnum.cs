@@ -47,7 +47,7 @@ namespace System.Windows.Forms
                     fetched++;
                 }
 
-                if (pceltFetched != null)
+                if (pceltFetched is not null)
                 {
                     *pceltFetched = fetched;
                 }

@@ -282,7 +282,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
                 UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
-                if (navigationTarget != null)
+                if (navigationTarget is not null)
                 {
                     return navigationTarget;
                 }
@@ -309,7 +309,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             get
             {
                 string name = Owner?.AccessibleName;
-                if (name != null)
+                if (name is not null)
                 {
                     return name;
                 }

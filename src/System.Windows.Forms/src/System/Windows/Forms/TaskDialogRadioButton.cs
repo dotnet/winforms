@@ -131,7 +131,7 @@ namespace System.Windows.Forms
                 DenyIfBoundAndNotCreated(); // Shouldn't throw here as the control must have been created.
                 DenyIfWaitingForInitialization();
 
-                if (BoundPage == null)
+                if (BoundPage is null)
                 {
                     _checked = value;
 
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
                     // all other buttons to False.
                     // Note that this does not handle buttons that are added later
                     // to the collection.
-                    if (_collection != null && value)
+                    if (_collection is not null && value)
                     {
                         foreach (TaskDialogRadioButton radioButton in _collection)
                         {

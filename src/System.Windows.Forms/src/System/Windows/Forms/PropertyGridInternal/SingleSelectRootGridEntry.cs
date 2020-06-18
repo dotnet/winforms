@@ -28,7 +28,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal SingleSelectRootGridEntry(PropertyGridView gridEntryHost, object value, GridEntry parent, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType)
         : base(gridEntryHost.OwnerGrid, parent)
         {
-            Debug.Assert(value != null, "Can't browse a null object!");
+            Debug.Assert(value is not null, "Can't browse a null object!");
             this.host = host;
             this.gridEntryHost = gridEntryHost;
             this.baseProvider = baseProvider;
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (browsableAttributes == null)
+                if (browsableAttributes is null)
                 {
                     browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
                 }
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     ResetBrowsableAttributes();
                     return;
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 bool same = true;
 
-                if (browsableAttributes != null && value != null && browsableAttributes.Count == value.Count)
+                if (browsableAttributes is not null && value is not null && browsableAttributes.Count == value.Count)
                 {
                     Attribute[] attr1 = new Attribute[browsableAttributes.Count];
                     Attribute[] attr2 = new Attribute[value.Count];
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 browsableAttributes = value;
 
-                if (!same && Children != null && Children.Count > 0)
+                if (!same && Children is not null && Children.Count > 0)
                 {
                     DisposeChildren();
                 }
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (changeService == null)
+                if (changeService is null)
                 {
                     changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                 }
@@ -165,13 +165,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (!forceReadOnlyChecked)
                 {
                     ReadOnlyAttribute readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(objValue)[typeof(ReadOnlyAttribute)];
-                    if ((readOnlyAttr != null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(objValue).Contains(InheritanceAttribute.InheritedReadOnly))
+                    if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(objValue).Contains(InheritanceAttribute.InheritedReadOnly))
                     {
                         flags |= FLAG_FORCE_READONLY;
                     }
                     forceReadOnlyChecked = true;
                 }
-                return base.ForceReadOnly || (GridEntryHost != null && !GridEntryHost.Enabled);
+                return base.ForceReadOnly || (GridEntryHost is not null && !GridEntryHost.Enabled);
             }
         }
 
@@ -205,7 +205,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 HelpKeywordAttribute helpAttribute = (HelpKeywordAttribute)TypeDescriptor.GetAttributes(objValue)[typeof(HelpKeywordAttribute)];
 
-                if (helpAttribute != null && !helpAttribute.IsDefaultAttribute())
+                if (helpAttribute is not null && !helpAttribute.IsDefaultAttribute())
                 {
                     return helpAttribute.HelpKeyword;
                 }
@@ -221,7 +221,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (objValue is IComponent)
                 {
                     ISite site = ((IComponent)objValue).Site;
-                    if (site == null)
+                    if (site is null)
                     {
                         return objValue.GetType().Name;
                     }
@@ -230,7 +230,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return site.Name;
                     }
                 }
-                else if (objValue != null)
+                else if (objValue is not null)
                 {
                     return objValue.ToString();
                 }
@@ -284,11 +284,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             object service = null;
 
-            if (host != null)
+            if (host is not null)
             {
                 service = host.GetService(serviceType);
             }
-            if (service == null && baseProvider != null)
+            if (service is null && baseProvider is not null)
             {
                 service = baseProvider.GetService(serviceType);
             }
@@ -320,7 +320,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // recreate the children
-                if (Expandable && ChildCollection != null)
+                if (Expandable && ChildCollection is not null)
                 {
                     CreateChildren();
                 }
@@ -344,12 +344,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     for (int i = 0; i < childEntries.Length; i++)
                     {
                         GridEntry pe = childEntries[i];
-                        Debug.Assert(pe != null);
-                        if (pe != null)
+                        Debug.Assert(pe is not null);
+                        if (pe is not null)
                         {
                             string category = pe.PropertyCategory;
                             ArrayList bin = (ArrayList)bins[category];
-                            if (bin == null)
+                            if (bin is null)
                             {
                                 bin = new ArrayList();
                                 bins[category] = bin;
@@ -368,7 +368,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     while (enumBins.MoveNext())
                     {
                         ArrayList bin = (ArrayList)enumBins.Value;
-                        if (bin != null)
+                        if (bin is not null)
                         {
                             string category = (string)enumBins.Key;
                             if (bin.Count > 0)

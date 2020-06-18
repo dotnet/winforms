@@ -61,7 +61,7 @@ internal static partial class Interop
                 fixed (char* c = Text)
                 fixed (void* i = &Info)
                 {
-                    if (Text != null)
+                    if (Text is not null)
                     {
                         Info.lpszText = c;
                     }

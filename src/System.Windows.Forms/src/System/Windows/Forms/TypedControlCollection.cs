@@ -34,7 +34,7 @@ namespace System.Windows.Forms
             // Check parenting first for consistency
             Control.CheckParentingCycle(_ownerControl, value);
 
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }

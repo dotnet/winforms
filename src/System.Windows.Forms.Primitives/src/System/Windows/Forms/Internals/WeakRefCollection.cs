@@ -67,7 +67,7 @@ namespace System.Windows.Forms
             {
                 object item = this[currentIndex];
 
-                if (item == null)
+                if (item is null)
                 {
                     InnerList.RemoveAt(currentIndex);
                 }
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            if (other == null || Count != other.Count)
+            if (other is null || Count != other.Count)
             {
                 return false;
             }
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
             {
                 if (InnerList[i] != other.InnerList[i])
                 {
-                    if (InnerList[i] == null || !InnerList[i].Equals(other.InnerList[i]))
+                    if (InnerList[i] is null || !InnerList[i].Equals(other.InnerList[i]))
                     {
                         return false;
                     }
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
 
         private WeakRefObject CreateWeakRefObject(object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return null;
             }
@@ -158,7 +158,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveByHashCode(object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -166,7 +166,7 @@ namespace System.Windows.Forms
             int hash = value.GetHashCode();
             for (int idx = 0; idx < InnerList.Count; idx++)
             {
-                if (InnerList[idx] != null && InnerList[idx].GetHashCode() == hash)
+                if (InnerList[idx] is not null && InnerList[idx].GetHashCode() == hash)
                 {
                     RemoveAt(idx);
                     return;
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
 
             internal WeakRefObject(object obj)
             {
-                Debug.Assert(obj != null, "Unexpected null object!");
+                Debug.Assert(obj is not null, "Unexpected null object!");
                 weakHolder = new WeakReference(obj);
                 _hash = obj.GetHashCode();
             }
@@ -243,14 +243,14 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                if (other == null)
+                if (other is null)
                 {
                     return false;
                 }
 
                 if (other.Target != Target)
                 {
-                    if (Target == null || !Target.Equals(other.Target))
+                    if (Target is null || !Target.Equals(other.Target))
                     {
                         return false;
                     }

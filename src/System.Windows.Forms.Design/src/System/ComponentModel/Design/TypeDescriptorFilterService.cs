@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
         private IDesigner GetDesigner(IComponent component)
         {
             ISite site = component.Site;
-            if (site != null)
+            if (site is not null)
             {
                 if (site.GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
@@ -39,11 +39,11 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ITypeDescriptorFilterService.FilterAttributes(IComponent component, IDictionary attributes)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
-            if (attributes == null)
+            if (attributes is null)
             {
                 throw new ArgumentNullException(nameof(attributes));
             }
@@ -55,7 +55,7 @@ namespace System.ComponentModel.Design
                 ((IDesignerFilter)designer).PreFilterAttributes(attributes);
                 ((IDesignerFilter)designer).PostFilterAttributes(attributes);
             }
-            return designer != null;
+            return designer is not null;
         }
 
         /// <summary>
@@ -63,11 +63,11 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ITypeDescriptorFilterService.FilterEvents(IComponent component, IDictionary events)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
-            if (events == null)
+            if (events is null)
             {
                 throw new ArgumentNullException(nameof(events));
             }
@@ -79,7 +79,7 @@ namespace System.ComponentModel.Design
                 ((IDesignerFilter)designer).PreFilterEvents(events);
                 ((IDesignerFilter)designer).PostFilterEvents(events);
             }
-            return designer != null;
+            return designer is not null;
         }
 
         /// <summary>
@@ -87,11 +87,11 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ITypeDescriptorFilterService.FilterProperties(IComponent component, IDictionary properties)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
-            if (properties == null)
+            if (properties is null)
             {
                 throw new ArgumentNullException(nameof(properties));
             }
@@ -103,7 +103,7 @@ namespace System.ComponentModel.Design
                 ((IDesignerFilter)designer).PreFilterProperties(properties);
                 ((IDesignerFilter)designer).PostFilterProperties(properties);
             }
-            return designer != null;
+            return designer is not null;
         }
     }
 }

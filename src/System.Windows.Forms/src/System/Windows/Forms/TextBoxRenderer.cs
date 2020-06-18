@@ -93,7 +93,7 @@ namespace System.Windows.Forms
 
         private static void InitializeRenderer(int state)
         {
-            if (visualStyleRenderer == null)
+            if (visualStyleRenderer is null)
             {
                 visualStyleRenderer = new VisualStyleRenderer(TextBoxElement.ClassName, TextBoxElement.Part, state);
             }

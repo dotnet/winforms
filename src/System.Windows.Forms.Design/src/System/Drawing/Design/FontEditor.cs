@@ -21,11 +21,11 @@ namespace System.Drawing.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider != null)
+            if (provider is not null)
             {
                 if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
-                    if (_fontDialog == null)
+                    if (_fontDialog is null)
                     {
                         _fontDialog = new FontDialog
                         {

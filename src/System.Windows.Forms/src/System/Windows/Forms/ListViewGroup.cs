@@ -318,7 +318,7 @@ namespace System.Windows.Forms
 
         private void UpdateListView()
         {
-            if (ListView != null && ListView.IsHandleCreated)
+            if (ListView is not null && ListView.IsHandleCreated)
             {
                 ListView.UpdateGroupNative(this);
             }
@@ -326,7 +326,7 @@ namespace System.Windows.Forms
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null)
+            if (info is null)
             {
                 throw new ArgumentNullException(nameof(info));
             }
@@ -340,7 +340,7 @@ namespace System.Windows.Forms
             {
                 info.AddValue(nameof(Name), Name);
             }
-            if (_items != null && _items.Count > 0)
+            if (_items is not null && _items.Count > 0)
             {
                 info.AddValue("ItemsCount", Items.Count);
                 for (int i = 0; i < Items.Count; i++)

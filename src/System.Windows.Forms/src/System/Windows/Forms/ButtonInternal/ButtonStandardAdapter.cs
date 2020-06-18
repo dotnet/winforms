@@ -132,7 +132,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             //This code is mostly taken from the non-themed rendering code path.
-            if (Control.BackgroundImage != null && !DisplayInformation.HighContrast)
+            if (Control.BackgroundImage is not null && !DisplayInformation.HighContrast)
             {
                 ControlPaint.DrawBackgroundImage(e.Graphics, Control.BackgroundImage, Color.Transparent, Control.BackgroundImageLayout, Control.ClientRectangle, bounds, Control.DisplayRectangle.Location, Control.RightToLeft);
             }
@@ -188,7 +188,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 finally
                 {
-                    if (backbrush != null)
+                    if (backbrush is not null)
                     {
                         backbrush.Dispose();
                         backbrush = null;

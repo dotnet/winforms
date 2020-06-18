@@ -313,7 +313,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void Add(MaskDescriptorTemplate maskDescriptorTemplate)
             {
-                if (maskDescriptorTemplate.Mask != null)
+                if (maskDescriptorTemplate.Mask is not null)
                 {
                     List.Add(maskDescriptorTemplate);
                 }

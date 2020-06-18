@@ -80,7 +80,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SortOrder));
                 }
-                if (OwningColumn == null || DataGridView == null)
+                if (OwningColumn is null || DataGridView is null)
                 {
                     throw new InvalidOperationException(SR.DataGridView_CellDoesNotYetBelongToDataGridView);
                 }
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return null;
             }
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
                     sb.Append("<THEAD>");
                 }
                 sb.Append("<TH>");
-                if (val != null)
+                if (val is not null)
                 {
                     FormatPlainTextAsHtml(val.ToString(), new StringWriter(sb, CultureInfo.CurrentCulture));
                 }
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
                     string.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
                     string.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (val != null)
+                    if (val is not null)
                     {
                         bool escapeApplied = false;
                         int insertionPoint = sb.Length;
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
-            if (DataGridView == null || OwningColumn == null)
+            if (DataGridView is null || OwningColumn is null)
             {
                 return Rectangle.Empty;
             }
@@ -282,12 +282,12 @@ namespace System.Windows.Forms
             }
 
             ContextMenuStrip contextMenuStrip = GetContextMenuStrip(-1);
-            if (contextMenuStrip != null)
+            if (contextMenuStrip is not null)
             {
                 return contextMenuStrip;
             }
 
-            if (DataGridView != null)
+            if (DataGridView is not null)
             {
                 return DataGridView.ContextMenuStrip;
             }
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
 
         public override DataGridViewCellStyle GetInheritedStyle(DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 throw new InvalidOperationException(SR.DataGridView_CellNeedsDataGridViewForInheritedStyle);
             }
@@ -314,18 +314,18 @@ namespace System.Windows.Forms
             if (HasStyle)
             {
                 cellStyle = Style;
-                Debug.Assert(cellStyle != null);
+                Debug.Assert(cellStyle is not null);
             }
 
             DataGridViewCellStyle columnHeadersStyle = DataGridView.ColumnHeadersDefaultCellStyle;
-            Debug.Assert(columnHeadersStyle != null);
+            Debug.Assert(columnHeadersStyle is not null);
 
             DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
-            Debug.Assert(dataGridViewStyle != null);
+            Debug.Assert(dataGridViewStyle is not null);
 
             if (includeColors)
             {
-                if (cellStyle != null && !cellStyle.BackColor.IsEmpty)
+                if (cellStyle is not null && !cellStyle.BackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.BackColor = cellStyle.BackColor;
                 }
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.BackColor = dataGridViewStyle.BackColor;
                 }
 
-                if (cellStyle != null && !cellStyle.ForeColor.IsEmpty)
+                if (cellStyle is not null && !cellStyle.ForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.ForeColor = cellStyle.ForeColor;
                 }
@@ -351,7 +351,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.ForeColor = dataGridViewStyle.ForeColor;
                 }
 
-                if (cellStyle != null && !cellStyle.SelectionBackColor.IsEmpty)
+                if (cellStyle is not null && !cellStyle.SelectionBackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionBackColor = cellStyle.SelectionBackColor;
                 }
@@ -364,7 +364,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.SelectionBackColor = dataGridViewStyle.SelectionBackColor;
                 }
 
-                if (cellStyle != null && !cellStyle.SelectionForeColor.IsEmpty)
+                if (cellStyle is not null && !cellStyle.SelectionForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionForeColor = cellStyle.SelectionForeColor;
                 }
@@ -378,11 +378,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (cellStyle != null && cellStyle.Font != null)
+            if (cellStyle is not null && cellStyle.Font is not null)
             {
                 inheritedCellStyleTmp.Font = cellStyle.Font;
             }
-            else if (columnHeadersStyle.Font != null)
+            else if (columnHeadersStyle.Font is not null)
             {
                 inheritedCellStyleTmp.Font = columnHeadersStyle.Font;
             }
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.Font = dataGridViewStyle.Font;
             }
 
-            if (cellStyle != null && !cellStyle.IsNullValueDefault)
+            if (cellStyle is not null && !cellStyle.IsNullValueDefault)
             {
                 inheritedCellStyleTmp.NullValue = cellStyle.NullValue;
             }
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.NullValue = dataGridViewStyle.NullValue;
             }
 
-            if (cellStyle != null && !cellStyle.IsDataSourceNullValueDefault)
+            if (cellStyle is not null && !cellStyle.IsDataSourceNullValueDefault)
             {
                 inheritedCellStyleTmp.DataSourceNullValue = cellStyle.DataSourceNullValue;
             }
@@ -417,7 +417,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.DataSourceNullValue = dataGridViewStyle.DataSourceNullValue;
             }
 
-            if (cellStyle != null && cellStyle.Format.Length != 0)
+            if (cellStyle is not null && cellStyle.Format.Length != 0)
             {
                 inheritedCellStyleTmp.Format = cellStyle.Format;
             }
@@ -430,7 +430,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.Format = dataGridViewStyle.Format;
             }
 
-            if (cellStyle != null && !cellStyle.IsFormatProviderDefault)
+            if (cellStyle is not null && !cellStyle.IsFormatProviderDefault)
             {
                 inheritedCellStyleTmp.FormatProvider = cellStyle.FormatProvider;
             }
@@ -443,7 +443,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.FormatProvider = dataGridViewStyle.FormatProvider;
             }
 
-            if (cellStyle != null && cellStyle.Alignment != DataGridViewContentAlignment.NotSet)
+            if (cellStyle is not null && cellStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
                 inheritedCellStyleTmp.AlignmentInternal = cellStyle.Alignment;
             }
@@ -457,7 +457,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.AlignmentInternal = dataGridViewStyle.Alignment;
             }
 
-            if (cellStyle != null && cellStyle.WrapMode != DataGridViewTriState.NotSet)
+            if (cellStyle is not null && cellStyle.WrapMode != DataGridViewTriState.NotSet)
             {
                 inheritedCellStyleTmp.WrapModeInternal = cellStyle.WrapMode;
             }
@@ -471,11 +471,11 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.WrapModeInternal = dataGridViewStyle.WrapMode;
             }
 
-            if (cellStyle != null && cellStyle.Tag != null)
+            if (cellStyle is not null && cellStyle.Tag is not null)
             {
                 inheritedCellStyleTmp.Tag = cellStyle.Tag;
             }
-            else if (columnHeadersStyle.Tag != null)
+            else if (columnHeadersStyle.Tag is not null)
             {
                 inheritedCellStyleTmp.Tag = columnHeadersStyle.Tag;
             }
@@ -484,7 +484,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.Tag = dataGridViewStyle.Tag;
             }
 
-            if (cellStyle != null && cellStyle.Padding != Padding.Empty)
+            if (cellStyle is not null && cellStyle.Padding != Padding.Empty)
             {
                 inheritedCellStyleTmp.PaddingInternal = cellStyle.Padding;
             }
@@ -507,12 +507,12 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return new Size(-1, -1);
             }
 
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -559,7 +559,7 @@ namespace System.Windows.Forms
                             }
                         }
                         if (constraintSize.Height - borderAndPaddingHeights - 2 * DATAGRIDVIEWCOLUMNHEADERCELL_verticalMargin > sortGlyphHeight &&
-                            OwningColumn != null &&
+                            OwningColumn is not null &&
                             OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                         {
                             preferredSize.Width += sortGlyphWidth +
@@ -579,7 +579,7 @@ namespace System.Windows.Forms
                         preferredSize = new Size(0, 0);
 
                         if (allowedWidth >= sortGlyphWidth + 2 * sortGlyphHorizontalMargin &&
-                            OwningColumn != null &&
+                            OwningColumn is not null &&
                             OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                         {
                             glyphSize = new Size(sortGlyphWidth + 2 * sortGlyphHorizontalMargin,
@@ -655,7 +655,7 @@ namespace System.Windows.Forms
                         {
                             preferredSize = new Size(0, 0);
                         }
-                        if (OwningColumn != null &&
+                        if (OwningColumn is not null &&
                             OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                         {
                             preferredSize.Width += sortGlyphWidth +
@@ -711,7 +711,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (OwningColumn != null)
+                if (OwningColumn is not null)
                 {
                     return OwningColumn.Name;
                 }
@@ -734,7 +734,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -766,7 +766,7 @@ namespace System.Windows.Forms
             DataGridViewPaintParts paintParts,
             bool paint)
         {
-            Debug.Assert(cellStyle != null);
+            Debug.Assert(cellStyle is not null);
             Rectangle contentBounds = Rectangle.Empty;
 
             if (paint && DataGridViewCell.PaintBorder(paintParts))
@@ -810,7 +810,7 @@ namespace System.Windows.Forms
 
                     // Set the state to Pressed/Hot only if the column can be sorted or selected
 #pragma warning disable SA1408 // Conditional expressions should declare precedence
-                    if (OwningColumn != null && OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable ||
+                    if (OwningColumn is not null && OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable ||
 #pragma warning restore SA1408 // Conditional expressions should declare precedence
                         DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                         DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
@@ -842,7 +842,7 @@ namespace System.Windows.Forms
                     {
                         // Flip the column header background
                         Bitmap bmFlipXPThemes = FlipXPThemesBitmap;
-                        if (bmFlipXPThemes == null ||
+                        if (bmFlipXPThemes is null ||
                             bmFlipXPThemes.Width < backgroundBounds.Width || bmFlipXPThemes.Width > 2 * backgroundBounds.Width ||
                             bmFlipXPThemes.Height < backgroundBounds.Height || bmFlipXPThemes.Height > 2 * backgroundBounds.Height)
                         {
@@ -924,7 +924,7 @@ namespace System.Windows.Forms
                     textColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
                 }
 
-                if (OwningColumn != null && OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
+                if (OwningColumn is not null && OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                 {
                     // Is there enough room to show the glyph?
                     int width = valBounds.Width -
@@ -1177,7 +1177,7 @@ namespace System.Windows.Forms
         private bool IsHighlighted()
         {
             return DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect &&
-                DataGridView.CurrentCell != null && DataGridView.CurrentCell.Selected &&
+                DataGridView.CurrentCell is not null && DataGridView.CurrentCell.Selected &&
                 DataGridView.CurrentCell.OwningColumn == OwningColumn;
         }
 
@@ -1190,7 +1190,7 @@ namespace System.Windows.Forms
 
             object originalValue = GetValue(rowIndex);
             Properties.SetObject(PropCellValue, value);
-            if (DataGridView != null && originalValue != value)
+            if (DataGridView is not null && originalValue != value)
             {
                 RaiseCellValueChanged(new DataGridViewCellEventArgs(ColumnIndex, -1));
             }

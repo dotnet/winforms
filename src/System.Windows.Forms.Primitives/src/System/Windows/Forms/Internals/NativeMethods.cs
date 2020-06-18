@@ -275,7 +275,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static string GetLocalPath(string fileName)
         {
-            System.Diagnostics.Debug.Assert(fileName != null && fileName.Length > 0, "Cannot get local path, fileName is not valid");
+            System.Diagnostics.Debug.Assert(fileName is not null && fileName.Length > 0, "Cannot get local path, fileName is not valid");
 
             Uri uri = new Uri(fileName);
             return uri.LocalPath + uri.Fragment;

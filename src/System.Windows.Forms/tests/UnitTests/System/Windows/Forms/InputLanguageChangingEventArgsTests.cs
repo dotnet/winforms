@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(Ctor_InputLanguage_Bool_TestData))]
         public void Ctor_InputLanguage_Bool(InputLanguage inputLanguage, bool sysCharSet)
         {
-            if (inputLanguage == null)
+            if (inputLanguage is null)
             {
                 // Couldn't get the language.
                 return;

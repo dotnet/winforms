@@ -15,28 +15,28 @@ namespace System.Windows.Forms.Design
         /// Edits the specified value using the specified provider within the specified context.
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
 
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            if (edSvc == null)
+            if (edSvc is null)
             {
                 return value;
             }
 
             DataGridViewCellStyle dgvCellStyle = context.Instance as DataGridViewCellStyle;
             ListControl listControl = context.Instance as ListControl;
-            Debug.Assert(listControl != null || dgvCellStyle != null, "this editor is used for the DataGridViewCellStyle::Format and the ListControl::FormatString properties");
+            Debug.Assert(listControl is not null || dgvCellStyle is not null, "this editor is used for the DataGridViewCellStyle::Format and the ListControl::FormatString properties");
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
 
-            if (_formatStringDialog == null)
+            if (_formatStringDialog is null)
             {
                 _formatStringDialog = new FormatStringDialog(context);
             }
 
-            if (listControl != null)
+            if (listControl is not null)
             {
                 _formatStringDialog.ListControl = listControl;
             }
@@ -47,9 +47,9 @@ namespace System.Windows.Forms.Design
 
             IComponentChangeService changeSvc = (IComponentChangeService)provider.GetService(typeof(IComponentChangeService));
 
-            if (changeSvc != null)
+            if (changeSvc is not null)
             {
-                if (dgvCellStyle != null)
+                if (dgvCellStyle is not null)
                 {
                     changeSvc.OnComponentChanging(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["Format"]);
                     changeSvc.OnComponentChanging(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["NullValue"]);
@@ -73,9 +73,9 @@ namespace System.Windows.Forms.Design
             // since the bindings may have changed, the properties listed in the properties window need to be refreshed
             TypeDescriptor.Refresh(context.Instance);
 
-            if (changeSvc != null)
+            if (changeSvc is not null)
             {
-                if (dgvCellStyle != null)
+                if (dgvCellStyle is not null)
                 {
                     changeSvc.OnComponentChanged(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["Format"], null, null);
                     changeSvc.OnComponentChanged(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["NullValue"], null, null);

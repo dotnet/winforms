@@ -72,16 +72,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((ToolStripPanelRow != null) && movingToolStrip);
+                return ((ToolStripPanelRow is not null) && movingToolStrip);
             }
             set
             {
-                if ((movingToolStrip != value) && ParentInternal != null)
+                if ((movingToolStrip != value) && ParentInternal is not null)
                 {
                     if (value)
                     {
                         // dont let grips move the toolstrip
-                        if (ParentInternal.ToolStripPanelRow == null)
+                        if (ParentInternal.ToolStripPanelRow is null)
                         {
                             return;
                         }
@@ -104,7 +104,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (ParentInternal == null) ? null : ((ISupportToolStripPanel)ParentInternal).ToolStripPanelRow;
+                return (ParentInternal is null) ? null : ((ISupportToolStripPanel)ParentInternal).ToolStripPanelRow;
             }
         }
 
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
         public override Size GetPreferredSize(Size constrainingSize)
         {
             Size preferredSize = Size.Empty;
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 if (ParentInternal.LayoutStyle == ToolStripLayoutStyle.VerticalStackWithOverflow)
                 {
@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             // all the grip painting should be on the ToolStrip itself.
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 ParentInternal.OnPaintGrip(e);
             }
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
         protected override void OnMouseEnter(EventArgs e)
         {
             // only switch the cursor if we've got a rafting row.
-            if ((ParentInternal != null) && (ToolStripPanelRow != null) && (!ParentInternal.IsInDesignMode))
+            if ((ParentInternal is not null) && (ToolStripPanelRow is not null) && (!ParentInternal.IsInDesignMode))
             {
                 oldCursor = ParentInternal.Cursor;
                 ParentInternal.Cursor = Cursors.SizeAll;
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
         /// <param name="e"></param>
         protected override void OnMouseLeave(EventArgs e)
         {
-            if (oldCursor != null && !ParentInternal.IsInDesignMode)
+            if (oldCursor is not null && !ParentInternal.IsInDesignMode)
             {
                 ParentInternal.Cursor = oldCursor;
             }
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string name = Owner.AccessibleName;
-                    if (name != null)
+                    if (name is not null)
                     {
                         return name;
                     }

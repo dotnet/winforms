@@ -21,7 +21,7 @@ namespace System.ComponentModel.Design.Serialization
 
         internal ResourcePropertyMemberCodeDomSerializer(MemberCodeDomSerializer serializer, CodeDomLocalizationProvider.LanguageExtenders extender, CodeDomLocalizationModel model)
         {
-            Debug.Assert(extender != null, "Extender should have been created by now.");
+            Debug.Assert(extender is not null, "Extender should have been created by now.");
 
             _serializer = serializer;
             _extender = extender;
@@ -51,17 +51,17 @@ namespace System.ComponentModel.Design.Serialization
 
         private CultureInfo GetLocalizationLanguage(IDesignerSerializationManager manager)
         {
-            if (localizationLanguage == null)
+            if (localizationLanguage is null)
             {
                 // Check to see if our base component's localizable prop is true
                 RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
 
-                if (rootCxt != null)
+                if (rootCxt is not null)
                 {
                     object comp = rootCxt.Value;
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
 
-                    if (prop != null && prop.PropertyType == typeof(CultureInfo))
+                    if (prop is not null && prop.PropertyType == typeof(CultureInfo))
                     {
                         localizationLanguage = (CultureInfo)prop.GetValue(comp);
                     }
@@ -78,9 +78,9 @@ namespace System.ComponentModel.Design.Serialization
 
             //unhook the event
             IDesignerSerializationManager manager = sender as IDesignerSerializationManager;
-            Debug.Assert(manager != null, "manager should not be null!");
+            Debug.Assert(manager is not null, "manager should not be null!");
 
-            if (manager != null)
+            if (manager is not null)
             {
                 manager.SerializationComplete -= new EventHandler(OnSerializationComplete);
             }
@@ -102,7 +102,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!shouldSerialize)
                         {
                             // hook up the event the first time to clear out our cache at the end of the serialization
-                            if (localizationLanguage == null)
+                            if (localizationLanguage is null)
                             {
                                 manager.SerializationComplete += new EventHandler(OnSerializationComplete);
                             }
@@ -119,10 +119,10 @@ namespace System.ComponentModel.Design.Serialization
                         // is not inherited.
                         InheritanceAttribute inheritance = (InheritanceAttribute)manager.Context[typeof(InheritanceAttribute)];
 
-                        if (inheritance == null)
+                        if (inheritance is null)
                         {
                             inheritance = (InheritanceAttribute)TypeDescriptor.GetAttributes(value)[typeof(InheritanceAttribute)];
-                            if (inheritance == null)
+                            if (inheritance is null)
                             {
                                 inheritance = InheritanceAttribute.NotInherited;
                             }

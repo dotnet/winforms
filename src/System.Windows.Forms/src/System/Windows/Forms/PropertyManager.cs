@@ -29,7 +29,7 @@ namespace System.Windows.Forms
 
         private protected override void SetDataSource(object dataSource)
         {
-            if (_dataSource != null && !string.IsNullOrEmpty(_propName))
+            if (_dataSource is not null && !string.IsNullOrEmpty(_propName))
             {
                 _propInfo.RemoveValueChanged(_dataSource, new EventHandler(PropertyChanged));
                 _propInfo = null;
@@ -37,10 +37,10 @@ namespace System.Windows.Forms
 
             _dataSource = dataSource;
 
-            if (_dataSource != null && !string.IsNullOrEmpty(_propName))
+            if (_dataSource is not null && !string.IsNullOrEmpty(_propName))
             {
                 _propInfo = TypeDescriptor.GetProperties(dataSource).Find(_propName, true);
-                if (_propInfo == null)
+                if (_propInfo is null)
                 {
                     throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, _propName, dataSource.ToString()));
                 }
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
 
         internal override object DataSource => _dataSource;
 
-        internal override bool IsBinding => _dataSource != null;
+        internal override bool IsBinding => _dataSource is not null;
 
         /// <summary>
         ///  Gets the position in the underlying list that controls bound to this data source point to.

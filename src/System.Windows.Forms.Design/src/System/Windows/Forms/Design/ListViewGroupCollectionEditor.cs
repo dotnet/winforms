@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
             INameCreationService ncs = GetService(typeof(INameCreationService)) as INameCreationService;
             IContainer container = GetService(typeof(IContainer)) as IContainer;
 
-            if (ncs != null && container != null)
+            if (ncs is not null && container is not null)
             {
                 lvgName = ncs.CreateName(container, typeof(ListViewGroup));
             }
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design
             int i = 1;
             resultName = lvgName + i.ToString(System.Globalization.CultureInfo.CurrentCulture);
 
-            while (lvgCollection[resultName] != null)
+            while (lvgCollection[resultName] is not null)
             {
                 i++;
                 resultName = lvgName + i.ToString(System.Globalization.CultureInfo.CurrentCulture);

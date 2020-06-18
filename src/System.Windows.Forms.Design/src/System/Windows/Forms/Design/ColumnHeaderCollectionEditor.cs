@@ -53,14 +53,14 @@ namespace System.Windows.Forms.Design
             {
                 IComponentChangeService cs = GetService(typeof(IComponentChangeService)) as IComponentChangeService;
                 PropertyDescriptor itemsProp = null;
-                if (cs != null)
+                if (cs is not null)
                 {
                     itemsProp = TypeDescriptor.GetProperties(Context.Instance)["Columns"];
                     cs.OnComponentChanging(Context.Instance, itemsProp);
                 }
                 listview.Columns.Remove(column);
 
-                if (cs != null && itemsProp != null)
+                if (cs is not null && itemsProp is not null)
                 {
                     cs.OnComponentChanged(Context.Instance, itemsProp, null, null);
                 }

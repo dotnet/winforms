@@ -56,13 +56,13 @@ namespace System.Windows.Forms
                 get
                 {
                     var help = base.Help;
-                    if (help != null)
+                    if (help is not null)
                     {
                         return help;
                     }
                     else
                     {
-                        if (_owner != null)
+                        if (_owner is not null)
                         {
                             return _owner.GetType().Name + "(" + _owner.GetType().BaseType.Name + ")";
                         }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string name = base.Name;
-                    if (name != null)
+                    if (name is not null)
                     {
                         return name;
                     }
@@ -346,7 +346,7 @@ namespace System.Windows.Forms
 
             private CalendarCellAccessibleObject GetCalendarCell(int calendarIndex, AccessibleObject parentAccessibleObject, int columnIndex)
             {
-                if (parentAccessibleObject == null ||
+                if (parentAccessibleObject is null ||
                     columnIndex < 0 ||
                     columnIndex >= MAX_DAYS ||
                     columnIndex >= ColumnCount)
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
 
             private CalendarRowAccessibleObject GetCalendarRow(int calendarIndex, AccessibleObject parentAccessibleObject, int rowIndex)
             {
-                if (parentAccessibleObject == null ||
+                if (parentAccessibleObject is null ||
                     (HasHeaderRow ? rowIndex < -1 : rowIndex < 0) ||
                     rowIndex >= RowCount)
                 {
@@ -430,7 +430,7 @@ namespace System.Windows.Forms
 
                 SelectionRange cellsRange = _owner.GetDisplayRange(false);
 
-                if (cellsRange == null || cellsRange.Start > DateTimePicker.SysTimeToDateTime(endDate) || cellsRange.End < DateTimePicker.SysTimeToDateTime(startDate))
+                if (cellsRange is null || cellsRange.Start > DateTimePicker.SysTimeToDateTime(endDate) || cellsRange.End < DateTimePicker.SysTimeToDateTime(startDate))
                 {
                     // Do not create row if the row's first cell is out of the current calendar's view range.
                     return null;
@@ -640,7 +640,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject calendarChildAccessibleObject = GetCalendarChildAccessibleObject(selectionStart, selectionEnd);
 
-                if (calendarChildAccessibleObject != null)
+                if (calendarChildAccessibleObject is not null)
                 {
                     calendarChildAccessibleObject.RaiseAutomationEvent(automationEventId);
 
@@ -655,7 +655,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject bodyAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody);
 
-                if (bodyAccessibleObject == null)
+                if (bodyAccessibleObject is null)
                 {
                     return null;
                 }
@@ -664,7 +664,7 @@ namespace System.Windows.Forms
                 {
                     AccessibleObject rowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, bodyAccessibleObject, row);
 
-                    if (rowAccessibleObject == null)
+                    if (rowAccessibleObject is null)
                     {
                         continue;
                     }
@@ -688,7 +688,7 @@ namespace System.Windows.Forms
 
                         AccessibleObject cellAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, rowAccessibleObject, column);
 
-                        if (cellAccessibleObject == null)
+                        if (cellAccessibleObject is null)
                         {
                             continue;
                         }
@@ -722,7 +722,7 @@ namespace System.Windows.Forms
                 AccessibleObject bodyAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody, this, -1);
                 AccessibleObject headerRowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, bodyAccessibleObject, -1);
 
-                if (headerRowAccessibleObject == null)
+                if (headerRowAccessibleObject is null)
                 {
                     return null;
                 }
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject rowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, this, row);
 
-                if (rowAccessibleObject == null)
+                if (rowAccessibleObject is null)
                 {
                     return null;
                 }

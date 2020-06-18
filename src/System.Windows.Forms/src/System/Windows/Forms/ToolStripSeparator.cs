@@ -170,7 +170,7 @@ namespace System.Windows.Forms
             get
             {
                 ToolStrip parent = ParentInternal;
-                if (parent == null)
+                if (parent is null)
                 {
                     parent = Owner;
                 }
@@ -260,11 +260,11 @@ namespace System.Windows.Forms
         public override Size GetPreferredSize(Size constrainingSize)
         {
             ToolStrip parent = ParentInternal;
-            if (parent == null)
+            if (parent is null)
             {
                 parent = Owner;
             }
-            if (parent == null)
+            if (parent is null)
             {
                 return new Size(SeparatorThickness, SeparatorThickness);
             }
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner != null && ParentInternal != null)
+            if (Owner is not null && ParentInternal is not null)
             {
                 Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
             }

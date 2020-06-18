@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void Invalidate(Rectangle rectangle)
         {
-            if (_behaviorService != null)
+            if (_behaviorService is not null)
             {
                 _behaviorService.Invalidate(rectangle);
             }
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void Invalidate(Region region)
         {
-            if (_behaviorService != null)
+            if (_behaviorService is not null)
             {
                 _behaviorService.Invalidate(region);
             }

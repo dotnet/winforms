@@ -96,12 +96,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 #if DEBUG
             ComNativeDescriptor cnd = new ComNativeDescriptor();
             dbgObjName = cnd.GetName(obj);
-            if (dbgObjName == null)
+            if (dbgObjName is null)
             {
                 dbgObjName = "(null)";
             }
             dbgObjClass = cnd.GetClassName(obj);
-            if (dbgObjClass == null)
+            if (dbgObjClass is null)
             {
                 dbgObjClass = "(null)";
             }
@@ -220,7 +220,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             get
             {
                 CheckValid(true);
-                if (touchedTime == 0 || props == null)
+                if (touchedTime == 0 || props is null)
                 {
                     return null;
                 }
@@ -267,7 +267,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public void AddExtendedBrowsingHandlers(Hashtable handlers)
         {
             object target = TargetObject;
-            if (target == null)
+            if (target is null)
             {
                 return;
             }
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     // created one of this type
                     //
                     Com2ExtendedBrowsingHandler handler = (Com2ExtendedBrowsingHandler)handlers[t];
-                    if (handler == null)
+                    if (handler is null)
                     {
                         handler = (Com2ExtendedBrowsingHandler)Activator.CreateInstance(extendedInterfaceHandlerTypes[i]);
                         handlers[t] = handler;
@@ -323,7 +323,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 #endif
 
-            if (props != null)
+            if (props is not null)
             {
                 Disposed?.Invoke(this, EventArgs.Empty);
 
@@ -369,7 +369,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             Ole32.TYPEATTR* pTypeAttr = null;
             HRESULT hr = pTypeInfo.GetTypeAttr(&pTypeAttr);
-            if (!hr.Succeeded() || pTypeAttr == null)
+            if (!hr.Succeeded() || pTypeAttr is null)
             {
                 return (0, 0, 0, 0);
             }
@@ -391,7 +391,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return true;
             }
 
-            bool valid = weakObjRef != null && weakObjRef.IsAlive;
+            bool valid = weakObjRef is not null && weakObjRef.IsAlive;
 
             // check the version information for each ITypeInfo the object exposes.
             if (valid && checkVersions)
@@ -429,7 +429,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 #if DEBUG
                 if (DbgCom2PropertiesSwitch.TraceVerbose)
                 {
-                    Debug.WriteLine("Disposing reference to object " + dbgObjName + ", class=" + dbgObjClass + " (weakRef " + (weakObjRef == null ? "null" : "dead") + ")");
+                    Debug.WriteLine("Disposing reference to object " + dbgObjName + ", class=" + dbgObjClass + " (weakRef " + (weakObjRef is null ? "null" : "dead") + ")");
                 }
 #endif
 
@@ -446,7 +446,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         internal void SetProps(Com2PropertyDescriptor[] props)
         {
             this.props = props;
-            if (props != null)
+            if (props is not null)
             {
                 for (int i = 0; i < props.Length; i++)
                 {

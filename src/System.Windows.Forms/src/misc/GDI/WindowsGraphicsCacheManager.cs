@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Internal
         {
             get
             {
-                if (t_windowsFontCache == null)
+                if (t_windowsFontCache is null)
                 {
                     t_currentIndex = -1;
                     t_windowsFontCache = new List<KeyValuePair<Font, WindowsFont>>(CacheSize);
@@ -71,9 +71,9 @@ namespace System.Windows.Forms.Internal
         {
             get
             {
-                if (t_measurementGraphics == null || t_measurementGraphics.DeviceContext == null /*object disposed*/)
+                if (t_measurementGraphics is null || t_measurementGraphics.DeviceContext is null /*object disposed*/)
                 {
-                    Debug.Assert(t_measurementGraphics == null || t_measurementGraphics.DeviceContext != null, "TLS MeasurementGraphics was disposed somewhere, enable TRACK_HDC macro to determine who did it, recreating it for now ...");
+                    Debug.Assert(t_measurementGraphics is null || t_measurementGraphics.DeviceContext is not null, "TLS MeasurementGraphics was disposed somewhere, enable TRACK_HDC macro to determine who did it, recreating it for now ...");
                     t_measurementGraphics = WindowsGraphics.CreateMeasurementWindowsGraphics();
                 }
 
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public static WindowsFont? GetWindowsFont(Font? font, Gdi32.QUALITY fontQuality = Gdi32.QUALITY.DEFAULT)
         {
-            if (font == null)
+            if (font is null)
             {
                 return null;
             }
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Internal
                     }
                 }
 
-                if (wfont != null)
+                if (wfont is not null)
                 {
                     WindowsFontCache[t_currentIndex] = newEntry;
                     winFont.OwnedByCacheManager = true;

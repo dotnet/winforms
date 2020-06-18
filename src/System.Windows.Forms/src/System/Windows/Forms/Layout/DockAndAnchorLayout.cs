@@ -289,7 +289,7 @@ namespace System.Windows.Forms.Layout
                 IArrangedElement element = children[i];
                 if (CommonProperties.GetNeedsAnchorLayout(element))
                 {
-                    Debug.Assert(GetAnchorInfo(element) != null, "AnchorInfo should be initialized before LayoutAnchorControls().");
+                    Debug.Assert(GetAnchorInfo(element) is not null, "AnchorInfo should be initialized before LayoutAnchorControls().");
                     SetCachedBounds(element, GetAnchorDestination(element, displayRectangle, /*measureOnly=*/false));
                 }
             }
@@ -370,7 +370,7 @@ namespace System.Windows.Forms.Layout
                         case DockStyle.Fill:
                             if (element is MdiClient)
                             {
-                                Debug.Assert(mdiClient == null, "How did we end up with multiple MdiClients?");
+                                Debug.Assert(mdiClient is null, "How did we end up with multiple MdiClients?");
                                 mdiClient = element;
                             }
                             else
@@ -388,7 +388,7 @@ namespace System.Windows.Forms.Layout
                 }
 
                 // Treat the MDI client specially, since it's supposed to blend in with the parent form
-                if (mdiClient != null)
+                if (mdiClient is not null)
                 {
                     SetCachedBounds(mdiClient, remainingBounds);
                 }
@@ -614,7 +614,7 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(!HasCachedBounds(element.Container), "Do not call this method with an active cached bounds list.");
 
             AnchorInfo anchorInfo = GetAnchorInfo(element);
-            if (anchorInfo == null)
+            if (anchorInfo is null)
             {
                 anchorInfo = new AnchorInfo();
                 SetAnchorInfo(element, anchorInfo);
@@ -622,9 +622,9 @@ namespace System.Windows.Forms.Layout
 
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "Update anchor info");
             Debug.Indent();
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, element.Container == null ? "No parent" : "Parent");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, element.Container is null ? "No parent" : "Parent");
 
-            if (CommonProperties.GetNeedsAnchorLayout(element) && element.Container != null)
+            if (CommonProperties.GetNeedsAnchorLayout(element) && element.Container is not null)
             {
                 Rectangle bounds = GetCachedBounds(element);
                 AnchorInfo oldAnchorInfo = new AnchorInfo
@@ -733,11 +733,11 @@ namespace System.Windows.Forms.Layout
                     SetAnchorInfo(element, null);
                 }
 
-                if (element.Container != null)
+                if (element.Container is not null)
                 {
                     bool rightReleased = IsAnchored(oldValue, AnchorStyles.Right) && !IsAnchored(value, AnchorStyles.Right);
                     bool bottomReleased = IsAnchored(oldValue, AnchorStyles.Bottom) && !IsAnchored(value, AnchorStyles.Bottom);
-                    if (element.Container.Container != null && (rightReleased || bottomReleased))
+                    if (element.Container.Container is not null && (rightReleased || bottomReleased))
                     {
                         // If the right or bottom anchor is being released, we have a special case where the element's
                         // margin may affect preferredSize where it didn't previously. Rather than do an expensive
@@ -795,7 +795,7 @@ namespace System.Windows.Forms.Layout
             AnchorInfo anchorInfo = GetAnchorInfo(element);
 
             // some controls don't have AnchorInfo, i.e. Panels
-            if (anchorInfo != null)
+            if (anchorInfo is not null)
             {
                 anchorInfo.Left = (int)((float)anchorInfo.Left * factor.Width);
                 anchorInfo.Top = (int)((float)anchorInfo.Top * factor.Height);
@@ -808,13 +808,13 @@ namespace System.Windows.Forms.Layout
 
         private static Rectangle GetCachedBounds(IArrangedElement element)
         {
-            if (element.Container != null)
+            if (element.Container is not null)
             {
                 IDictionary dictionary = (IDictionary)element.Container.Properties.GetObject(s_cachedBoundsProperty);
-                if (dictionary != null)
+                if (dictionary is not null)
                 {
                     object bounds = dictionary[element];
-                    if (bounds != null)
+                    if (bounds is not null)
                     {
                         return (Rectangle)bounds;
                     }
@@ -826,7 +826,7 @@ namespace System.Windows.Forms.Layout
 
         private static bool HasCachedBounds(IArrangedElement container)
         {
-            return container != null && container.Properties.GetObject(s_cachedBoundsProperty) != null;
+            return container is not null && container.Properties.GetObject(s_cachedBoundsProperty) is not null;
         }
 
         private static void ApplyCachedBounds(IArrangedElement container)
@@ -843,7 +843,7 @@ namespace System.Windows.Forms.Layout
             }
 
             IDictionary dictionary = (IDictionary)container.Properties.GetObject(s_cachedBoundsProperty);
-            if (dictionary != null)
+            if (dictionary is not null)
             {
 #if DEBUG
                 // In debug builds, we need to modify the collection, so we add a break and an
@@ -885,7 +885,7 @@ namespace System.Windows.Forms.Layout
             if (bounds != GetCachedBounds(element))
             {
                 IDictionary dictionary = (IDictionary)element.Container.Properties.GetObject(s_cachedBoundsProperty);
-                if (dictionary == null)
+                if (dictionary is null)
                 {
                     dictionary = new HybridDictionary();
                     element.Container.Properties.SetObject(s_cachedBoundsProperty, dictionary);

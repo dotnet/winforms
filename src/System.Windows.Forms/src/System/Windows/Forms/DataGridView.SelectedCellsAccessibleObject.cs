@@ -81,7 +81,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetFocused()
             {
-                if (owner.CurrentCell != null && owner.CurrentCell.Selected)
+                if (owner.CurrentCell is not null && owner.CurrentCell.Selected)
                 {
                     return owner.CurrentCell.AccessibilityObject;
                 }

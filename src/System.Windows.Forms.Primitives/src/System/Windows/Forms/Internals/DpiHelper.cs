@@ -289,7 +289,7 @@ namespace System.Windows.Forms
         /// <param name="targetImageSize">The size to scale image to</param>
         public static Bitmap CreateResizedBitmap(Bitmap logicalImage, Size targetImageSize)
         {
-            if (logicalImage == null)
+            if (logicalImage is null)
             {
                 return null;
             }
@@ -315,12 +315,12 @@ namespace System.Windows.Forms
         /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
         public static void ScaleBitmapLogicalToDevice(ref Bitmap logicalBitmap, int deviceDpi = 0)
         {
-            if (logicalBitmap == null)
+            if (logicalBitmap is null)
             {
                 return;
             }
             Bitmap deviceBitmap = CreateScaledBitmap(logicalBitmap, deviceDpi);
-            if (deviceBitmap != null)
+            if (deviceBitmap is not null)
             {
                 logicalBitmap.Dispose();
                 logicalBitmap = deviceBitmap;

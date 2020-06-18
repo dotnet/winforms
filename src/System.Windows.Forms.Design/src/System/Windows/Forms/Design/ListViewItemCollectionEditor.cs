@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override string GetDisplayText(object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return string.Empty;
             }
@@ -31,11 +31,11 @@ namespace System.Windows.Forms.Design
             string text;
 
             PropertyDescriptor prop = TypeDescriptor.GetDefaultProperty(CollectionType);
-            if (prop != null && prop.PropertyType == typeof(string))
+            if (prop is not null && prop.PropertyType == typeof(string))
             {
                 text = (string)prop.GetValue(value);
 
-                if (text != null && text.Length > 0)
+                if (text is not null && text.Length > 0)
                 {
                     return text;
                 }
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
 
             text = TypeDescriptor.GetConverter(value).ConvertToString(value);
 
-            if (text == null || text.Length == 0)
+            if (text is null || text.Length == 0)
             {
                 text = value.GetType().Name;
             }

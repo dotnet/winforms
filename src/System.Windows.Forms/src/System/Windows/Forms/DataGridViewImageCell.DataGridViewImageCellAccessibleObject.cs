@@ -54,8 +54,8 @@ namespace System.Windows.Forms
                 DataGridViewImageCell dataGridViewCell = (DataGridViewImageCell)Owner;
                 DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (dataGridView != null && dataGridViewCell.RowIndex != -1 &&
-                    dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
+                if (dataGridView is not null && dataGridViewCell.RowIndex != -1 &&
+                    dataGridViewCell.OwningColumn is not null && dataGridViewCell.OwningRow is not null)
                 {
                     dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
                 }

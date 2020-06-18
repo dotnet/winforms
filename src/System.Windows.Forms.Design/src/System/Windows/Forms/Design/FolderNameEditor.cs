@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (_folderBrowser == null)
+            if (_folderBrowser is null)
             {
                 _folderBrowser = new FolderBrowser();
                 InitializeDialog(_folderBrowser);
@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Design
             public unsafe DialogResult ShowDialog(IWin32Window owner)
             {
                 // Get/find an owner HWND for this dialog
-                IntPtr hWndOwner = owner != null ? owner.Handle : User32.GetActiveWindow();
+                IntPtr hWndOwner = owner is not null ? owner.Handle : User32.GetActiveWindow();
 
                 // Get the IDL for the specific startLocation
                 Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out CoTaskMemSafeHandle listHandle);

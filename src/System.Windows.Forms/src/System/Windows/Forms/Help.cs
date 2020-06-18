@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void ShowHelp(Control parent, string url, string keyword)
         {
-            if (keyword != null && keyword.Length != 0)
+            if (keyword is not null && keyword.Length != 0)
             {
                 ShowHelp(parent, url, HelpNavigator.Topic, keyword);
             }
@@ -149,14 +149,14 @@ namespace System.Windows.Forms
             string pathAndFileName = url; //This is our best guess at the path yet.
 
             file = Resolve(url);
-            if (file != null)
+            if (file is not null)
             { // Can't assume we have a good url
                 pathAndFileName = file.AbsoluteUri;
             }
-            if (file == null || file.IsFile)
+            if (file is null || file.IsFile)
             {
                 StringBuilder newPath = new StringBuilder();
-                string localPath = (file != null && file.IsFile) ? file.LocalPath : url;
+                string localPath = (file is not null && file.IsFile) ? file.LocalPath : url;
 
                 // If this is a local path, convert it to a short path name.  Pass 0 as the length the first time
                 uint requiredStringSize = UnsafeNativeMethods.GetShortPathName(localPath, newPath, 0);
@@ -171,7 +171,7 @@ namespace System.Windows.Forms
             }
 
             HandleRef handle;
-            if (parent != null)
+            if (parent is not null)
             {
                 handle = new HandleRef(parent, parent.Handle);
             }
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
                     SafeNativeMethods.HtmlHelp(handle, pathAndFileName, htmlCommand, (string)param);
                 }
             }
-            else if (param == null)
+            else if (param is null)
             {
                 SafeNativeMethods.HtmlHelp(handle, pathAndFileName, MapCommandToHTMLCommand(command, null, out htmlParam), 0);
             }
@@ -234,7 +234,7 @@ namespace System.Windows.Forms
 
             Uri file = Resolve(url);
 
-            if (file == null)
+            if (file is null)
             {
                 throw new ArgumentException(string.Format(SR.HelpInvalidURL, url), "url");
             }
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
                     //
                     break;
                 case HelpNavigator.Topic:
-                    if (param != null && param is string)
+                    if (param is not null && param is string)
                     {
                         file = new Uri(file.ToString() + "#" + (string)param);
                     }
@@ -256,7 +256,7 @@ namespace System.Windows.Forms
             }
 
             HandleRef handle;
-            if (parent != null)
+            if (parent is not null)
             {
                 handle = new HandleRef(parent, parent.Handle);
             }
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (file != null && file.Scheme == "file")
+            if (file is not null && file.Scheme == "file")
             {
                 string localPath = NativeMethods.GetLocalPath(partialUri);
                 Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "file, check for existence");
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (file == null)
+            if (file is null)
             {
                 Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "try appbase relative");
                 try
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
                     // Ignore invalid uris.
                 }
 
-                if (file != null && file.Scheme == "file")
+                if (file is not null && file.Scheme == "file")
                 {
                     string localPath = file.LocalPath + file.Fragment;
                     Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "file, check for existence");
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: GetHelpFileType " + url);
 
-            if (url == null)
+            if (url is null)
             {
                 Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "\tnull, must be Html File");
                 return HTMLFILE;
@@ -345,11 +345,11 @@ namespace System.Windows.Forms
 
             Uri file = Resolve(url);
 
-            if (file == null || file.Scheme == "file")
+            if (file is null || file.Scheme == "file")
             {
                 Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "\tfile");
 
-                string ext = Path.GetExtension(file == null ? url : file.LocalPath + file.Fragment).ToLower(CultureInfo.InvariantCulture);
+                string ext = Path.GetExtension(file is null ? url : file.LocalPath + file.Fragment).ToLower(CultureInfo.InvariantCulture);
                 if (ext == ".chm" || ext == ".col")
                 {
                     Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "\tchm or col, HtmlHelp 1.0 file");

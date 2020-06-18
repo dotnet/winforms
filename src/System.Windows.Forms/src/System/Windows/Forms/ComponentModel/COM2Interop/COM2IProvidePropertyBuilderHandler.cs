@@ -36,7 +36,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
         {
-            if (propDesc == null)
+            if (propDesc is null)
             {
                 return;
             }

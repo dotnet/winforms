@@ -50,12 +50,12 @@ namespace System.Windows.Forms.Tests
 
             bag.Font = value;
             Assert.Same(value, bag.Font);
-            Assert.Equal(value == null, bag.IsEmpty());
+            Assert.Equal(value is null, bag.IsEmpty());
 
             // Set same.
             bag.Font = value;
             Assert.Same(value, bag.Font);
-            Assert.Equal(value == null, bag.IsEmpty());
+            Assert.Equal(value is null, bag.IsEmpty());
         }
 
         [WinFormsTheory]

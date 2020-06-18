@@ -4503,7 +4503,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageIndex = value;
                 Assert.Equal(expected, item.ImageIndex);
                 Assert.Empty(item.ImageKey);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(1, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
 
@@ -4511,7 +4511,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageIndex = value;
                 Assert.Equal(expected, item.ImageIndex);
                 Assert.Empty(item.ImageKey);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(2, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
             }
@@ -5002,7 +5002,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageKey = value;
                 Assert.Equal(expected, item.ImageKey);
                 Assert.Equal(-1, item.ImageIndex);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(1, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
 
@@ -5010,7 +5010,7 @@ namespace System.Windows.Forms.Tests
                 item.ImageKey = value;
                 Assert.Equal(expected, item.ImageKey);
                 Assert.Equal(-1, item.ImageIndex);
-                Assert.Equal(expectedHasImage, item.Image != null);
+                Assert.Equal(expectedHasImage, item.Image is not null);
                 Assert.Equal(2, ownerLayoutCallCount);
                 Assert.False(owner.IsHandleCreated);
             }
@@ -9809,7 +9809,7 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             void handler(object sender, EventArgs e)
             {
-                Assert.Equal(callCount > 0, item.Image == null);
+                Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
             };
             item.Disposed += handler;
@@ -9846,7 +9846,7 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             void handler(object sender, EventArgs e)
             {
-                Assert.Equal(callCount > 0, item.Image == null);
+                Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
             };
             item.Disposed += handler;
@@ -9887,7 +9887,7 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             void handler(object sender, EventArgs e)
             {
-                Assert.Equal(callCount > 0, item.Image == null);
+                Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
             };
             item.Disposed += handler;
@@ -9957,7 +9957,7 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             void handler(object sender, EventArgs e)
             {
-                Assert.Equal(callCount > 0, item.Image == null);
+                Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
             };
             item.Disposed += handler;
@@ -9966,13 +9966,13 @@ namespace System.Windows.Forms.Tests
             {
                 item.Dispose(disposing);
                 Assert.False(item.IsDisposed);
-                Assert.Equal(disposing, item.Image == null);
+                Assert.Equal(disposing, item.Image is null);
                 Assert.Equal(expectedCallCount, callCount);
 
                 // Dispose multiple times.
                 item.Dispose(disposing);
                 Assert.False(item.IsDisposed);
-                Assert.Equal(disposing, item.Image == null);
+                Assert.Equal(disposing, item.Image is null);
                 Assert.Equal(expectedCallCount * 2, callCount);
             }
             finally
@@ -9996,7 +9996,7 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             void handler(object sender, EventArgs e)
             {
-                Assert.Equal(callCount > 0, item.Image == null);
+                Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
             };
             item.Disposed += handler;
@@ -10005,16 +10005,16 @@ namespace System.Windows.Forms.Tests
             {
                 item.Dispose(disposing);
                 Assert.Equal(disposing, item.IsDisposed);
-                Assert.Equal(disposing, item.Image == null);
-                Assert.Equal(disposing, item.Owner == null);
+                Assert.Equal(disposing, item.Image is null);
+                Assert.Equal(disposing, item.Owner is null);
                 Assert.Equal(!disposing, owner.Items.Contains(item));
                 Assert.Equal(expectedCallCount, callCount);
 
                 // Dispose multiple times.
                 item.Dispose(disposing);
                 Assert.Equal(disposing, item.IsDisposed);
-                Assert.Equal(disposing, item.Image == null);
-                Assert.Equal(disposing, item.Owner == null);
+                Assert.Equal(disposing, item.Image is null);
+                Assert.Equal(disposing, item.Owner is null);
                 Assert.Equal(!disposing, owner.Items.Contains(item));
                 Assert.Equal(expectedCallCount * 2, callCount);
             }
@@ -10039,7 +10039,7 @@ namespace System.Windows.Forms.Tests
             int callCount = 0;
             void handler(object sender, EventArgs e)
             {
-                Assert.Equal(callCount > 0, item.Image == null);
+                Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
             };
             item.Disposed += handler;
@@ -10048,7 +10048,7 @@ namespace System.Windows.Forms.Tests
             {
                 item.Dispose(disposing);
                 Assert.False(item.IsDisposed);
-                Assert.Equal(disposing, item.Image == null);
+                Assert.Equal(disposing, item.Image is null);
                 Assert.Same(parent, item.Parent);
                 Assert.Empty(parent.Items);
                 Assert.Equal(expectedCallCount, callCount);
@@ -10056,7 +10056,7 @@ namespace System.Windows.Forms.Tests
                 // Dispose multiple times.
                 item.Dispose(disposing);
                 Assert.False(item.IsDisposed);
-                Assert.Equal(disposing, item.Image == null);
+                Assert.Equal(disposing, item.Image is null);
                 Assert.Same(parent, item.Parent);
                 Assert.Empty(parent.Items);
                 Assert.Equal(expectedCallCount * 2, callCount);

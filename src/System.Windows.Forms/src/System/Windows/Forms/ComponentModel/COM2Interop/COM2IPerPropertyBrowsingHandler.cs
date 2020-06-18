@@ -26,7 +26,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
         {
-            if (propDesc == null)
+            if (propDesc is null)
             {
                 return;
             }
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return null;
             }
 
-            success = strVal != null;
+            success = strVal is not null;
             return strVal;
         }
 
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 if (destType == typeof(string) && !itemsEnum.arraysFetched)
                 {
                     object curValue = itemsEnum.target.GetValue(itemsEnum.target.TargetObject);
-                    if (curValue == value || (curValue != null && curValue.Equals(value)))
+                    if (curValue == value || (curValue is not null && curValue.Equals(value)))
                     {
                         bool success = false;
                         string val = GetDisplayString((Oleaut32.IPerPropertyBrowsing)itemsEnum.target.TargetObject, itemsEnum.target.DISPID, ref success);
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     Oleaut32.IPerPropertyBrowsing ppb = (Oleaut32.IPerPropertyBrowsing)target.TargetObject;
                     int itemCount = 0;
 
-                    Debug.Assert(cookieItems != null && nameItems != null, "An item array is null");
+                    Debug.Assert(cookieItems is not null && nameItems is not null, "An item array is null");
 
                     if (nameItems.Length > 0)
                     {
@@ -304,9 +304,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         for (int i = nameItems.Length - 1; i >= 0; i--)
                         {
                             cookie = (int)cookieItems[i];
-                            if (nameItems[i] == null || !(nameItems[i] is string))
+                            if (nameItems[i] is null || !(nameItems[i] is string))
                             {
-                                Debug.Fail("Bad IPerPropertyBrowsing item [" + i.ToString(CultureInfo.InvariantCulture) + "], name=" + (nameItems == null ? "(unknown)" : nameItems[i].ToString()));
+                                Debug.Fail("Bad IPerPropertyBrowsing item [" + i.ToString(CultureInfo.InvariantCulture) + "], name=" + (nameItems is null ? "(unknown)" : nameItems[i].ToString()));
                                 continue;
                             }
                             using var var = new Oleaut32.VARIANT();

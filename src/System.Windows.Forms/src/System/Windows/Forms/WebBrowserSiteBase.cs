@@ -96,7 +96,7 @@ namespace System.Windows.Forms
 
         unsafe HRESULT IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, XFORMCOORDS dwFlags)
         {
-            if (pPtlHimetric == null || pPtfContainer == null)
+            if (pPtlHimetric is null || pPtfContainer is null)
             {
                 return HRESULT.E_INVALIDARG;
             }
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
 
         unsafe HRESULT IOleControlSite.TranslateAccelerator(User32.MSG* pMsg, KEYMODIFIERS grfModifiers)
         {
-            if (pMsg == null)
+            if (pMsg is null)
             {
                 return HRESULT.E_POINTER;
             }
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
 
         unsafe HRESULT IOleClientSite.GetMoniker(OLEGETMONIKER dwAssign, OLEWHICHMK dwWhichMoniker, IntPtr* ppmk)
         {
-            if (ppmk == null)
+            if (ppmk is null)
             {
                 return HRESULT.E_POINTER;
             }
@@ -222,7 +222,7 @@ namespace System.Windows.Forms
         // IOleInPlaceSite methods:
         unsafe HRESULT IOleInPlaceSite.GetWindow(IntPtr* phwnd)
         {
-            if (phwnd == null)
+            if (phwnd is null)
             {
                 return HRESULT.E_POINTER;
             }
@@ -260,20 +260,20 @@ namespace System.Windows.Forms
             ppDoc = null;
             ppFrame = Host.GetParentContainer();
 
-            if (lprcPosRect == null || lprcClipRect == null)
+            if (lprcPosRect is null || lprcClipRect is null)
             {
                 return HRESULT.E_POINTER;
             }
 
             *lprcPosRect = Host.Bounds;
             *lprcClipRect = WebBrowserHelper.GetClipRect();
-            if (lpFrameInfo != null)
+            if (lpFrameInfo is not null)
             {
                 lpFrameInfo->cb = (uint)Marshal.SizeOf<OLEINPLACEFRAMEINFO>();
                 lpFrameInfo->fMDIApp = BOOL.FALSE;
                 lpFrameInfo->hAccel = IntPtr.Zero;
                 lpFrameInfo->cAccelEntries = 0;
-                lpFrameInfo->hwndFrame = (Host.ParentInternal == null) ? IntPtr.Zero : Host.ParentInternal.Handle;
+                lpFrameInfo->hwndFrame = (Host.ParentInternal is null) ? IntPtr.Zero : Host.ParentInternal.Handle;
             }
 
             return HRESULT.S_OK;
@@ -359,11 +359,11 @@ namespace System.Windows.Forms
             try
             {
                 ISite site = Host.Site;
-                if (site != null)
+                if (site is not null)
                 {
                     IComponentChangeService changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
 
-                    if (changeService != null)
+                    if (changeService is not null)
                     {
                         try
                         {
@@ -393,13 +393,13 @@ namespace System.Windows.Forms
 
         internal void StartEvents()
         {
-            if (connectionPoint != null)
+            if (connectionPoint is not null)
             {
                 return;
             }
 
             object nativeObject = Host.activeXInstance;
-            if (nativeObject != null)
+            if (nativeObject is not null)
             {
                 try
                 {
@@ -417,7 +417,7 @@ namespace System.Windows.Forms
 
         internal void StopEvents()
         {
-            if (connectionPoint != null)
+            if (connectionPoint is not null)
             {
                 connectionPoint.Disconnect();
                 connectionPoint = null;
@@ -426,7 +426,7 @@ namespace System.Windows.Forms
 
         private unsafe HRESULT OnActiveXRectChange(RECT* lprcPosRect)
         {
-            if (lprcPosRect == null)
+            if (lprcPosRect is null)
             {
                 return HRESULT.E_INVALIDARG;
             }

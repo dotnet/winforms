@@ -110,7 +110,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawHorizontalTicks(Graphics g, Rectangle bounds, int numTicks, EdgeStyle edgeStyle)
         {
-            if (numTicks <= 0 || bounds.Height <= 0 || bounds.Width <= 0 || g == null)
+            if (numTicks <= 0 || bounds.Height <= 0 || bounds.Width <= 0 || g is null)
             {
                 return;
             }
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawVerticalTicks(Graphics g, Rectangle bounds, int numTicks, EdgeStyle edgeStyle)
         {
-            if (numTicks <= 0 || bounds.Height <= 0 || bounds.Width <= 0 || g == null)
+            if (numTicks <= 0 || bounds.Height <= 0 || bounds.Width <= 0 || g is null)
             {
                 return;
             }
@@ -207,7 +207,7 @@ namespace System.Windows.Forms
 
         private static void InitializeRenderer(VisualStyleElement element, int state)
         {
-            if (visualStyleRenderer == null)
+            if (visualStyleRenderer is null)
             {
                 visualStyleRenderer = new VisualStyleRenderer(element.ClassName, element.Part, state);
             }

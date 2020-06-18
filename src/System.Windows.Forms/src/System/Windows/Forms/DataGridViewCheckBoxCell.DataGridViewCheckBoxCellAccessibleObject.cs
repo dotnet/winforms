@@ -85,12 +85,12 @@ namespace System.Windows.Forms
                 DataGridViewCheckBoxCell dataGridViewCell = (DataGridViewCheckBoxCell)Owner;
                 DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (dataGridView != null && dataGridViewCell.RowIndex == -1)
+                if (dataGridView is not null && dataGridViewCell.RowIndex == -1)
                 {
                     throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedCell);
                 }
 
-                if (!dataGridViewCell.ReadOnly && dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
+                if (!dataGridViewCell.ReadOnly && dataGridViewCell.OwningColumn is not null && dataGridViewCell.OwningRow is not null)
                 {
                     dataGridView.CurrentCell = dataGridViewCell;
                     bool endEditMode = false;
@@ -131,7 +131,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (runtimeId == null)
+                    if (runtimeId is null)
                     {
                         runtimeId = new int[2];
                         runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a

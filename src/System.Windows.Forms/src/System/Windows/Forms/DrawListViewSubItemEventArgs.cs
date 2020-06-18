@@ -20,18 +20,18 @@ namespace System.Windows.Forms
                         ListViewItem.ListViewSubItem subItem, int itemIndex, int columnIndex,
                         ColumnHeader header, ListViewItemStates itemState)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
             if (itemIndex == -1)
             {
-                if (item == null)
+                if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
             }
-            else if (subItem == null)
+            else if (subItem is null)
             {
                 throw new ArgumentNullException(nameof(subItem));
             }
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawFocusRectangle(Rectangle bounds)
         {
-            if (Item == null)
+            if (Item is null)
             {
                 return;
             }

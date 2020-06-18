@@ -5752,7 +5752,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(0, clickCallCount);
             Assert.Equal(0, mouseClickCallCount);
-            Assert.Equal(eventArgs != null, control.IsHandleCreated);
+            Assert.Equal(eventArgs is not null, control.IsHandleCreated);
 
             // Remove handler.
             control.MouseUp -= handler;
@@ -5760,7 +5760,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.Equal(0, clickCallCount);
             Assert.Equal(0, mouseClickCallCount);
-            Assert.Equal(eventArgs != null, control.IsHandleCreated);
+            Assert.Equal(eventArgs is not null, control.IsHandleCreated);
         }
 
         [WinFormsTheory]

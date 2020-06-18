@@ -553,7 +553,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner != null)
+                    if (Owner is not null)
                     {
                         if (Owner.Renderer is ToolStripProfessionalRenderer renderer)
                         {
@@ -569,7 +569,7 @@ namespace System.Windows.Forms
                 get
                 {
                     return ((BorderStyle == BorderStyle.Fixed3D) &&
-                             (Owner != null && (Owner.Renderer is ToolStripProfessionalRenderer)));
+                             (Owner is not null && (Owner.Renderer is ToolStripProfessionalRenderer)));
                 }
             }
 

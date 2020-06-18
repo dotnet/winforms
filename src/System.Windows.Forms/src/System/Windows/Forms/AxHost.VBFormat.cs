@@ -25,7 +25,7 @@ namespace System.Windows.Forms
                 ushort* rcb)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in Format");
-                if (rcb == null)
+                if (rcb is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }

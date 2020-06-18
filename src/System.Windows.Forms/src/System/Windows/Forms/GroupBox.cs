@@ -104,7 +104,7 @@ namespace System.Windows.Forms
                 if (GetAutoSizeMode() != value)
                 {
                     SetAutoSizeMode(value);
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         // DefaultLayout does not keep anchor information until it needs to.  When
                         // AutoSize became a common property, we could no longer blindly call into
@@ -603,7 +603,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (needToDispose && boxPen != null)
+                        if (needToDispose && boxPen is not null)
                         {
                             boxPen.Dispose();
                         }

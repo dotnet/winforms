@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (destinationType is null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
@@ -51,25 +51,25 @@ namespace System.Windows.Forms
                 if (col.ImageIndex != -1)
                 {
                     ctor = t.GetConstructor(new Type[] { typeof(int) });
-                    if (ctor != null)
+                    if (ctor is not null)
                     {
                         id = new InstanceDescriptor(ctor, new object[] { col.ImageIndex }, false);
                     }
                 }
 
-                if (id == null && !string.IsNullOrEmpty(col.ImageKey))
+                if (id is null && !string.IsNullOrEmpty(col.ImageKey))
                 {
                     ctor = t.GetConstructor(new Type[] { typeof(string) });
-                    if (ctor != null)
+                    if (ctor is not null)
                     {
                         id = new InstanceDescriptor(ctor, new object[] { col.ImageKey }, false);
                     }
                 }
 
-                if (id == null)
+                if (id is null)
                 {
                     ctor = t.GetConstructor(Array.Empty<Type>());
-                    if (ctor != null)
+                    if (ctor is not null)
                     {
                         return new InstanceDescriptor(ctor, Array.Empty<object>(), false);
                     }

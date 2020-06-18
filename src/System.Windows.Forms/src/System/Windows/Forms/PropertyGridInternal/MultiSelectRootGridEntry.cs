@@ -32,7 +32,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     foreach (object obj in (Array)objValue)
                     {
                         ReadOnlyAttribute readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
-                        if ((readOnlyAttr != null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(obj).Contains(InheritanceAttribute.InheritedReadOnly))
+                        if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(obj).Contains(InheritanceAttribute.InheritedReadOnly))
                         {
                             anyRO = true;
                             break;
@@ -63,9 +63,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 MultiPropertyDescriptorGridEntry[] mergedProps = PropertyMerger.GetMergedProperties(rgobjs, this, PropertySort, CurrentTab);
 
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps == null, "PropertyGridView: MergedProps returned null!");
+                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
 
-                if (mergedProps != null)
+                if (mergedProps is not null)
                 {
                     ChildCollection.AddRange(mergedProps);
                 }
@@ -264,7 +264,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (entries[i].ParensAroundName)
                     {
-                        if (newEntries == null)
+                        if (newEntries is null)
                         {
                             newEntries = new MultiPropertyDescriptorGridEntry[entries.Length];
                         }
@@ -278,7 +278,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     for (int i = 0; i < entries.Length; i++)
                     {
-                        if (entries[i] != null)
+                        if (entries[i] is not null)
                         {
                             newEntries[newPos++] = entries[i];
                         }
@@ -335,7 +335,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         offset = len / 2;
                     }
 
-                    if (mergedEntryList != null)
+                    if (mergedEntryList is not null)
                     {
                         mergeArray[0] = basePd;
                         Array.Copy(mergedEntryList, 0, mergeArray, 1, mergedEntryList.Length);
@@ -353,15 +353,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                 PropertyDescriptor a1 = obj1 as PropertyDescriptor;
                 PropertyDescriptor a2 = obj2 as PropertyDescriptor;
 
-                if (a1 == null && a2 == null)
+                if (a1 is null && a2 is null)
                 {
                     return 0;
                 }
-                else if (a1 == null)
+                else if (a1 is null)
                 {
                     return -1;
                 }
-                else if (a2 == null)
+                else if (a2 is null)
                 {
                     return 1;
                 }

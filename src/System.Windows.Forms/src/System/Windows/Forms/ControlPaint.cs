@@ -59,7 +59,7 @@ namespace System.Windows.Forms
         {
             Rectangle result = bounds;
 
-            if (backgroundImage != null)
+            if (backgroundImage is not null)
             {
                 switch (imageLayout)
                 {
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
         /// </summary>
         public unsafe static IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap)
         {
-            if (bitmap == null)
+            if (bitmap is null)
             {
                 throw new ArgumentNullException(nameof(bitmap));
             }
@@ -448,7 +448,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static void PrintBorder(Graphics graphics, Rectangle bounds, BorderStyle style, Border3DStyle b3dStyle)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -478,7 +478,7 @@ namespace System.Windows.Forms
 
         internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect, Point scrollOffset, RightToLeft rightToLeft)
         {
-            if (g == null)
+            if (g is null)
             {
                 throw new ArgumentNullException(nameof(g));
             }
@@ -596,7 +596,7 @@ namespace System.Windows.Forms
                                       Color bottomColor, int bottomWidth, ButtonBorderStyle bottomStyle)
         {
             // Very general, and very slow
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1073,7 +1073,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawBorder3D(Graphics graphics, int x, int y, int width, int height, Border3DStyle style, Border3DSide sides)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1113,7 +1113,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static void DrawBorderComplex(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1229,7 +1229,7 @@ namespace System.Windows.Forms
         private static void DrawBorderSimple(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style)
         {
             // Common case: system color with solid pen
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawContainerGrabHandle(Graphics graphics, Rectangle bounds)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1381,7 +1381,7 @@ namespace System.Windows.Forms
         {
             // Background color of checkbox
             //
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1401,7 +1401,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static void DrawFlatCheckBox(Graphics graphics, Rectangle rectangle, Color foreground, Brush background, ButtonState state)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1418,9 +1418,9 @@ namespace System.Windows.Forms
             //
             if ((state & ButtonState.Checked) == ButtonState.Checked)
             {
-                if (checkImage == null || checkImage.Width != rectangle.Width || checkImage.Height != rectangle.Height)
+                if (checkImage is null || checkImage.Width != rectangle.Width || checkImage.Height != rectangle.Height)
                 {
-                    if (checkImage != null)
+                    if (checkImage is not null)
                     {
                         checkImage.Dispose();
                         checkImage = null;
@@ -1484,7 +1484,7 @@ namespace System.Windows.Forms
 
         private static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color color, bool highContrast)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1512,7 +1512,7 @@ namespace System.Windows.Forms
             Color foreColor,
             Color backColor)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1573,7 +1573,7 @@ namespace System.Windows.Forms
             Pen pen;
             Brush brush;
 
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1633,7 +1633,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawGrid(Graphics graphics, Rectangle area, Size pixelsBetweenDots, Color backColor)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1645,10 +1645,10 @@ namespace System.Windows.Forms
             float intensity = backColor.GetBrightness();
             bool invert = (intensity < .5);
 
-            if (gridBrush == null || gridSize.Width != pixelsBetweenDots.Width
+            if (gridBrush is null || gridSize.Width != pixelsBetweenDots.Width
                 || gridSize.Height != pixelsBetweenDots.Height || invert != gridInvert)
             {
-                if (gridBrush != null)
+                if (gridBrush is not null)
                 {
                     gridBrush.Dispose();
                     gridBrush = null;
@@ -1691,7 +1691,7 @@ namespace System.Windows.Forms
 
         internal static bool IsImageTransparent(Image backgroundImage)
         {
-            if (backgroundImage != null && (backgroundImage.Flags & (int)ImageFlags.HasAlpha) > 0)
+            if (backgroundImage is not null && (backgroundImage.Flags & (int)ImageFlags.HasAlpha) > 0)
             {
                 return true;
             }
@@ -1720,7 +1720,7 @@ namespace System.Windows.Forms
         private static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination,
                                                ColorMatrix matrix)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -1744,18 +1744,18 @@ namespace System.Windows.Forms
         /// </summary>
         internal static void DrawImageDisabled(Graphics graphics, Image image, Rectangle imageBounds, Color background, bool unscaledImage)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
-            if (image == null)
+            if (image is null)
             {
                 throw new ArgumentNullException(nameof(image));
             }
 
             Size imageSize = image.Size;
 
-            if (disabledImageAttr == null)
+            if (disabledImageAttr is null)
             {
                 // This is how I came up with this somewhat random ColorMatrix.
                 // Its set to resemble Office10 commandbars, but still be able to
@@ -1819,7 +1819,7 @@ namespace System.Windows.Forms
         {
             Pen pen;
 
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -2000,7 +2000,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawSelectionFrame(Graphics graphics, bool active, Rectangle outsideRect, Rectangle insideRect, Color backColor)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -2038,7 +2038,7 @@ namespace System.Windows.Forms
         {
             // Note: We don't paint any background to facilitate transparency, background images, etc...
             //
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms
                                               Color color, RectangleF layoutRectangle,
                                               StringFormat format)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -2101,7 +2101,7 @@ namespace System.Windows.Forms
                                               Color color, Rectangle layoutRectangle,
                                               TextFormatFlags format)
         {
-            if (dc == null)
+            if (dc is null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
@@ -2127,7 +2127,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawVisualStyleBorder(Graphics graphics, Rectangle bounds)
         {
-            if (graphics == null)
+            if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
@@ -2290,10 +2290,10 @@ namespace System.Windows.Forms
                 brushColor = SystemColors.ControlDark;
             }
 
-            if (frameBrushActive == null ||
+            if (frameBrushActive is null ||
                 !frameColorActive.Equals(brushColor))
             {
-                if (frameBrushActive != null)
+                if (frameBrushActive is not null)
                 {
                     frameBrushActive.Dispose();
                     frameBrushActive = null;
@@ -2339,12 +2339,12 @@ namespace System.Windows.Forms
         /// </summary>
         private static Pen GetFocusPen(Color baseColor, bool odds, bool highContrast)
         {
-            if (focusPen == null ||
+            if (focusPen is null ||
                 (!highContrast && focusPenColor.GetBrightness() <= .5 && baseColor.GetBrightness() <= .5) ||
                 focusPenColor.ToArgb() != baseColor.ToArgb() ||
                 hcFocusPen != highContrast)
             {
-                if (focusPen != null)
+                if (focusPen is not null)
                 {
                     focusPen.Dispose();
                     focusPen = null;
@@ -2419,10 +2419,10 @@ namespace System.Windows.Forms
             {
                 brushColor = SystemColors.ControlDark;
             }
-            if (frameBrushSelected == null ||
+            if (frameBrushSelected is null ||
                 !frameColorSelected.Equals(brushColor))
             {
-                if (frameBrushSelected != null)
+                if (frameBrushSelected is not null)
                 {
                     frameBrushSelected.Dispose();
                     frameBrushSelected = null;

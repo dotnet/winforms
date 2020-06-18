@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public CodeDomLocalizationProvider(IServiceProvider provider, CodeDomLocalizationModel model)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 throw new ArgumentNullException(nameof(provider));
             }
@@ -53,12 +53,12 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public CodeDomLocalizationProvider(IServiceProvider provider, CodeDomLocalizationModel model, CultureInfo[] supportedCultures)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 throw new ArgumentNullException(nameof(provider));
             }
 
-            if (supportedCultures == null)
+            if (supportedCultures is null)
             {
                 throw new ArgumentNullException(nameof(supportedCultures));
             }
@@ -73,7 +73,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void Dispose()
         {
-            if (_providerService != null && _extender != null)
+            if (_providerService is not null && _extender is not null)
             {
                 _providerService.RemoveExtenderProvider(_extender);
                 _providerService = null;
@@ -88,7 +88,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             _providerService = provider.GetService(typeof(IExtenderProviderService)) as IExtenderProviderService;
 
-            if (_providerService == null)
+            if (_providerService is null)
             {
                 throw new NotSupportedException(string.Format(SR.LocalizationProviderMissingService, typeof(IExtenderProviderService).Name));
             }
@@ -103,7 +103,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
-            if (currentSerializer == null)
+            if (currentSerializer is null)
             {
                 return null;
             }
@@ -133,14 +133,14 @@ namespace System.ComponentModel.Design.Serialization
             CodeDomLocalizationModel model = CodeDomLocalizationModel.None;
             object modelObj = manager.Context[typeof(CodeDomLocalizationModel)];
 
-            if (modelObj != null)
+            if (modelObj is not null)
             {
                 model = (CodeDomLocalizationModel)modelObj;
             }
 
             //Nifty, but this causes everything to be loc'd because our provider
             //comes in before the default one
-            //if (model == CodeDomLocalizationModel.None && currentSerializer == null) {
+            //if (model == CodeDomLocalizationModel.None && currentSerializer is null) {
             //    model = CodeDomLocalizationModel.PropertyAssignment;
             //}
 
@@ -170,7 +170,7 @@ namespace System.ComponentModel.Design.Serialization
             // we don't know how to perform the serialization.
             // We can only provide a custom serializer if we have an existing one
             // to base off of.
-            if (currentSerializer == null)
+            if (currentSerializer is null)
             {
                 return null;
             }
@@ -182,7 +182,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // We only care if we're localizable
-            if (_extender == null || !_extender.GetLocalizable(null))
+            if (_extender is null || !_extender.GetLocalizable(null))
             {
                 return null;
             }
@@ -190,17 +190,17 @@ namespace System.ComponentModel.Design.Serialization
             // Fish the property out of the context to see if the property is localizable.
             PropertyDescriptor serializingProperty = manager.Context[typeof(PropertyDescriptor)] as PropertyDescriptor;
 
-            if (serializingProperty == null || !serializingProperty.IsLocalizable)
+            if (serializingProperty is null || !serializingProperty.IsLocalizable)
             {
                 model = CodeDomLocalizationModel.None;
             }
 
-            if (_memberSerializers == null)
+            if (_memberSerializers is null)
             {
                 _memberSerializers = new Hashtable();
             }
 
-            if (_nopMemberSerializers == null)
+            if (_nopMemberSerializers is null)
             {
                 _nopMemberSerializers = new Hashtable();
             }
@@ -216,7 +216,7 @@ namespace System.ComponentModel.Design.Serialization
                 newSerializer = _memberSerializers[currentSerializer];
             }
 
-            if (newSerializer == null)
+            if (newSerializer is null)
             {
                 newSerializer = new ResourcePropertyMemberCodeDomSerializer((MemberCodeDomSerializer)currentSerializer, _extender, model);
 
@@ -275,7 +275,7 @@ namespace System.ComponentModel.Design.Serialization
                 _host = serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
                 _language = CultureInfo.InvariantCulture;
 
-                if (supportedCultures != null)
+                if (supportedCultures is not null)
                 {
                     _supportedCultures = new TypeConverter.StandardValuesCollection(supportedCultures);
                 }
@@ -300,7 +300,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_defaultLanguage == null)
+                    if (_defaultLanguage is null)
                     {
                         _defaultLanguage = Application.CurrentCulture;
                     }
@@ -316,12 +316,12 @@ namespace System.ComponentModel.Design.Serialization
             {
                 ISite site = comp.Site;
 
-                if (site != null)
+                if (site is not null)
                 {
                     IComponentChangeService cs = site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
                     IContainer container = site.GetService(typeof(IContainer)) as IContainer;
 
-                    if (cs != null && container != null)
+                    if (cs is not null && container is not null)
                     {
                         foreach (IComponent c in container.Components)
                         {
@@ -342,7 +342,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             private void CheckRoot()
             {
-                if (_host != null && _host.RootComponent != _lastRoot)
+                if (_host is not null && _host.RootComponent != _lastRoot)
                 {
                     _lastRoot = _host.RootComponent;
                     _language = CultureInfo.InvariantCulture;
@@ -376,7 +376,7 @@ namespace System.ComponentModel.Design.Serialization
                 CheckRoot();
 
                 // If we never configured the load language, we're always invariant.
-                if (_loadLanguage == null)
+                if (_loadLanguage is null)
                 {
                     _loadLanguage = CultureInfo.InvariantCulture;
                 }
@@ -406,7 +406,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 CheckRoot();
 
-                if (language == null)
+                if (language is null)
                 {
                     language = CultureInfo.InvariantCulture;
                 }
@@ -425,7 +425,7 @@ namespace System.ComponentModel.Design.Serialization
                     SetLocalizable(o, true);
                 }
 
-                if (_serviceProvider != null && _host != null)
+                if (_serviceProvider is not null && _host is not null)
                 {
                     IDesignerLoaderService ls = _serviceProvider.GetService(typeof(IDesignerLoaderService)) as IDesignerLoaderService;
 
@@ -438,7 +438,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         bool reloadSuccessful = false;
 
-                        if (ls != null)
+                        if (ls is not null)
                         {
                             reloadSuccessful = ls.Reload();
                         }
@@ -447,7 +447,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             IUIService uis = (IUIService)_serviceProvider.GetService(typeof(IUIService));
 
-                            if (uis != null)
+                            if (uis is not null)
                             {
                                 uis.ShowMessage(SR.LocalizationProviderManualReload);
                             }
@@ -473,7 +473,7 @@ namespace System.ComponentModel.Design.Serialization
                         SetLanguage(o, CultureInfo.InvariantCulture);
                     }
 
-                    if (_host != null && !_host.Loading)
+                    if (_host is not null && !_host.Loading)
                     {
                         BroadcastGlobalChange(o);
                     }
@@ -485,7 +485,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             private bool ShouldSerializeLanguage(IComponent o)
             {
-                return (_language != null && _language != CultureInfo.InvariantCulture);
+                return (_language is not null && _language != CultureInfo.InvariantCulture);
             }
 
             /// <summary>
@@ -519,7 +519,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 CheckRoot();
 
-                return (_host != null && o == _host.RootComponent);
+                return (_host is not null && o == _host.RootComponent);
             }
         }
 
@@ -549,22 +549,22 @@ namespace System.ComponentModel.Design.Serialization
             {
                 StandardValuesCollection values = null;
 
-                if (context.PropertyDescriptor != null)
+                if (context.PropertyDescriptor is not null)
                 {
                     ExtenderProvidedPropertyAttribute attr = context.PropertyDescriptor.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
 
-                    if (attr != null)
+                    if (attr is not null)
                     {
                         LanguageExtenders provider = attr.Provider as LanguageExtenders;
 
-                        if (provider != null)
+                        if (provider is not null)
                         {
                             values = provider.SupportedCultures;
                         }
                     }
                 }
 
-                if (values == null)
+                if (values is null)
                 {
                     values = base.GetStandardValues(context);
                 }

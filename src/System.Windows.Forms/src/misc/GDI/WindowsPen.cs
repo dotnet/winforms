@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Internal
 
         public WindowsPen(DeviceContext dc, Gdi32.PS style, int width, WindowsBrush windowsBrush)
         {
-            Debug.Assert(windowsBrush != null, "null windowsBrush");
+            Debug.Assert(windowsBrush is not null, "null windowsBrush");
 
             _style = style;
             _wndBrush = (WindowsBrush)windowsBrush.Clone();
@@ -70,7 +70,7 @@ namespace System.Windows.Forms.Internal
                 _style |= Gdi32.PS.GEOMETRIC | Gdi32.PS.SOLID;
             }
 
-            if (_wndBrush == null)
+            if (_wndBrush is null)
             {
                 _nativeHandle = Gdi32.CreatePen(_style, _width, ColorTranslator.ToWin32(_color));
             }
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.Internal
 
         public object Clone()
         {
-            return (_wndBrush != null) ?
+            return (_wndBrush is not null) ?
                 new WindowsPen(_dc, _style, _width, (WindowsBrush)_wndBrush.Clone()) :
                 new WindowsPen(_dc, _style, _width, _color);
         }
@@ -107,13 +107,13 @@ namespace System.Windows.Forms.Internal
 
         void Dispose(bool disposing)
         {
-            if (_nativeHandle != IntPtr.Zero && _dc != null)
+            if (_nativeHandle != IntPtr.Zero && _dc is not null)
             {
                 _dc.DeleteObject(_nativeHandle, GdiObjectType.Pen);
                 _nativeHandle = IntPtr.Zero;
             }
 
-            if (_wndBrush != null)
+            if (_wndBrush is not null)
             {
                 _wndBrush.Dispose();
                 _wndBrush = null;
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Internal
                 _style,
                 _color,
                 _width,
-                _wndBrush != null ? _wndBrush.ToString() : "null");
+                _wndBrush is not null ? _wndBrush.ToString() : "null");
         }
     }
 }

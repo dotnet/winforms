@@ -74,7 +74,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected override ISite CreateSite(IComponent component, string name)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
@@ -99,7 +99,7 @@ namespace System.ComponentModel.Design
         protected override object GetService(Type serviceType)
         {
             object service = base.GetService(serviceType);
-            if (service != null)
+            if (service is not null)
             {
                 return service;
             }
@@ -109,12 +109,12 @@ namespace System.ComponentModel.Design
                 return _services ?? (_services = new ServiceContainer(_host));
             }
 
-            if (_services != null)
+            if (_services is not null)
             {
                 return _services.GetService(serviceType);
             }
 
-            if (Owner.Site == null || !_safeToCallOwner)
+            if (Owner.Site is null || !_safeToCallOwner)
             {
                 return null;
             }
@@ -147,14 +147,14 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_name == null)
+                    if (_name is null)
                     {
                         return null;
                     }
 
                     string ownerName = _container.OwnerName;
                     string childName = ((ISite)this).Name;
-                    if (ownerName == null)
+                    if (ownerName is null)
                     {
                         return childName;
                     }

@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                 // If passed-in IDeviceContext object is a WindowsGraphics we can use it directly.
                 wg = idc as WindowsGraphics;
 
-                if (wg != null)
+                if (wg is not null)
                 {
                     // In this case we cache the idc to compare it against the wg in the Dispose method to avoid
                     // disposing of the wg.
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (wg == null)
+            if (wg is null)
             {
                 // The IDeviceContext object is not a WindowsGraphics, or it is a custom IDeviceContext, or
                 // it is a Graphics object but we did not need to re-apply Graphics propertiesto the hdc.
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(wg != null, "WindowsGraphics is null.");
+                Debug.Assert(wg is not null, "WindowsGraphics is null.");
                 return wg;
             }
         }
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(disposing, "We should always dispose of this guy and not let GC do it for us!");
 
-            if (wg != null)
+            if (wg is not null)
             {
                 // We need to dispose of the WindowsGraphics if it is created by this class only, if the IDeviceContext is
                 // a WindowsGraphics object we must not dispose of it since it is owned by the caller.
@@ -126,7 +126,7 @@ namespace System.Windows.Forms
                     // resets the hdc and disposes of the internal Graphics (if inititialized from one) which releases the hdc.
                     wg.Dispose();
 
-                    if (idc != null) // not initialized from a Graphics idc.
+                    if (idc is not null) // not initialized from a Graphics idc.
                     {
                         idc.ReleaseHdc();
                     }

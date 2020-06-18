@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (destinationType is null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (info != null)
+                if (info is not null)
                 {
                     return new InstanceDescriptor(info, args, false);
                 }

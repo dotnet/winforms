@@ -100,7 +100,7 @@ namespace System.Windows.Forms
                         object obj = null;
                         if (GetAmbientProperty(DispatchID.AMBIENT_BACKCOLOR, ref obj))
                         {
-                            if (obj != null)
+                            if (obj is not null)
                             {
                                 try
                                 {
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (prop.Value == null)
+                    if (prop.Value is null)
                     {
                         return Color.Empty;
                     }
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
                             try
                             {
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object font type=" + obj.GetType().FullName);
-                                Debug.Assert(obj != null, "GetAmbientProperty failed");
+                                Debug.Assert(obj is not null, "GetAmbientProperty failed");
                                 IFont ifont = (IFont)obj;
                                 prop.Value = Font.FromHfont(ifont.hFont);
                             }
@@ -184,7 +184,7 @@ namespace System.Windows.Forms
                         object obj = null;
                         if (GetAmbientProperty(DispatchID.AMBIENT_FORECOLOR, ref obj))
                         {
-                            if (obj != null)
+                            if (obj is not null)
                             {
                                 try
                                 {
@@ -204,7 +204,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (prop.Value == null)
+                    if (prop.Value is null)
                     {
                         return Color.Empty;
                     }
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
                      dwSaveOption == OLECLOSE.PROMPTSAVE) &&
                     _activeXState[s_isDirty])
                 {
-                    if (_clientSite != null)
+                    if (_clientSite is not null)
                     {
                         _clientSite.SaveObject();
                     }
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
 
                         // Now that we're active, send the lpmsg to the control if it
                         // is valid.
-                        if (lpmsg != null)
+                        if (lpmsg is not null)
                         {
                             Control target = _control;
 
@@ -331,7 +331,7 @@ namespace System.Windows.Forms
                                 //  control, and if so, map the point into that child's window
                                 //  coordinates
                                 Control realTarget = target.GetChildAtPoint(pt);
-                                if (realTarget != null && realTarget != target)
+                                if (realTarget is not null && realTarget != target)
                                 {
                                     User32.MapWindowPoints(new HandleRef(target, target.Handle), new HandleRef(realTarget, realTarget.Handle), ref pt, 1);
                                     target = realTarget;
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
                 }
 
                 // if they didn't give us a rectangle, just copy over ours
-                if (prcBounds != null)
+                if (prcBounds is not null)
                 {
                     RECT rc = *prcBounds;
 
@@ -462,7 +462,7 @@ namespace System.Windows.Forms
                 finally
                 {
                     // And clean up the DC
-                    if (prcBounds != null)
+                    if (prcBounds is not null)
                     {
                         Gdi32.SetWindowOrgEx(hdcDraw, pW.X, pW.Y, null);
                         Gdi32.SetWindowExtEx(hdcDraw, sWindowExt.Width, sWindowExt.Height, null);
@@ -480,7 +480,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal static HRESULT EnumVerbs(out IEnumOLEVERB ppEnumOleVerb)
             {
-                if (s_axVerbs == null)
+                if (s_axVerbs is null)
                 {
                     var verbShow = new OLEVERB();
                     var verbInplaceActivate = new OLEVERB();
@@ -546,12 +546,12 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe HRESULT GetAdvise(DVASPECT* pAspects, ADVF* pAdvf, IAdviseSink[] ppAdvSink)
             {
-                if (pAspects != null)
+                if (pAspects is not null)
                 {
                     *pAspects = DVASPECT.CONTENT;
                 }
 
-                if (pAdvf != null)
+                if (pAdvf is not null)
                 {
                     *pAdvf = 0;
 
@@ -565,7 +565,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (ppAdvSink != null)
+                if (ppAdvSink is not null)
                 {
                     ppAdvSink[0] = _viewAdviseSink;
                 }
@@ -738,7 +738,7 @@ namespace System.Windows.Forms
                 // And recurse for our children.
                 foreach (Control c in control.Controls)
                 {
-                    if (c != null)
+                    if (c is not null)
                     {
                         GetMnemonicList(c, mnemonicList);
                     }
@@ -766,7 +766,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe HRESULT GetWindow(IntPtr* phwnd)
             {
-                if (phwnd == null)
+                if (phwnd is null)
                 {
                     return HRESULT.E_POINTER;
                 }
@@ -847,13 +847,13 @@ namespace System.Windows.Forms
                     var posRect = new RECT();
                     var clipRect = new RECT();
 
-                    if (_inPlaceUiWindow != null && Marshal.IsComObject(_inPlaceUiWindow))
+                    if (_inPlaceUiWindow is not null && Marshal.IsComObject(_inPlaceUiWindow))
                     {
                         Marshal.ReleaseComObject(_inPlaceUiWindow);
                         _inPlaceUiWindow = null;
                     }
 
-                    if (_inPlaceFrame != null && Marshal.IsComObject(_inPlaceFrame))
+                    if (_inPlaceFrame is not null && Marshal.IsComObject(_inPlaceFrame))
                     {
                         Marshal.ReleaseComObject(_inPlaceFrame);
                         _inPlaceFrame = null;
@@ -915,9 +915,9 @@ namespace System.Windows.Forms
                     }
 
                     // set ourselves up in the host.
-                    Debug.Assert(_inPlaceFrame != null, "Setting us to visible should have created the in place frame");
+                    Debug.Assert(_inPlaceFrame is not null, "Setting us to visible should have created the in place frame");
                     _inPlaceFrame.SetActiveObject(_control, null);
-                    if (_inPlaceUiWindow != null)
+                    if (_inPlaceUiWindow is not null)
                     {
                         _inPlaceUiWindow.SetActiveObject(_control, null);
                     }
@@ -930,7 +930,7 @@ namespace System.Windows.Forms
                         Marshal.ThrowExceptionForHR((int)hr);
                     }
 
-                    if (_inPlaceUiWindow != null)
+                    if (_inPlaceUiWindow is not null)
                     {
                         hr = _inPlaceFrame.SetBorderSpace(null);
                         if (!hr.Succeeded() && hr != HRESULT.OLE_E_INVALIDRECT &&
@@ -978,13 +978,13 @@ namespace System.Windows.Forms
                 _control.Visible = false;
                 HWNDParent = IntPtr.Zero;
 
-                if (_inPlaceUiWindow != null && Marshal.IsComObject(_inPlaceUiWindow))
+                if (_inPlaceUiWindow is not null && Marshal.IsComObject(_inPlaceUiWindow))
                 {
                     Marshal.ReleaseComObject(_inPlaceUiWindow);
                     _inPlaceUiWindow = null;
                 }
 
-                if (_inPlaceFrame != null && Marshal.IsComObject(_inPlaceFrame))
+                if (_inPlaceFrame is not null && Marshal.IsComObject(_inPlaceFrame))
                 {
                     Marshal.ReleaseComObject(_inPlaceFrame);
                     _inPlaceFrame = null;
@@ -1095,7 +1095,7 @@ namespace System.Windows.Forms
                     {
                         object obj = null;
                         HRESULT hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
-                        if (hr.Succeeded() && obj != null)
+                        if (hr.Succeeded() && obj is not null)
                         {
                             Debug.Indent();
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Property was in bag");
@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms
                                     // not check for CanConvertFrom here -- we the conversion fails the type converter will throw,
                                     // and we will log it into the COM error log.
                                     TypeConverter converter = props[i].Converter;
-                                    Debug.Assert(converter != null, "No type converter for property '" + props[i].Name + "' on class " + _control.GetType().FullName);
+                                    Debug.Assert(converter is not null, "No type converter for property '" + props[i].Name + "' on class " + _control.GetType().FullName);
 
                                     // Check to see if the type converter can convert from a string.  If it can,.
                                     // use that as it is the best format for IPropertyBag.  Otherwise, check to see
@@ -1164,10 +1164,10 @@ namespace System.Windows.Forms
                                     errorCode = HRESULT.E_FAIL;
                                 }
                             }
-                            if (errorString != null)
+                            if (errorString is not null)
                             {
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Exception converting property: " + errorString);
-                                if (pErrorLog != null)
+                                if (pErrorLog is not null)
                                 {
                                     IntPtr bstrSource = Marshal.StringToBSTR(_control.GetType().FullName);
                                     IntPtr bstrDescription = Marshal.StringToBSTR(errorString);
@@ -1338,7 +1338,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal void OnDocWindowActivate(BOOL fActivate)
             {
-                if (_activeXState[s_uiActive] && fActivate.IsTrue() && _inPlaceFrame != null)
+                if (_activeXState[s_uiActive] && fActivate.IsTrue() && _inPlaceFrame is not null)
                 {
                     // we have to explicitly say we don't wany any border space.
                     HRESULT hr = _inPlaceFrame.SetBorderSpace(null);
@@ -1384,7 +1384,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe HRESULT QuickActivate(QACONTAINER pQaContainer, QACONTROL* pQaControl)
             {
-                if (pQaControl == null)
+                if (pQaControl is null)
                 {
                     return HRESULT.E_FAIL;
                 }
@@ -1397,7 +1397,7 @@ namespace System.Windows.Forms
                 prop.Value = ColorTranslator.FromOle(unchecked((int)pQaContainer.colorFore));
 
                 // And our ambient font
-                if (pQaContainer.pFont != null)
+                if (pQaContainer.pFont is not null)
                 {
                     prop = LookupAmbient(DispatchID.AMBIENT_FONT);
 
@@ -1417,7 +1417,7 @@ namespace System.Windows.Forms
 
                 SetClientSite(pQaContainer.pClientSite);
 
-                if (pQaContainer.pAdviseSink != null)
+                if (pQaContainer.pAdviseSink is not null)
                 {
                     SetAdvise(DVASPECT.CONTENT, 0, pQaContainer.pAdviseSink);
                 }
@@ -1435,12 +1435,12 @@ namespace System.Windows.Forms
                 // Note that the AdviseHelper handles some non-standard COM interop that is required in order to access
                 // the events on the CLR-supplied CCW (COM-callable Wrapper.
 
-                if ((pQaContainer.pUnkEventSink != null) && (_control is UserControl))
+                if ((pQaContainer.pUnkEventSink is not null) && (_control is UserControl))
                 {
                     // Check if this control exposes events to COM.
                     Type eventInterface = GetDefaultEventsInterface(_control.GetType());
 
-                    if (eventInterface != null)
+                    if (eventInterface is not null)
                     {
                         try
                         {
@@ -1454,12 +1454,12 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (pQaContainer.pPropertyNotifySink != null && Marshal.IsComObject(pQaContainer.pPropertyNotifySink))
+                if (pQaContainer.pPropertyNotifySink is not null && Marshal.IsComObject(pQaContainer.pPropertyNotifySink))
                 {
                     Marshal.ReleaseComObject(pQaContainer.pPropertyNotifySink);
                 }
 
-                if (pQaContainer.pUnkEventSink != null && Marshal.IsComObject(pQaContainer.pUnkEventSink))
+                if (pQaContainer.pUnkEventSink is not null && Marshal.IsComObject(pQaContainer.pUnkEventSink))
                 {
                     Marshal.ReleaseComObject(pQaContainer.pUnkEventSink);
                 }
@@ -1745,7 +1745,7 @@ namespace System.Windows.Forms
                     ComSourceInterfacesAttribute coms = (ComSourceInterfacesAttribute)custom[0];
                     string eventName = coms.Value.Split(new char[] { '\0' })[0];
                     eventInterface = controlType.Module.Assembly.GetType(eventName, false);
-                    if (eventInterface == null)
+                    if (eventInterface is null)
                     {
                         eventInterface = Type.GetType(eventName, false);
                     }
@@ -1764,7 +1764,7 @@ namespace System.Windows.Forms
                     STGM.WRITE | STGM.SHARE_EXCLUSIVE | STGM.CREATE,
                     0,
                     0);
-                Debug.Assert(stream != null, "Stream should be non-null, or an exception should have been thrown.");
+                Debug.Assert(stream is not null, "Stream should be non-null, or an exception should have been thrown.");
 
                 Save(stream, BOOL.TRUE);
                 Marshal.ReleaseComObject(stream);
@@ -1819,7 +1819,7 @@ namespace System.Windows.Forms
                         {
                             // Not a resource property.  Persist this using standard type converters.
                             TypeConverter converter = props[i].Converter;
-                            Debug.Assert(converter != null, "No type converter for property '" + props[i].Name + "' on class " + _control.GetType().FullName);
+                            Debug.Assert(converter is not null, "No type converter for property '" + props[i].Name + "' on class " + _control.GetType().FullName);
 
                             if (converter.CanConvertFrom(typeof(string)))
                             {
@@ -1857,7 +1857,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < cnt; i++)
                 {
                     IAdviseSink s = (IAdviseSink)_adviseList[i];
-                    Debug.Assert(s != null, "NULL in our advise list");
+                    Debug.Assert(s is not null, "NULL in our advise list");
                     s.OnSave();
                 }
             }
@@ -1877,7 +1877,7 @@ namespace System.Windows.Forms
                 _activeXState[s_viewAdvisePrimeFirst] = (advf & ADVF.PRIMEFIRST) != 0;
                 _activeXState[s_viewAdviseOnlyOnce] = (advf & ADVF.ONLYONCE) != 0;
 
-                if (_viewAdviseSink != null && Marshal.IsComObject(_viewAdviseSink))
+                if (_viewAdviseSink is not null && Marshal.IsComObject(_viewAdviseSink))
                 {
                     Marshal.ReleaseComObject(_viewAdviseSink);
                 }
@@ -1898,7 +1898,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal void SetClientSite(IOleClientSite value)
             {
-                if (_clientSite != null)
+                if (_clientSite is not null)
                 {
                     if (Marshal.IsComObject(_clientSite))
                     {
@@ -1908,7 +1908,7 @@ namespace System.Windows.Forms
 
                 _clientSite = value;
 
-                if (_clientSite != null)
+                if (_clientSite is not null)
                 {
                     _control.Site = new AxSourcingSite(_control, _clientSite, "ControlAxSourcingSite");
                 }
@@ -1929,7 +1929,7 @@ namespace System.Windows.Forms
                     buttonControl.NotifyDefault((bool)obj);
                 }
 
-                if (_clientSite == null && _accelTable != IntPtr.Zero)
+                if (_clientSite is null && _accelTable != IntPtr.Zero)
                 {
                     User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
                     _accelTable = IntPtr.Zero;
@@ -1971,7 +1971,7 @@ namespace System.Windows.Forms
                                 bounds.Height = adjusted.Height;
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Announcing to in place site that our rect has changed.");
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "            Announcing rect = " + bounds);
-                                Debug.Assert(_clientSite != null, "How can we setextent before we are sited??");
+                                Debug.Assert(_clientSite is not null, "How can we setextent before we are sited??");
 
                                 RECT posRect = bounds;
                                 ioleClientSite.OnPosRectChange(&posRect);
@@ -1995,7 +1995,7 @@ namespace System.Windows.Forms
 
                             // We need to call RequestNewObjectLayout
                             // here so we visually display our new extents.
-                            if (!_activeXState[s_inPlaceActive] && _clientSite != null)
+                            if (!_activeXState[s_inPlaceActive] && _clientSite is not null)
                             {
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Requesting new Object layout.");
                                 _clientSite.RequestNewObjectLayout();
@@ -2028,7 +2028,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe HRESULT SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
             {
-                if (lprcPosRect == null || lprcClipRect == null)
+                if (lprcPosRect is null || lprcClipRect is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -2098,7 +2098,7 @@ namespace System.Windows.Forms
                     setRegion = true;
                 }
 
-                if (lprcClipRect != null)
+                if (lprcClipRect is not null)
                 {
                     // The container wants us to clip, so figure out if we really
                     // need to.
@@ -2146,7 +2146,7 @@ namespace System.Windows.Forms
                     IntPtr finalClipRegion = _clipRegion;
 
                     Region controlRegion = _control.Region;
-                    if (controlRegion != null)
+                    if (controlRegion is not null)
                     {
                         IntPtr rgn = _control.GetHRgn(controlRegion);
                         finalClipRegion = MergeRegion(rgn);
@@ -2175,7 +2175,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe HRESULT TranslateAccelerator(User32.MSG* lpmsg)
             {
-                if (lpmsg == null)
+                if (lpmsg is null)
                 {
                     return HRESULT.E_POINTER;
                 }
@@ -2210,7 +2210,7 @@ namespace System.Windows.Forms
                 if (needPreProcess)
                 {
                     Control target = FromChildHandle(lpmsg->hwnd);
-                    if (target != null && (_control == target || _control.Contains(target)))
+                    if (target is not null && (_control == target || _control.Contains(target)))
                     {
                         PreProcessControlState messageState = PreProcessControlMessageInternal(target, ref msg);
                         switch (messageState)
@@ -2287,7 +2287,7 @@ namespace System.Windows.Forms
                 _inPlaceUiWindow?.SetActiveObject(null, null);
 
                 // May need this for SetActiveObject & OnUIDeactivate, so leave until function return
-                Debug.Assert(_inPlaceFrame != null, "No inplace frame -- how dod we go UI active?");
+                Debug.Assert(_inPlaceFrame is not null, "No inplace frame -- how dod we go UI active?");
                 _inPlaceFrame.SetActiveObject(null, null);
 
                 if (_clientSite is IOleInPlaceSite ioleClientSite)
@@ -2303,14 +2303,14 @@ namespace System.Windows.Forms
             /// </summary>
             internal HRESULT Unadvise(uint dwConnection)
             {
-                if (dwConnection > _adviseList.Count || _adviseList[(int)dwConnection - 1] == null)
+                if (dwConnection > _adviseList.Count || _adviseList[(int)dwConnection - 1] is null)
                 {
                     return HRESULT.OLE_E_NOCONNECTION;
                 }
 
                 IAdviseSink sink = (IAdviseSink)_adviseList[(int)dwConnection - 1];
                 _adviseList.RemoveAt((int)dwConnection - 1);
-                if (sink != null && Marshal.IsComObject(sink))
+                if (sink is not null && Marshal.IsComObject(sink))
                 {
                     Marshal.ReleaseComObject(sink);
                 }
@@ -2410,7 +2410,7 @@ namespace System.Windows.Forms
                 // Note: Word2000 won't resize components correctly if an OnViewChange notification
                 //       is sent while the component is persisting it's state.  The !m_fSaving check
                 //       is to make sure we don't call OnViewChange in this case.
-                if (_viewAdviseSink != null && !_activeXState[s_saving])
+                if (_viewAdviseSink is not null && !_activeXState[s_saving])
                 {
                     _viewAdviseSink.OnViewChange((int)DVASPECT.CONTENT, -1);
 

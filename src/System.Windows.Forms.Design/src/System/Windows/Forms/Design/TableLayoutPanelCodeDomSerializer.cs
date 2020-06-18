@@ -41,22 +41,22 @@ namespace System.Windows.Forms.Design
             // Now push our layout settings stuff into the resx if we are not inherited read only and
             // are in a localizable Form.
             TableLayoutPanel tlp = value as TableLayoutPanel;
-            Debug.Assert(tlp != null, "Huh? We were expecting to be serializing a TableLayoutPanel here.");
+            Debug.Assert(tlp is not null, "Huh? We were expecting to be serializing a TableLayoutPanel here.");
 
-            if (tlp != null)
+            if (tlp is not null)
             {
                 InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(tlp)[typeof(InheritanceAttribute)];
 
-                if (ia == null || ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
+                if (ia is null || ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
                 {
                     IDesignerHost host = (IDesignerHost)manager.GetService(typeof(IDesignerHost));
 
                     if (IsLocalizable(host))
                     {
                         PropertyDescriptor lsProp = TypeDescriptor.GetProperties(tlp)[s_layoutSettingsPropName];
-                        object val = (lsProp != null) ? lsProp.GetValue(tlp) : null;
+                        object val = (lsProp is not null) ? lsProp.GetValue(tlp) : null;
 
-                        if (val != null)
+                        if (val is not null)
                         {
                             string key = manager.GetName(tlp) + "." + s_layoutSettingsPropName;
                             SerializeResourceInvariant(manager, key, val);
@@ -70,11 +70,11 @@ namespace System.Windows.Forms.Design
 
         private bool IsLocalizable(IDesignerHost host)
         {
-            if (host != null)
+            if (host is not null)
             {
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(host.RootComponent)["Localizable"];
 
-                if (prop != null && prop.PropertyType == typeof(bool))
+                if (prop is not null && prop.PropertyType == typeof(bool))
                 {
                     return (bool)prop.GetValue(host.RootComponent);
                 }

@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (visualStyleRenderer == null)
+                    if (visualStyleRenderer is null)
                     {
                         visualStyleRenderer = new VisualStyleRenderer(ComboBoxReadOnlyButton);
                     }
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             // Post theming functions
             public static void DrawBorder(Graphics g, Rectangle bounds)
             {
-                if (visualStyleRenderer == null)
+                if (visualStyleRenderer is null)
                 {
                     visualStyleRenderer = new VisualStyleRenderer(ComboBoxBorder);
                 }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             {
                 if (rightToLeft)
                 {
-                    if (visualStyleRenderer == null)
+                    if (visualStyleRenderer is null)
                     {
                         visualStyleRenderer = new VisualStyleRenderer(ComboBoxDropDownButtonLeft.ClassName, ComboBoxDropDownButtonLeft.Part, (int)state);
                     }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (visualStyleRenderer == null)
+                    if (visualStyleRenderer is null)
                     {
                         visualStyleRenderer = new VisualStyleRenderer(ComboBoxDropDownButtonRight.ClassName, ComboBoxDropDownButtonRight.Part, (int)state);
                     }
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
 
             public static void DrawReadOnlyButton(Graphics g, Rectangle bounds, ComboBoxState state)
             {
-                if (visualStyleRenderer == null)
+                if (visualStyleRenderer is null)
                 {
                     visualStyleRenderer = new VisualStyleRenderer(ComboBoxReadOnlyButton.ClassName, ComboBoxReadOnlyButton.Part, (int)state);
                 }

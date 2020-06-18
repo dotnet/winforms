@@ -29,19 +29,19 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
 
             var images = new ArrayList();
             var edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            if (edSvc == null)
+            if (edSvc is null)
             {
                 return images;
             }
 
-            if (_fileDialog == null)
+            if (_fileDialog is null)
             {
                 _fileDialog = new OpenFileDialog();
                 _fileDialog.Multiselect = true;
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
                                                                        null, null, null);
                     var editorClass = editor.GetType();
 
-                    if (!myClass.Equals(editorClass) && editor != null && myClass.IsInstanceOfType(editor))
+                    if (!myClass.Equals(editorClass) && editor is not null && myClass.IsInstanceOfType(editor))
                     {
                         filter += "|" + CreateFilterEntry(editor);
                     }

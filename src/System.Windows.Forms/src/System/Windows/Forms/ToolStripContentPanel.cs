@@ -244,7 +244,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (rendererSwitcher == null)
+                if (rendererSwitcher is null)
                 {
                     rendererSwitcher = new ToolStripRendererSwitcher(this, ToolStripRenderMode.System);
                     HandleRendererChanged(this, EventArgs.Empty);

@@ -236,11 +236,11 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (light != null)
+                if (light is not null)
                 {
                     light.Dispose();
                 }
-                if (dark != null)
+                if (dark is not null)
                 {
                     dark.Dispose();
                 }
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
                 part = VisualStyleElement.Button.GroupBox.HighContrastDisabledPart;
             }
 
-            if (visualStyleRenderer == null)
+            if (visualStyleRenderer is null)
             {
                 visualStyleRenderer = new VisualStyleRenderer(GroupBoxElement.ClassName, part, state);
             }

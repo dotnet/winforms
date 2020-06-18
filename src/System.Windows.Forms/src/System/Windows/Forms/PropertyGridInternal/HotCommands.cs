@@ -69,7 +69,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (label == null)
+                if (label is null)
                 {
                     label = new LinkLabel
                     {
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return (component != null);
+                return (component is not null);
             }
         }
 
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 int lineHeight = (int)(1.5 * Font.Height);
                 int verbCount = 0;
-                if (verbs != null)
+                if (verbs is not null)
                 {
                     verbCount = verbs.Length;
                 }
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual void SetVerbs(object component, DesignerVerb[] verbs)
         {
-            if (this.verbs != null)
+            if (this.verbs is not null)
             {
                 for (int i = 0; i < this.verbs.Length; i++)
                 {
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 this.verbs = null;
             }
 
-            if (component == null || verbs == null || verbs.Length == 0)
+            if (component is null || verbs is null || verbs.Length == 0)
             {
                 Visible = false;
                 Label.Links.Clear();
@@ -277,7 +277,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
                 UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
-                if (navigationTarget != null)
+                if (navigationTarget is not null)
                 {
                     return navigationTarget;
                 }
@@ -304,7 +304,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             get
             {
                 string name = Owner?.AccessibleName;
-                if (name != null)
+                if (name is not null)
                 {
                     return name;
                 }

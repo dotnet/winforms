@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (destinationType is null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                         if (!string.IsNullOrEmpty(item.ImageKey))
                         {
                             ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(string) });
-                            Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                            Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                             ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
                             ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
                             return new InstanceDescriptor(ctor, new object[] { subItemArray, item.ImageKey }, false);
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
                         else
                         {
                             ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(int) });
-                            Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                            Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                             ListViewItem.ListViewSubItem[] subItemArray = new ListViewItem.ListViewSubItem[item.SubItems.Count];
                             ((ICollection)item.SubItems).CopyTo(subItemArray, 0);
                             return new InstanceDescriptor(ctor, new object[] { subItemArray, item.ImageIndex }, false);
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
                             typeof(Color),
                             typeof(Font)
                         });
-                        Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                        Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                         return new InstanceDescriptor(ctor, new object[]
                         {
                             subItems,
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
                             typeof(Color),
                             typeof(Font)
                         });
-                        Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                        Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                         return new InstanceDescriptor(ctor, new object[]
                         {
                             subItems,
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
                 if (item.ImageIndex == -1 && string.IsNullOrEmpty(item.ImageKey) && item.SubItems.Count <= 1)
                 {
                     ctor = typeof(ListViewItem).GetConstructor(new Type[] { typeof(string) });
-                    Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                    Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                     return new InstanceDescriptor(ctor, new object[] { item.Text }, false);
                 }
 
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
                             typeof(string),
                             typeof(string)
                         });
-                        Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                        Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                         return new InstanceDescriptor(ctor, new object[] { item.Text, item.ImageKey }, false);
                     }
                     else
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
                             typeof(string),
                             typeof(int)
                         });
-                        Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                        Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                         return new InstanceDescriptor(ctor, new object[] { item.Text, item.ImageIndex }, false);
                     }
                 }
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                         typeof(string[]),
                         typeof(string)
                     });
-                    Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                    Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                     return new InstanceDescriptor(ctor, new object[] { subItems, item.ImageKey }, false);
                 }
                 else
@@ -201,7 +201,7 @@ namespace System.Windows.Forms
 
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (destinationType is null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
                         typeof(Color),
                         typeof(Font)
                     });
-                    Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                    Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                     return new InstanceDescriptor(ctor, new object[] {
                         null,
                         item.Text,
@@ -233,7 +233,7 @@ namespace System.Windows.Forms
 
                 // Otherwise, just use the text constructor
                 ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[] { typeof(ListViewItem), typeof(string) });
-                Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                 return new InstanceDescriptor(ctor, new object[] { null, item.Text }, true);
             }
 

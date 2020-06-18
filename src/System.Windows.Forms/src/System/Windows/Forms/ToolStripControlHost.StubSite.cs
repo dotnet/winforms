@@ -62,7 +62,7 @@ namespace System.Windows.Forms
             /// </summary>
             object IServiceProvider.GetService(Type service)
             {
-                if (service == null)
+                if (service is null)
                 {
                     throw new ArgumentNullException(nameof(service));
                 }
@@ -83,12 +83,12 @@ namespace System.Windows.Forms
             /// </summary>
             object IDictionaryService.GetKey(object value)
             {
-                if (_dictionary != null)
+                if (_dictionary is not null)
                 {
                     foreach (DictionaryEntry de in _dictionary)
                     {
                         object o = de.Value;
-                        if (value != null && value.Equals(o))
+                        if (value is not null && value.Equals(o))
                         {
                             return de.Key;
                         }
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
             /// </summary>
             object IDictionaryService.GetValue(object key)
             {
-                if (_dictionary != null)
+                if (_dictionary is not null)
                 {
                     return _dictionary[key];
                 }
@@ -118,12 +118,12 @@ namespace System.Windows.Forms
             /// </summary>
             void IDictionaryService.SetValue(object key, object value)
             {
-                if (_dictionary == null)
+                if (_dictionary is null)
                 {
                     _dictionary = new Hashtable();
                 }
 
-                if (value == null)
+                if (value is null)
                 {
                     _dictionary.Remove(key);
                 }

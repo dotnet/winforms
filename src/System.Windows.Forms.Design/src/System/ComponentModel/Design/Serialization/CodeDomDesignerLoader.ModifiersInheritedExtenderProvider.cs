@@ -54,22 +54,22 @@ namespace System.ComponentModel.Design.Serialization
             {
                 IComponent baseComponent = null;
 
-                if (c == null)
+                if (c is null)
                 {
                     return null;
                 }
 
-                if (_host == null)
+                if (_host is null)
                 {
                     ISite site = c.Site;
 
-                    if (site != null)
+                    if (site is not null)
                     {
                         _host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
                     }
                 }
 
-                if (_host != null)
+                if (_host is not null)
                 {
                     baseComponent = _host.RootComponent;
                 }
@@ -92,25 +92,25 @@ namespace System.ComponentModel.Design.Serialization
             public MemberAttributes GetModifiers(IComponent comp)
             {
                 IComponent baseComponent = GetBaseComponent(comp);
-                Debug.Assert(baseComponent != null, "Root component was null");
+                Debug.Assert(baseComponent is not null, "Root component was null");
                 Type baseType = baseComponent.GetType();
                 ISite site = comp.Site;
 
-                if (site == null)
+                if (site is null)
                 {
                     return MemberAttributes.Private;
                 }
 
                 string name = site.Name;
 
-                if (name == null)
+                if (name is null)
                 {
                     return MemberAttributes.Private;
                 }
 
                 FieldInfo field = TypeDescriptor.GetReflectionType(baseType).GetField(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
 
-                if (field != null)
+                if (field is not null)
                 {
                     if (field.IsPrivate)
                         return MemberAttributes.Private;
@@ -135,7 +135,7 @@ namespace System.ComponentModel.Design.Serialization
                 // visibility of this accessor to fix the modifiers up.
                 PropertyInfo prop = TypeDescriptor.GetReflectionType(baseType).GetProperty(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
                 MethodInfo[] accessors = prop?.GetAccessors(true);
-                if (accessors == null || accessors.Length == 0 || accessors[0] == null)
+                if (accessors is null || accessors.Length == 0 || accessors[0] is null)
                 {
                     return MemberAttributes.Private;
                 }

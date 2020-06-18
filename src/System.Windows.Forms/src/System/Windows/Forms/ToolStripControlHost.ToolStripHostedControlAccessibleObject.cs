@@ -35,9 +35,9 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_toolStripHostedControl != null // Hosted control should not be null.
-                        && _toolStripControlHost != null // ToolStripControlHost is a container for ToolStripControl.
-                        && _toolStripControlHost.Owner != null) // Owner is the ToolStrip.
+                    if (_toolStripHostedControl is not null // Hosted control should not be null.
+                        && _toolStripControlHost is not null // ToolStripControlHost is a container for ToolStripControl.
+                        && _toolStripControlHost.Owner is not null) // Owner is the ToolStrip.
                     {
                         return _toolStripControlHost.Owner.AccessibilityObject;
                     }
@@ -48,8 +48,8 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (_toolStripHostedControl != null &&
-                    _toolStripControlHost != null)
+                if (_toolStripHostedControl is not null &&
+                    _toolStripControlHost is not null)
                 {
                     switch (direction)
                     {

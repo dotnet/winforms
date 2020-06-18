@@ -99,7 +99,7 @@ namespace System.ComponentModel
                 {
                     if (o is WeakReference wr && !wr.IsAlive)
                     {
-                        if (cleanupList == null)
+                        if (cleanupList is null)
                         {
                             cleanupList = new ArrayList();
                         }
@@ -108,7 +108,7 @@ namespace System.ComponentModel
                     }
                 }
 
-                if (cleanupList != null)
+                if (cleanupList is not null)
                 {
                     foreach (object o in cleanupList)
                     {
@@ -125,11 +125,11 @@ namespace System.ComponentModel
         {
             bool IEqualityComparer.Equals(object x, object y)
             {
-                if (x == null)
+                if (x is null)
                 {
-                    return y == null;
+                    return y is null;
                 }
-                if (y != null && x.GetHashCode() == y.GetHashCode())
+                if (y is not null && x.GetHashCode() == y.GetHashCode())
                 {
                     if (x is WeakReference wX)
                     {
@@ -179,7 +179,7 @@ namespace System.ComponentModel
 
             public override bool Equals(object o)
             {
-                if (o == null)
+                if (o is null)
                 {
                     return false;
                 }

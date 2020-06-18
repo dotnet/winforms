@@ -38,7 +38,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 ICom2PropertyPageDisplayService propPageSvc = (ICom2PropertyPageDisplayService)provider.GetService(typeof(ICom2PropertyPageDisplayService));
 
-                if (propPageSvc == null)
+                if (propPageSvc is null)
                 {
                     propPageSvc = this;
                 }
@@ -58,10 +58,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
             catch (Exception ex1)
             {
-                if (provider != null)
+                if (provider is not null)
                 {
                     IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
-                    if (uiSvc != null)
+                    if (uiSvc is not null)
                     {
                         uiSvc.ShowError(ex1, SR.ErrorTypeConverterFailed);
                     }

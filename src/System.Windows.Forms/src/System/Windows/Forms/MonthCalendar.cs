@@ -196,7 +196,7 @@ namespace System.Windows.Forms
                     _monthsOfYear[i] = 0;
                 }
 
-                if (value != null && value.Length > 0)
+                if (value is not null && value.Length > 0)
                 {
                     // Add each bolded date to our ArrayList.
                     for (int i = 0; i < value.Length; i++)
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
             set
             {
                 _arrayOfDates.Clear();
-                if (value != null && value.Length > 0)
+                if (value is not null && value.Length > 0)
                 {
                     // Add each bolded date to our ArrayList.
                     for (int i = 0; i < value.Length; i++)
@@ -551,7 +551,7 @@ namespace System.Windows.Forms
                 _monthlyArrayOfDates.Clear();
                 _datesToBoldMonthly = 0;
 
-                if (value != null && value.Length > 0)
+                if (value is not null && value.Length > 0)
                 {
                     // Add each bolded date to our ArrayList.
                     for (int i = 0; i < value.Length; i++)

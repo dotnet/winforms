@@ -63,7 +63,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null || Properties.ContainsObject(PropTextBoxCellEditingTextBox))
+                if (value is not null || Properties.ContainsObject(PropTextBoxCellEditingTextBox))
                 {
                     Properties.SetObject(PropTextBoxCellEditingTextBox, value);
                 }
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
             get
             {
                 Type valueType = base.ValueType;
-                if (valueType != null)
+                if (valueType is not null)
                 {
                     return valueType;
                 }
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
         public override void DetachEditingControl()
         {
             DataGridView dgv = DataGridView;
-            if (dgv == null || dgv.EditingControl == null)
+            if (dgv is null || dgv.EditingControl is null)
             {
                 throw new InvalidOperationException();
             }
@@ -166,7 +166,7 @@ namespace System.Windows.Forms
         private Rectangle GetAdjustedEditingControlBounds(Rectangle editingControlBounds, DataGridViewCellStyle cellStyle)
         {
             Debug.Assert(cellStyle.WrapMode != DataGridViewTriState.NotSet);
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
             int originalWidth = editingControlBounds.Width;
             if (DataGridView.EditingControl is TextBox txtEditingControl)
@@ -281,12 +281,12 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null || rowIndex < 0 || OwningColumn == null)
+            if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
                 return Rectangle.Empty;
             }
@@ -342,14 +342,14 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null ||
+            if (DataGridView is null ||
                 rowIndex < 0 ||
-                OwningColumn == null ||
+                OwningColumn is null ||
                 !DataGridView.ShowCellErrors ||
                 string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
@@ -397,12 +397,12 @@ namespace System.Windows.Forms
 
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return new Size(-1, -1);
             }
 
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -502,9 +502,9 @@ namespace System.Windows.Forms
 
         public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
         {
-            Debug.Assert(DataGridView != null &&
-                         DataGridView.EditingPanel != null &&
-                         DataGridView.EditingControl != null);
+            Debug.Assert(DataGridView is not null &&
+                         DataGridView.EditingPanel is not null &&
+                         DataGridView.EditingControl is not null);
             Debug.Assert(!ReadOnly);
             base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
             if (DataGridView.EditingControl is TextBox textBox)
@@ -541,7 +541,7 @@ namespace System.Windows.Forms
 
         protected override void OnEnter(int rowIndex, bool throughMouseClick)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -553,7 +553,7 @@ namespace System.Windows.Forms
 
         protected override void OnLeave(int rowIndex, bool throughMouseClick)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -562,7 +562,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
 
         private bool OwnsEditingTextBox(int rowIndex)
         {
-            return rowIndex != -1 && EditingTextBox != null && rowIndex == ((IDataGridViewEditingControl)EditingTextBox).EditingControlRowIndex;
+            return rowIndex != -1 && EditingTextBox is not null && rowIndex == ((IDataGridViewEditingControl)EditingTextBox).EditingControlRowIndex;
         }
 
         protected override void Paint(Graphics graphics,
@@ -598,7 +598,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -646,7 +646,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle != null);
+            Debug.Assert(cellStyle is not null);
 
             // If computeContentBounds == TRUE then resultBounds will be the contentBounds.
             // If computeErrorIconBounds == TRUE then resultBounds will be the error icon bounds.
@@ -668,7 +668,7 @@ namespace System.Windows.Forms
 
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             bool cellCurrent = ptCurrentCell.X == ColumnIndex && ptCurrentCell.Y == rowIndex;
-            bool cellEdited = cellCurrent && DataGridView.EditingControl != null;
+            bool cellEdited = cellCurrent && DataGridView.EditingControl is not null;
             bool cellSelected = (cellState & DataGridViewElementStates.Selected) != 0;
 
             if (DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected && !cellEdited)
@@ -715,7 +715,7 @@ namespace System.Windows.Forms
             Rectangle errorBounds = valBounds;
             string formattedString = formattedValue as string;
 
-            if (formattedString != null && ((paint && !cellEdited) || computeContentBounds))
+            if (formattedString is not null && ((paint && !cellEdited) || computeContentBounds))
             {
                 // Font independent margins
                 int verticalTextMarginTop = cellStyle.WrapMode == DataGridViewTriState.True ? DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithWrapping : DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithoutWrapping;
@@ -756,7 +756,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.Assert(cellEdited || formattedString == null);
+                Debug.Assert(cellEdited || formattedString is null);
                 Debug.Assert(paint || computeContentBounds);
             }
 
