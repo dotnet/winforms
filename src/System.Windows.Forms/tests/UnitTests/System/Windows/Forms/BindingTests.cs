@@ -376,7 +376,7 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> OnBindingComplete_CriticalException_TestData()
         {
             yield return new object[] { null, new NullReferenceException() };
-            yield return new object[] { new BindingCompleteEventArgs(null, BindingCompleteState.Success, BindingCompleteContext.ControlUpdate), new SecurityException() };
+            yield return new object[] { new BindingCompleteEventArgs(null, BindingCompleteState.Success, BindingCompleteContext.ControlUpdate), new NullReferenceException() };
         }
 
         [Theory]
@@ -404,9 +404,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
+        public static IEnumerable<object[]> OnBindingComplete_NonCriticalException_TestData()
+        {
+            yield return new object[] { null, new SecurityException() };
+            yield return new object[] { new BindingCompleteEventArgs(null, BindingCompleteState.Success, BindingCompleteContext.ControlUpdate), new SecurityException() };
+        }
+
         [Theory]
-        [MemberData(nameof(BindingCompleteEventArgs_TestData))]
-        public void Binding_OnBindingComplete_ThrowsNonCriticalException_SetsCancelToTrue(BindingCompleteEventArgs eventArgs)
+        [MemberData(nameof(OnBindingComplete_NonCriticalException_TestData))]
+        public void Binding_OnBindingComplete_ThrowsNonCriticalException_SetsCancelToTrue(BindingCompleteEventArgs eventArgs, Exception exception)
         {
             var binding = new SubBinding("propertyName", new object(), "dataMember");
 
@@ -417,7 +423,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(eventArgs, e);
                 callCount++;
 
-                throw new DivideByZeroException();
+                throw exception;
             };
 
             binding.BindingComplete += handler;

@@ -31,11 +31,6 @@ namespace System.Windows.Forms
         }
 #pragma warning restore 618
 
-        public static bool IsSecurityOrCriticalException(Exception ex)
-        {
-            return (ex is Security.SecurityException) || IsCriticalException(ex);
-        }
-
         // Sequential version
         // assumes sequential enum members 0,1,2,3,4 -etc.
         //

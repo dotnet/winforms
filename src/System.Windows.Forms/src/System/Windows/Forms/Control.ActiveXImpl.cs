@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                                 {
                                     Debug.Fail("Failed to massage ambient back color to a Color", e.ToString());
 
-                                    if (ClientUtils.IsSecurityOrCriticalException(e))
+                                    if (ClientUtils.IsCriticalException(e))
                                     {
                                         throw;
                                     }
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
                                 IFont ifont = (IFont)obj;
                                 prop.Value = Font.FromHfont(ifont.hFont);
                             }
-                            catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
+                            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                             {
                                 // Do NULL, so we just defer to the default font
                                 prop.Value = null;
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
                                 {
                                     Debug.Fail("Failed to massage ambient fore color to a Color", e.ToString());
 
-                                    if (ClientUtils.IsSecurityOrCriticalException(e))
+                                    if (ClientUtils.IsCriticalException(e))
                                     {
                                         throw;
                                     }
@@ -1195,7 +1195,7 @@ namespace System.Windows.Forms
                     {
                         Debug.Fail("Unexpected failure reading property", ex.ToString());
 
-                        if (ClientUtils.IsSecurityOrCriticalException(ex))
+                        if (ClientUtils.IsCriticalException(ex))
                         {
                             throw;
                         }
@@ -1405,7 +1405,7 @@ namespace System.Windows.Forms
                     {
                         prop.Value = Font.FromHfont(pQaContainer.pFont.hFont);
                     }
-                    catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
+                    catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                     {
                         // Do NULL, so we just defer to the default font
                         prop.Value = null;
@@ -1448,7 +1448,7 @@ namespace System.Windows.Forms
                             // This is easier said than done. See notes in AdviseHelper.AdviseConnectionPoint.
                             AdviseHelper.AdviseConnectionPoint(_control, pQaContainer.pUnkEventSink, eventInterface, out pQaControl->dwEventCookie);
                         }
-                        catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
+                        catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                         {
                         }
                     }
@@ -2498,7 +2498,7 @@ namespace System.Windows.Forms
                     }
                     catch (Exception e)
                     {
-                        if (ClientUtils.IsSecurityOrCriticalException(e))
+                        if (ClientUtils.IsCriticalException(e))
                         {
                             throw;
                         }

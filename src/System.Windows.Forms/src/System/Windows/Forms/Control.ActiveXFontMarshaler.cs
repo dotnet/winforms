@@ -70,7 +70,7 @@ namespace System.Windows.Forms
                 {
                     return Font.FromHfont(nativeFont.hFont);
                 }
-                catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
+                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                 {
                     return DefaultFont;
                 }

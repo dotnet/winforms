@@ -379,7 +379,7 @@ namespace System.Windows.Forms
                 {
                     topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
                 }
-                catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
+                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                 {
                 }
 

@@ -7919,7 +7919,7 @@ namespace System.Windows.Forms
             }
             catch (Exception ex)
             {
-                if (ClientUtils.IsSecurityOrCriticalException(ex))
+                if (ClientUtils.IsCriticalException(ex))
                 {
                     throw;
                 }

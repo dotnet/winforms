@@ -266,7 +266,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                catch (Exception e) when (!ClientUtils.IsSecurityOrCriticalException(e))
+                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                 {
                 }
                 return foundControls;
