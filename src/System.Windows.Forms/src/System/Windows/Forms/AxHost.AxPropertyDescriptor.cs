@@ -144,7 +144,15 @@ namespace System.Windows.Forms
 
             public override object GetEditor(Type editorBaseType)
             {
-                UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)dispid.Value);
+                if (editorBaseType == null)
+                {
+                    throw new ArgumentNullException(nameof(editorBaseType));
+                }
+
+                if (dispid != null)
+                {
+                    UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)dispid.Value);
+                }
 
                 if (editorBaseType.Equals(typeof(UITypeEditor)) && editor != null)
                 {
@@ -252,7 +260,7 @@ namespace System.Windows.Forms
                 try
                 {
                     SetFlag(FlagSettingValue, true);
-                    if (PropertyType.IsEnum && (value.GetType() != PropertyType))
+                    if (PropertyType.IsEnum && value != null && value.GetType() != PropertyType)
                     {
                         baseProp.SetValue(component, Enum.ToObject(PropertyType, value));
                     }
