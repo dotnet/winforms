@@ -4923,11 +4923,13 @@ namespace System.Windows.Forms.Tests
             //when the Assert is inside FormLoaded method and it fails,
             //the Application doesn't exit and the process freezes.
             Assert.True(testForm.TestResult);
+            Assert.True(testForm.ExecutedLoadedEvent);
         }
 
         class TestForm : Form
         {
             private SubToolStripDropDown toolStrip;
+            private bool _executed;
             private bool _result = true;
 
             public TestForm()
@@ -4944,6 +4946,7 @@ namespace System.Windows.Forms.Tests
                     toolStrip?.Dispose();
             }
 
+            public bool ExecutedLoadedEvent => _executed;
             public bool TestResult => _result;
 
             private void FormLoaded(object sender, EventArgs e)
@@ -4961,6 +4964,8 @@ namespace System.Windows.Forms.Tests
                 _result &= toolStrip.ProcessDialogChar('F');
                 _result &= toolStrip.ProcessDialogChar('S');
                 _result &= !(toolStrip.ProcessDialogChar('T'));
+
+                _executed = true;
 
                 BeginInvoke(new Action(Close));
             }
