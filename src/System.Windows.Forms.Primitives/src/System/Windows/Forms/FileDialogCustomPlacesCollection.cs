@@ -10,7 +10,7 @@ namespace System.Windows.Forms
 {
     public class FileDialogCustomPlacesCollection : Collection<FileDialogCustomPlace>
     {
-        internal void Apply(FileDialogNative.IFileDialog dialog)
+        internal void Apply(IFileDialog dialog)
         {
             // Walk backwards
             for (int i = Items.Count - 1; i >= 0; --i)

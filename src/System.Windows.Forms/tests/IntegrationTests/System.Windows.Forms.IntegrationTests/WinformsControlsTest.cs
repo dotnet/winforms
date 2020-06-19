@@ -57,6 +57,7 @@ namespace System.Windows.Forms.IntegrationTests
         [InlineData(MainFormControlsTabOrder.PictureBoxesButton)]
         [InlineData(MainFormControlsTabOrder.FormBorderStylesButton)]
         [InlineData(MainFormControlsTabOrder.ToggleIconButton)]
+        [InlineData(MainFormControlsTabOrder.FileDialogButton)]
         public void WinformsControlsTest_InnerForms_OpenAndClose(MainFormControlsTabOrder tabOrder)
         {
             Process process = TestHelpers.StartProcess(_exePath);
@@ -113,6 +114,34 @@ namespace System.Windows.Forms.IntegrationTests
             TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false); // once
             TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false); // twice
             TestHelpers.SendTabKeysToProcess(process, 2, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+
+            Assert.False(process.HasExited);
+
+            process.Kill();
+            process.WaitForExit();
+
+            Assert.True(process.HasExited);
+        }
+
+        [Fact]
+        public void WinformsControlsTest_FileDialogTest()
+        {
+            Process process = TestHelpers.StartProcess(_exePath);
+            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.FileDialogButton);
+            TestHelpers.SendEnterKeyToProcess(process);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
             TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
 
             Assert.False(process.HasExited);

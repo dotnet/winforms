@@ -169,12 +169,12 @@ namespace System.Windows.Forms
 
         private bool TryRunDialogVista(IntPtr owner, out bool returnValue)
         {
-            FileDialogNative.NativeFileOpenDialog dialog;
+            OpenFileDialog.NativeFileOpenDialog dialog;
             try
             {
                 // Creating the Vista dialog can fail on Windows Server Core, even if the
                 // Server Core App Compatibility FOD is installed.
-                dialog = new FileDialogNative.NativeFileOpenDialog();
+                dialog = new OpenFileDialog.NativeFileOpenDialog();
             }
             catch (COMException)
             {
@@ -185,18 +185,16 @@ namespace System.Windows.Forms
             try
             {
                 SetDialogProperties(dialog);
-                int result = dialog.Show(owner);
-                if (result < 0)
+                HRESULT hr = dialog.Show(owner);
+                if (!hr.Succeeded())
                 {
-                    if ((HRESULT)result == HRESULT.ERROR_CANCELLED)
+                    if (hr == HRESULT.ERROR_CANCELLED)
                     {
                         returnValue = false;
                         return true;
                     }
-                    else
-                    {
-                        throw Marshal.GetExceptionForHR(result);
-                    }
+
+                    throw Marshal.GetExceptionForHR((int)hr);
                 }
 
                 GetResult(dialog);
@@ -212,7 +210,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void SetDialogProperties(FileDialogNative.IFileDialog dialog)
+        private void SetDialogProperties(IFileDialog dialog)
         {
             // Description
             if (!string.IsNullOrEmpty(_descriptionText))
@@ -223,7 +221,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    FileDialogNative.IFileDialogCustomize customize = (FileDialogNative.IFileDialogCustomize)dialog;
+                    IFileDialogCustomize customize = (IFileDialogCustomize)dialog;
                     customize.AddText(0, _descriptionText);
                 }
             }
@@ -258,7 +256,7 @@ namespace System.Windows.Forms
             return (IShellItem)item;
         }
 
-        private void GetResult(FileDialogNative.IFileDialog dialog)
+        private void GetResult(IFileDialog dialog)
         {
             dialog.GetResult(out IShellItem item);
             HRESULT hr = item.GetDisplayName(SIGDN.FILESYSPATH, out _selectedPath);

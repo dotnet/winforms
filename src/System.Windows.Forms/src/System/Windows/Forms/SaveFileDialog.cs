@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Shell32;
 
@@ -144,16 +145,28 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
+        private protected override string[] ProcessVistaFiles(IFileDialog dialog)
         {
-            FileDialogNative.IFileSaveDialog saveDialog = (FileDialogNative.IFileSaveDialog)dialog;
+            IFileSaveDialog saveDialog = (IFileSaveDialog)dialog;
             dialog.GetResult(out IShellItem item);
             return new string[] { GetFilePathFromShellItem(item) };
         }
 
-        private protected override FileDialogNative.IFileDialog CreateVistaDialog()
+        private protected override IFileDialog CreateVistaDialog() => new NativeFileSaveDialog();
+
+        [ComImport]
+        [Guid("84bccd23-5fde-4cdb-aea4-af64b83d78ab")]
+        [CoClass(typeof(FileSaveDialogRCW))]
+        private interface NativeFileSaveDialog : IFileSaveDialog
         {
-            return new FileDialogNative.NativeFileSaveDialog();
+        }
+
+        [ComImport]
+        [ClassInterface(ClassInterfaceType.None)]
+        [TypeLibType(TypeLibTypeFlags.FCanCreate)]
+        [Guid("C0B4E2F3-BA21-4773-8DBA-335EC946EB8B")]
+        private class FileSaveDialogRCW
+        {
         }
     }
 }

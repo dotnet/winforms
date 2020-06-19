@@ -35,11 +35,11 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected abstract FileDialogNative.IFileDialog CreateVistaDialog();
+        private protected abstract IFileDialog CreateVistaDialog();
 
         private bool TryRunDialogVista(IntPtr hWndOwner, out bool returnValue)
         {
-            FileDialogNative.IFileDialog dialog;
+            IFileDialog dialog;
             try
             {
                 // Creating the Vista dialog can fail on Windows Server Core, even if the
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnBeforeVistaDialog(FileDialogNative.IFileDialog dialog)
+        private void OnBeforeVistaDialog(IFileDialog dialog)
         {
             if (ClientGuid is { } clientGuid)
             {
@@ -138,9 +138,9 @@ namespace System.Windows.Forms
             return ret;
         }
 
-        private protected abstract string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog);
+        private protected abstract string[] ProcessVistaFiles(IFileDialog dialog);
 
-        private bool HandleVistaFileOk(FileDialogNative.IFileDialog dialog)
+        private bool HandleVistaFileOk(IFileDialog dialog)
         {
             int saveOptions = _options;
             int saveFilterIndex = FilterIndex;
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
             return ok;
         }
 
-        private class VistaDialogEvents : FileDialogNative.IFileDialogEvents
+        private class VistaDialogEvents : IFileDialogEvents
         {
             private readonly FileDialog _dialog;
 
@@ -208,57 +208,81 @@ namespace System.Windows.Forms
                 _dialog = dialog;
             }
 
-            public int OnFileOk(FileDialogNative.IFileDialog pfd)
+            public HRESULT OnFileOk(IFileDialog pfd)
             {
-                return _dialog.HandleVistaFileOk(pfd) ? (int)HRESULT.S_OK : (int)HRESULT.S_FALSE;
+                return _dialog.HandleVistaFileOk(pfd) ? HRESULT.S_OK : HRESULT.S_FALSE;
             }
 
-            public int OnFolderChanging(FileDialogNative.IFileDialog pfd, IShellItem psiFolder)
+            public HRESULT OnFolderChanging(IFileDialog pfd, IShellItem psiFolder)
             {
-                return (int)HRESULT.S_OK;
+                return HRESULT.S_OK;
             }
 
-            public void OnFolderChange(FileDialogNative.IFileDialog pfd)
+            public HRESULT OnFolderChange(IFileDialog pfd)
             {
+                return HRESULT.S_OK;
             }
 
-            public void OnSelectionChange(FileDialogNative.IFileDialog pfd)
+            public HRESULT OnSelectionChange(IFileDialog pfd)
             {
+                return HRESULT.S_OK;
             }
 
-            public void OnShareViolation(FileDialogNative.IFileDialog pfd, IShellItem psi, out FDESVR pResponse)
+            public unsafe HRESULT OnShareViolation(IFileDialog pfd, IShellItem psi, FDESVR* pResponse)
             {
-                pResponse = FDESVR.DEFAULT;
+                if (pResponse == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pResponse = FDESVR.DEFAULT;
+                return HRESULT.S_OK;
             }
 
-            public void OnTypeChange(FileDialogNative.IFileDialog pfd)
+            public HRESULT OnTypeChange(IFileDialog pfd)
             {
+                return HRESULT.S_OK;
             }
 
-            public void OnOverwrite(FileDialogNative.IFileDialog pfd, IShellItem psi, out FDEOR pResponse)
+            public unsafe HRESULT OnOverwrite(IFileDialog pfd, IShellItem psi, FDEOR* pResponse)
             {
-                pResponse = FDEOR.DEFAULT;
+                if (pResponse == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pResponse = FDEOR.DEFAULT;
+                return HRESULT.S_OK;
             }
         }
 
-        private void SetFileTypes(FileDialogNative.IFileDialog dialog)
+        private void SetFileTypes(IFileDialog dialog)
         {
-            FileDialogNative.COMDLG_FILTERSPEC[] filterItems = FilterItems;
-            dialog.SetFileTypes((uint)filterItems.Length, filterItems);
+            COMDLG_FILTERSPEC[] filterItems = FilterItems;
+            HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
+            if (!hr.Succeeded())
+            {
+                throw Marshal.GetExceptionForHR((int)hr);
+            }
+
             if (filterItems.Length > 0)
             {
-                dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
+                hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
+                if (!hr.Succeeded())
+                {
+                    throw Marshal.GetExceptionForHR((int)hr);
+                }
             }
         }
 
-        private FileDialogNative.COMDLG_FILTERSPEC[] FilterItems => GetFilterItems(_filter);
+        private COMDLG_FILTERSPEC[] FilterItems => GetFilterItems(_filter);
 
-        private static FileDialogNative.COMDLG_FILTERSPEC[] GetFilterItems(string filter)
+        private static COMDLG_FILTERSPEC[] GetFilterItems(string filter)
         {
             // Expected input types
             // "Text files (*.txt)|*.txt|All files (*.*)|*.*"
             // "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
-            var extensions = new List<FileDialogNative.COMDLG_FILTERSPEC>();
+            var extensions = new List<COMDLG_FILTERSPEC>();
             if (!string.IsNullOrEmpty(filter))
             {
                 string[] tokens = filter.Split('|');
@@ -268,7 +292,7 @@ namespace System.Windows.Forms
                     // Odd numbered tokens are the associated extensions
                     for (int i = 1; i < tokens.Length; i += 2)
                     {
-                        FileDialogNative.COMDLG_FILTERSPEC extension;
+                        COMDLG_FILTERSPEC extension;
                         extension.pszSpec = tokens[i];// This may be a semicolon delimeted list of extensions (that's ok)
                         extension.pszName = tokens[i - 1];
                         extensions.Add(extension);
