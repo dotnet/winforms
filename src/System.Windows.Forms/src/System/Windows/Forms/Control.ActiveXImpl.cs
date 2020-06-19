@@ -50,7 +50,8 @@ namespace System.Windows.Forms
 
             private readonly Control _control;
             private readonly IWindowTarget _controlWindowTarget;
-            private IntPtr _clipRegion;
+            private Rectangle? _lastClipRect;
+
             private IOleClientSite _clientSite;
             private IOleInPlaceUIWindow _inPlaceUiWindow;
             private IOleInPlaceFrame _inPlaceFrame;
@@ -1226,27 +1227,16 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Merges the input region with the current clipping region.
-            ///  The output is always a region that can be fed directly
-            ///  to SetWindowRgn.  The region does not have to be destroyed.
-            ///  The original region is destroyed if a new region is returned.
+            ///  Merges the input region with the current clipping region, if any.
             /// </summary>
-            internal IntPtr MergeRegion(IntPtr region)
+            internal Region MergeRegion(Region region)
             {
-                if (_clipRegion == IntPtr.Zero)
+                if (_lastClipRect.HasValue)
                 {
-                    return region;
+                    region.Exclude(_lastClipRect.Value);
                 }
 
-                if (region == IntPtr.Zero)
-                {
-                    return _clipRegion;
-                }
-
-                IntPtr newRegion = Gdi32.CreateRectRgn(0, 0, 0, 0);
-                Gdi32.CombineRgn(newRegion, region, _clipRegion, Gdi32.CombineMode.RGN_DIFF);
-                Gdi32.DeleteObject(region);
-                return newRegion;
+                return region;
             }
 
             private void CallParentPropertyChanged(Control control, string propName)
@@ -2090,20 +2080,18 @@ namespace System.Windows.Forms
 
                 bool setRegion = false;
 
-                if (_clipRegion != IntPtr.Zero)
+                if (_lastClipRect.HasValue)
                 {
-                    // Bad -- after calling SetWindowReg, windows owns the region.
-                    //SafeNativeMethods.DeleteObject(clipRegion);
-                    _clipRegion = IntPtr.Zero;
+                    // We had a clipping rectangle, we need to set the Control's Region even if we don't have a new
+                    // lprcClipRect to ensure it remove it in said case.
+                    _lastClipRect = null;
                     setRegion = true;
                 }
 
                 if (lprcClipRect != null)
                 {
-                    // The container wants us to clip, so figure out if we really
-                    // need to.
-                    Rectangle clipRect = Rectangle.FromLTRB(lprcClipRect->left, lprcClipRect->top, lprcClipRect->right, lprcClipRect->bottom);
-
+                    // The container wants us to clip, so figure out if we really need to.
+                    Rectangle clipRect = *lprcClipRect;
                     Rectangle intersect;
 
                     // Trident always sends an empty ClipRect... and so, we check for that and not do an
@@ -2123,17 +2111,16 @@ namespace System.Windows.Forms
                         RECT rcIntersect = intersect;
                         IntPtr hWndParent = User32.GetParent(_control);
 
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Old Intersect: " + new Rectangle(rcIntersect.left, rcIntersect.top, rcIntersect.right - rcIntersect.left, rcIntersect.bottom - rcIntersect.top));
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "New Control Bounds: " + posRect);
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Old Intersect: {(Rectangle)rcIntersect}");
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Control Bounds: {posRect}");
 
                         User32.MapWindowPoints(hWndParent, new HandleRef(_control, _control.Handle), ref rcIntersect, 2);
 
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "New Intersect: " + new Rectangle(rcIntersect.left, rcIntersect.top, rcIntersect.right - rcIntersect.left, rcIntersect.bottom - rcIntersect.top));
+                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Intersect: {(Rectangle)rcIntersect}");
 
-                        // Create a Win32 region for it
-                        _clipRegion = Gdi32.CreateRectRgn(rcIntersect.left, rcIntersect.top,
-                                                                 rcIntersect.right, rcIntersect.bottom);
+                        _lastClipRect = rcIntersect;
                         setRegion = true;
+
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Created clipping region");
                     }
                 }
@@ -2141,18 +2128,9 @@ namespace System.Windows.Forms
                 // If our region has changed, set the new value.  We only do this if
                 // the handle has been created, since otherwise the control will
                 // merge our region automatically.
-                if (setRegion && _control.IsHandleCreated)
+                if (setRegion)
                 {
-                    IntPtr finalClipRegion = _clipRegion;
-
-                    Region controlRegion = _control.Region;
-                    if (controlRegion != null)
-                    {
-                        IntPtr rgn = _control.GetHRgn(controlRegion);
-                        finalClipRegion = MergeRegion(rgn);
-                    }
-
-                    User32.SetWindowRgn(_control, new HandleRef(this, finalClipRegion), User32.IsWindowVisible(_control));
+                    _control.SetRegion(_control.Region);
                 }
 
                 // Yuck.  Forms^3 uses transparent overlay windows that appear to cause

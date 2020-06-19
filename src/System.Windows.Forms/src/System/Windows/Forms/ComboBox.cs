@@ -3842,60 +3842,43 @@ namespace System.Windows.Forms
                 case WM.PAINT:
                     if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
-                        using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect))
+                        using var dropDownRegion = new Gdi32.RegionScope(FlatComboBoxAdapter.dropDownRect);
+                        using var windowRegion = new Gdi32.RegionScope(Bounds);
+
+                        // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
+                        bool getRegionSucceeded = GetUpdateRgn(Handle, windowRegion, bErase: BOOL.TRUE) != RegionType.ERROR;
+
+                        Gdi32.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, Gdi32.CombineMode.RGN_DIFF);
+                        RECT updateRegionBoundingRect = default;
+                        Gdi32.GetRgnBox(windowRegion, ref updateRegionBoundingRect);
+
+                        FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);
+
+                        // Call the base class to do its painting (with a clipped DC).
+                        bool useBeginPaint = m.WParam == IntPtr.Zero;
+                        var paintScope = useBeginPaint ? new BeginPaintScope(Handle) : default;
+
+                        IntPtr dc = useBeginPaint ? paintScope : m.WParam;
+
+                        using var savedDcState = new Gdi32.SaveDcScope(dc);
+
+                        if (getRegionSucceeded)
                         {
-                            using (WindowsRegion wr = new WindowsRegion(Bounds))
-                            {
-                                // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
-                                RegionType updateRegionFlags = GetUpdateRgn(Handle, wr.HRegion, BOOL.TRUE);
-
-                                dr.CombineRegion(wr, dr, Gdi32.CombineMode.RGN_DIFF);
-
-                                Rectangle updateRegionBoundingRect = wr.ToRectangle();
-                                FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);
-
-                                // Call the base class to do its painting (with a clipped DC).
-                                var ps = new PAINTSTRUCT();
-                                IntPtr dc;
-                                bool disposeDc = false;
-                                if (m.WParam == IntPtr.Zero)
-                                {
-                                    dc = BeginPaint(new HandleRef(this, Handle), ref ps);
-                                    disposeDc = true;
-                                }
-                                else
-                                {
-                                    dc = m.WParam;
-                                }
-
-                                using (DeviceContext mDC = DeviceContext.FromHdc(dc))
-                                {
-                                    using (WindowsGraphics wg = new WindowsGraphics(mDC))
-                                    {
-                                        if (updateRegionFlags != RegionType.ERROR)
-                                        {
-                                            wg.DeviceContext.SetClip(dr);
-                                        }
-                                        m.WParam = dc;
-                                        DefWndProc(ref m);
-                                        if (updateRegionFlags != RegionType.ERROR)
-                                        {
-                                            wg.DeviceContext.SetClip(wr);
-                                        }
-                                        using (Graphics g = Graphics.FromHdcInternal(dc))
-                                        {
-                                            FlatComboBoxAdapter.DrawFlatCombo(this, g);
-                                        }
-                                    }
-                                }
-
-                                if (disposeDc)
-                                {
-                                    EndPaint(new HandleRef(this, Handle), ref ps);
-                                }
-                            }
-                            return;
+                            Gdi32.SelectClipRgn(dc, dropDownRegion);
                         }
+
+                        m.WParam = dc;
+                        DefWndProc(ref m);
+
+                        if (getRegionSucceeded)
+                        {
+                            Gdi32.SelectClipRgn(dc, windowRegion);
+                        }
+
+                        using Graphics g = Graphics.FromHdcInternal(dc);
+                        FlatComboBoxAdapter.DrawFlatCombo(this, g);
+
+                        return;
                     }
 
                     base.WndProc(ref m);

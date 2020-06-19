@@ -1971,35 +1971,32 @@ namespace System.Windows.Forms.Design
                     break;
                 case User32.WM.PRINTCLIENT:
                     {
-                        using (Graphics g = Graphics.FromHdc(m.WParam))
-                        {
-                            using (PaintEventArgs e = new PaintEventArgs(g, Control.ClientRectangle))
-                            {
-                                DefWndProc(ref m);
-                                OnPaintAdornments(e);
-                            }
-                        }
+                        using Graphics g = Graphics.FromHdc(m.WParam);
+                        using PaintEventArgs e = new PaintEventArgs(g, Control.ClientRectangle);
+                        DefWndProc(ref m);
+                        OnPaintAdornments(e);
                     }
                     break;
                 case User32.WM.PAINT:
-                    // First, save off the update region and call our base class.
-                    if (OleDragDropHandler.FreezePainting)
                     {
-                        User32.ValidateRect(m.HWnd, null);
-                        break;
-                    }
-                    if (Control == null)
-                    {
-                        break;
-                    }
-                    RECT clip = new RECT();
-                    IntPtr hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
-                    User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.FALSE);
-                    User32.GetUpdateRect(m.HWnd, ref clip, BOOL.FALSE);
-                    Region r = Region.FromHrgn(hrgn);
-                    Rectangle paintRect = Rectangle.Empty;
-                    try
-                    {
+                        // First, save off the update region and call our base class.
+                        if (OleDragDropHandler.FreezePainting)
+                        {
+                            User32.ValidateRect(m.HWnd, null);
+                            break;
+                        }
+
+                        if (Control == null)
+                        {
+                            break;
+                        }
+
+                        RECT clip = new RECT();
+                        using var hrgn = new Gdi32.RegionScope(0, 0, 0, 0);
+                        User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.FALSE);
+                        User32.GetUpdateRect(m.HWnd, ref clip, BOOL.FALSE);
+                        using Region region = hrgn.CreateGdiPlusRegion();
+
                         // Call the base class to do its own painting.
                         if (_thrownException == null)
                         {
@@ -2007,58 +2004,42 @@ namespace System.Windows.Forms.Design
                         }
 
                         // Now do our own painting.
-                        Graphics gr = Graphics.FromHwnd(m.HWnd);
-                        try
-                        {
-                            if (m.HWnd != Control.Handle)
-                            {
-                                // Re-map the clip rect we pass to the paint event args to our child coordinates.
-                                var pt = new Point();
-                                User32.MapWindowPoints(m.HWnd, Control.Handle, ref pt, 1);
-                                gr.TranslateTransform(-pt.X, -pt.Y);
-                                User32.MapWindowPoints(m.HWnd, Control.Handle, ref clip, 2);
-                            }
-                            paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);
-                            PaintEventArgs pevent = new PaintEventArgs(gr, paintRect);
+                        using Graphics graphics = Graphics.FromHwnd(m.HWnd);
 
-                            try
-                            {
-                                gr.Clip = r;
-                                if (_thrownException == null)
-                                {
-                                    OnPaintAdornments(pevent);
-                                }
-                                else
-                                {
-                                    var ps = new User32.PAINTSTRUCT();
-                                    User32.BeginPaint(m.HWnd, ref ps);
-                                    PaintException(pevent, _thrownException);
-                                    User32.EndPaint(m.HWnd, ref ps);
-                                }
-                            }
-                            finally
-                            {
-                                pevent.Dispose();
-                            }
-                        }
-                        finally
+                        if (m.HWnd != Control.Handle)
                         {
-                            gr.Dispose();
+                            // Re-map the clip rect we pass to the paint event args to our child coordinates.
+                            Point point = default;
+                            User32.MapWindowPoints(m.HWnd, Control.Handle, ref point, 1);
+                            graphics.TranslateTransform(-point.X, -point.Y);
+                            User32.MapWindowPoints(m.HWnd, Control.Handle, ref clip, 2);
                         }
-                    }
-                    finally
-                    {
-                        r.Dispose();
-                        Gdi32.DeleteObject(hrgn);
-                    }
 
-                    if (OverlayService != null)
-                    {
-                        // this will allow any Glyphs to re-paint after this control and its designer has painted
-                        paintRect.Location = Control.PointToScreen(paintRect.Location);
-                        OverlayService.InvalidateOverlays(paintRect);
+                        Rectangle paintRect = clip;
+                        using PaintEventArgs pevent = new PaintEventArgs(graphics, paintRect);
+
+                        graphics.Clip = region;
+                        if (_thrownException == null)
+                        {
+                            OnPaintAdornments(pevent);
+                        }
+                        else
+                        {
+                            var ps = new User32.PAINTSTRUCT();
+                            User32.BeginPaint(m.HWnd, ref ps);
+                            PaintException(pevent, _thrownException);
+                            User32.EndPaint(m.HWnd, ref ps);
+                        }
+
+                        if (OverlayService != null)
+                        {
+                            // this will allow any Glyphs to re-paint after this control and its designer has painted
+                            paintRect.Location = Control.PointToScreen(paintRect.Location);
+                            OverlayService.InvalidateOverlays(paintRect);
+                        }
+
+                        break;
                     }
-                    break;
                 case User32.WM.NCPAINT:
                 case User32.WM.NCACTIVATE:
                     if (m.Msg == (int)User32.WM.NCACTIVATE)

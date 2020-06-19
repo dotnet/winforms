@@ -11,5 +11,7 @@ internal static partial class Interop
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
         internal static extern BOOL DeleteObject(IntPtr hObject);
+
+        internal static BOOL DeleteObject(HGDIOBJ hObject) => DeleteObject(hObject.Handle);
     }
 }

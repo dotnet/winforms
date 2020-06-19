@@ -18,8 +18,8 @@ namespace System.Windows.Forms
     /// </summary>
     internal sealed class WindowsGraphicsWrapper : IDisposable
     {
-        IDeviceContext idc;
-        WindowsGraphics wg;
+        private IDeviceContext _deviceContext;
+        private WindowsGraphics _windowsGraphics;
 
         /// <summary>
         ///  Constructor that determines how to create the WindowsGraphics, there are three posible cases
@@ -35,9 +35,9 @@ namespace System.Windows.Forms
         ///     In this case we create the WindowsGraphics from the native DC by calling IDeviceContext.GetHdc,
         ///     on dispose we need to call IDeviceContext.ReleaseHdc.
         /// </summary>
-        public WindowsGraphicsWrapper(IDeviceContext idc, TextFormatFlags flags)
+        public WindowsGraphicsWrapper(IDeviceContext deviceContext, TextFormatFlags flags)
         {
-            if (idc is Graphics)
+            if (deviceContext is Graphics)
             {
                 ApplyGraphicsProperties properties = ApplyGraphicsProperties.None;
 
@@ -55,40 +55,57 @@ namespace System.Windows.Forms
                 // to be reapplied to the DC wrapped by the WindowsGraphics.
                 if (properties != ApplyGraphicsProperties.None)
                 {
-                    wg = WindowsGraphics.FromGraphics(idc as Graphics, properties);
+                    try
+                    {
+                        _windowsGraphics = WindowsGraphics.FromGraphics(deviceContext as Graphics, properties);
+                    }
+                    catch
+                    {
+                        GC.SuppressFinalize(this);
+                        throw;
+                    }
                 }
             }
             else
             {
                 // If passed-in IDeviceContext object is a WindowsGraphics we can use it directly.
-                wg = idc as WindowsGraphics;
+                _windowsGraphics = deviceContext as WindowsGraphics;
 
-                if (wg != null)
+                if (_windowsGraphics != null)
                 {
                     // In this case we cache the idc to compare it against the wg in the Dispose method to avoid
                     // disposing of the wg.
-                    this.idc = idc;
+                    _deviceContext = deviceContext;
                 }
             }
 
-            if (wg == null)
+            if (_windowsGraphics == null)
             {
                 // The IDeviceContext object is not a WindowsGraphics, or it is a custom IDeviceContext, or
                 // it is a Graphics object but we did not need to re-apply Graphics propertiesto the hdc.
                 // So create the WindowsGraphics from the hdc directly.
-                // Cache the IDC so the hdc can be released on dispose.
-                this.idc = idc;
-                wg = WindowsGraphics.FromHdc(idc.GetHdc());
+                // Cache the IDC so the hdc can be released ons dispose.
+                try
+                {
+                    _deviceContext = deviceContext;
+                    _windowsGraphics = WindowsGraphics.FromHdc(deviceContext.GetHdc());
+                }
+                catch
+                {
+                    SuppressFinalize();
+                    deviceContext.ReleaseHdc();
+                    throw;
+                }
             }
 
             // Set text padding on the WindowsGraphics (if any).
             if ((flags & TextFormatFlags.LeftAndRightPadding) != 0)
             {
-                wg.TextPadding = TextPaddingOptions.LeftAndRightPadding;
+                _windowsGraphics.TextPadding = TextPaddingOptions.LeftAndRightPadding;
             }
             else if ((flags & TextFormatFlags.NoPadding) != 0)
             {
-                wg.TextPadding = TextPaddingOptions.NoPadding;
+                _windowsGraphics.TextPadding = TextPaddingOptions.NoPadding;
             }
             // else wg.TextPadding = TextPaddingOptions.GlyphOverhangPadding - the default value.
         }
@@ -97,44 +114,54 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(wg != null, "WindowsGraphics is null.");
-                return wg;
+                Debug.Assert(_windowsGraphics != null, "WindowsGraphics is null.");
+                return _windowsGraphics;
             }
         }
+
+#if DEBUG
+        // We only need the finalizer to track missed Dispose() calls.
+
+        private readonly string _callStack = new StackTrace().ToString();
 
         ~WindowsGraphicsWrapper()
         {
-            Dispose(false);
+            Debug.Fail($"{nameof(WindowsGraphicsWrapper)} was not disposed properly. Originating stack:\n{_callStack}");
+
+            // We can't do anything with the fields when we're on the finalizer as they're all classes. If any of
+            // them become structs they'll be a part of this instance and possible to clean up. Ideally we fix
+            // the leaks and never come in on the finalizer.
+            return;
         }
+#endif
+
+        [Conditional("DEBUG")]
+        private void SuppressFinalize() => GC.SuppressFinalize(this);
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+            // Dispose() can throw. As such we'll suppress preemptively so we don't roll right back in and
+            // potentially throw again on the finalizer thread.
+            SuppressFinalize();
 
-        public void Dispose(bool disposing)
-        {
-            Debug.Assert(disposing, "We should always dispose of this guy and not let GC do it for us!");
-
-            if (wg != null)
+            // We need to dispose of the WindowsGraphics if it is created by this class only, if the IDeviceContext is
+            // a WindowsGraphics object we must not dispose of it since it is owned by the caller.
+            if (_windowsGraphics != null && _windowsGraphics != _deviceContext)
             {
-                // We need to dispose of the WindowsGraphics if it is created by this class only, if the IDeviceContext is
-                // a WindowsGraphics object we must not dispose of it since it is owned by the caller.
-                if (wg != idc)
+                try
                 {
-                    // resets the hdc and disposes of the internal Graphics (if inititialized from one) which releases the hdc.
-                    wg.Dispose();
-
-                    if (idc != null) // not initialized from a Graphics idc.
-                    {
-                        idc.ReleaseHdc();
-                    }
+                    _windowsGraphics.Dispose();
                 }
-
-                idc = null;
-                wg = null;
+                finally
+                {
+                    // Always make an attempt to release the HDC.
+                    _deviceContext?.ReleaseHdc();
+                }
             }
+
+            // Clear our fields that have finalizers
+            _deviceContext = null;
+            _windowsGraphics = null;
         }
     }
 }

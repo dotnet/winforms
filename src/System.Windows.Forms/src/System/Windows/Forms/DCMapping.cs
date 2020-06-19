@@ -59,7 +59,6 @@ namespace System.Windows.Forms
             }
 
             bool success;
-            IntPtr hOriginalClippingRegion = IntPtr.Zero;
 
             _translatedBounds = bounds;
             _graphics = null;
@@ -71,14 +70,18 @@ namespace System.Windows.Forms
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
             // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
-            IntPtr hClippingRegion = Gdi32.CreateRectRgn(viewportOrg.X + bounds.Left, viewportOrg.Y + bounds.Top, viewportOrg.X + bounds.Right, viewportOrg.Y + bounds.Bottom);
-            Debug.Assert(hClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
+            var hClippingRegion = new Gdi32.RegionScope(
+                viewportOrg.X + bounds.Left,
+                viewportOrg.Y + bounds.Top,
+                viewportOrg.X + bounds.Right,
+                viewportOrg.Y + bounds.Bottom);
+            Debug.Assert(!hClippingRegion.IsNull, "CreateRectRgn() failed.");
 
             try
             {
                 // Create an empty region oriented at 0,0 so we can populate it with the original clipping region of the hDC passed in.
-                hOriginalClippingRegion = Gdi32.CreateRectRgn(0, 0, 0, 0);
-                Debug.Assert(hOriginalClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
+                var hOriginalClippingRegion = new Gdi32.RegionScope(0, 0, 0, 0);
+                Debug.Assert(!hOriginalClippingRegion.IsNull, "CreateRectRgn() failed.");
 
                 // Get the clipping region from the hDC: result = {-1 = error, 0 = no region, 1 = success} per MSDN
                 int result = Gdi32.GetClipRgn(hDC, hOriginalClippingRegion);
@@ -95,53 +98,41 @@ namespace System.Windows.Forms
                     // Get the origninal clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
                     RECT originalClipRect = new RECT();
                     originalRegionType = Gdi32.GetRgnBox(hOriginalClippingRegion, ref originalClipRect);
-                    Debug.Assert(originalRegionType != RegionType.ERROR, "ERROR returned from SelectClipRgn while selecting the original clipping region..");
+                    Debug.Assert(
+                        originalRegionType != RegionType.ERROR,
+                        "ERROR returned from SelectClipRgn while selecting the original clipping region..");
 
                     if (originalRegionType == RegionType.SIMPLEREGION)
                     {
                         // Find the intersection of our clipping region and the current clipping region (our parent's)
-                        //      Returns a NULLREGION, the two didn't intersect.
-                        //      Returns a SIMPLEREGION, the two intersected
-                        //      Resulting region (stuff that was in hOriginalClippingRegion AND hClippingRegion is placed in hClippingRegion
-                        RegionType combineResult = Gdi32.CombineRgn(hClippingRegion, hClippingRegion, hOriginalClippingRegion, Gdi32.CombineMode.RGN_AND);
-                        Debug.Assert((combineResult == RegionType.SIMPLEREGION) ||
-                                        (combineResult == RegionType.NULLREGION),
-                                        "SIMPLEREGION or NULLREGION expected.");
+
+                        RegionType combineResult = Gdi32.CombineRgn(
+                            hClippingRegion,
+                            hClippingRegion,
+                            hOriginalClippingRegion,
+                            Gdi32.CombineMode.RGN_AND);
+
+                        Debug.Assert(
+                            (combineResult == RegionType.SIMPLEREGION) || (combineResult == RegionType.NULLREGION),
+                            "SIMPLEREGION or NULLREGION expected.");
                     }
                 }
                 else
                 {
                     // If there was no clipping region, then the result is a simple region.
-                    // We don't need to keep track of the original now, since it is empty.
-                    Gdi32.DeleteObject(hOriginalClippingRegion);
-                    hOriginalClippingRegion = IntPtr.Zero;
                     originalRegionType = RegionType.SIMPLEREGION;
                 }
 
                 // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
                 RegionType selectResult = Gdi32.SelectClipRgn(hDC, hClippingRegion);
-                Debug.Assert((selectResult == RegionType.SIMPLEREGION ||
-                                selectResult == RegionType.NULLREGION),
-                                "SIMPLEREGION or NULLLREGION expected.");
+                Debug.Assert(
+                    selectResult == RegionType.SIMPLEREGION || selectResult == RegionType.NULLREGION,
+                    "SIMPLEREGION or NULLLREGION expected.");
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
                 _dc.RestoreHdc();
                 _dc.Dispose();
-            }
-            finally
-            {
-                // Delete the new clipping region, as the clipping region for the HDC is now set
-                // to this rectangle. Hold on to hOriginalClippingRegion, as we'll need to restore
-                // it when this object is disposed.
-                success = Gdi32.DeleteObject(hClippingRegion).IsTrue();
-                Debug.Assert(success, "DeleteObject(hClippingRegion) failed.");
-
-                if (hOriginalClippingRegion != IntPtr.Zero)
-                {
-                    success = Gdi32.DeleteObject(hOriginalClippingRegion).IsTrue();
-                    Debug.Assert(success, "DeleteObject(hOriginalClippingRegion) failed.");
-                }
             }
         }
 

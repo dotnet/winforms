@@ -3068,46 +3068,37 @@ namespace System.Windows.Forms
                 Region oldRegion = Region;
                 if (oldRegion != value)
                 {
-                    Properties.SetObject(s_regionProperty, value);
-
-                    if (oldRegion != null)
-                    {
-                        oldRegion.Dispose();
-                    }
-
-                    if (IsHandleCreated)
-                    {
-                        IntPtr regionHandle = IntPtr.Zero;
-
-                        try
-                        {
-                            if (value != null)
-                            {
-                                regionHandle = GetHRgn(value);
-                            }
-
-                            if (IsActiveX)
-                            {
-                                regionHandle = ActiveXMergeRegion(regionHandle);
-                            }
-
-                            if (User32.SetWindowRgn(this, new HandleRef(this, regionHandle), User32.IsWindowVisible(this)) != 0)
-                            {
-                                //The Hwnd owns the region.
-                                regionHandle = IntPtr.Zero;
-                            }
-                        }
-                        finally
-                        {
-                            if (regionHandle != IntPtr.Zero)
-                            {
-                                Gdi32.DeleteObject(regionHandle);
-                            }
-                        }
-                    }
-
+                    oldRegion?.Dispose();
+                    SetRegion(value);
                     OnRegionChanged(EventArgs.Empty);
                 }
+            }
+        }
+
+        internal void SetRegion(Region region)
+        {
+            Properties.SetObject(s_regionProperty, region);
+
+            if (!IsHandleCreated)
+            {
+                // We'll get called when OnHandleCreated runs.
+                return;
+            }
+
+            if (region is null)
+            {
+                User32.SetWindowRgn(this, default, User32.IsWindowVisible(this));
+                return;
+            }
+
+            // If we're an ActiveX control, clone the region so it can potentially be modified
+            using Region regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
+            using var regionHandle = new Gdi32.RegionScope(regionCopy ?? region, Handle);
+
+            if (User32.SetWindowRgn(this, regionHandle, User32.IsWindowVisible(this)) != 0)
+            {
+                // Success, the window now owns the region
+                regionHandle.RelinquishOwnership();
             }
         }
 
@@ -4512,7 +4503,7 @@ namespace System.Windows.Forms
         ///  Helper method for retrieving an ActiveX property.  We abstract these
         ///  to another method so we do not force JIT the ActiveX codebase.
         /// </summary>
-        private IntPtr ActiveXMergeRegion(IntPtr region)
+        private Region ActiveXMergeRegion(Region region)
         {
             return ActiveXInstance.MergeRegion(region);
         }
@@ -5676,10 +5667,10 @@ namespace System.Windows.Forms
             return s_defaultFontHandleWrapper;
         }
 
-        internal IntPtr GetHRgn(Region region)
+        internal Gdi32.HRGN GetHRgn(Region region)
         {
             Graphics graphics = CreateGraphicsInternal();
-            IntPtr handle = region.GetHrgn(graphics);
+            Gdi32.HRGN handle = new Gdi32.HRGN(region.GetHrgn(graphics));
             graphics.Dispose();
             return handle;
         }
@@ -6238,43 +6229,30 @@ namespace System.Windows.Forms
             }
             else if (IsHandleCreated)
             {
-                IntPtr regionHandle = GetHRgn(region);
-                try
+                using Graphics graphics = CreateGraphicsInternal();
+                using var regionHandle = new Gdi32.RegionScope(region, graphics);
+
+                if (invalidateChildren)
                 {
-                    if (invalidateChildren)
+                    User32.RedrawWindow(
+                        new HandleRef(this, Handle),
+                        null,
+                        regionHandle,
+                        User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
+                }
+                else
+                {
+                    // It's safe to invoke InvalidateRgn from a separate thread.
+                    using (new MultithreadSafeCallScope())
                     {
-                        User32.RedrawWindow(
-                            new HandleRef(this, Handle),
-                            null,
-                            new HandleRef(region, regionHandle),
-                            User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
-                    }
-                    else
-                    {
-                        // It's safe to invoke InvalidateRgn from a separate thread.
-                        using (new MultithreadSafeCallScope())
-                        {
-                            User32.InvalidateRgn(
-                                this,
-                                new HandleRef(region, regionHandle),
-                                (!GetStyle(ControlStyles.Opaque)).ToBOOL());
-                        }
+                        User32.InvalidateRgn(
+                            this,
+                            regionHandle,
+                            (!GetStyle(ControlStyles.Opaque)).ToBOOL());
                     }
                 }
-                finally
-                {
-                    Gdi32.DeleteObject(regionHandle);
-                }
 
-                Rectangle bounds = Rectangle.Empty;
-
-                // gpr: We shouldn't have to create a Graphics for this...
-                using (Graphics graphics = CreateGraphicsInternal())
-                {
-                    bounds = Rectangle.Ceiling(region.GetBounds(graphics));
-                }
-
-                OnInvalidated(new InvalidateEventArgs(bounds));
+                OnInvalidated(new InvalidateEventArgs(Rectangle.Ceiling(region.GetBounds(graphics))));
             }
         }
 
@@ -7762,31 +7740,10 @@ namespace System.Windows.Forms
                 // when the ThreadContext in Application is created
                 SetAcceptDrops(AllowDrop);
 
-                Region region = (Region)Properties.GetObject(s_regionProperty);
+                Region region = Region;
                 if (region != null)
                 {
-                    IntPtr regionHandle = GetHRgn(region);
-
-                    try
-                    {
-                        if (IsActiveX)
-                        {
-                            regionHandle = ActiveXMergeRegion(regionHandle);
-                        }
-
-                        if (User32.SetWindowRgn(this, new HandleRef(this, regionHandle), User32.IsWindowVisible(this)) != 0)
-                        {
-                            //The HWnd owns the region.
-                            regionHandle = IntPtr.Zero;
-                        }
-                    }
-                    finally
-                    {
-                        if (regionHandle != IntPtr.Zero)
-                        {
-                            Gdi32.DeleteObject(regionHandle);
-                        }
-                    }
+                    SetRegion(region);
                 }
 
                 // Cache Handle in a local before asserting so we minimize code running under the Assert.
@@ -9206,24 +9163,21 @@ namespace System.Windows.Forms
             bool success = Gdi32.GetViewportOrgEx(hDC, out Point viewportOrg).IsTrue();
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
-            IntPtr hClippingRegion = Gdi32.CreateRectRgn(viewportOrg.X, viewportOrg.Y, viewportOrg.X + Width, viewportOrg.Y + Height);
-            Debug.Assert(hClippingRegion != IntPtr.Zero, "CreateRectRgn() failed.");
+            using var hClippingRegion = new Gdi32.RegionScope(
+                viewportOrg.X,
+                viewportOrg.Y,
+                viewportOrg.X + Width,
+                viewportOrg.Y + Height);
 
-            try
-            {
-                // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-                RegionType selectResult = Gdi32.SelectClipRgn(hDC, hClippingRegion);
-                Debug.Assert((selectResult == RegionType.SIMPLEREGION ||
-                              selectResult == RegionType.NULLREGION),
-                              "SIMPLEREGION or NULLLREGION expected.");
+            Debug.Assert(!hClippingRegion.IsNull, "CreateRectRgn() failed.");
 
-                PrintToMetaFileRecursive(hDC, lParam, new Rectangle(Point.Empty, Size));
-            }
-            finally
-            {
-                success = Gdi32.DeleteObject(hClippingRegion).IsTrue();
-                Debug.Assert(success, "DeleteObject() failed.");
-            }
+            // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
+            RegionType selectResult = Gdi32.SelectClipRgn(hDC, hClippingRegion);
+            Debug.Assert(
+                selectResult == RegionType.SIMPLEREGION || selectResult == RegionType.NULLREGION,
+                "SIMPLEREGION or NULLLREGION expected.");
+
+            PrintToMetaFileRecursive(hDC, lParam, new Rectangle(Point.Empty, Size));
         }
 
         private protected virtual void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)

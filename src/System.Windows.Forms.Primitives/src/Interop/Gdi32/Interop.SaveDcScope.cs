@@ -9,30 +9,28 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         /// <summary>
-        ///  Helper to scope lifetime of an HDC retrieved via CreateDC/CreateCompatibleDC.
-        ///  Deletes the HDC (if any) when disposed.
+        ///  Helper to scope lifetime of a saved device context state.
         /// </summary>
         /// <remarks>
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
-        ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
+        ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double restore.
         /// </remarks>
-        internal ref struct CreateDcScope
+        internal ref struct SaveDcScope
         {
             public IntPtr HDC { get; }
+            private readonly int _savedState;
 
-            /// <param name="hdc">Creates a compatible DC based off this.</param>
-            public CreateDcScope(IntPtr hdc)
+            public SaveDcScope(IntPtr hdc)
             {
-                HDC = CreateCompatibleDC(hdc);
+                _savedState = SaveDC(hdc);
+                HDC = hdc;
             }
-
-            public static implicit operator IntPtr(CreateDcScope dcScope) => dcScope.HDC;
 
             public void Dispose()
             {
-                if (HDC != IntPtr.Zero)
+                if (_savedState != 0)
                 {
-                    DeleteDC(HDC);
+                    RestoreDC(HDC, _savedState);
                 }
             }
         }

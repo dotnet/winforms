@@ -17,19 +17,19 @@ internal static partial class Interop
         /// </remarks>
         internal ref struct ObjectScope
         {
-            public IntPtr Object { get; }
+            public HGDIOBJ Object { get; }
 
             /// <param name="object">The object to be deleted when the scope closes.</param>
             public ObjectScope(IntPtr @object)
             {
-                Object = @object;
+                Object = new HGDIOBJ(@object);
             }
 
-            public static implicit operator IntPtr(ObjectScope objectScope) => objectScope.Object;
+            public static implicit operator IntPtr(ObjectScope objectScope) => objectScope.Object.Handle;
 
             public void Dispose()
             {
-                if (Object != null)
+                if (Object.Handle != IntPtr.Zero)
                 {
                     DeleteObject(Object);
                 }
