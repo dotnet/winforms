@@ -109,7 +109,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (mouseDownTimer is not null)
+                if (mouseDownTimer != null)
                 {
                     mouseDownTimer.Enabled = false;
                     mouseDownTimer.Dispose();
@@ -164,8 +164,8 @@ namespace System.Windows.Forms
         public override Size GetPreferredSize(Size constrainingSize)
         {
             Size preferredSize = Size.Empty;
-            preferredSize.Height = (Label.Image is not null) ? Label.Image.Height + 4 : 0;
-            preferredSize.Width = (ParentInternal is not null) ? ParentInternal.Width - 2 : preferredSize.Width; // Two for border
+            preferredSize.Height = (Label.Image != null) ? Label.Image.Height + 4 : 0;
+            preferredSize.Width = (ParentInternal != null) ? ParentInternal.Width - 2 : preferredSize.Width; // Two for border
             return preferredSize;
         }
 

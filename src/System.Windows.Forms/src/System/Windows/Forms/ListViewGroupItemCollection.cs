@@ -22,9 +22,9 @@ namespace System.Windows.Forms
 
         private ArrayList Items => _items ?? (_items = new ArrayList());
 
-        public bool OwnerIsVirtualListView => _group.ListView is not null && _group.ListView.VirtualMode;
+        public bool OwnerIsVirtualListView => _group.ListView != null && _group.ListView.VirtualMode;
 
-        public bool OwnerIsDesignMode => _group.ListView?.Site is not null && _group.ListView.Site.DesignMode;
+        public bool OwnerIsDesignMode => _group.ListView?.Site != null && _group.ListView.Site.DesignMode;
 
         public ListViewItem this[int index]
         {
@@ -66,7 +66,7 @@ namespace System.Windows.Forms
 
         private void CheckListViewItem(ListViewItem item)
         {
-            if (item.ListView is not null && item.ListView != _group.ListView)
+            if (item.ListView != null && item.ListView != _group.ListView)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text), nameof(item));
             }
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
 
         private void UpdateNativeListViewItem(ListViewItem item)
         {
-            if (item.ListView is not null && item.ListView.IsHandleCreated && !item.ListView.InsertingItemsNatively)
+            if (item.ListView != null && item.ListView.IsHandleCreated && !item.ListView.InsertingItemsNatively)
             {
                 item.UpdateStateToListView(item.Index);
             }

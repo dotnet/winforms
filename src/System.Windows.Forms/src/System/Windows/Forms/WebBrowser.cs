@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             set
             {
                 webBrowserState[WEBBROWSERSTATE_allowNavigation] = value;
-                if (webBrowserEvent is not null)
+                if (webBrowserEvent != null)
                 {
                     webBrowserEvent.AllowNavigation = value;
                 }
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
             get
             {
                 object objDoc = AxIWebBrowser2.Document;
-                if (objDoc is not null)
+                if (objDoc != null)
                 {
                     // Document is not necessarily an IHTMLDocument, it might be an office document as well.
                     IHTMLDocument2 iHTMLDocument2 = null;
@@ -251,10 +251,10 @@ namespace System.Windows.Forms
                     catch (InvalidCastException)
                     {
                     }
-                    if (iHTMLDocument2 is not null)
+                    if (iHTMLDocument2 != null)
                     {
                         IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
-                        if (iHTMLLocation is not null)
+                        if (iHTMLLocation != null)
                         {
                             string href = iHTMLLocation.GetHref();
                             if (!string.IsNullOrEmpty(href))
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
                 else
                 {
                     Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
-                    Debug.Assert(psi is not null, "Object isn't an IPersistStreamInit!");
+                    Debug.Assert(psi != null, "Object isn't an IPersistStreamInit!");
                     if (psi is null)
                     {
                         return null;
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
                 else
                 {
                     IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
-                    Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
+                    Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
                     try
                     {
                         documentTitle = htmlDocument2.GetTitle();
@@ -399,10 +399,10 @@ namespace System.Windows.Forms
             {
                 string docType = string.Empty;
                 HtmlDocument htmlDocument = Document;
-                if (htmlDocument is not null)
+                if (htmlDocument != null)
                 {
                     IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
-                    Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
+                    Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
                     try
                     {
                         docType = htmlDocument2.GetMimeType();
@@ -506,7 +506,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is not null)
+                if (value != null)
                 {
                     if (!Marshal.IsTypeVisibleFromCom(value.GetType()))
                     {
@@ -611,7 +611,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is not null && value.ToString() == "")
+                if (value != null && value.ToString() == "")
                 {
                     value = null;
                 }
@@ -1074,7 +1074,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (htmlShimManager is not null)
+                if (htmlShimManager != null)
                 {
                     htmlShimManager.Dispose();
                 }
@@ -1125,7 +1125,7 @@ namespace System.Windows.Forms
         protected override void CreateSink()
         {
             object ax = activeXInstance;
-            if (ax is not null)
+            if (ax != null)
             {
                 webBrowserEvent = new WebBrowserEvent(this)
                 {
@@ -1141,7 +1141,7 @@ namespace System.Windows.Forms
         protected override void DetachSink()
         {
             // If we have a cookie get rid of it
-            if (cookie is not null)
+            if (cookie != null)
             {
                 cookie.Disconnect();
                 cookie = null;
@@ -1356,7 +1356,7 @@ namespace System.Windows.Forms
         private bool ShowContextMenu(int x, int y)
         {
             ContextMenuStrip contextMenuStrip = ContextMenuStrip;
-            if (contextMenuStrip is not null)
+            if (contextMenuStrip != null)
             {
                 Point client;
                 bool keyboardActivated = false;
@@ -1374,7 +1374,7 @@ namespace System.Windows.Forms
 
                 if (ClientRectangle.Contains(client))
                 {
-                    if (contextMenuStrip is not null)
+                    if (contextMenuStrip != null)
                     {
                         contextMenuStrip.ShowInternal(this, client, keyboardActivated);
                     }
@@ -1651,7 +1651,7 @@ namespace System.Windows.Forms
 
             public void BeforeNavigate2(object pDisp, ref object urlObject, ref object flags, ref object targetFrameName, ref object postData, ref object headers, ref bool cancel)
             {
-                Debug.Assert(_parent is not null, "Parent should have been set");
+                Debug.Assert(_parent != null, "Parent should have been set");
                 //Note: we want to allow navigation if we haven't already navigated.
                 if (AllowNavigation || !_haveNavigated)
                 {
@@ -1687,13 +1687,13 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(urlObject is null || urlObject is string, "invalid url");
                 _haveNavigated = true;
-                if (_parent.documentStreamToSetOnLoad is not null && (string)urlObject == "about:blank")
+                if (_parent.documentStreamToSetOnLoad != null && (string)urlObject == "about:blank")
                 {
                     HtmlDocument htmlDocument = _parent.Document;
-                    if (htmlDocument is not null)
+                    if (htmlDocument != null)
                     {
                         Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
-                        Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
+                        Debug.Assert(psi != null, "The Document does not implement IPersistStreamInit");
                         Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(
                                                     _parent.documentStreamToSetOnLoad);
                         psi.Load(iStream);

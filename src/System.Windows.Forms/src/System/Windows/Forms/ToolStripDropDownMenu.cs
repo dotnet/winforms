@@ -353,7 +353,7 @@ namespace System.Windows.Forms
 
                     // determine Image Metrics
                     Size imageSize = Size.Empty;
-                    if (menuItem.Image is not null)
+                    if (menuItem.Image != null)
                     {
                         imageSize = (menuItem.ImageScaling == ToolStripItemImageScaling.SizeToFit) ? ImageScalingSize : menuItem.Image.Size;
                     }
@@ -361,7 +361,7 @@ namespace System.Windows.Forms
                     maxImageSize.Width = Math.Max(maxImageSize.Width, imageSize.Width);
                     maxImageSize.Height = Math.Max(maxImageSize.Height, imageSize.Height);
 
-                    if (menuItem.CheckedImage is not null)
+                    if (menuItem.CheckedImage != null)
                     {
                         Size checkedImageSize = menuItem.CheckedImage.Size;
                         maxCheckSize.Width = Math.Max(checkedImageSize.Width, maxCheckSize.Width);
@@ -510,7 +510,7 @@ namespace System.Windows.Forms
 
         internal override void ChangeSelection(ToolStripItem nextItem)
         {
-            if (nextItem is not null)
+            if (nextItem != null)
             {
                 Rectangle displayRect = DisplayRectangle;
                 if (!displayRect.Contains(displayRect.X, nextItem.Bounds.Top)

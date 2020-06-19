@@ -30,7 +30,7 @@ namespace System.Windows.Forms
 
         public DataGridViewIntLinkedList(DataGridViewIntLinkedList source)
         {
-            Debug.Assert(source is not null);
+            Debug.Assert(source != null);
             int elements = source.Count;
             for (int element = 0; element < elements; element++)
             {
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(headElement is not null);
+                Debug.Assert(headElement != null);
                 return headElement.Int;
             }
         }
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
         public void Add(int integer)
         {
             DataGridViewIntLinkedListElement newHead = new DataGridViewIntLinkedListElement(integer);
-            if (headElement is not null)
+            if (headElement != null)
             {
                 newHead.Next = headElement;
             }
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         {
             int index = 0;
             DataGridViewIntLinkedListElement tmp = headElement;
-            while (tmp is not null)
+            while (tmp != null)
             {
                 if (tmp.Int == integer)
                 {
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
         public bool Remove(int integer)
         {
             DataGridViewIntLinkedListElement tmp1 = null, tmp2 = headElement;
-            while (tmp2 is not null)
+            while (tmp2 != null)
             {
                 if (tmp2.Int == integer)
                 {
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(current is not null); // Since this is for internal use only.
+                Debug.Assert(current != null); // Since this is for internal use only.
                 return current.Int;
             }
         }
@@ -236,10 +236,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                Debug.Assert(current is not null); // Since this is for internal use only.
+                Debug.Assert(current != null); // Since this is for internal use only.
                 current = current.Next;
             }
-            return (current is not null);
+            return (current != null);
         }
 
         void IEnumerator.Reset()

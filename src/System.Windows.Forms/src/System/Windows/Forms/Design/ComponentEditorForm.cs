@@ -83,10 +83,10 @@ namespace System.Windows.Forms.Design
             {
                 IComponentChangeService changeService = null;
 
-                if (component.Site is not null)
+                if (component.Site != null)
                 {
                     changeService = (IComponentChangeService)component.Site.GetService(typeof(IComponentChangeService));
-                    if (changeService is not null)
+                    if (changeService != null)
                     {
                         try
                         {
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (changeService is not null)
+                if (changeService != null)
                 {
                     changeService.OnComponentChanged(component, null, null, null);
                 }
@@ -181,10 +181,10 @@ namespace System.Windows.Forms.Design
         private void OnConfigureUI()
         {
             Font uiFont = Control.DefaultFont;
-            if (component.Site is not null)
+            if (component.Site != null)
             {
                 IUIService uiService = (IUIService)component.Site.GetService(typeof(IUIService));
-                if (uiService is not null)
+                if (uiService != null)
                 {
                     uiFont = (Font)uiService.Styles["DialogFont"];
                 }
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.Design
 
             int selectorWidth = MIN_SELECTOR_WIDTH;
 
-            if (pageSites is not null)
+            if (pageSites != null)
             {
                 // Add the nodes corresponding to the pages
                 for (int n = 0; n < pageSites.Length; n++)
@@ -238,7 +238,7 @@ namespace System.Windows.Forms.Design
 
             string caption = string.Empty;
             ISite site = component.Site;
-            if (site is not null)
+            if (site != null)
             {
                 caption = string.Format(SR.ComponentEditorFormProperties, site.Name);
             }
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.Design
             grayStrip.Bounds = new Rectangle(pageHostBounds.X, BUTTON_PAD,
                                              pageHostBounds.Width, STRIP_HEIGHT);
 
-            if (pageSites is not null)
+            if (pageSites != null)
             {
                 Rectangle pageBounds = new Rectangle(0, 0, pageHostBounds.Width, pageHostBounds.Height);
                 for (int n = 0; n < pageSites.Length; n++)
@@ -788,7 +788,7 @@ namespace System.Windows.Forms.Design
                     case ComCtl32.CDDS.ITEMPREPAINT:
                         {
                             TreeNode itemNode = TreeNode.FromHandle(this, (IntPtr)nmtvcd->nmcd.dwItemSpec);
-                            if (itemNode is not null)
+                            if (itemNode != null)
                             {
                                 int state = STATE_NORMAL;
                                 ComCtl32.CDIS itemState = nmtvcd->nmcd.uItemState;

@@ -165,7 +165,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetFocused()
             {
-                if (owner.Focused && owner.CurrentCell is not null)
+                if (owner.Focused && owner.CurrentCell != null)
                 {
                     return owner.CurrentCell.AccessibilityObject;
                 }

@@ -85,12 +85,12 @@ namespace System.Windows.Forms
                 DataGridViewCheckBoxCell dataGridViewCell = (DataGridViewCheckBoxCell)Owner;
                 DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (dataGridView is not null && dataGridViewCell.RowIndex == -1)
+                if (dataGridView != null && dataGridViewCell.RowIndex == -1)
                 {
                     throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedCell);
                 }
 
-                if (!dataGridViewCell.ReadOnly && dataGridViewCell.OwningColumn is not null && dataGridViewCell.OwningRow is not null)
+                if (!dataGridViewCell.ReadOnly && dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
                 {
                     dataGridView.CurrentCell = dataGridViewCell;
                     bool endEditMode = false;

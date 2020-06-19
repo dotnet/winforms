@@ -131,7 +131,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 using (ThemeHandle? tHandle = ThemeHandle.Create(className, false))
                 {
-                    if (tHandle is not null)
+                    if (tHandle != null)
                     {
                         returnVal = IsThemePartDefined(tHandle, part, 0).IsTrue();
                     }
@@ -987,7 +987,7 @@ namespace System.Windows.Forms.VisualStyles
         {
             ThemeHandle? tHandle = null;
 
-            if (themeHandles is not null)
+            if (themeHandles != null)
             {
                 string[] classNames = new string[themeHandles.Keys.Count];
                 themeHandles.Keys.CopyTo(classNames, 0);
@@ -995,7 +995,7 @@ namespace System.Windows.Forms.VisualStyles
                 foreach (string className in classNames)
                 {
                     tHandle = (ThemeHandle?)themeHandles[className];
-                    if (tHandle is not null)
+                    if (tHandle != null)
                     {
                         tHandle.Dispose();
                     }
@@ -1005,7 +1005,7 @@ namespace System.Windows.Forms.VisualStyles
                     if (AreClientAreaVisualStylesSupported)
                     {
                         tHandle = ThemeHandle.Create(className, false);
-                        if (tHandle is not null)
+                        if (tHandle != null)
                         {
                             themeHandles[className] = tHandle;
                         }

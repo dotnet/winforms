@@ -26,7 +26,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public DesignerActionService(IServiceProvider serviceProvider)
         {
-            if (serviceProvider is not null)
+            if (serviceProvider != null)
             {
                 _serviceProvider = serviceProvider;
                 if (serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
@@ -68,7 +68,7 @@ namespace System.ComponentModel.Design
             }
 
             DesignerActionListCollection dhlc = (DesignerActionListCollection)_designerActionLists[comp];
-            if (dhlc is not null)
+            if (dhlc != null)
             {
                 dhlc.AddRange(designerActionListCollection);
             }
@@ -137,7 +137,7 @@ namespace System.ComponentModel.Design
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing && _serviceProvider is not null)
+            if (disposing && _serviceProvider != null)
             {
                 if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
@@ -196,7 +196,7 @@ namespace System.ComponentModel.Design
                 if (sc.GetService(typeof(DesignerCommandSet)) is DesignerCommandSet dcs)
                 {
                     DesignerActionListCollection pullCollection = dcs.ActionLists;
-                    if (pullCollection is not null)
+                    if (pullCollection != null)
                     {
                         actionLists.AddRange(pullCollection);
                     }
@@ -205,7 +205,7 @@ namespace System.ComponentModel.Design
                     if (actionLists.Count == 0)
                     {
                         DesignerVerbCollection verbs = dcs.Verbs;
-                        if (verbs is not null && verbs.Count != 0)
+                        if (verbs != null && verbs.Count != 0)
                         {
                             ArrayList verbsArray = new ArrayList();
                             bool hookupEvents = _componentToVerbsEventHookedUp[component] is null;
@@ -239,7 +239,7 @@ namespace System.ComponentModel.Design
 
                     // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
                     // NOTE: We do this AFTER the verb check that way to disable auto verb upgrading you can just return an empty actionlist collection
-                    if (pullCollection is not null)
+                    if (pullCollection != null)
                     {
                         foreach (DesignerActionList actionList in pullCollection)
                         {
@@ -271,7 +271,7 @@ namespace System.ComponentModel.Design
                                 if (verb == sender)
                                 {
                                     DesignerActionUIService dapUISvc = (DesignerActionUIService)sc.GetService(typeof(DesignerActionUIService));
-                                    if (dapUISvc is not null)
+                                    if (dapUISvc != null)
                                     {
                                         dapUISvc.Refresh(comp); // we need to refresh, a verb on the current panel has changed its state
                                     }
@@ -300,7 +300,7 @@ namespace System.ComponentModel.Design
             }
 
             DesignerActionListCollection pushCollection = (DesignerActionListCollection)_designerActionLists[component];
-            if (pushCollection is not null)
+            if (pushCollection != null)
             {
                 actionLists.AddRange(pushCollection);
                 // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
@@ -426,7 +426,7 @@ namespace System.ComponentModel.Design
             add
             {
                 DesignerActionUIService dapUISvc = (DesignerActionUIService)_serviceProvider.GetService(typeof(DesignerActionUIService));
-                if (dapUISvc is not null)
+                if (dapUISvc != null)
                 {
                     dapUISvc.DesignerActionUIStateChange += value;
                 }
@@ -434,7 +434,7 @@ namespace System.ComponentModel.Design
             remove
             {
                 DesignerActionUIService dapUISvc = (DesignerActionUIService)_serviceProvider.GetService(typeof(DesignerActionUIService));
-                if (dapUISvc is not null)
+                if (dapUISvc != null)
                 {
                     dapUISvc.DesignerActionUIStateChange -= value;
                 }

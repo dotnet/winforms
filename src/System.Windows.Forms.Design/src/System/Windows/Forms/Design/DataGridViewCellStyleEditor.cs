@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
             using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
             {
                 _builderDialog ??= new DataGridViewCellStyleBuilder(provider, comp);
-                if (uiService is not null)
+                if (uiService != null)
                 {
                     _builderDialog.Font = (Font)uiService.Styles["DialogFont"];
                 }

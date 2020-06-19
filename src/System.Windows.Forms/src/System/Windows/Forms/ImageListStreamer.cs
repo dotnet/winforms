@@ -47,7 +47,7 @@ namespace System.Windows.Forms
                     {
 #endif
                         byte[] dat = (byte[])sie.Value;
-                        if (dat is not null)
+                        if (dat != null)
                         {
                             // We enclose this imagelist handle create in a theming scope.
                             IntPtr userCookie = ThemingScope.Activate(Application.UseVisualStyles);
@@ -210,11 +210,11 @@ namespace System.Windows.Forms
             MemoryStream stream = new MemoryStream();
 
             IntPtr handle = IntPtr.Zero;
-            if (imageList is not null)
+            if (imageList != null)
             {
                 handle = imageList.Handle;
             }
-            else if (nativeImageList is not null)
+            else if (nativeImageList != null)
             {
                 handle = nativeImageList.Handle;
             }
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (nativeImageList is not null)
+                if (nativeImageList != null)
                 {
                     nativeImageList.Dispose();
                     nativeImageList = null;

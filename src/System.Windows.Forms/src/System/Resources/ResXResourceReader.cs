@@ -196,13 +196,13 @@ namespace System.Resources
         {
             if (disposing)
             {
-                if (_fileName is not null && _stream is not null)
+                if (_fileName != null && _stream != null)
                 {
                     _stream.Close();
                     _stream = null;
                 }
 
-                if (_reader is not null)
+                if (_reader != null)
                 {
                     _reader.Close();
                     _reader = null;
@@ -244,15 +244,15 @@ namespace System.Resources
                 try
                 {
                     // Read data in any which way
-                    if (_fileContents is not null)
+                    if (_fileContents != null)
                     {
                         contentReader = new XmlTextReader(new StringReader(_fileContents));
                     }
-                    else if (_reader is not null)
+                    else if (_reader != null)
                     {
                         contentReader = new XmlTextReader(_reader);
                     }
-                    else if (_fileName is not null || _stream is not null)
+                    else if (_fileName != null || _stream != null)
                     {
                         if (_stream is null)
                         {
@@ -268,7 +268,7 @@ namespace System.Resources
                 }
                 finally
                 {
-                    if (_fileName is not null && _stream is not null)
+                    if (_fileName != null && _stream != null)
                     {
                         _stream.Close();
                         _stream = null;
@@ -432,17 +432,17 @@ namespace System.Resources
 
                 string readerTypeName = _resHeaderReaderType;
                 string writerTypeName = _resHeaderWriterType;
-                if (readerTypeName is not null && readerTypeName.IndexOf(',') != -1)
+                if (readerTypeName != null && readerTypeName.IndexOf(',') != -1)
                 {
                     readerTypeName = readerTypeName.Split(',')[0].Trim();
                 }
-                if (writerTypeName is not null && writerTypeName.IndexOf(',') != -1)
+                if (writerTypeName != null && writerTypeName.IndexOf(',') != -1)
                 {
                     writerTypeName = writerTypeName.Split(',')[0].Trim();
                 }
 
-                if (readerTypeName is not null &&
-                    writerTypeName is not null &&
+                if (readerTypeName != null &&
+                    writerTypeName != null &&
                     readerTypeName.Equals(readerType.FullName) &&
                     writerTypeName.Equals(writerType.FullName))
                 {
@@ -461,7 +461,7 @@ namespace System.Resources
         private void ParseResHeaderNode(XmlReader reader)
         {
             string name = reader[ResXResourceWriter.NameStr];
-            if (name is not null)
+            if (name != null)
             {
                 reader.ReadStartElement();
 
@@ -600,7 +600,7 @@ namespace System.Resources
                 assemblyName = _aliasResolver.ResolveAlias(alias);
             }
 
-            if (assemblyName is not null)
+            if (assemblyName != null)
             {
                 nodeInfo.TypeName = GetTypeFromTypeName(typeName) + ", " + assemblyName.FullName;
             }

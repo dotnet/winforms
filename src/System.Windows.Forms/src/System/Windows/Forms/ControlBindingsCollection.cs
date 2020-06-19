@@ -115,7 +115,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.BindingsCollectionAdd1, nameof(dataBinding));
             }
-            if (dataBinding.BindableComponent is not null)
+            if (dataBinding.BindableComponent != null)
             {
                 throw new ArgumentException(SR.BindingsCollectionAdd2, nameof(dataBinding));
             }

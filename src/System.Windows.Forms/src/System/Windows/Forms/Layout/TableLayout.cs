@@ -304,11 +304,11 @@ namespace System.Windows.Forms.Layout
             proposedConstraints -= cellBorderSize;
             proposedConstraints.Width = Math.Max(proposedConstraints.Width, 1);
             proposedConstraints.Height = Math.Max(proposedConstraints.Height, 1);
-            if (tempInfo.Columns is not null && containerInfo.Columns is not null && (tempInfo.Columns.Length != containerInfo.Columns.Length))
+            if (tempInfo.Columns != null && containerInfo.Columns != null && (tempInfo.Columns.Length != containerInfo.Columns.Length))
             {
                 ClearCachedAssignments(containerInfo);
             }
-            if (tempInfo.Rows is not null && containerInfo.Rows is not null && (tempInfo.Rows.Length != containerInfo.Rows.Length))
+            if (tempInfo.Rows != null && containerInfo.Rows != null && (tempInfo.Rows.Length != containerInfo.Rows.Length))
             {
                 ClearCachedAssignments(containerInfo);
             }
@@ -464,11 +464,11 @@ namespace System.Windows.Forms.Layout
             //the element at the head of the non-absolutely positioned element queue
             LayoutInfo flowElement = GetNextLayoutInfo(childrenInfo, ref flowElementIndex, /*absolutelyPositioned*/false);
 
-            while (fixedElement is not null || flowElement is not null)
+            while (fixedElement != null || flowElement != null)
             {
                 int colStop = currentCol;
                 int rowStop;
-                if (flowElement is not null)
+                if (flowElement != null)
                 {
                     flowElement.RowStart = currentRow;
                     flowElement.ColumnStart = currentCol;
@@ -481,7 +481,7 @@ namespace System.Windows.Forms.Layout
                     }
                 }
                 //test to see if either the absolutely positioned element is null or it fits.
-                if (flowElement is not null && (fixedElement is null || (!IsCursorPastInsertionPoint(fixedElement, flowElement.RowStart, colStop) && !IsOverlappingWithReservationGrid(fixedElement, reservationGrid, currentRow))))
+                if (flowElement != null && (fixedElement is null || (!IsCursorPastInsertionPoint(fixedElement, flowElement.RowStart, colStop) && !IsOverlappingWithReservationGrid(fixedElement, reservationGrid, currentRow))))
                 {
                     //Place the flow element.
 
@@ -763,7 +763,7 @@ namespace System.Windows.Forms.Layout
             {
                 TableLayoutStyle style = i < styles.Count ? (TableLayoutStyle)styles[i] : null;
                 strip = strips[i];
-                if (style is not null && style.SizeType == SizeType.Absolute)
+                if (style != null && style.SizeType == SizeType.Absolute)
                 {
                     strip.MinSize = (int)Math.Round((double)((TableLayoutStyle)styles[i]).Size);
                     strip.MaxSize = strip.MinSize;
@@ -798,7 +798,7 @@ namespace System.Windows.Forms.Layout
 
             if (dontHonorConstraint && (proposedConstraints.Width < short.MaxValue))
             {
-                if (containerInfo.Container is TableLayoutPanel tlp && tlp.ParentInternal is not null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance)
+                if (containerInfo.Container is TableLayoutPanel tlp && tlp.ParentInternal != null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance)
                 {
                     if (tlp.Dock == DockStyle.Top || tlp.Dock == DockStyle.Bottom || tlp.Dock == DockStyle.Fill)
                     {
@@ -924,7 +924,7 @@ namespace System.Windows.Forms.Layout
 
             if (dontHonorConstraint && (proposedConstraints.Height < short.MaxValue))
             {
-                if (containerInfo.Container is TableLayoutPanel tlp && tlp.ParentInternal is not null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance)
+                if (containerInfo.Container is TableLayoutPanel tlp && tlp.ParentInternal != null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance)
                 {
                     if (tlp.Dock == DockStyle.Left || tlp.Dock == DockStyle.Right || tlp.Dock == DockStyle.Fill)
                     {
@@ -1760,7 +1760,7 @@ namespace System.Windows.Forms.Layout
                 set
                 {
                     _rowStyles = value;
-                    if (_rowStyles is not null)
+                    if (_rowStyles != null)
                     {
                         _rowStyles.EnsureOwnership(_container);
                     }
@@ -1780,7 +1780,7 @@ namespace System.Windows.Forms.Layout
                 set
                 {
                     _colStyles = value;
-                    if (_colStyles is not null)
+                    if (_colStyles != null)
                     {
                         _colStyles.EnsureOwnership(_container);
                     }
@@ -1895,7 +1895,7 @@ namespace System.Windows.Forms.Layout
             {
                 get
                 {
-                    if (_colStyles is not null)
+                    if (_colStyles != null)
                     {
                         bool foundAny = false;
                         foreach (ColumnStyle style in _colStyles)

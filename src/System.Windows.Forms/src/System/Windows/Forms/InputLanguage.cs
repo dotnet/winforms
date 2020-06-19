@@ -178,7 +178,7 @@ namespace System.Windows.Forms
                     // Look for a substitution
                     RegistryKey substitutions = Registry.CurrentUser.OpenSubKey("Keyboard Layout\\Substitutes");
                     string[] encodings = null;
-                    if (substitutions is not null)
+                    if (substitutions != null)
                     {
                         encodings = substitutions.GetValueNames();
 
@@ -200,7 +200,7 @@ namespace System.Windows.Forms
                     }
 
                     RegistryKey layouts = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts");
-                    if (layouts is not null)
+                    if (layouts != null)
                     {
                         encodings = layouts.GetSubKeyNames();
 
@@ -238,7 +238,7 @@ namespace System.Windows.Forms
                             {
                                 RegistryKey key = layouts.OpenSubKey(encoding);
                                 string codeValue = (string)key.GetValue("Layout Id");
-                                if (codeValue is not null)
+                                if (codeValue != null)
                                 {
                                     int value = Convert.ToInt32(codeValue, 16);
                                     if (value == device)
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                                 key.Close();
-                                if (layoutName is not null)
+                                if (layoutName != null)
                                 {
                                     break;
                                 }
@@ -277,7 +277,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static string GetLocalizedKeyboardLayoutName(string layoutDisplayName)
         {
-            if (layoutDisplayName is not null)
+            if (layoutDisplayName != null)
             {
                 var sb = new StringBuilder(512);
                 HRESULT res = Shlwapi.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);

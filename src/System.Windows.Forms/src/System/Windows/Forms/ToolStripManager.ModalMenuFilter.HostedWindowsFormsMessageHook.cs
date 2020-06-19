@@ -91,7 +91,7 @@ namespace System.Windows.Forms
                         {
                             // only process messages we've pulled off the queue
                             User32.MSG* msg = (User32.MSG*)lparam;
-                            if (msg is not null)
+                            if (msg != null)
                             {
                                 // call pretranslate on the message - this should execute
                                 // the message filters and preprocess message.

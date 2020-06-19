@@ -83,7 +83,7 @@ namespace System.Windows.Forms.Design
                 _sunkEvent = true;
             }
 
-            if (_currentHost is not null)
+            if (_currentHost != null)
             {
                 if (_currentHost.GetService(typeof(IEventBindingService)) is IEventBindingService service)
                 {
@@ -99,7 +99,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (context is not null)
+            if (context != null)
             {
                 if (context.GetService(typeof(IEventBindingService)) is IEventBindingService service)
                 {
@@ -168,7 +168,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 // We've found some, so add them to the event list.
-                if (list is not null)
+                if (list != null)
                 {
                     var realNamespaceProperties = new PropertyDescriptor[list.Count];
                     list.CopyTo(realNamespaceProperties, 0);

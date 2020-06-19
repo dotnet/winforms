@@ -64,10 +64,10 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragEnter received");
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
-            Debug.Assert(pDataObj is not null, "OleDragEnter didn't give us a valid data object.");
+            Debug.Assert(pDataObj != null, "OleDragEnter didn't give us a valid data object.");
             DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
 
-            if (drgevent is not null)
+            if (drgevent != null)
             {
                 owner.OnDragEnter(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
             DragEventArgs drgevent = CreateDragEventArgs(pDataObj, grfKeyState, pt, pdwEffect);
 
-            if (drgevent is not null)
+            if (drgevent != null)
             {
                 owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;

@@ -117,7 +117,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 finally
                 {
-                    if (brush is not null)
+                    if (brush != null)
                     {
                         brush.Dispose();
                     }
@@ -278,7 +278,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         private static Bitmap GetCheckBoxImage(Color checkColor, Rectangle fullSize, ref Color cacheCheckColor, ref Bitmap cacheCheckImage)
         {
-            if (cacheCheckImage is not null &&
+            if (cacheCheckImage != null &&
                 cacheCheckColor.Equals(checkColor) &&
                 cacheCheckImage.Width == fullSize.Width &&
                 cacheCheckImage.Height == fullSize.Height)
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.ButtonInternal
                 return cacheCheckImage;
             }
 
-            if (cacheCheckImage is not null)
+            if (cacheCheckImage != null)
             {
                 cacheCheckImage.Dispose();
             }

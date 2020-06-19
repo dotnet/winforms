@@ -93,7 +93,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private object GetService(Type serviceType)
         {
-            if (_provider is not null)
+            if (_provider != null)
             {
                 return _provider.GetService(serviceType);
             }
@@ -105,7 +105,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnComponentRemove(object sender, ComponentEventArgs ce)
         {
-            if (_selection is not null && _selection.Contains(ce.Component))
+            if (_selection != null && _selection.Contains(ce.Component))
             {
                 RemoveSelection(ce.Component);
                 OnSelectionChanged();
@@ -129,7 +129,7 @@ namespace System.ComponentModel.Design
                 UpdateHelpKeyword(true);
 
                 eh = _events[s_eventSelectionChanged] as EventHandler;
-                if (eh is not null)
+                if (eh != null)
                 {
                     try
                     {
@@ -165,7 +165,7 @@ namespace System.ComponentModel.Design
 
         internal object PrimarySelection
         {
-            get => (_selection is not null && _selection.Count > 0) ? _selection[0] : null;
+            get => (_selection != null && _selection.Count > 0) ? _selection[0] : null;
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void RemoveSelection(object sel)
         {
-            if (_selection is not null)
+            if (_selection != null)
             {
                 _selection.Remove(sel);
             }
@@ -203,7 +203,7 @@ namespace System.ComponentModel.Design
             }
 
             // If there is an old set of context attributes, remove them.
-            if (_contextAttributes is not null)
+            if (_contextAttributes != null)
             {
                 foreach (string s in _contextAttributes)
                 {
@@ -215,7 +215,7 @@ namespace System.ComponentModel.Design
             // Clear the selection keyword
             helpService.RemoveContextAttribute("Selection", s_selectionKeywords[_contextKeyword]);
             // Get a list of unique class names.
-            Debug.Assert(_selection is not null, "Should be impossible to update the help context before configuring the selection hash");
+            Debug.Assert(_selection != null, "Should be impossible to update the help context before configuring the selection hash");
             bool baseComponentSelected = false;
             if (_selection.Count == 0)
             {
@@ -235,7 +235,7 @@ namespace System.ComponentModel.Design
                 object s = _selection[i];
                 string helpContext = TypeDescriptor.GetClassName(s);
                 HelpKeywordAttribute contextAttr = (HelpKeywordAttribute)TypeDescriptor.GetAttributes(s)[typeof(HelpKeywordAttribute)];
-                if (contextAttr is not null && !contextAttr.IsDefaultAttribute())
+                if (contextAttr != null && !contextAttr.IsDefaultAttribute())
                 {
                     helpContext = contextAttr.HelpKeyword;
                 }
@@ -264,7 +264,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IDisposable.Dispose()
         {
-            if (_selection is not null)
+            if (_selection != null)
             {
                 if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
@@ -293,7 +293,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_selection is not null && _selection.Count > 0)
+                if (_selection != null && _selection.Count > 0)
                 {
                     return _selection[0];
                 }
@@ -309,7 +309,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_selection is not null)
+                if (_selection != null)
                 {
                     return _selection.Count;
                 }
@@ -344,7 +344,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(component));
             }
-            return (_selection is not null && _selection.Contains(component));
+            return (_selection != null && _selection.Contains(component));
         }
 
         /// <summary>
@@ -352,7 +352,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         ICollection ISelectionService.GetSelectedComponents()
         {
-            if (_selection is not null)
+            if (_selection != null)
             {
                 // Must clone here.  Otherwise the values collection is a live collection and will change when the  selection changes.  GetSelectedComponents should be a snapshot.
                 object[] selectedValues = new object[_selection.Count];
@@ -418,7 +418,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            if (requestedPrimary is not null && _selection is not null && (primaryIndex = _selection.IndexOf(requestedPrimary)) != -1)
+            if (requestedPrimary != null && _selection != null && (primaryIndex = _selection.IndexOf(requestedPrimary)) != -1)
             {
                 if (primaryIndex != 0)
                 {
@@ -433,7 +433,7 @@ namespace System.ComponentModel.Design
                 // If we are replacing the selection, only remove the ones that are not in our new list. We also handle the special case here of having a singular component selected that's already selected.  In this case we just move it to the primary selection.
                 if (!fToggle && !fAdd && !fRemove)
                 {
-                    if (_selection is not null)
+                    if (_selection != null)
                     {
                         object[] selections = new object[_selection.Count];
                         _selection.CopyTo(selections, 0);
@@ -472,7 +472,7 @@ namespace System.ComponentModel.Design
                         throw new ArgumentNullException(nameof(components));
                     }
 
-                    if (_selection is not null && _selection.Contains(comp))
+                    if (_selection != null && _selection.Contains(comp))
                     {
                         if (fToggle || fRemove)
                         {

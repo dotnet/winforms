@@ -199,14 +199,14 @@ namespace System.Windows.Forms
             {
                 if (autoCompleteCustomSource != value)
                 {
-                    if (autoCompleteCustomSource is not null)
+                    if (autoCompleteCustomSource != null)
                     {
                         autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
 
                     autoCompleteCustomSource = value;
 
-                    if (value is not null)
+                    if (value != null)
                     {
                         autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
@@ -517,11 +517,11 @@ namespace System.Windows.Forms
                 // so this will undo it, but on a dispose we'll be Destroying the window anyay.
 
                 ResetAutoComplete(true);
-                if (autoCompleteCustomSource is not null)
+                if (autoCompleteCustomSource != null)
                 {
                     autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
-                if (stringSource is not null)
+                if (stringSource != null)
                 {
                     stringSource.ReleaseAutoComplete();
                     stringSource = null;
@@ -639,7 +639,7 @@ namespace System.Windows.Forms
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            if (stringSource is not null)
+            if (stringSource != null)
             {
                 stringSource.ReleaseAutoComplete();
                 stringSource = null;
@@ -732,7 +732,7 @@ namespace System.Windows.Forms
 
                 if (AutoCompleteSource == AutoCompleteSource.CustomSource)
                 {
-                    if (IsHandleCreated && AutoCompleteCustomSource is not null)
+                    if (IsHandleCreated && AutoCompleteCustomSource != null)
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {

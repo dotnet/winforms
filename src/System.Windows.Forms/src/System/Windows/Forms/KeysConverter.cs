@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                             obj = Enum.Parse(typeof(Keys), tokens[i]);
                         }
 
-                        if (obj is not null)
+                        if (obj != null)
                         {
                             Keys currentKey = (Keys)obj;
 

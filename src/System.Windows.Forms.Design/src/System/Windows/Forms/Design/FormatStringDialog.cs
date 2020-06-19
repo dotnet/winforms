@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Design
         {
             int result = ctl.Width;
 
-            while (ctl is not null)
+            while (ctl != null)
             {
                 result += ctl.Left;
                 ctl = ctl.Parent;
@@ -112,8 +112,8 @@ namespace System.Windows.Forms.Design
         private void FormatStringDialog_Load(object sender, EventArgs e)
         {
             // make a reasonable guess what user control should be shown
-            string formatString = _dgvCellStyle is not null ? _dgvCellStyle.Format : _listControl.FormatString;
-            object nullValue = _dgvCellStyle is not null ? _dgvCellStyle.NullValue : null;
+            string formatString = _dgvCellStyle != null ? _dgvCellStyle.Format : _listControl.FormatString;
+            object nullValue = _dgvCellStyle != null ? _dgvCellStyle.NullValue : null;
             string formatType = string.Empty;
 
             if (!string.IsNullOrEmpty(formatString))
@@ -123,13 +123,13 @@ namespace System.Windows.Forms.Design
 
             // the null value text box should be enabled only when editing DataGridViewCellStyle
             // when we are editing ListControl, it should be disabled
-            if (_dgvCellStyle is not null)
+            if (_dgvCellStyle != null)
             {
                 _formatControl1.NullValueTextBoxEnabled = true;
             }
             else
             {
-                Debug.Assert(_listControl is not null, "we check this everywhere, but it does not hurt to check it again");
+                Debug.Assert(_listControl != null, "we check this everywhere, but it does not hurt to check it again");
                 _formatControl1.NullValueTextBoxEnabled = false;
             }
 
@@ -138,7 +138,7 @@ namespace System.Windows.Forms.Design
             // push the information from FormatString/FormatInfo/NullValue into the FormattingUserControl
             FormatControl.FormatTypeClass formatTypeItem = _formatControl1.FormatTypeItem;
 
-            if (formatTypeItem is not null)
+            if (formatTypeItem != null)
             {
                 // parsing the FormatString uses the CultureInfo. So push the CultureInfo before push the FormatString.
                 formatTypeItem.PushFormatStringIntoFormatType(formatString);
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.Design
                 _formatControl1.FormatType = SR.BindingFormattingDialogFormatTypeNoFormatting;
             }
 
-            _formatControl1.NullValue = nullValue is not null ? nullValue.ToString() : "";
+            _formatControl1.NullValue = nullValue != null ? nullValue.ToString() : "";
         }
 
         public void End()
@@ -264,7 +264,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            if (_dgvCellStyle is not null)
+            if (_dgvCellStyle != null)
             {
                 _dgvCellStyle.Format = formatTypeItem.FormatString;
                 _dgvCellStyle.NullValue = _formatControl1.NullValue;

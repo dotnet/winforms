@@ -107,7 +107,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             continue;
                         }
 
-                        Debug.Assert(result is not null, "IProvideMultipleClassInfo::GetInfoOfIndex returned S_OK for ITypeInfo index " + i + ", this is a issue in the object that's being browsed, NOT the property browser.");
+                        Debug.Assert(result != null, "IProvideMultipleClassInfo::GetInfoOfIndex returned S_OK for ITypeInfo index " + i + ", this is a issue in the object that's being browsed, NOT the property browser.");
                         typeInfos[i] = result;
                     }
 
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             ITypeInfo temp = FindTypeInfo(obj, wantCoClass);
-            if (temp is not null)
+            if (temp != null)
             {
                 return new ITypeInfo[] { temp };
             }
@@ -161,7 +161,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // now get the dispid of the one that worked...
-            if (names is not null)
+            if (names != null)
             {
                 DispatchID pDispid = DispatchID.UNKNOWN;
                 Guid g = Guid.Empty;
@@ -216,7 +216,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 uint[] versions = new uint[2];
                 Guid typeGuid = GetGuidForTypeInfo(ti, versions);
                 PropertyDescriptor[] props = null;
-                bool dontProcess = typeGuid != Guid.Empty && processedLibraries is not null && processedLibraries.Contains(typeGuid);
+                bool dontProcess = typeGuid != Guid.Empty && processedLibraries != null && processedLibraries.Contains(typeGuid);
 
                 if (dontProcess)
                 {
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
 
-                if (props is not null)
+                if (props != null)
                 {
                     propList.AddRange(props);
                 }
@@ -283,7 +283,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             try
             {
-                if (versions is not null)
+                if (versions != null)
                 {
                     versions[0] = pTypeAttr->wMajorVerNum;
                     versions[1] = pTypeAttr->wMinorVerNum;
@@ -328,7 +328,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 case VARENUM.PTR:
                     // we'll need to recurse into a user defined reference typeinfo
-                    Debug.Assert(typeDesc.union.lptdesc is not null, "typeDesc doesn't contain an refTypeDesc!");
+                    Debug.Assert(typeDesc.union.lptdesc != null, "typeDesc doesn't contain an refTypeDesc!");
                     if (typeDesc.union.lptdesc->vt == VARENUM.VARIANT)
                     {
                         return VTToType(typeDesc.union.lptdesc->vt);
@@ -350,7 +350,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // here is where we look at the next level type info.
                 // if we get an enum, process it, otherwise we will recurse
                 // or get a dispatch.
-                if (refTypeInfo is not null)
+                if (refTypeInfo != null)
                 {
                     TYPEATTR* pTypeAttr = null;
                     hr = refTypeInfo.GetTypeAttr(&pTypeAttr);
@@ -562,7 +562,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     flags |= VARFLAGS.FNONBROWSABLE;
                 }
 
-                if (pTypeData[0] is not null)
+                if (pTypeData[0] != null)
                 {
                     pi.TypeData = pTypeData[0];
                 }
@@ -661,7 +661,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                         else
                         {
-                            Debug.Assert(pFuncDesc->lprgelemdescParam is not null, "ELEMDESC param is null!");
+                            Debug.Assert(pFuncDesc->lprgelemdescParam != null, "ELEMDESC param is null!");
                             if (pFuncDesc->lprgelemdescParam is null || pFuncDesc->cParams != 1)
                             {
                                 continue;
@@ -675,7 +675,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         pi = ProcessDataCore(typeInfo, propInfoList, pFuncDesc->memid, nameDispID, in typeDesc, (VARFLAGS)pFuncDesc->wFuncFlags);
 
                         // if we got a setmethod, it's not readonly
-                        if (pi is not null && !isPropGet)
+                        if (pi != null && !isPropGet)
                         {
                             pi.ReadOnly = PropInfo.ReadOnlyFalse;
                         }
@@ -786,7 +786,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                             else
                             {
-                                Debug.Assert(name is not null, "No name for VARDESC member, but GetDocumentation returned S_OK!");
+                                Debug.Assert(name != null, "No name for VARDESC member, but GetDocumentation returned S_OK!");
                                 nameString = name;
                             }
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: adding name value=" + nameString);
@@ -821,7 +821,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                             Type enumType = typeof(int);
 
-                            if (vars.Count > 0 && vars[0] is not null)
+                            if (vars.Count > 0 && vars[0] != null)
                             {
                                 enumType = vars[0].GetType();
                             }

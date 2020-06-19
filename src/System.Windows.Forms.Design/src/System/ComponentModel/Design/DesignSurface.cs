@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_loadErrors is not null)
+                if (_loadErrors != null)
                 {
                     return _loadErrors;
                 }
@@ -152,7 +152,7 @@ namespace System.ComponentModel.Design
                 if (rootComponent is null)
                 {
                     // Check to see if we have any load errors.  If so, use them.
-                    if (_loadErrors is not null)
+                    if (_loadErrors != null)
                     {
                         foreach (object o in _loadErrors)
                         {
@@ -160,7 +160,7 @@ namespace System.ComponentModel.Design
                             {
                                 throw new InvalidOperationException(ex.Message, ex);
                             }
-                            else if (o is not null)
+                            else if (o != null)
                             {
                                 throw new InvalidOperationException(o.ToString());
                             }
@@ -318,7 +318,7 @@ namespace System.ComponentModel.Design
             // Locate an appropriate constructor for IComponents.
             object instance = null;
             ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(Array.Empty<Type>());
-            if (ctor is not null)
+            if (ctor != null)
             {
                 instance = TypeDescriptor.CreateInstance(this, type, Array.Empty<Type>(), Array.Empty<object>());
             }
@@ -328,7 +328,7 @@ namespace System.ComponentModel.Design
                 {
                     ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.ExactBinding, null, new Type[] { typeof(IContainer) }, null);
                 }
-                if (ctor is not null)
+                if (ctor != null)
                 {
                     instance = TypeDescriptor.CreateInstance(this, type, new Type[] { typeof(IContainer) }, new object[] { ComponentContainer });
                 }
@@ -390,14 +390,14 @@ namespace System.ComponentModel.Design
                 {
                     try
                     {
-                        if (_host is not null)
+                        if (_host != null)
                         {
                             _host.DisposeHost();
                         }
                     }
                     finally
                     {
-                        if (_serviceContainer is not null)
+                        if (_serviceContainer != null)
                         {
                             _serviceContainer.RemoveService(typeof(DesignSurface));
                             _serviceContainer.Dispose();
@@ -417,7 +417,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Flush()
         {
-            if (_host is not null)
+            if (_host != null)
             {
                 _host.Flush();
             }
@@ -432,7 +432,7 @@ namespace System.ComponentModel.Design
         /// <returns> An instance of the requested service or null if the service could not be found. </returns>
         public object GetService(Type serviceType)
         {
-            if (_serviceContainer is not null)
+            if (_serviceContainer != null)
             {
                 return _serviceContainer.GetService(serviceType);
             }
@@ -498,7 +498,7 @@ namespace System.ComponentModel.Design
                         HelpLink = SR.DesignSurfaceNoRootComponent
                     };
                     newErrors.Add(ex);
-                    if (errors is not null)
+                    if (errors != null)
                     {
                         newErrors.AddRange(errors);
                     }

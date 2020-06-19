@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         {
             Array.Clear(strings, 0, size);
 
-            if (strings is not null)
+            if (strings != null)
             {
                 this.strings = strings;
             }
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
 
         public void ReleaseAutoComplete()
         {
-            if (_autoCompleteObject2 is not null)
+            if (_autoCompleteObject2 != null)
             {
                 Marshal.ReleaseComObject(_autoCompleteObject2);
                 _autoCompleteObject2 = null;
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
         {
             Array.Clear(strings, 0, size);
 
-            if (strings is not null)
+            if (strings != null)
             {
                 strings = newSource;
             }

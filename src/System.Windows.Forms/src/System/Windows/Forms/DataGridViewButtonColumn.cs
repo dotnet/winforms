@@ -35,7 +35,7 @@ namespace System.Windows.Forms
             get => base.CellTemplate;
             set
             {
-                if (value is not null && !(value is DataGridViewButtonCell))
+                if (value != null && !(value is DataGridViewButtonCell))
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewButtonCell"));
                 }
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
                 if (FlatStyle != value)
                 {
                     ((DataGridViewButtonCell)CellTemplate).FlatStyle = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -102,7 +102,7 @@ namespace System.Windows.Forms
                 if (!string.Equals(value, text, StringComparison.Ordinal))
                 {
                     text = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         if (UseColumnTextForButtonValue)
                         {
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
                 if (UseColumnTextForButtonValue != value)
                 {
                     ((DataGridViewButtonCell)CellTemplate).UseColumnTextForButtonValueInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewColumn = (DataGridViewButtonColumn)System.Activator.CreateInstance(thisType);
             }
-            if (dataGridViewColumn is not null)
+            if (dataGridViewColumn != null)
             {
                 base.CloneInternal(dataGridViewColumn);
                 dataGridViewColumn.Text = text;
@@ -198,14 +198,14 @@ namespace System.Windows.Forms
                     !defaultCellStyle.ForeColor.IsEmpty ||
                     !defaultCellStyle.SelectionBackColor.IsEmpty ||
                     !defaultCellStyle.SelectionForeColor.IsEmpty ||
-                    defaultCellStyle.Font is not null ||
+                    defaultCellStyle.Font != null ||
                     !defaultCellStyle.IsNullValueDefault ||
                     !defaultCellStyle.IsDataSourceNullValueDefault ||
                     !string.IsNullOrEmpty(defaultCellStyle.Format) ||
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
-                    defaultCellStyle.Tag is not null ||
+                    defaultCellStyle.Tag != null ||
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 

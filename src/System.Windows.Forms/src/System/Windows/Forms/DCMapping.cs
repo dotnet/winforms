@@ -147,7 +147,7 @@ namespace System.Windows.Forms
 
         public void Dispose()
         {
-            if (_graphics is not null)
+            if (_graphics != null)
             {
                 // Reset GDI+ if used.
                 // we need to dispose the graphics object first, as it will do
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
                 _graphics = null;
             }
 
-            if (_dc is not null)
+            if (_dc != null)
             {
                 // Now properly reset GDI.
                 _dc.RestoreHdc();
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(_dc is not null, "unexpected null dc!");
+                Debug.Assert(_dc != null, "unexpected null dc!");
 
                 if (_graphics is null)
                 {

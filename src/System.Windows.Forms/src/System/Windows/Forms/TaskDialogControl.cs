@@ -146,7 +146,7 @@ namespace System.Windows.Forms
 
         private protected void DenyIfBoundAndNotCreated()
         {
-            if (BoundPage is not null && !IsCreated)
+            if (BoundPage != null && !IsCreated)
             {
                 throw new InvalidOperationException(SR.TaskDialogControlNotCreated);
             }

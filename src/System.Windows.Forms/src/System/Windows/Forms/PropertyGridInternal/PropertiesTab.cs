@@ -34,7 +34,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (def is null)
             {
                 PropertyDescriptorCollection props = GetProperties(obj);
-                if (props is not null)
+                if (props != null)
                 {
                     for (int i = 0; i < props.Count; i++)
                     {

@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components is not null))
+            if (disposing && (components != null))
             {
                 components.Dispose();
             }

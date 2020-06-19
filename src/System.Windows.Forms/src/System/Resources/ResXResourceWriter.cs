@@ -155,20 +155,20 @@ namespace System.Resources
             {
                 bool writeHeaderRequired = false;
 
-                if (_textWriter is not null)
+                if (_textWriter != null)
                 {
                     _textWriter.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
                     writeHeaderRequired = true;
 
                     _xmlTextWriter = new XmlTextWriter(_textWriter);
                 }
-                else if (_stream is not null)
+                else if (_stream != null)
                 {
                     _xmlTextWriter = new XmlTextWriter(_stream, System.Text.Encoding.UTF8);
                 }
                 else
                 {
-                    Debug.Assert(_fileName is not null, "Nothing to output to");
+                    Debug.Assert(_fileName != null, "Nothing to output to");
                     _xmlTextWriter = new XmlTextWriter(_fileName, System.Text.Encoding.UTF8);
                 }
 
@@ -420,7 +420,7 @@ namespace System.Resources
                         {
                             type = null;
                         }
-                        else if (typeObject is not null)
+                        else if (typeObject != null)
                         {
                             assemblyName = GetFullName(MultitargetUtil.GetAssemblyQualifiedName(typeObject, _typeNameConverter));
                             alias = GetAliasFromName(new AssemblyName(assemblyName));
@@ -450,18 +450,18 @@ namespace System.Resources
                 }
                 else
                 {
-                    if (type is not null)
+                    if (type != null)
                     {
                         Writer.WriteAttributeString(TypeStr, type);
                     }
                 }
 
-                if (mimeType is not null)
+                if (mimeType != null)
                 {
                     Writer.WriteAttributeString(MimeTypeStr, mimeType);
                 }
 
-                if ((type is null && mimeType is null) || (type is not null && type.StartsWith("System.Char", StringComparison.Ordinal)))
+                if ((type is null && mimeType is null) || (type != null && type.StartsWith("System.Char", StringComparison.Ordinal)))
                 {
                     Writer.WriteAttributeString("xml", "space", null, "preserve");
                 }
@@ -546,19 +546,19 @@ namespace System.Resources
                     Generate();
                 }
 
-                if (_xmlTextWriter is not null)
+                if (_xmlTextWriter != null)
                 {
                     _xmlTextWriter.Close();
                     _xmlTextWriter = null;
                 }
 
-                if (_stream is not null)
+                if (_stream != null)
                 {
                     _stream.Close();
                     _stream = null;
                 }
 
-                if (_textWriter is not null)
+                if (_textWriter != null)
                 {
                     _textWriter.Close();
                     _textWriter = null;

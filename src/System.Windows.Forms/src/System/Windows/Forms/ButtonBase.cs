@@ -321,7 +321,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (image is null && imageList is not null)
+                if (image is null && imageList != null)
                 {
                     int actualIndex = imageIndex.ActualIndex;
 
@@ -353,7 +353,7 @@ namespace System.Windows.Forms
                 StopAnimate();
 
                 image = value;
-                if (image is not null)
+                if (image != null)
                 {
                     ImageIndex = ImageList.Indexer.DefaultIndex;
                     ImageList = null;
@@ -408,7 +408,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndex.Index != ImageList.Indexer.DefaultIndex && imageList is not null && imageIndex.Index >= imageList.Images.Count)
+                if (imageIndex.Index != ImageList.Indexer.DefaultIndex && imageList != null && imageIndex.Index >= imageList.Images.Count)
                 {
                     return imageList.Images.Count - 1;
                 }
@@ -462,7 +462,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value is not null)
+                if (value != null)
                 {
                     // Image.set calls ImageIndex = -1
                     image = null;
@@ -499,7 +499,7 @@ namespace System.Windows.Forms
 
                 // Detach old event handlers
                 //
-                if (imageList is not null)
+                if (imageList != null)
                 {
                     imageList.RecreateHandle -= recreateHandler;
                     imageList.Disposed -= disposedHandler;
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
 
                 // Make sure we don't have an Image as well as an ImageList
                 //
-                if (value is not null)
+                if (value != null)
                 {
                     image = null; // Image.set calls ImageList = null
                 }
@@ -517,7 +517,7 @@ namespace System.Windows.Forms
 
                 // Wire up new event handlers
                 //
-                if (value is not null)
+                if (value != null)
                 {
                     value.RecreateHandle += recreateHandler;
                     value.Disposed += disposedHandler;
@@ -743,7 +743,7 @@ namespace System.Windows.Forms
 
         private void Animate()
         {
-            Animate(!DesignMode && Visible && Enabled && ParentInternal is not null);
+            Animate(!DesignMode && Visible && Enabled && ParentInternal != null);
         }
 
         private void StopAnimate()
@@ -757,7 +757,7 @@ namespace System.Windows.Forms
             {
                 if (animate)
                 {
-                    if (image is not null)
+                    if (image != null)
                     {
                         ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
@@ -765,7 +765,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (image is not null)
+                    if (image != null)
                     {
                         ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
@@ -789,12 +789,12 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 StopAnimate();
-                if (imageList is not null)
+                if (imageList != null)
                 {
                     imageList.Disposed -= new EventHandler(DetachImageList);
                 }
                 //Dipose the tooltip if one present..
-                if (textToolTip is not null)
+                if (textToolTip != null)
                 {
                     textToolTip.Dispose();
                     textToolTip = null;
@@ -846,7 +846,7 @@ namespace System.Windows.Forms
         {
             SetFlag(FlagMouseOver, true);
             Invalidate();
-            if (!DesignMode && AutoEllipsis && ShowToolTip && textToolTip is not null)
+            if (!DesignMode && AutoEllipsis && ShowToolTip && textToolTip != null)
             {
                 textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
             }
@@ -861,7 +861,7 @@ namespace System.Windows.Forms
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             SetFlag(FlagMouseOver, false);
-            if (textToolTip is not null)
+            if (textToolTip != null)
             {
                 textToolTip.Hide(this);
             }
@@ -1194,7 +1194,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeImage()
         {
-            return image is not null;
+            return image != null;
         }
 
         private void UpdateOwnerDraw()

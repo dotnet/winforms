@@ -146,16 +146,16 @@ namespace System.Windows.Forms
                 if (oldValue != value)
                 {
                     EventHandler disposedHandler = new EventHandler(DetachContextMenuStrip);
-                    if (oldValue is not null)
+                    if (oldValue != null)
                     {
                         oldValue.Disposed -= disposedHandler;
                     }
                     Properties.SetObject(PropCellContextMenuStrip, value);
-                    if (value is not null)
+                    if (value != null)
                     {
                         value.Disposed += disposedHandler;
                     }
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridView.OnCellContextMenuStripChanged(this);
                     }
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetObject(PropCellErrorText, value);
                 }
-                if (DataGridView is not null && !errorText.Equals(ErrorTextInternal))
+                if (DataGridView != null && !errorText.Equals(ErrorTextInternal))
                 {
                     DataGridView.OnCellErrorTextChanged(this);
                 }
@@ -317,9 +317,9 @@ namespace System.Windows.Forms
             get
             {
                 TypeConverter formattedValueTypeConverter = null;
-                if (FormattedValueType is not null)
+                if (FormattedValueType != null)
                 {
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         formattedValueTypeConverter = DataGridView.GetCachedTypeConverter(FormattedValueType);
                     }
@@ -337,12 +337,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (DataGridView is not null && RowIndex >= 0 && ColumnIndex >= 0)
+                if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
                     return OwningColumn.Frozen && OwningRow.Frozen;
                 }
-                else if (OwningRow is not null && (OwningRow.DataGridView is null || RowIndex >= 0))
+                else if (OwningRow != null && (OwningRow.DataGridView is null || RowIndex >= 0))
                 {
                     return OwningRow.Frozen;
                 }
@@ -352,7 +352,7 @@ namespace System.Windows.Forms
 
         private bool HasErrorText
         {
-            get => Properties.ContainsObject(PropCellErrorText) && Properties.GetObject(PropCellErrorText) is not null;
+            get => Properties.ContainsObject(PropCellErrorText) && Properties.GetObject(PropCellErrorText) != null;
         }
 
         [Browsable(false)]
@@ -360,7 +360,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Properties.ContainsObject(PropCellStyle) && Properties.GetObject(PropCellStyle) is not null;
+                return Properties.ContainsObject(PropCellStyle) && Properties.GetObject(PropCellStyle) != null;
             }
         }
 
@@ -368,7 +368,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Properties.ContainsObject(PropCellToolTipText) && Properties.GetObject(PropCellToolTipText) is not null;
+                return Properties.ContainsObject(PropCellToolTipText) && Properties.GetObject(PropCellToolTipText) != null;
             }
         }
 
@@ -376,17 +376,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Properties.ContainsObject(PropCellValue) && Properties.GetObject(PropCellValue) is not null;
+                return Properties.ContainsObject(PropCellValue) && Properties.GetObject(PropCellValue) != null;
             }
         }
 
         private protected virtual bool HasValueType
         {
-            get => Properties.ContainsObject(PropCellValueType) && Properties.GetObject(PropCellValueType) is not null;
+            get => Properties.ContainsObject(PropCellValueType) && Properties.GetObject(PropCellValueType) != null;
         }
 
         #region IKeyboardToolTip implementation
-        bool IKeyboardToolTip.CanShowToolTipsNow() => Visible && DataGridView is not null;
+        bool IKeyboardToolTip.CanShowToolTipsNow() => Visible && DataGridView != null;
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => AccessibilityObject.Bounds;
 
@@ -542,11 +542,11 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
-                if (OwningRow is not null && (OwningRow.DataGridView is null || RowIndex >= 0) && OwningRow.ReadOnly)
+                if (OwningRow != null && (OwningRow.DataGridView is null || RowIndex >= 0) && OwningRow.ReadOnly)
                 {
                     return true;
                 }
-                if (DataGridView is not null && RowIndex >= 0 && ColumnIndex >= 0)
+                if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
                     return OwningColumn.ReadOnly;
@@ -555,7 +555,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (DataGridView is not null)
+                if (DataGridView != null)
                 {
                     if (RowIndex == -1)
                     {
@@ -609,12 +609,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (OwningRow is not null && (OwningRow.DataGridView is null || RowIndex >= 0) && OwningRow.Resizable == DataGridViewTriState.True)
+                if (OwningRow != null && (OwningRow.DataGridView is null || RowIndex >= 0) && OwningRow.Resizable == DataGridViewTriState.True)
                 {
                     return true;
                 }
 
-                if (DataGridView is not null && RowIndex >= 0 && ColumnIndex >= 0)
+                if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
                     return OwningColumn.Resizable == DataGridViewTriState.True;
@@ -641,12 +641,12 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                if (OwningRow is not null && (OwningRow.DataGridView is null || RowIndex >= 0) && OwningRow.Selected)
+                if (OwningRow != null && (OwningRow.DataGridView is null || RowIndex >= 0) && OwningRow.Selected)
                 {
                     return true;
                 }
 
-                if (DataGridView is not null && RowIndex >= 0 && ColumnIndex >= 0)
+                if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
                     return OwningColumn.Selected;
@@ -656,7 +656,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (DataGridView is not null)
+                if (DataGridView != null)
                 {
                     if (RowIndex == -1)
                     {
@@ -686,7 +686,7 @@ namespace System.Windows.Forms
                 {
                     State = State & ~DataGridViewElementStates.Selected;
                 }
-                if (DataGridView is not null)
+                if (DataGridView != null)
                 {
                     DataGridView.OnDataGridViewElementStateChanged(this, -1, DataGridViewElementStates.Selected);
                 }
@@ -706,7 +706,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (DataGridView is not null)
+                if (DataGridView != null)
                 {
                     DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
                     dgvabsEffective = AdjustCellBorderStyle(
@@ -747,17 +747,17 @@ namespace System.Windows.Forms
                     dgvcs = Style;
                     dgvcs.RemoveScope(DataGridViewCellStyleScopes.Cell);
                 }
-                if (value is not null || Properties.ContainsObject(PropCellStyle))
+                if (value != null || Properties.ContainsObject(PropCellStyle))
                 {
-                    if (value is not null)
+                    if (value != null)
                     {
                         value.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
                     }
                     Properties.SetObject(PropCellStyle, value);
                 }
-                if (((dgvcs is not null && value is null) ||
-                    (dgvcs is null && value is not null) ||
-                    (dgvcs is not null && value is not null && !dgvcs.Equals(Style))) && DataGridView is not null)
+                if (((dgvcs != null && value is null) ||
+                    (dgvcs is null && value != null) ||
+                    (dgvcs != null && value != null && !dgvcs.Equals(Style))) && DataGridView != null)
                 {
                     DataGridView.OnCellStyleChanged(this);
                 }
@@ -778,7 +778,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is not null || Properties.ContainsObject(PropCellTag))
+                if (value != null || Properties.ContainsObject(PropCellTag))
                 {
                     Properties.SetObject(PropCellTag, value);
                 }
@@ -814,7 +814,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetObject(PropCellToolTipText, value);
                 }
-                if (DataGridView is not null && !toolTipText.Equals(ToolTipTextInternal))
+                if (DataGridView != null && !toolTipText.Equals(ToolTipTextInternal))
                 {
                     DataGridView.OnCellToolTipTextChanged(this);
                 }
@@ -842,7 +842,7 @@ namespace System.Windows.Forms
             get
             {
                 Type cellValueType = (Type)Properties.GetObject(PropCellValueType);
-                if (cellValueType is null && OwningColumn is not null)
+                if (cellValueType is null && OwningColumn != null)
                 {
                     cellValueType = OwningColumn.ValueType;
                 }
@@ -851,7 +851,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is not null || Properties.ContainsObject(PropCellValueType))
+                if (value != null || Properties.ContainsObject(PropCellValueType))
                 {
                     Properties.SetObject(PropCellValueType, value);
                 }
@@ -863,13 +863,13 @@ namespace System.Windows.Forms
             get
             {
                 TypeConverter valueTypeConverter = null;
-                if (OwningColumn is not null)
+                if (OwningColumn != null)
                 {
                     valueTypeConverter = OwningColumn.BoundColumnConverter;
                 }
-                if (valueTypeConverter is null && ValueType is not null)
+                if (valueTypeConverter is null && ValueType != null)
                 {
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         valueTypeConverter = DataGridView.GetCachedTypeConverter(ValueType);
                     }
@@ -887,12 +887,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (DataGridView is not null && RowIndex >= 0 && ColumnIndex >= 0)
+                if (DataGridView != null && RowIndex >= 0 && ColumnIndex >= 0)
                 {
                     Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
                     return OwningColumn.Visible && OwningRow.Visible;
                 }
-                else if (OwningRow is not null && (OwningRow.DataGridView is null || RowIndex >= 0))
+                else if (OwningRow != null && (OwningRow.DataGridView is null || RowIndex >= 0))
                 {
                     return OwningRow.Visible;
                 }
@@ -920,7 +920,7 @@ namespace System.Windows.Forms
             switch (dataGridViewAdvancedBorderStyleInput.All)
             {
                 case DataGridViewAdvancedCellBorderStyle.Single:
-                    if (DataGridView is not null && DataGridView.RightToLeftInternal)
+                    if (DataGridView != null && DataGridView.RightToLeftInternal)
                     {
                         dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
                         dataGridViewAdvancedBorderStylePlaceholder.RightInternal = (isFirstDisplayedColumn && singleVerticalBorderAdded) ? DataGridViewAdvancedCellBorderStyle.Single : DataGridViewAdvancedCellBorderStyle.None;
@@ -935,7 +935,7 @@ namespace System.Windows.Forms
                     return dataGridViewAdvancedBorderStylePlaceholder;
 
                 case DataGridViewAdvancedCellBorderStyle.NotSet:
-                    if (DataGridView is not null && DataGridView.AdvancedCellBorderStyle == dataGridViewAdvancedBorderStyleInput)
+                    if (DataGridView != null && DataGridView.AdvancedCellBorderStyle == dataGridViewAdvancedBorderStyleInput)
                     {
                         switch (DataGridView.CellBorderStyle)
                         {
@@ -1001,9 +1001,9 @@ namespace System.Windows.Forms
                 rect.Height++;
             }
 
-            if (OwningColumn is not null)
+            if (OwningColumn != null)
             {
-                if (DataGridView is not null && DataGridView.RightToLeftInternal)
+                if (DataGridView != null && DataGridView.RightToLeftInternal)
                 {
                     rect.X += OwningColumn.DividerWidth;
                 }
@@ -1012,7 +1012,7 @@ namespace System.Windows.Forms
                     rect.Width += OwningColumn.DividerWidth;
                 }
             }
-            if (OwningRow is not null)
+            if (OwningRow != null)
             {
                 rect.Height += OwningRow.DividerHeight;
             }
@@ -1028,7 +1028,7 @@ namespace System.Windows.Forms
 
         internal DataGridViewElementStates CellStateFromColumnRowStates(DataGridViewElementStates rowState)
         {
-            Debug.Assert(DataGridView is not null);
+            Debug.Assert(DataGridView != null);
             Debug.Assert(ColumnIndex >= 0);
             DataGridViewElementStates orFlags = DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.Selected;
             DataGridViewElementStates andFlags = DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Visible;
@@ -1066,14 +1066,14 @@ namespace System.Windows.Forms
             {
                 dataGridViewCell.ToolTipText = ToolTipTextInternal;
             }
-            if (ContextMenuStripInternal is not null)
+            if (ContextMenuStripInternal != null)
             {
                 dataGridViewCell.ContextMenuStrip = ContextMenuStripInternal.Clone();
             }
             dataGridViewCell.State = State & ~DataGridViewElementStates.Selected;
             dataGridViewCell.Tag = Tag;
 
-            if (DataGridView is not null)
+            if (DataGridView != null)
             {
                 KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, DataGridView.KeyboardToolTip);
             }
@@ -1099,12 +1099,12 @@ namespace System.Windows.Forms
             out DataGridViewElementStates cellState,
             out Rectangle cellBounds)
         {
-            Debug.Assert(DataGridView is not null);
+            Debug.Assert(DataGridView != null);
             bool singleVerticalBorderAdded = !DataGridView.RowHeadersVisible && DataGridView.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single;
             bool singleHorizontalBorderAdded = !DataGridView.ColumnHeadersVisible && DataGridView.AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single;
             DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle();
 
-            if (rowIndex > -1 && OwningColumn is not null)
+            if (rowIndex > -1 && OwningColumn != null)
             {
                 // Inner cell case
                 dgvabsEffective = AdjustCellBorderStyle(DataGridView.AdvancedCellBorderStyle,
@@ -1117,20 +1117,20 @@ namespace System.Windows.Forms
                 cellState = CellStateFromColumnRowStates(rowState);
                 cellState |= State;
             }
-            else if (OwningColumn is not null)
+            else if (OwningColumn != null)
             {
                 // Column header cell case
                 Debug.Assert(rowIndex == -1);
                 Debug.Assert(this is DataGridViewColumnHeaderCell, "if the row index == -1 and we have an owning column this should be a column header cell");
                 DataGridViewColumn dataGridViewColumn = DataGridView.Columns.GetLastColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                bool isLastVisibleColumn = (dataGridViewColumn is not null && dataGridViewColumn.Index == ColumnIndex);
+                bool isLastVisibleColumn = (dataGridViewColumn != null && dataGridViewColumn.Index == ColumnIndex);
                 dgvabsEffective = DataGridView.AdjustColumnHeaderBorderStyle(DataGridView.AdvancedColumnHeadersBorderStyle,
                     dataGridViewAdvancedBorderStylePlaceholder,
                     ColumnIndex == DataGridView.FirstDisplayedColumnIndex,
                     isLastVisibleColumn);
                 cellState = OwningColumn.State | State;
             }
-            else if (OwningRow is not null)
+            else if (OwningRow != null)
             {
                 // Row header cell case
                 Debug.Assert(this is DataGridViewRowHeaderCell);
@@ -1212,7 +1212,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException();
             }
-            if (dgv.EditingControl.ParentInternal is not null)
+            if (dgv.EditingControl.ParentInternal != null)
             {
                 if (dgv.EditingControl.ContainsFocus)
                 {
@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms
                     AccessibilityObject.RaiseStructureChangedEvent(UiaCore.StructureChangeType.ChildRemoved, dgv.EditingControlAccessibleObject.RuntimeId);
                 }
             }
-            if (dgv.EditingPanel.ParentInternal is not null)
+            if (dgv.EditingPanel.ParentInternal != null)
             {
                 Debug.Assert(dgv.EditingPanel.ParentInternal == dgv);
                 Debug.Assert(dgv.Controls.Contains(dgv.EditingPanel));
@@ -1290,7 +1290,7 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 ContextMenuStrip contextMenuStrip = (ContextMenuStrip)ContextMenuStripInternal;
-                if (contextMenuStrip is not null)
+                if (contextMenuStrip != null)
                 {
                     contextMenuStrip.Disposed -= new EventHandler(DetachContextMenuStrip);
                 }
@@ -1439,7 +1439,7 @@ namespace System.Windows.Forms
             if (DpiHelper.IsScalingRequired)
             {
                 Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, new Size(iconsWidth, iconsHeight));
-                if (scaledBitmap is not null)
+                if (scaledBitmap != null)
                 {
                     b.Dispose();
                     b = scaledBitmap;
@@ -1486,7 +1486,7 @@ namespace System.Windows.Forms
                     sb.Append("<TR>");
                 }
                 sb.Append("<TD>");
-                if (formattedValue is not null)
+                if (formattedValue != null)
                 {
                     FormatPlainTextAsHtml(formattedValue.ToString(), new StringWriter(sb, CultureInfo.CurrentCulture));
                 }
@@ -1512,7 +1512,7 @@ namespace System.Windows.Forms
                     string.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
                     string.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (formattedValue is not null)
+                    if (formattedValue != null)
                     {
                         if (firstCell && lastCell && inFirstRow && inLastRow)
                         {
@@ -1564,8 +1564,8 @@ namespace System.Windows.Forms
         internal ContextMenuStrip GetContextMenuStrip(int rowIndex)
         {
             ContextMenuStrip contextMenuStrip = ContextMenuStripInternal;
-            if (DataGridView is not null &&
-                (DataGridView.VirtualMode || DataGridView.DataSource is not null))
+            if (DataGridView != null &&
+                (DataGridView.VirtualMode || DataGridView.DataSource != null))
             {
                 contextMenuStrip = DataGridView.OnCellContextMenuStripNeeded(ColumnIndex, rowIndex, contextMenuStrip);
             }
@@ -1574,7 +1574,7 @@ namespace System.Windows.Forms
 
         internal void GetContrastedPens(Color baseline, ref Pen darkPen, ref Pen lightPen)
         {
-            Debug.Assert(DataGridView is not null);
+            Debug.Assert(DataGridView != null);
 
             int darkDistance = ColorDistance(baseline, SystemColors.ControlDark);
             int lightDistance = ColorDistance(baseline, SystemColors.ControlLightLight);
@@ -1644,12 +1644,12 @@ namespace System.Windows.Forms
 
         internal object GetEditedFormattedValue(object value, int rowIndex, ref DataGridViewCellStyle dataGridViewCellStyle, DataGridViewDataErrorContexts context)
         {
-            Debug.Assert(DataGridView is not null);
+            Debug.Assert(DataGridView != null);
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             if (ColumnIndex == ptCurrentCell.X && rowIndex == ptCurrentCell.Y)
             {
                 IDataGridViewEditingControl dgvectl = (IDataGridViewEditingControl)DataGridView.EditingControl;
-                if (dgvectl is not null)
+                if (dgvectl != null)
                 {
                     return dgvectl.GetEditingControlFormattedValue(context);
                 }
@@ -1690,21 +1690,21 @@ namespace System.Windows.Forms
         {
             string errorText = string.Empty;
             object objErrorText = Properties.GetObject(PropCellErrorText);
-            if (objErrorText is not null)
+            if (objErrorText != null)
             {
                 errorText = (string)objErrorText;
             }
-            else if (DataGridView is not null &&
+            else if (DataGridView != null &&
                      rowIndex != -1 &&
                      rowIndex != DataGridView.NewRowIndex &&
-                     OwningColumn is not null &&
+                     OwningColumn != null &&
                      OwningColumn.IsDataBound &&
-                     DataGridView.DataConnection is not null)
+                     DataGridView.DataConnection != null)
             {
                 errorText = DataGridView.DataConnection.GetError(OwningColumn.BoundColumnIndex, ColumnIndex, rowIndex);
             }
 
-            if (DataGridView is not null && (DataGridView.VirtualMode || DataGridView.DataSource is not null) &&
+            if (DataGridView != null && (DataGridView.VirtualMode || DataGridView.DataSource != null) &&
                 ColumnIndex >= 0 && rowIndex >= 0)
             {
                 errorText = DataGridView.OnCellErrorTextNeeded(ColumnIndex, rowIndex, errorText);
@@ -1743,7 +1743,7 @@ namespace System.Windows.Forms
             bool checkFormattedValType = true;
 
             if (!formattingApplied &&
-                FormattedValueType is not null &&
+                FormattedValueType != null &&
                 (formattedValue is null || !FormattedValueType.IsAssignableFrom(formattedValue.GetType())))
             {
                 try
@@ -1782,7 +1782,7 @@ namespace System.Windows.Forms
             {
                 if (formattedValue is null &&
                     cellStyle.NullValue is null &&
-                    FormattedValueType is not null &&
+                    FormattedValueType != null &&
                     !typeof(ValueType).IsAssignableFrom(FormattedValueType))
                 {
                     // null is an acceptable formatted value
@@ -1847,13 +1847,13 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            Debug.Assert(OwningRow is not null);
+            Debug.Assert(OwningRow != null);
             return OwningRow.GetHeight(rowIndex);
         }
 
         public virtual ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
         {
-            if (DataGridView is not null)
+            if (DataGridView != null)
             {
                 if (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)
                 {
@@ -1867,30 +1867,30 @@ namespace System.Windows.Forms
             }
 
             ContextMenuStrip contextMenuStrip = GetContextMenuStrip(rowIndex);
-            if (contextMenuStrip is not null)
+            if (contextMenuStrip != null)
             {
                 return contextMenuStrip;
             }
 
-            if (OwningRow is not null)
+            if (OwningRow != null)
             {
                 contextMenuStrip = OwningRow.GetContextMenuStrip(rowIndex);
-                if (contextMenuStrip is not null)
+                if (contextMenuStrip != null)
                 {
                     return contextMenuStrip;
                 }
             }
 
-            if (OwningColumn is not null)
+            if (OwningColumn != null)
             {
                 contextMenuStrip = OwningColumn.ContextMenuStrip;
-                if (contextMenuStrip is not null)
+                if (contextMenuStrip != null)
                 {
                     return contextMenuStrip;
                 }
             }
 
-            if (DataGridView is not null)
+            if (DataGridView != null)
             {
                 return DataGridView.ContextMenuStrip;
             }
@@ -1911,7 +1911,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
                 }
-                if (OwningRow is not null)
+                if (OwningRow != null)
                 {
                     state |= (OwningRow.GetState(-1) & (DataGridViewElementStates.Frozen | DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible));
                     if (OwningRow.GetResizable(rowIndex) == DataGridViewTriState.True)
@@ -1928,8 +1928,8 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
-            Debug.Assert(OwningColumn is not null);
-            Debug.Assert(OwningRow is not null);
+            Debug.Assert(OwningColumn != null);
+            Debug.Assert(OwningRow != null);
             Debug.Assert(ColumnIndex >= 0);
 
             if (DataGridView.Rows.SharedRow(rowIndex) != OwningRow)
@@ -2027,33 +2027,33 @@ namespace System.Windows.Forms
             if (HasStyle)
             {
                 cellStyle = Style;
-                Debug.Assert(cellStyle is not null);
+                Debug.Assert(cellStyle != null);
             }
 
             DataGridViewCellStyle rowStyle = null;
             if (DataGridView.Rows.SharedRow(rowIndex).HasDefaultCellStyle)
             {
                 rowStyle = DataGridView.Rows.SharedRow(rowIndex).DefaultCellStyle;
-                Debug.Assert(rowStyle is not null);
+                Debug.Assert(rowStyle != null);
             }
 
             DataGridViewCellStyle columnStyle = null;
             if (OwningColumn.HasDefaultCellStyle)
             {
                 columnStyle = OwningColumn.DefaultCellStyle;
-                Debug.Assert(columnStyle is not null);
+                Debug.Assert(columnStyle != null);
             }
 
             DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
-            Debug.Assert(dataGridViewStyle is not null);
+            Debug.Assert(dataGridViewStyle != null);
 
             if (includeColors)
             {
-                if (cellStyle is not null && !cellStyle.BackColor.IsEmpty)
+                if (cellStyle != null && !cellStyle.BackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.BackColor = cellStyle.BackColor;
                 }
-                else if (rowStyle is not null && !rowStyle.BackColor.IsEmpty)
+                else if (rowStyle != null && !rowStyle.BackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.BackColor = rowStyle.BackColor;
                 }
@@ -2066,7 +2066,7 @@ namespace System.Windows.Forms
                 {
                     inheritedCellStyleTmp.BackColor = DataGridView.AlternatingRowsDefaultCellStyle.BackColor;
                 }
-                else if (columnStyle is not null && !columnStyle.BackColor.IsEmpty)
+                else if (columnStyle != null && !columnStyle.BackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.BackColor = columnStyle.BackColor;
                 }
@@ -2075,11 +2075,11 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.BackColor = dataGridViewStyle.BackColor;
                 }
 
-                if (cellStyle is not null && !cellStyle.ForeColor.IsEmpty)
+                if (cellStyle != null && !cellStyle.ForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.ForeColor = cellStyle.ForeColor;
                 }
-                else if (rowStyle is not null && !rowStyle.ForeColor.IsEmpty)
+                else if (rowStyle != null && !rowStyle.ForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.ForeColor = rowStyle.ForeColor;
                 }
@@ -2092,7 +2092,7 @@ namespace System.Windows.Forms
                 {
                     inheritedCellStyleTmp.ForeColor = DataGridView.AlternatingRowsDefaultCellStyle.ForeColor;
                 }
-                else if (columnStyle is not null && !columnStyle.ForeColor.IsEmpty)
+                else if (columnStyle != null && !columnStyle.ForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.ForeColor = columnStyle.ForeColor;
                 }
@@ -2101,11 +2101,11 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.ForeColor = dataGridViewStyle.ForeColor;
                 }
 
-                if (cellStyle is not null && !cellStyle.SelectionBackColor.IsEmpty)
+                if (cellStyle != null && !cellStyle.SelectionBackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionBackColor = cellStyle.SelectionBackColor;
                 }
-                else if (rowStyle is not null && !rowStyle.SelectionBackColor.IsEmpty)
+                else if (rowStyle != null && !rowStyle.SelectionBackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionBackColor = rowStyle.SelectionBackColor;
                 }
@@ -2118,7 +2118,7 @@ namespace System.Windows.Forms
                 {
                     inheritedCellStyleTmp.SelectionBackColor = DataGridView.AlternatingRowsDefaultCellStyle.SelectionBackColor;
                 }
-                else if (columnStyle is not null && !columnStyle.SelectionBackColor.IsEmpty)
+                else if (columnStyle != null && !columnStyle.SelectionBackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionBackColor = columnStyle.SelectionBackColor;
                 }
@@ -2127,11 +2127,11 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.SelectionBackColor = dataGridViewStyle.SelectionBackColor;
                 }
 
-                if (cellStyle is not null && !cellStyle.SelectionForeColor.IsEmpty)
+                if (cellStyle != null && !cellStyle.SelectionForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionForeColor = cellStyle.SelectionForeColor;
                 }
-                else if (rowStyle is not null && !rowStyle.SelectionForeColor.IsEmpty)
+                else if (rowStyle != null && !rowStyle.SelectionForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionForeColor = rowStyle.SelectionForeColor;
                 }
@@ -2144,7 +2144,7 @@ namespace System.Windows.Forms
                 {
                     inheritedCellStyleTmp.SelectionForeColor = DataGridView.AlternatingRowsDefaultCellStyle.SelectionForeColor;
                 }
-                else if (columnStyle is not null && !columnStyle.SelectionForeColor.IsEmpty)
+                else if (columnStyle != null && !columnStyle.SelectionForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionForeColor = columnStyle.SelectionForeColor;
                 }
@@ -2154,24 +2154,24 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (cellStyle is not null && cellStyle.Font is not null)
+            if (cellStyle != null && cellStyle.Font != null)
             {
                 inheritedCellStyleTmp.Font = cellStyle.Font;
             }
-            else if (rowStyle is not null && rowStyle.Font is not null)
+            else if (rowStyle != null && rowStyle.Font != null)
             {
                 inheritedCellStyleTmp.Font = rowStyle.Font;
             }
-            else if (DataGridView.RowsDefaultCellStyle.Font is not null &&
+            else if (DataGridView.RowsDefaultCellStyle.Font != null &&
                 (rowIndex % 2 == 0 || DataGridView.AlternatingRowsDefaultCellStyle.Font is null))
             {
                 inheritedCellStyleTmp.Font = DataGridView.RowsDefaultCellStyle.Font;
             }
-            else if (rowIndex % 2 == 1 && DataGridView.AlternatingRowsDefaultCellStyle.Font is not null)
+            else if (rowIndex % 2 == 1 && DataGridView.AlternatingRowsDefaultCellStyle.Font != null)
             {
                 inheritedCellStyleTmp.Font = DataGridView.AlternatingRowsDefaultCellStyle.Font;
             }
-            else if (columnStyle is not null && columnStyle.Font is not null)
+            else if (columnStyle != null && columnStyle.Font != null)
             {
                 inheritedCellStyleTmp.Font = columnStyle.Font;
             }
@@ -2180,11 +2180,11 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.Font = dataGridViewStyle.Font;
             }
 
-            if (cellStyle is not null && !cellStyle.IsNullValueDefault)
+            if (cellStyle != null && !cellStyle.IsNullValueDefault)
             {
                 inheritedCellStyleTmp.NullValue = cellStyle.NullValue;
             }
-            else if (rowStyle is not null && !rowStyle.IsNullValueDefault)
+            else if (rowStyle != null && !rowStyle.IsNullValueDefault)
             {
                 inheritedCellStyleTmp.NullValue = rowStyle.NullValue;
             }
@@ -2198,7 +2198,7 @@ namespace System.Windows.Forms
             {
                 inheritedCellStyleTmp.NullValue = DataGridView.AlternatingRowsDefaultCellStyle.NullValue;
             }
-            else if (columnStyle is not null && !columnStyle.IsNullValueDefault)
+            else if (columnStyle != null && !columnStyle.IsNullValueDefault)
             {
                 inheritedCellStyleTmp.NullValue = columnStyle.NullValue;
             }
@@ -2207,11 +2207,11 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.NullValue = dataGridViewStyle.NullValue;
             }
 
-            if (cellStyle is not null && !cellStyle.IsDataSourceNullValueDefault)
+            if (cellStyle != null && !cellStyle.IsDataSourceNullValueDefault)
             {
                 inheritedCellStyleTmp.DataSourceNullValue = cellStyle.DataSourceNullValue;
             }
-            else if (rowStyle is not null && !rowStyle.IsDataSourceNullValueDefault)
+            else if (rowStyle != null && !rowStyle.IsDataSourceNullValueDefault)
             {
                 inheritedCellStyleTmp.DataSourceNullValue = rowStyle.DataSourceNullValue;
             }
@@ -2225,7 +2225,7 @@ namespace System.Windows.Forms
             {
                 inheritedCellStyleTmp.DataSourceNullValue = DataGridView.AlternatingRowsDefaultCellStyle.DataSourceNullValue;
             }
-            else if (columnStyle is not null && !columnStyle.IsDataSourceNullValueDefault)
+            else if (columnStyle != null && !columnStyle.IsDataSourceNullValueDefault)
             {
                 inheritedCellStyleTmp.DataSourceNullValue = columnStyle.DataSourceNullValue;
             }
@@ -2234,11 +2234,11 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.DataSourceNullValue = dataGridViewStyle.DataSourceNullValue;
             }
 
-            if (cellStyle is not null && cellStyle.Format.Length != 0)
+            if (cellStyle != null && cellStyle.Format.Length != 0)
             {
                 inheritedCellStyleTmp.Format = cellStyle.Format;
             }
-            else if (rowStyle is not null && rowStyle.Format.Length != 0)
+            else if (rowStyle != null && rowStyle.Format.Length != 0)
             {
                 inheritedCellStyleTmp.Format = rowStyle.Format;
             }
@@ -2251,7 +2251,7 @@ namespace System.Windows.Forms
             {
                 inheritedCellStyleTmp.Format = DataGridView.AlternatingRowsDefaultCellStyle.Format;
             }
-            else if (columnStyle is not null && columnStyle.Format.Length != 0)
+            else if (columnStyle != null && columnStyle.Format.Length != 0)
             {
                 inheritedCellStyleTmp.Format = columnStyle.Format;
             }
@@ -2260,11 +2260,11 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.Format = dataGridViewStyle.Format;
             }
 
-            if (cellStyle is not null && !cellStyle.IsFormatProviderDefault)
+            if (cellStyle != null && !cellStyle.IsFormatProviderDefault)
             {
                 inheritedCellStyleTmp.FormatProvider = cellStyle.FormatProvider;
             }
-            else if (rowStyle is not null && !rowStyle.IsFormatProviderDefault)
+            else if (rowStyle != null && !rowStyle.IsFormatProviderDefault)
             {
                 inheritedCellStyleTmp.FormatProvider = rowStyle.FormatProvider;
             }
@@ -2277,7 +2277,7 @@ namespace System.Windows.Forms
             {
                 inheritedCellStyleTmp.FormatProvider = DataGridView.AlternatingRowsDefaultCellStyle.FormatProvider;
             }
-            else if (columnStyle is not null && !columnStyle.IsFormatProviderDefault)
+            else if (columnStyle != null && !columnStyle.IsFormatProviderDefault)
             {
                 inheritedCellStyleTmp.FormatProvider = columnStyle.FormatProvider;
             }
@@ -2286,11 +2286,11 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.FormatProvider = dataGridViewStyle.FormatProvider;
             }
 
-            if (cellStyle is not null && cellStyle.Alignment != DataGridViewContentAlignment.NotSet)
+            if (cellStyle != null && cellStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
                 inheritedCellStyleTmp.AlignmentInternal = cellStyle.Alignment;
             }
-            else if (rowStyle is not null && rowStyle.Alignment != DataGridViewContentAlignment.NotSet)
+            else if (rowStyle != null && rowStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
                 inheritedCellStyleTmp.AlignmentInternal = rowStyle.Alignment;
             }
@@ -2303,7 +2303,7 @@ namespace System.Windows.Forms
             {
                 inheritedCellStyleTmp.AlignmentInternal = DataGridView.AlternatingRowsDefaultCellStyle.Alignment;
             }
-            else if (columnStyle is not null && columnStyle.Alignment != DataGridViewContentAlignment.NotSet)
+            else if (columnStyle != null && columnStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
                 inheritedCellStyleTmp.AlignmentInternal = columnStyle.Alignment;
             }
@@ -2313,11 +2313,11 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.AlignmentInternal = dataGridViewStyle.Alignment;
             }
 
-            if (cellStyle is not null && cellStyle.WrapMode != DataGridViewTriState.NotSet)
+            if (cellStyle != null && cellStyle.WrapMode != DataGridViewTriState.NotSet)
             {
                 inheritedCellStyleTmp.WrapModeInternal = cellStyle.WrapMode;
             }
-            else if (rowStyle is not null && rowStyle.WrapMode != DataGridViewTriState.NotSet)
+            else if (rowStyle != null && rowStyle.WrapMode != DataGridViewTriState.NotSet)
             {
                 inheritedCellStyleTmp.WrapModeInternal = rowStyle.WrapMode;
             }
@@ -2330,7 +2330,7 @@ namespace System.Windows.Forms
             {
                 inheritedCellStyleTmp.WrapModeInternal = DataGridView.AlternatingRowsDefaultCellStyle.WrapMode;
             }
-            else if (columnStyle is not null && columnStyle.WrapMode != DataGridViewTriState.NotSet)
+            else if (columnStyle != null && columnStyle.WrapMode != DataGridViewTriState.NotSet)
             {
                 inheritedCellStyleTmp.WrapModeInternal = columnStyle.WrapMode;
             }
@@ -2340,24 +2340,24 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.WrapModeInternal = dataGridViewStyle.WrapMode;
             }
 
-            if (cellStyle is not null && cellStyle.Tag is not null)
+            if (cellStyle != null && cellStyle.Tag != null)
             {
                 inheritedCellStyleTmp.Tag = cellStyle.Tag;
             }
-            else if (rowStyle is not null && rowStyle.Tag is not null)
+            else if (rowStyle != null && rowStyle.Tag != null)
             {
                 inheritedCellStyleTmp.Tag = rowStyle.Tag;
             }
-            else if (DataGridView.RowsDefaultCellStyle.Tag is not null &&
+            else if (DataGridView.RowsDefaultCellStyle.Tag != null &&
                 (rowIndex % 2 == 0 || DataGridView.AlternatingRowsDefaultCellStyle.Tag is null))
             {
                 inheritedCellStyleTmp.Tag = DataGridView.RowsDefaultCellStyle.Tag;
             }
-            else if (rowIndex % 2 == 1 && DataGridView.AlternatingRowsDefaultCellStyle.Tag is not null)
+            else if (rowIndex % 2 == 1 && DataGridView.AlternatingRowsDefaultCellStyle.Tag != null)
             {
                 inheritedCellStyleTmp.Tag = DataGridView.AlternatingRowsDefaultCellStyle.Tag;
             }
-            else if (columnStyle is not null && columnStyle.Tag is not null)
+            else if (columnStyle != null && columnStyle.Tag != null)
             {
                 inheritedCellStyleTmp.Tag = columnStyle.Tag;
             }
@@ -2366,11 +2366,11 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.Tag = dataGridViewStyle.Tag;
             }
 
-            if (cellStyle is not null && cellStyle.Padding != Padding.Empty)
+            if (cellStyle != null && cellStyle.Padding != Padding.Empty)
             {
                 inheritedCellStyleTmp.PaddingInternal = cellStyle.Padding;
             }
-            else if (rowStyle is not null && rowStyle.Padding != Padding.Empty)
+            else if (rowStyle != null && rowStyle.Padding != Padding.Empty)
             {
                 inheritedCellStyleTmp.PaddingInternal = rowStyle.Padding;
             }
@@ -2383,7 +2383,7 @@ namespace System.Windows.Forms
             {
                 inheritedCellStyleTmp.PaddingInternal = DataGridView.AlternatingRowsDefaultCellStyle.Padding;
             }
-            else if (columnStyle is not null && columnStyle.Padding != Padding.Empty)
+            else if (columnStyle != null && columnStyle.Padding != Padding.Empty)
             {
                 inheritedCellStyleTmp.PaddingInternal = columnStyle.Padding;
             }
@@ -2483,16 +2483,16 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedCell, "Size"));
             }
 
-            Debug.Assert(OwningColumn is not null);
-            Debug.Assert(OwningRow is not null);
+            Debug.Assert(OwningColumn != null);
+            Debug.Assert(OwningRow != null);
             return new Size(OwningColumn.Thickness, OwningRow.GetHeight(rowIndex));
         }
 
         private protected string GetInternalToolTipText(int rowIndex)
         {
             string toolTipText = ToolTipTextInternal;
-            if (DataGridView is not null &&
-                (DataGridView.VirtualMode || DataGridView.DataSource is not null))
+            if (DataGridView != null &&
+                (DataGridView.VirtualMode || DataGridView.DataSource != null))
             {
                 toolTipText = DataGridView.OnCellToolTipTextNeeded(ColumnIndex, rowIndex, toolTipText);
             }
@@ -2536,7 +2536,7 @@ namespace System.Windows.Forms
         protected virtual object GetValue(int rowIndex)
         {
             DataGridView dataGridView = DataGridView;
-            if (dataGridView is not null)
+            if (dataGridView != null)
             {
                 if (rowIndex < 0 || rowIndex >= dataGridView.Rows.Count)
                 {
@@ -2550,13 +2550,13 @@ namespace System.Windows.Forms
             }
             if (dataGridView is null ||
                 (dataGridView.AllowUserToAddRowsInternal && rowIndex > -1 && rowIndex == dataGridView.NewRowIndex && rowIndex != dataGridView.CurrentCellAddress.Y) ||
-                (!dataGridView.VirtualMode && OwningColumn is not null && !OwningColumn.IsDataBound) ||
+                (!dataGridView.VirtualMode && OwningColumn != null && !OwningColumn.IsDataBound) ||
                 rowIndex == -1 ||
                 ColumnIndex == -1)
             {
                 return Properties.GetObject(PropCellValue);
             }
-            else if (OwningColumn is not null && OwningColumn.IsDataBound)
+            else if (OwningColumn != null && OwningColumn.IsDataBound)
             {
                 DataGridView.DataGridViewDataConnection dataConnection = dataGridView.DataConnection;
                 if (dataConnection is null)
@@ -2878,7 +2878,7 @@ namespace System.Windows.Forms
 
         private void OnCellDataAreaMouseEnterInternal(int rowIndex)
         {
-            Debug.Assert(DataGridView is not null);
+            Debug.Assert(DataGridView != null);
             if (!DataGridView.ShowCellToolTips)
             {
                 return;
@@ -2889,7 +2889,7 @@ namespace System.Windows.Forms
             if (ptCurrentCell.X != -1 &&
                 ptCurrentCell.X == ColumnIndex &&
                 ptCurrentCell.Y == rowIndex &&
-                DataGridView.EditingControl is not null)
+                DataGridView.EditingControl != null)
             {
                 Debug.Assert(DataGridView.IsCurrentCellInEditMode);
                 return;
@@ -2902,7 +2902,7 @@ namespace System.Windows.Forms
             {
                 if (FormattedValueType == stringType)
                 {
-                    if (rowIndex != -1 && OwningColumn is not null)
+                    if (rowIndex != -1 && OwningColumn != null)
                     {
                         int width = GetPreferredWidth(rowIndex, OwningRow.Height);
                         int height = GetPreferredHeight(rowIndex, OwningColumn.Width);
@@ -2920,7 +2920,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    else if ((rowIndex != -1 && OwningRow is not null && DataGridView.RowHeadersVisible && DataGridView.RowHeadersWidth > 0 && OwningColumn is null) ||
+                    else if ((rowIndex != -1 && OwningRow != null && DataGridView.RowHeadersVisible && DataGridView.RowHeadersWidth > 0 && OwningColumn is null) ||
                              rowIndex == -1)
                     {
                         // we are on a header cell.
@@ -3010,7 +3010,7 @@ namespace System.Windows.Forms
 
         internal void OnCommonChange()
         {
-            if (DataGridView is not null && !DataGridView.IsDisposed && !DataGridView.Disposing)
+            if (DataGridView != null && !DataGridView.IsDisposed && !DataGridView.Disposing)
             {
                 if (RowIndex == -1)
                 {
@@ -3227,7 +3227,7 @@ namespace System.Windows.Forms
                 DataGridView.OnCommonCellContentClick(e.ColumnIndex, e.RowIndex, e.Clicks > 1);
             }
 
-            if (DataGridView is not null && e.ColumnIndex < DataGridView.Columns.Count && e.RowIndex < DataGridView.Rows.Count)
+            if (DataGridView != null && e.ColumnIndex < DataGridView.Columns.Count && e.RowIndex < DataGridView.Rows.Count)
             {
                 OnMouseUp(e);
             }
@@ -3721,7 +3721,7 @@ namespace System.Windows.Forms
             }
 
             Bitmap bmp = DataGridViewCell.ErrorBitmap;
-            if (bmp is not null)
+            if (bmp != null)
             {
                 lock (bmp)
                 {
@@ -3804,7 +3804,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            Debug.Assert(DataGridView is not null);
+            Debug.Assert(DataGridView != null);
             DataGridView dataGridView = DataGridView;
             int columnIndex = ColumnIndex;
             object formattedValue, value = GetValue(rowIndex);
@@ -4008,12 +4008,12 @@ namespace System.Windows.Forms
         {
             object originalValue = null;
             DataGridView dataGridView = DataGridView;
-            if (dataGridView is not null && !dataGridView.InSortOperation)
+            if (dataGridView != null && !dataGridView.InSortOperation)
             {
                 originalValue = GetValue(rowIndex);
             }
 
-            if (dataGridView is not null && OwningColumn is not null && OwningColumn.IsDataBound)
+            if (dataGridView != null && OwningColumn != null && OwningColumn.IsDataBound)
             {
                 DataGridView.DataGridViewDataConnection dataConnection = dataGridView.DataConnection;
                 if (dataConnection is null)
@@ -4022,7 +4022,7 @@ namespace System.Windows.Forms
                 }
                 else if (dataConnection.CurrencyManager.Count <= rowIndex)
                 {
-                    if (value is not null || Properties.ContainsObject(PropCellValue))
+                    if (value != null || Properties.ContainsObject(PropCellValue))
                     {
                         Properties.SetObject(PropCellValue, value);
                     }
@@ -4062,7 +4062,7 @@ namespace System.Windows.Forms
                 rowIndex == -1 ||
                 ColumnIndex == -1)
             {
-                if (value is not null || Properties.ContainsObject(PropCellValue))
+                if (value != null || Properties.ContainsObject(PropCellValue))
                 {
                     Properties.SetObject(PropCellValue, value);
                 }
@@ -4074,11 +4074,11 @@ namespace System.Windows.Forms
                 dataGridView.OnCellValuePushed(ColumnIndex, rowIndex, value);
             }
 
-            if (dataGridView is not null &&
+            if (dataGridView != null &&
                 !dataGridView.InSortOperation &&
-                ((originalValue is null && value is not null) ||
-                 (originalValue is not null && value is null) ||
-                 (originalValue is not null && !value.Equals(originalValue))))
+                ((originalValue is null && value != null) ||
+                 (originalValue != null && value is null) ||
+                 (originalValue != null && !value.Equals(originalValue))))
             {
                 RaiseCellValueChanged(new DataGridViewCellEventArgs(ColumnIndex, rowIndex));
             }

@@ -93,7 +93,7 @@ namespace System.Windows.Forms
             {
                 int index = -1;
 
-                if (innerArray is not null)
+                if (innerArray != null)
                 {
                     index = Array.IndexOf(innerArray, item);
 

@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Design
             _serviceProvider = serviceProvider;
             _comp = comp;
 
-            if (_serviceProvider is not null)
+            if (_serviceProvider != null)
             {
                 _helpService = (IHelpService)serviceProvider.GetService(typeof(IHelpService));
             }
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (_components is not null)
+                if (_components != null)
                 {
                     _components.Dispose();
                 }

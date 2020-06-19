@@ -317,7 +317,7 @@ namespace System.Windows.Forms.Tests.Interop_Mso
             mock2.Setup(m => m.FQueryTerminate(BOOL.TRUE)).Returns(BOOL.TRUE);
             void* pUnk = default;
             Assert.Equal(BOOL.TRUE, manager.FGetActiveComponent(msogac.Tracking, &pUnk, &info, 0));
-            Assert.True(pUnk is not null);
+            Assert.True(pUnk != null);
             try
             {
                 var component = (IMsoComponent)Marshal.GetObjectForIUnknown((IntPtr)pUnk);

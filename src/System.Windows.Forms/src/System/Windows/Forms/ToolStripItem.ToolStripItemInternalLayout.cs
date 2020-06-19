@@ -72,7 +72,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_currentLayoutOptions is not null)
+                    if (_currentLayoutOptions != null)
                     {
                         return _currentLayoutOptions.gdiTextFormatFlags;
                     }
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
                 // bigger than the ToolStrip itself.  Note this is "Parent" not
                 // "Owner" because we care in this instance what we're currently displayed on.
 
-                if (_ownerItem is not null)
+                if (_ownerItem != null)
                 {
                     _lastPreferredSize = _currentLayoutOptions.GetPreferredSizeCore(constrainingSize);
                     return _lastPreferredSize;
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
             {
                 _layoutData = GetLayoutData();
                 ToolStrip parent = ParentInternal;
-                if (parent is not null)
+                if (parent != null)
                 {
                     _parentLayoutData = new ToolStripLayoutData(parent);
                 }
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
                     _size = toolStrip.Size;
                 }
                 public bool IsCurrent(ToolStrip toolStrip)
-                    => toolStrip is not null && toolStrip.Size == _size && toolStrip.LayoutStyle == _layoutStyle && toolStrip.AutoSize == _autoSize;
+                    => toolStrip != null && toolStrip.Size == _size && toolStrip.LayoutStyle == _layoutStyle && toolStrip.AutoSize == _autoSize;
             }
         }
     }

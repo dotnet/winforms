@@ -102,7 +102,7 @@ namespace System.Windows.Forms
         public override Size GetPreferredSize(Size constrainingSize)
         {
             Size preferredSize = constrainingSize;
-            if (ParentInternal is not null)
+            if (ParentInternal != null)
             {
                 if (ParentInternal.Orientation == Orientation.Horizontal)
                 {
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
         // make sure the Overflow button extends from edge-edge. (Ignore Padding/Margin).
         internal protected override void SetBounds(Rectangle bounds)
         {
-            if (ParentInternal is not null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout)
+            if (ParentInternal != null && ParentInternal.LayoutEngine is ToolStripSplitStackLayout)
             {
                 if (ParentInternal.Orientation == Orientation.Horizontal)
                 {
@@ -137,7 +137,7 @@ namespace System.Windows.Forms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (ParentInternal is not null)
+            if (ParentInternal != null)
             {
                 ToolStripRenderer renderer = ParentInternal.Renderer;
                 renderer.DrawOverflowButtonBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string name = Owner.AccessibleName;
-                    if (name is not null)
+                    if (name != null)
                     {
                         return name;
                     }

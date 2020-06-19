@@ -80,7 +80,7 @@ namespace System.Drawing.Design
             get
             {
                 AssemblyName[] names = (AssemblyName[])Properties["DependentAssemblies"];
-                if (names is not null)
+                if (names != null)
                 {
                     return (AssemblyName[])names.Clone();
                 }
@@ -319,7 +319,7 @@ namespace System.Drawing.Design
         {
             OnComponentsCreating(new ToolboxComponentsCreatingEventArgs(host));
             IComponent[] comps = CreateComponentsCore(host, new Hashtable());
-            if (comps is not null && comps.Length > 0)
+            if (comps != null && comps.Length > 0)
             {
                 OnComponentsCreated(new ToolboxComponentsCreatedEventArgs(comps));
             }
@@ -335,7 +335,7 @@ namespace System.Drawing.Design
         {
             OnComponentsCreating(new ToolboxComponentsCreatingEventArgs(host));
             IComponent[] comps = CreateComponentsCore(host, defaultValues);
-            if (comps is not null && comps.Length > 0)
+            if (comps != null && comps.Length > 0)
             {
                 OnComponentsCreated(new ToolboxComponentsCreatedEventArgs(comps));
             }
@@ -351,9 +351,9 @@ namespace System.Drawing.Design
             ArrayList comps = new ArrayList();
 
             Type createType = GetType(host, AssemblyName, TypeName, true);
-            if (createType is not null)
+            if (createType != null)
             {
-                if (host is not null)
+                if (host != null)
                 {
                     comps.Add(host.CreateComponent(createType));
                 }
@@ -376,7 +376,7 @@ namespace System.Drawing.Design
         {
             IComponent[] components = CreateComponentsCore(host);
 
-            if (host is not null && components is not null)
+            if (host != null && components != null)
             {
                 for (int i = 0; i < components.Length; i++)
                 {
@@ -487,7 +487,7 @@ namespace System.Drawing.Design
         private static bool AreAssemblyNamesEqual(AssemblyName name1, AssemblyName name2)
         {
             return name1 == name2 ||
-                   (name1 is not null && name2 is not null && name1.FullName == name2.FullName);
+                   (name1 != null && name2 != null && name1.FullName == name2.FullName);
         }
 
         public override int GetHashCode() => HashCode.Combine(TypeName, DisplayName);
@@ -562,16 +562,16 @@ namespace System.Drawing.Design
                 throw new ArgumentNullException(nameof(typeName));
             }
 
-            if (host is not null)
+            if (host != null)
             {
                 ts = host.GetService(typeof(ITypeResolutionService)) as ITypeResolutionService;
             }
 
-            if (ts is not null)
+            if (ts != null)
             {
                 if (reference)
                 {
-                    if (assemblyName is not null)
+                    if (assemblyName != null)
                     {
                         ts.ReferenceAssembly(assemblyName);
                         type = ts.GetType(typeName);
@@ -585,7 +585,7 @@ namespace System.Drawing.Design
                         {
                             type = Type.GetType(typeName);
                         }
-                        if (type is not null)
+                        if (type != null)
                         {
                             ts.ReferenceAssembly(type.Assembly.GetName());
                         }
@@ -593,10 +593,10 @@ namespace System.Drawing.Design
                 }
                 else
                 {
-                    if (assemblyName is not null)
+                    if (assemblyName != null)
                     {
                         Assembly a = ts.GetAssembly(assemblyName);
-                        if (a is not null)
+                        if (a != null)
                         {
                             type = a.GetType(typeName);
                         }
@@ -612,7 +612,7 @@ namespace System.Drawing.Design
             {
                 if (!string.IsNullOrEmpty(typeName))
                 {
-                    if (assemblyName is not null)
+                    if (assemblyName != null)
                     {
                         Assembly a = null;
                         try
@@ -646,7 +646,7 @@ namespace System.Drawing.Design
                             }
                         }
 
-                        if (a is not null)
+                        if (a != null)
                         {
                             type = a.GetType(typeName);
                         }
@@ -669,20 +669,20 @@ namespace System.Drawing.Design
         {
             CheckUnlocked();
 
-            if (type is not null)
+            if (type != null)
             {
                 TypeName = type.FullName;
                 AssemblyName assemblyName = type.Assembly.GetName(true);
 
                 Dictionary<string, AssemblyName> parents = new Dictionary<string, AssemblyName>();
                 Type parentType = type;
-                while (parentType is not null)
+                while (parentType != null)
                 {
                     AssemblyName policiedname = parentType.Assembly.GetName(true);
 
                     AssemblyName aname = GetNonRetargetedAssemblyName(type, policiedname);
 
-                    if (aname is not null && !parents.ContainsKey(aname.FullName))
+                    if (aname != null && !parents.ContainsKey(aname.FullName))
                     {
                         parents[aname.FullName] = aname;
                     }
@@ -706,9 +706,9 @@ namespace System.Drawing.Design
                 if (!type.Assembly.ReflectionOnly)
                 {
                     object[] companyattrs = type.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), true);
-                    if (companyattrs is not null && companyattrs.Length > 0)
+                    if (companyattrs != null && companyattrs.Length > 0)
                     {
-                        if (companyattrs[0] is AssemblyCompanyAttribute company && company.Company is not null)
+                        if (companyattrs[0] is AssemblyCompanyAttribute company && company.Company != null)
                         {
                             Company = company.Company;
                         }
@@ -716,16 +716,16 @@ namespace System.Drawing.Design
 
                     //set the description based off the description attribute of the given type.
                     DescriptionAttribute descattr = (DescriptionAttribute)TypeDescriptor.GetAttributes(type)[typeof(DescriptionAttribute)];
-                    if (descattr is not null)
+                    if (descattr != null)
                     {
                         Description = descattr.Description;
                     }
 
                     ToolboxBitmapAttribute attr = (ToolboxBitmapAttribute)TypeDescriptor.GetAttributes(type)[typeof(ToolboxBitmapAttribute)];
-                    if (attr is not null)
+                    if (attr != null)
                     {
                         Bitmap itemBitmap = attr.GetImage(type, false) as Bitmap;
-                        if (itemBitmap is not null)
+                        if (itemBitmap != null)
                         {
                             // Original bitmap is used when adding the item to the Visual Studio toolbox
                             // if running on a machine with HDPI scaling enabled.
@@ -764,7 +764,7 @@ namespace System.Drawing.Design
 
         private AssemblyName GetNonRetargetedAssemblyName(Type type, AssemblyName policiedAssemblyName)
         {
-            Debug.Assert(type is not null);
+            Debug.Assert(type != null);
             if (policiedAssemblyName is null)
             {
                 return null;
@@ -927,7 +927,7 @@ namespace System.Drawing.Design
                     int filterCount = 0;
                     ICollection col = (ICollection)value;
 
-                    if (col is not null)
+                    if (col != null)
                     {
                         foreach (object f in col)
                         {
@@ -940,7 +940,7 @@ namespace System.Drawing.Design
 
                     ToolboxItemFilterAttribute[] filter = new ToolboxItemFilterAttribute[filterCount];
 
-                    if (col is not null)
+                    if (col != null)
                     {
                         filterCount = 0;
                         foreach (object f in col)

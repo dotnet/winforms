@@ -34,7 +34,7 @@ namespace System.Windows.Forms
                     if (_companyName is null)
                     {
                         object[] attrs = _owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                        if (attrs is not null && attrs.Length > 0)
+                        if (attrs != null && attrs.Length > 0)
                         {
                             _companyName = ((AssemblyCompanyAttribute)attrs[0]).Company;
                         }
@@ -42,7 +42,7 @@ namespace System.Windows.Forms
                         if (_companyName is null || _companyName.Length == 0)
                         {
                             _companyName = GetFileVersionInfo().CompanyName;
-                            if (_companyName is not null)
+                            if (_companyName != null)
                             {
                                 _companyName = _companyName.Trim();
                             }
@@ -82,7 +82,7 @@ namespace System.Windows.Forms
                     if (_productName is null)
                     {
                         object[] attrs = _owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                        if (attrs is not null && attrs.Length > 0)
+                        if (attrs != null && attrs.Length > 0)
                         {
                             _productName = ((AssemblyProductAttribute)attrs[0]).Product;
                         }
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
                         if (_productName is null || _productName.Length == 0)
                         {
                             _productName = GetFileVersionInfo().ProductName;
-                            if (_productName is not null)
+                            if (_productName != null)
                             {
                                 _productName = _productName.Trim();
                             }
@@ -131,7 +131,7 @@ namespace System.Windows.Forms
                     {
                         // custom attribute
                         object[] attrs = _owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
-                        if (attrs is not null && attrs.Length > 0)
+                        if (attrs != null && attrs.Length > 0)
                         {
                             _productVersion = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
                         }
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
                         if (_productVersion is null || _productVersion.Length == 0)
                         {
                             _productVersion = GetFileVersionInfo().ProductVersion;
-                            if (_productVersion is not null)
+                            if (_productVersion != null)
                             {
                                 _productVersion = _productVersion.Trim();
                             }

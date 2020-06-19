@@ -147,7 +147,7 @@ namespace System.Windows.Forms
 
         private void OnSystemMenuDropDownOpening(object sender, EventArgs e)
         {
-            if (!system.HasDropDownItems && (target is not null))
+            if (!system.HasDropDownItems && (target != null))
             {
                 system.DropDown = ToolStripDropDownMenu.FromHMenu(User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE), target);
             }
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
 
         private void UnhookTarget()
         {
-            if (target is not null)
+            if (target != null)
             {
                 if (target is Control controlTarget)
                 {

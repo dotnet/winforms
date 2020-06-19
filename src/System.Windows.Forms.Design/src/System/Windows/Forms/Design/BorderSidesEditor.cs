@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Design
             _borderSidesEditorUI.Start(edSvc, value);
             edSvc.DropDownControl(_borderSidesEditorUI);
 
-            if (_borderSidesEditorUI.Value is not null)
+            if (_borderSidesEditorUI.Value != null)
             {
                 value = _borderSidesEditorUI.Value;
             }
@@ -413,7 +413,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
-                Debug.Assert(edSvc is not null);
+                Debug.Assert(edSvc != null);
 
                 EditorService = edSvc;
                 originalValue = Value = value;

@@ -128,7 +128,7 @@ namespace System.Windows.Forms
             string text = GetNativeMenuItemTextAndShortcut();
 
             // the shortcut is tab separated from the item text.
-            if (text is not null)
+            if (text != null)
             {
                 // separate out the two fields.
                 string[] textFields = text.Split('\t');
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
                         else
                         {
                             Bitmap indeterminateCheckedBmp = DpiHelper.GetBitmapFromIcon(typeof(ToolStripMenuItem), "IndeterminateChecked");
-                            if (indeterminateCheckedBmp is not null)
+                            if (indeterminateCheckedBmp != null)
                             {
                                 if (DpiHelper.IsScalingRequired)
                                 {
@@ -322,7 +322,7 @@ namespace System.Windows.Forms
                         else
                         {
                             Bitmap checkedBmp = DpiHelper.GetBitmapFromIcon(typeof(ToolStripMenuItem), "Checked");
-                            if (checkedBmp is not null)
+                            if (checkedBmp != null)
                             {
                                 if (DpiHelper.IsScalingRequired)
                                 {
@@ -343,21 +343,21 @@ namespace System.Windows.Forms
             Bitmap b = null;
 
             Icon icon = new Icon(typeof(ToolStripMenuItem), iconName);
-            if (icon is not null)
+            if (icon != null)
             {
                 Icon desiredIcon = new Icon(icon, desiredIconSize);
-                if (desiredIcon is not null)
+                if (desiredIcon != null)
                 {
                     try
                     {
                         b = desiredIcon.ToBitmap();
 
-                        if (b is not null)
+                        if (b != null)
                         {
                             if (DpiHelper.IsScalingRequired && (b.Size.Width != desiredIconSize.Width || b.Size.Height != desiredIconSize.Height))
                             {
                                 Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredIconSize);
-                                if (scaledBitmap is not null)
+                                if (scaledBitmap != null)
                                 {
                                     b.Dispose();
                                     b = scaledBitmap;
@@ -488,7 +488,7 @@ namespace System.Windows.Forms
                 {
                     ClearShortcutCache();
                     ToolStrip owner = Owner;
-                    if (owner is not null)
+                    if (owner != null)
                     {
                         // add to the shortcut caching system.
                         if (originalShortcut != Keys.None)
@@ -594,7 +594,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return MdiForm is not null;
+                return MdiForm != null;
             }
         }
 
@@ -698,13 +698,13 @@ namespace System.Windows.Forms
 
         protected override void Dispose(bool disposing) {
             if (disposing) {
-                if (lastOwner is not null) {
+                if (lastOwner != null) {
                     Keys shortcut = this.ShortcutKeys;
                     if (shortcut != Keys.None && lastOwner.Shortcuts.ContainsKey(shortcut)) {
                         lastOwner.Shortcuts.Remove(shortcut);
                     }
                     lastOwner = null;
-                    if (MdiForm is not null)
+                    if (MdiForm != null)
                     {
                         Properties.SetObject(PropMdiForm, null);
                     }
@@ -763,7 +763,7 @@ namespace System.Windows.Forms
                     User32.GetMenuItemInfoW(new HandleRef(this, nativeMenuHandle), nativeMenuCommandID, /*fByPosition instead of ID=*/  BOOL.FALSE, ref info);
 
                     // convert the string into managed data.
-                    if (info.dwTypeData is not null)
+                    if (info.dwTypeData != null)
                     {
                         text = new string(info.dwTypeData, 0, info.cch);
                     }
@@ -878,7 +878,7 @@ namespace System.Windows.Forms
 
         internal void HandleAutoExpansion()
         {
-            if (Enabled && ParentInternal is not null && ParentInternal.MenuAutoExpand && HasDropDownItems)
+            if (Enabled && ParentInternal != null && ParentInternal.MenuAutoExpand && HasDropDownItems)
             {
                 ShowDropDown();
 
@@ -949,7 +949,7 @@ namespace System.Windows.Forms
             // cancel the current menu timer.
             Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[ToolStripMenuItem.OnDropDownShow] MenuTimer.Cancel called");
             MenuTimer.Cancel(this);
-            if (ParentInternal is not null)
+            if (ParentInternal != null)
             {
                 ParentInternal.MenuAutoExpand = true;
             }
@@ -1006,7 +1006,7 @@ namespace System.Windows.Forms
                 if (isMouseDown && showDropDown)
                 {
                     // opening should happen on mouse down.
-                    Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
+                    Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
                     openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                     ShowDropDown(/*mousePush =*/true);
                 }
@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms
                 {
                     // closing should happen on mouse up.  ensure it's not the mouse
                     // up for the mouse down we opened with.
-                    Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
+                    Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
                     byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                     int openedMouseID = openMouseId;
                     if (closeMouseId != openedMouseID)
@@ -1029,10 +1029,10 @@ namespace System.Windows.Forms
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            Debug.Assert(ParentInternal is not null, "Why is parent null");
+            Debug.Assert(ParentInternal != null, "Why is parent null");
 
             // If we are in a submenu pop down the submenu.
-            if (ParentInternal is not null && ParentInternal.MenuAutoExpand && Selected)
+            if (ParentInternal != null && ParentInternal.MenuAutoExpand && Selected)
             {
                 Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "received mouse enter - calling drop down");
 
@@ -1056,12 +1056,12 @@ namespace System.Windows.Forms
             Keys shortcut = ShortcutKeys;
             if (shortcut != Keys.None)
             {
-                if (lastOwner is not null)
+                if (lastOwner != null)
                 {
                     lastOwner.Shortcuts.Remove(shortcut);
                 }
 
-                if (Owner is not null)
+                if (Owner != null)
                 {
                     if (Owner.Shortcuts.Contains(shortcut))
                     {
@@ -1081,7 +1081,7 @@ namespace System.Windows.Forms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner is not null)
+            if (Owner != null)
             {
                 ToolStripRenderer renderer = Renderer;
                 Graphics g = e.Graphics;
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms
                         renderer.DrawArrow(new ToolStripArrowRenderEventArgs(g, this, menuItemInternalLayout.ArrowRectangle, arrowColor, arrowDir));
                     }
 
-                    if (menuItemInternalLayout.PaintImage && (DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image && Image is not null)
+                    if (menuItemInternalLayout.PaintImage && (DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image && Image != null)
                     {
                         renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(g, this, InternalLayout.ImageRectangle));
                     }
@@ -1159,7 +1159,7 @@ namespace System.Windows.Forms
                         renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, textColor, Font, InternalLayout.TextFormat));
                     }
 
-                    if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image && Image is not null)
+                    if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image && Image != null)
                     {
                         renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(g, this, InternalLayout.ImageRectangle));
                     }
@@ -1370,7 +1370,7 @@ namespace System.Windows.Forms
                 Cancel(CurrentItem);
             }
             CurrentItem = item;
-            if (item is not null)
+            if (item != null)
             {
                 CurrentItem = item;
                 autoMenuExpandTimer.Interval = item.IsOnDropDown ? slowShow : quickShow;
@@ -1439,8 +1439,8 @@ namespace System.Windows.Forms
                 InTransition = false;
 
                 // we should roolup if the current item has changed and is selected.
-                bool rollup = forceClose || (CurrentItem is not null && CurrentItem != lastSelected && CurrentItem.Selected);
-                if (rollup && lastSelected is not null && lastSelected.HasDropDownItems)
+                bool rollup = forceClose || (CurrentItem != null && CurrentItem != lastSelected && CurrentItem.Selected);
+                if (rollup && lastSelected != null && lastSelected.HasDropDownItems)
                 {
                     lastSelected.HideDropDown();
                 }
@@ -1454,7 +1454,7 @@ namespace System.Windows.Forms
                 // we're about to fall off the edge of the toolstrip, something should be selected
                 // at all times while we're InTransition mode - otherwise it looks really funny
                 // to have an auto expanded item
-                if (CurrentItem is not null)
+                if (CurrentItem != null)
                 {
                     CurrentItem.Select();
                 }
@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms
                 if (toolStrip.IsDropDown && toolStrip.ActiveDropDowns.Count > 0)
                 {
                     ToolStripMenuItem menuItem = (!(toolStrip.ActiveDropDowns[0] is ToolStripDropDown dropDown)) ? null : dropDown.OwnerItem as ToolStripMenuItem;
-                    if (menuItem is not null && menuItem.Pressed)
+                    if (menuItem != null && menuItem.Pressed)
                     {
                         menuItem.Select();
                     }
@@ -1483,7 +1483,7 @@ namespace System.Windows.Forms
                 return;
             }
             EndTransition(/*forceClose*/false);
-            if (CurrentItem is not null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
+            if (CurrentItem != null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
             {
                 Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose, "[MenuTimer.OnTick] calling OnMenuAutoExpand");
                 CurrentItem.OnMenuAutoExpand();

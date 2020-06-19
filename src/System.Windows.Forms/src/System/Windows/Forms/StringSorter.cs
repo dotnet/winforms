@@ -100,7 +100,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < items.Length; i++)
                     {
                         object item = items[i];
-                        if (item is not null)
+                        if (item != null)
                         {
                             keys[i] = item.ToString();
                         }
@@ -219,7 +219,7 @@ namespace System.Windows.Forms
                         string key = keys[i];
                         keys[i] = keys[j];
                         keys[j] = key;
-                        if (items is not null)
+                        if (items != null)
                         {
                             object item = items[i];
                             items[i] = items[j];
@@ -397,7 +397,7 @@ namespace System.Windows.Forms
             // keys and items have to be the same length
             //
             if ((items is null)
-                || ((keys is not null) && (keys.Length != items.Length)))
+                || ((keys != null) && (keys.Length != items.Length)))
             {
                 throw new ArgumentException(string.Format(SR.ArraysNotSameSize,
                                                                    "keys",

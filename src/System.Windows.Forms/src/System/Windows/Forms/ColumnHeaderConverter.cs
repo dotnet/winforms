@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                 if (col.ImageIndex != -1)
                 {
                     ctor = t.GetConstructor(new Type[] { typeof(int) });
-                    if (ctor is not null)
+                    if (ctor != null)
                     {
                         id = new InstanceDescriptor(ctor, new object[] { col.ImageIndex }, false);
                     }
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                 if (id is null && !string.IsNullOrEmpty(col.ImageKey))
                 {
                     ctor = t.GetConstructor(new Type[] { typeof(string) });
-                    if (ctor is not null)
+                    if (ctor != null)
                     {
                         id = new InstanceDescriptor(ctor, new object[] { col.ImageKey }, false);
                     }
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
                 if (id is null)
                 {
                     ctor = t.GetConstructor(Array.Empty<Type>());
-                    if (ctor is not null)
+                    if (ctor != null)
                     {
                         return new InstanceDescriptor(ctor, Array.Empty<object>(), false);
                     }

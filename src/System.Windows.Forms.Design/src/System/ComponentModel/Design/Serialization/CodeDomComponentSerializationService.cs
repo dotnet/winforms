@@ -317,7 +317,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             internal void AddMember(object value, MemberDescriptor member, bool absolute)
             {
-                if (_objectState is not null)
+                if (_objectState != null)
                 {
                     throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
                 }
@@ -344,7 +344,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             internal void AddObject(object value, bool absolute)
             {
-                if (_objectState is not null)
+                if (_objectState != null)
                 {
                     throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
                 }
@@ -398,7 +398,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
 
                     // also serialize out resources if we have any  we force this in order for undo to work correctly
-                    if (_resources is not null)
+                    if (_resources != null)
                     {
                         Debug.Assert(_resourceStream is null, "Attempting to close a serialization store with already serialized resources");
                         if (_resourceStream is null)
@@ -455,7 +455,7 @@ namespace System.ComponentModel.Design.Serialization
             private ICollection Deserialize(IServiceProvider provider, IContainer container, bool recycleInstances, bool validateRecycledTypes, bool applyDefaults)
             {
                 PassThroughSerializationManager delegator = new PassThroughSerializationManager(new LocalDesignerSerializationManager(this, new LocalServices(this, provider)));
-                if (container is not null)
+                if (container != null)
                 {
                     delegator.Manager.Container = container;
                 }
@@ -474,7 +474,7 @@ namespace System.ComponentModel.Design.Serialization
                 delegator.Manager.ValidateRecycledTypes = validateRecycledTypes;
                 ArrayList objects = null;
                 // recreate resouces
-                if (_resourceStream is not null)
+                if (_resourceStream != null)
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
                     _resourceStream.Seek(0, SeekOrigin.Begin);
@@ -494,12 +494,12 @@ namespace System.ComponentModel.Design.Serialization
                     if (_shimObjectNames.Count > 0)
                     {
                         List<string> names = _shimObjectNames;
-                        if (delegator is IDesignerSerializationManager dsm && container is not null)
+                        if (delegator is IDesignerSerializationManager dsm && container != null)
                         {
                             foreach (string compName in names)
                             {
                                 object instance = container.Components[compName];
-                                if (instance is not null && dsm.GetInstance(compName) is null)
+                                if (instance != null && dsm.GetInstance(compName) is null)
                                 {
                                     dsm.SetName(instance, compName);
                                 }
@@ -513,8 +513,8 @@ namespace System.ComponentModel.Design.Serialization
                         foreach (string name in _objectNames)
                         {
                             object instance = ((IDesignerSerializationManager)delegator.Manager).GetInstance(name);
-                            Debug.Assert(instance is not null, "Failed to deserialize object " + name);
-                            if (instance is not null)
+                            Debug.Assert(instance != null, "Failed to deserialize object " + name);
+                            if (instance != null)
                             {
                                 objects.Add(instance);
                             }
@@ -541,7 +541,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (value is IComponent comp)
                 {
                     ISite site = comp.Site;
-                    if (site is not null)
+                    if (site != null)
                     {
                         if (site is INestedSite nestedSite && !string.IsNullOrEmpty(nestedSite.FullName))
                         {
@@ -637,7 +637,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 // spit this line by line so it respects the indent.
                 StringReader sr = new StringReader(sw.ToString());
-                for (string ln = sr.ReadLine(); ln is not null; ln = sr.ReadLine())
+                for (string ln = sr.ReadLine(); ln != null; ln = sr.ReadLine())
                 {
                     Debug.WriteLine(ln);
                 }
@@ -720,13 +720,13 @@ namespace System.ComponentModel.Design.Serialization
                     foreach (string name in objectNames)
                     {
                         object[] state = (object[])objectState[name];
-                        if (state is not null)
+                        if (state != null)
                         {
-                            if (state[StateCode] is not null)
+                            if (state[StateCode] != null)
                             {
                                 PopulateCompleteStatements(state[StateCode], name, completeStatements);
                             }
-                            if (state[StateCtx] is not null)
+                            if (state[StateCtx] != null)
                             {
                                 PopulateCompleteStatements(state[StateCtx], name, completeStatements);
                             }
@@ -799,17 +799,17 @@ namespace System.ComponentModel.Design.Serialization
                 private void DeserializeDefaultProperties(IDesignerSerializationManager manager, string name, object state)
                 {
                     // Next, default properties, but only if we successfully  resolved.
-                    if (state is not null && _applyDefaults)
+                    if (state != null && _applyDefaults)
                     {
                         object comp = manager.GetInstance(name);
-                        if (comp is not null)
+                        if (comp != null)
                         {
                             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
                             string[] defProps = (string[])state;
                             foreach (string propName in defProps)
                             {
                                 PropertyDescriptor prop = props[propName];
-                                if (prop is not null && prop.CanResetValue(comp))
+                                if (prop != null && prop.CanResetValue(comp))
                                 {
                                     Trace("Resetting default for {0}.{1}", name, propName);
                                     // If there is a member relationship setup for this property, we should disconnect it first. This makes sense, since if there was a previous relationship, we would have serialized it and not come here at all.
@@ -826,17 +826,17 @@ namespace System.ComponentModel.Design.Serialization
 
                 private void DeserializeDesignTimeProperties(IDesignerSerializationManager manager, string name, object state)
                 {
-                    if (state is not null)
+                    if (state != null)
                     {
                         object comp = manager.GetInstance(name);
-                        if (comp is not null)
+                        if (comp != null)
                         {
                             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
 
                             foreach (DictionaryEntry de in (IDictionary)state)
                             {
                                 PropertyDescriptor prop = props[(string)de.Key];
-                                if (prop is not null)
+                                if (prop != null)
                                 {
                                     prop.SetValue(comp, de.Value);
                                 }
@@ -852,7 +852,7 @@ namespace System.ComponentModel.Design.Serialization
                 private IComponent ResolveNestedName(IDesignerSerializationManager manager, string name, ref string outerComponent)
                 {
                     IComponent curComp = null;
-                    if (name is not null && manager is not null)
+                    if (name != null && manager != null)
                     {
                         bool moreChunks = true;
                         Debug.Assert(name.IndexOf('.') > 0, "ResolvedNestedName accepts only nested names!");
@@ -867,7 +867,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             moreChunks = curIndex != -1;
                             string compName = moreChunks ? name.Substring(prevIndex + 1, curIndex) : name.Substring(prevIndex + 1);
-                            if (curComp is not null && curComp.Site is not null)
+                            if (curComp != null && curComp.Site != null)
                             {
                                 ISite site = curComp.Site;
                                 if (site.GetService(typeof(INestedContainer)) is INestedContainer container && !string.IsNullOrEmpty(compName))
@@ -903,7 +903,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         string parentName = null;
                         IComponent nestedComp = ResolveNestedName(manager, name, ref parentName);
-                        if (nestedComp is not null && parentName is not null)
+                        if (nestedComp != null && parentName != null)
                         {
                             manager.SetName(nestedComp, name);
                             // What is the point of this?  Well, the nested components won't be in the statement table with its nested name.  However, their most parent component will be, so forcing a resolve of their name will actually deserialize the nested statements.
@@ -935,7 +935,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                         // next, invoke the serializer for this component
-                        if (typeName is not null)
+                        if (typeName != null)
                         {
                             Type type = manager.GetType(typeName);
                             if (type is null)
@@ -945,7 +945,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             else
                             {
-                                if (statements is not null && statements.Count > 0)
+                                if (statements != null && statements.Count > 0)
                                 {
                                     CodeDomSerializer serializer = GetSerializer(manager, type);
                                     if (serializer is null)
@@ -962,7 +962,7 @@ namespace System.ComponentModel.Design.Serialization
                                         try
                                         {
                                             object instance = serializer.Deserialize(manager, statements);
-                                            resolved = instance is not null;
+                                            resolved = instance != null;
                                             if (resolved)
                                             {
                                                 _statementsTable[name] = instance;
@@ -986,22 +986,22 @@ namespace System.ComponentModel.Design.Serialization
                             resolved = true;
                         }
 
-                        if (state is not null && state[StateProperties] is not null)
+                        if (state != null && state[StateProperties] != null)
                         {
                             DeserializeDefaultProperties(manager, name, state[StateProperties]);
                         }
 
-                        if (state is not null && state[StateResources] is not null)
+                        if (state != null && state[StateResources] != null)
                         {
                             DeserializeDesignTimeProperties(manager, name, state[StateResources]);
                         }
 
-                        if (state is not null && state[StateEvents] is not null)
+                        if (state != null && state[StateEvents] != null)
                         {
                             DeserializeEventResets(manager, name, state[StateEvents]);
                         }
 
-                        if (state is not null && state[StateModifier] is not null)
+                        if (state != null && state[StateModifier] != null)
                         {
                             DeserializeModifier(manager, name, state[StateModifier]);
                         }
@@ -1019,7 +1019,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        resolved = _statementsTable[name] is not null;
+                        resolved = _statementsTable[name] != null;
                         if (!resolved)
                         {
                             // this is condition 2 of the comment at the start of this method.
@@ -1029,7 +1029,7 @@ namespace System.ComponentModel.Design.Serialization
                                 foreach (CodeExpression exp in exps)
                                 {
                                     object exValue = DeserializeExpression(manager, name, exp);
-                                    if (exValue is not null && !resolved)
+                                    if (exValue != null && !resolved)
                                     {
                                         if (canInvokeManager && manager.GetInstance(name) is null)
                                         {
@@ -1043,26 +1043,26 @@ namespace System.ComponentModel.Design.Serialization
                             // Sometimes components won't be in either the statements table or the expressions table, for example, this occurs for resources  during undo/redo. In these cases the component should be resolvable by the manager. Never do this when we have been asked by the serialization manager to resolve the name;  otherwise we may infinitely recurse.
                             if (!resolved && canInvokeManager)
                             {
-                                resolved = manager.GetInstance(name) is not null;
+                                resolved = manager.GetInstance(name) != null;
                             }
 
                             // In this case we still need to correctly deserialize default properties &  design-time only properties.
-                            if (resolved && state is not null && state[StateProperties] is not null)
+                            if (resolved && state != null && state[StateProperties] != null)
                             {
                                 DeserializeDefaultProperties(manager, name, state[StateProperties]);
                             }
 
-                            if (resolved && state is not null && state[StateResources] is not null)
+                            if (resolved && state != null && state[StateResources] != null)
                             {
                                 DeserializeDesignTimeProperties(manager, name, state[StateResources]);
                             }
 
-                            if (resolved && state is not null && state[StateEvents] is not null)
+                            if (resolved && state != null && state[StateEvents] != null)
                             {
                                 DeserializeEventResets(manager, name, state[StateEvents]);
                             }
 
-                            if (resolved && state is not null && state[StateModifier] is not null)
+                            if (resolved && state != null && state[StateModifier] != null)
                             {
                                 DeserializeModifier(manager, name, state[StateModifier]);
                             }
@@ -1079,19 +1079,19 @@ namespace System.ComponentModel.Design.Serialization
 
                 private void DeserializeEventResets(IDesignerSerializationManager manager, string name, object state)
                 {
-                    if (state is List<string> eventNames && manager is not null && !string.IsNullOrEmpty(name))
+                    if (state is List<string> eventNames && manager != null && !string.IsNullOrEmpty(name))
                     {
                         object comp = manager.GetInstance(name);
-                        if (comp is not null && manager.GetService(typeof(IEventBindingService)) is IEventBindingService ebs)
+                        if (comp != null && manager.GetService(typeof(IEventBindingService)) is IEventBindingService ebs)
                         {
                             PropertyDescriptorCollection eventProps = ebs.GetEventProperties(TypeDescriptor.GetEvents(comp));
-                            if (eventProps is not null)
+                            if (eventProps != null)
                             {
                                 foreach (string eventName in eventNames)
                                 {
                                     PropertyDescriptor prop = eventProps[eventName];
 
-                                    if (prop is not null)
+                                    if (prop != null)
                                     {
                                         prop.SetValue(comp, null);
                                     }
@@ -1103,13 +1103,13 @@ namespace System.ComponentModel.Design.Serialization
 
                 private static void DeserializeModifier(IDesignerSerializationManager manager, string name, object state)
                 {
-                    Debug.Assert(state is not null && state is MemberAttributes, "Attempting to deserialize a null modifier");
+                    Debug.Assert(state != null && state is MemberAttributes, "Attempting to deserialize a null modifier");
                     object comp = manager.GetInstance(name);
-                    if (comp is not null)
+                    if (comp != null)
                     {
                         MemberAttributes modifierValue = (MemberAttributes)state;
                         PropertyDescriptor modifierProp = TypeDescriptor.GetProperties(comp)["Modifiers"];
-                        if (modifierProp is not null)
+                        if (modifierProp != null)
                         {
                             modifierProp.SetValue(comp, modifierValue);
                         }
@@ -1132,7 +1132,7 @@ namespace System.ComponentModel.Design.Serialization
                     foreach (IComponent c in container.Components)
                     {
                         string name = TypeDescriptor.GetComponentName(c);
-                        if (name is not null && name.Length > 0)
+                        if (name != null && name.Length > 0)
                         {
                             bool needVar = true;
                             if (objectData.Contains(c) && ((ObjectData)objectData[c]).EntireObject)
@@ -1149,7 +1149,7 @@ namespace System.ComponentModel.Design.Serialization
                                     shimObjectNames.Add(name);
                                 }
 
-                                if (c.Site is not null)
+                                if (c.Site != null)
                                 {
                                     if (c.Site.GetService(typeof(INestedContainer)) is INestedContainer nested && nested.Components.Count > 0)
                                     {
@@ -1191,7 +1191,7 @@ namespace System.ComponentModel.Design.Serialization
                             object[] state = new object[6];
                             CodeStatementCollection extraStatements = new CodeStatementCollection();
                             manager.Context.Push(extraStatements);
-                            if (serializer is not null)
+                            if (serializer != null)
                             {
                                 if (data.EntireObject)
                                 {
@@ -1206,7 +1206,7 @@ namespace System.ComponentModel.Design.Serialization
                                             state[StateCode] = serializer.Serialize(manager, data._value);
                                         }
                                         CodeStatementCollection ctxStatements = statementCxt.StatementCollection[data._value];
-                                        if (ctxStatements is not null && ctxStatements.Count > 0)
+                                        if (ctxStatements != null && ctxStatements.Count > 0)
                                         {
                                             state[StateCtx] = ctxStatements;
                                         }
@@ -1290,7 +1290,7 @@ namespace System.ComponentModel.Design.Serialization
                                     }
                                 }
 
-                                if (ebs is not null)
+                                if (ebs != null)
                                 {
                                     PropertyDescriptorCollection events = ebs.GetEventProperties(TypeDescriptor.GetEvents(data._value));
                                     foreach (PropertyDescriptor eventProp in events)
@@ -1317,7 +1317,7 @@ namespace System.ComponentModel.Design.Serialization
                                 {
                                     if (md._member is PropertyDescriptor prop && !prop.ShouldSerializeValue(data._value))
                                     {
-                                        if (ebs is not null && ebs.GetEvent(prop) is not null)
+                                        if (ebs != null && ebs.GetEvent(prop) != null)
                                         {
                                             Debug.Assert(prop.GetValue(data._value) is null, "ShouldSerializeValue and GetValue are differing");
                                             if (defaultEventList is null)
@@ -1345,17 +1345,17 @@ namespace System.ComponentModel.Design.Serialization
                                 state[StateModifier] = modifier.GetValue(data._value);
                             }
 
-                            if (defaultPropList is not null)
+                            if (defaultPropList != null)
                             {
                                 state[StateProperties] = (string[])defaultPropList.ToArray(typeof(string));
                             }
 
-                            if (defaultEventList is not null)
+                            if (defaultEventList != null)
                             {
                                 state[StateEvents] = defaultEventList;
                             }
 
-                            if (state[StateCode] is not null || state[StateProperties] is not null)
+                            if (state[StateCode] != null || state[StateProperties] != null)
                             {
                                 objectState[data._name] = state;
                             }
@@ -1420,7 +1420,7 @@ namespace System.ComponentModel.Design.Serialization
                     get => _entireObject;
                     set
                     {
-                        if (value && _members is not null)
+                        if (value && _members != null)
                         {
                             _members.Clear();
                         }
@@ -1524,7 +1524,7 @@ namespace System.ComponentModel.Design.Serialization
                         return this;
                     }
 
-                    if (_provider is not null)
+                    if (_provider != null)
                     {
                         return _provider.GetService(serviceType);
                     }
@@ -1590,8 +1590,8 @@ namespace System.ComponentModel.Design.Serialization
                     object instance = ((IDesignerSerializationManager)_manager).GetInstance(name);
 
                     // If an object is retrived from the current container as a result of GetInstance(), we need to make sure and fully deserialize it before returning it.  To do this, we will force a resolve on this name and not interfere the next time GetInstance() is called with this component.  This will force the component to completely deserialize.
-                    if (_resolveNameEventHandler is not null && instance is not null && !_resolved.ContainsKey(name) &&
-                        _manager.PreserveNames && _manager.Container is not null && _manager.Container.Components[name] is not null)
+                    if (_resolveNameEventHandler != null && instance != null && !_resolved.ContainsKey(name) &&
+                        _manager.PreserveNames && _manager.Container != null && _manager.Container.Components[name] != null)
                     {
                         _resolved[name] = true;
                         _resolveNameEventHandler(this, new ResolveNameEventArgs(name));
@@ -1669,7 +1669,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         if (!_typeSvcAvailable.HasValue)
                         {
-                            _typeSvcAvailable = new Nullable<bool>(GetService(typeof(ITypeResolutionService)) is not null);
+                            _typeSvcAvailable = new Nullable<bool>(GetService(typeof(ITypeResolutionService)) != null);
                         }
                         return _typeSvcAvailable.Value;
                     }
@@ -1688,10 +1688,10 @@ namespace System.ComponentModel.Design.Serialization
                         foreach (AssemblyName n in names)
                         {
                             Assembly a = Assembly.Load(n);
-                            if (a is not null)
+                            if (a != null)
                             {
                                 t = a.GetType(name);
-                                if (t is not null)
+                                if (t != null)
                                 {
                                     break;
                                 }
@@ -1704,21 +1704,21 @@ namespace System.ComponentModel.Design.Serialization
                             foreach (AssemblyName n in names)
                             {
                                 Assembly a = Assembly.Load(n);
-                                if (a is not null)
+                                if (a != null)
                                 {
                                     foreach (AssemblyName dep in a.GetReferencedAssemblies())
                                     {
                                         Assembly aDep = Assembly.Load(dep);
-                                        if (aDep is not null)
+                                        if (aDep != null)
                                         {
                                             t = aDep.GetType(name);
-                                            if (t is not null)
+                                            if (t != null)
                                             {
                                                 break;
                                             }
                                         }
                                     }
-                                    if (t is not null)
+                                    if (t != null)
                                     {
                                         break;
                                     }

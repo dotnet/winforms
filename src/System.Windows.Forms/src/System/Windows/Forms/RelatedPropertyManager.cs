@@ -23,7 +23,7 @@ namespace System.Windows.Forms
 
         private void Bind(BindingManagerBase parentManager, string dataField)
         {
-            Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
+            Debug.Assert(parentManager != null, "How could this be a null parentManager.");
             this.parentManager = parentManager;
             this.dataField = dataField;
             fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         {
             PropertyDescriptor[] accessors;
 
-            if (listAccessors is not null && listAccessors.Length > 0)
+            if (listAccessors != null && listAccessors.Length > 0)
             {
                 accessors = new PropertyDescriptor[listAccessors.Length + 1];
                 listAccessors.CopyTo(accessors, 1);
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (DataSource is not null) ? fieldInfo.GetValue(DataSource) : null;
+                return (DataSource != null) ? fieldInfo.GetValue(DataSource) : null;
             }
         }
 

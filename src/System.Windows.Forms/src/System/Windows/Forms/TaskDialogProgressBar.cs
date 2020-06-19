@@ -89,7 +89,7 @@ namespace System.Windows.Forms
 
                 DenyIfBoundAndNotCreated();
 
-                if (BoundPage is not null && value == TaskDialogProgressBarState.None)
+                if (BoundPage != null && value == TaskDialogProgressBarState.None)
                 {
                     throw new InvalidOperationException(
                         SR.TaskDialogCannotRemoveProgressBarWhileDialogIsShown);
@@ -361,7 +361,7 @@ namespace System.Windows.Forms
 
         private void UpdateState(TaskDialogProgressBarState previousState, bool isInitialization = false)
         {
-            Debug.Assert(BoundPage is not null);
+            Debug.Assert(BoundPage != null);
 
             TaskDialog taskDialog = BoundPage.BoundDialog!;
 

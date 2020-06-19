@@ -46,7 +46,7 @@ namespace System.Windows.Forms
             get => _enabled;
             set
             {
-                if (_parent is not null && _parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                 if (value != _enabled)
                 {
                     _enabled = value;
-                    if (_parent is not null)
+                    if (_parent != null)
                     {
                         User32.EnableScrollBar(
                             _parent,
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
             get => _maximum;
             set
             {
-                if (_parent is not null && _parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -147,7 +147,7 @@ namespace System.Windows.Forms
             get => _minimum;
             set
             {
-                if (_parent is not null && _parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
             get => _visible;
             set
             {
-                if (_parent is not null && _parent.AutoScroll)
+                if (_parent != null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -269,7 +269,7 @@ namespace System.Windows.Forms
 
         internal void UpdateScrollInfo()
         {
-            if (_parent is not null && _parent.IsHandleCreated && _visible)
+            if (_parent != null && _parent.IsHandleCreated && _visible)
             {
                 var si = new User32.SCROLLINFO
                 {

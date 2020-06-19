@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 // Only dispose the graphics object if we created it via the dc.
-                if (_graphics is not null && _dc != IntPtr.Zero)
+                if (_graphics != null && _dc != IntPtr.Zero)
                 {
                     _graphics.Dispose();
                 }
@@ -127,10 +127,10 @@ namespace System.Windows.Forms
         /// </summary>
         internal void ResetGraphics()
         {
-            if (_graphics is not null)
+            if (_graphics != null)
             {
-                Debug.Assert(_dc == IntPtr.Zero || _savedGraphicsState is not null, "Called ResetGraphics more than once?");
-                if (_savedGraphicsState is not null)
+                Debug.Assert(_dc == IntPtr.Zero || _savedGraphicsState != null, "Called ResetGraphics more than once?");
+                if (_savedGraphicsState != null)
                 {
                     _graphics.Restore(_savedGraphicsState);
                     _savedGraphicsState = null;

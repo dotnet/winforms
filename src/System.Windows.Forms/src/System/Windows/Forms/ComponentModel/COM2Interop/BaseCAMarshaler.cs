@@ -40,7 +40,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                if (_itemArray is null && _caArrayAddress is not null)
+                if (_itemArray is null && _caArrayAddress != null)
                 {
                     object[] items = Items;
                 }
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     Debug.WriteLineIf(s_caMarshalSwitch.TraceVerbose, "Marshaling failed: " + ex.GetType().Name + ", " + ex.Message);
                 }
 #if DEBUG
-                if (_itemArray is not null)
+                if (_itemArray != null)
                 {
                     Debug.WriteLineIf(s_caMarshalSwitch.TraceVerbose, "Marshaled: " + _itemArray.Length.ToString(CultureInfo.InvariantCulture) + " items, array type=" + _itemArray.GetType().Name);
                 }
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 try
                 {
                     object curItem = GetItemFromAddress(nativeItems[i]);
-                    if (curItem is not null && ItemType.IsInstanceOfType(curItem))
+                    if (curItem != null && ItemType.IsInstanceOfType(curItem))
                     {
                         items[i] = curItem;
                     }

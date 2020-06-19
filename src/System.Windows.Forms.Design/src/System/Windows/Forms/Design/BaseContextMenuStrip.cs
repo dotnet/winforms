@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Design
         private void RefreshSelectionMenuItem()
         {
             int index = -1;
-            if (selectionMenuItem is not null)
+            if (selectionMenuItem != null)
             {
                 index = Items.IndexOf(selectionMenuItem);
                 Groups[StandardGroups.Selection].Items.Remove(selectionMenuItem);
@@ -85,13 +85,13 @@ namespace System.Windows.Forms.Design
             if (serviceProvider.GetService(typeof(ISelectionService)) is ISelectionService selectionService && serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
                 IComponent root = host.RootComponent;
-                Debug.Assert(root is not null, "Null root component. Will be unable to build selection menu");
-                if (selectionService.PrimarySelection is Control selectedControl && root is not null && selectedControl != root)
+                Debug.Assert(root != null, "Null root component. Will be unable to build selection menu");
+                if (selectionService.PrimarySelection is Control selectedControl && root != null && selectedControl != root)
                 {
                     Control parentControl = selectedControl.Parent;
-                    while (parentControl is not null)
+                    while (parentControl != null)
                     {
-                        if (parentControl.Site is not null)
+                        if (parentControl.Site != null)
                         {
                             parentControls.Add(parentControl);
                             nParentControls++;
@@ -150,7 +150,7 @@ namespace System.Windows.Forms.Design
         {
             //Add Designer Verbs..
             IMenuCommandService menuCommandService = (IMenuCommandService)serviceProvider.GetService(typeof(IMenuCommandService));
-            if (menuCommandService is not null)
+            if (menuCommandService != null)
             {
                 DesignerVerbCollection verbCollection = menuCommandService.Verbs;
                 foreach (DesignerVerb verb in verbCollection)
@@ -252,10 +252,10 @@ namespace System.Windows.Forms.Design
                 _serviceProvider = provider;
                 // Get NestedSiteName...
                 string compName = null;
-                if (_comp is not null)
+                if (_comp != null)
                 {
                     ISite site = _comp.Site;
-                    if (site is not null)
+                    if (site != null)
                     {
                         if (site is INestedSite nestedSite && !string.IsNullOrEmpty(nestedSite.FullName))
                         {

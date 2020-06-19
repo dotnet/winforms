@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                 }
                 if (autoSizeMode != value)
                 {
-                    if (Visible && DataGridView is not null)
+                    if (Visible && DataGridView != null)
                     {
                         if (!DataGridView.ColumnHeadersVisible &&
                             (value == DataGridViewAutoSizeColumnMode.ColumnHeader ||
@@ -194,7 +194,7 @@ namespace System.Windows.Forms
                 if (value != dataPropertyName)
                 {
                     dataPropertyName = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridView.OnColumnDataPropertyNameChanged(this);
                     }
@@ -224,14 +224,14 @@ namespace System.Windows.Forms
                     !defaultCellStyle.ForeColor.IsEmpty ||
                     !defaultCellStyle.SelectionBackColor.IsEmpty ||
                     !defaultCellStyle.SelectionForeColor.IsEmpty ||
-                    defaultCellStyle.Font is not null ||
+                    defaultCellStyle.Font != null ||
                     !defaultCellStyle.IsNullValueDefault ||
                     !defaultCellStyle.IsDataSourceNullValueDefault ||
                     !string.IsNullOrEmpty(defaultCellStyle.Format) ||
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.NotSet ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
-                    defaultCellStyle.Tag is not null ||
+                    defaultCellStyle.Tag != null ||
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, int.MaxValue));
                     }
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         if (value < 0)
                         {
@@ -365,7 +365,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(FillWeight), value, ushort.MaxValue));
                 }
-                if (DataGridView is not null)
+                if (DataGridView != null)
                 {
                     DataGridView.OnColumnFillWeightChanging(this, value);
                     fillWeight = value;
@@ -433,8 +433,8 @@ namespace System.Windows.Forms
             }
             set
             {
-                if ((value is not null || HasHeaderCell) &&
-                    HeaderCell.ValueType is not null &&
+                if ((value != null || HasHeaderCell) &&
+                    HeaderCell.ValueType != null &&
                     HeaderCell.ValueType.IsAssignableFrom(typeof(string)))
                 {
                     HeaderCell.Value = value;
@@ -467,7 +467,7 @@ namespace System.Windows.Forms
                 if (HasDefaultCellStyle)
                 {
                     columnStyle = DefaultCellStyle;
-                    Debug.Assert(columnStyle is not null);
+                    Debug.Assert(columnStyle != null);
                 }
 
                 if (DataGridView is null)
@@ -477,9 +477,9 @@ namespace System.Windows.Forms
 
                 DataGridViewCellStyle inheritedCellStyleTmp = new DataGridViewCellStyle();
                 DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
-                Debug.Assert(dataGridViewStyle is not null);
+                Debug.Assert(dataGridViewStyle != null);
 
-                if (columnStyle is not null && !columnStyle.BackColor.IsEmpty)
+                if (columnStyle != null && !columnStyle.BackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.BackColor = columnStyle.BackColor;
                 }
@@ -488,7 +488,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.BackColor = dataGridViewStyle.BackColor;
                 }
 
-                if (columnStyle is not null && !columnStyle.ForeColor.IsEmpty)
+                if (columnStyle != null && !columnStyle.ForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.ForeColor = columnStyle.ForeColor;
                 }
@@ -497,7 +497,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.ForeColor = dataGridViewStyle.ForeColor;
                 }
 
-                if (columnStyle is not null && !columnStyle.SelectionBackColor.IsEmpty)
+                if (columnStyle != null && !columnStyle.SelectionBackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionBackColor = columnStyle.SelectionBackColor;
                 }
@@ -506,7 +506,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.SelectionBackColor = dataGridViewStyle.SelectionBackColor;
                 }
 
-                if (columnStyle is not null && !columnStyle.SelectionForeColor.IsEmpty)
+                if (columnStyle != null && !columnStyle.SelectionForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionForeColor = columnStyle.SelectionForeColor;
                 }
@@ -515,7 +515,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.SelectionForeColor = dataGridViewStyle.SelectionForeColor;
                 }
 
-                if (columnStyle is not null && columnStyle.Font is not null)
+                if (columnStyle != null && columnStyle.Font != null)
                 {
                     inheritedCellStyleTmp.Font = columnStyle.Font;
                 }
@@ -524,7 +524,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.Font = dataGridViewStyle.Font;
                 }
 
-                if (columnStyle is not null && !columnStyle.IsNullValueDefault)
+                if (columnStyle != null && !columnStyle.IsNullValueDefault)
                 {
                     inheritedCellStyleTmp.NullValue = columnStyle.NullValue;
                 }
@@ -533,7 +533,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.NullValue = dataGridViewStyle.NullValue;
                 }
 
-                if (columnStyle is not null && !columnStyle.IsDataSourceNullValueDefault)
+                if (columnStyle != null && !columnStyle.IsDataSourceNullValueDefault)
                 {
                     inheritedCellStyleTmp.DataSourceNullValue = columnStyle.DataSourceNullValue;
                 }
@@ -542,7 +542,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.DataSourceNullValue = dataGridViewStyle.DataSourceNullValue;
                 }
 
-                if (columnStyle is not null && columnStyle.Format.Length != 0)
+                if (columnStyle != null && columnStyle.Format.Length != 0)
                 {
                     inheritedCellStyleTmp.Format = columnStyle.Format;
                 }
@@ -551,7 +551,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.Format = dataGridViewStyle.Format;
                 }
 
-                if (columnStyle is not null && !columnStyle.IsFormatProviderDefault)
+                if (columnStyle != null && !columnStyle.IsFormatProviderDefault)
                 {
                     inheritedCellStyleTmp.FormatProvider = columnStyle.FormatProvider;
                 }
@@ -560,7 +560,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.FormatProvider = dataGridViewStyle.FormatProvider;
                 }
 
-                if (columnStyle is not null && columnStyle.Alignment != DataGridViewContentAlignment.NotSet)
+                if (columnStyle != null && columnStyle.Alignment != DataGridViewContentAlignment.NotSet)
                 {
                     inheritedCellStyleTmp.AlignmentInternal = columnStyle.Alignment;
                 }
@@ -570,7 +570,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.AlignmentInternal = dataGridViewStyle.Alignment;
                 }
 
-                if (columnStyle is not null && columnStyle.WrapMode != DataGridViewTriState.NotSet)
+                if (columnStyle != null && columnStyle.WrapMode != DataGridViewTriState.NotSet)
                 {
                     inheritedCellStyleTmp.WrapModeInternal = columnStyle.WrapMode;
                 }
@@ -580,7 +580,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.WrapModeInternal = dataGridViewStyle.WrapMode;
                 }
 
-                if (columnStyle is not null && columnStyle.Tag is not null)
+                if (columnStyle != null && columnStyle.Tag != null)
                 {
                     inheritedCellStyleTmp.Tag = columnStyle.Tag;
                 }
@@ -589,7 +589,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.Tag = dataGridViewStyle.Tag;
                 }
 
-                if (columnStyle is not null && columnStyle.Padding != Padding.Empty)
+                if (columnStyle != null && columnStyle.Padding != Padding.Empty)
                 {
                     inheritedCellStyleTmp.PaddingInternal = columnStyle.Padding;
                 }
@@ -690,7 +690,7 @@ namespace System.Windows.Forms
                 // I talked w/ MarkRi and he is perfectly fine w/ DataGridViewColumn::Name changing w/o ColumnNameChanged
                 // being fired.
                 //
-                if (Site is not null && !string.IsNullOrEmpty(Site.Name))
+                if (Site != null && !string.IsNullOrEmpty(Site.Name))
                 {
                     name = Site.Name;
                 }
@@ -709,7 +709,7 @@ namespace System.Windows.Forms
                     name = value;
                 }
 
-                if (DataGridView is not null && !string.Equals(name, oldName, StringComparison.Ordinal))
+                if (DataGridView != null && !string.Equals(name, oldName, StringComparison.Ordinal))
                 {
                     DataGridView.OnColumnNameChanged(this);
                 }
@@ -724,8 +724,8 @@ namespace System.Windows.Forms
             set
             {
                 if (IsDataBound &&
-                    DataGridView is not null &&
-                    DataGridView.DataConnection is not null &&
+                    DataGridView != null &&
+                    DataGridView.DataConnection != null &&
                     BoundColumnIndex != -1 &&
                     DataGridView.DataConnection.DataFieldIsReadOnly(BoundColumnIndex) &&
                     !value)
@@ -774,7 +774,7 @@ namespace System.Windows.Forms
                 {
                     if (value != DataGridViewColumnSortMode.NotSortable)
                     {
-                        if (DataGridView is not null &&
+                        if (DataGridView != null &&
                             !DataGridView.InInitialization &&
                             value == DataGridViewColumnSortMode.Automatic &&
                             (DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
@@ -798,7 +798,7 @@ namespace System.Windows.Forms
                         flags = (byte)(flags & ~DATAGRIDVIEWCOLUMN_automaticSort);
                         flags = (byte)(flags & ~DATAGRIDVIEWCOLUMN_programmaticSort);
                     }
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridView.OnColumnSortModeChanged(this);
                     }
@@ -822,7 +822,7 @@ namespace System.Windows.Forms
                 {
                     HeaderCell.ToolTipText = value;
 
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridView.OnColumnToolTipTextChanged(this);
                     }
@@ -890,7 +890,7 @@ namespace System.Windows.Forms
             //
 
             DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)System.Activator.CreateInstance(GetType());
-            if (dataGridViewColumn is not null)
+            if (dataGridViewColumn != null)
             {
                 CloneInternal(dataGridViewColumn);
             }
@@ -939,7 +939,7 @@ namespace System.Windows.Forms
 
         internal DataGridViewAutoSizeColumnMode GetInheritedAutoSizeMode(DataGridView dataGridView)
         {
-            if (dataGridView is not null && autoSizeMode == DataGridViewAutoSizeColumnMode.NotSet)
+            if (dataGridView != null && autoSizeMode == DataGridViewAutoSizeColumnMode.NotSet)
             {
                 switch (dataGridView.AutoSizeColumnsMode)
                 {

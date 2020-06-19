@@ -329,7 +329,7 @@ namespace System.Windows.Forms
                 // We need to honor left to right and head and tail.
                 //      In RTL.Yes, Head is to the Right, Tail is to the Left
                 //      In RTL.No,  Head is to the Left,  Tail is to the Right
-                if ((item is not null) && (item.Placement == ToolStripItemPlacement.Main))
+                if ((item != null) && (item.Placement == ToolStripItemPlacement.Main))
                 {
                     int x = displayRectangle.Left;
                     int y = displayRectangle.Top;
@@ -491,7 +491,7 @@ namespace System.Windows.Forms
                 // Vertical split stack management ignores left to right.
                 //      Items aligned to the Head are placed from Top to Bottom
                 //      Items aligned to the Tail are placed from Bottom to Top
-                if ((item is not null) && (item.Placement == ToolStripItemPlacement.Main))
+                if ((item != null) && (item.Placement == ToolStripItemPlacement.Main))
                 {
                     Padding itemMargin = item.Margin;
                     int x = displayRectangle.Left + itemMargin.Left;

@@ -27,7 +27,7 @@ namespace System.IO
         {
             Path = path;
 
-            if (data is not null)
+            if (data != null)
             {
                 File.WriteAllBytes(path, data);
             }

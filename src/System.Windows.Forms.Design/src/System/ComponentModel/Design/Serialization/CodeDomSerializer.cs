@@ -83,7 +83,7 @@ namespace System.ComponentModel.Design.Serialization
                             if (instance is null)
                             {
                                 instance = DeserializeStatementToInstance(manager, element);
-                                if (instance is not null)
+                                if (instance != null)
                                 {
                                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance, new Attribute[] { BrowsableAttribute.Yes });
                                     foreach (PropertyDescriptor prop in props)
@@ -146,7 +146,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
-            else if (statement is CodeVariableDeclarationStatement varDecl && varDecl.InitExpression is not null)
+            else if (statement is CodeVariableDeclarationStatement varDecl && varDecl.InitExpression != null)
             {
                 Trace("Initializing variable declaration for variable {0}", varDecl.Name);
                 instance = DeserializeExpression(manager, varDecl.Name, varDecl.InitExpression);
@@ -205,7 +205,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     TraceIf(expression is null, "Unable to create object; aborting.");
                     // Short circuit common cases
-                    if (expression is not null)
+                    if (expression != null)
                     {
                         if (isComplete)
                         {
@@ -373,19 +373,19 @@ namespace System.ComponentModel.Design.Serialization
                     if (name is null)
                     {
                         IReferenceService referenceService = (IReferenceService)manager.GetService(typeof(IReferenceService));
-                        if (referenceService is not null)
+                        if (referenceService != null)
                         {
                             name = referenceService.GetName(value);
-                            referenceName = name is not null;
+                            referenceName = name != null;
                         }
                     }
 
-                    if (name is not null)
+                    if (name != null)
                     {
                         Trace("Object is reference ({0}) Creating reference expression", name);
                         // Check to see if this is a reference to the root component.  If it is, then use "this".
                         RootContext root = (RootContext)manager.Context[typeof(RootContext)];
-                        if (root is not null && root.Value == value)
+                        if (root != null && root.Value == value)
                         {
                             expression = root.Expression;
                         }

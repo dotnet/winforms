@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             {
                 DenyIfBoundAndNotCreated();
 
-                if (BoundPage is not null)
+                if (BoundPage != null)
                 {
                     // If we are bound but waiting for initialization (e.g. immediately after
                     // starting a navigation), we buffer the change until we apply the

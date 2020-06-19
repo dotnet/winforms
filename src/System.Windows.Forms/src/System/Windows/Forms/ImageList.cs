@@ -152,7 +152,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ImageListHandleCreatedDescr))]
-        public bool HandleCreated => _nativeImageList is not null;
+        public bool HandleCreated => _nativeImageList != null;
 
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(null)]
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
                 }
 
                 NativeImageList himl = value.GetNativeImageList();
-                if (himl is not null && himl != _nativeImageList)
+                if (himl != null && himl != _nativeImageList)
                 {
                     bool recreatingHandle = HandleCreated; // We only need to fire RecreateHandle if there was a previous handle
                     DestroyHandle();
@@ -469,7 +469,7 @@ namespace System.Windows.Forms
 
             ComCtl32.ImageList.SetBkColor(this, ComCtl32.CLR.NONE);
 
-            Debug.Assert(_originals is not null, "Handle not yet created, yet original images are gone");
+            Debug.Assert(_originals != null, "Handle not yet created, yet original images are gone");
             for (int i = 0; i < _originals.Count; i++)
             {
                 Original original = (Original)_originals[i];
@@ -515,7 +515,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (_originals is not null)
+                if (_originals != null)
                 {
                     // we might own some of the stuff that's not been created yet
                     foreach (Original original in _originals)
@@ -678,16 +678,16 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (tmpBitmap is not null)
+                        if (tmpBitmap != null)
                         {
-                            if (bmpData is not null)
+                            if (bmpData != null)
                             {
                                 tmpBitmap.UnlockBits(bmpData);
                             }
 
                             tmpBitmap.Dispose();
                         }
-                        if (result is not null && targetData is not null)
+                        if (result != null && targetData != null)
                         {
                             result.UnlockBits(targetData);
                         }
@@ -796,7 +796,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            if (Images is not null)
+            if (Images != null)
             {
                 return s + " Images.Count: " + Images.Count.ToString(CultureInfo.CurrentCulture) + ", ImageSize: " + ImageSize.ToString();
             }

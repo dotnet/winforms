@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         /// </returns>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (context is not null && context.Instance is not null)
+            if (context != null && context.Instance != null)
             {
                 object instance = context.Instance;
 
@@ -53,24 +53,24 @@ namespace System.Windows.Forms
                 PropertyDescriptorCollection listViewItemProps = TypeDescriptor.GetProperties(instance);
                 PropertyDescriptor listViewProp = listViewItemProps["ListView"];
 
-                if (listViewProp is not null)
+                if (listViewProp != null)
                 {
                     // Grab the ListView property off of the TreeNode.
                     object listViewInstance = listViewProp.GetValue(instance);
 
-                    if (listViewInstance is not null)
+                    if (listViewInstance != null)
                     {
                         // Get the ImageList property from the ListView and set it to be the currentImageList.
                         PropertyDescriptorCollection listViewProps = TypeDescriptor.GetProperties(listViewInstance);
                         PropertyDescriptor listViewImageListProperty = listViewProps["StateImageList"];
-                        if (listViewImageListProperty is not null)
+                        if (listViewImageListProperty != null)
                         {
                             imageList = (ImageList)listViewImageListProperty.GetValue(listViewInstance);
                         }
                     }
                 }
 
-                if (imageList is not null)
+                if (imageList != null)
                 {
                     // Create array to contain standard values
                     //

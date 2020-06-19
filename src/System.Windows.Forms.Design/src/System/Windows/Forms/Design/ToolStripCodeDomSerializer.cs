@@ -26,12 +26,12 @@ namespace System.Windows.Forms.Design
 
             foreach (ToolStripItem item in toolStrip.Items)
             {
-                if (item.Site is not null && toolStrip.Site is not null && item.Site.Container == toolStrip.Site.Container)
+                if (item.Site != null && toolStrip.Site != null && item.Site.Container == toolStrip.Site.Container)
                 {
                     // We only emit Size/Location information for controls that are sited and not inherrited readonly.
                     InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(item)[typeof(InheritanceAttribute)];
 
-                    if (ia is not null && ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
+                    if (ia != null && ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
                     {
                         return true;
                     }

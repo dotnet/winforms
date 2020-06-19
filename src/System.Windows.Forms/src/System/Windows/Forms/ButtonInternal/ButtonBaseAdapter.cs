@@ -267,22 +267,22 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 finally
                 {
-                    if (penTopLeft is not null)
+                    if (penTopLeft != null)
                     {
                         penTopLeft.Dispose();
                     }
 
-                    if (penBottomRight is not null)
+                    if (penBottomRight != null)
                     {
                         penBottomRight.Dispose();
                     }
 
-                    if (insetPen is not null)
+                    if (insetPen != null)
                     {
                         insetPen.Dispose();
                     }
 
-                    if (bottomRightInsetPen is not null)
+                    if (bottomRightInsetPen != null)
                     {
                         bottomRightInsetPen.Dispose();
                     }
@@ -584,7 +584,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             finally
             {
-                if (!stockBorder && brush is not null)
+                if (!stockBorder && brush != null)
                 {
                     brush.Dispose();
                 }
@@ -618,7 +618,7 @@ namespace System.Windows.Forms.ButtonInternal
         /// </summary>
         void DrawImage(Graphics graphics, LayoutData layout)
         {
-            if (Control.Image is not null)
+            if (Control.Image != null)
             {
                 //setup new clip region & draw
                 DrawImageCore(graphics, Control.Image, layout.imageBounds, layout.imageStart, layout);
@@ -1693,7 +1693,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             internal LayoutData(LayoutOptions options)
             {
-                Debug.Assert(options is not null, "must have options");
+                Debug.Assert(options != null, "must have options");
                 this.options = options;
             }
         }

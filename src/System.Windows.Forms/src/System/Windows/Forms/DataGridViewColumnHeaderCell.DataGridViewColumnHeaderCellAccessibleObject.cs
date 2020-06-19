@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner.OwningColumn is not null)
+                    if (Owner.OwningColumn != null)
                     {
                         if (Owner.OwningColumn.SortMode == DataGridViewColumnSortMode.Automatic)
                         {
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner.OwningColumn is not null)
+                    if (Owner.OwningColumn != null)
                     {
                         return Owner.OwningColumn.HeaderText;
                     }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                     if (Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                         Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
                     {
-                        if (Owner.OwningColumn is not null && Owner.OwningColumn.Selected)
+                        if (Owner.OwningColumn != null && Owner.OwningColumn.Selected)
                         {
                             resultState |= AccessibleStates.Selected;
                         }
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
                 DataGridViewColumnHeaderCell dataGridViewCell = (DataGridViewColumnHeaderCell)Owner;
                 DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (dataGridViewCell.OwningColumn is not null)
+                if (dataGridViewCell.OwningColumn != null)
                 {
                     if (dataGridViewCell.OwningColumn.SortMode == DataGridViewColumnSortMode.Automatic)
                     {
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
                 {
                     dataGridView.Focus();
                 }
-                if (dataGridViewCell.OwningColumn is not null &&
+                if (dataGridViewCell.OwningColumn != null &&
                     (dataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                      dataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect))
                 {

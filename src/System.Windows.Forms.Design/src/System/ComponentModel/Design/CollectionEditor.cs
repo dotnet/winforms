@@ -73,7 +73,7 @@ namespace System.ComponentModel.Design
             {
                 // Make sure the component is not being inherited -- we can't delete these!
                 InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(comp)[typeof(InheritanceAttribute)];
-                if (ia is not null && ia.InheritanceLevel != InheritanceLevel.NotInherited)
+                if (ia != null && ia.InheritanceLevel != InheritanceLevel.NotInherited)
                 {
                     return false;
                 }
@@ -105,7 +105,7 @@ namespace System.ComponentModel.Design
         protected virtual object CreateInstance(Type itemType)
         {
             IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-            if (typeof(IComponent).IsAssignableFrom(itemType) && host is not null)
+            if (typeof(IComponent).IsAssignableFrom(itemType) && host != null)
             {
                 IComponent instance = host.CreateComponent(itemType, null);
 
@@ -115,7 +115,7 @@ namespace System.ComponentModel.Design
                     init.InitializeNewComponent(null);
                 }
 
-                if (instance is not null)
+                if (instance != null)
                 {
                     return instance;
                 }
@@ -145,7 +145,7 @@ namespace System.ComponentModel.Design
             }
 
             PropertyDescriptor prop = TypeDescriptor.GetProperties(value)["Name"];
-            if (prop is not null && prop.PropertyType == typeof(string))
+            if (prop != null && prop.PropertyType == typeof(string))
             {
                 text = (string)prop.GetValue(value);
                 if (!string.IsNullOrEmpty(text))
@@ -155,7 +155,7 @@ namespace System.ComponentModel.Design
             }
 
             prop = TypeDescriptor.GetDefaultProperty(CollectionType);
-            if (prop is not null && prop.PropertyType == typeof(string))
+            if (prop != null && prop.PropertyType == typeof(string))
             {
                 text = (string)prop.GetValue(value);
                 if (!string.IsNullOrEmpty(text))
@@ -251,7 +251,7 @@ namespace System.ComponentModel.Design
                     }
 
                     cs = host?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                    if (cs is not null)
+                    if (cs != null)
                     {
                         cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
                         cs.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
@@ -270,7 +270,7 @@ namespace System.ComponentModel.Design
                 {
                     localCollectionForm.EditValue = null;
                     _currentContext = lastContext;
-                    if (trans is not null)
+                    if (trans != null)
                     {
                         if (commitChange)
                         {
@@ -282,7 +282,7 @@ namespace System.ComponentModel.Design
                         }
                     }
 
-                    if (cs is not null)
+                    if (cs != null)
                     {
                         cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                         cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
@@ -319,13 +319,13 @@ namespace System.ComponentModel.Design
                     if (!isInheritanceServiceInitialized)
                     {
                         isInheritanceServiceInitialized = true;
-                        if (Context is not null)
+                        if (Context != null)
                         {
                             inheritanceService = Context.GetService(typeof(IInheritanceService)) as IInheritanceService;
                         }
                     }
 
-                    if (inheritanceService is not null && inheritanceService.GetInheritanceAttribute(comp).Equals(InheritanceAttribute.InheritedReadOnly))
+                    if (inheritanceService != null && inheritanceService.GetInheritanceAttribute(comp).Equals(InheritanceAttribute.InheritedReadOnly))
                     {
                         return true;
                     }
@@ -402,7 +402,7 @@ namespace System.ComponentModel.Design
             if (editValue is IList list)
             {
                 list.Clear();
-                if (value is not null)
+                if (value != null)
                 {
                     for (int i = 0; i < value.Length; i++)
                     {
@@ -684,7 +684,7 @@ namespace System.ComponentModel.Design
             private void ShowContextMenuStrip()
             {
                 State = PushButtonState.Pressed;
-                if (ContextMenuStrip is not null)
+                if (ContextMenuStrip != null)
                 {
                     ContextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(ContextMenuStrip_Closed);
                     ContextMenuStrip.Show(this, 0, Height);
@@ -840,7 +840,7 @@ namespace System.ComponentModel.Design
                 {
                     foreach (object instance in instances)
                     {
-                        if (instance is not null)
+                        if (instance != null)
                         {
                             _dirty = true;
                             _createdItems.Add(instance);
@@ -904,7 +904,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private bool AllowRemoveInstance(object value)
             {
-                if (_createdItems is not null && _createdItems.Contains(value))
+                if (_createdItems != null && _createdItems.Contains(value))
                 {
                     return true;
                 }
@@ -925,7 +925,7 @@ namespace System.ComponentModel.Design
 
                 SizeF size = g.MeasureString(GetDisplayText(item), _listbox.Font);
                 int pic = 0;
-                if (item.Editor is not null && item.Editor.GetPaintValueSupported())
+                if (item.Editor != null && item.Editor.GetPaintValueSupported())
                 {
                     pic = PaintWidth + TextIndent;
                 }
@@ -949,10 +949,10 @@ namespace System.ComponentModel.Design
                     _dirty = false;
                     _listbox.Items.Clear();
 
-                    if (_createdItems is not null)
+                    if (_createdItems != null)
                     {
                         object[] items = _createdItems.ToArray();
-                        if (items.Length > 0 && items[0] is IComponent && ((IComponent)items[0]).Site is not null)
+                        if (items.Length > 0 && items[0] is IComponent && ((IComponent)items[0]).Site != null)
                         {
                             // here we bail now because we don't want to do the "undo" manually,
                             // we're part of a trasaction, we've added item, the rollback will be
@@ -967,7 +967,7 @@ namespace System.ComponentModel.Design
                         }
                         _createdItems.Clear();
                     }
-                    if (_removedItems is not null)
+                    if (_removedItems != null)
                     {
                         _removedItems.Clear();
                     }
@@ -975,7 +975,7 @@ namespace System.ComponentModel.Design
                     // Restore the original contents. Because objects get parented during CreateAndAddInstance, the underlying collection
                     // gets changed during add, but not other operations. Not all consumers of this dialog can roll back every single change,
                     // but this will at least roll back the additions, removals and reordering. See ASURT #85470.
-                    if (_originalItems is not null && (_originalItems.Count > 0))
+                    if (_originalItems != null && (_originalItems.Count > 0))
                     {
                         object[] items = new object[_originalItems.Count];
                         for (int i = 0; i < _originalItems.Count; i++)
@@ -1007,7 +1007,7 @@ namespace System.ComponentModel.Design
                     object instance = CreateInstance(type);
                     IList multipleInstance = _editor.GetObjectsFromInstance(instance);
 
-                    if (multipleInstance is not null)
+                    if (multipleInstance != null)
                     {
                         AddItems(multipleInstance);
                     }
@@ -1223,7 +1223,7 @@ namespace System.ComponentModel.Design
                 {
                     int old = _listbox.HorizontalExtent;
 
-                    if (item is not null)
+                    if (item != null)
                     {
                         int w = CalcItemWidth(g, item);
                         if (w > old)
@@ -1293,7 +1293,7 @@ namespace System.ComponentModel.Design
                     }
                     offset += 2;
 
-                    if (item.Editor is not null && item.Editor.GetPaintValueSupported())
+                    if (item.Editor != null && item.Editor.GetPaintValueSupported())
                     {
                         Rectangle baseVar = new Rectangle(e.Bounds.X + offset, e.Bounds.Y + 1, PaintWidth, e.Bounds.Height - 3);
                         g.DrawRectangle(SystemPens.ControlText, baseVar.X, baseVar.Y, baseVar.Width - 1, baseVar.Height - 1);
@@ -1395,7 +1395,7 @@ namespace System.ComponentModel.Design
                         Items = items;
                     }
 
-                    if (_removedItems is not null && _dirty)
+                    if (_removedItems != null && _dirty)
                     {
                         object[] deadItems = _removedItems.ToArray();
 
@@ -1425,7 +1425,7 @@ namespace System.ComponentModel.Design
             private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
             {
                 // see if this is any of the items in our list...this can happen if we launched a child editor
-                if (!_dirty && _originalItems is not null)
+                if (!_dirty && _originalItems != null)
                 {
                     foreach (object item in _originalItems)
                     {
@@ -1459,7 +1459,7 @@ namespace System.ComponentModel.Design
                 // Now update the list box.
                 _listbox.Items.Clear();
                 _propertyBrowser.Site = new PropertyGridSite(Context, _propertyBrowser);
-                if (EditValue is not null)
+                if (EditValue != null)
                 {
                     SuspendEnabledUpdates();
                     try
@@ -1580,13 +1580,13 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void RemoveInternal(ListItem item)
             {
-                if (item is not null)
+                if (item != null)
                 {
                     _editor.OnItemRemoving(item.Value);
 
                     _dirty = true;
 
-                    if (_createdItems is not null && _createdItems.Contains(item.Value))
+                    if (_createdItems != null && _createdItems.Contains(item.Value))
                     {
                         DestroyInstance(item.Value);
                         _createdItems.Remove(item.Value);
@@ -1670,7 +1670,7 @@ namespace System.ComponentModel.Design
                 DialogResult result = DialogResult.OK;
                 try
                 {
-                    if (cs is not null)
+                    if (cs != null)
                     {
                         cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
                     }
@@ -1681,7 +1681,7 @@ namespace System.ComponentModel.Design
                 }
                 finally
                 {
-                    if (cs is not null)
+                    if (cs != null)
                     {
                         cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                     }
@@ -1743,14 +1743,14 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                bool editEnabled = (_listbox.SelectedItem is not null) && CollectionEditable;
+                bool editEnabled = (_listbox.SelectedItem != null) && CollectionEditable;
                 _removeButton.Enabled = editEnabled && AllowRemoveInstance(((ListItem)_listbox.SelectedItem).Value);
                 _upButton.Enabled = editEnabled && _listbox.Items.Count > 1;
                 _downButton.Enabled = editEnabled && _listbox.Items.Count > 1;
                 _propertyBrowser.Enabled = editEnabled;
                 _addButton.Enabled = CollectionEditable;
 
-                if (_listbox.SelectedItem is not null)
+                if (_listbox.SelectedItem != null)
                 {
                     object[] items;
 
@@ -1861,7 +1861,7 @@ namespace System.ComponentModel.Design
                         else
                         {
                             object nextValue = li.Value;
-                            if (_value is not null)
+                            if (_value != null)
                             {
                                 if (nextValue is null)
                                 {
@@ -1879,7 +1879,7 @@ namespace System.ComponentModel.Design
                             }
                             else
                             {
-                                if (nextValue is not null)
+                                if (nextValue != null)
                                 {
                                     _value = null;
                                     break;
@@ -2146,7 +2146,7 @@ namespace System.ComponentModel.Design
                         // the first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use that to sling focus to the grid.
                         if (unchecked((int)(long)m.WParam) == VK_PROCESSKEY)
                         {
-                            if (PropertyGrid is not null)
+                            if (PropertyGrid != null)
                             {
                                 PropertyGrid.Focus();
                                 User32.SetFocus(new HandleRef(PropertyGrid, PropertyGrid.Handle));
@@ -2172,7 +2172,7 @@ namespace System.ComponentModel.Design
                             break;
                         }
 
-                        if (PropertyGrid is not null)
+                        if (PropertyGrid != null)
                         {
                             PropertyGrid.Focus();
                             User32.SetFocus(new HandleRef(PropertyGrid, PropertyGrid.Handle));
@@ -2282,7 +2282,7 @@ namespace System.ComponentModel.Design
                     bool canChange = false;
                     try
                     {
-                        if (Context is not null)
+                        if (Context != null)
                         {
                             canChange = Context.OnComponentChanging();
                         }
@@ -2400,7 +2400,7 @@ namespace System.ComponentModel.Design
 
             public object GetService(Type t)
             {
-                if (!_inGetService && _sp is not null)
+                if (!_inGetService && _sp != null)
                 {
                     try
                     {

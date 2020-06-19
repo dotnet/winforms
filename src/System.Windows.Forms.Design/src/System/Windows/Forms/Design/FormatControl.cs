@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Design
             {
                 FormatTypeClass formatType = formatTypeListBox.SelectedItem as FormatTypeClass;
 
-                if (formatType is not null)
+                if (formatType != null)
                 {
                     return formatType.ToString();
                 }
@@ -440,11 +440,11 @@ namespace System.Windows.Forms.Design
             FormatStringDialog fsd = null;
             Control ctl = Parent;
 
-            while (ctl is not null)
+            while (ctl != null)
             {
                 fsd = ctl as FormatStringDialog;
 
-                if (fsd is not null)
+                if (fsd != null)
                 {
                     break;
                 }
@@ -452,7 +452,7 @@ namespace System.Windows.Forms.Design
                 ctl = ctl.Parent;
             }
 
-            if (fsd is not null)
+            if (fsd != null)
             {
                 fsd.FormatControlFinishedLoading();
             }

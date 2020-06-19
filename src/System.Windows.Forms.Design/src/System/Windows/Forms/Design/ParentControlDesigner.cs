@@ -120,8 +120,8 @@ namespace System.Windows.Forms.Design
             Point location = Point.Empty;
             Size size = Size.Empty;
             Size offset = new Size(0, 0);
-            bool hasLocation = (defaultValues is not null && defaultValues.Contains("Location"));
-            bool hasSize = (defaultValues is not null && defaultValues.Contains("Size"));
+            bool hasLocation = (defaultValues != null && defaultValues.Contains("Location"));
+            bool hasSize = (defaultValues != null && defaultValues.Contains("Size"));
 
             if (hasLocation)
             {
@@ -133,14 +133,14 @@ namespace System.Windows.Forms.Design
                 size = (Size)defaultValues["Size"];
             }
 
-            if (defaultValues is not null && defaultValues.Contains("Offset"))
+            if (defaultValues != null && defaultValues.Contains("Offset"))
             {
                 offset = (Size)defaultValues["Offset"];
             }
 
             // If this component doesn't have a control designer, or if this control is top level, then ignore it.  We have the reverse logic in OnComponentAdded in the document designer so that we will add those guys to the tray. Also, if the child-control has already been parented, we assume it's also been located and return immediately. Otherwise, proceed with the parenting and locating.
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host is not null && newChild is not null && !Control.Contains(newChild) && (host.GetDesigner(newChild) as ControlDesigner) is not null && !(newChild is Form && ((Form)newChild).TopLevel))
+            if (host != null && newChild != null && !Control.Contains(newChild) && (host.GetDesigner(newChild) as ControlDesigner) != null && !(newChild is Form && ((Form)newChild).TopLevel))
             {
                 Rectangle bounds = new Rectangle();
                 // If we were provided with a location, convert it to parent control coordinates. Otherwise, get the control's size and put the location in the middle of it
@@ -156,13 +156,13 @@ namespace System.Windows.Forms.Design
                     ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
                     object primarySelection = selSvc.PrimarySelection;
                     Control selectedControl = null;
-                    if (primarySelection is not null)
+                    if (primarySelection != null)
                     {
                         selectedControl = ((IOleDragClient)this).GetControlForComponent(primarySelection);
                     }
 
                     // If the resulting control that came back isn't sited, it's not part of the design surface and should not be used as a marker.
-                    if (selectedControl is not null && selectedControl.Site is null)
+                    if (selectedControl != null && selectedControl.Site is null)
                     {
                         selectedControl = null;
                     }
@@ -210,10 +210,10 @@ namespace System.Windows.Forms.Design
                 bounds.X += offset.Width;
                 bounds.Y += offset.Height;
                 // check to see if we have additional information for bounds from the behaviorservice dragdrop logic
-                if (defaultValues is not null && defaultValues.Contains("ToolboxSnapDragDropEventArgs"))
+                if (defaultValues != null && defaultValues.Contains("ToolboxSnapDragDropEventArgs"))
                 {
                     ToolboxSnapDragDropEventArgs e = defaultValues["ToolboxSnapDragDropEventArgs"] as ToolboxSnapDragDropEventArgs;
-                    Debug.Assert(e is not null, "Why can't we get a ToolboxSnapDragDropEventArgs object out of our default values?");
+                    Debug.Assert(e != null, "Why can't we get a ToolboxSnapDragDropEventArgs object out of our default values?");
                     Rectangle snappedBounds = DesignerUtils.GetBoundsFromToolboxSnapDragDropInfo(e, bounds, Control.IsMirrored);
                     //Make sure the snapped bounds intersects with the bounds of the root control before we go adjusting the drag offset.  A race condition exists where the user can drag a tbx item so fast that the adorner window will never receive the proper drag/mouse move messages and never properly adjust the snap drag info.  This cause the control to be added @ 0,0 w.r.t. the adorner window.
                     if (host.RootComponent is Control rootControl && snappedBounds.IntersectsWith(rootControl.ClientRectangle))
@@ -223,17 +223,17 @@ namespace System.Windows.Forms.Design
                 }
                 // Parent the control to the designer and set it to the front.
                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(Control)["Controls"];
-                if (componentChangeSvc is not null)
+                if (componentChangeSvc != null)
                 {
                     componentChangeSvc.OnComponentChanging(Control, controlsProp);
                 }
                 AddChildControl(newChild);
                 // Now see if the control has size and location properties.  Update these values if it does.
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(newChild);
-                if (props is not null)
+                if (props != null)
                 {
                     PropertyDescriptor prop = props["Size"];
-                    if (prop is not null)
+                    if (prop != null)
                     {
                         prop.SetValue(newChild, new Size(bounds.Width, bounds.Height));
                     }
@@ -247,13 +247,13 @@ namespace System.Windows.Forms.Design
                     }
 
                     prop = props["Location"];
-                    if (prop is not null)
+                    if (prop != null)
                     {
                         prop.SetValue(newChild, pt);
                     }
                 }
 
-                if (componentChangeSvc is not null)
+                if (componentChangeSvc != null)
                 {
                     componentChangeSvc.OnComponentChanged(Control, controlsProp, Control.Controls, Control.Controls);
                 }
@@ -292,7 +292,7 @@ namespace System.Windows.Forms.Design
             //Check to see if the control is AutoSized. VSWhidbey #416721
             PropertyDescriptor prop = TypeDescriptor.GetProperties(component)["AutoSize"];
             Size size;
-            if (prop is not null &&
+            if (prop != null &&
                 !(prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden) ||
                   prop.Attributes.Contains(BrowsableAttribute.No)))
             {
@@ -300,7 +300,7 @@ namespace System.Windows.Forms.Design
                 if (autoSize)
                 {
                     prop = TypeDescriptor.GetProperties(component)["PreferredSize"];
-                    if (prop is not null)
+                    if (prop != null)
                     {
                         size = (Size)prop.GetValue(component);
                         if (size != Size.Empty)
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.Design
 
             // attempt to get the size property of our component
             prop = TypeDescriptor.GetProperties(component)["Size"];
-            if (prop is not null)
+            if (prop != null)
             {
                 // first, let's see if we can get a valid size...
                 size = (Size)prop.GetValue(component);
@@ -321,7 +321,7 @@ namespace System.Windows.Forms.Design
                 if (size.Width <= 0 || size.Height <= 0)
                 {
                     DefaultValueAttribute sizeAttr = (DefaultValueAttribute)prop.Attributes[typeof(DefaultValueAttribute)];
-                    if (sizeAttr is not null)
+                    if (sizeAttr != null)
                     {
                         return ((Size)sizeAttr.Value);
                     }
@@ -536,7 +536,7 @@ namespace System.Windows.Forms.Design
             }
             EnableDragDrop(true);
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host is not null)
+            if (host != null)
             {
                 componentChangeSvc = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
             }
@@ -555,7 +555,7 @@ namespace System.Windows.Forms.Design
 
         private void OnComponentRemoving(object sender, ComponentEventArgs e)
         {
-            if (e.Component is Control comp && comp.Parent is not null && comp.Parent == Control)
+            if (e.Component is Control comp && comp.Parent != null && comp.Parent == Control)
             {
                 pendingRemoveControl = (Control)comp;
                 //We suspend Component Changing Events for bulk operations to avoid unnecessary serialization\deserialization for undo

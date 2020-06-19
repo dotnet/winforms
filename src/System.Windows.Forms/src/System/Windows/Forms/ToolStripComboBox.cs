@@ -398,7 +398,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnDropDown(EventArgs e)
         {
-            if (ParentInternal is not null)
+            if (ParentInternal != null)
             {
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.SuspendMenuMode();
@@ -407,7 +407,7 @@ namespace System.Windows.Forms
         }
         protected virtual void OnDropDownClosed(EventArgs e)
         {
-            if (ParentInternal is not null)
+            if (ParentInternal != null)
             {
                 // PERF,
 
@@ -501,7 +501,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner is not null)
+                    if (Owner != null)
                     {
                         if (Owner.Renderer is ToolStripProfessionalRenderer renderer)
                         {
@@ -539,7 +539,7 @@ namespace System.Windows.Forms
                     ToolStripComboBoxControl toolStripComboBox = comboBox as ToolStripComboBoxControl;
                     if (toolStripComboBox is null || !(toolStripComboBox.Owner.Renderer is ToolStripProfessionalRenderer))
                     {
-                        Debug.Assert(toolStripComboBox is not null, "Why are we here and not a toolstrip combo?");
+                        Debug.Assert(toolStripComboBox != null, "Why are we here and not a toolstrip combo?");
                         return true;
                     }
                     return false;
@@ -547,7 +547,7 @@ namespace System.Windows.Forms
 
                 private static ProfessionalColorTable GetColorTable(ToolStripComboBoxControl toolStripComboBoxControl)
                 {
-                    if (toolStripComboBoxControl is not null)
+                    if (toolStripComboBoxControl != null)
                     {
                         return toolStripComboBoxControl.ColorTable;
                     }

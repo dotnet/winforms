@@ -342,7 +342,7 @@ namespace System.Windows.Forms
         private Rectangle ImageRectangleFromSizeMode(PictureBoxSizeMode mode)
         {
             Rectangle result = LayoutUtils.DeflateRect(ClientRectangle, Padding);
-            if (_image is not null)
+            if (_image != null)
             {
                 switch (mode)
                 {
@@ -535,7 +535,7 @@ namespace System.Windows.Forms
 
             _pictureBoxState[AsyncOperationInProgressState] = true;
 
-            if ((Image is null || (_imageInstallationType == ImageInstallationType.ErrorOrInitial)) && InitialImage is not null)
+            if ((Image is null || (_imageInstallationType == ImageInstallationType.ErrorOrInitial)) && InitialImage != null)
             {
                 InstallNewImage(InitialImage, ImageInstallationType.ErrorOrInitial);
             }
@@ -567,7 +567,7 @@ namespace System.Windows.Forms
         {
             AsyncOperation temp = _currentAsyncLoadOperation;
             _currentAsyncLoadOperation = null;
-            if (temp is not null)
+            if (temp != null)
             {
                 temp.PostOperationCompleted(_loadCompletedDelegate, new AsyncCompletedEventArgs(error, cancelled, null));
             }
@@ -670,7 +670,7 @@ namespace System.Windows.Forms
                     if (_contentLength != -1)
                     {
                         int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
-                        if (_currentAsyncLoadOperation is not null)
+                        if (_currentAsyncLoadOperation != null)
                         {
                             _currentAsyncLoadOperation.Post(_loadProgressDelegate,
                                     new ProgressChangedEventArgs(progress, null));
@@ -680,7 +680,7 @@ namespace System.Windows.Forms
                 else
                 {
                     _tempDownloadStream.Seek(0, SeekOrigin.Begin);
-                    if (_currentAsyncLoadOperation is not null)
+                    if (_currentAsyncLoadOperation != null)
                     {
                         _currentAsyncLoadOperation.Post(_loadProgressDelegate,
                                     new ProgressChangedEventArgs(100, null));
@@ -783,7 +783,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeImage()
         {
-            return (_imageInstallationType == ImageInstallationType.DirectlySpecified) && (Image is not null);
+            return (_imageInstallationType == ImageInstallationType.DirectlySpecified) && (Image != null);
         }
 
         /// <summary>
@@ -942,7 +942,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void Animate() => Animate(animate: !DesignMode && Visible && Enabled && ParentInternal is not null);
+        private void Animate() => Animate(animate: !DesignMode && Visible && Enabled && ParentInternal != null);
 
         private void StopAnimate() => Animate(animate: false);
 
@@ -952,7 +952,7 @@ namespace System.Windows.Forms
             {
                 if (animate)
                 {
-                    if (_image is not null)
+                    if (_image != null)
                     {
                         ImageAnimator.Animate(_image, new EventHandler(OnFrameChanged));
                         _currentlyAnimating = animate;
@@ -960,7 +960,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_image is not null)
+                    if (_image != null)
                     {
                         ImageAnimator.StopAnimate(_image, new EventHandler(OnFrameChanged));
                         _currentlyAnimating = animate;
@@ -982,12 +982,12 @@ namespace System.Windows.Forms
 
         private void DisposeImageStream()
         {
-            if (_localImageStreamReader is not null)
+            if (_localImageStreamReader != null)
             {
                 _localImageStreamReader.Dispose();
                 _localImageStreamReader = null;
             }
-            if (_uriImageStream is not null)
+            if (_uriImageStream != null)
             {
                 _uriImageStream.Dispose();
                 _localImageStreamReader = null;
@@ -1096,7 +1096,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (_image is not null && pe is not null)
+            if (_image != null && pe != null)
             {
                 Animate();
                 ImageAnimator.UpdateFrames(Image);
@@ -1132,7 +1132,7 @@ namespace System.Windows.Forms
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            if (_sizeMode == PictureBoxSizeMode.Zoom || _sizeMode == PictureBoxSizeMode.StretchImage || _sizeMode == PictureBoxSizeMode.CenterImage || BackgroundImage is not null)
+            if (_sizeMode == PictureBoxSizeMode.Zoom || _sizeMode == PictureBoxSizeMode.StretchImage || _sizeMode == PictureBoxSizeMode.CenterImage || BackgroundImage != null)
             {
                 Invalidate();
             }
@@ -1181,7 +1181,7 @@ namespace System.Windows.Forms
 
             // Need to do this in EndInit since there's no guarantee of the
             // order in which ImageLocation and WaitOnLoad will be set.
-            if (ImageLocation is not null && ImageLocation.Length != 0 && WaitOnLoad)
+            if (ImageLocation != null && ImageLocation.Length != 0 && WaitOnLoad)
             {
                 // Load when initialization completes, so any error will occur synchronously
                 Load();

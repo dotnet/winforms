@@ -72,7 +72,7 @@ namespace System.Windows.Forms
                 if (GetAutoSizeMode() != value)
                 {
                     SetAutoSizeMode(value);
-                    if (ParentInternal is not null)
+                    if (ParentInternal != null)
                     {
                         // DefaultLayout does not keep anchor information until it needs to.  When
                         // AutoSize became a common property, we could no longer blindly call into
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
         protected override void OnClick(EventArgs e)
         {
             Form form = FindForm();
-            if (form is not null)
+            if (form != null)
             {
                 form.DialogResult = dialogResult;
             }

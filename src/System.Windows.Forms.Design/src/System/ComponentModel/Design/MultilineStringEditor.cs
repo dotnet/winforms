@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider is not null)
+            if (provider != null)
             {
                 if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
@@ -106,7 +106,7 @@ namespace System.ComponentModel.Design
             {
                 if (disposing)
                 {
-                    if (_watermarkBrush is not null)
+                    if (_watermarkBrush != null)
                     {
                         _watermarkBrush.Dispose();
                         _watermarkBrush = null;
@@ -323,7 +323,7 @@ namespace System.ComponentModel.Design
                                     if (replaceFont is null)
                                     {
                                         using RegistryKey regkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack\SurrogateFallback");
-                                        if (regkey is not null)
+                                        if (regkey != null)
                                         {
                                             string fallBackFontName = (string)regkey.GetValue("Plane" + planeNumber);
                                             if (!string.IsNullOrEmpty(fallBackFontName))
@@ -333,7 +333,7 @@ namespace System.ComponentModel.Design
                                             _fallbackFonts[planeNumber] = replaceFont;
                                         }
                                     }
-                                    if (replaceFont is not null)
+                                    if (replaceFont != null)
                                     {
                                         int selectionLength = (i == surrogates.Length - 1) ? value.Length - surrogates[i] : surrogates[i + 1] - surrogates[i];
                                         base.Select(surrogates[i], selectionLength);
@@ -466,13 +466,13 @@ namespace System.ComponentModel.Design
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
 
                 Ole32.ILockBytes pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
-                Debug.Assert(pLockBytes is not null, "pLockBytes is NULL!");
+                Debug.Assert(pLockBytes != null, "pLockBytes is NULL!");
 
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
                     Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE,
                     0);
-                Debug.Assert(storage is not null, "storage is NULL!");
+                Debug.Assert(storage != null, "storage is NULL!");
 
                 return HRESULT.S_OK;
             }

@@ -131,7 +131,7 @@ namespace System.Windows.Forms
                 {
                     ConstructorInfo ctor = typeof(SelectionRange).GetConstructor(new Type[] {
                         typeof(DateTime), typeof(DateTime)});
-                    if (ctor is not null)
+                    if (ctor != null)
                     {
                         return new InstanceDescriptor(ctor, new object[] { range.Start, range.End });
                     }

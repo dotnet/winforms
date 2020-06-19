@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                 Guid* iid,
                 void** ppvObj)
             {
-                if (ppvObj is not null)
+                if (ppvObj != null)
                 {
                     *ppvObj = null;
                 }
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
                             // Nothing is on the message queue. Perform idle processing and then do a WaitMessage.
                             bool continueIdle = false;
 
-                            if (OleComponents is not null)
+                            if (OleComponents != null)
                             {
                                 IEnumerator enumerator = OleComponents.Values.GetEnumerator();
 
@@ -422,7 +422,7 @@ namespace System.Windows.Forms
                 void** ppvObj)
             {
                 // We do not support sub component managers.
-                if (ppvObj is not null)
+                if (ppvObj != null)
                 {
                     *ppvObj = null;
                 }
@@ -433,7 +433,7 @@ namespace System.Windows.Forms
             BOOL IMsoComponentManager.FGetParentComponentManager(void** ppicm)
             {
                 // We have no parent.
-                if (ppicm is not null)
+                if (ppicm != null)
                 {
                     *ppicm = null;
                 }
@@ -458,7 +458,7 @@ namespace System.Windows.Forms
                 if (component is null)
                     return BOOL.FALSE;
 
-                if (pcrinfo is not null)
+                if (pcrinfo != null)
                 {
                     if (pcrinfo->cbSize < sizeof(MSOCRINFO))
                     {
@@ -475,7 +475,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (ppic is not null)
+                if (ppic != null)
                 {
                     // This will addref the interface
                     *ppic = (void*)Marshal.GetComInterfaceForObject<IMsoComponent, IMsoComponent>(component);

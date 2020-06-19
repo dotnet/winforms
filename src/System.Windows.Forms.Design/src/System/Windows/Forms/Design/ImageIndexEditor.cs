@@ -57,23 +57,23 @@ namespace System.Windows.Forms.Design
             }
 
             // If the instances are different, then we need to re-acquire our image list.
-            if ((index >= 0) || (key is not null))
+            if ((index >= 0) || (key != null))
             {
                 PropertyDescriptor currentImageListProp = null;
-                if (currentImageListPropRef is not null)
+                if (currentImageListPropRef != null)
                 {
                     currentImageListProp = currentImageListPropRef.Target as PropertyDescriptor;
                 }
                 if (currentImageList is null ||
                     instance != currentInstance ||
-                    (currentImageListProp is not null && (ImageList)currentImageListProp.GetValue(currentInstance) != currentImageList))
+                    (currentImageListProp != null && (ImageList)currentImageListProp.GetValue(currentInstance) != currentImageList))
                 {
                     currentInstance = instance;
                     // first look for an attribute
                     PropertyDescriptor imageListProp = GetImageListProperty(context.PropertyDescriptor, ref instance);
 
                     // not found as an attribute, do the old behavior
-                    while (instance is not null && imageListProp is null)
+                    while (instance != null && imageListProp is null)
                     {
                         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance);
 
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Design
                             // We didn't find the image list in this component.  See if the
                             // component has a "parent" property.  If so, walk the tree...
                             PropertyDescriptor parentProp = props[ParentImageListProperty];
-                            if (parentProp is not null)
+                            if (parentProp != null)
                             {
                                 instance = parentProp.GetValue(instance);
                             }
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    if (imageListProp is not null)
+                    if (imageListProp != null)
                     {
                         currentImageList = (ImageList)imageListProp.GetValue(instance);
                         currentImageListPropRef = new WeakReference(imageListProp);
@@ -111,11 +111,11 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (currentImageList is not null)
+                if (currentImageList != null)
                 {
                     if (useIntIndex)
                     {
-                        if (currentImageList is not null && index < currentImageList.Images.Count)
+                        if (currentImageList != null && index < currentImageList.Images.Count)
                         {
                             index = (index > 0) ? index : 0;
                             image = currentImageList.Images[index];
@@ -140,14 +140,14 @@ namespace System.Windows.Forms.Design
         /// Gets a value indicating whether this editor supports the painting of a representation of an object's value.
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
-            => imageEditor is not null ? imageEditor.GetPaintValueSupported(context) : false;
+            => imageEditor != null ? imageEditor.GetPaintValueSupported(context) : false;
 
         /// <summary>
         /// Paints a representative value of the given object to the provided canvas. Painting should be done within the boundaries of the provided rectangle.
         /// </summary>
         public override void PaintValue(PaintValueEventArgs e)
         {
-            if (ImageEditor is not null)
+            if (ImageEditor != null)
             {
                 Image image = null;
 
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.Design
                     image = GetImage(e.Context, -1, (string)e.Value, false);
                 }
 
-                if (image is not null)
+                if (image != null)
                 {
                     ImageEditor.PaintValue(new PaintValueEventArgs(e.Context, image, e.Graphics, e.Bounds));
                 }
@@ -179,7 +179,7 @@ namespace System.Windows.Forms.Design
             object parentInstance = instance;
 
             RelatedImageListAttribute relILAttr = currentComponent.Attributes[typeof(RelatedImageListAttribute)] as RelatedImageListAttribute;
-            if (relILAttr is not null)
+            if (relILAttr != null)
             {
                 var pathInfo = relILAttr.RelatedImageList.Split('.');
                 for (int i = 0; i < pathInfo.Length; i++)

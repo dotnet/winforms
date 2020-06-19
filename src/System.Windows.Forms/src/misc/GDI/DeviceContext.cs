@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Internal
             Gdi32.RestoreDC(new HandleRef(this, _hDC), -1);
             Debug.Assert(_contextStack is null, "Someone is calling RestoreHdc() before SaveHdc()");
 
-            if (_contextStack is not null)
+            if (_contextStack != null)
             {
                 GraphicsState g = (GraphicsState)_contextStack.Pop();
 
@@ -329,7 +329,7 @@ namespace System.Windows.Forms.Internal
                 _hCurrentPen = g.hPen;
                 _hCurrentFont = g.hFont;
 
-                if (g.font is not null && g.font.IsAlive)
+                if (g.font != null && g.font.IsAlive)
                 {
                     ActiveFont = g.font.Target as WindowsFont;
                 }
@@ -337,7 +337,7 @@ namespace System.Windows.Forms.Internal
                 {
                     WindowsFont? previousFont = ActiveFont;
                     ActiveFont = null;
-                    if (previousFont is not null && MeasurementDCInfo.IsMeasurementDC(this))
+                    if (previousFont != null && MeasurementDCInfo.IsMeasurementDC(this))
                     {
                         previousFont.Dispose();
                     }

@@ -775,7 +775,7 @@ namespace System.Drawing.Design
                     if (prop.PropertyType == typeof(Color))
                     {
                         MethodInfo method = prop.GetGetMethod();
-                        if (method is not null && (method.Attributes & attrs) == attrs)
+                        if (method != null && (method.Attributes & attrs) == attrs)
                         {
                             object[] tempIndex = null;
                             colorList.Add(prop.GetValue(null, tempIndex));
@@ -867,7 +867,7 @@ namespace System.Drawing.Design
             private void OnListClick(object sender, EventArgs e)
             {
                 ListBox lb = (ListBox)sender;
-                if (lb.SelectedItem is not null)
+                if (lb.SelectedItem != null)
                 {
                     value = (Color)lb.SelectedItem;
                 }
@@ -941,7 +941,7 @@ namespace System.Drawing.Design
             {
                 TabPage selectedPage = tabControl.SelectedTab;
 
-                if (selectedPage is not null && selectedPage.Controls.Count > 0)
+                if (selectedPage != null && selectedPage.Controls.Count > 0)
                 {
                     selectedPage.Controls[0].Focus();
                 }
@@ -988,7 +988,7 @@ namespace System.Drawing.Design
 
                 // Now look for the current color so we can select the proper tab.
                 //
-                if (value is not null)
+                if (value != null)
                 {
                     object[] values = ColorValues;
                     TabPage selectedTab = paletteTabPage;
@@ -1043,7 +1043,7 @@ namespace System.Drawing.Design
                 protected override void OnGotFocus(EventArgs e)
                 {
                     TabPage selectedTab = this.SelectedTab;
-                    if (selectedTab is not null && selectedTab.Controls.Count > 0)
+                    if (selectedTab != null && selectedTab.Controls.Count > 0)
                     {
                         selectedTab.Controls[0].Focus();
                     }

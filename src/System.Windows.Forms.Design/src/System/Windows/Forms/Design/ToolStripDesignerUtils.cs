@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Design
 
             // check to see if we've got a toolbox item, and use it.
             ToolboxItem tbxItem = GetCachedToolboxItem(itemType);
-            if (tbxItem is not null)
+            if (tbxItem != null)
             {
                 return tbxItem.Bitmap;
             }
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.Design
         {
             string currentName = null;
             ToolboxItem tbxItem = GetCachedToolboxItem(itemType);
-            if (tbxItem is not null)
+            if (tbxItem != null)
             {
                 currentName = tbxItem.DisplayName;
             }
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.Design
             {
                 return s_newItemTypesForStatusStrip;
             }
-            Debug.Assert(toolStrip is not null, "why werent we handed a toolstrip here? returning default list");
+            Debug.Assert(toolStrip != null, "why werent we handed a toolstrip here? returning default list");
             return s_newItemTypesForToolStrip;
         }
 
@@ -237,7 +237,7 @@ namespace System.Windows.Forms.Design
         public static Type[] GetCustomItemTypes(IComponent component, IServiceProvider serviceProvider)
         {
             ITypeDiscoveryService discoveryService = null;
-            if (serviceProvider is not null)
+            if (serviceProvider != null)
             {
                 discoveryService = serviceProvider.GetService(typeof(ITypeDiscoveryService)) as ITypeDiscoveryService;
             }
@@ -245,7 +245,7 @@ namespace System.Windows.Forms.Design
         }
         public static Type[] GetCustomItemTypes(IComponent component, ITypeDiscoveryService discoveryService)
         {
-            if (discoveryService is not null)
+            if (discoveryService != null)
             {
                 // fish out all types which derive from toolstrip item
                 ICollection itemTypes = discoveryService.GetTypes(s_toolStripItemType, false /*excludeGlobalTypes*/);
@@ -281,7 +281,7 @@ namespace System.Windows.Forms.Design
 
                         // if the visibility matches the current toolstrip type,  add it to the list of possible types to create.
                         ToolStripItemDesignerAvailabilityAttribute visiblityAttribute = (ToolStripItemDesignerAvailabilityAttribute)TypeDescriptor.GetAttributes(t)[typeof(ToolStripItemDesignerAvailabilityAttribute)];
-                        if (visiblityAttribute is not null && ((visiblityAttribute.ItemAdditionVisibility & currentToolStripVisibility) == currentToolStripVisibility))
+                        if (visiblityAttribute != null && ((visiblityAttribute.ItemAdditionVisibility & currentToolStripVisibility) == currentToolStripVisibility))
                         {
                             bool isStockType = false;
                             // PERF: consider a dictionary - but this list will usually be 3-7 items.
@@ -326,7 +326,7 @@ namespace System.Windows.Forms.Design
                 {
                     ConvertTo = convertTo
                 };
-                if (onClick is not null)
+                if (onClick != null)
                 {
                     item.Click += onClick;
                 }
@@ -348,7 +348,7 @@ namespace System.Windows.Forms.Design
                 {
                     ConvertTo = convertTo
                 };
-                if (onClick is not null)
+                if (onClick != null)
                 {
                     item.Click += onClick;
                 }
@@ -371,7 +371,7 @@ namespace System.Windows.Forms.Design
                 contextMenu.Groups["StandardList"].Items.Add(item);
                 if (convertTo)
                 {
-                    if (item is ItemTypeToolStripMenuItem toolItem && currentItem is not null && toolItem.ItemType == currentItem.GetType())
+                    if (item is ItemTypeToolStripMenuItem toolItem && currentItem != null && toolItem.ItemType == currentItem.GetType())
                     {
                         toolItem.Enabled = false;
                     }
@@ -401,7 +401,7 @@ namespace System.Windows.Forms.Design
                 contextMenu.Groups["CustomList"].Items.Add(item);
                 if (convertTo)
                 {
-                    if (item is ItemTypeToolStripMenuItem toolItem && currentItem is not null && toolItem.ItemType == currentItem.GetType())
+                    if (item is ItemTypeToolStripMenuItem toolItem && currentItem != null && toolItem.ItemType == currentItem.GetType())
                     {
                         toolItem.Enabled = false;
                     }
@@ -430,7 +430,7 @@ namespace System.Windows.Forms.Design
                 Rectangle invalidateBounds = Rectangle.Empty;
                 IDesignerHost designerHost = (IDesignerHost)provider.GetService(typeof(IDesignerHost));
 
-                if (designerHost is not null)
+                if (designerHost != null)
                 {
                     foreach (Component comp in originalSelComps)
                     {
@@ -442,7 +442,7 @@ namespace System.Windows.Forms.Design
                             {
                                 // finally Invalidate the selection rect ...
                                 designer = designerHost.GetDesigner(selItem) as ToolStripItemDesigner;
-                                if (designer is not null)
+                                if (designer != null)
                                 {
                                     invalidateBounds = designer.GetGlyphBounds();
                                     GetAdjustedBounds(selItem, ref invalidateBounds);
@@ -467,19 +467,19 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (invalidateRegion is not null || templateNodeSelected || shiftPressed)
+                if (invalidateRegion != null || templateNodeSelected || shiftPressed)
                 {
                     BehaviorService behaviorService = (BehaviorService)provider.GetService(typeof(BehaviorService));
-                    if (behaviorService is not null)
+                    if (behaviorService != null)
                     {
-                        if (invalidateRegion is not null)
+                        if (invalidateRegion != null)
                         {
                             behaviorService.Invalidate(invalidateRegion);
                         }
 
                         // When a ToolStripItem is PrimarySelection, the glyph bounds are not invalidated  through the SelectionManager so we have to do this.
                         designer = designerHost.GetDesigner(nextSelection) as ToolStripItemDesigner;
-                        if (designer is not null)
+                        if (designer != null)
                         {
                             invalidateBounds = designer.GetGlyphBounds();
                             GetAdjustedBounds(nextSelection, ref invalidateBounds);
@@ -495,12 +495,12 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (invalidateRegion is not null)
+                if (invalidateRegion != null)
                 {
                     invalidateRegion.Dispose();
                 }
 
-                if (itemRegion is not null)
+                if (itemRegion != null)
                 {
                     itemRegion.Dispose();
                 }

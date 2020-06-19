@@ -346,7 +346,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             }
             finally
             {
-                if (pipeClient is not null)
+                if (pipeClient != null)
                 {
                     pipeClient.Dispose();
                 }

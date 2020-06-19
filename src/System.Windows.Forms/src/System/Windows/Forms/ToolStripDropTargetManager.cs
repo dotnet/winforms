@@ -93,7 +93,7 @@ namespace System.Windows.Forms
             {
                 ToolStripItem item = FindItemAtPoint(e.X, e.Y);
 
-                if ((item is not null) && (item.AllowDrop))
+                if ((item != null) && (item.AllowDrop))
                 {
                     // the item wants this event
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStripItem taking this: " + item.ToString());
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
                     lastDropTarget = null;
                 }
             }
-            if (lastDropTarget is not null)
+            if (lastDropTarget != null)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragEnter on target...");
 #if DEBUG
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
             {
                 ToolStripItem item = FindItemAtPoint(e.X, e.Y);
 
-                if ((item is not null) && (item.AllowDrop))
+                if ((item != null) && (item.AllowDrop))
                 {
                     // the item wants this event
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStripItem taking this: " + item.ToString());
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
             }
 
             // now call drag over
-            if (lastDropTarget is not null)
+            if (lastDropTarget != null)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragOver on target...");
                 lastDropTarget.OnDragOver(e);
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG LEAVE] ==============");
 
-            if (lastDropTarget is not null)
+            if (lastDropTarget != null)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragLeave on current target...");
 #if DEBUG
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(DragDropDebug.TraceVerbose, "[DRAG DROP] ==============");
 
-            if (lastDropTarget is not null)
+            if (lastDropTarget != null)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragDrop on current target...");
 
@@ -262,12 +262,12 @@ namespace System.Windows.Forms
             if (newTarget != lastDropTarget)
             {
                 // tell the last drag target you've left
-                if (lastDropTarget is not null)
+                if (lastDropTarget != null)
                 {
                     OnDragLeave(EventArgs.Empty);
                 }
                 lastDropTarget = newTarget;
-                if (newTarget is not null)
+                if (newTarget != null)
                 {
                     DragEventArgs dragEnterArgs = new DragEventArgs(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, e.Effect)
                     {

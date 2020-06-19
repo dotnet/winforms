@@ -12,7 +12,7 @@ namespace System.ComponentModel.Design
 
         public DesignerActionVerbItem(DesignerVerb verb) : base(null, null, null)
         {
-            Debug.Assert(verb is not null, "All callers check whether the verb is null.");
+            Debug.Assert(verb != null, "All callers check whether the verb is null.");
             _targetVerb = verb;
         }
 

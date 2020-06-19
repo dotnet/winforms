@@ -55,7 +55,7 @@ namespace System.Windows.Forms
             HRESULT Oleaut32.IPropertyBag.Write(string pszPropName, ref object pVar)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Writing property " + pszPropName + " [" + pVar + "] into OCXState propertybag.");
-                if (pVar is not null && !pVar.GetType().IsSerializable)
+                if (pVar != null && !pVar.GetType().IsSerializable)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t " + pVar.GetType().FullName + " is not serializable.");
                     return HRESULT.S_OK;

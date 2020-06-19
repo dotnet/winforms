@@ -28,19 +28,19 @@ namespace System.Windows.Forms
                 // Get ahold of the parent HWND -- if it's a different thread we need to do the disable
                 // over there too.  Note we only do this if we're parented by a Windows Forms parent.
 
-                if (MainForm is not null && MainForm.IsHandleCreated)
+                if (MainForm != null && MainForm.IsHandleCreated)
                 {
                     // Get ahold of the parenting control
                     IntPtr parentHandle = Interop.User32.GetWindowLong(new HandleRef(this, MainForm.Handle), User32.GWL.HWNDPARENT);
 
                     parentControl = Control.FromHandle(parentHandle);
 
-                    _parentWindowContext = parentControl is not null && parentControl.InvokeRequired
+                    _parentWindowContext = parentControl != null && parentControl.InvokeRequired
                         ? GetContextForHandle(new HandleRef(this, parentHandle)) : null;
                 }
 
                 // If we got a thread context, that means our parent is in a different thread, make the call on that thread.
-                if (_parentWindowContext is not null)
+                if (_parentWindowContext != null)
                 {
                     // In case we've already torn down, ask the context for this.
                     if (parentControl is null)

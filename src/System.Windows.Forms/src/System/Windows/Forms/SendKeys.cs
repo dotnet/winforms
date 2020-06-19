@@ -323,7 +323,7 @@ namespace System.Windows.Forms
             if (s_hhook != IntPtr.Zero)
             {
                 s_stopHook = false;
-                if (events is not null)
+                if (events != null)
                 {
                     events.Clear();
                 }
@@ -944,14 +944,14 @@ namespace System.Windows.Forms
 
             // For SendInput only, see AddCancelModifiersForPreviousEvents for details
             Queue previousEvents = null;
-            if ((events is not null) && (events.Count != 0))
+            if ((events != null) && (events.Count != 0))
             {
                 previousEvents = (Queue)events.Clone();
             }
 
             // generate the list of events that we're going to fire off with the hook
             //
-            ParseKeys(keys, (control is not null) ? control.Handle : IntPtr.Zero);
+            ParseKeys(keys, (control != null) ? control.Handle : IntPtr.Zero);
 
             // if there weren't any events posted as a result, we're done!
             //
@@ -1009,7 +1009,7 @@ namespace System.Windows.Forms
         ///  Sends the given keys to the active application, and then waits for
         ///  the messages to be processed.
         /// </summary>
-        // WARNING: this method will never work if control is not null, because while
+        // WARNING: this method will never work if control != null, because while
         // Windows journaling *looks* like it can be directed to a specific HWND,
         // it can't.
         //
@@ -1024,7 +1024,7 @@ namespace System.Windows.Forms
         public static void Flush()
         {
             Application.DoEvents();
-            while (events is not null && events.Count > 0)
+            while (events != null && events.Count > 0)
             {
                 Application.DoEvents();
             }
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms
                             break;
                         }
 
-                        if (SendKeys.events is not null && SendKeys.events.Count > 0)
+                        if (SendKeys.events != null && SendKeys.events.Count > 0)
                         {
                             SendKeys.events.Dequeue();
                         }
@@ -1158,7 +1158,7 @@ namespace System.Windows.Forms
                         gotNextEvent = true;
 
 #if DEBUG
-                        Debug.Assert(SendKeys.events is not null && SendKeys.events.Count > 0 && !SendKeys.s_stopHook, "HC_GETNEXT when queue is empty!");
+                        Debug.Assert(SendKeys.events != null && SendKeys.events.Count > 0 && !SendKeys.s_stopHook, "HC_GETNEXT when queue is empty!");
 #endif
 
                         SKEvent evt = (SKEvent)SendKeys.events.Peek();

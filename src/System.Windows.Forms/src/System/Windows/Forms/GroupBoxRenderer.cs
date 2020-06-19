@@ -236,11 +236,11 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (light is not null)
+                if (light != null)
                 {
                     light.Dispose();
                 }
-                if (dark is not null)
+                if (dark != null)
                 {
                     dark.Dispose();
                 }

@@ -92,7 +92,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Owner is not null && Owner is StatusStrip)
+                if (Owner != null && Owner is StatusStrip)
                 {
                     return scaledDefaultStatusStripMargin;
                 }

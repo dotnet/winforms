@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
                 BackColor = opaqueBackColor;
 
-                if (dataGridView is not null)
+                if (dataGridView != null)
                 {
                     dataGridView.EditingPanel.BackColor = opaqueBackColor;
                 }
@@ -342,7 +342,7 @@ namespace System.Windows.Forms
             get
             {
                 string name = Owner.AccessibleName;
-                if (name is not null)
+                if (name != null)
                 {
                     return name;
                 }

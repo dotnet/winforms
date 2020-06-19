@@ -40,7 +40,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (target is VSSDK.IVSMDPerPropertyBrowsing)
             {
                 Attribute[] attrs = GetComponentAttributes((VSSDK.IVSMDPerPropertyBrowsing)target, sender.DISPID);
-                if (attrs is not null)
+                if (attrs != null)
                 {
                     for (int i = 0; i < attrs.Length; i++)
                     {
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Type t = Type.GetType(attrName);
                 Assembly a = null;
 
-                if (t is not null)
+                if (t != null)
                 {
                     a = t.Assembly;
                 }
@@ -137,12 +137,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         continue;
                     }
 
-                    if (t is not null)
+                    if (t != null)
                     {
                         FieldInfo fi = t.GetField(fieldName);
 
                         // only if it's static
-                        if (fi is not null && fi.IsStatic)
+                        if (fi != null && fi.IsStatic)
                         {
                             object fieldValue = fi.GetValue(null);
                             if (fieldValue is Attribute)
@@ -170,7 +170,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // okay, if we got here, we need to build the attribute...
                 // get the initalizer value if we've got a one item ctor
 
-                if (!Convert.IsDBNull(varParams[i]) && varParams[i] is not null)
+                if (!Convert.IsDBNull(varParams[i]) && varParams[i] != null)
                 {
                     ConstructorInfo[] ctors = t.GetConstructors();
                     for (int c = 0; c < ctors.Length; c++)

@@ -83,7 +83,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public bool UndoInProgress
         {
-            get => _executingUnit is not null;
+            get => _executingUnit != null;
         }
 
         /// <summary>
@@ -221,13 +221,13 @@ namespace System.ComponentModel.Design
             {
                 Trace("Disposing undo engine");
 
-                if (_host is not null)
+                if (_host != null)
                 {
                     _host.TransactionOpening -= new EventHandler(OnTransactionOpening);
                     _host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
                 }
 
-                if (_componentChangeService is not null)
+                if (_componentChangeService != null)
                 {
                     _componentChangeService.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
                     _componentChangeService.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
@@ -247,7 +247,7 @@ namespace System.ComponentModel.Design
         internal string GetName(object obj, bool generateNew)
         {
             string componentName = null;
-            if (obj is not null)
+            if (obj != null)
             {
                 if (GetService(typeof(IReferenceService)) is IReferenceService rs)
                 {
@@ -258,7 +258,7 @@ namespace System.ComponentModel.Design
                     if (obj is IComponent comp)
                     {
                         ISite site = comp.Site;
-                        if (site is not null)
+                        if (site != null)
                         {
                             componentName = site.Name;
                         }
@@ -307,7 +307,7 @@ namespace System.ComponentModel.Design
                 throw new ArgumentNullException(nameof(serviceType));
             }
 
-            if (_provider is not null)
+            if (_provider != null)
             {
                 return _provider.GetService(serviceType);
             }
@@ -321,7 +321,7 @@ namespace System.ComponentModel.Design
                 unit.ComponentAdded(e);
             }
 
-            if (CurrentUnit is not null)
+            if (CurrentUnit != null)
             {
                 CheckPopUnit(PopUnitReason.Normal);
             }
@@ -333,7 +333,7 @@ namespace System.ComponentModel.Design
             if (_enabled && _executingUnit is null && _unitStack.Count == 0)
             {
                 string name;
-                if (e.Component is not null)
+                if (e.Component != null)
                 {
                     name = string.Format(SR.UndoEngineComponentAdd1, GetName(e.Component, true));
                 }
@@ -358,7 +358,7 @@ namespace System.ComponentModel.Design
                 unit.ComponentChanged(e);
             }
 
-            if (CurrentUnit is not null)
+            if (CurrentUnit != null)
             {
                 CheckPopUnit(PopUnitReason.Normal);
             }
@@ -371,11 +371,11 @@ namespace System.ComponentModel.Design
             {
                 string name;
 
-                if (e.Member is not null && e.Component is not null)
+                if (e.Member != null && e.Component != null)
                 {
                     name = string.Format(SR.UndoEngineComponentChange2, GetName(e.Component, true), e.Member.Name);
                 }
-                else if (e.Component is not null)
+                else if (e.Component != null)
                 {
                     name = string.Format(SR.UndoEngineComponentChange1, GetName(e.Component, true));
                 }
@@ -400,13 +400,13 @@ namespace System.ComponentModel.Design
                 unit.ComponentRemoved(e);
             }
 
-            if (CurrentUnit is not null)
+            if (CurrentUnit != null)
             {
                 CheckPopUnit(PopUnitReason.Normal);
             }
 
             // Now we need to raise ComponentChanged events for every component that had a reference to this removed component
-            if (_refToRemovedComponent is not null && _refToRemovedComponent.TryGetValue(e.Component, out List<ReferencingComponent> propsToUpdate) && propsToUpdate is not null && _componentChangeService is not null)
+            if (_refToRemovedComponent != null && _refToRemovedComponent.TryGetValue(e.Component, out List<ReferencingComponent> propsToUpdate) && propsToUpdate != null && _componentChangeService != null)
             {
                 foreach (ReferencingComponent ro in propsToUpdate)
                 {
@@ -422,7 +422,7 @@ namespace System.ComponentModel.Design
             if (_enabled && _executingUnit is null && _unitStack.Count == 0)
             {
                 string name;
-                if (e.Component is not null)
+                if (e.Component != null)
                 {
                     name = string.Format(SR.UndoEngineComponentRemove1, GetName(e.Component, true));
                 }
@@ -434,7 +434,7 @@ namespace System.ComponentModel.Design
             }
 
             // We need to keep track of all references in the container to the deleted component so  that those references can be fixed up if an undo of this "remove" occurs.
-            if (_enabled && _host is not null && _host.Container is not null && _componentChangeService is not null)
+            if (_enabled && _host != null && _host.Container != null && _componentChangeService != null)
             {
                 List<ReferencingComponent> propsToUpdate = null;
                 foreach (IComponent comp in _host.Container.Components)
@@ -460,7 +460,7 @@ namespace System.ComponentModel.Design
                                 continue;
                             }
 
-                            if (obj is not null && object.ReferenceEquals(obj, e.Component))
+                            if (obj != null && object.ReferenceEquals(obj, e.Component))
                             {
                                 if (propsToUpdate is null)
                                 {
@@ -505,7 +505,7 @@ namespace System.ComponentModel.Design
 
         private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
         {
-            if (_executingUnit is null && CurrentUnit is not null)
+            if (_executingUnit is null && CurrentUnit != null)
             {
                 PopUnitReason reason = e.TransactionCommitted ? PopUnitReason.TransactionCommit : PopUnitReason.TransactionCancel;
                 CheckPopUnit(reason);
@@ -591,7 +591,7 @@ namespace System.ComponentModel.Design
                     Hashtable selectedNames = new Hashtable();
                     foreach (object sel in selection)
                     {
-                        if (sel is IComponent comp && comp.Site is not null)
+                        if (sel is IComponent comp && comp.Site != null)
                         {
                             selectedNames[comp.Site.Name] = comp.Site.Container;
                         }
@@ -627,7 +627,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public virtual void Close()
             {
-                if (_changeEvents is not null)
+                if (_changeEvents != null)
                 {
                     foreach (ChangeUndoEvent e in _changeEvents)
                     {
@@ -635,7 +635,7 @@ namespace System.ComponentModel.Design
                     }
                 }
 
-                if (_removeEvents is not null)
+                if (_removeEvents != null)
                 {
                     foreach (AddRemoveUndoEvent e in _removeEvents)
                     {
@@ -655,7 +655,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public virtual void ComponentAdded(ComponentEventArgs e)
             {
-                if (e.Component.Site is not null &&
+                if (e.Component.Site != null &&
                     e.Component.Site.Container is INestedContainer)
                 {
                     // do nothing
@@ -665,7 +665,7 @@ namespace System.ComponentModel.Design
                     AddEvent(new AddRemoveUndoEvent(UndoEngine, e.Component, true));
                 }
 
-                if (_ignoreAddingList is not null)
+                if (_ignoreAddingList != null)
                 {
                     _ignoreAddingList.Remove(e.Component);
                 }
@@ -726,7 +726,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public virtual void ComponentChanged(ComponentChangedEventArgs e)
             {
-                if (_events is not null && e is not null)
+                if (_events != null && e != null)
                 {
                     for (int i = 0; i < _events.Count; i++)
                     {
@@ -737,7 +737,7 @@ namespace System.ComponentModel.Design
                         //          - There are no renames in between Changing and Changed.
                         if (_events[i] is ChangeUndoEvent ce && ChangeEventsSymmetric(ce.ComponentChangingEventArgs, e) && i != _events.Count - 1)
                         {
-                            if (e.Member is not null && e.Member.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content) &&
+                            if (e.Member != null && e.Member.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content) &&
                                 CanRepositionEvent(i, e))
                             {
                                 _events.RemoveAt(i);
@@ -754,7 +754,7 @@ namespace System.ComponentModel.Design
             public virtual void ComponentChanging(ComponentChangingEventArgs e)
             {
                 // If we are in the process of adding this component, ignore any changes to it.  The ending "Added" event will capture the component's state.  This not just an optimization.  If we get a change during an add, we can have an undo order that specifies a remove, and then a change to a removed component.
-                if (_ignoreAddingList is not null && _ignoreAddingList.Contains(e.Component))
+                if (_ignoreAddingList != null && _ignoreAddingList.Contains(e.Component))
                 {
                     return;
                 }
@@ -765,7 +765,7 @@ namespace System.ComponentModel.Design
                 }
 
                 // The site check here is done because the data team is calling us for components that are not yet sited.  We end up writing them out as Guid-named locals.  That's fine, except that we cannot capture after state for these types of things so we assert.
-                if (UndoEngine.GetName(e.Component, false) is not null)
+                if (UndoEngine.GetName(e.Component, false) != null)
                 {
                     // The caller provided us with a component.  This is the common case.  We will add a new change event provided there is not already one open for this component.
                     bool hasChange = false;
@@ -781,16 +781,16 @@ namespace System.ComponentModel.Design
                     }
 
                     if (!hasChange ||
-                        (e.Member is not null && e.Member.Attributes is not null && e.Member.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content)))
+                        (e.Member != null && e.Member.Attributes != null && e.Member.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content)))
                     {
 #if DEBUG
                         string name = UndoEngine.GetName(e.Component, false);
                         string memberName = "(none)";
-                        if (e.Member is not null && e.Member.Name is not null)
+                        if (e.Member != null && e.Member.Name != null)
                         {
                             memberName = e.Member.Name;
                         }
-                        if (name is not null)
+                        if (name != null)
                         {
                             Debug.WriteLineIf(s_traceUndo.TraceVerbose && hasChange, "Adding second ChangeEvent for " + name + " Member: " + memberName);
                         }
@@ -802,29 +802,29 @@ namespace System.ComponentModel.Design
                         ChangeUndoEvent changeEvent = null;
                         bool serializeBeforeState = true;
                         //perf: if this object was added in this undo unit we do not want to serialize before state for ChangeEvent since undo will remove it anyway
-                        if (_ignoreAddedList is not null && _ignoreAddedList.Contains(e.Component))
+                        if (_ignoreAddedList != null && _ignoreAddedList.Contains(e.Component))
                         {
                             serializeBeforeState = false;
                         }
 
-                        if (e.Component is IComponent comp && comp.Site is not null)
+                        if (e.Component is IComponent comp && comp.Site != null)
                         {
                             changeEvent = new ChangeUndoEvent(UndoEngine, e, serializeBeforeState);
                         }
-                        else if (e.Component is not null)
+                        else if (e.Component != null)
                         {
                             if (GetService(typeof(IReferenceService)) is IReferenceService rs)
                             {
                                 IComponent owningComp = rs.GetComponent(e.Component);
 
-                                if (owningComp is not null)
+                                if (owningComp != null)
                                 {
                                     changeEvent = new ChangeUndoEvent(UndoEngine, new ComponentChangingEventArgs(owningComp, null), serializeBeforeState);
                                 }
                             }
                         }
 
-                        if (changeEvent is not null)
+                        if (changeEvent != null)
                         {
                             AddEvent(changeEvent);
                             _changeEvents.Add(changeEvent);
@@ -839,7 +839,7 @@ namespace System.ComponentModel.Design
             public virtual void ComponentRemoved(ComponentEventArgs e)
             {
                 // We should gather undo state in ComponentRemoved, but by this time the component's designer has been destroyed so it's too late.  Instead, we captured state in the Removing method.  But, it is possible for there to be component changes to other objects that happen between removing and removed,  so we need to reorder the removing event so it's positioned after any changes.
-                if (_events is not null && e is not null)
+                if (_events != null && e != null)
                 {
                     ChangeUndoEvent changeEvt = null;
                     int changeIdx = -1;
@@ -856,7 +856,7 @@ namespace System.ComponentModel.Design
                             evt.Commit(UndoEngine);
                             // We should only reorder events if there  are change events coming between OnRemoving and OnRemoved.
                             // If there are other events (such as AddRemoving), the serialization  done in OnComponentRemoving might refer to components that aren't available.
-                            if (idx != _events.Count - 1 && changeEvt is not null)
+                            if (idx != _events.Count - 1 && changeEvt != null)
                             {
                                 // ensure only change change events exist between these two events
                                 bool onlyChange = true;
@@ -887,7 +887,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public virtual void ComponentRemoving(ComponentEventArgs e)
             {
-                if (e.Component.Site is not null &&
+                if (e.Component.Site != null &&
                     e.Component.Site is INestedContainer)
                 {
                     return;
@@ -957,7 +957,7 @@ namespace System.ComponentModel.Design
                 }
                 finally
                 {
-                    if (transaction is not null)
+                    if (transaction != null)
                     {
                         transaction.Commit();
                     }
@@ -975,7 +975,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             protected virtual void UndoCore()
             {
-                if (_events is not null)
+                if (_events != null)
                 {
                     if (_reverse)
                     {
@@ -1013,7 +1013,7 @@ namespace System.ComponentModel.Design
                         }
 
                         // Now, if we have a selection, apply it.
-                        if (_lastSelection is not null)
+                        if (_lastSelection != null)
                         {
                             if (UndoEngine.GetService(typeof(ISelectionService)) is ISelectionService ss)
                             {
@@ -1022,10 +1022,10 @@ namespace System.ComponentModel.Design
                                 ArrayList list = new ArrayList(names.Length);
                                 foreach (string name in names)
                                 {
-                                    if (name is not null)
+                                    if (name != null)
                                     {
                                         object comp = ((Container)_lastSelection[name]).Components[name];
-                                        if (comp is not null)
+                                        if (comp != null)
                                         {
                                             list.Add(comp);
                                         }
@@ -1160,7 +1160,7 @@ namespace System.ComponentModel.Design
                         IComponent component = host.Container.Components[_componentName];
 
                         // Note: It's ok for the component to be null here.  This could happen if the parent to this control is disposed first. Ex:SplitContainer
-                        if (component is not null)
+                        if (component != null)
                         {
                             host.DestroyComponent(component);
                         }
@@ -1293,7 +1293,7 @@ namespace System.ComponentModel.Design
                     }
 
                     // It is OK for us to not find a component here.  That can happen if our "after" state is owned by another change, like an add of the component.
-                    if (component is not null)
+                    if (component != null)
                     {
                         _after = Serialize(engine, component, _member);
                     }
@@ -1304,7 +1304,7 @@ namespace System.ComponentModel.Design
                     SerializationStore store;
                     using (store = engine._serializationService.CreateStore())
                     {
-                        if (member is not null && !(member.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden)))
+                        if (member != null && !(member.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden)))
                         {
                             engine._serializationService.SerializeMemberAbsolute(store, component, member);
                         }
@@ -1324,7 +1324,7 @@ namespace System.ComponentModel.Design
                     UndoEngine.Trace("---> Applying changes to '{0}'", _componentName);
                     Debug.Assert(_savedAfterState, "After state not saved.  BeforeUndo was not called?");
 
-                    if (_before is not null)
+                    if (_before != null)
                     {
                         if (engine.GetService(typeof(IDesignerHost)) is IDesignerHost host)
                         {
@@ -1360,7 +1360,7 @@ namespace System.ComponentModel.Design
                 {
                     UndoEngine.Trace("---> Renaming '{0}'->'{1}'", _after, _before);
                     IComponent comp = engine._host.Container.Components[_after];
-                    if (comp is not null)
+                    if (comp != null)
                     {
                         engine.ComponentChangeService.OnComponentChanging(comp, null);
                         comp.Site.Name = _before;

@@ -27,14 +27,14 @@ namespace System.Windows.Forms.Design
         {
             _sp = provider;
             _designerHost = (IDesignerHost)provider.GetService(typeof(IDesignerHost));
-            Debug.Assert(_designerHost is not null, "ToolStripKeyboardHandlingService relies on the selection service, which is unavailable.");
-            if (_designerHost is not null)
+            Debug.Assert(_designerHost != null, "ToolStripKeyboardHandlingService relies on the selection service, which is unavailable.");
+            if (_designerHost != null)
             {
                 _designerHost.AddService(typeof(ISupportInSituService), this);
             }
             _componentChangeSvc = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
-            Debug.Assert(_componentChangeSvc is not null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
-            if (_componentChangeSvc is not null)
+            Debug.Assert(_componentChangeSvc != null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
+            if (_componentChangeSvc != null)
             {
                 _componentChangeSvc.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
             }
@@ -45,17 +45,17 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void Dispose()
         {
-            if (_toolDesigner is not null)
+            if (_toolDesigner != null)
             {
                 _toolDesigner.Dispose();
                 _toolDesigner = null;
             }
-            if (_toolItemDesigner is not null)
+            if (_toolItemDesigner != null)
             {
                 _toolItemDesigner.Dispose();
                 _toolItemDesigner = null;
             }
-            if (_componentChangeSvc is not null)
+            if (_componentChangeSvc != null)
             {
                 _componentChangeSvc.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                 _componentChangeSvc = null;
@@ -83,13 +83,13 @@ namespace System.Windows.Forms.Design
             {
                 ISelectionService selectionService = (ISelectionService)_sp.GetService(typeof(ISelectionService));
                 IDesignerHost host = (IDesignerHost)_sp.GetService(typeof(IDesignerHost));
-                if (selectionService is not null && host is not null)
+                if (selectionService != null && host != null)
                 {
                     if (!(selectionService.PrimarySelection is IComponent comp))
                     {
                         comp = (IComponent)ToolStripKeyBoardService.SelectedDesignerControl;
                     }
-                    if (comp is not null)
+                    if (comp != null)
                     {
                         if (comp is DesignerToolStripControlHost c)
                         {
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Design
                                     else
                                     {
                                         _toolItemDesigner = host.GetDesigner(parentItem) as ToolStripMenuItemDesigner;
-                                        if (_toolItemDesigner is not null)
+                                        if (_toolItemDesigner != null)
                                         {
                                             _toolDesigner = null;
                                             return true;
@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Design
                                 if (c.GetCurrentParent() is MenuStrip tool)
                                 {
                                     _toolDesigner = host.GetDesigner(tool) as ToolStripDesigner;
-                                    if (_toolDesigner is not null)
+                                    if (_toolDesigner != null)
                                     {
                                         _toolItemDesigner = null;
                                         return true;
@@ -130,10 +130,10 @@ namespace System.Windows.Forms.Design
                             if (host.GetDesigner(comp) is ToolStripDropDownDesigner designer)
                             {
                                 ToolStripMenuItem toolItem = designer.DesignerMenuItem;
-                                if (toolItem is not null)
+                                if (toolItem != null)
                                 {
                                     _toolItemDesigner = host.GetDesigner(toolItem) as ToolStripItemDesigner;
-                                    if (_toolItemDesigner is not null)
+                                    if (_toolItemDesigner != null)
                                     {
                                         _toolDesigner = null;
                                         return true;
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.Design
                         else if (comp is MenuStrip)
                         {
                             _toolDesigner = host.GetDesigner(comp) as ToolStripDesigner;
-                            if (_toolDesigner is not null)
+                            if (_toolDesigner != null)
                             {
                                 _toolItemDesigner = null;
                                 return true;
@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Design
                         else if (comp is ToolStripMenuItem)
                         {
                             _toolItemDesigner = host.GetDesigner(comp) as ToolStripItemDesigner;
-                            if (_toolItemDesigner is not null)
+                            if (_toolItemDesigner != null)
                             {
                                 _toolDesigner = null;
                                 return true;
@@ -170,18 +170,18 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void HandleKeyChar()
         {
-            if (_toolDesigner is not null || _toolItemDesigner is not null)
+            if (_toolDesigner != null || _toolItemDesigner != null)
             {
-                if (_toolDesigner is not null)
+                if (_toolDesigner != null)
                 {
                     _toolDesigner.ShowEditNode(false);
                 }
-                else if (_toolItemDesigner is not null)
+                else if (_toolItemDesigner != null)
                 {
                     if (_toolItemDesigner is ToolStripMenuItemDesigner menuDesigner)
                     {
                         ISelectionService selService = (ISelectionService)_sp.GetService(typeof(ISelectionService));
-                        if (selService is not null)
+                        if (selService != null)
                         {
                             object comp = selService.PrimarySelection;
                             if (comp is null)
@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Design
                                 comp = ToolStripKeyBoardService.SelectedDesignerControl;
                             }
                             DesignerToolStripControlHost designerItem = comp as DesignerToolStripControlHost;
-                            if (designerItem is not null || comp is ToolStripDropDown)
+                            if (designerItem != null || comp is ToolStripDropDown)
                             {
                                 menuDesigner.EditTemplateNode(false);
                             }
@@ -213,11 +213,11 @@ namespace System.Windows.Forms.Design
         public IntPtr GetEditWindow()
         {
             IntPtr hWnd = IntPtr.Zero;
-            if (_toolDesigner is not null && _toolDesigner.Editor is not null && _toolDesigner.Editor.EditBox is not null)
+            if (_toolDesigner != null && _toolDesigner.Editor != null && _toolDesigner.Editor.EditBox != null)
             {
                 hWnd = (_toolDesigner.Editor.EditBox.Visible) ? _toolDesigner.Editor.EditBox.Handle : hWnd;
             }
-            else if (_toolItemDesigner is not null && _toolItemDesigner.Editor is not null && _toolItemDesigner.Editor.EditBox is not null)
+            else if (_toolItemDesigner != null && _toolItemDesigner.Editor != null && _toolItemDesigner.Editor.EditBox != null)
             {
                 hWnd = (_toolItemDesigner.Editor.EditBox.Visible) ? _toolItemDesigner.Editor.EditBox.Handle : hWnd;
             }
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.Design
             if (!toolStripPresent)
             {
                 ToolStripInSituService inSituService = (ToolStripInSituService)_sp.GetService(typeof(ISupportInSituService));
-                if (inSituService is not null)
+                if (inSituService != null)
                 {
                     //since we are going away .. restore the old commands.
                     _designerHost.RemoveService(typeof(ISupportInSituService));

@@ -62,7 +62,7 @@ namespace System.ComponentModel.Design.Serialization
                 bool caseInsensitive = false;
                 CodeDomProvider provider = manager.GetService(typeof(CodeDomProvider)) as CodeDomProvider;
                 TraceWarningIf(provider is null, "Unable to determine case sensitivity. Make sure CodeDomProvider is a service of the manager.");
-                if (provider is not null)
+                if (provider != null)
                 {
                     caseInsensitive = ((provider.LanguageOptions & LanguageOptions.CaseInsensitive) != 0);
                 }
@@ -75,7 +75,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     Type t = manager.GetType(GetTypeNameFromCodeTypeReference(manager, typeRef));
                     baseTypeName = typeRef.BaseType;
-                    if (t is not null && !(t.IsInterface))
+                    if (t != null && !(t.IsInterface))
                     {
                         baseType = t;
                         break;
@@ -117,7 +117,7 @@ namespace System.ComponentModel.Design.Serialization
                                 // always skip members with the same name as the type -- because that's the name we use when we resolve "base" and "this" items...
                                 _nameTable[member.Name] = member;
 
-                                if (member.Type is not null && !string.IsNullOrEmpty(member.Type.BaseType))
+                                if (member.Type != null && !string.IsNullOrEmpty(member.Type.BaseType))
                                 {
                                     names[member.Name] = GetTypeNameFromCodeTypeReference(manager, member.Type);
                                 }
@@ -157,7 +157,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     // Interesting problem.  The CodeDom parser may auto generate statements that are associated with other methods. VB does this, for example, to  create statements automatically for Handles clauses.  The problem with this technique is that we will end up with statements that are related to variables that live solely in user code and not in InitializeComponent. We will attempt to construct instances of these objects with limited success. To guard against this, we check to see if the manager even supports this feature, and if it does, we must look out for these statements while filling the statement collections.
                     PropertyDescriptor supportGenerate = manager.Properties["SupportsStatementGeneration"];
-                    if (supportGenerate is not null && supportGenerate.PropertyType == typeof(bool) && ((bool)supportGenerate.GetValue(manager)) == true)
+                    if (supportGenerate != null && supportGenerate.PropertyType == typeof(bool) && ((bool)supportGenerate.GetValue(manager)) == true)
                     {
                         // Ok, we must do the more expensive work of validating the statements we get.
                         foreach (string name in _nameTable.Keys)
@@ -207,7 +207,7 @@ namespace System.ComponentModel.Design.Serialization
                             DeserializeName(manager, statements.Name, statements);
                         }
                     }
-                    if (rootStatements is not null)
+                    if (rootStatements != null)
                     {
                         DeserializeName(manager, rootStatements.Name, rootStatements);
                     }
@@ -238,7 +238,7 @@ namespace System.ComponentModel.Design.Serialization
                 string typeName = null;
                 CodeMemberField field = null;
                 TraceIf(codeObject is null, "Name already deserialized.  Type: {0}", (value is null ? "(null)" : value.GetType().Name));
-                if (codeObject is not null)
+                if (codeObject != null)
                 {
                     // If we fail, don't return a CodeDom element to the caller! Also clear out our nametable entry here -- A badly written serializer may cause a recursion here, and we want to stop it.
                     value = null;
@@ -252,7 +252,7 @@ namespace System.ComponentModel.Design.Serialization
                     else
                     {
                         field = codeObject as CodeMemberField;
-                        if (field is not null)
+                        if (field != null)
                         {
                             typeName = GetTypeNameFromCodeTypeReference(manager, field.Type);
                         }
@@ -274,11 +274,11 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     // See if the container has this object.  This may be necessary for visual inheritance.
                     IContainer container = (IContainer)manager.GetService(typeof(IContainer));
-                    if (container is not null)
+                    if (container != null)
                     {
                         Trace("Try to get the type name from the container: {0}", name);
                         IComponent comp = container.Components[name];
-                        if (comp is not null)
+                        if (comp != null)
                         {
                             typeName = comp.GetType().FullName;
                             // we had to go to the host here, so there isn't a nametable entry here -- push in the component here so we don't accidentally recurse when we try to deserialize this object.
@@ -287,7 +287,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (typeName is not null)
+                if (typeName != null)
                 {
                     // Default case -- something that needs to be deserialized
                     Type type = manager.GetType(typeName);
@@ -303,7 +303,7 @@ namespace System.ComponentModel.Design.Serialization
                             statements = _statementTable[name];
                         }
 
-                        if (statements is not null && statements.Count > 0)
+                        if (statements != null && statements.Count > 0)
                         {
                             CodeDomSerializer serializer = GetSerializer(manager, type);
                             if (serializer is null)
@@ -321,11 +321,11 @@ namespace System.ComponentModel.Design.Serialization
                                 {
                                     value = serializer.Deserialize(manager, statements);
                                     // Search for a modifiers property, and set it.
-                                    if (value is not null && field is not null)
+                                    if (value != null && field != null)
                                     {
                                         PropertyDescriptor prop = TypeDescriptor.GetProperties(value)["Modifiers"];
 
-                                        if (prop is not null && prop.PropertyType == typeof(MemberAttributes))
+                                        if (prop != null && prop.PropertyType == typeof(MemberAttributes))
                                         {
                                             MemberAttributes modifiers = field.Attributes & MemberAttributes.AccessMask;
 
@@ -399,12 +399,12 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private void OnResolveName(object sender, ResolveNameEventArgs e)
         {
-            Debug.Assert(_nameTable is not null, "OnResolveName called and we are not deserializing!");
+            Debug.Assert(_nameTable != null, "OnResolveName called and we are not deserializing!");
             using (TraceScope("RootCodeDomSerializer::OnResolveName"))
             {
                 Trace("Name: {0}", e.Name);
                 // If someone else already found a value, who are we to complain?
-                if (e.Value is not null)
+                if (e.Value != null)
                 {
                     TraceWarning("Another name resolver has already found the value for {0}.", e.Name);
                 }
@@ -443,7 +443,7 @@ namespace System.ComponentModel.Design.Serialization
             StatementContext statementCxt = new StatementContext();
             // Populate the statement context with a list of members we'd like to see statements for
             statementCxt.StatementCollection.Populate(root);
-            if (members is not null)
+            if (members != null)
             {
                 statementCxt.StatementCollection.Populate(members);
             }
@@ -455,7 +455,7 @@ namespace System.ComponentModel.Design.Serialization
             try
             {
                 // Do each component, skipping us, since we handle our own serialization. This looks really sweet, but is it worth it?  We take the perf hit of a quicksort + the allocation overhead of 4 bytes for each component. Profiles show this as a 2% cost for a form with 100 controls. Let's meet the perf goals first, then consider uncommenting this.
-                if (members is not null)
+                if (members != null)
                 {
                     foreach (object member in members)
                     {
@@ -516,14 +516,14 @@ namespace System.ComponentModel.Design.Serialization
             Dictionary<string, int> methodMapIndex = new Dictionary<string, int>();
             List<CodeMethodMap> methodMap = new List<CodeMethodMap>();
             // Go through all of our members and root object and fish out matching statement context info for each object.  The statement context will probably contain more objects than our members, because each object that returned a statement collection was placed in the context. That's fine, because for each major component we serialized it pushed its statement collection on the context stack and statements were added there as well, forming a comlete graph.
-            if (members is not null)
+            if (members != null)
             {
                 foreach (object member in members)
                 {
                     if (member != root)
                     { // always skip the root and do it last
                         CodeStatementCollection statements = statementCxt.StatementCollection[member];
-                        if (statements is not null)
+                        if (statements != null)
                         {
                             CodeMemberMethod method = GetInitializeMethod(manager, typeDecl, member);
                             if (method is null)
@@ -553,7 +553,7 @@ namespace System.ComponentModel.Design.Serialization
 
             // Finally, do the same thing for the root object.
             CodeStatementCollection rootStatements = statementCxt.StatementCollection[root];
-            if (rootStatements is not null)
+            if (rootStatements != null)
             {
                 CodeMemberMethod rootMethod = GetInitializeMethod(manager, typeDecl, root);
                 if (rootMethod is null)

@@ -205,7 +205,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (dialog is not null)
+                if (dialog != null)
                 {
                     Marshal.FinalReleaseComObject(dialog);
                 }

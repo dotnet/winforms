@@ -272,7 +272,7 @@ namespace System.Windows.Forms
             if (dataSource is ICurrencyManagerProvider currencyManagerProvider)
             {
                 bindingManagerBase = currencyManagerProvider.GetRelatedCurrencyManager(dataMember);
-                if (bindingManagerBase is not null)
+                if (bindingManagerBase != null)
                 {
                     return bindingManagerBase;
                 }
@@ -281,11 +281,11 @@ namespace System.Windows.Forms
             // Check for previously created binding manager
             HashKey key = GetKey(dataSource, dataMember);
             WeakReference wRef = _listManagers[key] as WeakReference;
-            if (wRef is not null)
+            if (wRef != null)
             {
                 bindingManagerBase = (BindingManagerBase)wRef.Target;
             }
-            if (bindingManagerBase is not null)
+            if (bindingManagerBase != null)
             {
                 return bindingManagerBase;
             }
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
             }
 
             // if wRef is null, then it is the first time we want this bindingManagerBase: so add it
-            // if wRef is not null, then the bindingManagerBase was GC'ed at some point: keep the old wRef and change its target
+            // if wRef != null, then the bindingManagerBase was GC'ed at some point: keep the old wRef and change its target
             if (wRef is null)
             {
                 _listManagers.Add(key, new WeakReference(bindingManagerBase, false));
@@ -347,10 +347,10 @@ namespace System.Windows.Forms
 
         private static void CheckPropertyBindingCycles(BindingContext newBindingContext, Binding propBinding)
         {
-            Debug.Assert(newBindingContext is not null, "Always called with a non-null BindingContext");
-            Debug.Assert(propBinding is not null, "Always called with a non-null Binding.");
+            Debug.Assert(newBindingContext != null, "Always called with a non-null BindingContext");
+            Debug.Assert(propBinding != null, "Always called with a non-null Binding.");
 
-            if (propBinding.BindableComponent is not null && newBindingContext.Contains(propBinding.BindableComponent, string.Empty))
+            if (propBinding.BindableComponent != null && newBindingContext.Contains(propBinding.BindableComponent, string.Empty))
             {
                 // this way we do not add a bindingManagerBase to the
                 // bindingContext if there isn't one already
@@ -389,7 +389,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (cleanupList is not null)
+            if (cleanupList != null)
             {
                 foreach (object o in cleanupList)
                 {
@@ -411,12 +411,12 @@ namespace System.Windows.Forms
             }
 
             BindingManagerBase oldManager = binding.BindingManagerBase;
-            if (oldManager is not null)
+            if (oldManager != null)
             {
                 oldManager.Bindings.Remove(binding);
             }
 
-            if (newBindingContext is not null)
+            if (newBindingContext != null)
             {
                 // we need to first check for cycles before adding this binding to the collection
                 // of bindings.

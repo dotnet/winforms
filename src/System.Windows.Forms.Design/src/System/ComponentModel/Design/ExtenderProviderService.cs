@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         IExtenderProvider[] IExtenderListService.GetExtenderProviders()
         {
-            if (_providers is not null)
+            if (_providers != null)
             {
                 IExtenderProvider[] providers = new IExtenderProvider[_providers.Count];
                 _providers.CopyTo(providers, 0);

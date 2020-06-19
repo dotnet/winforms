@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (name is not null)
+                if (name != null)
                 {
                     lock (CollectionSyncRoot)
                     {

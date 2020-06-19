@@ -325,11 +325,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private bool ContainsMaskDescriptor(MaskDescriptor maskDescriptor)
         {
-            Debug.Assert(maskDescriptor is not null, "Null mask descriptor.");
+            Debug.Assert(maskDescriptor != null, "Null mask descriptor.");
 
             foreach (MaskDescriptor descriptor in _maskDescriptors)
             {
-                Debug.Assert(descriptor is not null, "Null mask descriptor in the collection.");
+                Debug.Assert(descriptor != null, "Null mask descriptor in the collection.");
 
                 if (maskDescriptor.Equals(descriptor) || maskDescriptor.Name.Trim() == descriptor.Name.Trim())
                 {
@@ -492,7 +492,7 @@ namespace System.Windows.Forms.Design
 
                 foreach (MaskDescriptor maskDescriptor in _maskDescriptors)
                 {
-                    string validatingType = maskDescriptor.ValidatingType is not null ? maskDescriptor.ValidatingType.Name : nullEntry;
+                    string validatingType = maskDescriptor.ValidatingType != null ? maskDescriptor.ValidatingType.Name : nullEntry;
 
                     // Make sure the sample displays literals.
                     MaskedTextProvider mtp = new MaskedTextProvider(maskDescriptor.Mask, maskDescriptor.Culture);
@@ -508,7 +508,7 @@ namespace System.Windows.Forms.Design
                 _maskDescriptors.Add(_customMaskDescriptor);
                 _listViewCannedMasks.Items.Add(new ListViewItem(new string[] { _customMaskDescriptor.Name, "", nullEntry }));
 
-                if (selectedMaskDex is not null)
+                if (selectedMaskDex != null)
                 {
                     SetSelectedMaskDescriptor(selectedMaskDex);
                 }
@@ -583,7 +583,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void listViewCannedMasks_Enter(object sender, EventArgs e)
         {
-            if (_listViewCannedMasks.FocusedItem is not null || _listViewCannedMasks.Items.Count <= 0)
+            if (_listViewCannedMasks.FocusedItem != null || _listViewCannedMasks.Items.Count <= 0)
             {
                 return;
             }
@@ -645,7 +645,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void ShowHelp()
         {
-            if (_helpService is not null)
+            if (_helpService != null)
             {
                 _helpService.ShowHelpFromKeyword(HelpTopic);
             }

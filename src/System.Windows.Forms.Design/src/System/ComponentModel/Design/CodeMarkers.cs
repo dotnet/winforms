@@ -278,10 +278,10 @@ namespace System.ComponentModel.Design
             }
 
             byte[] correlationIdBytes = correlationId.ToByteArray();
-            byte[] bufferWithCorrelation = new byte[s_correlationMarkBytes.Length + correlationIdBytes.Length + (buffer is not null ? buffer.Length : 0)];
+            byte[] bufferWithCorrelation = new byte[s_correlationMarkBytes.Length + correlationIdBytes.Length + (buffer != null ? buffer.Length : 0)];
             s_correlationMarkBytes.CopyTo(bufferWithCorrelation, 0);
             correlationIdBytes.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length);
-            if (buffer is not null)
+            if (buffer != null)
             {
                 buffer.CopyTo(bufferWithCorrelation, s_correlationMarkBytes.Length + correlationIdBytes.Length);
             }
@@ -328,7 +328,7 @@ namespace System.ComponentModel.Design
             using (RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, registryView))
             using (RegistryKey key = baseKey.OpenSubKey(regRoot + "\\Performance"))
             {
-                if (key is not null)
+                if (key != null)
                 {
                     // Read the default value
                     // It doesn't matter what the value is, if it's present and not empty, code markers are enabled

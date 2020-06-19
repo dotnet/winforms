@@ -95,7 +95,7 @@ namespace System.ComponentModel.Design.Tests
 
             // Add again.
             container.Add(component1, "newName");
-            if (component1.Site is not null)
+            if (component1.Site != null)
             {
                 Assert.Equal(componentName, component1.Site.Name);
             }

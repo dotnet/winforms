@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool ContainsMnemonic(string text)
         {
-            if (text is not null)
+            if (text != null)
             {
                 int textLength = text.Length;
                 int firstAmpersand = text.IndexOf('&', 0);
@@ -178,7 +178,7 @@ namespace System.Windows.Forms
             string typeOfControl = "Unknown";
             string nameOfControl = "Name: ";
             Control c = Control.FromHandle(hwnd);
-            if (c is not null)
+            if (c != null)
             {
                 typeOfControl = c.GetType().ToString();
                 if (!string.IsNullOrEmpty(c.Name))
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
                     nameOfControl += "Unknown";
 
                     // Add some extra debug info for ToolStripDropDowns.
-                    if (c is ToolStripDropDown dd && dd.OwnerItem is not null)
+                    if (c is ToolStripDropDown dd && dd.OwnerItem != null)
                     {
                         nameOfControl += Environment.NewLine + "\tOwnerItem: " + dd.OwnerItem.ToString();
                     }
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
         public static char GetMnemonic(string text, bool convertToUpperCase)
         {
             char mnemonic = '\0';
-            if (text is not null)
+            if (text != null)
             {
                 int len = text.Length;
                 for (int i = 0; i < len - 1; i++)
@@ -331,7 +331,7 @@ namespace System.Windows.Forms
 
         public static string GetComponentName(IComponent component, string defaultNameValue)
         {
-            Debug.Assert(component is not null, "component passed here cannot be null");
+            Debug.Assert(component != null, "component passed here cannot be null");
             if (string.IsNullOrEmpty(defaultNameValue))
             {
                 return component.Site?.Name ?? string.Empty;

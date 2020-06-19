@@ -42,10 +42,10 @@ namespace System.Windows.Forms
 
                 // public DataGridViewColumn(Type cellType)
                 //
-                if (dataGridViewColumn.CellType is not null)
+                if (dataGridViewColumn.CellType != null)
                 {
                     ctor = dataGridViewColumn.GetType().GetConstructor(new Type[] { typeof(Type) });
-                    if (ctor is not null)
+                    if (ctor != null)
                     {
                         return new InstanceDescriptor(ctor, new object[] { dataGridViewColumn.CellType }, false);
                     }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                 // public DataGridViewColumn()
                 //
                 ctor = dataGridViewColumn.GetType().GetConstructor(Array.Empty<Type>());
-                if (ctor is not null)
+                if (ctor != null)
                 {
                     return new InstanceDescriptor(ctor, Array.Empty<object>(), false);
                 }

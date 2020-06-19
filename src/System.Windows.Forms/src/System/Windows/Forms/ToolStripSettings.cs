@@ -144,7 +144,7 @@ namespace System.Windows.Forms
 
             foreach (ToolStrip toolStrip in FindToolStrips(true, form.Controls))
             {
-                if (toolStrip is not null && !string.IsNullOrEmpty(toolStrip.Name))
+                if (toolStrip != null && !string.IsNullOrEmpty(toolStrip.Name))
                 {
                     ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
 
@@ -163,7 +163,7 @@ namespace System.Windows.Forms
         {
             foreach (ToolStrip toolStrip in FindToolStrips(true, form.Controls))
             {
-                if (toolStrip is not null && !string.IsNullOrEmpty(toolStrip.Name))
+                if (toolStrip != null && !string.IsNullOrEmpty(toolStrip.Name))
                 {
                     ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
                     SettingsStub stub = new SettingsStub(toolStrip);
@@ -261,7 +261,7 @@ namespace System.Windows.Forms
                 {
                     List<SettingsStub> stubSettings = toolStripPanelDestinationHash[toolStripPanelName];
 
-                    if (stubSettings is not null)
+                    if (stubSettings != null)
                     {
                         foreach (SettingsStub settings in stubSettings)
                         {
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
 
         private void ApplyToolStripSettings(ToolStrip toolStrip, SettingsStub settings, Dictionary<string, ToolStrip> itemLocationHash)
         {
-            if (toolStrip is not null)
+            if (toolStrip != null)
             {
                 toolStrip.Visible = settings.Visible;
                 toolStrip.Size = settings.Size;
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
                     for (int i = 0; ((i < toolStrip.Items.Count) && (i < keys.Length)); i++)
                     {
                         Match match = r.Match(keys[i]);
-                        if (match is not null && match.Success)
+                        if (match != null && match.Success)
                         {
                             string key = match.Value;
                             if (!string.IsNullOrEmpty(key) && itemLocationHash.ContainsKey(key))
@@ -317,7 +317,7 @@ namespace System.Windows.Forms
             ArrayList toolStrips = FindToolStrips(true, form.Controls);
             Dictionary<string, ToolStrip> itemLocationHash = new Dictionary<string, ToolStrip>();
 
-            if (toolStrips is not null)
+            if (toolStrips != null)
             {
                 foreach (ToolStrip toolStrip in toolStrips)
                 {
@@ -370,7 +370,7 @@ namespace System.Windows.Forms
                         {
                             continue;
                         }
-                        if ((controlsToLookIn[i].Controls is not null) && controlsToLookIn[i].Controls.Count > 0)
+                        if ((controlsToLookIn[i].Controls != null) && controlsToLookIn[i].Controls.Count > 0)
                         {
                             // if it has a valid child collecion, append those results to our collection
                             foundControls = FindControls(baseType, searchAllChildren, controlsToLookIn[i].Controls, foundControls);
@@ -400,7 +400,7 @@ namespace System.Windows.Forms
 
         private string GetSettingsKey(ToolStrip toolStrip)
         {
-            if (toolStrip is not null)
+            if (toolStrip != null)
             {
                 return formKey + "." + toolStrip.Name;
             }

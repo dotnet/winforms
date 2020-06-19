@@ -83,12 +83,12 @@ namespace System.Windows.Forms
             /// </summary>
             object IDictionaryService.GetKey(object value)
             {
-                if (_dictionary is not null)
+                if (_dictionary != null)
                 {
                     foreach (DictionaryEntry de in _dictionary)
                     {
                         object o = de.Value;
-                        if (value is not null && value.Equals(o))
+                        if (value != null && value.Equals(o))
                         {
                             return de.Key;
                         }
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
             /// </summary>
             object IDictionaryService.GetValue(object key)
             {
-                if (_dictionary is not null)
+                if (_dictionary != null)
                 {
                     return _dictionary[key];
                 }

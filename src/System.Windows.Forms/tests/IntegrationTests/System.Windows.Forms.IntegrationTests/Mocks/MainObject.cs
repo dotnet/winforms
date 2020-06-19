@@ -19,7 +19,7 @@ namespace System.Windows.Forms.IntegrationTests.Mocks
                 if (text != value)
                 {
                     text = value;
-                    if (_propertyChanged is not null)
+                    if (_propertyChanged != null)
                     {
                         _propertyChanged(this, new PropertyChangedEventArgs(nameof(Text)));
                     }
@@ -33,6 +33,6 @@ namespace System.Windows.Forms.IntegrationTests.Mocks
             remove => _propertyChanged -= value;
         }
 
-        public bool IsPropertyChangedAssigned { get { return _propertyChanged is not null; } }
+        public bool IsPropertyChangedAssigned { get { return _propertyChanged != null; } }
     }
 }

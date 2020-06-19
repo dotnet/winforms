@@ -156,7 +156,7 @@ namespace System.Windows.Forms
 
         private void DenyIfHasOtherCollection(TaskDialogRadioButton item)
         {
-            if (item.Collection is not null && item.Collection != this)
+            if (item.Collection != null && item.Collection != this)
             {
                 throw new InvalidOperationException(SR.TaskDialogControlIsPartOfOtherCollection);
             }

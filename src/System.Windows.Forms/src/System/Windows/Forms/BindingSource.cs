@@ -142,7 +142,7 @@ namespace System.Windows.Forms
 
         private bool IsListWriteable(bool checkConstructor)
         {
-            return !List.IsReadOnly && !List.IsFixedSize && (!checkConstructor || _itemConstructor is not null);
+            return !List.IsReadOnly && !List.IsFixedSize && (!checkConstructor || _itemConstructor != null);
         }
 
         [Browsable(false)]
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
         {
             BindingSource bindingSource = newDataSource as BindingSource;
 
-            while (bindingSource is not null)
+            while (bindingSource != null)
             {
                 if (bindingSource == this)
                 {
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
                 instanceException = ex; // No default ctor defined
             }
 
-            if (instanceException is not null)
+            if (instanceException != null)
             {
                 throw new NotSupportedException(SR.BindingSourceInstanceError, instanceException);
             }
@@ -739,7 +739,7 @@ namespace System.Windows.Forms
             // See if data member corresponds to a valid property on the specified data source
             PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(_dataSource);
             PropertyDescriptor dmProp = dsProps[_dataMember];
-            if (dmProp is not null)
+            if (dmProp != null)
             {
                 return true;
             }
@@ -921,20 +921,20 @@ namespace System.Windows.Forms
                     // If parent list has a current item, get the sub-list from the relevant property on that item
                     PropertyDescriptorCollection dsProps = cm.GetItemProperties();
                     PropertyDescriptor dmProp = dsProps[_dataMember];
-                    if (dmProp is not null)
+                    if (dmProp != null)
                     {
                         currentValue = ListBindingHelper.GetList(dmProp.GetValue(cm.Current));
                         currentList = currentValue as IList;
                     }
                 }
 
-                if (currentList is not null)
+                if (currentList != null)
                 {
                     // Yippeeee, the current item gave us a list to bind to!
                     // [NOTE: Specify applySortAndFilter=TRUE to apply our sort/filter settings to new list]
                     SetList(currentList, false, true);
                 }
-                else if (currentValue is not null)
+                else if (currentValue != null)
                 {
                     // Ok, we didn't get a list, but we did get something, so wrap it in a list
                     // [NOTE: Specify applySortAndFilter=FALSE to stop BindingList<T> from throwing]
@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms
 
                     // GetListFromEnumerable returns null if there are no elements
                     // Don't consider it a list of enumerables in this case
-                    if (bindingList is not null)
+                    if (bindingList != null)
                     {
                         _listExtractedFromEnumerable = true;
                     }
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms
                 // If it's not an IList, IListSource or IEnumerable
                 if (bindingList is null)
                 {
-                    if (list is not null)
+                    if (list != null)
                     {
                         // If its some random non-list object, just wrap it in a list
                         bindingList = WrapObjectInBindingList(list);
@@ -1231,11 +1231,11 @@ namespace System.Windows.Forms
             // because the sort or filter values were invalid).
             if (applySortAndFilter)
             {
-                if (Sort is not null)
+                if (Sort != null)
                 {
                     InnerListSort = Sort;
                 }
-                if (Filter is not null)
+                if (Filter != null)
                 {
                     InnerListFilter = Filter;
                 }
@@ -1287,7 +1287,7 @@ namespace System.Windows.Forms
 
         private void WireCurrencyManager(CurrencyManager cm)
         {
-            Debug.Assert(cm is not null);
+            Debug.Assert(cm != null);
 
             cm.PositionChanged += new EventHandler(CurrencyManager_PositionChanged);
             cm.CurrentChanged += new EventHandler(CurrencyManager_CurrentChanged);
@@ -1298,7 +1298,7 @@ namespace System.Windows.Forms
 
         private void UnwireCurrencyManager(CurrencyManager cm)
         {
-            Debug.Assert(cm is not null);
+            Debug.Assert(cm != null);
 
             cm.PositionChanged -= new EventHandler(CurrencyManager_PositionChanged);
             cm.CurrentChanged -= new EventHandler(CurrencyManager_CurrentChanged);
@@ -1312,7 +1312,7 @@ namespace System.Windows.Forms
             if (_dataSource is ICurrencyManagerProvider provider)
             {
                 CurrencyManager cm = provider.CurrencyManager;
-                if (cm is not null)
+                if (cm != null)
                 {
                     cm.CurrentItemChanged += new EventHandler(ParentCurrencyManager_CurrentItemChanged);
                     cm.MetaDataChanged += new EventHandler(ParentCurrencyManager_MetaDataChanged);
@@ -1325,7 +1325,7 @@ namespace System.Windows.Forms
             if (_dataSource is ICurrencyManagerProvider provider)
             {
                 CurrencyManager cm = provider.CurrencyManager;
-                if (cm is not null)
+                if (cm != null)
                 {
                     cm.CurrentItemChanged -= new EventHandler(ParentCurrencyManager_CurrentItemChanged);
                     cm.MetaDataChanged -= new EventHandler(ParentCurrencyManager_MetaDataChanged);
@@ -1351,7 +1351,7 @@ namespace System.Windows.Forms
 
         private void WirePropertyChangedEvents(object item)
         {
-            if (item is not null && _itemShape is not null)
+            if (item != null && _itemShape != null)
             {
                 for (int j = 0; j < _itemShape.Count; j++)
                 {
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms
 
         private void UnwirePropertyChangedEvents(object item)
         {
-            if (item is not null && _itemShape is not null)
+            if (item != null && _itemShape != null)
             {
                 for (int j = 0; j < _itemShape.Count; j++)
                 {
@@ -1494,7 +1494,7 @@ namespace System.Windows.Forms
             }
 
             // Throw if user tries to add items to list that don't match the current item type
-            if (value is not null && !_itemType.IsAssignableFrom(value.GetType()))
+            if (value != null && !_itemType.IsAssignableFrom(value.GetType()))
             {
                 throw new InvalidOperationException(SR.BindingSourceItemTypeMismatchOnAdd);
             }

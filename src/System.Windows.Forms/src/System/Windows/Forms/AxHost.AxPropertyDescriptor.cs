@@ -42,7 +42,7 @@ namespace System.Windows.Forms
                 // Get the category for this dispid.
                 //
                 dispid = (DispIdAttribute)baseProp.Attributes[typeof(DispIdAttribute)];
-                if (dispid is not null)
+                if (dispid != null)
                 {
                     // Look to see if this property has a property page.
                     // If it does, then it needs to be Browsable(true).
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
 
                     // Use the CategoryAttribute provided by the OCX.
                     CategoryAttribute cat = owner.GetCategoryForDispid((Ole32.DispatchID)dispid.Value);
-                    if (cat is not null)
+                    if (cat != null)
                     {
                         AddAttribute(cat);
                     }
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (dispid is not null)
+                    if (dispid != null)
                     {
                         UpdateTypeConverterAndTypeEditorInternal(false, Dispid);
                     }
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                 get
                 {
                     DispIdAttribute dispid = (DispIdAttribute)baseProp.Attributes[typeof(DispIdAttribute)];
-                    if (dispid is not null)
+                    if (dispid != null)
                     {
                         return (Ole32.DispatchID)dispid.Value;
                     }
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
             {
                 UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)dispid.Value);
 
-                if (editorBaseType.Equals(typeof(UITypeEditor)) && editor is not null)
+                if (editorBaseType.Equals(typeof(UITypeEditor)) && editor != null)
                 {
                     return editor;
                 }
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
                 {
                     Oleaut32.IPerPropertyBrowsing ppb = owner.GetPerPropertyBrowsing();
 
-                    if (ppb is not null)
+                    if (ppb != null)
                     {
                         bool hasStrings = false;
 
@@ -464,10 +464,10 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex1)
                 {
-                    if (provider is not null)
+                    if (provider != null)
                     {
                         IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
-                        if (uiSvc is not null)
+                        if (uiSvc != null)
                         {
                             uiSvc.ShowError(ex1, SR.ErrorTypeConverterFailed);
                         }

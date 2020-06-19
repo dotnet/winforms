@@ -159,7 +159,7 @@ namespace System.Windows.Forms
             get
             {
                 Type valueType = base.ValueType;
-                if (valueType is not null)
+                if (valueType != null)
                 {
                     return valueType;
                 }
@@ -436,9 +436,9 @@ namespace System.Windows.Forms
         protected override object GetValue(int rowIndex)
         {
             if (UseColumnTextForButtonValue &&
-                DataGridView is not null &&
+                DataGridView != null &&
                 DataGridView.NewRowIndex != rowIndex &&
-                OwningColumn is not null &&
+                OwningColumn != null &&
                 OwningColumn is DataGridViewButtonColumn)
             {
                 return ((DataGridViewButtonColumn)OwningColumn).Text;
@@ -501,7 +501,7 @@ namespace System.Windows.Forms
                 if (!e.Alt && !e.Control && !e.Shift)
                 {
                     RaiseCellClick(new DataGridViewCellEventArgs(ColumnIndex, rowIndex));
-                    if (DataGridView is not null &&
+                    if (DataGridView != null &&
                         ColumnIndex < DataGridView.Columns.Count &&
                         rowIndex < DataGridView.Rows.Count)
                     {
@@ -672,7 +672,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle is not null);
+            Debug.Assert(cellStyle != null);
 
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             bool cellSelected = (elementState & DataGridViewElementStates.Selected) != 0;
@@ -976,7 +976,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (formattedString is not null && paint && DataGridViewCell.PaintContentForeground(paintParts))
+                if (formattedString != null && paint && DataGridViewCell.PaintContentForeground(paintParts))
                 {
                     // Font independent margins
                     valBounds.Offset(DATAGRIDVIEWBUTTONCELL_horizontalTextMargin, DATAGRIDVIEWBUTTONCELL_verticalTextMargin);

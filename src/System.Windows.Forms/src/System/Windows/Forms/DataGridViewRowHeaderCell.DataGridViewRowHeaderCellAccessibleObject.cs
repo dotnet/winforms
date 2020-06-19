@@ -60,7 +60,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (ParentPrivate is not null)
+                    if (ParentPrivate != null)
                     {
                         return ParentPrivate.Name;
                     }
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
                     if (Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
                         Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
                     {
-                        if (Owner.OwningRow is not null && Owner.OwningRow.Selected)
+                        if (Owner.OwningRow != null && Owner.OwningRow.Selected)
                         {
                             resultState |= AccessibleStates.Selected;
                         }
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
             {
                 if ((Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
                     Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect) &&
-                    Owner.OwningRow is not null)
+                    Owner.OwningRow != null)
                 {
                     Owner.OwningRow.Selected = true;
                 }
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
                 switch (navigationDirection)
                 {
                     case AccessibleNavigation.Next:
-                        if (Owner.OwningRow is not null && Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) > 0)
+                        if (Owner.OwningRow != null && Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) > 0)
                         {
                             // go to the next sibling
                             return ParentPrivate.GetChild(1);
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
                 {
                     dataGridView.Focus();
                 }
-                if (dataGridViewCell.OwningRow is not null &&
+                if (dataGridViewCell.OwningRow != null &&
                     (dataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
                      dataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect))
                 {

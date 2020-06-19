@@ -86,7 +86,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            if (destinationType == typeof(string) && value is not null && value is string && ((string)value).Length == 0)
+            if (destinationType == typeof(string) && value != null && value is string && ((string)value).Length == 0)
             {
                 return SR.toStringNone;
             }
@@ -106,12 +106,12 @@ namespace System.Windows.Forms
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (context is not null && context.Instance is not null)
+            if (context != null && context.Instance != null)
             {
                 object instance = context.Instance;
                 PropertyDescriptor imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
 
-                while (instance is not null && imageListProp is null)
+                while (instance != null && imageListProp is null)
                 {
                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance);
 
@@ -130,7 +130,7 @@ namespace System.Windows.Forms
                         // component has a "parent" property.  If so, walk the tree...
                         //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
-                        if (parentProp is not null)
+                        if (parentProp != null)
                         {
                             instance = parentProp.GetValue(instance);
                         }
@@ -143,11 +143,11 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (imageListProp is not null)
+                if (imageListProp != null)
                 {
                     ImageList imageList = (ImageList)imageListProp.GetValue(instance);
 
-                    if (imageList is not null)
+                    if (imageList != null)
                     {
                         // Create array to contain standard values
                         //
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
                         StringCollection imageKeys = imageList.Images.Keys;
                         for (int i = 0; i < imageKeys.Count; i++)
                         {
-                            if ((imageKeys[i] is not null) && (imageKeys[i].Length != 0))
+                            if ((imageKeys[i] != null) && (imageKeys[i].Length != 0))
                             {
                                 values[i] = imageKeys[i];
                             }

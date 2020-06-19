@@ -39,10 +39,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             IntPtr parentHandle = (IntPtr)User32.GetFocus();
 
             IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
-            if (uiSvc is not null)
+            if (uiSvc != null)
             {
                 IWin32Window parent = uiSvc.GetDialogOwnerWindow();
-                if (parent is not null)
+                if (parent != null)
                 {
                     parentHandle = parent.Handle;
                 }

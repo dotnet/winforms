@@ -21,13 +21,13 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void PopulateOptionCollection(DesignerOptionCollection options)
         {
-            if (options is null || options.Parent is not null)
+            if (options is null || options.Parent != null)
             {
                 return;
             }
 
             DesignerOptions designerOptions = CompatibilityOptions;
-            if (designerOptions is not null)
+            if (designerOptions != null)
             {
                 CreateOptionCollection(options, "DesignerOptions", designerOptions);
             }

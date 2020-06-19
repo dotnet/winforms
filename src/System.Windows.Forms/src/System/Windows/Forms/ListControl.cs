@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             get => _dataSource;
             set
             {
-                if (value is not null && !(value is IList || value is IListSource))
+                if (value != null && !(value is IList || value is IListSource))
                 {
                     throw new ArgumentException(SR.BadDataSourceForComplexBinding, nameof(value));
                 }
@@ -141,10 +141,10 @@ namespace System.Windows.Forms
                 if (_displayMemberConverter is null)
                 {
                     PropertyDescriptorCollection props = DataManager?.GetItemProperties();
-                    if (props is not null)
+                    if (props != null)
                     {
                         PropertyDescriptor displayMemberProperty = props.Find(_displayMember.BindingField, true);
-                        if (displayMemberProperty is not null)
+                        if (displayMemberProperty != null)
                         {
                             _displayMemberConverter = displayMemberProperty.Converter;
                         }
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
 
         private static bool BindingMemberInfoInDataManager(CurrencyManager dataManager, BindingMemberInfo bindingMemberInfo)
         {
-            Debug.Assert(dataManager is not null);
+            Debug.Assert(dataManager != null);
 
             PropertyDescriptorCollection props = dataManager.GetItemProperties();
 
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
 
                     // See if the valueMember is a member of
                     // the properties in the dataManager
-                    if (DataManager is not null && !string.IsNullOrEmpty(value))
+                    if (DataManager != null && !string.IsNullOrEmpty(value))
                     {
                         if (!BindingMemberInfoInDataManager(DataManager, newValueMember))
                         {
@@ -352,7 +352,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (SelectedIndex != -1 && _dataManager is not null)
+                if (SelectedIndex != -1 && _dataManager != null)
                 {
                     object currentItem = _dataManager[SelectedIndex];
                     return FilterItemOnProperty(currentItem, _valueMember.BindingField);
@@ -362,7 +362,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (_dataManager is not null)
+                if (_dataManager != null)
                 {
                     string propertyName = _valueMember.BindingField;
                     // We can't set the SelectedValue property when the listManager does not
@@ -390,7 +390,7 @@ namespace System.Windows.Forms
 
         private void DataManager_PositionChanged(object sender, EventArgs e)
         {
-            if (DataManager is not null)
+            if (DataManager != null)
             {
                 if (AllowSelection)
                 {
@@ -402,7 +402,7 @@ namespace System.Windows.Forms
         private void DataManager_ItemChanged(object sender, ItemChangedEventArgs e)
         {
             // Note this is being called internally with a null event.
-            if (_dataManager is not null)
+            if (_dataManager != null)
             {
                 if (e.Index == -1)
                 {
@@ -426,13 +426,13 @@ namespace System.Windows.Forms
 
         protected object FilterItemOnProperty(object item, string field)
         {
-            if (item is not null && !string.IsNullOrEmpty(field))
+            if (item != null && !string.IsNullOrEmpty(field))
             {
                 try
                 {
                     // if we have a dataSource, then use that to display the string
                     PropertyDescriptor descriptor;
-                    if (DataManager is not null)
+                    if (DataManager != null)
                     {
                         descriptor = DataManager.GetItemProperties().Find(field, true);
                     }
@@ -440,7 +440,7 @@ namespace System.Windows.Forms
                     {
                         descriptor = TypeDescriptor.GetProperties(item).Find(field, true);
                     }
-                    if (descriptor is not null)
+                    if (descriptor != null)
                     {
                         item = descriptor.GetValue(item);
                     }
@@ -680,14 +680,14 @@ namespace System.Windows.Forms
                     if (_isDataSourceInitialized)
                     {
                         CurrencyManager newDataManager = null;
-                        if (newDataSource is not null && BindingContext is not null && newDataSource != Convert.DBNull)
+                        if (newDataSource != null && BindingContext != null && newDataSource != Convert.DBNull)
                         {
                             newDataManager = (CurrencyManager)BindingContext[newDataSource, newDisplayMember.BindingPath];
                         }
 
                         if (_dataManager != newDataManager)
                         {
-                            if (_dataManager is not null)
+                            if (_dataManager != null)
                             {
                                 _dataManager.ItemChanged -= new ItemChangedEventHandler(DataManager_ItemChanged);
                                 _dataManager.PositionChanged -= new EventHandler(DataManager_PositionChanged);
@@ -695,7 +695,7 @@ namespace System.Windows.Forms
 
                             _dataManager = newDataManager;
 
-                            if (_dataManager is not null)
+                            if (_dataManager != null)
                             {
                                 _dataManager.ItemChanged += new ItemChangedEventHandler(DataManager_ItemChanged);
                                 _dataManager.PositionChanged += new EventHandler(DataManager_PositionChanged);
@@ -705,7 +705,7 @@ namespace System.Windows.Forms
                         // See if the BindingField in the newDisplayMember is valid
                         // The same thing if dataSource Changed
                         // "" is a good value for displayMember
-                        if (_dataManager is not null && (displayMemberChanged || dataSourceChanged) && !string.IsNullOrEmpty(_displayMember.BindingMember))
+                        if (_dataManager != null && (displayMemberChanged || dataSourceChanged) && !string.IsNullOrEmpty(_displayMember.BindingMember))
                         {
                             if (!BindingMemberInfoInDataManager(_dataManager, _displayMember))
                             {
@@ -713,7 +713,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        if (_dataManager is not null && (dataSourceChanged || displayMemberChanged || force))
+                        if (_dataManager != null && (dataSourceChanged || displayMemberChanged || force))
                         {
                             // If we force a new data manager, then change the items in the list control
                             // only if the list changed or if we go from a null dataManager to a full fledged one

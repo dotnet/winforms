@@ -89,7 +89,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (currencyManager is not null)
+                    if (currencyManager != null)
                     {
                         // we only allow to add new rows on an IBindingList
                         return (currencyManager.List is IBindingList) && currencyManager.AllowAdd && ((IBindingList)currencyManager.List).SupportsChangeNotification;
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (currencyManager is not null)
+                    if (currencyManager != null)
                     {
                         return currencyManager.AllowEdit;
                     }
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (currencyManager is not null)
+                    if (currencyManager != null)
                     {
                         // we only allow deletion on an IBindingList
                         return (currencyManager.List is IBindingList) && currencyManager.AllowRemove && ((IBindingList)currencyManager.List).SupportsChangeNotification;
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (currencyManager is not null)
+                    if (currencyManager != null)
                     {
                         return currencyManager.List;
                     }
@@ -246,7 +246,7 @@ namespace System.Windows.Forms
 
             public void AddNew()
             {
-                if (currencyManager is not null)
+                if (currencyManager != null)
                 {
                     // don't call AddNew on a suspended currency manager.
                     if (!currencyManager.ShouldBind)
@@ -365,7 +365,7 @@ namespace System.Windows.Forms
 
             public TypeConverter BoundColumnConverter(int boundColumnIndex)
             {
-                Debug.Assert(props is not null);
+                Debug.Assert(props != null);
                 return props[boundColumnIndex].Converter;
             }
 
@@ -393,8 +393,8 @@ namespace System.Windows.Forms
 
             public SortOrder BoundColumnSortOrder(int boundColumnIndex)
             {
-                IBindingList ibl = currencyManager is not null ? currencyManager.List as IBindingList : null;
-                IBindingListView iblv = ibl is not null ? ibl as IBindingListView : null;
+                IBindingList ibl = currencyManager != null ? currencyManager.List as IBindingList : null;
+                IBindingListView iblv = ibl != null ? ibl as IBindingListView : null;
 
                 if (ibl is null || !ibl.SupportsSorting || !ibl.IsSorted)
                 {
@@ -421,7 +421,7 @@ namespace System.Windows.Forms
 
             public Type BoundColumnValueType(int boundColumnIndex)
             {
-                Debug.Assert(props is not null);
+                Debug.Assert(props != null);
                 return props[boundColumnIndex].PropertyType;
             }
 
@@ -703,7 +703,7 @@ namespace System.Windows.Forms
                         case ListChangedType.ItemChanged:
                             Debug.Assert(e.NewIndex != -1, "the item changed event does not cover changes to the entire list");
                             string dataPropertyName = null;
-                            if (e.PropertyDescriptor is not null)
+                            if (e.PropertyDescriptor != null)
                             {
                                 dataPropertyName = ((MemberDescriptor)(e.PropertyDescriptor)).Name;
                             }
@@ -871,14 +871,14 @@ namespace System.Windows.Forms
 
                 // Update the data manager
                 SetDataConnection(dataSource, dataMember);
-                Debug.Assert(currencyManager is not null);
+                Debug.Assert(currencyManager != null);
                 owner.RefreshColumnsAndRows();
                 owner.OnDataBindingComplete(ListChangedType.Reset);
             }
 
             private void DataSourceMetaDataChanged()
             {
-                Debug.Assert(currencyManager is not null);
+                Debug.Assert(currencyManager != null);
 
                 // get the new meta data
                 props = currencyManager.GetItemProperties();
@@ -1047,8 +1047,8 @@ namespace System.Windows.Forms
 
             private void GetSortingInformationFromBackend(out PropertyDescriptor sortProperty, out SortOrder sortOrder)
             {
-                IBindingList ibl = currencyManager is not null ? currencyManager.List as IBindingList : null;
-                IBindingListView iblv = ibl is not null ? ibl as IBindingListView : null;
+                IBindingList ibl = currencyManager != null ? currencyManager.List as IBindingList : null;
+                IBindingListView iblv = ibl != null ? ibl as IBindingListView : null;
 
                 if (ibl is null || !ibl.SupportsSorting || !ibl.IsSorted)
                 {
@@ -1057,20 +1057,20 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (ibl.SortProperty is not null)
+                if (ibl.SortProperty != null)
                 {
                     sortProperty = ibl.SortProperty;
                     sortOrder = ibl.SortDirection == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
                 }
-                else if (iblv is not null)
+                else if (iblv != null)
                 {
                     // Maybe the data view is sorted on multiple columns.
                     // Go thru the IBindingListView which offers the entire list of sorted columns
                     // and pick the first one as the SortedColumn.
                     ListSortDescriptionCollection sorts = iblv.SortDescriptions;
-                    if (sorts is not null &&
+                    if (sorts != null &&
                         sorts.Count > 0 &&
-                        sorts[0].PropertyDescriptor is not null)
+                        sorts[0].PropertyDescriptor != null)
                     {
                         sortProperty = sorts[0].PropertyDescriptor;
                         sortOrder = sorts[0].SortDirection == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
@@ -1100,7 +1100,7 @@ namespace System.Windows.Forms
                 // Microsoft: I wish there would be a Reset method on BitVector32...
                 dataConnectionState = new BitVector32(DATACONNECTIONSTATE_finishedAddNew);
 
-                if (currencyManager is not null)
+                if (currencyManager != null)
                 {
                     dataConnectionState[DATACONNECTIONSTATE_interestedInRowEvents] = true;
                 }
@@ -1145,10 +1145,10 @@ namespace System.Windows.Forms
                     // unwire the events
                     UnWireEvents();
 
-                    if (this.dataSource is not null && owner.BindingContext is not null && !(this.dataSource == Convert.DBNull))
+                    if (this.dataSource != null && owner.BindingContext != null && !(this.dataSource == Convert.DBNull))
                     {
                         dsInit = this.dataSource as ISupportInitializeNotification;
-                        if (dsInit is not null && !dsInit.IsInitialized)
+                        if (dsInit != null && !dsInit.IsInitialized)
                         {
                             if (!dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp])
                             {
@@ -1169,7 +1169,7 @@ namespace System.Windows.Forms
 
                     // wire the events
                     WireEvents();
-                    if (currencyManager is not null)
+                    if (currencyManager != null)
                     {
                         props = currencyManager.GetItemProperties();
                     }
@@ -1185,7 +1185,7 @@ namespace System.Windows.Forms
 
                 ResetCachedAllowUserToAddRowsInternal();
 
-                if (currencyManager is not null)
+                if (currencyManager != null)
                 {
                     lastListCount = currencyManager.Count;
                 }
@@ -1217,7 +1217,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (errInfo is not null)
+                if (errInfo != null)
                 {
                     return errInfo.Error;
                 }
@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (errInfo is not null)
+                if (errInfo != null)
                 {
                     return errInfo[props[boundColumnIndex].Name];
                 }
@@ -1292,7 +1292,7 @@ namespace System.Windows.Forms
                 {
 #if DEBUG
                     // all the properties in the currency manager should be either Browsable(false) or point to sub lists
-                    if (props is not null)
+                    if (props != null)
                     {
                         for (int i = 0; i < props.Count; i++)
                         {
@@ -1311,7 +1311,7 @@ namespace System.Windows.Forms
                 if (columnIndex == -1)
                 {
                     DataGridViewColumn dataGridViewColumn = owner.Columns.GetFirstColumn(DataGridViewElementStates.None);
-                    Debug.Assert(dataGridViewColumn is not null);
+                    Debug.Assert(dataGridViewColumn != null);
                     dataGridViewColumn.Visible = true;
                     columnIndex = dataGridViewColumn.Index;
                 }
@@ -1392,7 +1392,7 @@ namespace System.Windows.Forms
                         editableObject = currencyManager.Current as IEditableObject;
                     }
 
-                    if (editableObject is not null && currentItem == editableObject)
+                    if (editableObject != null && currentItem == editableObject)
                     {
                         editableObject.BeginEdit();
                     }
@@ -1557,7 +1557,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    if (value is not null)
+                    if (value != null)
                     {
                         Type valueType = value.GetType();
                         Type columnType = owner.Columns[columnIndex].ValueType;
@@ -1565,14 +1565,14 @@ namespace System.Windows.Forms
                         {
                             // value needs to be converted before being fed to the back-end.
                             TypeConverter boundColumnConverter = BoundColumnConverter(boundColumnIndex);
-                            if (boundColumnConverter is not null && boundColumnConverter.CanConvertFrom(valueType))
+                            if (boundColumnConverter != null && boundColumnConverter.CanConvertFrom(valueType))
                             {
                                 value = boundColumnConverter.ConvertFrom(value);
                             }
                             else
                             {
                                 TypeConverter valueConverter = owner.GetCachedTypeConverter(valueType);
-                                if (valueConverter is not null && valueConverter.CanConvertTo(columnType))
+                                if (valueConverter != null && valueConverter.CanConvertTo(columnType))
                                 {
                                     value = valueConverter.ConvertTo(value, columnType);
                                 }
@@ -1622,7 +1622,7 @@ namespace System.Windows.Forms
                 }
 
                 PropertyDescriptorCollection props = cm.GetItemProperties();
-                if (dataMember.Length != 0 && props[dataMember] is not null)
+                if (dataMember.Length != 0 && props[dataMember] != null)
                 {
                     // the data member is valid. Don't change it
                     return false;
@@ -1640,7 +1640,7 @@ namespace System.Windows.Forms
 
             private void UnWireEvents()
             {
-                if (currencyManager is not null)
+                if (currencyManager != null)
                 {
                     currencyManager.PositionChanged -= new EventHandler(currencyManager_PositionChanged);
                     currencyManager.ListChanged -= new ListChangedEventHandler(currencyManager_ListChanged);
@@ -1650,7 +1650,7 @@ namespace System.Windows.Forms
 
             private void WireEvents()
             {
-                if (currencyManager is not null)
+                if (currencyManager != null)
                 {
                     currencyManager.PositionChanged += new EventHandler(currencyManager_PositionChanged);
                     currencyManager.ListChanged += new ListChangedEventHandler(currencyManager_ListChanged);

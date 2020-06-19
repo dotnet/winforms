@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
         internal DataGridViewRowPostPaintEventArgs(DataGridView dataGridView)
         {
-            Debug.Assert(dataGridView is not null);
+            Debug.Assert(dataGridView != null);
             _dataGridView = dataGridView;
         }
 
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                                     bool isFirstDisplayedRow,
                                     bool isLastVisibleRow)
         {
-            Debug.Assert(graphics is not null);
+            Debug.Assert(graphics != null);
 
             Graphics = graphics;
             ClipBounds = clipBounds;

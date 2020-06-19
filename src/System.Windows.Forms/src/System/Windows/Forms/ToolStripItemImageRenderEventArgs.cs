@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     {
         public ToolStripItemImageRenderEventArgs(Graphics g, ToolStripItem item, Rectangle imageRectangle) : base(g, item)
         {
-            Image = (item is not null && item.RightToLeftAutoMirrorImage && item.RightToLeft == RightToLeft.Yes) ? item.MirroredImage : item?.Image;
+            Image = (item != null && item.RightToLeftAutoMirrorImage && item.RightToLeft == RightToLeft.Yes) ? item.MirroredImage : item?.Image;
             ImageRectangle = imageRectangle;
         }
 

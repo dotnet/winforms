@@ -31,14 +31,14 @@ namespace System.Windows.Forms
         {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(IESettingsRegPath);
 
-            if (key is not null)
+            if (key != null)
             {
                 // Since this comes from the registry, be very careful about its contents.
                 //
                 string s = (string)key.GetValue(name);
                 key.Close();
 
-                if (s is not null)
+                if (s != null)
                 {
                     string[] rgbs = s.Split(new char[] { ',' });
                     int[] rgb = new int[3];
@@ -134,16 +134,16 @@ namespace System.Windows.Forms
                 // Catch SecurityException silently and let the return value fallback to AlwaysUnderline.
             }
 
-            if (key is not null)
+            if (key != null)
             {
                 string s = (string)key.GetValue("Anchor Underline");
                 key.Close();
 
-                if (s is not null && string.Compare(s, "no", true, CultureInfo.InvariantCulture) == 0)
+                if (s != null && string.Compare(s, "no", true, CultureInfo.InvariantCulture) == 0)
                 {
                     return LinkBehavior.NeverUnderline;
                 }
-                if (s is not null && string.Compare(s, "hover", true, CultureInfo.InvariantCulture) == 0)
+                if (s != null && string.Compare(s, "hover", true, CultureInfo.InvariantCulture) == 0)
                 {
                     return LinkBehavior.HoverUnderline;
                 }
@@ -158,7 +158,7 @@ namespace System.Windows.Forms
 
         public static void EnsureLinkFonts(Font baseFont, LinkBehavior link, ref Font linkFont, ref Font hoverLinkFont)
         {
-            if (linkFont is not null && hoverLinkFont is not null)
+            if (linkFont != null && hoverLinkFont != null)
             {
                 return;
             }

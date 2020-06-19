@@ -260,7 +260,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return accelerations is not null && buttonPressedStartTime != InvalidValue;
+                return accelerations != null && buttonPressedStartTime != InvalidValue;
             }
         }
 

@@ -93,13 +93,13 @@ namespace System.Windows.Forms
         /// </returns>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (context is not null && context.Instance is not null)
+            if (context != null && context.Instance != null)
             {
                 object instance = context.Instance;
 
                 PropertyDescriptor imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
 
-                while (instance is not null && imageListProp is null)
+                while (instance != null && imageListProp is null)
                 {
                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance);
 
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
                         // component has a "parent" property.  If so, walk the tree...
                         //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
-                        if (parentProp is not null)
+                        if (parentProp != null)
                         {
                             instance = parentProp.GetValue(instance);
                         }
@@ -131,11 +131,11 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (imageListProp is not null)
+                if (imageListProp != null)
                 {
                     ImageList imageList = (ImageList)imageListProp.GetValue(instance);
 
-                    if (imageList is not null)
+                    if (imageList != null)
                     {
                         // Create array to contain standard values
                         //

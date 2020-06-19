@@ -42,7 +42,7 @@ namespace System.Windows.Forms
                 if (AutoComplete != value)
                 {
                     ComboBoxCellTemplate.AutoComplete = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -67,12 +67,12 @@ namespace System.Windows.Forms
             set
             {
                 DataGridViewComboBoxCell dataGridViewComboBoxCell = value as DataGridViewComboBoxCell;
-                if (value is not null && dataGridViewComboBoxCell is null)
+                if (value != null && dataGridViewComboBoxCell is null)
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewComboBoxCell"));
                 }
                 base.CellTemplate = value;
-                if (value is not null)
+                if (value != null)
                 {
                     dataGridViewComboBoxCell.TemplateComboBoxColumn = this;
                 }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 ComboBoxCellTemplate.DataSource = value;
-                if (DataGridView is not null)
+                if (DataGridView != null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                     int rowCount = dataGridViewRows.Count;
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 ComboBoxCellTemplate.DisplayMember = value;
-                if (DataGridView is not null)
+                if (DataGridView != null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                     int rowCount = dataGridViewRows.Count;
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 ComboBoxCellTemplate.DisplayStyle = value;
-                if (DataGridView is not null)
+                if (DataGridView != null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                     int rowCount = dataGridViewRows.Count;
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 ComboBoxCellTemplate.DisplayStyleForCurrentCellOnly = value;
-                if (DataGridView is not null)
+                if (DataGridView != null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                     int rowCount = dataGridViewRows.Count;
@@ -259,7 +259,7 @@ namespace System.Windows.Forms
                 if (DropDownWidth != value)
                 {
                     ComboBoxCellTemplate.DropDownWidth = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -294,7 +294,7 @@ namespace System.Windows.Forms
                 if (FlatStyle != value)
                 {
                     ((DataGridViewComboBoxCell)CellTemplate).FlatStyle = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 ComboBoxCellTemplate.ValueMember = value;
-                if (DataGridView is not null)
+                if (DataGridView != null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                     int rowCount = dataGridViewRows.Count;
@@ -385,7 +385,7 @@ namespace System.Windows.Forms
                 if (MaxDropDownItems != value)
                 {
                     ComboBoxCellTemplate.MaxDropDownItems = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -420,7 +420,7 @@ namespace System.Windows.Forms
                 if (Sorted != value)
                 {
                     ComboBoxCellTemplate.Sorted = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -452,7 +452,7 @@ namespace System.Windows.Forms
 
                 dataGridViewColumn = (DataGridViewComboBoxColumn)System.Activator.CreateInstance(thisType);
             }
-            if (dataGridViewColumn is not null)
+            if (dataGridViewColumn != null)
             {
                 base.CloneInternal(dataGridViewColumn);
                 ((DataGridViewComboBoxCell)dataGridViewColumn.CellTemplate).TemplateComboBoxColumn = dataGridViewColumn;
@@ -464,7 +464,7 @@ namespace System.Windows.Forms
         {
             // Items collection of the CellTemplate was changed.
             // Update the items collection of each existing DataGridViewComboBoxCell in the column.
-            if (DataGridView is not null)
+            if (DataGridView != null)
             {
                 DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                 int rowCount = dataGridViewRows.Count;

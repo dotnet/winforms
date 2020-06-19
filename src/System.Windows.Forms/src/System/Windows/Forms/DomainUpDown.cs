@@ -422,7 +422,7 @@ namespace System.Windows.Forms
         {
             // Sanity check index
 
-            Debug.Assert(domainItems is not null, "Domain values array is null");
+            Debug.Assert(domainItems != null, "Domain values array is null");
             Debug.Assert(index < domainItems.Count && index >= -1, "SelectValue: index out of range");
             if (domainItems is null || index < -1 || index >= domainItems.Count)
             {
@@ -464,7 +464,7 @@ namespace System.Windows.Forms
                 // Sanity check
                 Debug.Assert(sorted, "Sorted == false");
 
-                if (domainItems is not null)
+                if (domainItems != null)
                 {
                     // Sort the domain values
                     ArrayList.Adapter(domainItems).Sort(new DomainUpDownItemCompare());
@@ -493,7 +493,7 @@ namespace System.Windows.Forms
         {
             string s = base.ToString();
 
-            if (Items is not null)
+            if (Items != null)
             {
                 s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
                 s += ", SelectedIndex: " + SelectedIndex.ToString(CultureInfo.CurrentCulture);

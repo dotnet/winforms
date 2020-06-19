@@ -44,7 +44,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected override object SetItems(object editValue, object[] value)
         {
-            if (editValue is not null && !(editValue is Array))
+            if (editValue != null && !(editValue is Array))
             {
                 return editValue;
             }

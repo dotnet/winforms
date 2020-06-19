@@ -82,7 +82,7 @@ namespace System.Windows.Forms
             internal override void WmContextMenu(ref Message m)
             {
                 // Want to make the SourceControl to be the UpDownBase, not the Edit.
-                if (ContextMenuStrip is not null)
+                if (ContextMenuStrip != null)
                 {
                     WmContextMenu(ref m, _parent);
                 }

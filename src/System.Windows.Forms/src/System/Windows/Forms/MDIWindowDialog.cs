@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             {
 #if DEBUG
                 ListItem item = (ListItem)itemList.SelectedItem;
-                Debug.Assert(item is not null, "No item selected!");
+                Debug.Assert(item != null, "No item selected!");
 #endif
                 return active;
             }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
         private void ItemList_selectedIndexChanged(object source, EventArgs e)
         {
             ListItem item = (ListItem)itemList.SelectedItem;
-            if (item is not null)
+            if (item != null)
             {
                 active = item.form;
             }

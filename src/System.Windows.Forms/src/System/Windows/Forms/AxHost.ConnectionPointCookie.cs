@@ -93,7 +93,7 @@ namespace System.Windows.Forms
 
                 if (connectionPoint is null || cookie == 0)
                 {
-                    if (connectionPoint is not null)
+                    if (connectionPoint != null)
                     {
                         Marshal.ReleaseComObject(connectionPoint);
                     }
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Disconnect()
             {
-                if (connectionPoint is not null && cookie != 0)
+                if (connectionPoint != null && cookie != 0)
                 {
                     try
                     {
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
 
             ~ConnectionPointCookie()
             {
-                if (connectionPoint is not null && cookie != 0)
+                if (connectionPoint != null && cookie != 0)
                 {
                     if (!AppDomain.CurrentDomain.IsFinalizingForUnload())
                     {
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return connectionPoint is not null && cookie != 0;
+                    return connectionPoint != null && cookie != 0;
                 }
             }
         }

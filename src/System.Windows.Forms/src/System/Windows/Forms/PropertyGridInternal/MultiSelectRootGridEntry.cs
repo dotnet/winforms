@@ -32,7 +32,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     foreach (object obj in (Array)objValue)
                     {
                         ReadOnlyAttribute readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
-                        if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(obj).Contains(InheritanceAttribute.InheritedReadOnly))
+                        if ((readOnlyAttr != null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(obj).Contains(InheritanceAttribute.InheritedReadOnly))
                         {
                             anyRO = true;
                             break;
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
 
-                if (mergedProps is not null)
+                if (mergedProps != null)
                 {
                     ChildCollection.AddRange(mergedProps);
                 }
@@ -278,7 +278,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     for (int i = 0; i < entries.Length; i++)
                     {
-                        if (entries[i] is not null)
+                        if (entries[i] != null)
                         {
                             newEntries[newPos++] = entries[i];
                         }
@@ -335,7 +335,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         offset = len / 2;
                     }
 
-                    if (mergedEntryList is not null)
+                    if (mergedEntryList != null)
                     {
                         mergeArray[0] = basePd;
                         Array.Copy(mergedEntryList, 0, mergeArray, 1, mergedEntryList.Length);

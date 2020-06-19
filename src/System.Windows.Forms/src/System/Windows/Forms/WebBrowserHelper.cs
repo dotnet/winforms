@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         internal static ISelectionService GetSelectionService(Control ctl)
         {
             ISite site = ctl.Site;
-            if (site is not null)
+            if (site != null)
             {
                 object o = site.GetService(typeof(ISelectionService));
                 Debug.Assert(o is null || o is ISelectionService, "service must implement ISelectionService");

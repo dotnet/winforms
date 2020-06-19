@@ -95,7 +95,7 @@ namespace System.Windows.Forms
                         if (_activeHwnd.Handle != IntPtr.Zero)
                         {
                             control = Control.FromHandle(_activeHwnd.Handle);
-                            if (control is not null)
+                            if (control != null)
                             {
                                 control.HandleCreated -= new EventHandler(OnActiveHwndHandleCreated);
                             }
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
 
                         // make sure we watch out for handle recreates.
                         control = Control.FromHandle(_activeHwnd.Handle);
-                        if (control is not null)
+                        if (control != null)
                         {
                             control.HandleCreated += new EventHandler(OnActiveHwndHandleCreated);
                         }
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
             internal void NotifyLastLastFocusedToolAboutFocusLoss()
             {
                 IKeyboardToolTip lastFocusedTool = KeyboardToolTipStateMachine.Instance.LastFocusedTool;
-                if (lastFocusedTool is not null)
+                if (lastFocusedTool != null)
                 {
                     _lastFocusedTool.SetTarget(lastFocusedTool);
                     KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(lastFocusedTool);
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
                     {
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "___________Exiting MenuMode....");
 
-                        if (_messageHook is not null)
+                        if (_messageHook != null)
                         {
                             // message filter isn't going to help as we dont own the message pump
                             // switch over to a MessageHook
@@ -212,7 +212,7 @@ namespace System.Windows.Forms
                         {
                             // Unsubscribe from handle creates
                             Control control = Control.FromHandle(ActiveHwnd.Handle);
-                            if (control is not null)
+                            if (control != null)
                             {
                                 control.HandleCreated -= new EventHandler(OnActiveHwndHandleCreated);
                             }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
                             User32.ShowCaret(IntPtr.Zero);
                         }
 
-                        if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool is not null)
+                        if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool) && tool != null)
                         {
                             KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(tool);
                         }
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
 
             internal ToolStrip GetActiveToolStripInternal()
             {
-                if (_inputFilterQueue is not null && _inputFilterQueue.Count > 0)
+                if (_inputFilterQueue != null && _inputFilterQueue.Count > 0)
                 {
                     return _inputFilterQueue[_inputFilterQueue.Count - 1];
                 }
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
                 if (_toplevelToolStrip is null)
                 {
                     ToolStrip activeToolStrip = GetActiveToolStripInternal();
-                    if (activeToolStrip is not null)
+                    if (activeToolStrip != null)
                     {
                         _toplevelToolStrip = activeToolStrip.GetToplevelOwnerToolStrip();
                     }
@@ -315,7 +315,7 @@ namespace System.Windows.Forms
                     ExitMenuMode();
 
                     // Make sure we roll selection off  the toplevel toolstrip.
-                    if (activeToolStripDropDown.OwnerItem is not null)
+                    if (activeToolStripDropDown.OwnerItem != null)
                     {
                         activeToolStripDropDown.OwnerItem.Unselect();
                     }
@@ -333,7 +333,7 @@ namespace System.Windows.Forms
                     _ensureMessageProcessingTimer.Interval = MessageProcessingInterval;
                     _ensureMessageProcessingTimer.Enabled = true;
                 }
-                else if (_ensureMessageProcessingTimer is not null)
+                else if (_ensureMessageProcessingTimer != null)
                 {
                     _ensureMessageProcessingTimer.Enabled = false;
                     _ensureMessageProcessingTimer.Dispose();
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
                 {
                     ToolStrip activeToolStrip = GetActiveToolStripInternal();
 
-                    if (activeToolStrip is not null)
+                    if (activeToolStrip != null)
                     {
                         var pt = new Point(x, y);
                         User32.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), ref pt, 1);
@@ -358,9 +358,9 @@ namespace System.Windows.Forms
                         {
                             if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)
                             {
-                                if (!(activeToolStripDropDown.OwnerToolStrip is not null
+                                if (!(activeToolStripDropDown.OwnerToolStrip != null
                                     && activeToolStripDropDown.OwnerToolStrip.Handle == hwndMouseMessageIsFrom
-                                    && activeToolStripDropDown.OwnerDropDownItem is not null
+                                    && activeToolStripDropDown.OwnerDropDownItem != null
                                      && activeToolStripDropDown.OwnerDropDownItem.DropDownButtonArea.Contains(x, y)))
                                 {
                                     // The owner item should handle closing the dropdown
@@ -458,7 +458,7 @@ namespace System.Windows.Forms
 
                     // ToolStrip dropdowns push/pull their activation based on visibility.
                     // we have to account for the toolstrips that aren't dropdowns
-                    if (currentActiveToolStrip is not null)
+                    if (currentActiveToolStrip != null)
                     {
                         if (!currentActiveToolStrip.IsDropDown)
                         {
@@ -617,7 +617,7 @@ namespace System.Windows.Forms
                                     // It is NOT a child of the current active toolstrip.
 
                                     ToolStrip toplevelToolStrip = GetCurrentTopLevelToolStrip();
-                                    if (toplevelToolStrip is not null
+                                    if (toplevelToolStrip != null
                                         && (IsChildOrSameWindow(new HandleRef(toplevelToolStrip, toplevelToolStrip.Handle),
                                                                new HandleRef(null, m.HWnd))))
                                     {

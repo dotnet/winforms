@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal void InvalidateOwnerLocation()
         {
-            if (_alternativeParent is not null)
+            if (_alternativeParent != null)
             { // alternative parent and adoner are exclusive...
                 _alternativeParent.Invalidate(_bounds);
             }
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.Design.Behavior
             IComponent relatedComponent = ((DesignerActionBehavior)Behavior).RelatedComponent;
             Point topRight = Point.Empty;
             //handle the case that our comp is a control
-            if (relatedComponent is Control relatedControl && !(relatedComponent is ToolStripDropDown) && _adorner is not null)
+            if (relatedComponent is Control relatedControl && !(relatedComponent is ToolStripDropDown) && _adorner != null)
             {
                 topRight = _adorner.BehaviorService.ControlToAdornerWindow(relatedControl);
                 topRight.X += relatedControl.Width;
@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (_alternativeParent is ComponentTray compTray)
                 {
                     ComponentTray.TrayControl trayControl = compTray.GetTrayControlFromComponent(relatedComponent);
-                    if (trayControl is not null)
+                    if (trayControl != null)
                     {
                         _alternativeBounds = trayControl.Bounds;
                     }
@@ -198,7 +198,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
                 IComponent panelComponent = ((DesignerActionUI)((DesignerActionBehavior)Behavior).ParentUI).LastPanelComponent;
                 IComponent relatedComponent = ((DesignerActionBehavior)Behavior).RelatedComponent;
-                if (panelComponent is not null && panelComponent == relatedComponent)
+                if (panelComponent != null && panelComponent == relatedComponent)
                 {
                     image = GlyphImageOpened;
                 }
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     _insidePaint = true;
                     pe.Graphics.DrawImage(image, _bounds.Left, _bounds.Top);
-                    if (MouseOver || (panelComponent is not null && panelComponent == relatedComponent))
+                    if (MouseOver || (panelComponent != null && panelComponent == relatedComponent))
                     {
                         pe.Graphics.FillRectangle(DesignerUtils.HoverBrush, Rectangle.Inflate(_bounds, -1, -1));
                     }

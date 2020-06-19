@@ -35,7 +35,7 @@ namespace System.Drawing.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (innerEditor is not null)
+            if (innerEditor != null)
             {
                 return innerEditor.EditValue(context, provider, value);
             }
@@ -51,7 +51,7 @@ namespace System.Drawing.Design
         /// </summary>
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
-            if (innerEditor is not null)
+            if (innerEditor != null)
             {
                 return innerEditor.GetPaintValueSupported(context);
             }
@@ -64,7 +64,7 @@ namespace System.Drawing.Design
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
-            if (innerEditor is not null)
+            if (innerEditor != null)
             {
                 return innerEditor.GetEditStyle(context);
             }
@@ -78,7 +78,7 @@ namespace System.Drawing.Design
         /// </summary>
         public override void PaintValue(PaintValueEventArgs e)
         {
-            if (innerEditor is not null)
+            if (innerEditor != null)
             {
                 innerEditor.PaintValue(e);
             }

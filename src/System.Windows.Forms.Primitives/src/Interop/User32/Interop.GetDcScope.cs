@@ -46,7 +46,7 @@ internal static partial class Interop
 
             public void Dispose()
             {
-                if (HDC is not null)
+                if (HDC != null)
                 {
                     ReleaseDC(HWND, HDC);
                 }

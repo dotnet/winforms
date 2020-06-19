@@ -137,14 +137,14 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  Adds a Node with given label and value to the parent, provided the parent is not null;
+            ///  Adds a Node with given label and value to the parent, provided the parent != null;
             ///  Otherwise, adds that node to the Nodes TreeNodeCollection. Returns the new node.
             /// </summary>
             public SelectorNode AddNode(string label, object value, SelectorNode parent)
             {
                 SelectorNode newNode = new SelectorNode(label, value);
 
-                if (parent is not null)
+                if (parent != null)
                 {
                     parent.Nodes.Add(newNode);
                 }
@@ -160,7 +160,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private bool ChooseSelectedNodeIfEqual()
             {
-                if (_editor is not null && _edSvc is not null)
+                if (_editor != null && _edSvc != null)
                 {
                     _editor.SetValue(((SelectorNode)SelectedNode).value);
                     if (_editor.EqualsToValue(((SelectorNode)SelectedNode).value))
@@ -263,7 +263,7 @@ namespace System.ComponentModel.Design
                         SelectedNode = treeNodes[i];
                         return true;
                     }
-                    if ((treeNodes[i].Nodes is not null) && (treeNodes[i].Nodes.Count != 0))
+                    if ((treeNodes[i].Nodes != null) && (treeNodes[i].Nodes.Count != 0))
                     {
                         treeNodes[i].Expand();
                         if (SetSelection(value, treeNodes[i].Nodes))

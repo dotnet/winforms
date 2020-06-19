@@ -90,7 +90,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject element = HitTest((int)x, (int)y);
 
-                if (element is not null)
+                if (element != null)
                 {
                     return element;
                 }
@@ -166,7 +166,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderSimple[] GetSelection()
             {
                 AccessibleObject itemAccessibleObject = GetSelected();
-                if (itemAccessibleObject is not null)
+                if (itemAccessibleObject != null)
                 {
                     return new UiaCore.IRawElementProviderSimple[]
                     {
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_owningListBox is not null)
+                if (_owningListBox != null)
                 {
                     return true;
                 }

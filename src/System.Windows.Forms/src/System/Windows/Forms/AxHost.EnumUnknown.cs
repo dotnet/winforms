@@ -32,7 +32,7 @@ namespace System.Windows.Forms
 
             unsafe HRESULT Ole32.IEnumUnknown.Next(uint celt, IntPtr rgelt, uint* pceltFetched)
             {
-                if (pceltFetched is not null)
+                if (pceltFetched != null)
                 {
                     *pceltFetched = 0;
                 }
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                 {
                     for (; loc < size && fetched < celt; ++loc)
                     {
-                        if (arr[loc] is not null)
+                        if (arr[loc] != null)
                         {
                             Marshal.WriteIntPtr(rgelt, Marshal.GetIUnknownForObject(arr[loc]));
                             rgelt = (IntPtr)((long)rgelt + (long)sizeof(IntPtr));
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (pceltFetched is not null)
+                if (pceltFetched != null)
                 {
                     *pceltFetched = fetched;
                 }

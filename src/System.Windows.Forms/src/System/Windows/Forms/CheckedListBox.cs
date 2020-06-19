@@ -295,7 +295,7 @@ namespace System.Windows.Forms
 
                     // see if we have some items, and only invalidate if we do.
                     ObjectCollection items = (ObjectCollection)Items;
-                    if ((items is not null) && (items.Count > 0))
+                    if ((items != null) && (items.Count > 0))
                     {
                         Invalidate();
                     }

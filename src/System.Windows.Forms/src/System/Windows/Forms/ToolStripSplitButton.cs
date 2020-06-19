@@ -282,7 +282,7 @@ namespace System.Windows.Forms
                 // For preferred size caching reasons, we need to keep our two
                 // internal layouts (button, dropdown button) in sync.
 
-                if (InternalLayout is not null /*if layout is invalid - calls CreateInternalLayout - which resets splitButtonButtonLayout to null*/
+                if (InternalLayout != null /*if layout is invalid - calls CreateInternalLayout - which resets splitButtonButtonLayout to null*/
                     && splitButtonButtonLayout is null)
                 {
                     splitButtonButtonLayout = new ToolStripSplitButtonButtonLayout(this);
@@ -462,7 +462,7 @@ namespace System.Windows.Forms
                 {
                     if (!DropDown.Visible)
                     {
-                        Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
+                        Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
                         openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                         ShowDropDown(/*mousePress = */true);
                     }
@@ -489,7 +489,7 @@ namespace System.Windows.Forms
                 {
                     if (DropDown.Visible)
                     {
-                        Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
+                        Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
                         byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                         if (closeMouseId != openMouseId)
                         {
@@ -546,7 +546,7 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             ToolStripRenderer renderer = Renderer;
-            if (renderer is not null)
+            if (renderer != null)
             {
                 InvalidateSplitButtonLayout();
                 Graphics g = e.Graphics;
@@ -680,7 +680,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner is not null)
+                    if (owner != null)
                     {
                         return owner.Selected;
                     }
@@ -796,7 +796,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (ownerItem is not null)
+                if (ownerItem != null)
                 {
                     return true;
                 }
@@ -825,7 +825,7 @@ namespace System.Windows.Forms
 
             internal override void Collapse()
             {
-                if (ownerItem is not null && ownerItem.DropDown is not null && ownerItem.DropDown.Visible)
+                if (ownerItem != null && ownerItem.DropDown != null && ownerItem.DropDown.Visible)
                 {
                     ownerItem.DropDown.Close();
                 }

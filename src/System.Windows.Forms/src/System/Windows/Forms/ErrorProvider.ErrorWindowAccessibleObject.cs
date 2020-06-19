@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject element = HitTest((int)x, (int)y);
 
-                if (element is not null)
+                if (element != null)
                 {
                     return element;
                 }
@@ -122,7 +122,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_owner is not null)
+                if (_owner != null)
                 {
                     return true;
                 }

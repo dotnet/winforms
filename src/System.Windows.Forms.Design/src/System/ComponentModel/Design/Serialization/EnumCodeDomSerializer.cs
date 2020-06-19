@@ -49,7 +49,7 @@ namespace System.ComponentModel.Design.Serialization
                     bool needCast = false;
                     Enum[] values;
                     TypeConverter converter = TypeDescriptor.GetConverter(value);
-                    if (converter is not null && converter.CanConvertTo(typeof(Enum[])))
+                    if (converter != null && converter.CanConvertTo(typeof(Enum[])))
                     {
                         values = (Enum[])converter.ConvertTo(value, typeof(Enum[]));
                         needCast = (values.Length > 1);
@@ -82,7 +82,7 @@ namespace System.ComponentModel.Design.Serialization
                         string termString = enumConverter?.ConvertToString(term);
                         CodeExpression newExpression = !String.IsNullOrEmpty(termString) ? new CodeFieldReferenceExpression(enumType, termString) : null;
 
-                        if (newExpression is not null)
+                        if (newExpression != null)
                         {
                             if (expression is null)
                             {
@@ -97,7 +97,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     // If we had to combine multiple names, wrap the result in an appropriate cast.
                     //
-                    if (expression is not null && needCast)
+                    if (expression != null && needCast)
                     {
                         expression = new CodeCastExpression(value.GetType(), expression);
                     }

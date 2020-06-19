@@ -29,7 +29,7 @@ namespace System.Windows.Forms
 
         internal void Bind(BindingManagerBase parentManager, string dataField)
         {
-            Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
+            Debug.Assert(parentManager != null, "How could this be a null parentManager.");
 
             // Unwire previous BindingManagerBase
             UnwireParentManager(this.parentManager);
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
 
         private void UnwireParentManager(BindingManagerBase bmb)
         {
-            if (bmb is not null)
+            if (bmb != null)
             {
                 bmb.CurrentItemChanged -= new EventHandler(ParentManager_CurrentItemChanged);
 
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
 
         private void WireParentManager(BindingManagerBase bmb)
         {
-            if (bmb is not null)
+            if (bmb != null)
             {
                 bmb.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
 
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
         {
             PropertyDescriptor[] accessors;
 
-            if (listAccessors is not null && listAccessors.Length > 0)
+            if (listAccessors != null && listAccessors.Length > 0)
             {
                 accessors = new PropertyDescriptor[listAccessors.Length + 1];
                 listAccessors.CopyTo(accessors, 1);

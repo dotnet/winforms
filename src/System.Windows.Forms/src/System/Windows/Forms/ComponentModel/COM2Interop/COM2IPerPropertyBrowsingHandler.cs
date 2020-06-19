@@ -61,7 +61,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return null;
             }
 
-            success = strVal is not null;
+            success = strVal != null;
             return strVal;
         }
 
@@ -208,7 +208,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 if (destType == typeof(string) && !itemsEnum.arraysFetched)
                 {
                     object curValue = itemsEnum.target.GetValue(itemsEnum.target.TargetObject);
-                    if (curValue == value || (curValue is not null && curValue.Equals(value)))
+                    if (curValue == value || (curValue != null && curValue.Equals(value)))
                     {
                         bool success = false;
                         string val = GetDisplayString((Oleaut32.IPerPropertyBrowsing)itemsEnum.target.TargetObject, itemsEnum.target.DISPID, ref success);
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     Oleaut32.IPerPropertyBrowsing ppb = (Oleaut32.IPerPropertyBrowsing)target.TargetObject;
                     int itemCount = 0;
 
-                    Debug.Assert(cookieItems is not null && nameItems is not null, "An item array is null");
+                    Debug.Assert(cookieItems != null && nameItems != null, "An item array is null");
 
                     if (nameItems.Length > 0)
                     {

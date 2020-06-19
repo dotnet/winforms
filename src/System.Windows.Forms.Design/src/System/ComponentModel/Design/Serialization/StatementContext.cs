@@ -63,13 +63,13 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (object.ReferenceEquals(_table[idx].Owner, statementOwner))
                     {
-                        if (_table[idx].Statements is not null)
+                        if (_table[idx].Statements != null)
                         {
                             throw new InvalidOperationException();
                         }
                         else
                         {
-                            if (statements is not null)
+                            if (statements != null)
                             {
                                 _table[idx] = new TableEntry(statementOwner, statements);
                             }
@@ -95,7 +95,7 @@ namespace System.ComponentModel.Design.Serialization
                     throw new ArgumentNullException(nameof(statementOwner));
                 }
 
-                if (_table is not null)
+                if (_table != null)
                 {
                     for (int idx = 0; idx < _table.Count; idx++)
                     {
@@ -130,9 +130,9 @@ namespace System.ComponentModel.Design.Serialization
                 throw new ArgumentNullException(nameof(statementOwner));
             }
 
-            if (_table is not null)
+            if (_table != null)
             {
-                return (this[statementOwner] is not null);
+                return (this[statementOwner] != null);
             }
             return false;
         }
@@ -244,7 +244,7 @@ namespace System.ComponentModel.Design.Serialization
 
             public bool MoveNext()
             {
-                if (_table._table is not null && (_position + 1) < _table._table.Count)
+                if (_table._table != null && (_position + 1) < _table._table.Count)
                 {
                     _position++;
                     return true;

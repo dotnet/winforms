@@ -413,13 +413,13 @@ namespace System.Windows.Forms.Design
             if (provider.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
             {
                 PropertyDescriptor snaplinesProp = options.Options.Properties["UseSnapLines"];
-                if (snaplinesProp is not null)
+                if (snaplinesProp != null)
                 {
                     optionValue = snaplinesProp.GetValue(null);
                 }
             }
 
-            if (optionValue is not null && optionValue is bool)
+            if (optionValue != null && optionValue is bool)
             {
                 useSnapLines = (bool)optionValue;
             }
@@ -429,12 +429,12 @@ namespace System.Windows.Forms.Design
         public static object GetOptionValue(IServiceProvider provider, string name)
         {
             object optionValue = null;
-            if (provider is not null)
+            if (provider != null)
             {
                 if (provider.GetService(typeof(DesignerOptionService)) is DesignerOptionService desOpts)
                 {
                     PropertyDescriptor prop = desOpts.Options.Properties[name];
-                    if (prop is not null)
+                    if (prop != null)
                     {
                         optionValue = prop.GetValue(null);
                     }
@@ -840,9 +840,9 @@ namespace System.Windows.Forms.Design
                 Cursor.Current = Cursors.WaitCursor;
                 ComponentSerializationService css = svcProvider.GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
                 IDesignerHost host = svcProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
-                Debug.Assert(css is not null, "No component serialization service -- we cannot copy the objects");
-                Debug.Assert(host is not null, "No host -- we cannot copy the objects");
-                if (css is not null && host is not null)
+                Debug.Assert(css != null, "No component serialization service -- we cannot copy the objects");
+                Debug.Assert(host != null, "No host -- we cannot copy the objects");
+                if (css != null && host != null)
                 {
                     SerializationStore store = null;
                     store = css.CreateStore();
@@ -862,7 +862,7 @@ namespace System.Windows.Forms.Design
                     foreach (IComponent comp in copyObjects)
                     {
                         Control c = comp as Control;
-                        if (c is not null && c.Parent is null)
+                        if (c != null && c.Parent is null)
                         {
                             newObjects.Add(comp);
                         }
@@ -915,7 +915,7 @@ namespace System.Windows.Forms.Design
 
             foreach (IComponent childComp in designer.AssociatedComponents)
             {
-                if (childComp.Site is not null)
+                if (childComp.Site != null)
                 {
                     list.Add(childComp);
                     GetAssociatedComponents(childComp, host, list);

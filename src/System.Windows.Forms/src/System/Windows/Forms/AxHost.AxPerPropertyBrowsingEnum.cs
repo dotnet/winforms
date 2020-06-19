@@ -79,7 +79,7 @@ namespace System.Windows.Forms
                     Oleaut32.IPerPropertyBrowsing ppb = (Oleaut32.IPerPropertyBrowsing)owner.GetPerPropertyBrowsing();
                     int itemCount = 0;
 
-                    Debug.Assert(cookieItems is not null && nameItems is not null, "An item array is null");
+                    Debug.Assert(cookieItems != null && nameItems != null, "An item array is null");
 
                     if (nameItems.Length > 0)
                     {

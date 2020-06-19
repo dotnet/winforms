@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         private unsafe WindowsFont(User32.LOGFONTW logFont, FontStyle style, bool createHandle)
         {
-            Debug.Assert(Hfont == IntPtr.Zero, "hFont is not null, this will generate a handle leak.");
+            Debug.Assert(Hfont == IntPtr.Zero, "hFont != null, this will generate a handle leak.");
 
             _logFont = logFont;
             if (_logFont.FaceName.Length == 0)
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Internal
             string familyName = font.FontFamily.Name;
 
             // Strip vertical-font mark from the name if needed.
-            if (familyName is not null && familyName.Length > 1 && familyName[0] == '@')
+            if (familyName != null && familyName.Length > 1 && familyName[0] == '@')
             {
                 familyName = familyName.Substring(1);
             }

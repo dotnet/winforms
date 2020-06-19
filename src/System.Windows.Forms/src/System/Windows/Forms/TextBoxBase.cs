@@ -665,7 +665,7 @@ namespace System.Windows.Forms
             set
             {
                 //unparse this string list...
-                if (value is not null && value.Length > 0)
+                if (value != null && value.Length > 0)
                 {
                     // Using a StringBuilder instead of a String
                     // speeds things up approx 150 times
@@ -1548,7 +1548,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            if (mevent is not null)
+            if (mevent != null)
             {
                 Point pt = PointToScreen(mevent.Location);
 

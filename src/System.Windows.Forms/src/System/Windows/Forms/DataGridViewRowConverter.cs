@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             if (value is DataGridView row && destinationType == typeof(InstanceDescriptor))
             {
                 ConstructorInfo ctor = row.GetType().GetConstructor(Array.Empty<Type>());
-                if (ctor is not null)
+                if (ctor != null)
                 {
                     return new InstanceDescriptor(ctor, Array.Empty<object>(), isComplete: false);
                 }

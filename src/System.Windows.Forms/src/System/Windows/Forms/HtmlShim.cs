@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         ///  inheriting classes should override to disconnect from ConnectionPoint and call base.
         public virtual void DisconnectFromEvents()
         {
-            if (attachedEventList is not null)
+            if (attachedEventList != null)
             {
                 EventHandler[] events = new EventHandler[attachedEventList.Count];
                 attachedEventList.Keys.CopyTo(events, 0);
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 DisconnectFromEvents();
-                if (events is not null)
+                if (events != null)
                 {
                     events.Dispose();
                     events = null;
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
         {
             Delegate delegateToInvoke = (Delegate)Events[key];
 
-            if (delegateToInvoke is not null)
+            if (delegateToInvoke != null)
             {
                 try
                 {

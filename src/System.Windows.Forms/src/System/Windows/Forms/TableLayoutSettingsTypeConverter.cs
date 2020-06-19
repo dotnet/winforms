@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Layout
         private string GetAttributeValue(XmlNode node, string attribute)
         {
             XmlAttribute attr = node.Attributes[attribute];
-            if (attr is not null)
+            if (attr != null)
             {
                 return attr.Value;
             }

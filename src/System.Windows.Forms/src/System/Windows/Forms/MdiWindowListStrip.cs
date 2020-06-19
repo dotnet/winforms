@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                 mergeItem.Text = mdiMergeItem.Text;
 
                 Form[] forms = mdiParent.MdiChildren;
-                if (forms is not null && forms.Length != 0)
+                if (forms != null && forms.Length != 0)
                 {
                     if (includeSeparator)
                     {
@@ -166,7 +166,7 @@ namespace System.Windows.Forms
         {
             Form[] forms = mdiParent.MdiChildren;
 
-            if (forms is not null)
+            if (forms != null)
             {
                 using (MdiWindowDialog dialog = new MdiWindowDialog())
                 {
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                         // AllWindows Assert above allows this...
                         //
                         dialog.ActiveChildForm.Activate();
-                        if (dialog.ActiveChildForm.ActiveControl is not null && !dialog.ActiveChildForm.ActiveControl.Focused)
+                        if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused)
                         {
                             dialog.ActiveChildForm.ActiveControl.Focus();
                         }
@@ -193,10 +193,10 @@ namespace System.Windows.Forms
             {
                 Form boundForm = windowListItem.MdiForm;
 
-                if (boundForm is not null)
+                if (boundForm != null)
                 {
                     boundForm.Activate();
-                    if (boundForm.ActiveControl is not null && !boundForm.ActiveControl.Focused)
+                    if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused)
                     {
                         boundForm.ActiveControl.Focus();
                     }

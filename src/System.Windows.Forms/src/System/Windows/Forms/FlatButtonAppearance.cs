@@ -53,7 +53,7 @@ namespace System.Windows.Forms
                 if (borderSize != value)
                 {
                     borderSize = value;
-                    if (owner is not null && owner.ParentInternal is not null)
+                    if (owner != null && owner.ParentInternal != null)
                     {
                         LayoutTransaction.DoLayoutIf(owner.AutoSize, owner.ParentInternal, owner, PropertyNames.FlatAppearanceBorderSize);
                     }
@@ -198,7 +198,7 @@ namespace System.Windows.Forms
         // Don't let the property grid display the CheckedBackColor property for Button controls
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
         {
-            if (context is not null && context.Instance is Button)
+            if (context != null && context.Instance is Button)
             {
                 Attribute[] attributes2 = new Attribute[attributes.Length + 1];
                 attributes.CopyTo(attributes2, 0);

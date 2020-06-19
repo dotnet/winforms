@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         internal HtmlWindow(HtmlShimManager shimManager, IHTMLWindow2 win)
         {
             htmlWindow2 = win;
-            Debug.Assert(NativeHtmlWindow is not null, "The window object should implement IHTMLWindow2");
+            Debug.Assert(NativeHtmlWindow != null, "The window object should implement IHTMLWindow2");
 
             this.shimManager = shimManager;
         }
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ShimManager is not null)
+                if (ShimManager != null)
                 {
                     HtmlWindowShim shim = ShimManager.GetWindowShim(this);
                     if (shim is null)
@@ -84,7 +84,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLFramesCollection2 iHTMLFramesCollection2 = NativeHtmlWindow.GetFrames();
-                return (iHTMLFramesCollection2 is not null) ? new HtmlWindowCollection(ShimManager, iHTMLFramesCollection2) : null;
+                return (iHTMLFramesCollection2 != null) ? new HtmlWindowCollection(ShimManager, iHTMLFramesCollection2) : null;
             }
         }
 
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
             get
             {
                 IOmHistory iOmHistory = NativeHtmlWindow.GetHistory();
-                return iOmHistory is not null ? new HtmlHistory(iOmHistory) : null;
+                return iOmHistory != null ? new HtmlHistory(iOmHistory) : null;
             }
         }
 
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.GetParent();
-                return (iHTMLWindow2 is not null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+                return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
             }
         }
 
@@ -259,7 +259,7 @@ namespace System.Windows.Forms
         public HtmlWindow Open(string urlString, string target, string windowOptions, bool replaceEntry)
         {
             IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, target, windowOptions, replaceEntry);
-            return (iHTMLWindow2 is not null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+            return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
         public HtmlWindow Open(Uri url, string target, string windowOptions, bool replaceEntry)
@@ -274,7 +274,7 @@ namespace System.Windows.Forms
         public HtmlWindow OpenNew(string urlString, string windowOptions)
         {
             IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, "_blank", windowOptions, true);
-            return (iHTMLWindow2 is not null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+            return (iHTMLWindow2 != null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
 
         public HtmlWindow OpenNew(Uri url, string windowOptions)
@@ -386,7 +386,7 @@ namespace System.Windows.Forms
 
             private void FireEvent(object key, EventArgs e)
             {
-                if (parent is not null)
+                if (parent != null)
                 {
                     parent.WindowShim.FireEvent(key, e);
                 }
@@ -421,7 +421,7 @@ namespace System.Windows.Forms
             {
                 HtmlElementEventArgs e = new HtmlElementEventArgs(parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.EventUnload, e);
-                if (parent is not null)
+                if (parent != null)
                 {
                     parent.WindowShim.OnWindowUnload();
                 }
@@ -517,7 +517,7 @@ namespace System.Windows.Forms
             public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
-                if (proxy is not null)
+                if (proxy != null)
                 {
                     ((IHTMLWindow3)NativeHtmlWindow).DetachEvent(eventName, proxy);
                 }
@@ -525,7 +525,7 @@ namespace System.Windows.Forms
 
             public override void DisconnectFromEvents()
             {
-                if (cookie is not null)
+                if (cookie != null)
                 {
                     cookie.Disconnect();
                     cookie = null;
@@ -537,7 +537,7 @@ namespace System.Windows.Forms
                 base.Dispose(disposing);
                 if (disposing)
                 {
-                    if (htmlWindow is not null && htmlWindow.NativeHtmlWindow is not null)
+                    if (htmlWindow != null && htmlWindow.NativeHtmlWindow != null)
                     {
                         Marshal.FinalReleaseComObject(htmlWindow.NativeHtmlWindow);
                     }
@@ -552,7 +552,7 @@ namespace System.Windows.Forms
 
             public void OnWindowUnload()
             {
-                if (htmlWindow is not null)
+                if (htmlWindow != null)
                 {
                     htmlWindow.ShimManager.OnWindowUnloaded(htmlWindow);
                 }

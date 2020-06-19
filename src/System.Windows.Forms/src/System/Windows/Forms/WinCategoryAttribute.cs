@@ -40,7 +40,7 @@ namespace System.Windows.Forms
             }
             // This attribute is internal, and we should never have a missing resource string.
             //
-            Debug.Assert(localizedValue is not null, "All Windows Forms category attributes should have localized strings.  Category '" + value + "' not found.");
+            Debug.Assert(localizedValue != null, "All Windows Forms category attributes should have localized strings.  Category '" + value + "' not found.");
             return localizedValue;
         }
 

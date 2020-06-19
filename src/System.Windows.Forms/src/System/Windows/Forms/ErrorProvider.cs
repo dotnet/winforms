@@ -188,14 +188,14 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (_parentControl is not null)
+                if (_parentControl != null)
                 {
                     _parentControl.BindingContextChanged -= _propChangedEvent;
                 }
 
                 _parentControl = value;
 
-                if (_parentControl is not null)
+                if (_parentControl != null)
                 {
                     _parentControl.BindingContextChanged += _propChangedEvent;
                 }
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                     UnwireEvents(_errorManager);
 
                     // Get the new errorManager
-                    if (_parentControl is not null && _dataSource is not null && _parentControl.BindingContext is not null)
+                    if (_parentControl != null && _dataSource != null && _parentControl.BindingContext != null)
                     {
                         _errorManager = _parentControl.BindingContext[_dataSource, _dataMember];
                     }
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
 
                     // See if there are errors at the current item in the list, without waiting for
                     // the position to change
-                    if (_errorManager is not null)
+                    if (_errorManager != null)
                     {
                         UpdateBinding();
                     }
@@ -317,7 +317,7 @@ namespace System.Windows.Forms
             get => _dataSource;
             set
             {
-                if (_parentControl is not null && _parentControl.BindingContext is not null && value is not null && !string.IsNullOrEmpty(_dataMember))
+                if (_parentControl != null && _parentControl.BindingContext != null && value != null && !string.IsNullOrEmpty(_dataMember))
                 {
                     // Let's check if the datamember exists in the new data source
                     try
@@ -335,7 +335,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShouldSerializeDataSource() => _dataSource is not null;
+        private bool ShouldSerializeDataSource() => _dataSource != null;
 
         /// <summary>
         ///  Indicates the sub-list of data from the DataSource to bind errors against.
@@ -402,7 +402,7 @@ namespace System.Windows.Forms
         private void ErrorManager_BindingComplete(object sender, BindingCompleteEventArgs e)
         {
             Binding binding = e.Binding;
-            if (binding is not null && binding.Control is not null)
+            if (binding != null && binding.Control != null)
             {
                 SetError(binding.Control, (e.ErrorText ?? string.Empty));
             }
@@ -433,7 +433,7 @@ namespace System.Windows.Forms
             {
                 for (int j = 0; j < bindingsCount; j++)
                 {
-                    if (errBindings[j].Control is not null)
+                    if (errBindings[j].Control != null)
                     {
                         // Ignore everything but bindings to Controls
                         SetError(errBindings[j].Control, "");
@@ -643,10 +643,10 @@ namespace System.Windows.Forms
         {
             ISupportInitializeNotification dsInit = (DataSource as ISupportInitializeNotification);
 
-            Debug.Assert(dsInit is not null, "ErrorProvider: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
+            Debug.Assert(dsInit != null, "ErrorProvider: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
             Debug.Assert(dsInit.IsInitialized, "ErrorProvider: DataSource sent ISupportInitializeNotification.Initialized event but before it had finished initializing.");
 
-            if (dsInit is not null)
+            if (dsInit != null)
             {
                 dsInit.Initialized -= new EventHandler(DataSource_Initialized);
             }
@@ -702,7 +702,7 @@ namespace System.Windows.Forms
         /// </summary>
         void DisposeRegion()
         {
-            if (_region is not null)
+            if (_region != null)
             {
                 _region.Dispose();
                 _region = null;
@@ -951,12 +951,12 @@ namespace System.Windows.Forms
             /// </summary>
             private void EnsureDestroyed()
             {
-                if (_timer is not null)
+                if (_timer != null)
                 {
                     _timer.Dispose();
                     _timer = null;
                 }
-                if (_tipWindow is not null)
+                if (_tipWindow != null)
                 {
                     _tipWindow.DestroyHandle();
                     _tipWindow = null;
@@ -993,7 +993,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_mirrordc is null, "Why is mirrordc non-null? Did you not call RestoreMirrorDC?");
 
                 _mirrordc = DeviceContext.FromHdc(hdc);
-                if (_parent.IsMirrored && _mirrordc is not null)
+                if (_parent.IsMirrored && _mirrordc != null)
                 {
                     _mirrordc.SaveHdc();
                     _mirrordcExtent = _mirrordc.ViewportExtent;
@@ -1007,7 +1007,7 @@ namespace System.Windows.Forms
 
             private void RestoreMirrorDC()
             {
-                if (_parent.IsMirrored && _mirrordc is not null)
+                if (_parent.IsMirrored && _mirrordc != null)
                 {
                     _mirrordc.ViewportExtent = _mirrordcExtent;
                     _mirrordc.ViewportOrigin = _mirrordcOrigin;
@@ -1076,7 +1076,7 @@ namespace System.Windows.Forms
                 }
                 if (blinkPhase == 0 && _provider.BlinkStyle != ErrorBlinkStyle.AlwaysBlink)
                 {
-                    Debug.Assert(_timer is not null);
+                    Debug.Assert(_timer != null);
                     _timer.Stop();
                 }
                 Update(timerCaused: true);
@@ -1118,7 +1118,7 @@ namespace System.Windows.Forms
             {
                 _items.Remove(item);
 
-                if (_tipWindow is not null)
+                if (_tipWindow != null)
                 {
                     var info = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id);
                     info.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.DELTOOLW);
@@ -1218,7 +1218,7 @@ namespace System.Windows.Forms
                             iconRegion.Region.Translate(-iconBounds.X, -iconBounds.Y);
                         }
 
-                        if (_tipWindow is not null)
+                        if (_tipWindow != null)
                         {
                             ComCtl32.TTF flags = ComCtl32.TTF.SUBCLASS;
                             if (_provider.RightToLeft)
@@ -1266,7 +1266,7 @@ namespace System.Windows.Forms
 
                     finally
                     {
-                        if (dc is not null)
+                        if (dc != null)
                         {
                             dc.Dispose();
                         }
@@ -1412,7 +1412,7 @@ namespace System.Windows.Forms
 
             public void Dispose()
             {
-                if (_control is not null)
+                if (_control != null)
                 {
                     _control.HandleCreated -= new EventHandler(OnCreateHandle);
                     _control.HandleDestroyed -= new EventHandler(OnDestroyHandle);
@@ -1616,7 +1616,7 @@ namespace System.Windows.Forms
             /// </summary>
             private void StartBlinking()
             {
-                if (_window is not null)
+                if (_window != null)
                 {
                     BlinkPhase = _startingBlinkPhase;
                     _window.StartBlinking();
@@ -1631,7 +1631,7 @@ namespace System.Windows.Forms
                 // if we are recreating the control, then add the control.
                 if (_window is null &&
                     (_control.Created || _control.RecreatingHandle) &&
-                    _control.Visible && _control.ParentInternal is not null &&
+                    _control.Visible && _control.ParentInternal != null &&
                     _error.Length > 0)
                 {
                     _window = _provider.EnsureErrorWindow(_control.ParentInternal);
@@ -1649,7 +1649,7 @@ namespace System.Windows.Forms
             /// </summary>
             private void RemoveFromWindow()
             {
-                if (_window is not null)
+                if (_window != null)
                 {
                     _window.Remove(this);
                     _window = null;
@@ -1771,7 +1771,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Dispose()
             {
-                if (region is not null)
+                if (region != null)
                 {
                     region.Dispose();
                     region = null;

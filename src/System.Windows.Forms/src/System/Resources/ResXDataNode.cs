@@ -91,12 +91,12 @@ namespace System.Resources
 
             Type valueType = (value is null) ? typeof(object) : value.GetType();
 
-            if (value is not null && !valueType.IsSerializable)
+            if (value != null && !valueType.IsSerializable)
             {
                 throw new InvalidOperationException(string.Format(SR.NotSerializableType, name, valueType.FullName));
             }
 
-            if (value is not null)
+            if (value != null)
             {
                 _typeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, _typeNameConverter);
             }
@@ -139,13 +139,13 @@ namespace System.Resources
                 nodeType = s_internalTypeResolver.GetType(_nodeInfo.TypeName, false, true);
             }
 
-            if (nodeType is not null && nodeType.Equals(typeof(ResXFileRef)))
+            if (nodeType != null && nodeType.Equals(typeof(ResXFileRef)))
             {
                 // we have a fileref, split the value data and populate the fields
                 string[] fileRefDetails = ResXFileRef.Converter.ParseResxFileRefString(_nodeInfo.ValueData);
                 if (fileRefDetails != null && fileRefDetails.Length > 1)
                 {
-                    if (!Path.IsPathRooted(fileRefDetails[0]) && basePath is not null)
+                    if (!Path.IsPathRooted(fileRefDetails[0]) && basePath != null)
                     {
                         _fileRefFullPath = Path.Combine(basePath, fileRefDetails[0]);
                     }
@@ -168,7 +168,7 @@ namespace System.Resources
             get
             {
                 string result = _comment;
-                if (result is null && _nodeInfo is not null)
+                if (result is null && _nodeInfo != null)
                 {
                     result = _nodeInfo.Comment;
                 }
@@ -185,7 +185,7 @@ namespace System.Resources
             get
             {
                 string result = _name;
-                if (result is null && _nodeInfo is not null)
+                if (result is null && _nodeInfo != null)
                 {
                     result = _nodeInfo.Name;
                 }
@@ -294,7 +294,7 @@ namespace System.Resources
             else
             {
                 Type valueType = (value is null) ? typeof(object) : value.GetType();
-                if (value is not null && !valueType.IsSerializable)
+                if (value != null && !valueType.IsSerializable)
                 {
                     throw new InvalidOperationException(string.Format(SR.NotSerializableType, _name, valueType.FullName));
                 }
@@ -386,7 +386,7 @@ namespace System.Resources
                     }
 
                     IFormatter formatter = _binaryFormatter;
-                    if (serializedData is not null && serializedData.Length > 0)
+                    if (serializedData != null && serializedData.Length > 0)
                     {
                         result = formatter.Deserialize(new MemoryStream(serializedData));
                         if (result is ResXNullRef)
@@ -400,7 +400,7 @@ namespace System.Resources
                     if (!string.IsNullOrEmpty(typeName))
                     {
                         Type type = ResolveType(typeName, typeResolver);
-                        if (type is not null)
+                        if (type != null)
                         {
                             TypeConverter tc = TypeDescriptor.GetConverter(type);
                             if (tc.CanConvertFrom(typeof(byte[])))
@@ -408,7 +408,7 @@ namespace System.Resources
                                 string text = dataNodeInfo.ValueData;
                                 byte[] serializedData = FromBase64WrappedString(text);
 
-                                if (serializedData is not null)
+                                if (serializedData != null)
                                 {
                                     result = tc.ConvertFrom(serializedData);
                                 }
@@ -428,7 +428,7 @@ namespace System.Resources
             else if (!string.IsNullOrEmpty(typeName))
             {
                 Type type = ResolveType(typeName, typeResolver);
-                if (type is not null)
+                if (type != null)
                 {
                     if (type == typeof(ResXNullRef))
                     {
@@ -486,7 +486,7 @@ namespace System.Resources
         internal DataNodeInfo GetDataNodeInfo()
         {
             bool shouldSerialize = true;
-            if (_nodeInfo is not null)
+            if (_nodeInfo != null)
             {
                 shouldSerialize = false;
             }
@@ -499,11 +499,11 @@ namespace System.Resources
 
             // We always serialize if this node represents a FileRef. This is because FileRef is a public property,
             // so someone could have modified it.
-            if (shouldSerialize || FileRefFullPath is not null)
+            if (shouldSerialize || FileRefFullPath != null)
             {
                 // if we dont have a datanodeinfo it could be either
                 // a direct object OR a fileref
-                if (FileRefFullPath is not null)
+                if (FileRefFullPath != null)
                 {
                     _nodeInfo.ValueData = FileRef.ToString();
                     _nodeInfo.MimeType = null;
@@ -544,12 +544,12 @@ namespace System.Resources
             string result = FileRefType;
             Type objectType = null;
             // do we have a fileref?
-            if (result is not null)
+            if (result != null)
             {
                 // try to resolve this type
                 objectType = ResolveType(FileRefType, typeResolver);
             }
-            else if (_nodeInfo is not null)
+            else if (_nodeInfo != null)
             {
                 // we dont have a fileref, try to resolve the type of the datanode
                 result = _nodeInfo.TypeName;
@@ -579,7 +579,7 @@ namespace System.Resources
                             result = MultitargetUtil.GetAssemblyQualifiedName(typeof(object), _typeNameConverter);
                         }
 
-                        if (insideObject is not null)
+                        if (insideObject != null)
                         {
                             result = MultitargetUtil.GetAssemblyQualifiedName(insideObject.GetType(), _typeNameConverter);
                         }
@@ -595,7 +595,7 @@ namespace System.Resources
                     objectType = ResolveType(_nodeInfo.TypeName, typeResolver);
                 }
             }
-            if (objectType is not null)
+            if (objectType != null)
             {
                 if (objectType == typeof(ResXNullRef))
                 {
@@ -622,20 +622,20 @@ namespace System.Resources
         /// </summary>
         public object GetValue(ITypeResolutionService typeResolver)
         {
-            if (_value is not null)
+            if (_value != null)
             {
                 return _value;
             }
 
             object result = null;
-            if (FileRefFullPath is not null)
+            if (FileRefFullPath != null)
             {
                 Type objectType = ResolveType(FileRefType, typeResolver);
-                if (objectType is not null)
+                if (objectType != null)
                 {
                     // we have the FQN for this type
                     _fileRef =
-                        FileRefTextEncoding is not null
+                        FileRefTextEncoding != null
                             ? new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding))
                             : new ResXFileRef(FileRefFullPath, FileRefType);
                     TypeConverter tc = TypeDescriptor.GetConverter(typeof(ResXFileRef));
@@ -648,7 +648,7 @@ namespace System.Resources
                     throw (newTle);
                 }
             }
-            else if (_nodeInfo.ValueData is not null)
+            else if (_nodeInfo.ValueData != null)
             {
                 // it's embedded, we deserialize it
                 result = GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver);
@@ -698,7 +698,7 @@ namespace System.Resources
         private Type ResolveType(string typeName, ITypeResolutionService typeResolver)
         {
             Type resolvedType = null;
-            if (typeResolver is not null)
+            if (typeResolver != null)
             {
                 // If we cannot find the strong-named type, then try to see
                 // if the TypeResolver can bind to partial names. For this,
@@ -711,7 +711,7 @@ namespace System.Resources
                     string[] typeParts = typeName.Split(',');
 
                     // Break up the type name from the rest of the assembly strong name.
-                    if (typeParts is not null && typeParts.Length >= 2)
+                    if (typeParts != null && typeParts.Length >= 2)
                     {
                         string partialName = typeParts[0].Trim();
                         string assemblyName = typeParts[1].Trim();

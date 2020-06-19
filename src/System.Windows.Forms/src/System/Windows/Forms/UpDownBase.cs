@@ -848,14 +848,14 @@ namespace System.Windows.Forms
             clientArea.Inflate(-borderWidth, -borderWidth);
 
             // Reposition and resize the upDownEdit control
-            if (_upDownEdit is not null)
+            if (_upDownEdit != null)
             {
                 upDownEditBounds = clientArea;
                 upDownEditBounds.Size = new Size(clientArea.Width - _defaultButtonsWidth, clientArea.Height);
             }
 
             // Reposition and resize the updown buttons
-            if (_upDownButtons is not null)
+            if (_upDownButtons != null)
             {
                 int borderFixup = (themed) ? 1 : 2;
                 if (borderStyle == BorderStyle.None)
@@ -883,11 +883,11 @@ namespace System.Windows.Forms
             }
 
             // Apply locations
-            if (_upDownEdit is not null)
+            if (_upDownEdit != null)
             {
                 _upDownEdit.Bounds = upDownEditBounds;
             }
-            if (_upDownButtons is not null)
+            if (_upDownButtons != null)
             {
                 _upDownButtons.Bounds = upDownButtonsBounds;
                 _upDownButtons.Invalidate();
@@ -904,7 +904,7 @@ namespace System.Windows.Forms
         /// </summary>
         private MouseEventArgs TranslateMouseEvent(Control child, MouseEventArgs e)
         {
-            if (child is not null && IsHandleCreated)
+            if (child != null && IsHandleCreated)
             {
                 // Same control as PointToClient or PointToScreen, just
                 // with two specific controls in mind.

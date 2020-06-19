@@ -63,13 +63,13 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     ISite site = c.Site;
 
-                    if (site is not null)
+                    if (site != null)
                     {
                         _host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
                     }
                 }
 
-                if (_host is not null)
+                if (_host != null)
                 {
                     baseComponent = _host.RootComponent;
                 }
@@ -92,7 +92,7 @@ namespace System.ComponentModel.Design.Serialization
             public MemberAttributes GetModifiers(IComponent comp)
             {
                 IComponent baseComponent = GetBaseComponent(comp);
-                Debug.Assert(baseComponent is not null, "Root component was null");
+                Debug.Assert(baseComponent != null, "Root component was null");
                 Type baseType = baseComponent.GetType();
                 ISite site = comp.Site;
 
@@ -110,7 +110,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 FieldInfo field = TypeDescriptor.GetReflectionType(baseType).GetField(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
 
-                if (field is not null)
+                if (field != null)
                 {
                     if (field.IsPrivate)
                         return MemberAttributes.Private;

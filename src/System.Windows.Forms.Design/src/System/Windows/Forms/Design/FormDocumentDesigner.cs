@@ -179,13 +179,13 @@ namespace System.Windows.Forms.Design
                 }
 
                 // if the padding has not been set - then we'll auto-add padding to form - this is a Usability request
-                if (Control.Padding == Padding.Empty && snapLines is not null)
+                if (Control.Padding == Padding.Empty && snapLines != null)
                 {
                     int paddingsFound = 0; // used to short-circuit once we find 4 paddings
                     for (int i = 0; i < snapLines.Count; i++)
                     {
                         // remove previous padding snaplines
-                        if (snapLines[i] is SnapLine snapLine && snapLine.Filter is not null && snapLine.Filter.StartsWith(SnapLine.Padding))
+                        if (snapLines[i] is SnapLine snapLine && snapLine.Filter != null && snapLine.Filter.StartsWith(SnapLine.Padding))
                         {
                             if (snapLine.Filter.Equals(SnapLine.PaddingLeft) || snapLine.Filter.Equals(SnapLine.PaddingTop))
                             {
@@ -217,13 +217,13 @@ namespace System.Windows.Forms.Design
             {
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
-                if (cs is not null)
+                if (cs != null)
                 {
                     cs.OnComponentChanging(Component, props["ClientSize"]);
                 }
 
                 Control.Size = value;
-                if (cs is not null)
+                if (cs != null)
                 {
                     cs.OnComponentChanged(Component, props["ClientSize"], null, null);
                 }
@@ -287,7 +287,7 @@ namespace System.Windows.Forms.Design
             if (disposing)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                Debug.Assert(host is not null, "Must have a designer host on dispose");
+                Debug.Assert(host != null, "Must have a designer host on dispose");
             }
             base.Dispose(disposing);
         }
@@ -307,7 +307,7 @@ namespace System.Windows.Forms.Design
         {
             // We have to shadow the WindowState before we call base.Initialize
             PropertyDescriptor windowStateProp = TypeDescriptor.GetProperties(component.GetType())["WindowState"];
-            if (windowStateProp is not null && windowStateProp.PropertyType == typeof(FormWindowState))
+            if (windowStateProp != null && windowStateProp.PropertyType == typeof(FormWindowState))
             {
                 WindowState = (FormWindowState)windowStateProp.GetValue(component);
             }
@@ -332,7 +332,7 @@ namespace System.Windows.Forms.Design
             if (ce.Component is ToolStrip && _toolStripAdornerWindowService is null)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host is not null)
+                if (host != null)
                 {
                     EnsureToolStripWindowAdornerService();
                 }
@@ -344,7 +344,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
-            if (ce.Component is ToolStrip && _toolStripAdornerWindowService is not null)
+            if (ce.Component is ToolStrip && _toolStripAdornerWindowService != null)
             {
                 _toolStripAdornerWindowService = null;
             }
@@ -366,7 +366,7 @@ namespace System.Windows.Forms.Design
         {
             // Paint the form's title bar UI-active
             Control control = Control;
-            if (control is not null && control.IsHandleCreated)
+            if (control != null && control.IsHandleCreated)
             {
                 User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (IntPtr)1, IntPtr.Zero);
                 User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.Design
         private unsafe void OnDesignerDeactivate(object sender, EventArgs e)
         {
             Control control = Control;
-            if (control is not null && control.IsHandleCreated)
+            if (control != null && control.IsHandleCreated)
             {
                 User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, IntPtr.Zero, IntPtr.Zero);
                 User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
@@ -409,7 +409,7 @@ namespace System.Windows.Forms.Design
                 ApplyAutoScaling(_autoScaleBaseSize, form);
                 ClientSize = new Size(clientWidth, clientHeight);
                 BehaviorService svc = (BehaviorService)GetService(typeof(BehaviorService));
-                if (svc is not null)
+                if (svc != null)
                 {
                     svc.SyncSelection();
                 }
@@ -431,7 +431,7 @@ namespace System.Windows.Forms.Design
             for (int i = 0; i < shadowProps.Length; i++)
             {
                 prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop is not null)
+                if (prop != null)
                 {
                     properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(FormDocumentDesigner), prop, empty);
                 }
@@ -439,14 +439,14 @@ namespace System.Windows.Forms.Design
 
             // Mark auto scale base size as serializable again so we can monitor it for backwards compat.
             prop = (PropertyDescriptor)properties["AutoScaleBaseSize"];
-            if (prop is not null)
+            if (prop != null)
             {
                 properties["AutoScaleBaseSize"] = TypeDescriptor.CreateProperty(typeof(FormDocumentDesigner), prop, DesignerSerializationVisibilityAttribute.Visible);
             }
 
             // And set the new default value attribute for client base size, and shadow it as well.
             prop = (PropertyDescriptor)properties["ClientSize"];
-            if (prop is not null)
+            if (prop != null)
             {
                 properties["ClientSize"] = TypeDescriptor.CreateProperty(typeof(FormDocumentDesigner), prop, new DefaultValueAttribute(new Size(-1, -1)));
             }
@@ -462,7 +462,7 @@ namespace System.Windows.Forms.Design
             if (!updateSize)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host is not null)
+                if (host != null)
                 {
                     updateSize = host.Loading;
                 }

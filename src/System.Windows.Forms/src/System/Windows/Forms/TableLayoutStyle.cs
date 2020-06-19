@@ -26,7 +26,7 @@ namespace System.Windows.Forms
                 if (_sizeType != value)
                 {
                     _sizeType = value;
-                    if (Owner is not null)
+                    if (Owner != null)
                     {
                         LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Style);
                         if (Owner is Control owner)
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
                 if (_size != value)
                 {
                     _size = value;
-                    if (Owner is not null)
+                    if (Owner != null)
                     {
                         LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Style);
                         if (Owner is Control owner)

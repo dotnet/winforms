@@ -266,14 +266,14 @@ namespace System.Windows.Forms
             {
                 if (autoCompleteCustomSource != value)
                 {
-                    if (autoCompleteCustomSource is not null)
+                    if (autoCompleteCustomSource != null)
                     {
                         autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
 
                     autoCompleteCustomSource = value;
 
-                    if (autoCompleteCustomSource is not null)
+                    if (autoCompleteCustomSource != null)
                     {
                         autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
@@ -631,7 +631,7 @@ namespace System.Windows.Forms
                 }
 
                 IntPtr focus = GetFocus();
-                return focus != IntPtr.Zero && ((childEdit is not null && focus == childEdit.Handle) || (childListBox is not null && focus == childListBox.Handle));
+                return focus != IntPtr.Zero && ((childEdit != null && focus == childEdit.Handle) || (childListBox != null && focus == childListBox.Handle));
             }
         }
 
@@ -774,7 +774,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is not null || Properties.ContainsObject(PropMatchingText))
+                if (value != null || Properties.ContainsObject(PropMatchingText))
                 {
                     Properties.SetObject(PropMatchingText, value);
                 }
@@ -1032,7 +1032,7 @@ namespace System.Windows.Forms
                 if (SelectedIndex != value)
                 {
                     int itemCount = 0;
-                    if (itemsCollection is not null)
+                    if (itemsCollection != null)
                     {
                         itemCount = itemsCollection.Count;
                     }
@@ -1083,10 +1083,10 @@ namespace System.Windows.Forms
             {
                 int x = -1;
 
-                if (itemsCollection is not null)
+                if (itemsCollection != null)
                 {
                     //
-                    if (value is not null)
+                    if (value != null)
                     {
                         x = itemsCollection.IndexOf(value);
                     }
@@ -1130,7 +1130,7 @@ namespace System.Windows.Forms
                     //AccessViolation exception, which is bad
                     string str = (value ?? "");
                     CreateControl();
-                    if (IsHandleCreated && childEdit is not null)
+                    if (IsHandleCreated && childEdit != null)
                     {
                         SendMessageW(new HandleRef(this, childEdit.Handle), (WM)EM.REPLACESEL, (IntPtr)(-1), str);
                     }
@@ -1200,7 +1200,7 @@ namespace System.Windows.Forms
             {
                 if (sorted != value)
                 {
-                    if (DataSource is not null && value)
+                    if (DataSource != null && value)
                     {
                         throw new ArgumentException(SR.ComboBoxSortWithDataSource);
                     }
@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (SelectedItem is not null && !BindingFieldEmpty)
+                if (SelectedItem != null && !BindingFieldEmpty)
                 {
                     //preserve everett behavior if "formatting enabled == false" -- just return selecteditem text.
                     if (FormattingEnabled)
@@ -1312,7 +1312,7 @@ namespace System.Windows.Forms
                     {
                         SelectedIndex = -1;
                     }
-                    else if (value is not null &&
+                    else if (value != null &&
                         (selectedItem is null || (string.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0)))
                     {
                         int index = FindStringIgnoreCase(value);
@@ -1538,7 +1538,7 @@ namespace System.Windows.Forms
 
         private void CheckNoDataSource()
         {
-            if (DataSource is not null)
+            if (DataSource != null)
             {
                 throw new ArgumentException(SR.DataSourceLocksItems);
             }
@@ -1721,7 +1721,7 @@ namespace System.Windows.Forms
                     if (!HostedInWin32DialogManager)
                     {
                         IContainerControl c = GetContainerControl();
-                        if (c is not null)
+                        if (c != null)
                         {
                             if (c is ContainerControl container)
                             {
@@ -1739,7 +1739,7 @@ namespace System.Windows.Forms
                     // once in the combobox and once here.
                     if (fireSetFocus)
                     {
-                        if (!DesignMode && childEdit is not null && m.HWnd == childEdit.Handle)
+                        if (!DesignMode && childEdit != null && m.HWnd == childEdit.Handle)
                         {
                             WmImeSetFocus();
                         }
@@ -1755,7 +1755,7 @@ namespace System.Windows.Forms
 
                 case WM.SETFONT:
                     DefChildWndProc(ref m);
-                    if (childEdit is not null && m.HWnd == childEdit.Handle)
+                    if (childEdit != null && m.HWnd == childEdit.Handle)
                     {
                         SendMessageW(new HandleRef(this, childEdit.Handle), (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                     }
@@ -1881,7 +1881,7 @@ namespace System.Windows.Forms
                     mousePressed = true;
                     mouseEvents = true;
 
-                    if (ContextMenuStrip is not null)
+                    if (ContextMenuStrip != null)
                     {
                         // Set the mouse capture as this is the child Wndproc.
                         Capture = true;
@@ -1917,7 +1917,7 @@ namespace System.Windows.Forms
 
                 case WM.CONTEXTMENU:
                     // Forward context menu messages to the parent control
-                    if (ContextMenuStrip is not null)
+                    if (ContextMenuStrip != null)
                     {
                         SendMessageW(this, WM.CONTEXTMENU, m.WParam, m.LParam);
                     }
@@ -1937,7 +1937,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.SETCURSOR:
-                    if (Cursor != DefaultCursor && childEdit is not null && m.HWnd == childEdit.Handle && PARAM.LOWORD(m.LParam) == (int)HT.CLIENT)
+                    if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && PARAM.LOWORD(m.LParam) == (int)HT.CLIENT)
                     {
                         Cursor.Current = Cursor;
                     }
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms
 
         private void DefChildWndProc(ref Message m)
         {
-            if (childEdit is not null)
+            if (childEdit != null)
             {
                 NativeWindow childWindow;
                 if (m.HWnd == childEdit.Handle)
@@ -2007,7 +2007,7 @@ namespace System.Windows.Forms
                 //childwindow could be null if the handle was recreated while within a message handler
                 // and then whoever recreated the handle allowed the message to continue to be processed
                 //we cannot really be sure the new child will properly handle this window message, so we eat it.
-                if (childWindow is not null)
+                if (childWindow != null)
                 {
                     childWindow.DefWndProc(ref m);
                 }
@@ -2018,11 +2018,11 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (autoCompleteCustomSource is not null)
+                if (autoCompleteCustomSource != null)
                 {
                     autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
-                if (stringSource is not null)
+                if (stringSource != null)
                 {
                     stringSource.ReleaseAutoComplete();
                     stringSource = null;
@@ -2046,11 +2046,11 @@ namespace System.Windows.Forms
             }
             if (EndUpdateInternal())
             {
-                if (childEdit is not null && childEdit.Handle != IntPtr.Zero)
+                if (childEdit != null && childEdit.Handle != IntPtr.Zero)
                 {
                     InvalidateRect(new HandleRef(this, childEdit.Handle), null, BOOL.FALSE);
                 }
-                if (childListBox is not null && childListBox.Handle != IntPtr.Zero)
+                if (childListBox != null && childListBox.Handle != IntPtr.Zero)
                 {
                     InvalidateRect(new HandleRef(this, childListBox.Handle), null, BOOL.FALSE);
                 }
@@ -2167,7 +2167,7 @@ namespace System.Windows.Forms
         internal int GetListNativeWindowRuntimeIdPart()
         {
             NativeWindow listNativeWindow = GetListNativeWindow();
-            return listNativeWindow is not null ? listNativeWindow.GetHashCode() : 0;
+            return listNativeWindow != null ? listNativeWindow.GetHashCode() : 0;
         }
 
         internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg)
@@ -2345,7 +2345,7 @@ namespace System.Windows.Forms
             }
 
             SendMessageW(this, (WM)CB.RESETCONTENT);
-            if (saved is not null)
+            if (saved != null)
             {
                 WindowText = saved;
             }
@@ -2515,7 +2515,7 @@ namespace System.Windows.Forms
                 fromHandleCreate = false;
             }
 
-            if (itemsCollection is not null)
+            if (itemsCollection != null)
             {
                 foreach (object item in itemsCollection)
                 {
@@ -2550,7 +2550,7 @@ namespace System.Windows.Forms
             {
                 selectedIndex = SelectedIndex;
             }
-            if (stringSource is not null)
+            if (stringSource != null)
             {
                 stringSource.ReleaseAutoComplete();
                 stringSource = null;
@@ -2755,7 +2755,7 @@ namespace System.Windows.Forms
             // into the backEnd. We do not need to do that.
             //
             // don't change the position if SelectedIndex is -1 because this indicates a selection not from the list.
-            if (DataManager is not null && DataManager.Position != SelectedIndex)
+            if (DataManager != null && DataManager.Position != SelectedIndex)
             {
                 //read this as "if everett or   (whidbey and selindex is valid)"
                 if (!FormattingEnabled || SelectedIndex != -1)
@@ -2960,7 +2960,7 @@ namespace System.Windows.Forms
         {
             if (Sorted)
             {
-                if (DataSource is not null && Created)
+                if (DataSource != null && Created)
                 {
                     // we will only throw the exception when the control is already on the form.
                     Debug.Assert(DisplayMember.Equals(string.Empty), "if this list is sorted it means that dataSource was null when Sorted first became true. at that point DisplayMember had to be String.Empty");
@@ -3094,7 +3094,7 @@ namespace System.Windows.Forms
             // if we have a dataSource and a DisplayMember, then use it
             // to populate the Items collection
             //
-            if (DataManager is not null && DataManager.Count != -1)
+            if (DataManager != null && DataManager.Count != -1)
             {
                 newItems = new object[DataManager.Count];
                 for (int i = 0; i < newItems.Length; i++)
@@ -3102,7 +3102,7 @@ namespace System.Windows.Forms
                     newItems[i] = DataManager[i];
                 }
             }
-            else if (savedItems is not null)
+            else if (savedItems != null)
             {
                 newItems = new object[savedItems.Count];
                 savedItems.CopyTo(newItems, 0);
@@ -3118,11 +3118,11 @@ namespace System.Windows.Forms
                 }
                 // Store the current list of items
                 //
-                if (newItems is not null)
+                if (newItems != null)
                 {
                     Items.AddRangeInternal(newItems);
                 }
-                if (DataManager is not null)
+                if (DataManager != null)
                 {
                     // put the selectedIndex in sync w/ the position in the dataManager
                     SelectedIndex = DataManager.Position;
@@ -3152,14 +3152,14 @@ namespace System.Windows.Forms
         /// </summary>
         private void ReleaseChildWindow()
         {
-            if (childEdit is not null)
+            if (childEdit != null)
             {
                 // We do not use UI Automation provider for child edit, so do not need to release providers.
                 childEdit.ReleaseHandle();
                 childEdit = null;
             }
 
-            if (childListBox is not null)
+            if (childListBox != null)
             {
                 // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
                 ReleaseUiaProvider(childListBox.Handle);
@@ -3168,7 +3168,7 @@ namespace System.Windows.Forms
                 childListBox = null;
             }
 
-            if (childDropDown is not null)
+            if (childDropDown != null)
             {
                 // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
                 ReleaseUiaProvider(childDropDown.Handle);
@@ -3231,7 +3231,7 @@ namespace System.Windows.Forms
 
                 if (AutoCompleteSource == AutoCompleteSource.CustomSource)
                 {
-                    if (AutoCompleteCustomSource is not null)
+                    if (AutoCompleteCustomSource != null)
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {
@@ -3258,7 +3258,7 @@ namespace System.Windows.Forms
                 {
                     if (DropDownStyle != ComboBoxStyle.DropDownList)
                     {
-                        if (itemsCollection is not null)
+                        if (itemsCollection != null)
                         {
                             if (itemsCollection.Count == 0)
                             {
@@ -3369,7 +3369,7 @@ namespace System.Windows.Forms
             // if the list changed, we want to keep the same selected index
             // CurrencyManager will provide the PositionChanged event
             // it will be provided before changing the list though...
-            if (DataManager is not null)
+            if (DataManager != null)
             {
                 if (DataSource is ICurrencyManagerProvider)
                 {
@@ -3404,7 +3404,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeAutoCompleteCustomSource()
         {
-            return autoCompleteCustomSource is not null && autoCompleteCustomSource.Count > 0;
+            return autoCompleteCustomSource != null && autoCompleteCustomSource.Count > 0;
         }
 
         internal bool ShouldSerializeDropDownWidth()
@@ -3518,7 +3518,7 @@ namespace System.Windows.Forms
             if (SelectedIndex != -1)
             {
                 object item = Items[SelectedIndex];
-                if (item is not null)
+                if (item != null)
                 {
                     s = GetItemText(item);
                 }
@@ -3528,7 +3528,7 @@ namespace System.Windows.Forms
 
             if (DropDownStyle == ComboBoxStyle.DropDown)
             {
-                if (childEdit is not null && childEdit.Handle != IntPtr.Zero)
+                if (childEdit != null && childEdit.Handle != IntPtr.Zero)
                 {
                     SendMessageW(new HandleRef(this, childEdit.Handle), WM.SETTEXT, IntPtr.Zero, s);
                 }
@@ -3537,13 +3537,13 @@ namespace System.Windows.Forms
 
         private void WmEraseBkgnd(ref Message m)
         {
-            if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal is not null)
+            if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal != null)
             {
                 RECT rect = new RECT();
                 GetClientRect(new HandleRef(this, Handle), ref rect);
                 Control p = ParentInternal;
                 Graphics graphics = Graphics.FromHdcInternal(m.WParam);
-                if (p is not null)
+                if (p != null)
                 {
                     Brush brush = new SolidBrush(p.BackColor);
                     graphics.FillRectangle(brush, rect.left, rect.top,
@@ -3571,7 +3571,7 @@ namespace System.Windows.Forms
 
                 // By some reason WmParentNotify with WM_DESTROY is not called before recreation.
                 // So release the old references here.
-                if (childDropDown is not null)
+                if (childDropDown != null)
                 {
                     // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
                     ReleaseUiaProvider(childDropDown.Handle);
@@ -4556,7 +4556,7 @@ namespace System.Windows.Forms
 
             public ChildAccessibleObject(ComboBox owner, IntPtr handle)
             {
-                Debug.Assert(owner is not null && owner.Handle != IntPtr.Zero, "ComboBox's handle hasn't been created");
+                Debug.Assert(owner != null && owner.Handle != IntPtr.Zero, "ComboBox's handle hasn't been created");
 
                 this.owner = owner;
                 UseStdAccessibleObjects(handle);
@@ -4645,7 +4645,7 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.PreviousSibling:
                         currentIndex = GetCurrentIndex();
                         comboBoxChildListUiaProvider = _owningComboBox.ChildListAccessibleObject as ComboBoxChildListUiaProvider;
-                        if (comboBoxChildListUiaProvider is not null)
+                        if (comboBoxChildListUiaProvider != null)
                         {
                             var itemsCount = comboBoxChildListUiaProvider.GetChildFragmentCount();
                             int previousItemIndex = currentIndex - 1;
@@ -4756,7 +4756,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owningComboBox is not null)
+                    if (_owningComboBox != null)
                     {
                         return _owningItem.ToString();
                     }
@@ -4917,7 +4917,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_owningComboBox is not null)
+                if (_owningComboBox != null)
                 {
                     return true;
                 }
@@ -4949,7 +4949,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owningComboBox is not null)
+                    if (_owningComboBox != null)
                     {
                         // we need to provide a unique ID
                         // others are implementing this in the same manner
@@ -4989,7 +4989,7 @@ namespace System.Windows.Forms
             {
                 ValidateChildID(ref childID);
 
-                if (childID is not null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
+                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
                 {
                     return Name;
                 }
@@ -5002,7 +5002,7 @@ namespace System.Windows.Forms
             internal override string get_accKeyboardShortcutInternal(object childID)
             {
                 ValidateChildID(ref childID);
-                if (childID is not null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
+                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
                 {
                     return KeyboardShortcut;
                 }
@@ -5257,7 +5257,7 @@ namespace System.Windows.Forms
                         return null;
                     case UiaCore.NavigateDirection.PreviousSibling:
                         comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
-                        if (comboBoxAccessibleObject is not null)
+                        if (comboBoxAccessibleObject != null)
                         {
                             AccessibleObject firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
                             if (RuntimeId != firstComboBoxChildFragment.RuntimeId)
@@ -5376,7 +5376,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
             {
                 var systemIAccessible = GetSystemIAccessibleInternal();
-                if (systemIAccessible is not null)
+                if (systemIAccessible != null)
                 {
                     object result = systemIAccessible.accHitTest((int)x, (int)y);
                     if (result is int childId)
@@ -5507,7 +5507,7 @@ namespace System.Windows.Forms
                 int selectedIndex = _owningComboBox.SelectedIndex;
 
                 AccessibleObject itemAccessibleObject = GetChildFragment(selectedIndex);
-                if (itemAccessibleObject is not null)
+                if (itemAccessibleObject != null)
                 {
                     return new UiaCore.IRawElementProviderSimple[] {
                         itemAccessibleObject
@@ -5669,7 +5669,7 @@ namespace System.Windows.Forms
                         return null;
                     case UiaCore.NavigateDirection.PreviousSibling:
                         comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
-                        if (comboBoxAccessibleObject is not null)
+                        if (comboBoxAccessibleObject != null)
                         {
                             AccessibleObject firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
                             if (RuntimeId != firstComboBoxChildFragment.RuntimeId)
@@ -6378,7 +6378,7 @@ namespace System.Windows.Forms
             // this is just here so we can quickly eliminate rectangles that arent in the update region.
             public unsafe void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
             {
-                if (comboBox is not null)
+                if (comboBox != null)
                 {
                     return;
                 }

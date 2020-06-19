@@ -135,7 +135,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Application.DoEvents();
             CalendarChildAccessibleObject cell = bodyAccessibleObject.GetFromPoint(info);
 
-            return new ScenarioResult(cell is not null);
+            return new ScenarioResult(cell != null);
         }
 
         [Scenario(true)]
@@ -188,7 +188,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Application.DoEvents();
             object child = method.Invoke(accessibleObject, new object[] { selectedDate, selectedDate });
 
-            return new ScenarioResult(child is not null);
+            return new ScenarioResult(child != null);
         }
 
         [Scenario(true)]
@@ -217,7 +217,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             Application.DoEvents();
             IRawElementProviderSimple[] items = accessibleObject.GetColumnHeaderItems();
 
-            return new ScenarioResult(items is not null);
+            return new ScenarioResult(items != null);
         }
 
         [Scenario(true)]

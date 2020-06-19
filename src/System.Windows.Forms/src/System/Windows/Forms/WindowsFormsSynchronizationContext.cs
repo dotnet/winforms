@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if ((destinationThreadRef is not null) && (destinationThreadRef.IsAlive))
+                if ((destinationThreadRef != null) && (destinationThreadRef.IsAlive))
                 {
                     return destinationThreadRef.Target as Thread;
                 }
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is not null)
+                if (value != null)
                 {
                     destinationThreadRef = new WeakReference(value);
                 }
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         }
         public void Dispose()
         {
-            if (controlToSendTo is not null)
+            if (controlToSendTo != null)
             {
                 if (!controlToSendTo.IsDisposed)
                 {
@@ -126,7 +126,7 @@ namespace System.Windows.Forms
                 previousSyncContext = null;
             }
 
-            if (previousSyncContext is not null)
+            if (previousSyncContext != null)
             {
                 return;
             }

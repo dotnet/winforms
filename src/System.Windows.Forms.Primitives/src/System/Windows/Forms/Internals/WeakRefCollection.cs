@@ -166,7 +166,7 @@ namespace System.Windows.Forms
             int hash = value.GetHashCode();
             for (int idx = 0; idx < InnerList.Count; idx++)
             {
-                if (InnerList[idx] is not null && InnerList[idx].GetHashCode() == hash)
+                if (InnerList[idx] != null && InnerList[idx].GetHashCode() == hash)
                 {
                     RemoveAt(idx);
                     return;
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
 
             internal WeakRefObject(object obj)
             {
-                Debug.Assert(obj is not null, "Unexpected null object!");
+                Debug.Assert(obj != null, "Unexpected null object!");
                 weakHolder = new WeakReference(obj);
                 _hash = obj.GetHashCode();
             }

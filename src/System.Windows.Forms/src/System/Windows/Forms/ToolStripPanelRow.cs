@@ -157,7 +157,7 @@ namespace System.Windows.Forms
             get
             {
                 ToolStripPanelCell cell = RowManager.GetNextVisibleCell(0, /*forward*/true);
-                if (cell is not null && cell.DraggedControl is not null)
+                if (cell != null && cell.DraggedControl != null)
                 {
                     if (cell.DraggedControl.Stretch)
                     {
@@ -520,7 +520,7 @@ namespace System.Windows.Forms
             }
 
             // fixup for items before it shrinking.
-            if (cellOffsets is not null)
+            if (cellOffsets != null)
             {
                 for (int i = 0; i < Cells.Count; i++)
                 {
@@ -610,7 +610,7 @@ namespace System.Windows.Forms
             }
 
             // fixup for items before it shrinking.
-            if (cellOffsets is not null)
+            if (cellOffsets != null)
             {
                 for (int i = 0; i < Cells.Count; i++)
                 {
@@ -698,7 +698,7 @@ namespace System.Windows.Forms
         {
             Size preferredSize = LayoutEngine.GetPreferredSize(this, constrainingSize - Padding.Size) + Padding.Size;
 
-            if (Orientation == Orientation.Horizontal && ParentInternal is not null)
+            if (Orientation == Orientation.Horizontal && ParentInternal != null)
             {
                 preferredSize.Width = DisplayRectangle.Width;
             }
@@ -790,7 +790,7 @@ namespace System.Windows.Forms
                 foreach (Control c in Row.ControlsInternal)
                 {
                     raftingControl = c as ISupportToolStripPanel;
-                    if (raftingControl is not null)
+                    if (raftingControl != null)
                     {
                         if (raftingControl.Stretch)
                         {
@@ -981,11 +981,11 @@ namespace System.Windows.Forms
                 {
                     Rectangle displayRect = ((IArrangedElement)Row).DisplayRectangle;
 
-                    if (ToolStripPanel is not null)
+                    if (ToolStripPanel != null)
                     {
                         Rectangle raftingDisplayRectangle = ToolStripPanel.DisplayRectangle;
 
-                        if ((!ToolStripPanel.Visible || LayoutUtils.IsZeroWidthOrHeight(raftingDisplayRectangle)) && (ToolStripPanel.ParentInternal is not null))
+                        if ((!ToolStripPanel.Visible || LayoutUtils.IsZeroWidthOrHeight(raftingDisplayRectangle)) && (ToolStripPanel.ParentInternal != null))
                         {
                             // if were layed out before we're visible we have the wrong display rectangle, so we need to calculate it.
                             displayRect.Width = ToolStripPanel.ParentInternal.DisplayRectangle.Width - (ToolStripPanel.Margin.Horizontal + ToolStripPanel.Padding.Horizontal) - Row.Margin.Horizontal;
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms
                             if (index + 1 < Row.Cells.Count)
                             {
                                 cell = GetNextVisibleCell(index + 1, /*forward*/true);
-                                if (cell is not null)
+                                if (cell != null)
                                 {
                                     cellMargin = cell.Margin;
                                     cellMargin.Left += spaceToFree;
@@ -1243,7 +1243,7 @@ namespace System.Windows.Forms
                     if (Row.Cells.Count > 0 && (spaceToFree > freedSpace))
                     {
                         ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward*/false);
-                        if (lastCell is not null)
+                        if (lastCell != null)
                         {
                             freedSpace += DisplayRectangle.Right - lastCell.Bounds.Right;
                         }
@@ -1262,9 +1262,9 @@ namespace System.Windows.Forms
                         {
                             cell = Row.Cells[index] as ToolStripPanelCell;
                         }
-                        Debug.Assert(cell is not null, "Dont expect cell to be null here, what's going on?");
+                        Debug.Assert(cell != null, "Dont expect cell to be null here, what's going on?");
 
-                        if (cell is not null)
+                        if (cell != null)
                         {
                             cellMargin = cell.Margin;
                             cellMargin.Left += spaceToFree;
@@ -1296,7 +1296,7 @@ namespace System.Windows.Forms
                     if (Row.Cells.Count == 1)
                     {
                         cell = GetNextVisibleCell(index,/*forward*/true);
-                        if (cell is not null)
+                        if (cell != null)
                         {
                             cellMargin = cell.Margin;
                             cellMargin.Left += freedSpace;
@@ -1331,7 +1331,7 @@ namespace System.Windows.Forms
 
                             // add the space occupied by the cell to the next one.
                             ToolStripPanelCell nextCell = GetNextVisibleCell(index + 1, /*forward*/true);
-                            if (nextCell is not null)
+                            if (nextCell != null)
                             {
                                 Padding nextCellMargin = nextCell.Margin;
                                 nextCellMargin.Left += spaceOccupiedByCell;
@@ -1456,7 +1456,7 @@ namespace System.Windows.Forms
                                 ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1,  /*forward*/false);
 
                                 // count the stuff at the end of the row as freed space
-                                if (nextCell is not null && lastCell is not null)
+                                if (nextCell != null && lastCell != null)
                                 {
                                     Padding lastCellMargin = lastCell.Margin;
                                     lastCellMargin.Left = Math.Max(0, locationToDrag.X - nextCell.Bounds.Right);
@@ -1504,7 +1504,7 @@ namespace System.Windows.Forms
                                     cell = (ToolStripPanelCell)Row.Cells[Row.Cells.Count - 1];
                                 }
 
-                                if (cell is not null)
+                                if (cell != null)
                                 {
                                     Padding cellMargin = cell.Margin;
                                     cellMargin.Left = Math.Max(0, locationToDrag.X - Row.Margin.Left);
@@ -1542,11 +1542,11 @@ namespace System.Windows.Forms
                 {
                     Rectangle displayRect = ((IArrangedElement)Row).DisplayRectangle;
 
-                    if (ToolStripPanel is not null)
+                    if (ToolStripPanel != null)
                     {
                         Rectangle raftingDisplayRectangle = ToolStripPanel.DisplayRectangle;
 
-                        if ((!ToolStripPanel.Visible || LayoutUtils.IsZeroWidthOrHeight(raftingDisplayRectangle)) && (ToolStripPanel.ParentInternal is not null))
+                        if ((!ToolStripPanel.Visible || LayoutUtils.IsZeroWidthOrHeight(raftingDisplayRectangle)) && (ToolStripPanel.ParentInternal != null))
                         {
                             // if were layed out before we're visible we have the wrong display rectangle, so we need to calculate it.
                             displayRect.Height = ToolStripPanel.ParentInternal.DisplayRectangle.Height - (ToolStripPanel.Margin.Vertical + ToolStripPanel.Padding.Vertical) - Row.Margin.Vertical;
@@ -1730,7 +1730,7 @@ namespace System.Windows.Forms
                             if (index + 1 < Row.Cells.Count)
                             {
                                 cell = GetNextVisibleCell(index + 1, /*forward*/true);
-                                if (cell is not null)
+                                if (cell != null)
                                 {
                                     cellMargin = cell.Margin;
                                     cellMargin.Top += spaceToFree;
@@ -1805,7 +1805,7 @@ namespace System.Windows.Forms
                     if (Row.Cells.Count > 0 && (spaceToFree > freedSpace))
                     {
                         ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward*/false);
-                        if (lastCell is not null)
+                        if (lastCell != null)
                         {
                             freedSpace += DisplayRectangle.Bottom - lastCell.Bounds.Bottom;
                         }
@@ -1850,7 +1850,7 @@ namespace System.Windows.Forms
                     if (Row.Cells.Count == 1)
                     {
                         cell = GetNextVisibleCell(index,/*forward*/true);
-                        if (cell is not null)
+                        if (cell != null)
                         {
                             cellMargin = cell.Margin;
                             cellMargin.Top += freedSpace;
@@ -1879,7 +1879,7 @@ namespace System.Windows.Forms
                     // take a look at the last guy.  if his right edge exceeds
                     // the new bounds, then we should go ahead and push him into view.
                     ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward=*/false);
-                    int spaceToFree = (lastCell is not null) ? lastCell.Bounds.Bottom - newBounds.Height : 0;
+                    int spaceToFree = (lastCell != null) ? lastCell.Bounds.Bottom - newBounds.Height : 0;
 
                     if (spaceToFree > 0)
                     {
@@ -1985,7 +1985,7 @@ namespace System.Windows.Forms
                             if (index < Row.ControlsInternal.Count - 1)
                             {
                                 ToolStripPanelCell nextCell = GetNextVisibleCell(index + 1,  /*forward*/true);
-                                if (nextCell is not null)
+                                if (nextCell != null)
                                 {
                                     Padding nextCellMargin = nextCell.Margin;
 
@@ -2024,7 +2024,7 @@ namespace System.Windows.Forms
                                 ToolStripPanelCell lastCell = GetNextVisibleCell(Row.Cells.Count - 1,  /*forward*/false);
 
                                 // count the stuff at the end of the row as freed space
-                                if (nextCell is not null && lastCell is not null)
+                                if (nextCell != null && lastCell != null)
                                 {
                                     Padding lastCellMargin = lastCell.Margin;
                                     lastCellMargin.Top = Math.Max(0, locationToDrag.Y - nextCell.Bounds.Bottom);
@@ -2066,7 +2066,7 @@ namespace System.Windows.Forms
                             if (Row.Cells.Count > 0)
                             {
                                 ToolStripPanelCell cell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward*/false);
-                                if (cell is not null)
+                                if (cell != null)
                                 {
                                     Padding cellMargin = cell.Margin;
                                     cellMargin.Top = Math.Max(0, locationToDrag.Y - Row.Margin.Top);
@@ -2099,7 +2099,7 @@ namespace System.Windows.Forms
 
                             // add the space occupied by the cell to the next one.
                             ToolStripPanelCell nextCell = GetNextVisibleCell(index + 1, /*forward*/true);
-                            if (nextCell is not null)
+                            if (nextCell != null)
                             {
                                 Padding nextCellMargin = nextCell.Margin;
                                 nextCellMargin.Top += spaceOccupiedByCell;
@@ -2203,7 +2203,7 @@ namespace System.Windows.Forms
 
                 ToolStripPanel currentOwner = ToolStripPanel;
 
-                if (currentOwner is not null)
+                if (currentOwner != null)
                 {
                     currentOwner.SuspendLayout();
                 }
@@ -2217,7 +2217,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner is not null)
+                    if (currentOwner != null)
                     {
                         currentOwner.ResumeLayout();
                     }
@@ -2238,7 +2238,7 @@ namespace System.Windows.Forms
 
             public virtual void Clear()
             {
-                if (owner is not null)
+                if (owner != null)
                 {
                     ToolStripPanel.SuspendLayout();
                 }
@@ -2252,7 +2252,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (owner is not null)
+                    if (owner != null)
                     {
                         ToolStripPanel.ResumeLayout();
                     }
@@ -2337,7 +2337,7 @@ namespace System.Windows.Forms
             /// </summary>
             private void OnAfterRemove(Control control, int index)
             {
-                if (owner is not null)
+                if (owner != null)
                 {
                     // unfortunately we dont know the index of the control in the ToolStripPanel's
                     // control collection, as all rows share this collection.
@@ -2352,16 +2352,16 @@ namespace System.Windows.Forms
 
             private void OnAdd(ISupportToolStripPanel controlToBeDragged, int index)
             {
-                if (owner is not null)
+                if (owner != null)
                 {
                     LayoutTransaction layoutTransaction = null;
-                    if (ToolStripPanel is not null && ToolStripPanel.ParentInternal is not null)
+                    if (ToolStripPanel != null && ToolStripPanel.ParentInternal != null)
                     {
                         layoutTransaction = new LayoutTransaction(ToolStripPanel, ToolStripPanel.ParentInternal, PropertyNames.Parent);
                     }
                     try
                     {
-                        if (controlToBeDragged is not null)
+                        if (controlToBeDragged != null)
                         {
                             controlToBeDragged.ToolStripPanelRow = owner;
 
@@ -2374,7 +2374,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (layoutTransaction is not null)
+                        if (layoutTransaction != null)
                         {
                             layoutTransaction.Dispose();
                         }
@@ -2442,7 +2442,7 @@ namespace System.Windows.Forms
                     get
                     {
                         ToolStripPanelCell cell = arrayListEnumerator.Current as ToolStripPanelCell;
-                        Debug.Assert(cell is not null, "Expected ToolStripPanel cells only!!!" + arrayListEnumerator.Current.GetType().ToString());
+                        Debug.Assert(cell != null, "Expected ToolStripPanel cells only!!!" + arrayListEnumerator.Current.GetType().ToString());
                         return cell?.Control;
                     }
                 }

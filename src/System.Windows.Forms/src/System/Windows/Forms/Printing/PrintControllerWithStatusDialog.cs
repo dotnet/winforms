@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (underlyingController is not null)
+                if (underlyingController != null)
                 {
                     return underlyingController.IsPreview;
                 }
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             }
             catch
             {
-                if (backgroundThread is not null)
+                if (backgroundThread != null)
                 {
                     backgroundThread.Stop();
                 }
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (backgroundThread is not null && backgroundThread.canceled)
+                if (backgroundThread != null && backgroundThread.canceled)
                 {
                     e.Cancel = true;
                 }
@@ -91,12 +91,12 @@ namespace System.Windows.Forms
         {
             base.OnStartPage(document, e);
 
-            if (backgroundThread is not null)
+            if (backgroundThread != null)
             {
                 backgroundThread.UpdateLabel();
             }
             Graphics result = underlyingController.OnStartPage(document, e);
-            if (backgroundThread is not null && backgroundThread.canceled)
+            if (backgroundThread != null && backgroundThread.canceled)
             {
                 e.Cancel = true;
             }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
         public override void OnEndPage(PrintDocument document, PrintPageEventArgs e)
         {
             underlyingController.OnEndPage(document, e);
-            if (backgroundThread is not null && backgroundThread.canceled)
+            if (backgroundThread != null && backgroundThread.canceled)
             {
                 e.Cancel = true;
             }
@@ -124,12 +124,12 @@ namespace System.Windows.Forms
         public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
         {
             underlyingController.OnEndPrint(document, e);
-            if (backgroundThread is not null && backgroundThread.canceled)
+            if (backgroundThread != null && backgroundThread.canceled)
             {
                 e.Cancel = true;
             }
 
-            if (backgroundThread is not null)
+            if (backgroundThread != null)
             {
                 backgroundThread.Stop();
             }
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
                 {
                     lock (this)
                     {
-                        if (dialog is not null)
+                        if (dialog != null)
                         {
                             dialog.Dispose();
                             dialog = null;
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
             {
                 lock (this)
                 {
-                    if (dialog is not null && dialog.IsHandleCreated)
+                    if (dialog != null && dialog.IsHandleCreated)
                     {
                         dialog.BeginInvoke(new MethodInvoker(dialog.Close));
                         return;
@@ -219,7 +219,7 @@ namespace System.Windows.Forms
             // Called from any thread
             internal void UpdateLabel()
             {
-                if (dialog is not null && dialog.IsHandleCreated)
+                if (dialog != null && dialog.IsHandleCreated)
                 {
                     dialog.BeginInvoke(new MethodInvoker(ThreadUnsafeUpdateLabel));
                     // Don't wait for a response

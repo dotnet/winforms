@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         {
             string? text = base.GetResultingText();
 
-            if (text is not null && _descriptionText is not null)
+            if (text != null && _descriptionText != null)
             {
                 text += '\n' + _descriptionText;
             }

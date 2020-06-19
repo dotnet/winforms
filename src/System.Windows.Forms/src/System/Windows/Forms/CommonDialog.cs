@@ -177,7 +177,7 @@ namespace System.Windows.Forms
             DialogResult result = DialogResult.Cancel;
             try
             {
-                if (owner is not null)
+                if (owner != null)
                 {
                     hwndOwner = Control.GetSafeHandle(owner);
                 }

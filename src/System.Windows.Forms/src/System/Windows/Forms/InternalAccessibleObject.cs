@@ -118,7 +118,7 @@ namespace System.Windows.Forms
         /// </summary>
         private object[]? AsArrayOfNativeAccessibles(object[]? accObjectArray)
         {
-            if (accObjectArray is not null && accObjectArray.Length > 0)
+            if (accObjectArray != null && accObjectArray.Length > 0)
             {
                 for (int i = 0; i < accObjectArray.Length; i++)
                 {
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
         object? IRawElementProviderSimple.GetPatternProvider(UIA patternId)
         {
             object? obj = publicIRawElementProviderSimple.GetPatternProvider(patternId);
-            if (obj is not null)
+            if (obj != null)
             {
                 // we always want to return the internal accessible object
                 if (patternId == UIA.ExpandCollapsePatternId)

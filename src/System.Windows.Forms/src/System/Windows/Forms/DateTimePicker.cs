@@ -236,7 +236,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if ((value is null && calendarFont is not null) || (value is not null && !value.Equals(calendarFont)))
+                if ((value is null && calendarFont != null) || (value != null && !value.Equals(calendarFont)))
                 {
                     calendarFont = value;
                     calendarFontHandleWrapper = null;
@@ -485,8 +485,8 @@ namespace System.Windows.Forms
 
             set
             {
-                if ((value is not null && !value.Equals(customFormat)) ||
-                    (value is null && customFormat is not null))
+                if ((value != null && !value.Equals(customFormat)) ||
+                    (value is null && customFormat != null))
                 {
                     customFormat = value;
 
@@ -1412,7 +1412,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeCalendarFont()
         {
-            return calendarFont is not null;
+            return calendarFont != null;
         }
 
         /// <summary>
@@ -1700,7 +1700,7 @@ namespace System.Windows.Forms
                     // This code was copied from the Everett sources.
                     Label previousLabel = PreviousLabel;
 
-                    if (previousLabel is not null)
+                    if (previousLabel != null)
                     {
                         char previousLabelMnemonic = WindowsFormsUtils.GetMnemonic(previousLabel.Text, false /*convertToUpperCase*/);
                         if (previousLabelMnemonic != (char)0)

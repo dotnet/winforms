@@ -85,7 +85,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (component is VSSDK.IVsPerPropertyBrowsing)
             {
                 HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)component).GetClassName(ref name);
-                if (hr.Succeeded() && name is not null)
+                if (hr.Succeeded() && name != null)
                 {
                     return name;
                 }
@@ -127,7 +127,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 bool success = false;
                 object value = GetPropertyValue(component, dispid, ref success);
 
-                if (success && value is not null)
+                if (success && value != null)
                 {
                     return value.ToString();
                 }
@@ -259,7 +259,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         entry = de.Value as Com2Properties;
 
-                        if (entry is not null && entry.TooOld)
+                        if (entry != null && entry.TooOld)
                         {
                             if (disposeList is null)
                             {
@@ -272,7 +272,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     // now run through the ones that are dead and dispose them.
                     // there's going to be a very small number of these.
                     //
-                    if (disposeList is not null)
+                    if (disposeList != null)
                     {
                         object oldKey;
                         for (int i = disposeList.Count - 1; i >= 0; i--)
@@ -280,7 +280,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             oldKey = disposeList[i];
                             entry = nativeProps[oldKey] as Com2Properties;
 
-                            if (entry is not null)
+                            if (entry != null)
                             {
                                 entry.Disposed -= new EventHandler(OnPropsInfoDisposed);
                                 entry.Dispose();
@@ -310,7 +310,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (propsInfo is null || !propsInfo.CheckValid())
             {
                 propsInfo = Com2TypeInfoProcessor.GetProperties(component);
-                if (propsInfo is not null)
+                if (propsInfo != null)
                 {
                     propsInfo.Disposed += new EventHandler(OnPropsInfoDisposed);
                     nativeProps.SetWeak(component, propsInfo);
@@ -362,7 +362,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             CheckClear(component);
 
             Com2Properties propsInfo = GetPropsInfo(component);
-            if (propsInfo is not null)
+            if (propsInfo != null)
             {
                 return propsInfo.DefaultProperty;
             }
@@ -455,16 +455,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         internal static void ResolveVariantTypeConverterAndTypeEditor(object propertyValue, ref TypeConverter currentConverter, Type editorType, ref object currentEditor)
         {
             object curValue = propertyValue;
-            if (curValue is not null && curValue is not null && !Convert.IsDBNull(curValue))
+            if (curValue != null && curValue != null && !Convert.IsDBNull(curValue))
             {
                 Type t = curValue.GetType();
                 TypeConverter subConverter = TypeDescriptor.GetConverter(t);
-                if (subConverter is not null && subConverter.GetType() != typeof(TypeConverter))
+                if (subConverter != null && subConverter.GetType() != typeof(TypeConverter))
                 {
                     currentConverter = subConverter;
                 }
                 object subEditor = TypeDescriptor.GetEditor(t, editorType);
-                if (subEditor is not null)
+                if (subEditor != null)
                 {
                     currentEditor = subEditor;
                 }

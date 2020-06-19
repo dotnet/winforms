@@ -29,12 +29,12 @@ namespace System.Windows.Forms
                 DataGridViewLinkCell dataGridViewCell = (DataGridViewLinkCell)Owner;
                 DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (dataGridView is not null && dataGridViewCell.RowIndex == -1)
+                if (dataGridView != null && dataGridViewCell.RowIndex == -1)
                 {
                     throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedCell);
                 }
 
-                if (dataGridViewCell.OwningColumn is not null && dataGridViewCell.OwningRow is not null)
+                if (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
                 {
                     dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
                 }

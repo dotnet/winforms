@@ -31,14 +31,14 @@ namespace System.Windows.Forms.Design
                 bool isTargetInherited = false;
                 ExpressionContext cxt = manager.Context[typeof(ExpressionContext)] as ExpressionContext;
 
-                if (cxt is not null && cxt.Expression == targetExpression)
+                if (cxt != null && cxt.Expression == targetExpression)
                 {
                     IComponent comp = cxt.Owner as IComponent;
 
-                    if (comp is not null)
+                    if (comp != null)
                     {
                         InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(comp)[typeof(InheritanceAttribute)];
-                        isTargetInherited = (ia is not null && ia.InheritanceLevel == InheritanceLevel.Inherited);
+                        isTargetInherited = (ia != null && ia.InheritanceLevel == InheritanceLevel.Inherited);
                     }
                 }
 
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design
                     {
                         InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(o)[typeof(InheritanceAttribute)];
 
-                        if (ia is not null)
+                        if (ia != null)
                         {
                             if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
                                 genCode = false;
@@ -71,12 +71,12 @@ namespace System.Windows.Forms.Design
                         statement.Method = methodRef;
                         CodeExpression serializedObj = SerializeToExpression(manager, o);
 
-                        if (serializedObj is not null && !typeof(Control).IsAssignableFrom(o.GetType()))
+                        if (serializedObj != null && !typeof(Control).IsAssignableFrom(o.GetType()))
                         {
                             serializedObj = new CodeCastExpression(typeof(Control), serializedObj);
                         }
 
-                        if (serializedObj is not null)
+                        if (serializedObj != null)
                         {
                             int col, row;
                             col = tableCollection.Container.GetColumn((Control)o);

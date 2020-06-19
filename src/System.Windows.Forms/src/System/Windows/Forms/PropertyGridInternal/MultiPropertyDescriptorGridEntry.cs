@@ -37,7 +37,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         break;
                     }
 
-                    if (comp.Site is not null)
+                    if (comp.Site != null)
                     {
                         if (c is null)
                         {
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
 
-                if (mergedProps is not null)
+                if (mergedProps != null)
                 {
                     ChildCollection.AddRange(mergedProps);
                 }
@@ -189,7 +189,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             IDesignerHost host = DesignerHost;
             DesignerTransaction trans = null;
 
-            if (host is not null)
+            if (host != null)
             {
                 trans = host.CreateTransaction();
             }
@@ -199,7 +199,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             finally
             {
-                if (trans is not null)
+                if (trans != null)
                 {
                     trans.Commit();
                 }
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected override void NotifyParentChange(GridEntry ge)
         {
             // now see if we need to notify the parent(s) up the chain
-            while (ge is not null &&
+            while (ge != null &&
                    ge is PropertyDescriptorGridEntry &&
                    ((PropertyDescriptorGridEntry)ge).propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
             {
@@ -228,13 +228,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // fire the change on that owner
-                if (ge is not null)
+                if (ge != null)
                 {
                     owner = ge.GetValueOwner();
 
                     IComponentChangeService changeService = ComponentChangeService;
 
-                    if (changeService is not null)
+                    if (changeService != null)
                     {
                         if (owner is Array ownerArray)
                         {
@@ -248,7 +248,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                     pd = ((MergePropertyDescriptor)pd)[i];
                                 }
 
-                                if (pd is not null)
+                                if (pd != null)
                                 {
                                     changeService.OnComponentChanging(ownerArray.GetValue(i), pd);
                                     changeService.OnComponentChanged(ownerArray.GetValue(i), pd, null, null);
@@ -278,12 +278,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     object[] objects = (object[])obj;
 
-                    if (objects is not null && objects.Length > 0)
+                    if (objects != null && objects.Length > 0)
                     {
                         IDesignerHost host = DesignerHost;
                         DesignerTransaction trans = null;
 
-                        if (host is not null)
+                        if (host != null)
                         {
                             trans = host.CreateTransaction(string.Format(SR.PropertyGridResetValue, PropertyName));
                         }
@@ -294,7 +294,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             {
                                 if (!OnComponentChanging())
                                 {
-                                    if (trans is not null)
+                                    if (trans != null)
                                     {
                                         trans.Cancel();
                                         trans = null;
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         finally
                         {
-                            if (trans is not null)
+                            if (trans != null)
                             {
                                 trans.Commit();
                             }
@@ -334,10 +334,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                             eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
                         }
 
-                        if (eventBindings is not null)
+                        if (eventBindings != null)
                         {
                             EventDescriptor descriptor = eventBindings.GetEvent(mpd[0]);
-                            if (descriptor is not null)
+                            if (descriptor != null)
                             {
                                 return ViewEvent(obj, null, descriptor, true);
                             }
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override bool OnComponentChanging()
         {
-            if (ComponentChangeService is not null)
+            if (ComponentChangeService != null)
             {
                 int cLength = objs.Length;
                 for (int i = 0; i < cLength; i++)
@@ -403,7 +403,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override void OnComponentChanged()
         {
-            if (ComponentChangeService is not null)
+            if (ComponentChangeService != null)
             {
                 int cLength = objs.Length;
                 for (int i = 0; i < cLength; i++)

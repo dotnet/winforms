@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             //use the adornerWindow as an overlay
             IOverlayService os = (IOverlayService)serviceProvider.GetService(typeof(IOverlayService));
-            if (os is not null)
+            if (os != null)
             {
                 _adornerWindowIndex = os.PushOverlay(_adornerWindow);
             }
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal bool HasCapture
         {
-            get => _captureBehavior is not null;
+            get => _captureBehavior != null;
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_behaviorStack is not null && _behaviorStack.Count > 0)
+                if (_behaviorStack != null && _behaviorStack.Count > 0)
                 {
                     return (_behaviorStack[0] as Behavior);
                 }
@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             // remove adorner window from overlay service
             IOverlayService os = (IOverlayService)_serviceProvider.GetService(typeof(IOverlayService));
-            if (os is not null)
+            if (os != null)
             {
                 os.RemoveOverlay(_adornerWindow);
             }
@@ -221,7 +221,7 @@ namespace System.Windows.Forms.Design.Behavior
                 menuCommandHandler = menuCommandService as MenuCommandHandler;
             }
 
-            if (menuCommandHandler is not null && _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
+            if (menuCommandHandler != null && _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
                 IMenuCommandService oldMenuCommandService = menuCommandHandler.MenuService;
                 host.RemoveService(typeof(IMenuCommandService));
@@ -295,7 +295,7 @@ namespace System.Windows.Forms.Design.Behavior
             finally
             {
                 // It's possible we did not receive an EndDrag, and therefore we weren't able to cleanup the drag.  We will do that here. Scenarios where this happens: dragging from designer to recycle-bin, or over the taskbar.
-                if (dropSourceBehavior is not null)
+                if (dropSourceBehavior != null)
                 {
                     dropSourceBehavior.CleanupDrag();
                 }
@@ -415,7 +415,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Behavior GetNextBehavior(Behavior behavior)
         {
-            if (_behaviorStack is not null && _behaviorStack.Count > 0)
+            if (_behaviorStack != null && _behaviorStack.Count > 0)
             {
                 int index = _behaviorStack.IndexOf(behavior);
                 if ((index != -1) && (index < _behaviorStack.Count - 1))
@@ -492,7 +492,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 _adornerWindow.Capture = false;
                 // Defensive:  adornerWindow should get a WM_CAPTURECHANGED, but do this by hand if it didn't.
-                if (_captureBehavior is not null)
+                if (_captureBehavior != null)
                 {
                     OnLoseCapture();
                     Debug.Assert(_captureBehavior is null, "OnLostCapture should have cleared captureBehavior");
@@ -521,7 +521,7 @@ namespace System.Windows.Forms.Design.Behavior
             // Should we catch this
             _behaviorStack.Insert(0, behavior);
             // If there is a capture behavior, and it isn't this behavior, notify it that it no longer has capture.
-            if (_captureBehavior is not null && _captureBehavior != behavior)
+            if (_captureBehavior != null && _captureBehavior != behavior)
             {
                 OnLoseCapture();
             }
@@ -540,10 +540,10 @@ namespace System.Windows.Forms.Design.Behavior
 
             //VSWhidbey #373836. Since we are now capturing all mouse messages, we might miss some WM_MOUSEACTIVATE which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window, let's activate it here.
             IUIService uiService = (IUIService)_serviceProvider.GetService(typeof(IUIService));
-            if (uiService is not null)
+            if (uiService != null)
             {
                 IWin32Window hwnd = uiService.GetDialogOwnerWindow();
-                if (hwnd is not null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != User32.GetActiveWindow())
+                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != User32.GetActiveWindow())
                 {
                     User32.SetActiveWindow(hwnd.Handle);
                 }
@@ -561,7 +561,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal void OnLoseCapture()
         {
-            if (_captureBehavior is not null)
+            if (_captureBehavior != null)
             {
                 Behavior b = _captureBehavior;
                 _captureBehavior = null;
@@ -640,7 +640,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 s_adornerWindowList.Remove(this);
                 // unregister the mouse hook once all adorner windows have been disposed.
-                if (s_adornerWindowList.Count == 0 && s_mouseHook is not null)
+                if (s_adornerWindowList.Count == 0 && s_mouseHook != null)
                 {
                     s_mouseHook.Dispose();
                     s_mouseHook = null;
@@ -655,7 +655,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (disposing)
                 {
-                    if (_designerFrame is not null)
+                    if (_designerFrame != null)
                     {
                         _designerFrame = null;
                     }
@@ -1094,7 +1094,7 @@ namespace System.Windows.Forms.Design.Behavior
                     if (_isHooked && nCode == User32.HC.ACTION)
                     {
                         User32.MOUSEHOOKSTRUCT* mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
-                        if (mhs is not null)
+                        if (mhs != null)
                         {
                             try
                             {
@@ -1222,7 +1222,7 @@ namespace System.Windows.Forms.Design.Behavior
                 for (int j = 0; j < _adorners[i].Glyphs.Count; j++)
                 {
                     Cursor hitTestCursor = _adorners[i].Glyphs[j].GetHitTest(pt);
-                    if (hitTestCursor is not null)
+                    if (hitTestCursor != null)
                     {
                         // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave. VSWhidbey #396611
                         Glyph newGlyph = _adorners[i].Glyphs[j];
@@ -1246,7 +1246,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (_validDragArgs is null)
             {
                 Cursor cursor = Cursors.Default;
-                if ((_behaviorStack is not null) && (_behaviorStack.Count > 0))
+                if ((_behaviorStack != null) && (_behaviorStack.Count > 0))
                 {
                     if (_behaviorStack[0] is Behavior behavior)
                     {
@@ -1337,13 +1337,13 @@ namespace System.Windows.Forms.Design.Behavior
         private MenuCommand FindCommand(CommandID commandID, IMenuCommandService menuService)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior is not null)
+            if (behavior != null)
             {
                 //if the behavior wants all commands disabled..
                 if (behavior.DisableAllCommands)
                 {
                     MenuCommand menuCommand = menuService.FindCommand(commandID);
-                    if (menuCommand is not null)
+                    if (menuCommand != null)
                     {
                         menuCommand.Enabled = false;
                     }
@@ -1353,7 +1353,7 @@ namespace System.Windows.Forms.Design.Behavior
                 else
                 {
                     MenuCommand menuCommand = behavior.FindCommand(commandID);
-                    if (menuCommand is not null)
+                    if (menuCommand != null)
                     {
                         // the behavior chose to interrupt - so return the new command
                         return menuCommand;
@@ -1365,12 +1365,12 @@ namespace System.Windows.Forms.Design.Behavior
 
         private Behavior GetAppropriateBehavior(Glyph g)
         {
-            if (_behaviorStack is not null && _behaviorStack.Count > 0)
+            if (_behaviorStack != null && _behaviorStack.Count > 0)
             {
                 return _behaviorStack[0] as Behavior;
             }
 
-            if (g is not null && g.Behavior is not null)
+            if (g != null && g.Behavior != null)
             {
                 return g.Behavior;
             }
@@ -1396,7 +1396,7 @@ namespace System.Windows.Forms.Design.Behavior
                     _toolboxSvc = (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
                 }
 
-                if (_toolboxSvc is not null && _toolboxSvc.SetCursor())
+                if (_toolboxSvc != null && _toolboxSvc.SetCursor())
                 {
                     cursor = new Cursor(User32.GetCursor());
                 }
@@ -1406,14 +1406,14 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void InvokeMouseEnterLeave(Glyph leaveGlyph, Glyph enterGlyph)
         {
-            if (leaveGlyph is not null)
+            if (leaveGlyph != null)
             {
-                if (enterGlyph is not null && leaveGlyph.Equals(enterGlyph))
+                if (enterGlyph != null && leaveGlyph.Equals(enterGlyph))
                 {
                     //same glyph - no change
                     return;
                 }
-                if (_validDragArgs is not null)
+                if (_validDragArgs != null)
                 {
                     OnDragLeave(leaveGlyph, EventArgs.Empty);
                 }
@@ -1423,9 +1423,9 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            if (enterGlyph is not null)
+            if (enterGlyph != null)
             {
-                if (_validDragArgs is not null)
+                if (_validDragArgs != null)
                 {
                     OnDragEnter(enterGlyph, _validDragArgs);
                 }
@@ -1453,7 +1453,7 @@ namespace System.Windows.Forms.Design.Behavior
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tForwarding to behavior");
             behavior.OnDragEnter(g, e);
 
-            if (g is not null && g is ControlBodyGlyph && e.Effect == DragDropEffects.None)
+            if (g != null && g is ControlBodyGlyph && e.Effect == DragDropEffects.None)
             {
                 _dragEnterReplies[g] = this; // dummy value, we just need to set something.
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tCalled DragEnter on this glyph. Caching");
@@ -1615,7 +1615,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void TestHook_GetRecentSnapLines(ref Message m)
         {
             string snapLineInfo = string.Empty;
-            if (_testHook_RecentSnapLines is not null)
+            if (_testHook_RecentSnapLines != null)
             {
                 foreach (string line in _testHook_RecentSnapLines)
                 {
@@ -1699,7 +1699,7 @@ namespace System.Windows.Forms.Design.Behavior
                 return;
             }
             if (_hitTestedGlyph is null ||
-               (_hitTestedGlyph is not null && !_dragEnterReplies.ContainsKey(_hitTestedGlyph)))
+               (_hitTestedGlyph != null && !_dragEnterReplies.ContainsKey(_hitTestedGlyph)))
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tFound glyph, forwarding to behavior");
                 behavior.OnDragOver(_hitTestedGlyph, e);

@@ -16,13 +16,13 @@ namespace System.ComponentModel.Design
         internal DesignerActionUIService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            if (serviceProvider is not null)
+            if (serviceProvider != null)
             {
                 _serviceProvider = serviceProvider;
                 IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
                 host.AddService(typeof(DesignerActionUIService), this);
                 _designerActionService = serviceProvider.GetService(typeof(DesignerActionService)) as DesignerActionService;
-                Debug.Assert(_designerActionService is not null, "we should have created and registered the DAService first");
+                Debug.Assert(_designerActionService != null, "we should have created and registered the DAService first");
             }
         }
 
@@ -31,10 +31,10 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Dispose()
         {
-            if (_serviceProvider is not null)
+            if (_serviceProvider != null)
             {
                 IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-                if (host is not null)
+                if (host != null)
                 {
                     host.RemoveService(typeof(DesignerActionUIService));
                 }
@@ -79,21 +79,21 @@ namespace System.ComponentModel.Design
         public bool ShouldAutoShow(IComponent component)
         {
             // Check the designer options...
-            if (_serviceProvider is not null)
+            if (_serviceProvider != null)
             {
                 if (_serviceProvider.GetService(typeof(DesignerOptionService)) is DesignerOptionService opts)
                 {
                     PropertyDescriptor p = opts.Options.Properties["ObjectBoundSmartTagAutoShow"];
-                    if (p is not null && p.PropertyType == typeof(bool) && !(bool)p.GetValue(null))
+                    if (p != null && p.PropertyType == typeof(bool) && !(bool)p.GetValue(null))
                     {
                         return false;
                     }
                 }
             }
-            if (_designerActionService is not null)
+            if (_designerActionService != null)
             {
                 DesignerActionListCollection coll = _designerActionService.GetComponentActions(component);
-                if (coll is not null && coll.Count > 0)
+                if (coll != null && coll.Count > 0)
                 {
                     for (int i = 0; i < coll.Count; i++)
                     {

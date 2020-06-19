@@ -65,8 +65,8 @@ namespace System.Windows.Forms.Design
         private object GetProperty(string propertyName)
         {
             PropertyDescriptor getProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
-            Debug.Assert(getProperty is not null, "Could not find given property in control.");
-            if (getProperty is not null)
+            Debug.Assert(getProperty != null, "Could not find given property in control.");
+            if (getProperty != null)
             {
                 return getProperty.GetValue(_toolStrip);
             }
@@ -77,8 +77,8 @@ namespace System.Windows.Forms.Design
         private void ChangeProperty(string propertyName, object value)
         {
             PropertyDescriptor changingProperty = TypeDescriptor.GetProperties(_toolStrip)[propertyName];
-            Debug.Assert(changingProperty is not null, "Could not find given property in control.");
-            if (changingProperty is not null)
+            Debug.Assert(changingProperty != null, "Could not find given property in control.");
+            if (changingProperty != null)
             {
                 changingProperty.SetValue(_toolStrip, value);
             }
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Design
         {
             // Hide the Panel...
             DesignerActionUIService actionUIService = (DesignerActionUIService)_toolStrip.Site.GetService(typeof(DesignerActionUIService));
-            if (actionUIService is not null)
+            if (actionUIService != null)
             {
                 actionUIService.HideUI(_toolStrip);
             }

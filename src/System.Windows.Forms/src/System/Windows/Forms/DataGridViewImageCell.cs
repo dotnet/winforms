@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             get
             {
                 object description = Properties.GetObject(PropImageCellDescription);
-                if (description is not null)
+                if (description != null)
                 {
                     return (string)description;
                 }
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
                 if (ValueIsIcon != value)
                 {
                     ValueIsIconInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         if (RowIndex != -1)
                         {
@@ -209,7 +209,7 @@ namespace System.Windows.Forms
                     {
                         flags = (byte)(flags & ~DATAGRIDVIEWIMAGECELL_valueIsIcon);
                     }
-                    if (DataGridView is not null &&
+                    if (DataGridView != null &&
                         RowIndex != -1 &&
                         DataGridView.NewRowIndex == RowIndex &&
                         !DataGridView.VirtualMode)
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
             {
                 Type baseValueType = base.ValueType;
 
-                if (baseValueType is not null)
+                if (baseValueType != null)
                 {
                     return baseValueType;
                 }
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
             set
             {
                 base.ValueType = value;
-                ValueIsIcon = (value is not null && defaultTypeIcon.IsAssignableFrom(value));
+                ValueIsIcon = (value != null && defaultTypeIcon.IsAssignableFrom(value));
             }
         }
 
@@ -453,9 +453,9 @@ namespace System.Windows.Forms
             if (freeDimension == DataGridViewFreeDimension.Height &&
                 ImageLayout == DataGridViewImageCellLayout.Zoom)
             {
-                if (img is not null || ico is not null)
+                if (img != null || ico != null)
                 {
-                    if (img is not null)
+                    if (img != null)
                     {
                         int imgWidthAllowed = constraintSize.Width - borderAndPaddingWidths;
                         if (imgWidthAllowed <= 0 || img.Width == 0)
@@ -488,9 +488,9 @@ namespace System.Windows.Forms
             else if (freeDimension == DataGridViewFreeDimension.Width &&
                      ImageLayout == DataGridViewImageCellLayout.Zoom)
             {
-                if (img is not null || ico is not null)
+                if (img != null || ico != null)
                 {
-                    if (img is not null)
+                    if (img != null)
                     {
                         int imgHeightAllowed = constraintSize.Height - borderAndPaddingHeights;
                         if (imgHeightAllowed <= 0 || img.Height == 0)
@@ -522,11 +522,11 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (img is not null)
+                if (img != null)
                 {
                     preferredSize = new Size(img.Width, img.Height);
                 }
-                else if (ico is not null)
+                else if (ico != null)
                 {
                     preferredSize = new Size(ico.Width, ico.Height);
                 }
@@ -575,7 +575,7 @@ namespace System.Windows.Forms
                     if (defaultTypeImage.IsAssignableFrom(ValueType))
                     {
                         Image image = owningImageColumn.Image;
-                        if (image is not null)
+                        if (image != null)
                         {
                             return image;
                         }
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
                     else if (defaultTypeIcon.IsAssignableFrom(ValueType))
                     {
                         Icon icon = owningImageColumn.Icon;
-                        if (icon is not null)
+                        if (icon != null)
                         {
                             return icon;
                         }
@@ -769,7 +769,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle is not null);
+            Debug.Assert(cellStyle != null);
 
             if (paint && DataGridViewCell.PaintBorder(paintParts))
             {
@@ -811,7 +811,7 @@ namespace System.Windows.Forms
                     {
                         ico = formattedValue as Icon;
                     }
-                    if (ico is not null || img is not null)
+                    if (ico != null || img != null)
                     {
                         DataGridViewImageCellLayout imageLayout = ImageLayout;
                         if (imageLayout == DataGridViewImageCellLayout.NotSet)
@@ -837,7 +837,7 @@ namespace System.Windows.Forms
                                 }
                                 if (DataGridViewCell.PaintContentForeground(paintParts))
                                 {
-                                    if (img is not null)
+                                    if (img != null)
                                     {
                                         //
 
@@ -872,7 +872,7 @@ namespace System.Windows.Forms
                                     //paint the image
                                     Region reg = g.Clip;
                                     g.SetClip(Rectangle.Intersect(Rectangle.Intersect(imgBounds2, imgBounds), Rectangle.Truncate(g.VisibleClipBounds)));
-                                    if (img is not null)
+                                    if (img != null)
                                     {
                                         g.DrawImage(img, imgBounds2);
                                     }

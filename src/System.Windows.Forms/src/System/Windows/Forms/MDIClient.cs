@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             get
             {
                 Image result = base.BackgroundImage;
-                if (result is null && ParentInternal is not null)
+                if (result is null && ParentInternal != null)
                 {
                     result = ParentInternal.BackgroundImage;
                 }
@@ -66,7 +66,7 @@ namespace System.Windows.Forms
             get
             {
                 Image backgroundImage = BackgroundImage;
-                if (backgroundImage is not null && ParentInternal is not null)
+                if (backgroundImage != null && ParentInternal != null)
                 {
                     ImageLayout imageLayout = base.BackgroundImageLayout;
                     if (imageLayout != ParentInternal.BackgroundImageLayout)
@@ -106,13 +106,13 @@ namespace System.Windows.Forms
                     idFirstChild = 1
                 };
                 ISite site = ParentInternal?.Site;
-                if (site is not null && site.DesignMode)
+                if (site != null && site.DesignMode)
                 {
                     cp.Style |= (int)User32.WS.DISABLED;
                     SetState(States.Enabled, false);
                 }
 
-                if (RightToLeft == RightToLeft.Yes && ParentInternal is not null && ParentInternal.IsMirrored)
+                if (RightToLeft == RightToLeft.Yes && ParentInternal != null && ParentInternal.IsMirrored)
                 {
                     //We want to turn on mirroring for MdiClient explicitly.
                     cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
         protected override void OnResize(EventArgs e)
         {
             ISite site = ParentInternal?.Site;
-            if (site is not null && site.DesignMode && Handle != IntPtr.Zero)
+            if (site != null && site.DesignMode && Handle != IntPtr.Zero)
             {
                 SetWindowRgn();
             }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < Controls.Count; i++)
                     {
                         Control ctl = Controls[i];
-                        if (ctl is not null && ctl is Form)
+                        if (ctl != null && ctl is Form)
                         {
                             Form child = (Form)ctl;
                             // Only adjust the window position for visible MDI Child windows to prevent
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
             switch ((User32.WM)m.Msg)
             {
                 case User32.WM.CREATE:
-                    if (ParentInternal is not null && ParentInternal.Site is not null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
+                    if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                     {
                         SetWindowRgn();
                     }
@@ -389,7 +389,7 @@ namespace System.Windows.Forms
                     {
                         childForm = MdiChildren[0];
                     }
-                    if (childForm is not null && childForm.Visible)
+                    if (childForm != null && childForm.Visible)
                     {
                         childForm.Active = true;
                     }

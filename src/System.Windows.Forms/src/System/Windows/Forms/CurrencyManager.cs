@@ -593,12 +593,12 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if (property is not null && (list is IBindingList) && ((IBindingList)list).SupportsSearching)
+            if (property != null && (list is IBindingList) && ((IBindingList)list).SupportsSearching)
             {
                 return ((IBindingList)list).Find(property, key);
             }
 
-            if (property is not null)
+            if (property != null)
             {
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms
                 {
                     shouldBind = true;
                     // we need to put the listPosition at the beginning of the list if the list is not empty
-                    listposition = (list is not null && list.Count != 0) ? 0 : -1;
+                    listposition = (list != null && list.Count != 0) ? 0 : -1;
                     UpdateIsBinding();
                 }
             }
@@ -1054,8 +1054,8 @@ namespace System.Windows.Forms
 
         private void UpdateIsBinding(bool raiseItemChangedEvent)
         {
-            bool newBound = list is not null && list.Count > 0 && shouldBind && listposition != -1;
-            if (list is not null)
+            bool newBound = list != null && list.Count > 0 && shouldBind && listposition != -1;
+            if (list != null)
             {
                 if (bound != newBound)
                 {

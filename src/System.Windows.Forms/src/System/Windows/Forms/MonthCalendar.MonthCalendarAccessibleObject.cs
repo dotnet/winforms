@@ -56,13 +56,13 @@ namespace System.Windows.Forms
                 get
                 {
                     var help = base.Help;
-                    if (help is not null)
+                    if (help != null)
                     {
                         return help;
                     }
                     else
                     {
-                        if (_owner is not null)
+                        if (_owner != null)
                         {
                             return _owner.GetType().Name + "(" + _owner.GetType().BaseType.Name + ")";
                         }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string name = base.Name;
-                    if (name is not null)
+                    if (name != null)
                     {
                         return name;
                     }
@@ -640,7 +640,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject calendarChildAccessibleObject = GetCalendarChildAccessibleObject(selectionStart, selectionEnd);
 
-                if (calendarChildAccessibleObject is not null)
+                if (calendarChildAccessibleObject != null)
                 {
                     calendarChildAccessibleObject.RaiseAutomationEvent(automationEventId);
 

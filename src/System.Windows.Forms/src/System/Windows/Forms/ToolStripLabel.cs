@@ -223,12 +223,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void InvalidateLinkFonts()
         {
-            if (linkFont is not null)
+            if (linkFont != null)
             {
                 linkFont.Dispose();
             }
 
-            if (hoverLinkFont is not null && hoverLinkFont != linkFont)
+            if (hoverLinkFont != null && hoverLinkFont != linkFont)
             {
                 hoverLinkFont.Dispose();
             }
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
             if (IsLink)
             {
                 ToolStrip parent = Parent;
-                if (parent is not null)
+                if (parent != null)
                 {
                     lastCursor = parent.Cursor;
                     parent.Cursor = Cursors.Hand;
@@ -262,7 +262,7 @@ namespace System.Windows.Forms
             if (IsLink)
             {
                 ToolStrip parent = Parent;
-                if (parent is not null)
+                if (parent != null)
                 {
                     parent.Cursor = lastCursor;
                 }
@@ -323,7 +323,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner is not null)
+            if (Owner != null)
             {
                 ToolStripRenderer renderer = Renderer;
 
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
         protected internal override bool ProcessMnemonic(char charCode)
         {
             // checking IsMnemonic is not necessary - toolstrip does this for us.
-            if (ParentInternal is not null)
+            if (ParentInternal != null)
             {
                 if (!CanSelect)
                 {

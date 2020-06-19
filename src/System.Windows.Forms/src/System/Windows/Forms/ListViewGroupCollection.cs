@@ -191,7 +191,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < group.Items.Count; i++)
             {
                 ListViewItem item = group.Items[i];
-                if (item.ListView is not null && item.ListView != _listView)
+                if (item.ListView != null && item.ListView != _listView)
                 {
                     throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text));
                 }

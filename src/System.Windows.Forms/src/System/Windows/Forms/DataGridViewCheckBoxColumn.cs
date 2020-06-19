@@ -44,7 +44,7 @@ namespace System.Windows.Forms
             get => base.CellTemplate;
             set
             {
-                if (value is not null && !(value is DataGridViewCheckBoxCell))
+                if (value != null && !(value is DataGridViewCheckBoxCell))
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewCheckBoxCell"));
                 }
@@ -88,7 +88,7 @@ namespace System.Windows.Forms
                 if (FalseValue != value)
                 {
                     CheckBoxCellTemplate.FalseValueInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
                 if (FlatStyle != value)
                 {
                     CheckBoxCellTemplate.FlatStyle = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
                 if (IndeterminateValue != value)
                 {
                     CheckBoxCellTemplate.IndeterminateValueInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -197,7 +197,7 @@ namespace System.Windows.Forms
                 if (ThreeState != value)
                 {
                     CheckBoxCellTemplate.ThreeStateInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
                 if (TrueValue != value)
                 {
                     CheckBoxCellTemplate.TrueValueInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -294,14 +294,14 @@ namespace System.Windows.Forms
                     !defaultCellStyle.ForeColor.IsEmpty ||
                     !defaultCellStyle.SelectionBackColor.IsEmpty ||
                     !defaultCellStyle.SelectionForeColor.IsEmpty ||
-                    defaultCellStyle.Font is not null ||
+                    defaultCellStyle.Font != null ||
                     !defaultCellStyle.NullValue.Equals(defaultNullValue) ||
                     !defaultCellStyle.IsDataSourceNullValueDefault ||
                     !string.IsNullOrEmpty(defaultCellStyle.Format) ||
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
-                    defaultCellStyle.Tag is not null ||
+                    defaultCellStyle.Tag != null ||
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 

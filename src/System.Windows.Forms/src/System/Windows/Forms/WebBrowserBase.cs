@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                 SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
                 try
                 {
-                    if (axOleInPlaceObject is not null)
+                    if (axOleInPlaceObject != null)
                     {
                         // Give the ActiveX control a chance to process this key by calling
                         // IOleInPlaceActiveObject::TranslateAccelerator.
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
                 case User32.WM.MOUSEACTIVATE:
                     if (!DesignMode)
                     {
-                        if (containingControl is not null && containingControl.ActiveControl != this)
+                        if (containingControl != null && containingControl.ActiveControl != this)
                         {
                             Focus();
                         }
@@ -465,7 +465,7 @@ namespace System.Windows.Forms
                     // up to InPlaceActivate that the ActiveX control grabs our handle).
                     TransitionDownTo(WebBrowserHelper.AXState.Running);
 
-                    if (axWindow is not null)
+                    if (axWindow != null)
                     {
                         axWindow.ReleaseHandle();
                     }
@@ -489,7 +489,7 @@ namespace System.Windows.Forms
         protected override void OnParentChanged(EventArgs e)
         {
             Control parent = ParentInternal;
-            if ((Visible && parent is not null && parent.Visible) || IsHandleCreated)
+            if ((Visible && parent != null && parent.Visible) || IsHandleCreated)
             {
                 TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
             }
@@ -778,12 +778,12 @@ namespace System.Windows.Forms
             {
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
                 this.selectionStyle = selectionStyle;
-                if (iss is not null && iss.GetComponentSelected(this))
+                if (iss != null && iss.GetComponentSelected(this))
                 {
                     // The ActiveX Host designer will offer an extender property
                     // called "SelectionStyle"
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
-                    if (prop is not null && prop.PropertyType == typeof(int))
+                    if (prop != null && prop.PropertyType == typeof(int))
                     {
                         prop.SetValue(this, (int)selectionStyle);
                     }
@@ -798,7 +798,7 @@ namespace System.Windows.Forms
                 SetAXHostState(WebBrowserHelper.addedSelectionHandler, true);
 
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
-                if (iss is not null)
+                if (iss != null)
                 {
                     iss.SelectionChanging += SelectionChangeHandler;
                 }
@@ -813,7 +813,7 @@ namespace System.Windows.Forms
                 SetAXHostState(WebBrowserHelper.addedSelectionHandler, false);
 
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
-                if (iss is not null)
+                if (iss != null)
                 {
                     iss.SelectionChanging -= SelectionChangeHandler;
                 }
@@ -825,7 +825,7 @@ namespace System.Windows.Forms
         {
             User32.SetParent(hwnd, new HandleRef(this, Handle));
 
-            if (axWindow is not null)
+            if (axWindow != null)
             {
                 axWindow.ReleaseHandle();
             }
@@ -853,10 +853,10 @@ namespace System.Windows.Forms
         internal void MakeDirty()
         {
             ISite iSite = Site;
-            if (iSite is not null)
+            if (iSite != null)
             {
                 IComponentChangeService ccs = (IComponentChangeService)iSite.GetService(typeof(IComponentChangeService));
-                if (ccs is not null)
+                if (ccs != null)
                 {
                     ccs.OnComponentChanging(this, null);
                     ccs.OnComponentChanged(this, null, null, null);
@@ -919,7 +919,7 @@ namespace System.Windows.Forms
                     throw Marshal.GetExceptionForHR((int)hr);
                 }
 
-                Debug.Assert(activeXInstance is not null, "w/o an exception being thrown we must have an object...");
+                Debug.Assert(activeXInstance != null, "w/o an exception being thrown we must have an object...");
 
                 // We are now loaded.
                 ActiveXState = WebBrowserHelper.AXState.Loaded;
@@ -942,7 +942,7 @@ namespace System.Windows.Forms
                 {
                     //
                     // Release the activeXInstance
-                    if (activeXInstance is not null)
+                    if (activeXInstance != null)
                     {
                         //
                         // Lets first get the cached interface pointers of activeXInstance released.
@@ -1003,7 +1003,7 @@ namespace System.Windows.Forms
                 //
                 // Remove ourselves from our parent container...
                 WebBrowserContainer parentContainer = GetParentContainer();
-                if (parentContainer is not null)
+                if (parentContainer != null)
                 {
                     parentContainer.RemoveControl(this);
                 }
@@ -1049,7 +1049,7 @@ namespace System.Windows.Forms
                 // First, lets make sure we transfer the ContainingControl's ActiveControl
                 // before we InPlaceDeactivate.
                 ContainerControl f = ContainingControl;
-                if (f is not null && f.ActiveControl == this)
+                if (f != null && f.ActiveControl == this)
                 {
                     f.SetActiveControl(null);
                 }
@@ -1111,7 +1111,7 @@ namespace System.Windows.Forms
 
         private void AttachInterfacesInternal()
         {
-            Debug.Assert(activeXInstance is not null, "The native control is null");
+            Debug.Assert(activeXInstance != null, "The native control is null");
             axOleObject = (Ole32.IOleObject)activeXInstance;
             axOleInPlaceObject = (Ole32.IOleInPlaceObject)activeXInstance;
             axOleInPlaceActiveObject = (Ole32.IOleInPlaceActiveObject)activeXInstance;
@@ -1156,7 +1156,7 @@ namespace System.Windows.Forms
             if (DesignMode)
             {
                 ISelectionService iss = WebBrowserHelper.GetSelectionService(this);
-                if (iss is not null)
+                if (iss != null)
                 {
                     // We are no longer selected.
                     if (!iss.GetComponentSelected(this))
@@ -1176,7 +1176,7 @@ namespace System.Windows.Forms
                         //
                         // The AX Host designer will offer an extender property called "SelectionStyle"
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(this)["SelectionStyle"];
-                        if (prop is not null && prop.PropertyType == typeof(int))
+                        if (prop != null && prop.PropertyType == typeof(int))
                         {
                             int curSelectionStyle = (int)prop.GetValue(this);
                             if (curSelectionStyle != (int)selectionStyle)
@@ -1245,13 +1245,13 @@ namespace System.Windows.Forms
         //Find the uppermost ContainerControl that this control lives in
         internal ContainerControl FindContainerControlInternal()
         {
-            if (Site is not null)
+            if (Site != null)
             {
                 IDesignerHost host = (IDesignerHost)Site.GetService(typeof(IDesignerHost));
-                if (host is not null)
+                if (host != null)
                 {
                     IComponent comp = host.RootComponent;
-                    if (comp is not null && comp is ContainerControl)
+                    if (comp != null && comp is ContainerControl)
                     {
                         return (ContainerControl)comp;
                     }
@@ -1259,7 +1259,7 @@ namespace System.Windows.Forms
             }
 
             ContainerControl cc = null;
-            for (Control control = this; control is not null; control = control.ParentInternal)
+            for (Control control = this; control != null; control = control.ParentInternal)
             {
                 if (control is ContainerControl tempCC)
                 {
@@ -1285,7 +1285,7 @@ namespace System.Windows.Forms
 
         private void AmbientChanged(Ole32.DispatchID dispid)
         {
-            if (activeXInstance is not null)
+            if (activeXInstance != null)
             {
                 try
                 {

@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Design
 
             DataGridViewCellStyle dgvCellStyle = context.Instance as DataGridViewCellStyle;
             ListControl listControl = context.Instance as ListControl;
-            Debug.Assert(listControl is not null || dgvCellStyle is not null, "this editor is used for the DataGridViewCellStyle::Format and the ListControl::FormatString properties");
+            Debug.Assert(listControl != null || dgvCellStyle != null, "this editor is used for the DataGridViewCellStyle::Format and the ListControl::FormatString properties");
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
 
             if (_formatStringDialog is null)
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Design
                 _formatStringDialog = new FormatStringDialog(context);
             }
 
-            if (listControl is not null)
+            if (listControl != null)
             {
                 _formatStringDialog.ListControl = listControl;
             }
@@ -47,9 +47,9 @@ namespace System.Windows.Forms.Design
 
             IComponentChangeService changeSvc = (IComponentChangeService)provider.GetService(typeof(IComponentChangeService));
 
-            if (changeSvc is not null)
+            if (changeSvc != null)
             {
-                if (dgvCellStyle is not null)
+                if (dgvCellStyle != null)
                 {
                     changeSvc.OnComponentChanging(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["Format"]);
                     changeSvc.OnComponentChanging(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["NullValue"]);
@@ -73,9 +73,9 @@ namespace System.Windows.Forms.Design
             // since the bindings may have changed, the properties listed in the properties window need to be refreshed
             TypeDescriptor.Refresh(context.Instance);
 
-            if (changeSvc is not null)
+            if (changeSvc != null)
             {
-                if (dgvCellStyle is not null)
+                if (dgvCellStyle != null)
                 {
                     changeSvc.OnComponentChanged(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["Format"], null, null);
                     changeSvc.OnComponentChanged(dgvCellStyle, TypeDescriptor.GetProperties(dgvCellStyle)["NullValue"], null, null);

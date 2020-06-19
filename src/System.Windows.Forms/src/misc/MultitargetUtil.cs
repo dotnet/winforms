@@ -20,9 +20,9 @@ namespace System.Resources
         {
             string assemblyQualifiedName = null;
 
-            if (type is not null)
+            if (type != null)
             {
-                if (typeNameConverter is not null)
+                if (typeNameConverter != null)
                 {
                     try
                     {

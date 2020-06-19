@@ -94,7 +94,7 @@ namespace System.Windows.Forms
         private Rectangle UpdateBounds(Rectangle originalBounds, bool drawText)
         {
             Rectangle resultBounds = originalBounds;
-            if (Item.ListView is not null && Item.ListView.View == View.Details)
+            if (Item.ListView != null && Item.ListView.View == View.Details)
             {
                 // Note: this logic will compute the bounds so they align w/ the system drawn bounds only
                 // for the default font.

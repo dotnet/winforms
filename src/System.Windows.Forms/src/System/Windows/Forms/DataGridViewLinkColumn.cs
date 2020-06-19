@@ -39,7 +39,7 @@ namespace System.Windows.Forms
                 if (!ActiveLinkColor.Equals(value))
                 {
                     ((DataGridViewLinkCell)CellTemplate).ActiveLinkColorInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
             get => base.CellTemplate;
             set
             {
-                if (value is not null && !(value is DataGridViewLinkCell))
+                if (value != null && !(value is DataGridViewLinkCell))
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewLinkCell"));
                 }
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
                 if (!LinkBehavior.Equals(value))
                 {
                     ((DataGridViewLinkCell)CellTemplate).LinkBehavior = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
                 if (!LinkColor.Equals(value))
                 {
                     ((DataGridViewLinkCell)CellTemplate).LinkColorInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                 if (!string.Equals(value, text, StringComparison.Ordinal))
                 {
                     text = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         if (UseColumnTextForLinkValue)
                         {
@@ -221,7 +221,7 @@ namespace System.Windows.Forms
                 if (TrackVisitedState != value)
                 {
                     ((DataGridViewLinkCell)CellTemplate).TrackVisitedStateInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -257,7 +257,7 @@ namespace System.Windows.Forms
                 if (UseColumnTextForLinkValue != value)
                 {
                     ((DataGridViewLinkCell)CellTemplate).UseColumnTextForLinkValueInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
                 if (!VisitedLinkColor.Equals(value))
                 {
                     ((DataGridViewLinkCell)CellTemplate).VisitedLinkColorInternal = value;
-                    if (DataGridView is not null)
+                    if (DataGridView != null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -335,7 +335,7 @@ namespace System.Windows.Forms
 
                 dataGridViewColumn = (DataGridViewLinkColumn)System.Activator.CreateInstance(thisType);
             }
-            if (dataGridViewColumn is not null)
+            if (dataGridViewColumn != null)
             {
                 base.CloneInternal(dataGridViewColumn);
                 dataGridViewColumn.Text = text;

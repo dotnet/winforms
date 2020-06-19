@@ -85,7 +85,7 @@ namespace System.Windows.Forms
                         if (ownerItem.Owner is ToolStripDropDownMenu menu)
                         {
                             Rectangle checkRectangle = menu.CheckRectangle;
-                            if (ownerItem.CheckedImage is not null)
+                            if (ownerItem.CheckedImage != null)
                             {
                                 int imageHeight = ownerItem.CheckedImage.Height;
                                 // make sure we're vertically centered

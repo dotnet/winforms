@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design.Serialization
         internal CodeMethodMap(CodeStatementCollection targetStatements, CodeMemberMethod method)
         {
             _method = method;
-            if (targetStatements is not null)
+            if (targetStatements != null)
             {
                 _targetStatements = targetStatements;
             }
@@ -185,37 +185,37 @@ namespace System.ComponentModel.Design.Serialization
 
         internal void Combine()
         {
-            if (_container is not null)
+            if (_container != null)
             {
                 _targetStatements.AddRange(_container);
             }
 
-            if (_locals is not null)
+            if (_locals != null)
             {
                 _targetStatements.AddRange(_locals);
             }
 
-            if (_fields is not null)
+            if (_fields != null)
             {
                 _targetStatements.AddRange(_fields);
             }
 
-            if (_variables is not null)
+            if (_variables != null)
             {
                 _targetStatements.AddRange(_variables);
             }
 
-            if (_begin is not null)
+            if (_begin != null)
             {
                 _targetStatements.AddRange(_begin);
             }
 
-            if (_statements is not null)
+            if (_statements != null)
             {
                 _targetStatements.AddRange(_statements);
             }
 
-            if (_end is not null)
+            if (_end != null)
             {
                 _targetStatements.AddRange(_end);
             }

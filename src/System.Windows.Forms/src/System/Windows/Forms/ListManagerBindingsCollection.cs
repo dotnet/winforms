@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()
         {
-            Debug.Assert(bindingManagerBase is not null, "How could a listmanagerbindingscollection not have a bindingManagerBase associated with it!");
+            Debug.Assert(bindingManagerBase != null, "How could a listmanagerbindingscollection not have a bindingManagerBase associated with it!");
             _bindingManagerBase = bindingManagerBase;
         }
 
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.BindingsCollectionAdd1, nameof(dataBinding));
             }
-            if (dataBinding.BindingManagerBase is not null)
+            if (dataBinding.BindingManagerBase != null)
             {
                 throw new ArgumentException(SR.BindingsCollectionAdd2, nameof(dataBinding));
             }

@@ -41,7 +41,7 @@ namespace System.ComponentModel.Design
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing && _inheritedComponents is not null)
+            if (disposing && _inheritedComponents != null)
             {
                 _inheritedComponents.Clear();
                 _inheritedComponents = null;
@@ -73,11 +73,11 @@ namespace System.ComponentModel.Design
             IComponentChangeService cs = null;
             INameCreationService ncs = null;
 
-            if (site is not null)
+            if (site != null)
             {
                 ncs = (INameCreationService)site.GetService(typeof(INameCreationService));
                 cs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                if (cs is not null)
+                if (cs != null)
                 {
                     cs.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
                 }
@@ -118,7 +118,7 @@ namespace System.ComponentModel.Design
                         MemberInfo member = field;
 
                         object[] fieldAttrs = field.GetCustomAttributes(typeof(AccessedThroughPropertyAttribute), false);
-                        if (fieldAttrs is not null && fieldAttrs.Length > 0)
+                        if (fieldAttrs != null && fieldAttrs.Length > 0)
                         {
                             Debug.Assert(fieldAttrs.Length == 1, "Non-inheritable attribute has more than one copy");
                             Debug.Assert(fieldAttrs[0] is AccessedThroughPropertyAttribute, "Reflection bug:  GetCustomAttributes(type) didn't discriminate by type");
@@ -126,9 +126,9 @@ namespace System.ComponentModel.Design
 
                             PropertyInfo fieldProp = reflect.GetProperty(propAttr.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-                            Debug.Assert(fieldProp is not null, "Field declared with AccessedThroughPropertyAttribute has no associated property");
+                            Debug.Assert(fieldProp != null, "Field declared with AccessedThroughPropertyAttribute has no associated property");
                             Debug.Assert(fieldProp.PropertyType == field.FieldType, "Field declared with AccessedThroughPropertyAttribute is associated with a property with a different return type.");
-                            if (fieldProp is not null && fieldProp.PropertyType == field.FieldType)
+                            if (fieldProp != null && fieldProp.PropertyType == field.FieldType)
                             {
                                 // If the property cannot be read, it is useless to us.
                                 if (!fieldProp.CanRead)
@@ -138,7 +138,7 @@ namespace System.ComponentModel.Design
 
                                 // We never access the set for the property, so we can concentrate on just the get method.
                                 member = fieldProp.GetGetMethod(true);
-                                Debug.Assert(member is not null, "GetGetMethod for property didn't return a method, but CanRead is true");
+                                Debug.Assert(member != null, "GetGetMethod for property didn't return a method, but CanRead is true");
                                 name = propAttr.PropertyName;
                             }
                         }
@@ -221,7 +221,7 @@ namespace System.ComponentModel.Design
             }
             finally
             {
-                if (cs is not null)
+                if (cs != null)
                 {
                     cs.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
                 }
@@ -263,7 +263,7 @@ namespace System.ComponentModel.Design
 
         private void OnComponentAdding(object sender, ComponentEventArgs ce)
         {
-            if (_addingComponent is not null && _addingComponent != ce.Component)
+            if (_addingComponent != null && _addingComponent != ce.Component)
             {
                 Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "Adding component... " + ce.Component.ToString());
                 _inheritedComponents[ce.Component] = InheritanceAttribute.InheritedReadOnly;
@@ -277,10 +277,10 @@ namespace System.ComponentModel.Design
 
         private static Type GetReflectionTypeFromTypeHelper(Type type)
         {
-            if (type is not null)
+            if (type != null)
             {
                 TypeDescriptionProvider targetProvider = GetTargetFrameworkProviderForType(type);
-                if (targetProvider is not null)
+                if (targetProvider != null)
                 {
                     if (targetProvider.IsSupportedType(type))
                     {
@@ -294,7 +294,7 @@ namespace System.ComponentModel.Design
         private static TypeDescriptionProvider GetTargetFrameworkProviderForType(Type type)
         {
             IDesignerSerializationManager manager = DocumentDesigner.manager;
-            if (manager is not null)
+            if (manager != null)
             {
                 if (manager.GetService(typeof(TypeDescriptionProviderService)) is TypeDescriptionProviderService service)
                 {

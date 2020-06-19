@@ -103,7 +103,7 @@ namespace System.Windows.Forms
                         // there's no connected rect between a system menu item and a dropdown.
                         return Rectangle.Empty;
                     }
-                    if (ownerItem is not null && ownerItem.ParentInternal is not null && !ownerItem.IsOnDropDown)
+                    if (ownerItem != null && ownerItem.ParentInternal != null && !ownerItem.IsOnDropDown)
                     {
                         // translate the item into our coordinate system.
                         Rectangle itemBounds = new Rectangle(ToolStrip.PointToClient(ownerItem.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords)), ownerItem.Size);

@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Internal
         internal static bool IsMeasurementDC(DeviceContext dc)
         {
             WindowsGraphics? sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
-            return sharedGraphics is not null && sharedGraphics.DeviceContext is not null && sharedGraphics.DeviceContext.Hdc == dc.Hdc;
+            return sharedGraphics != null && sharedGraphics.DeviceContext != null && sharedGraphics.DeviceContext.Hdc == dc.Hdc;
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Internal
             // PERF: operate on a local reference rather than party directly on the thread static one.
             CachedInfo? currentCachedInfo = t_cachedMeasurementDCInfo;
 
-            if (currentCachedInfo is not null && currentCachedInfo.LeftTextMargin > 0 && currentCachedInfo.RightTextMargin > 0 && font == currentCachedInfo.LastUsedFont)
+            if (currentCachedInfo != null && currentCachedInfo.LeftTextMargin > 0 && currentCachedInfo.RightTextMargin > 0 && font == currentCachedInfo.LastUsedFont)
             {
                 // we have to return clones as DrawTextEx will modify this struct
                 return new User32.DRAWTEXTPARAMS
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Internal
         internal static void ResetIfIsMeasurementDC(IntPtr hdc)
         {
             WindowsGraphics? sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
-            if (sharedGraphics is not null && sharedGraphics.DeviceContext is not null && sharedGraphics.DeviceContext.Hdc == hdc)
+            if (sharedGraphics != null && sharedGraphics.DeviceContext != null && sharedGraphics.DeviceContext.Hdc == hdc)
             {
                 CachedInfo? currentCachedInfo = t_cachedMeasurementDCInfo;
                 currentCachedInfo?.UpdateFont(null);

@@ -177,7 +177,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listview is not null)
+                if (listview != null)
                 {
                     return listview.GetColumnIndex(this);
                 }
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndexer.Index != ImageList.Indexer.DefaultIndex && ImageList is not null && imageIndexer.Index >= ImageList.Images.Count)
+                if (imageIndexer.Index != ImageList.Indexer.DefaultIndex && ImageList != null && imageIndexer.Index >= ImageList.Images.Count)
                 {
                     return ImageList.Images.Count - 1;
                 }
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
 
                 imageIndexer.Index = value;
 
-                if (ListView is not null && ListView.IsHandleCreated)
+                if (ListView != null && ListView.IsHandleCreated)
                 {
                     ListView.SetColumnInfo(LVCF.IMAGE, this);
                 }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
 
                 imageIndexer.Key = value;
 
-                if (ListView is not null && ListView.IsHandleCreated)
+                if (ListView != null && ListView.IsHandleCreated)
                 {
                     ListView.SetColumnInfo(LVCF.IMAGE, this);
                 }
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
                 {
                     name = value;
                 }
-                if (Site is not null)
+                if (Site != null)
                 {
                     Site.Name = value;
                 }
@@ -320,7 +320,7 @@ namespace System.Windows.Forms
                 {
                     text = value;
                 }
-                if (listview is not null)
+                if (listview != null)
                 {
                     listview.SetColumnInfo(LVCF.TEXT, this);
                 }
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!textAlignInitialized && (listview is not null))
+                if (!textAlignInitialized && (listview != null))
                 {
                     textAlignInitialized = true;
                     // See below for an explanation of (Index != 0)
@@ -365,7 +365,7 @@ namespace System.Windows.Forms
                     textAlign = HorizontalAlignment.Left;
                 }
 
-                if (listview is not null)
+                if (listview != null)
                 {
                     listview.SetColumnInfo(LVCF.FMT, this);
                     listview.Invalidate();
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
                 // we don't get notified when the user changes it, we need to get this info
                 // from the underlying control every time we're asked.
                 // The underlying control will only report the correct width if it's in Report view
-                if (listview is not null && listview.IsHandleCreated && !listview.Disposing && listview.View == View.Details)
+                if (listview != null && listview.IsHandleCreated && !listview.Disposing && listview.View == View.Details)
                 {
                     // Make sure this column has already been added to the ListView, else just return width
                     IntPtr hwndHdr = User32.SendMessageW(listview, (User32.WM)LVM.GETHEADER);
@@ -432,7 +432,7 @@ namespace System.Windows.Forms
             set
             {
                 width = value;
-                if (listview is not null)
+                if (listview != null)
                 {
                     listview.SetColumnWidth(Index, ColumnHeaderAutoResizeStyle.None);
                 }
@@ -446,7 +446,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
             }
 
-            if (listview is not null)
+            if (listview != null)
             {
                 listview.AutoResizeColumn(Index, headerAutoResize);
             }
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (listview is not null)
+                if (listview != null)
                 {
                     int index = Index;
                     if (index != -1)
@@ -520,7 +520,7 @@ namespace System.Windows.Forms
 
         internal bool ShouldSerializeText()
         {
-            return text is not null;
+            return text != null;
         }
 
         /// <summary>

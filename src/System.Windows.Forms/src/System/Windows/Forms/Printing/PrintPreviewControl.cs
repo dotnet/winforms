@@ -234,7 +234,7 @@ namespace System.Windows.Forms
             get
             {
                 int value = startPage;
-                if (pageInfo is not null)
+                if (pageInfo != null)
                 {
                     value = Math.Min(value, pageInfo.Length - (rows * columns));
                 }
@@ -376,7 +376,7 @@ namespace System.Windows.Forms
         // This function computes everything in terms of physical size (millimeters), not pixels
         private void ComputeLayout()
         {
-            Debug.Assert(pageInfo is not null, "Must call ComputePreview first");
+            Debug.Assert(pageInfo != null, "Must call ComputePreview first");
             layoutOk = true;
             if (pageInfo.Length == 0)
             {
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
 
                 document.Print();
                 pageInfo = previewController.GetPreviewPageInfo();
-                Debug.Assert(pageInfo is not null, "ReviewPrintController did not give us preview info");
+                Debug.Assert(pageInfo != null, "ReviewPrintController did not give us preview info");
 
                 document.PrintController = oldController;
             }
@@ -511,7 +511,7 @@ namespace System.Windows.Forms
                 {
                     pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
 
-                    if (pageInfo is not null || exceptionPrinting)
+                    if (pageInfo != null || exceptionPrinting)
                     {
                         // Calculate formats
                         StringFormat format = new StringFormat
@@ -626,7 +626,7 @@ namespace System.Windows.Forms
                                 pevent.Graphics.FillRectangle(brush, box);
                             }
                             box.Inflate(-1, -1);
-                            if (pageInfo[i + StartPage].Image is not null)
+                            if (pageInfo[i + StartPage].Image != null)
                             {
                                 pevent.Graphics.DrawImage(pageInfo[i + StartPage].Image, box);
                             }

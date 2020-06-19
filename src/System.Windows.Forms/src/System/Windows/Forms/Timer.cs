@@ -157,7 +157,7 @@ namespace System.Windows.Forms
                         if (Enabled)
                         {
                             // Change the timer value, don't tear down the timer itself.
-                            if (!DesignMode && _timerWindow is not null)
+                            if (!DesignMode && _timerWindow != null)
                             {
                                 _timerWindow.RestartTimer(value);
                             }

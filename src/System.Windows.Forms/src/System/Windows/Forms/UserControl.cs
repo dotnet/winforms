@@ -89,7 +89,7 @@ namespace System.Windows.Forms
                     SetAutoSizeMode(value);
                     Control toLayout = DesignMode || ParentInternal is null ? this : ParentInternal;
 
-                    if (toLayout is not null)
+                    if (toLayout != null)
                     {
                         // DefaultLayout does not keep anchor information until it needs to.  When
                         // AutoSize became a common property, we could no longer blindly call into
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            if (BackgroundImage is not null)
+            if (BackgroundImage != null)
             {
                 Invalidate();
             }

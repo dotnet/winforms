@@ -41,9 +41,9 @@ namespace System.Windows.Forms.Design
             // Now push our layout settings stuff into the resx if we are not inherited read only and
             // are in a localizable Form.
             TableLayoutPanel tlp = value as TableLayoutPanel;
-            Debug.Assert(tlp is not null, "Huh? We were expecting to be serializing a TableLayoutPanel here.");
+            Debug.Assert(tlp != null, "Huh? We were expecting to be serializing a TableLayoutPanel here.");
 
-            if (tlp is not null)
+            if (tlp != null)
             {
                 InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(tlp)[typeof(InheritanceAttribute)];
 
@@ -54,9 +54,9 @@ namespace System.Windows.Forms.Design
                     if (IsLocalizable(host))
                     {
                         PropertyDescriptor lsProp = TypeDescriptor.GetProperties(tlp)[s_layoutSettingsPropName];
-                        object val = (lsProp is not null) ? lsProp.GetValue(tlp) : null;
+                        object val = (lsProp != null) ? lsProp.GetValue(tlp) : null;
 
-                        if (val is not null)
+                        if (val != null)
                         {
                             string key = manager.GetName(tlp) + "." + s_layoutSettingsPropName;
                             SerializeResourceInvariant(manager, key, val);
@@ -70,11 +70,11 @@ namespace System.Windows.Forms.Design
 
         private bool IsLocalizable(IDesignerHost host)
         {
-            if (host is not null)
+            if (host != null)
             {
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(host.RootComponent)["Localizable"];
 
-                if (prop is not null && prop.PropertyType == typeof(bool))
+                if (prop != null && prop.PropertyType == typeof(bool))
                 {
                     return (bool)prop.GetValue(host.RootComponent);
                 }

@@ -36,10 +36,10 @@ namespace System.Windows.Forms.Design
             string text;
 
             PropertyDescriptor prop = TypeDescriptor.GetProperties(value)["Name"];
-            if (prop is not null)
+            if (prop != null)
             {
                 text = (string)prop.GetValue(value);
-                if (text is not null && text.Length > 0)
+                if (text != null && text.Length > 0)
                 {
                     return text;
                 }

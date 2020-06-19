@@ -89,7 +89,7 @@ namespace System.ComponentModel.Design
             get
             {
                 IDesignerEventService eventService = EventService;
-                if (eventService is not null)
+                if (eventService != null)
                 {
                     return new DesignSurfaceCollection(eventService.Designers);
                 }
@@ -132,7 +132,7 @@ namespace System.ComponentModel.Design
                 if (_activeDesignSurfaceChanged is null)
                 {
                     IDesignerEventService eventService = EventService;
-                    if (eventService is not null)
+                    if (eventService != null)
                     {
                         eventService.ActiveDesignerChanged += new ActiveDesignerEventHandler(OnActiveDesignerChanged);
                     }
@@ -143,13 +143,13 @@ namespace System.ComponentModel.Design
             remove
             {
                 _activeDesignSurfaceChanged -= value;
-                if (_activeDesignSurfaceChanged is not null)
+                if (_activeDesignSurfaceChanged != null)
                 {
                     return;
                 }
 
                 IDesignerEventService eventService = EventService;
-                if (eventService is not null)
+                if (eventService != null)
                 {
                     eventService.ActiveDesignerChanged -= new ActiveDesignerEventHandler(OnActiveDesignerChanged);
                 }
@@ -167,7 +167,7 @@ namespace System.ComponentModel.Design
                 if (_designSurfaceCreated is null)
                 {
                     IDesignerEventService eventService = EventService;
-                    if (eventService is not null)
+                    if (eventService != null)
                     {
                         eventService.DesignerCreated += new DesignerEventHandler(OnDesignerCreated);
                     }
@@ -178,13 +178,13 @@ namespace System.ComponentModel.Design
             remove
             {
                 _designSurfaceCreated -= value;
-                if (_designSurfaceCreated is not null)
+                if (_designSurfaceCreated != null)
                 {
                     return;
                 }
 
                 IDesignerEventService eventService = EventService;
-                if (eventService is not null)
+                if (eventService != null)
                 {
                     eventService.DesignerCreated -= new DesignerEventHandler(OnDesignerCreated);
                 }
@@ -202,7 +202,7 @@ namespace System.ComponentModel.Design
                 if (_designSurfaceDisposed is null)
                 {
                     IDesignerEventService eventService = EventService;
-                    if (eventService is not null)
+                    if (eventService != null)
                     {
                         eventService.DesignerDisposed += new DesignerEventHandler(OnDesignerDisposed);
                     }
@@ -213,13 +213,13 @@ namespace System.ComponentModel.Design
             remove
             {
                 _designSurfaceDisposed -= value;
-                if (_designSurfaceDisposed is not null)
+                if (_designSurfaceDisposed != null)
                 {
                     return;
                 }
 
                 IDesignerEventService eventService = EventService;
-                if (eventService is not null)
+                if (eventService != null)
                 {
                     eventService.DesignerDisposed -= new DesignerEventHandler(OnDesignerDisposed);
                 }
@@ -238,7 +238,7 @@ namespace System.ComponentModel.Design
                 if (_selectionChanged is null)
                 {
                     IDesignerEventService eventService = EventService;
-                    if (eventService is not null)
+                    if (eventService != null)
                     {
                         eventService.SelectionChanged += new EventHandler(OnSelectionChanged);
                     }
@@ -249,13 +249,13 @@ namespace System.ComponentModel.Design
             remove
             {
                 _selectionChanged -= value;
-                if (_selectionChanged is not null)
+                if (_selectionChanged != null)
                 {
                     return;
                 }
 
                 IDesignerEventService eventService = EventService;
-                if (eventService is not null)
+                if (eventService != null)
                 {
                     eventService.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 }
@@ -306,7 +306,7 @@ namespace System.ComponentModel.Design
             // the ones providing the event service, then whoever is providing
             // it will be responsible for updating it when new designers are created.
             DesignerEventService eventService = GetService(typeof(IDesignerEventService)) as DesignerEventService;
-            if (eventService is not null)
+            if (eventService != null)
             {
                 eventService.OnCreateDesigner(surface);
             }
@@ -378,18 +378,18 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e)
         {
-            Debug.Assert(_activeDesignSurfaceChanged is not null, "Should have detached this event handler.");
-            if (_activeDesignSurfaceChanged is not null)
+            Debug.Assert(_activeDesignSurfaceChanged != null, "Should have detached this event handler.");
+            if (_activeDesignSurfaceChanged != null)
             {
                 DesignSurface newSurface = null;
                 DesignSurface oldSurface = null;
 
-                if (e.OldDesigner is not null)
+                if (e.OldDesigner != null)
                 {
                     oldSurface = e.OldDesigner.GetService(typeof(DesignSurface)) as DesignSurface;
                 }
 
-                if (e.NewDesigner is not null)
+                if (e.NewDesigner != null)
                 {
                     newSurface = e.NewDesigner.GetService(typeof(DesignSurface)) as DesignSurface;
                 }
@@ -404,7 +404,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnDesignerCreated(object sender, DesignerEventArgs e)
         {
-            Debug.Assert(_designSurfaceCreated is not null, "Should have detached this event handler.");
+            Debug.Assert(_designSurfaceCreated != null, "Should have detached this event handler.");
             if (_designSurfaceCreated is null)
             {
                 return;
@@ -422,7 +422,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnDesignerDisposed(object sender, DesignerEventArgs e)
         {
-            Debug.Assert(_designSurfaceDisposed is not null, "Should have detached this event handler.");
+            Debug.Assert(_designSurfaceDisposed != null, "Should have detached this event handler.");
             if (_designSurfaceDisposed is null)
             {
                 return;
@@ -440,7 +440,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
-            Debug.Assert(_selectionChanged is not null, "Should have detached this event handler.");
+            Debug.Assert(_selectionChanged != null, "Should have detached this event handler.");
             _selectionChanged?.Invoke(this, e);
         }
 

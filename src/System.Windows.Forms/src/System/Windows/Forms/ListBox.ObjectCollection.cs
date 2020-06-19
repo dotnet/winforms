@@ -168,7 +168,7 @@ namespace System.Windows.Forms
                         {
                             owner.NativeInsert(index, item);
                             owner.UpdateMaxItemWidth(item, false);
-                            if (owner.selectedItems is not null)
+                            if (owner.selectedItems != null)
                             {
                                 // Sorting may throw the LB contents and the selectedItem array out of synch.
                                 owner.selectedItems.Dirty();
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
 
             internal void AddRangeInternal(ICollection items)
             {
-                Debug.Assert(items is not null);
+                Debug.Assert(items != null);
 
                 owner.BeginUpdate();
                 try

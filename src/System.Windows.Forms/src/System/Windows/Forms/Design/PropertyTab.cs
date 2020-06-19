@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (_bitmap is not null)
+                if (_bitmap != null)
                 {
                     _bitmap.Dispose();
                     _bitmap = null;

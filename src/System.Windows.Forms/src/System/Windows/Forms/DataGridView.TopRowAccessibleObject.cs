@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    if (owner is not null)
+                    if (owner != null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerAlreadySet);
                     }

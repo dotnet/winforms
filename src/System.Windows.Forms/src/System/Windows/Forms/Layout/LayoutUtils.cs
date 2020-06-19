@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Layout
         public static Size OldGetLargestStringSizeInCollection(Font font, ICollection objects)
         {
             Size largestSize = Size.Empty;
-            if (objects is not null)
+            if (objects != null)
             {
                 foreach (object obj in objects)
                 {
@@ -755,7 +755,7 @@ namespace System.Windows.Forms.Layout
             _controlToLayout = controlToLayout;
 
             _resumeLayout = resumeLayout;
-            if (_controlToLayout is not null)
+            if (_controlToLayout != null)
             {
 #if DEBUG
                 _layoutSuspendCount = _controlToLayout.LayoutSuspendCount;
@@ -774,7 +774,7 @@ namespace System.Windows.Forms.Layout
 
         public void Dispose()
         {
-            if (_controlToLayout is not null)
+            if (_controlToLayout != null)
             {
                 _controlToLayout.ResumeLayout(_resumeLayout);
 
@@ -802,16 +802,16 @@ namespace System.Windows.Forms.Layout
 
         public static void DoLayout(IArrangedElement elementToLayout, IArrangedElement elementCausingLayout, string property)
         {
-            if (elementCausingLayout is not null)
+            if (elementCausingLayout != null)
             {
                 CommonProperties.xClearPreferredSizeCache(elementCausingLayout);
-                if (elementToLayout is not null)
+                if (elementToLayout != null)
                 {
                     CommonProperties.xClearPreferredSizeCache(elementToLayout);
                     elementToLayout.PerformLayout(elementCausingLayout, property);
                 }
             }
-            Debug.Assert(elementCausingLayout is not null, "LayoutTransaction.DoLayout - elementCausingLayout is null, no layout performed - did you mix up your parameters?");
+            Debug.Assert(elementCausingLayout != null, "LayoutTransaction.DoLayout - elementCausingLayout is null, no layout performed - did you mix up your parameters?");
         }
 
         // This overload should be used when a property has changed that affects preferred size,
@@ -821,7 +821,7 @@ namespace System.Windows.Forms.Layout
         {
             if (!condition)
             {
-                if (elementCausingLayout is not null)
+                if (elementCausingLayout != null)
                 {
                     CommonProperties.xClearPreferredSizeCache(elementCausingLayout);
                 }

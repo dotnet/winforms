@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Design
 
         public int GetHashCode(MaskDescriptor maskDescriptor)
         {
-            if (maskDescriptor is not null)
+            if (maskDescriptor != null)
             {
                 return maskDescriptor.GetHashCode();
             }

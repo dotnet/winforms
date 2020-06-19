@@ -118,7 +118,7 @@ namespace System
                             modifiers: null);
                     }
 
-                    if (methodInfo is not null || type == typeof(object))
+                    if (methodInfo != null || type == typeof(object))
                     {
                         // Found something, or already at the top of the type heirarchy
                         break;
@@ -171,7 +171,7 @@ namespace System
                             memberName,
                             BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic);
 
-                    if (info is not null || type == typeof(object))
+                    if (info != null || type == typeof(object))
                     {
                         // Found something, or already at the top of the type heirarchy
                         break;

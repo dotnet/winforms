@@ -138,7 +138,7 @@ namespace System.ComponentModel.Design
         internal void ShowHelp()
         {
             IHelpService helpService = GetService(typeof(IHelpService)) as IHelpService;
-            if (helpService is not null)
+            if (helpService != null)
             {
                 helpService.ShowHelpFromKeyword(HELP_KEYWORD);
             }
@@ -182,12 +182,12 @@ namespace System.ComponentModel.Design
                     _value = value;
                     byte[] bytes = null;
 
-                    if (value is not null)
+                    if (value != null)
                     {
                         bytes = _editor.ConvertToBytes(value);
                     }
 
-                    if (bytes is not null)
+                    if (bytes != null)
                     {
                         _byteViewer.SetBytes(bytes);
                         _byteViewer.Enabled = true;

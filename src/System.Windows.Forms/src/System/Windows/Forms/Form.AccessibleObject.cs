@@ -31,7 +31,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_owner is not null)
+                if (_owner != null)
                 {
                     return true;
                 }

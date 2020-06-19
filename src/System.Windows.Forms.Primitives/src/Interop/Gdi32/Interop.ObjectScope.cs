@@ -29,7 +29,7 @@ internal static partial class Interop
 
             public void Dispose()
             {
-                if (Object is not null)
+                if (Object != null)
                 {
                     DeleteObject(Object);
                 }

@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         internal HtmlElementEventArgs(HtmlShimManager shimManager, IHTMLEventObj eventObj)
         {
             NativeHTMLEventObj = eventObj;
-            Debug.Assert(NativeHTMLEventObj is not null, "The event object should implement IHTMLEventObj");
+            Debug.Assert(NativeHTMLEventObj != null, "The event object should implement IHTMLEventObj");
 
             _shimManager = shimManager;
         }

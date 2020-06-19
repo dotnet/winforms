@@ -249,7 +249,7 @@ namespace System.Windows.Forms
                 // call menu activate before we actually take focus.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
                 ToolStripItem item = GetItemAt(pt);
-                if (item is not null && !(item is ToolStripControlHost))
+                if (item != null && !(item is ToolStripControlHost))
                 {
                     // verify the place where we've clicked is a place where we have to do "fake" focus
                     // e.g. an item that isnt a control.

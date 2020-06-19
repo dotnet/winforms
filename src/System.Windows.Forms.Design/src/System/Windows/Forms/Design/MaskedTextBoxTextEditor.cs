@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
             MaskedTextBoxTextEditorDropDown dropDown = new MaskedTextBoxTextEditorDropDown(maskedTextBox);
             editorService.DropDownControl(dropDown);
 
-            if (dropDown.Value is not null)
+            if (dropDown.Value != null)
             {
                 value = dropDown.Value;
             }
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
-            if (context is not null && context.Instance is not null)
+            if (context != null && context.Instance != null)
             {
                 return UITypeEditorEditStyle.DropDown;
             }
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Design
 
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
-            if (context is not null && context.Instance is not null)
+            if (context != null && context.Instance != null)
             {
                 return false;
             }

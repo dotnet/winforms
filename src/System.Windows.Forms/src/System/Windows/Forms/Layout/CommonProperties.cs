@@ -166,7 +166,7 @@ namespace System.Windows.Forms.Layout
         internal static void ResetPadding(IArrangedElement element)
         {
             object value = element.Properties.GetObject(_paddingProperty);
-            if (value is not null)
+            if (value != null)
             {
                 element.Properties.RemoveObject(_paddingProperty);
             }

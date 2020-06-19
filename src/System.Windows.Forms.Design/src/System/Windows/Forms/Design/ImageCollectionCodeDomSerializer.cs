@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Design
             object codeObject = baseSerializer.Serialize(manager, value);
             ImageList imageList = value as ImageList;
 
-            if (imageList is not null)
+            if (imageList != null)
             {
                 StringCollection imageKeys = imageList.Images.Keys;
 
@@ -57,15 +57,15 @@ namespace System.Windows.Forms.Design
                 {
                     CodeExpression imageListObject = GetExpression(manager, value);
 
-                    if (imageListObject is not null)
+                    if (imageListObject != null)
                     {
                         CodeExpression imageListImagesProperty = new CodePropertyReferenceExpression(imageListObject, "Images");
 
-                        if (imageListImagesProperty is not null)
+                        if (imageListImagesProperty != null)
                         {
                             for (int i = 0; i < imageKeys.Count; i++)
                             {
-                                if ((imageKeys[i] is not null) || (imageKeys[i].Length != 0))
+                                if ((imageKeys[i] != null) || (imageKeys[i].Length != 0))
                                 {
                                     CodeMethodInvokeExpression setNameMethodCall = new CodeMethodInvokeExpression(imageListImagesProperty, "SetKeyName",
                                                                                    new CodeExpression[] {

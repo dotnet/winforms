@@ -141,7 +141,7 @@ namespace System.Drawing.Design
                 this.value = value;
 
                 // Select the current cursor
-                if (value is not null)
+                if (value != null)
                 {
                     for (int i = 0; i < Items.Count; i++)
                     {

@@ -1538,18 +1538,18 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCsvText, dataObject.GetData(DataFormats.CommaSeparatedValue, autoConvert: false));
 
             Assert.True(dataObject.ContainsText(format));
-            Assert.Equal(expectedUnicodeText is not null, dataObject.GetDataPresent(DataFormats.UnicodeText, autoConvert: true));
-            Assert.Equal(expectedUnicodeText is not null, dataObject.GetDataPresent(DataFormats.UnicodeText, autoConvert: false));
+            Assert.Equal(expectedUnicodeText != null, dataObject.GetDataPresent(DataFormats.UnicodeText, autoConvert: true));
+            Assert.Equal(expectedUnicodeText != null, dataObject.GetDataPresent(DataFormats.UnicodeText, autoConvert: false));
             Assert.False(dataObject.GetDataPresent(DataFormats.Text, autoConvert: true));
             Assert.False(dataObject.GetDataPresent(DataFormats.Text, autoConvert: false));
             Assert.False(dataObject.GetDataPresent(DataFormats.StringFormat, autoConvert: true));
             Assert.False(dataObject.GetDataPresent(DataFormats.StringFormat, autoConvert: false));
-            Assert.Equal(expectedRtfText is not null, dataObject.GetDataPresent(DataFormats.Rtf, autoConvert: true));
-            Assert.Equal(expectedRtfText is not null, dataObject.GetDataPresent(DataFormats.Rtf, autoConvert: false));
-            Assert.Equal(expectedHtmlText is not null, dataObject.GetDataPresent(DataFormats.Html, autoConvert: true));
-            Assert.Equal(expectedHtmlText is not null, dataObject.GetDataPresent(DataFormats.Html, autoConvert: false));
-            Assert.Equal(expectedCsvText is not null, dataObject.GetDataPresent(DataFormats.CommaSeparatedValue, autoConvert: true));
-            Assert.Equal(expectedCsvText is not null, dataObject.GetDataPresent(DataFormats.CommaSeparatedValue, autoConvert: false));
+            Assert.Equal(expectedRtfText != null, dataObject.GetDataPresent(DataFormats.Rtf, autoConvert: true));
+            Assert.Equal(expectedRtfText != null, dataObject.GetDataPresent(DataFormats.Rtf, autoConvert: false));
+            Assert.Equal(expectedHtmlText != null, dataObject.GetDataPresent(DataFormats.Html, autoConvert: true));
+            Assert.Equal(expectedHtmlText != null, dataObject.GetDataPresent(DataFormats.Html, autoConvert: false));
+            Assert.Equal(expectedCsvText != null, dataObject.GetDataPresent(DataFormats.CommaSeparatedValue, autoConvert: true));
+            Assert.Equal(expectedCsvText != null, dataObject.GetDataPresent(DataFormats.CommaSeparatedValue, autoConvert: false));
         }
 
         public static IEnumerable<object[]> SetText_StringTextDataFormatMocked_TestData()

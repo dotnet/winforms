@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
                                                                        null, null, null);
                     var editorClass = editor.GetType();
 
-                    if (!myClass.Equals(editorClass) && editor is not null && myClass.IsInstanceOfType(editor))
+                    if (!myClass.Equals(editorClass) && editor != null && myClass.IsInstanceOfType(editor))
                     {
                         filter += "|" + CreateFilterEntry(editor);
                     }

@@ -39,7 +39,7 @@ namespace System.ComponentModel.Design
             ///  If there is just a reset method, this always returns true.  If none of these
             ///  cases apply, this returns false.
             /// </summary>
-            public override bool CanResetValue(object component) => GetValue(component) is not null;
+            public override bool CanResetValue(object component) => GetValue(component) != null;
 
             /// <summary>
             ///  Retrieves the type of the component this PropertyDescriptor is bound to.
@@ -104,7 +104,7 @@ namespace System.ComponentModel.Design
                     {
                         IComponent baseComponent = rs.GetComponent(component);
 
-                        if (baseComponent is not null)
+                        if (baseComponent != null)
                         {
                             site = baseComponent.Site;
                         }
@@ -157,7 +157,7 @@ namespace System.ComponentModel.Design
                     throw ex;
                 }
 
-                if (value is not null && !(value is string))
+                if (value != null && !(value is string))
                 {
                     Exception ex = new ArgumentException(string.Format(SR.EventBindingServiceBadArgType, Name, typeof(string).Name));
                     ex.HelpLink = SR.EventBindingServiceBadArgType;
@@ -167,7 +167,7 @@ namespace System.ComponentModel.Design
 
                 string name = (string)value;
 
-                if (name is not null && name.Length == 0)
+                if (name != null && name.Length == 0)
                 {
                     name = null;
                 }
@@ -185,7 +185,7 @@ namespace System.ComponentModel.Design
                 {
                     IComponent baseComponent = rs.GetComponent(component);
 
-                    if (baseComponent is not null)
+                    if (baseComponent != null)
                     {
                         site = baseComponent.Site;
                     }
@@ -217,13 +217,13 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                if (oldName is not null && name is not null && oldName.Equals(name))
+                if (oldName != null && name != null && oldName.Equals(name))
                 {
                     return;
                 }
 
                 // Before we continue our work, ensure that the name is actually valid.
-                if (name is not null)
+                if (name != null)
                 {
                     _eventSvc.ValidateMethodName(name);
                 }
@@ -244,7 +244,7 @@ namespace System.ComponentModel.Design
                     // sure it's OK to perform the change.
                     IComponentChangeService change = site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
 
-                    if (change is not null)
+                    if (change != null)
                     {
                         try
                         {
@@ -265,19 +265,19 @@ namespace System.ComponentModel.Design
                     // Less chance of success of adding a new method name, so
                     // don't release the old name until we verify that adding
                     // the new one actually succeeded.
-                    if (name is not null)
+                    if (name != null)
                     {
                         _eventSvc.UseMethod((IComponent)component, Event, name);
                     }
 
-                    if (oldName is not null)
+                    if (oldName != null)
                     {
                         _eventSvc.FreeMethod((IComponent)component, Event, oldName);
                     }
 
                     ds.SetValue(key, name);
 
-                    if (change is not null)
+                    if (change != null)
                     {
                         change.OnComponentChanged(component, Event, null, null);
                         change.OnComponentChanged(component, this, oldName, name);
@@ -285,14 +285,14 @@ namespace System.ComponentModel.Design
 
                     OnValueChanged(component, EventArgs.Empty);
 
-                    if (trans is not null)
+                    if (trans != null)
                     {
                         trans.Commit();
                     }
                 }
                 finally
                 {
-                    if (trans is not null)
+                    if (trans != null)
                     {
                         ((IDisposable)trans).Dispose();
                     }
@@ -404,11 +404,11 @@ namespace System.ComponentModel.Design
                     // We cannot cache this because it depends on the contents of the source file.
                     string[] eventMethods = null;
 
-                    if (context is not null)
+                    if (context != null)
                     {
                         IEventBindingService ebs = (IEventBindingService)context.GetService(typeof(IEventBindingService));
 
-                        if (ebs is not null)
+                        if (ebs != null)
                         {
                             ICollection methods = ebs.GetCompatibleMethods(_evt);
                             eventMethods = new string[methods.Count];

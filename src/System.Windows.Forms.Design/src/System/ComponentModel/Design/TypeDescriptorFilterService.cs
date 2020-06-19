@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
         private IDesigner GetDesigner(IComponent component)
         {
             ISite site = component.Site;
-            if (site is not null)
+            if (site != null)
             {
                 if (site.GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
@@ -55,7 +55,7 @@ namespace System.ComponentModel.Design
                 ((IDesignerFilter)designer).PreFilterAttributes(attributes);
                 ((IDesignerFilter)designer).PostFilterAttributes(attributes);
             }
-            return designer is not null;
+            return designer != null;
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace System.ComponentModel.Design
                 ((IDesignerFilter)designer).PreFilterEvents(events);
                 ((IDesignerFilter)designer).PostFilterEvents(events);
             }
-            return designer is not null;
+            return designer != null;
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace System.ComponentModel.Design
                 ((IDesignerFilter)designer).PreFilterProperties(properties);
                 ((IDesignerFilter)designer).PostFilterProperties(properties);
             }
-            return designer is not null;
+            return designer != null;
         }
     }
 }

@@ -154,12 +154,12 @@ namespace System.Windows.Forms
                         // We need access to be able to read from the registry here.  We're not creating a
                         // registry key, nor are we returning information from the registry to the user.
                         RegistryKey key = Registry.LocalMachine.OpenSubKey(CommonAppDataRegistryKeyName);
-                        if (key is not null)
+                        if (key != null)
                         {
                             object value = key.GetValue(EverettThreadAffinityValue);
                             key.Close();
 
-                            if (value is not null && (int)value != 0)
+                            if (value != null && (int)value != 0)
                             {
                                 s_useEverettThreadAffinity = true;
                             }
@@ -201,10 +201,10 @@ namespace System.Windows.Forms
                     {
                         // Custom attribute
                         Assembly entryAssembly = Assembly.GetEntryAssembly();
-                        if (entryAssembly is not null)
+                        if (entryAssembly != null)
                         {
                             object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                            if (attrs is not null && attrs.Length > 0)
+                            if (attrs != null && attrs.Length > 0)
                             {
                                 s_companyName = ((AssemblyCompanyAttribute)attrs[0]).Company;
                             }
@@ -214,7 +214,7 @@ namespace System.Windows.Forms
                         if (s_companyName is null || s_companyName.Length == 0)
                         {
                             s_companyName = GetAppFileVersionInfo().CompanyName;
-                            if (s_companyName is not null)
+                            if (s_companyName != null)
                             {
                                 s_companyName = s_companyName.Trim();
                             }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
                         {
                             Type t = GetAppMainType();
 
-                            if (t is not null)
+                            if (t != null)
                             {
                                 string ns = t.Namespace;
 
@@ -344,10 +344,10 @@ namespace System.Windows.Forms
                     {
                         // Custom attribute
                         Assembly entryAssembly = Assembly.GetEntryAssembly();
-                        if (entryAssembly is not null)
+                        if (entryAssembly != null)
                         {
                             object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                            if (attrs is not null && attrs.Length > 0)
+                            if (attrs != null && attrs.Length > 0)
                             {
                                 s_productName = ((AssemblyProductAttribute)attrs[0]).Product;
                             }
@@ -357,7 +357,7 @@ namespace System.Windows.Forms
                         if (s_productName is null || s_productName.Length == 0)
                         {
                             s_productName = GetAppFileVersionInfo().ProductName;
-                            if (s_productName is not null)
+                            if (s_productName != null)
                             {
                                 s_productName = s_productName.Trim();
                             }
@@ -369,7 +369,7 @@ namespace System.Windows.Forms
                         {
                             Type t = GetAppMainType();
 
-                            if (t is not null)
+                            if (t != null)
                             {
                                 string ns = t.Namespace;
 
@@ -412,10 +412,10 @@ namespace System.Windows.Forms
                     {
                         // Custom attribute
                         Assembly entryAssembly = Assembly.GetEntryAssembly();
-                        if (entryAssembly is not null)
+                        if (entryAssembly != null)
                         {
                             object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
-                            if (attrs is not null && attrs.Length > 0)
+                            if (attrs != null && attrs.Length > 0)
                             {
                                 s_productVersion = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
                             }
@@ -425,7 +425,7 @@ namespace System.Windows.Forms
                         if (s_productVersion is null || s_productVersion.Length == 0)
                         {
                             s_productVersion = GetAppFileVersionInfo().ProductVersion;
-                            if (s_productVersion is not null)
+                            if (s_productVersion != null)
                             {
                                 s_productVersion = s_productVersion.Trim();
                             }
@@ -821,7 +821,7 @@ namespace System.Windows.Forms
         {
             // Pull manifest from our resources
             string assemblyLoc = typeof(Application).Assembly.Location;
-            if (assemblyLoc is not null)
+            if (assemblyLoc != null)
             {
                 // CSC embeds DLL manifests as resource ID 2
                 UseVisualStyles = ThemingScope.CreateActivationContext(assemblyLoc, nativeResourceManifestID: 2);
@@ -856,7 +856,7 @@ namespace System.Windows.Forms
                 if (s_exiting)
                 {
                     // Recursive call to Exit
-                    if (e is not null)
+                    if (e != null)
                     {
                         e.Cancel = false;
                     }
@@ -867,14 +867,14 @@ namespace System.Windows.Forms
                 try
                 {
                     // Raise the FormClosing and FormClosed events for each open form
-                    if (s_forms is not null)
+                    if (s_forms != null)
                     {
                         foreach (Form f in s_forms)
                         {
                             if (f.RaiseFormClosingOnAppExit())
                             {
                                 // A form refused to close
-                                if (e is not null)
+                                if (e != null)
                                 {
                                     e.Cancel = true;
                                 }
@@ -890,7 +890,7 @@ namespace System.Windows.Forms
                     }
 
                     ThreadContext.ExitApplication();
-                    if (e is not null)
+                    if (e != null)
                     {
                         e.Cancel = false;
                     }
@@ -908,7 +908,7 @@ namespace System.Windows.Forms
         public static void ExitThread()
         {
             ThreadContext context = ThreadContext.FromCurrent();
-            if (context.ApplicationContext is not null)
+            if (context.ApplicationContext != null)
             {
                 context.ApplicationContext.ExitThread();
             }
@@ -941,7 +941,7 @@ namespace System.Windows.Forms
                 if (s_appFileVersion is null)
                 {
                     Type t = GetAppMainType();
-                    if (t is not null)
+                    if (t != null)
                     {
                         s_appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
                     }
@@ -968,7 +968,7 @@ namespace System.Windows.Forms
 
                     // Get Main type...This doesn't work in MC++ because Main is a global function and not
                     // a class static method (it doesn't belong to a Type).
-                    if (exe is not null)
+                    if (exe != null)
                     {
                         s_mainType = exe.EntryPoint.ReflectedType;
                     }
@@ -985,7 +985,7 @@ namespace System.Windows.Forms
         {
             ThreadContext cxt = ThreadContext.FromId(User32.GetWindowThreadProcessId(handle.Handle, out _));
             Debug.Assert(
-                cxt is not null,
+                cxt != null,
                 "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
 
             GC.KeepAlive(handle.Wrapper);
@@ -1015,10 +1015,10 @@ namespace System.Windows.Forms
         /// </summary>
         private static void RaiseExit()
         {
-            if (s_eventHandlers is not null)
+            if (s_eventHandlers != null)
             {
                 Delegate exit = s_eventHandlers[EVENT_APPLICATIONEXIT];
-                if (exit is not null)
+                if (exit != null)
                 {
                     ((EventHandler)exit)(null, EventArgs.Empty);
                 }
@@ -1030,10 +1030,10 @@ namespace System.Windows.Forms
         /// </summary>
         private static void RaiseThreadExit()
         {
-            if (s_eventHandlers is not null)
+            if (s_eventHandlers != null)
             {
                 Delegate exit = s_eventHandlers[EVENT_THREADEXIT];
-                if (exit is not null)
+                if (exit != null)
                 {
                     ((EventHandler)exit)(null, EventArgs.Empty);
                 }
@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms
             Debug.Assert(((int)User32.GetWindowLong(handle, User32.GWL.STYLE) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
 
             ThreadContext cxt = GetContextForHandle(handle);
-            if (cxt is not null)
+            if (cxt != null)
             {
                 cxt.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
             }
@@ -1068,7 +1068,7 @@ namespace System.Windows.Forms
         internal static void ParkHandle(CreateParams cp, IntPtr dpiAwarenessContext)
         {
             ThreadContext cxt = ThreadContext.FromCurrent();
-            if (cxt is not null)
+            if (cxt != null)
             {
                 cp.Parent = cxt.GetParkingWindow(dpiAwarenessContext).Handle;
             }
@@ -1093,7 +1093,7 @@ namespace System.Windows.Forms
         internal static void UnparkHandle(HandleRef handle, IntPtr context)
         {
             ThreadContext cxt = GetContextForHandle(handle);
-            if (cxt is not null)
+            if (cxt != null)
             {
                 cxt.GetParkingWindow(context).UnparkHandle(handle);
             }
@@ -1125,7 +1125,7 @@ namespace System.Windows.Forms
             bool hrefExeCase = false;
 
             Process process = Process.GetCurrentProcess();
-            Debug.Assert(process is not null);
+            Debug.Assert(process != null);
             if (string.Equals(process.MainModule.ModuleName, IEEXEC, StringComparison.OrdinalIgnoreCase))
             {
                 string clrPath = Path.GetDirectoryName(typeof(object).Module.FullyQualifiedName);
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms
             {
                 // Regular app case
                 string[] arguments = Environment.GetCommandLineArgs();
-                Debug.Assert(arguments is not null && arguments.Length > 0);
+                Debug.Assert(arguments != null && arguments.Length > 0);
                 StringBuilder sb = new StringBuilder((arguments.Length - 1) * 16);
                 for (int argumentIndex = 1; argumentIndex < arguments.Length - 1; argumentIndex++)
                 {

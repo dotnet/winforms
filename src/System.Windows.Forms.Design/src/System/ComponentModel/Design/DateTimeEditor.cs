@@ -126,7 +126,7 @@ namespace System.ComponentModel.Design
                 _edSvc = edSvc;
                 _value = value;
 
-                if (value is not null)
+                if (value != null)
                 {
                     DateTime dt = (DateTime)value;
                     _monthCalendar.SetDate((dt.Equals(DateTime.MinValue)) ? DateTime.Today : dt);

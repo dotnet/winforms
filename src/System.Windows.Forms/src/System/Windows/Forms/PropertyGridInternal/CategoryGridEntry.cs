@@ -27,7 +27,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 #if DEBUG
             for (int n = 0; n < childGridEntries.Length; n++)
             {
-                Debug.Assert(childGridEntries[n] is not null, "Null item in category subproperty list");
+                Debug.Assert(childGridEntries[n] != null, "Null item in category subproperty list");
             }
 #endif
             if (categoryStates is null)
@@ -75,13 +75,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (disposing)
             {
-                if (backBrush is not null)
+                if (backBrush != null)
                 {
                     backBrush.Dispose();
                     backBrush = null;
                 }
 
-                if (ChildCollection is not null)
+                if (ChildCollection != null)
                 {
                     ChildCollection = null;
                 }

@@ -24,7 +24,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 throw new ArgumentNullException(nameof(value));
             }
 
-            Debug.Assert(_entries is not null, "Entries is initialized in the base class constructor.");
+            Debug.Assert(_entries != null, "Entries is initialized in the base class constructor.");
             var newArray = new GridEntry[_entries.Length + value.Length];
             _entries.CopyTo(newArray, 0);
             value.CopyTo(newArray, _entries.Length);
@@ -49,11 +49,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (disposing)
             {
-                if (_owner is not null)
+                if (_owner != null)
                 {
                     for (int i = 0; i < _entries.Length; i++)
                     {
-                        if (_entries[i] is not null)
+                        if (_entries[i] != null)
                         {
                             ((GridEntry)_entries[i]).Dispose();
                             _entries[i] = null;

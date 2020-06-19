@@ -63,7 +63,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is not null || Properties.ContainsObject(PropTextBoxCellEditingTextBox))
+                if (value != null || Properties.ContainsObject(PropTextBoxCellEditingTextBox))
                 {
                     Properties.SetObject(PropTextBoxCellEditingTextBox, value);
                 }
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
             get
             {
                 Type valueType = base.ValueType;
-                if (valueType is not null)
+                if (valueType != null)
                 {
                     return valueType;
                 }
@@ -166,7 +166,7 @@ namespace System.Windows.Forms
         private Rectangle GetAdjustedEditingControlBounds(Rectangle editingControlBounds, DataGridViewCellStyle cellStyle)
         {
             Debug.Assert(cellStyle.WrapMode != DataGridViewTriState.NotSet);
-            Debug.Assert(DataGridView is not null);
+            Debug.Assert(DataGridView != null);
 
             int originalWidth = editingControlBounds.Width;
             if (DataGridView.EditingControl is TextBox txtEditingControl)
@@ -502,9 +502,9 @@ namespace System.Windows.Forms
 
         public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
         {
-            Debug.Assert(DataGridView is not null &&
-                         DataGridView.EditingPanel is not null &&
-                         DataGridView.EditingControl is not null);
+            Debug.Assert(DataGridView != null &&
+                         DataGridView.EditingPanel != null &&
+                         DataGridView.EditingControl != null);
             Debug.Assert(!ReadOnly);
             base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
             if (DataGridView.EditingControl is TextBox textBox)
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
 
         private bool OwnsEditingTextBox(int rowIndex)
         {
-            return rowIndex != -1 && EditingTextBox is not null && rowIndex == ((IDataGridViewEditingControl)EditingTextBox).EditingControlRowIndex;
+            return rowIndex != -1 && EditingTextBox != null && rowIndex == ((IDataGridViewEditingControl)EditingTextBox).EditingControlRowIndex;
         }
 
         protected override void Paint(Graphics graphics,
@@ -646,7 +646,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle is not null);
+            Debug.Assert(cellStyle != null);
 
             // If computeContentBounds == TRUE then resultBounds will be the contentBounds.
             // If computeErrorIconBounds == TRUE then resultBounds will be the error icon bounds.
@@ -668,7 +668,7 @@ namespace System.Windows.Forms
 
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             bool cellCurrent = ptCurrentCell.X == ColumnIndex && ptCurrentCell.Y == rowIndex;
-            bool cellEdited = cellCurrent && DataGridView.EditingControl is not null;
+            bool cellEdited = cellCurrent && DataGridView.EditingControl != null;
             bool cellSelected = (cellState & DataGridViewElementStates.Selected) != 0;
 
             if (DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected && !cellEdited)
@@ -715,7 +715,7 @@ namespace System.Windows.Forms
             Rectangle errorBounds = valBounds;
             string formattedString = formattedValue as string;
 
-            if (formattedString is not null && ((paint && !cellEdited) || computeContentBounds))
+            if (formattedString != null && ((paint && !cellEdited) || computeContentBounds))
             {
                 // Font independent margins
                 int verticalTextMarginTop = cellStyle.WrapMode == DataGridViewTriState.True ? DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithWrapping : DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithoutWrapping;

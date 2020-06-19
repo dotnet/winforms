@@ -79,7 +79,7 @@ namespace System.Windows.Forms
                     if (User32.IsWindow(hWnd).IsTrue())
                     {
                         Control c = Control.FromHandle(hWnd);
-                        if (c is not null)
+                        if (c != null)
                         {
                             c.Dispose();
                         }
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
                 {
                     _activeHwnd = User32.GetActiveWindow();
                     Control activatingControl = ThreadContext.FromCurrent().ActivatingControl;
-                    if (activatingControl is not null)
+                    if (activatingControl != null)
                     {
                         _focusedHwnd = activatingControl.Handle;
                     }

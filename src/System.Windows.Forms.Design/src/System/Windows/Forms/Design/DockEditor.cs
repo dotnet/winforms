@@ -361,7 +361,7 @@ namespace System.Windows.Forms.Design
 
                 e.Handled = true;
 
-                if (target is not null && target != sender)
+                if (target != null && target != sender)
                 {
                     target.Focus();
                 }

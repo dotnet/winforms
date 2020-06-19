@@ -60,7 +60,7 @@ namespace System.ComponentModel.Design
                                 collectionType = parameters[0].ParameterType;
                             }
 
-                            if (collectionType is not null)
+                            if (collectionType != null)
                             {
                                 if (!typeof(IComponent).IsAssignableFrom(collectionType))
                                 {
@@ -192,7 +192,7 @@ namespace System.ComponentModel.Design
                 serializationVisibility = dsva.Visibility;
             }
 
-            if (value is not null && serializationVisibility == DesignerSerializationVisibility.Content)
+            if (value != null && serializationVisibility == DesignerSerializationVisibility.Content)
             {
                 if (value is ICloneable)
                 {
@@ -239,7 +239,7 @@ namespace System.ComponentModel.Design
                 if (!propertyDescriptor.ShouldSerializeValue(component))
                 {
                     DefaultValueAttribute defaultAttribute = (DefaultValueAttribute)propertyDescriptor.Attributes[typeof(DefaultValueAttribute)];
-                    if (defaultAttribute is not null)
+                    if (defaultAttribute != null)
                     {
                         _defaultValue = defaultAttribute.Value;
                         currentValue = _defaultValue;

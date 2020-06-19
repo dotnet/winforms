@@ -78,8 +78,8 @@ namespace System.ComponentModel.Design
             else
             {
                 IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
-                Debug.Assert(sc is not null, "DesignerHost: Ctor needs a service provider that provides IServiceContainer");
-                if (sc is not null)
+                Debug.Assert(sc != null, "DesignerHost: Ctor needs a service provider that provides IServiceContainer");
+                if (sc != null)
                 {
                     foreach (Type t in s_defaultServices)
                     {
@@ -124,14 +124,14 @@ namespace System.ComponentModel.Design
                 _typeServiceChecked = true;
             }
             // TypeDescriptionProviderService is attached at design time only
-            if (_typeService is not null)
+            if (_typeService != null)
             {
                 // Check for the attribute that VsTargetFrameworkProvider injects on reflection types to see if VsTargetFrameworkProvider is already attached.
                 Type type = TypeDescriptor.GetProvider(component).GetReflectionType(typeof(object));
                 if (!type.IsDefined(typeof(ProjectTargetFrameworkAttribute), false))
                 {
                     TypeDescriptionProvider typeProvider = _typeService.GetProvider(component);
-                    if (typeProvider is not null)
+                    if (typeProvider != null)
                     {
                         TypeDescriptor.AddProvider(typeProvider, component);
                     }
@@ -183,7 +183,7 @@ namespace System.ComponentModel.Design
             }
 
             // Make sure we're not adding an instance of the root component to itself.
-            if (_rootComponent is not null)
+            if (_rootComponent != null)
             {
                 if (string.Equals(component.GetType().FullName, _rootComponentClassName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -197,9 +197,9 @@ namespace System.ComponentModel.Design
 
             ISite existingSite = component.Site;
             // If the component is already in our container, we just rename.
-            if (existingSite is not null && existingSite.Container == this)
+            if (existingSite != null && existingSite.Container == this)
             {
-                if (name is not null)
+                if (name != null)
                 {
                     existingSite.Name = name;
                 }
@@ -253,7 +253,7 @@ namespace System.ComponentModel.Design
                 designer = _surface.CreateDesigner(component, false);
             }
 
-            if (designer is not null)
+            if (designer != null)
             {
                 // The presence of a designer in this table allows the designer to filter the component's properties, which is often needed during designer initialization.  So, we stuff it in the table first, initialize, and if it throws we remove it from the table.
                 _designers[component] = designer;
@@ -291,7 +291,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void BeginLoad(DesignerLoader loader)
         {
-            if (_loader is not null && _loader != loader)
+            if (_loader != null && _loader != loader)
             {
                 Exception ex = new InvalidOperationException(SR.DesignerHostLoaderSpecified)
                 {
@@ -301,7 +301,7 @@ namespace System.ComponentModel.Design
             }
 
             IDesignerEventService des = null;
-            bool reloading = (_loader is not null);
+            bool reloading = (_loader != null);
             _loader = loader;
             if (!reloading)
             {
@@ -314,7 +314,7 @@ namespace System.ComponentModel.Design
                 }
 
                 des = GetService(typeof(IDesignerEventService)) as IDesignerEventService;
-                if (des is not null)
+                if (des != null)
                 {
                     des.ActiveDesignerChanged += new ActiveDesignerEventHandler(OnActiveDesignerChanged);
                     _designerEventService = des;
@@ -360,9 +360,9 @@ namespace System.ComponentModel.Design
         /// <returns> The newly created site </returns>
         protected override ISite CreateSite(IComponent component, string name)
         {
-            Debug.Assert(component is not null, "Caller should have guarded against a null component");
+            Debug.Assert(component != null, "Caller should have guarded against a null component");
             // We need to handle the case where a component's ctor adds itself to the container.  We don't want to do the work of creating a name, and then immediately renaming.  So, DesignerHost's CreateComponent will set _newComponentName to the newly created name before creating the component.
-            if (_newComponentName is not null)
+            if (_newComponentName != null)
             {
                 name = _newComponentName;
                 _newComponentName = null;
@@ -372,7 +372,7 @@ namespace System.ComponentModel.Design
             // Fabricate a name if one wasn't provided.  We try to use the name creation service, but if it is not available we will just use an empty string.
             if (name is null)
             {
-                if (nameCreate is not null)
+                if (nameCreate != null)
                 {
                     // VirtualTypes and Compact framework types will need to use  reflection type in order to get their "real" name (the one  available in the compact FX, for example)
                     Type reflectType = TypeDescriptor.GetReflectionType(component);
@@ -389,7 +389,7 @@ namespace System.ComponentModel.Design
             }
             else
             {
-                if (nameCreate is not null)
+                if (nameCreate != null)
                 {
                     nameCreate.ValidateName(name);
                 }
@@ -416,15 +416,15 @@ namespace System.ComponentModel.Design
         {
             try
             {
-                if (_loader is not null)
+                if (_loader != null)
                 {
                     _loader.Dispose();
                     Unload();
                 }
 
-                if (_surface is not null)
+                if (_surface != null)
                 {
-                    if (_designerEventService is not null)
+                    if (_designerEventService != null)
                     {
                         _designerEventService.ActiveDesignerChanged -= new ActiveDesignerEventHandler(OnActiveDesignerChanged);
                     }
@@ -439,8 +439,8 @@ namespace System.ComponentModel.Design
                     else
                     {
                         IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
-                        Debug.Assert(sc is not null, "DesignerHost: Ctor needs a service provider that provides IServiceContainer");
-                        if (sc is not null)
+                        Debug.Assert(sc != null, "DesignerHost: Ctor needs a service provider that provides IServiceContainer");
+                        if (sc != null)
                         {
                             foreach (Type t in s_defaultServices)
                             {
@@ -464,7 +464,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void Flush()
         {
-            if (_loader is not null)
+            if (_loader != null)
             {
                 _loader.Flush();
             }
@@ -493,7 +493,7 @@ namespace System.ComponentModel.Design
             else
             {
                 serviceInstance = base.GetService(service);
-                if (serviceInstance is null && _surface is not null)
+                if (serviceInstance is null && _surface != null)
                 {
                     serviceInstance = _surface.GetService(service);
                 }
@@ -530,7 +530,7 @@ namespace System.ComponentModel.Design
             }
 
             // If we are deactivating, flush any code changes. We always route through the design surface so it can correctly raise its Flushed event.
-            if (e.OldDesigner == this && _surface is not null)
+            if (e.OldDesigner == this && _surface != null)
             {
                 _surface.Flush();
             }
@@ -613,7 +613,7 @@ namespace System.ComponentModel.Design
                 Site site = component.Site as Site;
                 RemoveWithoutUnsiting(component);
                 RemoveFromContainerPostProcess(component, this);
-                if (site is not null)
+                if (site != null)
                 {
                     site.Disposed = true;
                 }
@@ -659,7 +659,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            if (designer is not null)
+            if (designer != null)
             {
                 designer.Dispose();
                 _designers.Remove(component);
@@ -695,13 +695,13 @@ namespace System.ComponentModel.Design
         {
             _surface?.OnUnloading();
 
-            if (GetService(typeof(IHelpService)) is IHelpService helpService && _rootComponent is not null && _designers[_rootComponent] is not null)
+            if (GetService(typeof(IHelpService)) is IHelpService helpService && _rootComponent != null && _designers[_rootComponent] != null)
             {
                 helpService.RemoveContextAttribute("Keyword", "Designer_" + _designers[_rootComponent].GetType().FullName);
             }
 
             ISelectionService selectionService = (ISelectionService)GetService(typeof(ISelectionService));
-            if (selectionService is not null)
+            if (selectionService != null)
             {
                 selectionService.SetSelectedComponents(null, SelectionTypes.Replace);
             }
@@ -742,7 +742,7 @@ namespace System.ComponentModel.Design
                     }
                 }
 
-                if (_rootComponent is not null)
+                if (_rootComponent != null)
                 {
                     if (_designers[_rootComponent] is IDesigner designer)
                     {
@@ -779,7 +779,7 @@ namespace System.ComponentModel.Design
             }
 
             // There should be no open transactions.  Commit all of the ones that are open.
-            if (_transactions is not null && _transactions.Count > 0)
+            if (_transactions != null && _transactions.Count > 0)
             {
                 Debug.Fail("There are open transactions at unload");
                 while (_transactions.Count > 0)
@@ -887,7 +887,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool IDesignerHost.Loading
         {
-            get => _state[s_stateLoading] || _state[s_stateUnloading] || (_loader is not null && _loader.Loading);
+            get => _state[s_stateLoading] || _state[s_stateUnloading] || (_loader != null && _loader.Loading);
         }
 
         /// <summary>
@@ -895,7 +895,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool IDesignerHost.InTransaction
         {
-            get => (_transactions is not null && _transactions.Count > 0) || IsClosingTransaction;
+            get => (_transactions != null && _transactions.Count > 0) || IsClosingTransaction;
         }
 
         /// <summary>
@@ -929,7 +929,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_transactions is not null && _transactions.Count > 0)
+                if (_transactions != null && _transactions.Count > 0)
                 {
                     return ((DesignerTransaction)_transactions.Peek()).Description;
                 }
@@ -1107,7 +1107,7 @@ namespace System.ComponentModel.Design
                 throw new ArgumentNullException(nameof(component));
             }
 
-            if (component.Site is not null && component.Site.Name is not null)
+            if (component.Site != null && component.Site.Name != null)
             {
                 name = component.Site.Name;
             }
@@ -1119,7 +1119,7 @@ namespace System.ComponentModel.Design
             // Make sure the component is not being inherited -- we can't delete these!
             // UNDONE.  Try to get Inheritance knowledge out of this basic code.
             InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(component)[typeof(InheritanceAttribute)];
-            if (ia is not null && ia.InheritanceLevel != InheritanceLevel.NotInherited)
+            if (ia != null && ia.InheritanceLevel != InheritanceLevel.NotInherited)
             {
                 Exception ex = new InvalidOperationException(string.Format(SR.DesignerHostCantDestroyInheritedComponent, name))
                 {
@@ -1183,11 +1183,11 @@ namespace System.ComponentModel.Design
             bool wasLoading = _state[s_stateLoading];
             _state[s_stateLoading] = false;
 
-            if (rootClassName is not null)
+            if (rootClassName != null)
             {
                 _rootComponentClassName = rootClassName;
             }
-            else if (_rootComponent is not null && _rootComponent.Site is not null)
+            else if (_rootComponent != null && _rootComponent.Site != null)
             {
                 _rootComponentClassName = _rootComponent.Site.Name;
             }
@@ -1211,7 +1211,7 @@ namespace System.ComponentModel.Design
                 Unload();
             }
 
-            if (wasLoading && _surface is not null)
+            if (wasLoading && _surface != null)
             {
                 _surface.OnLoaded(successful, errorCollection);
             }
@@ -1244,14 +1244,14 @@ namespace System.ComponentModel.Design
                         {
                             ex
                         };
-                        if (errorCollection is not null)
+                        if (errorCollection != null)
                         {
                             errorList.AddRange(errorCollection);
                         }
                         errorCollection = errorList;
                         successful = false;
 
-                        if (_surface is not null)
+                        if (_surface != null)
                         {
                             _surface.OnLoaded(successful, errorCollection);
                         }
@@ -1261,7 +1261,7 @@ namespace System.ComponentModel.Design
                     }
 
                     // If we saved a selection as a result of a reload, try to replace it.
-                    if (successful && _savedSelection is not null)
+                    if (successful && _savedSelection != null)
                     {
                         if (GetService(typeof(ISelectionService)) is ISelectionService ss)
                         {
@@ -1269,7 +1269,7 @@ namespace System.ComponentModel.Design
                             foreach (string name in _savedSelection)
                             {
                                 IComponent comp = Components[name];
-                                if (comp is not null)
+                                if (comp != null)
                                 {
                                     selectedComponents.Add(comp);
                                 }
@@ -1287,7 +1287,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IDesignerLoaderHost.Reload()
         {
-            if (_loader is not null)
+            if (_loader != null)
             {
                 // Flush the loader to make sure there aren't any pending  changes.  We always route through the design surface so it can correctly raise its Flushed event.
                 _surface.Flush();
@@ -1297,7 +1297,7 @@ namespace System.ComponentModel.Design
                     ArrayList list = new ArrayList(ss.SelectionCount);
                     foreach (object o in ss.GetSelectedComponents())
                     {
-                        if (o is IComponent comp && comp.Site is not null && comp.Site.Name is not null)
+                        if (o is IComponent comp && comp.Site != null && comp.Site.Name != null)
                         {
                             list.Add(comp.Site.Name);
                         }
@@ -1534,7 +1534,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             protected override void OnCancel()
             {
-                if (_host is not null)
+                if (_host != null)
                 {
                     if (_host._transactions.Peek() != this)
                     {
@@ -1562,7 +1562,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             protected override void OnCommit()
             {
-                if (_host is not null)
+                if (_host != null)
                 {
                     if (_host._transactions.Peek() != this)
                     {
@@ -1616,9 +1616,9 @@ namespace System.ComponentModel.Design
                 get
                 {
                     SiteNestedContainer nc = ((IServiceProvider)this).GetService(typeof(INestedContainer)) as SiteNestedContainer;
-                    Debug.Assert(nc is not null, "We failed to resolve a nested container.");
+                    Debug.Assert(nc != null, "We failed to resolve a nested container.");
                     IServiceContainer sc = nc.GetServiceInternal(typeof(IServiceContainer)) as IServiceContainer;
-                    Debug.Assert(sc is not null, "We failed to resolve a service container from the nested container.");
+                    Debug.Assert(sc != null, "We failed to resolve a service container from the nested container.");
                     return sc;
                 }
             }
@@ -1628,12 +1628,12 @@ namespace System.ComponentModel.Design
             /// </summary>
             object IDictionaryService.GetKey(object value)
             {
-                if (_dictionary is not null)
+                if (_dictionary != null)
                 {
                     foreach (DictionaryEntry de in _dictionary)
                     {
                         object o = de.Value;
-                        if (value is not null && value.Equals(o))
+                        if (value != null && value.Equals(o))
                         {
                             return de.Key;
                         }
@@ -1647,7 +1647,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             object IDictionaryService.GetValue(object key)
             {
-                if (_dictionary is not null)
+                if (_dictionary != null)
                 {
                     return _dictionary[key];
                 }
@@ -1753,7 +1753,7 @@ namespace System.ComponentModel.Design
 
                 // SiteNestedContainer does offer IServiceContainer and IContainer as services, but we always want a default site query for these services to delegate to the host.
                 // Because it is more common to add  services to the host than it is to add them to the site itself, and also because we need this for backward compatibility.
-                if (service != typeof(IServiceContainer) && service != typeof(IContainer) && _nestedContainer is not null)
+                if (service != typeof(IServiceContainer) && service != typeof(IContainer) && _nestedContainer != null)
                 {
                     return _nestedContainer.GetServiceInternal(service);
                 }
@@ -1822,7 +1822,7 @@ namespace System.ComponentModel.Design
                             IComponent namedComponent = _container.Components[value];
                             validateName = (_component != namedComponent);
                             // allow renames that are just case changes of the current name.
-                            if (namedComponent is not null && validateName)
+                            if (namedComponent != null && validateName)
                             {
                                 Exception ex = new Exception(string.Format(SR.DesignerHostDuplicateName, value))
                                 {

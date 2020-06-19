@@ -621,7 +621,7 @@ namespace System.Windows.Forms
                     ImageIndexer.Key = value;
                     if (string.IsNullOrEmpty(value) || value.Equals(SR.toStringNone))
                     {
-                        ImageIndex = (ImageList is not null) ? 0 : ImageList.Indexer.DefaultIndex;
+                        ImageIndex = (ImageList != null) ? 0 : ImageList.Indexer.DefaultIndex;
                     }
                     if (IsHandleCreated)
                     {
@@ -660,7 +660,7 @@ namespace System.Windows.Forms
                     {
                         User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, IntPtr.Zero,
                                     value is null ? IntPtr.Zero : value.Handle);
-                        if (StateImageList is not null && StateImageList.Images.Count > 0 && internalStateImageList is not null)
+                        if (StateImageList != null && StateImageList.Images.Count > 0 && internalStateImageList != null)
                         {
                             SetStateImageList(internalStateImageList.Handle);
                         }
@@ -672,7 +672,7 @@ namespace System.Windows.Forms
 
         private void AttachImageListHandlers()
         {
-            if (imageList is not null)
+            if (imageList != null)
             {
                 //NOTE: any handlers added here should be removed in DetachImageListHandlers
                 imageList.RecreateHandle += new EventHandler(ImageListRecreateHandle);
@@ -683,7 +683,7 @@ namespace System.Windows.Forms
 
         private void DetachImageListHandlers()
         {
-            if (imageList is not null)
+            if (imageList != null)
             {
                 imageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
                 imageList.Disposed -= new EventHandler(DetachImageList);
@@ -693,7 +693,7 @@ namespace System.Windows.Forms
 
         private void AttachStateImageListHandlers()
         {
-            if (stateImageList is not null)
+            if (stateImageList != null)
             {
                 //NOTE: any handlers added here should be removed in DetachStateImageListHandlers
                 stateImageList.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
@@ -704,7 +704,7 @@ namespace System.Windows.Forms
 
         private void DetachStateImageListHandlers()
         {
-            if (stateImageList is not null)
+            if (stateImageList != null)
             {
                 stateImageList.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
                 stateImageList.Disposed -= new EventHandler(DetachStateImageList);
@@ -1136,7 +1136,7 @@ namespace System.Windows.Forms
 
                     if (string.IsNullOrEmpty(value) || value.Equals(SR.toStringNone))
                     {
-                        SelectedImageIndex = (ImageList is not null) ? 0 : ImageList.Indexer.DefaultIndex;
+                        SelectedImageIndex = (ImageList != null) ? 0 : ImageList.Indexer.DefaultIndex;
                     }
                     if (IsHandleCreated)
                     {
@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms
 
                     return NodeFromHandle(hItem);
                 }
-                else if (selectedNode is not null && selectedNode.TreeView == this)
+                else if (selectedNode != null && selectedNode.TreeView == this)
                 {
                     return selectedNode;
                 }
@@ -1181,7 +1181,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated && (value is null || value.TreeView == this))
                 {
                     // This class invariant is not quite correct -- if the selected node does not belong to this Treeview,
-                    // selectedNode is not null even though the handle is created.  We will call set_SelectedNode
+                    // selectedNode != null even though the handle is created.  We will call set_SelectedNode
                     // to inform the handle that the selected node has been added to the TreeView.
                     Debug.Assert(selectedNode is null || selectedNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
@@ -1341,7 +1341,7 @@ namespace System.Windows.Forms
                 if (treeViewNodeSorter != value)
                 {
                     treeViewNodeSorter = value;
-                    if (value is not null)
+                    if (value != null)
                     {
                         Sort();
                     }
@@ -1391,7 +1391,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated && (value is null || value.TreeView == this))
                 {
                     // This class invariant is not quite correct -- if the selected node does not belong to this Treeview,
-                    // selectedNode is not null even though the handle is created.  We will call set_SelectedNode
+                    // selectedNode != null even though the handle is created.  We will call set_SelectedNode
                     // to inform the handle that the selected node has been added to the TreeView.
                     Debug.Assert(topNode is null || topNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
@@ -1701,7 +1701,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetToolTip(ToolTip toolTip, string toolTipText)
         {
-            if (toolTip is not null)
+            if (toolTip != null)
             {
                 User32.SendMessageW(toolTip, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
                 User32.SendMessageW(this, (User32.WM)TVM.SETTOOLTIPS, toolTip.Handle);
@@ -1817,7 +1817,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr handle = IntPtr.Zero;
-                if (internalStateImageList is not null)
+                if (internalStateImageList != null)
                 {
                     handle = internalStateImageList.Handle;
                 }
@@ -1831,7 +1831,7 @@ namespace System.Windows.Forms
             {
                 // Since the native treeview requires the state imagelist to be 1-indexed we need to
                 // re add the images if the original collection had changed.
-                if (stateImageList is not null && stateImageList.Images.Count > 0)
+                if (stateImageList != null && stateImageList.Images.Count > 0)
                 {
                     Image[] images = new Image[stateImageList.Images.Count + 1];
                     images[0] = stateImageList.Images[0];
@@ -1840,7 +1840,7 @@ namespace System.Windows.Forms
                         images[i] = stateImageList.Images[i - 1];
                     }
 
-                    if (internalStateImageList is not null)
+                    if (internalStateImageList != null)
                     {
                         internalStateImageList.Images.Clear();
                         internalStateImageList.Images.AddRange(images);
@@ -1851,10 +1851,10 @@ namespace System.Windows.Forms
                         internalStateImageList.Images.AddRange(images);
                     }
 
-                    Debug.Assert(internalStateImageList is not null, "Why are changing images when the Imagelist is null?");
-                    if (internalStateImageList is not null)
+                    Debug.Assert(internalStateImageList != null, "Why are changing images when the Imagelist is null?");
+                    if (internalStateImageList != null)
                     {
-                        if (ScaledStateImageSize is not null)
+                        if (ScaledStateImageSize != null)
                         {
                             internalStateImageList.ImageSize = (Size)ScaledStateImageSize;
                         }
@@ -1877,7 +1877,7 @@ namespace System.Windows.Forms
             // If in edit mode, treat Return as an input key, so the form doesn't grab it
             // and treat it as clicking the Form.AcceptButton.  Similarly for Escape
             // and Form.CancelButton.
-            if (editNode is not null && (keyData & Keys.Alt) == 0)
+            if (editNode != null && (keyData & Keys.Alt) == 0)
             {
                 switch (keyData & Keys.KeyCode)
                 {
@@ -1969,12 +1969,12 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WM)TVM.SETLINECOLOR, IntPtr.Zero, PARAM.FromColor(lineColor));
             }
 
-            if (imageList is not null)
+            if (imageList != null)
             {
                 User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, IntPtr.Zero, imageList.Handle);
             }
 
-            if (stateImageList is not null)
+            if (stateImageList != null)
             {
                 UpdateNativeStateImageList();
             }
@@ -2035,10 +2035,10 @@ namespace System.Windows.Forms
         // set the value of internalStateImageList to the new list
         private void UpdateNativeStateImageList()
         {
-            if (stateImageList is not null && stateImageList.Images.Count > 0)
+            if (stateImageList != null && stateImageList.Images.Count > 0)
             {
                 ImageList newImageList = new ImageList();
-                if (ScaledStateImageSize is not null)
+                if (ScaledStateImageSize != null)
                 {
                     newImageList.ImageSize = (Size)ScaledStateImageSize;
                 }
@@ -2052,7 +2052,7 @@ namespace System.Windows.Forms
                 newImageList.Images.AddRange(images);
                 User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, newImageList.Handle);
 
-                if (internalStateImageList is not null)
+                if (internalStateImageList != null)
                 {
                     internalStateImageList.Dispose();
                 }
@@ -2096,7 +2096,7 @@ namespace System.Windows.Forms
 
             // for the case when we are NOT being disposed, we'll be recreating the internal state imagelist
             // in OnHandleCreate, so it is ok to completely Dispose here
-            if (internalStateImageList is not null)
+            if (internalStateImageList != null)
             {
                 internalStateImageList.Dispose();
                 internalStateImageList = null;
@@ -2132,7 +2132,7 @@ namespace System.Windows.Forms
             if (hnode != IntPtr.Zero && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
-                if (tn != prevHoveredNode && tn is not null)
+                if (tn != prevHoveredNode && tn != null)
                 {
                     OnNodeMouseHover(new TreeNodeMouseHoverEventArgs(tn));
                     prevHoveredNode = tn;
@@ -2275,7 +2275,7 @@ namespace System.Windows.Forms
             if (CheckBoxes && (e.KeyData & Keys.KeyCode) == Keys.Space)
             {
                 TreeNode node = SelectedNode;
-                if (node is not null)
+                if (node != null)
                 {
                     bool eventReturn = TreeViewBeforeCheck(node, TreeViewAction.ByKeyboard);
                     if (!eventReturn)
@@ -2388,7 +2388,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeSelectedImageIndex()
         {
-            if (imageList is not null)
+            if (imageList != null)
             {
                 return (SelectedImageIndex != 0);
             }
@@ -2397,7 +2397,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeImageIndex()
         {
-            if (imageList is not null)
+            if (imageList != null)
             {
                 return (ImageIndex != 0);
             }
@@ -2419,7 +2419,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            if (Nodes is not null)
+            if (Nodes != null)
             {
                 s += ", Nodes.Count: " + Nodes.Count.ToString(CultureInfo.CurrentCulture);
                 if (Nodes.Count > 0)
@@ -2596,7 +2596,7 @@ namespace System.Windows.Forms
             string newText = (nmtvdi.item.pszText == IntPtr.Zero ? null : Marshal.PtrToStringAuto(nmtvdi.item.pszText));
             NodeLabelEditEventArgs e = new NodeLabelEditEventArgs(node, newText);
             OnAfterLabelEdit(e);
-            if (newText is not null && !e.CancelEdit && node is not null)
+            if (newText != null && !e.CancelEdit && node != null)
             {
                 node.text = newText;
                 if (Scrollable)
@@ -2612,12 +2612,12 @@ namespace System.Windows.Forms
             base.UpdateStylesCore();
             if (IsHandleCreated && CheckBoxes)
             {
-                if (StateImageList is not null)
+                if (StateImageList != null)
                 {
                     // Setting the TVS_CHECKBOXES window style also causes the TreeView to display the default checkbox
                     // images rather than the user specified StateImageList.  We send a TVM_SETIMAGELIST to restore the
                     // user's images.
-                    if (internalStateImageList is not null)
+                    if (internalStateImageList != null)
                     {
                         SetStateImageList(internalStateImageList.Handle);
                     }
@@ -2759,16 +2759,16 @@ namespace System.Windows.Forms
                     // when one item is selected, click and hold on another). This needs to be fixed.
                     Color riFore = renderinfo.ForeColor;
                     Color riBack = renderinfo.BackColor;
-                    if (renderinfo is not null && !riFore.IsEmpty)
+                    if (renderinfo != null && !riFore.IsEmpty)
                     {
                         nmtvcd->clrText = ColorTranslator.ToWin32(riFore);
                     }
-                    if (renderinfo is not null && !riBack.IsEmpty)
+                    if (renderinfo != null && !riBack.IsEmpty)
                     {
                         nmtvcd->clrTextBk = ColorTranslator.ToWin32(riBack);
                     }
 
-                    if (renderinfo is not null && renderinfo.Font is not null)
+                    if (renderinfo != null && renderinfo.Font != null)
                     {
                         // Mess with the DC directly...
                         Gdi32.SelectObject(new HandleRef(nmtvcd->nmcd, nmtvcd->nmcd.hdc), new HandleRef(renderinfo, renderinfo.FontHandle));
@@ -2890,7 +2890,7 @@ namespace System.Windows.Forms
             if (hnode != IntPtr.Zero && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
-                if (tn is not null)
+                if (tn != null)
                 {
                     if (!ShowNodeToolTips) // default ToolTips
                     {
@@ -2924,11 +2924,11 @@ namespace System.Windows.Forms
             if (hnode != IntPtr.Zero && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
-                if (ShowNodeToolTips && tn is not null && (!string.IsNullOrEmpty(tn.ToolTipText)))
+                if (ShowNodeToolTips && tn != null && (!string.IsNullOrEmpty(tn.ToolTipText)))
                 {
                     tipText = tn.ToolTipText;
                 }
-                else if (tn is not null && tn.Bounds.Right > Bounds.Right)
+                else if (tn != null && tn.Bounds.Right > Bounds.Right)
                 {
                     tipText = tn.Text;
                 }
@@ -3020,7 +3020,7 @@ namespace System.Windows.Forms
                         if (nmtv->nmhdr.code == (int)NM.RCLICK)
                         {
                             TreeNode treeNode = NodeFromHandle(hnode);
-                            if (treeNode is not null && treeNode.ContextMenuStrip is not null)
+                            if (treeNode != null && treeNode.ContextMenuStrip != null)
                             {
                                 ShowContextMenu(treeNode);
                             }
@@ -3054,7 +3054,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowContextMenu(TreeNode treeNode)
         {
-            if (treeNode.ContextMenuStrip is not null)
+            if (treeNode.ContextMenuStrip != null)
             {
                 ContextMenuStrip menu = treeNode.ContextMenuStrip;
 
@@ -3211,7 +3211,7 @@ namespace System.Windows.Forms
                         {
                             TreeNode node = NodeFromHandle(hNodeMouseDown);
                             bool eventReturn = TreeViewBeforeCheck(node, TreeViewAction.ByMouse);
-                            if (!eventReturn && node is not null)
+                            if (!eventReturn && node != null)
                             {
                                 node.CheckedInternal = !node.CheckedInternal;
                                 TreeViewAfterCheck(node, TreeViewAction.ByMouse);
@@ -3343,12 +3343,12 @@ namespace System.Windows.Forms
                     {
                         // this is the Shift + F10 Case....
                         TreeNode treeNode = SelectedNode;
-                        if (treeNode is not null && treeNode.ContextMenuStrip is not null)
+                        if (treeNode != null && treeNode.ContextMenuStrip != null)
                         {
                             Point client;
                             client = new Point(treeNode.Bounds.X, treeNode.Bounds.Y + treeNode.Bounds.Height / 2);
                             // VisualStudio7 # 156, only show the context menu when clicked in the client area
-                            if (ClientRectangle.Contains(client) && treeNode.ContextMenuStrip is not null)
+                            if (ClientRectangle.Contains(client) && treeNode.ContextMenuStrip != null)
                             {
                                 bool keyboardActivated = (unchecked((int)(long)m.LParam) == -1);
                                 treeNode.ContextMenuStrip.ShowInternal(this, client, keyboardActivated);

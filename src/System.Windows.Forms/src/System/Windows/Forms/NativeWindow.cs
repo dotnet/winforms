@@ -367,7 +367,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (_weakThisPtr.IsAlive && _weakThisPtr.Target is not null)
+                if (_weakThisPtr.IsAlive && _weakThisPtr.Target != null)
                 {
                     WndProc(ref m);
                 }
@@ -452,7 +452,7 @@ namespace System.Windows.Forms
                                 // CreateWindowEx throws if WindowText is greater than the max
                                 // length of a 16 bit int (32767).
                                 // If it exceeds the max, we should take the substring....
-                                if (cp.Caption is not null && cp.Caption.Length > short.MaxValue)
+                                if (cp.Caption != null && cp.Caption.Length > short.MaxValue)
                                 {
                                     cp.Caption = cp.Caption.Substring(0, short.MaxValue);
                                 }
@@ -626,7 +626,7 @@ namespace System.Windows.Forms
                             if (entry.Value.IsAllocated)
                             {
                                 NativeWindow w = (NativeWindow)entry.Value.Target;
-                                if (w is not null)
+                                if (w != null)
                                 {
                                     w.Handle = IntPtr.Zero;
                                 }
@@ -689,7 +689,7 @@ namespace System.Windows.Forms
 
                 Handle = IntPtr.Zero;
 
-                if (_weakThisPtr.IsAlive && _weakThisPtr.Target is not null)
+                if (_weakThisPtr.IsAlive && _weakThisPtr.Target != null)
                 {
                     // We're not already finalizing.
                     OnHandleChange();
@@ -712,13 +712,13 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (window.PreviousWindow is not null)
+                if (window.PreviousWindow != null)
                 {
                     // Connect the prior window directly to the next window (if any)
                     window.PreviousWindow._nextWindow = window._nextWindow;
                 }
 
-                if (window._nextWindow is not null)
+                if (window._nextWindow != null)
                 {
                     // Connect the next window to the prior window
                     window._nextWindow._priorWindowProcHandle = window._priorWindowProcHandle;
@@ -735,7 +735,7 @@ namespace System.Windows.Forms
                         root.Free();
                     }
 
-                    if (window.PreviousWindow is not null)
+                    if (window.PreviousWindow != null)
                     {
                         s_windowHandles[handle] = GCHandle.Alloc(window.PreviousWindow, GCHandleType.Weak);
                     }

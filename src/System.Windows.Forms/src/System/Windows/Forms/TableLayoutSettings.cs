@@ -226,7 +226,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_stub is not null)
+                if (_stub != null)
                 {
                     return true;
                 }
@@ -289,7 +289,7 @@ namespace System.Windows.Forms
             else
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container is not null)
+                if (element.Container != null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
@@ -335,7 +335,7 @@ namespace System.Windows.Forms
             else
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container is not null)
+                if (element.Container != null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
@@ -488,7 +488,7 @@ namespace System.Windows.Forms
             else
             {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container is not null)
+                if (element.Container != null)
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
@@ -552,7 +552,7 @@ namespace System.Windows.Forms
                         // We need to go through the PropertyDescriptor for the Name property
                         // since it is shadowed.
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(c)["Name"];
-                        if (prop is not null && prop.PropertyType == typeof(string))
+                        if (prop != null && prop.PropertyType == typeof(string))
                         {
                             controlInfo.Name = prop.GetValue(c);
                         }

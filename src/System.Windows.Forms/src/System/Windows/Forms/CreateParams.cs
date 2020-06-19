@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Class style bits. This must be a combination of CS_XXX style flags. This
-        ///  field is ignored if the className field is not null.
+        ///  field is ignored if the className field != null.
         /// </summary>
         public int ClassStyle { get; set; }
 

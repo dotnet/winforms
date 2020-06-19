@@ -123,7 +123,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderToolStripBackground(e);
                 return;
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
         protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e) {
             ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
 
-            if (RendererOverride is not null) {
+            if (RendererOverride != null) {
                 base.OnRenderOverflowButtonBackground(e);
                 return;
             }
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderDropDownButtonBackground(e);
                 return;
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderSeparator(e);
                 return;
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderSplitButtonBackground(e);
                 return;
@@ -269,7 +269,7 @@ namespace System.Windows.Forms
             if (e.Item is ToolStripSplitButton item)
             {
                 Rectangle bounds = new Rectangle(Point.Empty, item.Size);
-                if (item.BackgroundImage is not null)
+                if (item.BackgroundImage != null)
                 {
                     Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
                     ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderToolStripStatusLabelBackground(e);
                 return;
@@ -325,7 +325,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderLabelBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderLabelBackground(e);
                 return;
@@ -336,7 +336,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderButtonBackground(e);
                 return;
@@ -354,7 +354,7 @@ namespace System.Windows.Forms
             {
                 Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
 
-                if (item.BackgroundImage is not null)
+                if (item.BackgroundImage != null)
                 {
                     ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
                 }
@@ -395,7 +395,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderToolStripBorder(e);
                 return;
@@ -473,7 +473,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderGrip(ToolStripGripRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderGrip(e);
                 return;
@@ -541,7 +541,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderMenuItemBackground(e);
                 return;
@@ -594,11 +594,11 @@ namespace System.Windows.Forms
                 {
                     Rectangle fillRect = bounds;
 
-                    if (item.BackgroundImage is not null)
+                    if (item.BackgroundImage != null)
                     {
                         ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
                     }
-                    else if (item.Owner is not null && item.BackColor != item.Owner.BackColor)
+                    else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
                     {
                         using (Brush b = new SolidBrush(item.BackColor))
                         {
@@ -646,11 +646,11 @@ namespace System.Windows.Forms
                 {
                     Rectangle fillRect = bounds;
 
-                    if (item.BackgroundImage is not null)
+                    if (item.BackgroundImage != null)
                     {
                         ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
                     }
-                    else if (item.Owner is not null && item.BackColor != item.Owner.BackColor)
+                    else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
                     {
                         using (Brush b = new SolidBrush(item.BackColor))
                         {
@@ -663,7 +663,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderArrow(e);
                 return;
@@ -681,7 +681,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderImageMargin(e);
                 return;
@@ -702,7 +702,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderItemText(e);
                 return;
@@ -718,7 +718,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderItemCheck(e);
                 return;
@@ -729,7 +729,7 @@ namespace System.Windows.Forms
         }
         protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderItemImage(e);
                 return;
@@ -750,7 +750,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (imageRect != Rectangle.Empty && image is not null)
+            if (imageRect != Rectangle.Empty && image != null)
             {
                 if (!e.Item.Enabled)
                 {
@@ -772,7 +772,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripPanelBackground(ToolStripPanelRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderToolStripPanelBackground(e);
                 return;
@@ -792,7 +792,7 @@ namespace System.Windows.Forms
 
         protected override void OnRenderToolStripContentPanelBackground(ToolStripContentPanelRenderEventArgs e)
         {
-            if (RendererOverride is not null)
+            if (RendererOverride != null)
             {
                 base.OnRenderToolStripContentPanelBackground(e);
                 return;
@@ -836,7 +836,7 @@ namespace System.Windows.Forms
             // Render curve
             // eat away at the corners by drawing the parent background
             //
-            if (toolStrip.ParentInternal is not null)
+            if (toolStrip.ParentInternal != null)
             {
                 //
                 // Paint pieces of the parent here to give toolStrip rounded effect
@@ -1092,7 +1092,7 @@ namespace System.Windows.Forms
 
             Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
 
-            if (item.BackgroundImage is not null)
+            if (item.BackgroundImage != null)
             {
                 ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
             }
@@ -1115,7 +1115,7 @@ namespace System.Windows.Forms
             if (orientation == Orientation.Horizontal)
             {
                 Control parent = control.ParentInternal;
-                if (parent is not null)
+                if (parent != null)
                 {
                     Rectangle gradientBounds = new Rectangle(Point.Empty, parent.Size);
                     if (!LayoutUtils.IsZeroWidthOrHeight(gradientBounds))
@@ -1528,12 +1528,12 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (disposeForeColorPen && foreColorPen is not null)
+                if (disposeForeColorPen && foreColorPen != null)
                 {
                     foreColorPen.Dispose();
                 }
 
-                if (disposeHighlightColorColorPen && highlightColorPen is not null)
+                if (disposeHighlightColorColorPen && highlightColorPen != null)
                 {
                     highlightColorPen.Dispose();
                 }
@@ -1572,7 +1572,7 @@ namespace System.Windows.Forms
 
             Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
 
-            if (item.BackgroundImage is not null)
+            if (item.BackgroundImage != null)
             {
                 ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
             }
@@ -1587,7 +1587,7 @@ namespace System.Windows.Forms
                 RenderSelectedButtonFill(g, bounds);
                 drawHotBorder = useHotBorder;
             }
-            else if (item.Owner is not null && item.BackColor != item.Owner.BackColor)
+            else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
             {
                 using (Brush b = new SolidBrush(item.BackColor))
                 {

@@ -591,7 +591,7 @@ namespace System.ComponentModel.Design
                                 2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
             }
 
-            if (_scrollBar is not null)
+            if (_scrollBar != null)
             {
                 if (_linesCount > _rowCount)
                 {
@@ -654,7 +654,7 @@ namespace System.ComponentModel.Design
                 throw new ArgumentNullException("bytes");
             }
 
-            if (_dataBuf is not null)
+            if (_dataBuf != null)
             {
                 _dataBuf = null;
             }

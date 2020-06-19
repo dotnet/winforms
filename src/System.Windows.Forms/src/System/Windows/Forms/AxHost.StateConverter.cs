@@ -77,7 +77,7 @@ namespace System.Windows.Forms
 
                 if (destinationType == typeof(byte[]))
                 {
-                    if (value is not null)
+                    if (value != null)
                     {
                         MemoryStream ms = new MemoryStream();
                         State state = (State)value;

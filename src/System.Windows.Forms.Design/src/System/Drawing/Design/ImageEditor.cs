@@ -70,7 +70,7 @@ namespace System.Drawing.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider is not null)
+            if (provider != null)
             {
                 if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
@@ -88,7 +88,7 @@ namespace System.Drawing.Design
 
                             ImageEditor e = (ImageEditor)Activator.CreateInstance(extender, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
                             Type myClass = GetType();
-                            if (!myClass.Equals(e.GetType()) && e is not null && myClass.IsInstanceOfType(e))
+                            if (!myClass.Equals(e.GetType()) && e != null && myClass.IsInstanceOfType(e))
                             {
                                 filter += "|" + CreateFilterEntry(e);
                             }
@@ -147,7 +147,7 @@ namespace System.Drawing.Design
                 if (e.GetType() != typeof(ImageEditor))
                 {
                     string[] extensions = e.GetExtensions();
-                    if (extensions is not null)
+                    if (extensions != null)
                     {
                         list.AddRange(extensions);
                     }

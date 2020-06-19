@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Internal
             {
                 if (t_measurementGraphics is null || t_measurementGraphics.DeviceContext is null /*object disposed*/)
                 {
-                    Debug.Assert(t_measurementGraphics is null || t_measurementGraphics.DeviceContext is not null, "TLS MeasurementGraphics was disposed somewhere, enable TRACK_HDC macro to determine who did it, recreating it for now ...");
+                    Debug.Assert(t_measurementGraphics is null || t_measurementGraphics.DeviceContext != null, "TLS MeasurementGraphics was disposed somewhere, enable TRACK_HDC macro to determine who did it, recreating it for now ...");
                     t_measurementGraphics = WindowsGraphics.CreateMeasurementWindowsGraphics();
                 }
 
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Internal
                     }
                 }
 
-                if (wfont is not null)
+                if (wfont != null)
                 {
                     WindowsFontCache[t_currentIndex] = newEntry;
                     winFont.OwnedByCacheManager = true;

@@ -21,7 +21,7 @@ namespace System.ComponentModel.Design.Serialization
 
         internal ResourcePropertyMemberCodeDomSerializer(MemberCodeDomSerializer serializer, CodeDomLocalizationProvider.LanguageExtenders extender, CodeDomLocalizationModel model)
         {
-            Debug.Assert(extender is not null, "Extender should have been created by now.");
+            Debug.Assert(extender != null, "Extender should have been created by now.");
 
             _serializer = serializer;
             _extender = extender;
@@ -56,12 +56,12 @@ namespace System.ComponentModel.Design.Serialization
                 // Check to see if our base component's localizable prop is true
                 RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
 
-                if (rootCxt is not null)
+                if (rootCxt != null)
                 {
                     object comp = rootCxt.Value;
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
 
-                    if (prop is not null && prop.PropertyType == typeof(CultureInfo))
+                    if (prop != null && prop.PropertyType == typeof(CultureInfo))
                     {
                         localizationLanguage = (CultureInfo)prop.GetValue(comp);
                     }
@@ -78,9 +78,9 @@ namespace System.ComponentModel.Design.Serialization
 
             //unhook the event
             IDesignerSerializationManager manager = sender as IDesignerSerializationManager;
-            Debug.Assert(manager is not null, "manager should not be null!");
+            Debug.Assert(manager != null, "manager should not be null!");
 
-            if (manager is not null)
+            if (manager != null)
             {
                 manager.SerializationComplete -= new EventHandler(OnSerializationComplete);
             }

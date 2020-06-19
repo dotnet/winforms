@@ -157,7 +157,7 @@ namespace System.Windows.Forms
                 object oldDataSourceNullValue = DataSourceNullValue;
 
                 if ((oldDataSourceNullValue == value) ||
-                    (oldDataSourceNullValue is not null && oldDataSourceNullValue.Equals(value)))
+                    (oldDataSourceNullValue != null && oldDataSourceNullValue.Equals(value)))
                 {
                     return;
                 }
@@ -172,8 +172,8 @@ namespace System.Windows.Forms
                     Properties.SetObject(PropDataSourceNullValue, value);
                 }
 
-                Debug.Assert((oldDataSourceNullValue is null && DataSourceNullValue is not null) ||
-                             (oldDataSourceNullValue is not null && DataSourceNullValue is null) ||
+                Debug.Assert((oldDataSourceNullValue is null && DataSourceNullValue != null) ||
+                             (oldDataSourceNullValue != null && DataSourceNullValue is null) ||
                              (oldDataSourceNullValue != DataSourceNullValue && !oldDataSourceNullValue.Equals(DataSourceNullValue)));
 
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
@@ -190,13 +190,13 @@ namespace System.Windows.Forms
             set
             {
                 Font f = Font;
-                if (value is not null || Properties.ContainsObject(PropFont))
+                if (value != null || Properties.ContainsObject(PropFont))
                 {
                     Properties.SetObject(PropFont, value);
                 }
-                if ((f is null && value is not null) ||
-                    (f is not null && value is null) ||
-                    (f is not null && value is not null && !f.Equals(Font)))
+                if ((f is null && value != null) ||
+                    (f != null && value is null) ||
+                    (f != null && value != null && !f.Equals(Font)))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Font);
                 }
@@ -245,7 +245,7 @@ namespace System.Windows.Forms
             set
             {
                 string format = Format;
-                if ((value is not null && value.Length > 0) || Properties.ContainsObject(PropFormat))
+                if ((value != null && value.Length > 0) || Properties.ContainsObject(PropFormat))
                 {
                     Properties.SetObject(PropFormat, value);
                 }
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
                 object oldNullValue = NullValue;
 
                 if ((oldNullValue == value) ||
-                    (oldNullValue is not null && oldNullValue.Equals(value)))
+                    (oldNullValue != null && oldNullValue.Equals(value)))
                 {
                     return;
                 }
@@ -355,9 +355,9 @@ namespace System.Windows.Forms
                     Properties.SetObject(PropNullValue, value);
                 }
 
-                Debug.Assert((oldNullValue is null && NullValue is not null) ||
-                             (oldNullValue is not null && NullValue is null) ||
-                             (oldNullValue is not nullValue && !oldNullValue.Equals(NullValue)));
+                Debug.Assert((oldNullValue is null && NullValue != null) ||
+                             (oldNullValue != null && NullValue is null) ||
+                             (oldNullValue != nullValue && !oldNullValue.Equals(NullValue)));
 
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
@@ -476,7 +476,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is not null || Properties.ContainsObject(PropTag))
+                if (value != null || Properties.ContainsObject(PropTag))
                 {
                     Properties.SetObject(PropTag, value);
                 }
@@ -548,7 +548,7 @@ namespace System.Windows.Forms
             {
                 SelectionForeColor = dataGridViewCellStyle.SelectionForeColor;
             }
-            if (dataGridViewCellStyle.Font is not null)
+            if (dataGridViewCellStyle.Font != null)
             {
                 Font = dataGridViewCellStyle.Font;
             }
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
             {
                 WrapModeInternal = dataGridViewCellStyle.WrapMode;
             }
-            if (dataGridViewCellStyle.Tag is not null)
+            if (dataGridViewCellStyle.Tag != null)
             {
                 Tag = dataGridViewCellStyle.Tag;
             }
@@ -605,7 +605,7 @@ namespace System.Windows.Forms
 
         internal DataGridViewCellStyleDifferences GetDifferencesFrom(DataGridViewCellStyle dgvcs)
         {
-            Debug.Assert(dgvcs is not null);
+            Debug.Assert(dgvcs != null);
 
             bool preferredSizeAffectingPropDifferent = (
                     dgvcs.Alignment != Alignment ||
@@ -613,7 +613,7 @@ namespace System.Windows.Forms
                     dgvcs.Font != Font ||
                     dgvcs.Format != Format ||
                     dgvcs.FormatProvider != FormatProvider ||
-                    dgvcs.NullValue is not nullValue ||
+                    dgvcs.NullValue != nullValue ||
                     dgvcs.Padding != Padding ||
                     dgvcs.Tag != Tag ||
                     dgvcs.WrapMode != WrapMode);
@@ -658,7 +658,7 @@ namespace System.Windows.Forms
 
         private void OnPropertyChanged(DataGridViewCellStylePropertyInternal property)
         {
-            if (dataGridView is not null && scope != DataGridViewCellStyleScopes.None)
+            if (dataGridView != null && scope != DataGridViewCellStyleScopes.None)
             {
                 dataGridView.OnCellStyleContentChanged(this, property);
             }
@@ -681,7 +681,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeFont()
         {
-            return Properties.GetObject(PropFont) is not null;
+            return Properties.GetObject(PropFont) != null;
         }
 
         private bool ShouldSerializeForeColor()
@@ -692,7 +692,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeFormatProvider()
         {
-            return Properties.GetObject(PropFormatProvider) is not null;
+            return Properties.GetObject(PropFormatProvider) != null;
         }
 
         private bool ShouldSerializePadding()
@@ -749,7 +749,7 @@ namespace System.Windows.Forms
                 sb.Append(" SelectionForeColor=" + SelectionForeColor.ToString());
                 firstPropAdded = false;
             }
-            if (Font is not null)
+            if (Font != null)
             {
                 if (!firstPropAdded)
                 {
@@ -758,7 +758,7 @@ namespace System.Windows.Forms
                 sb.Append(" Font=" + Font.ToString());
                 firstPropAdded = false;
             }
-            if (!IsNullValueDefault && NullValue is not null)
+            if (!IsNullValueDefault && NullValue != null)
             {
                 if (!firstPropAdded)
                 {
@@ -767,7 +767,7 @@ namespace System.Windows.Forms
                 sb.Append(" NullValue=" + NullValue.ToString());
                 firstPropAdded = false;
             }
-            if (!IsDataSourceNullValueDefault && DataSourceNullValue is not null)
+            if (!IsDataSourceNullValueDefault && DataSourceNullValue != null)
             {
                 if (!firstPropAdded)
                 {
@@ -812,7 +812,7 @@ namespace System.Windows.Forms
                 sb.Append(" Padding=" + Padding.ToString());
                 firstPropAdded = false;
             }
-            if (Tag is not null)
+            if (Tag != null)
             {
                 if (!firstPropAdded)
                 {

@@ -125,10 +125,10 @@ namespace System.Windows.Forms.Design.Behavior
             }
             else if (!_ignoreNextMouseUp)
             {
-                if (_serviceProvider is not null)
+                if (_serviceProvider != null)
                 {
                     ISelectionService selectionService = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
-                    if (selectionService is not null)
+                    if (selectionService != null)
                     {
                         if (selectionService.PrimarySelection != RelatedComponent)
                         {

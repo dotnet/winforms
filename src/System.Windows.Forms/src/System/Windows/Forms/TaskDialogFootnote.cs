@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             {
                 DenyIfBoundAndNotCreated();
 
-                if (BoundPage is not null)
+                if (BoundPage != null)
                 {
                     // If we are bound but waiting for initialization (e.g. immediately after
                     // starting a navigation), we buffer the change until we apply the
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
                 // while waiting for the initialization.
                 DenyIfWaitingForInitialization();
 
-                if (BoundPage is not null)
+                if (BoundPage != null)
                 {
                     (ComCtl32.TASKDIALOGCONFIG.IconUnion icon, bool? iconIsFromHandle) =
                         TaskDialogPage.GetIconValue(value);
@@ -125,7 +125,7 @@ namespace System.Windows.Forms
                     // The native task dialog icon cannot be updated from a handle
                     // type to a non-handle type and vice versa, so we need to throw
                     // in such a case.
-                    if (iconIsFromHandle is not null && iconIsFromHandle != _boundIconIsFromHandle)
+                    if (iconIsFromHandle != null && iconIsFromHandle != _boundIconIsFromHandle)
                     {
                         throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                     }

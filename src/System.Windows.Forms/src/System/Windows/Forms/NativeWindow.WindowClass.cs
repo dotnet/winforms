@@ -69,15 +69,15 @@ namespace System.Windows.Forms
                     {
                         // If we weren't given a class name, look for a window
                         // that has the exact class style.
-                        while (wc is not null
-                            && (wc._className is not null || wc._classStyle != classStyle))
+                        while (wc != null
+                            && (wc._className != null || wc._classStyle != classStyle))
                         {
                             wc = wc._next;
                         }
                     }
                     else
                     {
-                        while (wc is not null && !className.Equals(wc._className))
+                        while (wc != null && !className.Equals(wc._className))
                         {
                             wc = wc._next;
                         }

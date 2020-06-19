@@ -129,7 +129,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void AddCellLinkedList(DataGridViewCellLinkedList dataGridViewCells)
         {
-            Debug.Assert(dataGridViewCells is not null);
+            Debug.Assert(dataGridViewCells != null);
             foreach (DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
                 Debug.Assert(!Contains(dataGridViewCell));

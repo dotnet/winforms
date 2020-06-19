@@ -250,7 +250,7 @@ namespace System.Windows.Forms
             }
 
             TreeView tv = owner.TreeView;
-            if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
+            if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
                 tv.BeginUpdate();
             }
@@ -261,7 +261,7 @@ namespace System.Windows.Forms
                 AddInternal(nodes[i], i);
             }
             owner.Nodes.FixedIndex = -1;
-            if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
+            if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
                 tv.EndUpdate();
             }
@@ -311,7 +311,7 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
-                    if ((treeNodeCollectionToLookIn[i].Nodes is not null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
+                    if ((treeNodeCollectionToLookIn[i].Nodes != null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
                     {
                         // if it has a valid child collecion, append those results to our collection
                         foundTreeNodes = FindInternal(key, searchAllChildren, treeNodeCollectionToLookIn[i].Nodes, foundTreeNodes);
@@ -345,7 +345,7 @@ namespace System.Windows.Forms
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
-            if (tv is not null && tv.Sorted)
+            if (tv != null && tv.Sorted)
             {
                 return owner.AddSorted(node);
             }
@@ -366,12 +366,12 @@ namespace System.Windows.Forms
             owner.childCount++;
             node.Realize(false);
 
-            if (tv is not null && node == tv.selectedNode)
+            if (tv != null && node == tv.selectedNode)
             {
                 tv.SelectedNode = node; // communicate this to the handle
             }
 
-            if (tv is not null && tv.TreeViewNodeSorter is not null)
+            if (tv != null && tv.TreeViewNodeSorter != null)
             {
                 tv.Sort();
             }
@@ -494,7 +494,7 @@ namespace System.Windows.Forms
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
-            if (tv is not null && tv.Sorted)
+            if (tv != null && tv.Sorted)
             {
                 owner.AddSorted(node);
                 return;

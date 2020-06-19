@@ -59,7 +59,7 @@ namespace System.Windows.Forms
         {
             Rectangle result = bounds;
 
-            if (backgroundImage is not null)
+            if (backgroundImage != null)
             {
                 switch (imageLayout)
                 {
@@ -1420,7 +1420,7 @@ namespace System.Windows.Forms
             {
                 if (checkImage is null || checkImage.Width != rectangle.Width || checkImage.Height != rectangle.Height)
                 {
-                    if (checkImage is not null)
+                    if (checkImage != null)
                     {
                         checkImage.Dispose();
                         checkImage = null;
@@ -1648,7 +1648,7 @@ namespace System.Windows.Forms
             if (gridBrush is null || gridSize.Width != pixelsBetweenDots.Width
                 || gridSize.Height != pixelsBetweenDots.Height || invert != gridInvert)
             {
-                if (gridBrush is not null)
+                if (gridBrush != null)
                 {
                     gridBrush.Dispose();
                     gridBrush = null;
@@ -1691,7 +1691,7 @@ namespace System.Windows.Forms
 
         internal static bool IsImageTransparent(Image backgroundImage)
         {
-            if (backgroundImage is not null && (backgroundImage.Flags & (int)ImageFlags.HasAlpha) > 0)
+            if (backgroundImage != null && (backgroundImage.Flags & (int)ImageFlags.HasAlpha) > 0)
             {
                 return true;
             }
@@ -2293,7 +2293,7 @@ namespace System.Windows.Forms
             if (frameBrushActive is null ||
                 !frameColorActive.Equals(brushColor))
             {
-                if (frameBrushActive is not null)
+                if (frameBrushActive != null)
                 {
                     frameBrushActive.Dispose();
                     frameBrushActive = null;
@@ -2344,7 +2344,7 @@ namespace System.Windows.Forms
                 focusPenColor.ToArgb() != baseColor.ToArgb() ||
                 hcFocusPen != highContrast)
             {
-                if (focusPen is not null)
+                if (focusPen != null)
                 {
                     focusPen.Dispose();
                     focusPen = null;
@@ -2422,7 +2422,7 @@ namespace System.Windows.Forms
             if (frameBrushSelected is null ||
                 !frameColorSelected.Equals(brushColor))
             {
-                if (frameBrushSelected is not null)
+                if (frameBrushSelected != null)
                 {
                     frameBrushSelected.Dispose();
                     frameBrushSelected = null;

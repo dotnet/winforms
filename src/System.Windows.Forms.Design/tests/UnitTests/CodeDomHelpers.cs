@@ -120,7 +120,7 @@ namespace WinForms.Common.Tests
             string GetType(CodeTypeReference reference)
             {
                 Type result = Type.GetType(reference.BaseType);
-                if (result is not null)
+                if (result != null)
                 {
                     return $"typeof({result.Name})";
                 }

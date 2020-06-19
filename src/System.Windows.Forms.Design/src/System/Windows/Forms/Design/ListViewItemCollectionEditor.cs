@@ -31,11 +31,11 @@ namespace System.Windows.Forms.Design
             string text;
 
             PropertyDescriptor prop = TypeDescriptor.GetDefaultProperty(CollectionType);
-            if (prop is not null && prop.PropertyType == typeof(string))
+            if (prop != null && prop.PropertyType == typeof(string))
             {
                 text = (string)prop.GetValue(value);
 
-                if (text is not null && text.Length > 0)
+                if (text != null && text.Length > 0)
                 {
                     return text;
                 }

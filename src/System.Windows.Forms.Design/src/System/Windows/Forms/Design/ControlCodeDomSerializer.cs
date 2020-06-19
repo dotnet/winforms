@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design
             IContainer container = (IContainer)manager.GetService(typeof(IContainer));
             ArrayList suspendedComponents = null;
 
-            if (container is not null)
+            if (container != null)
             {
                 suspendedComponents = new ArrayList(container.Components.Count);
 
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
                 {
                     Control control = comp as Control;
 
-                    if (control is not null)
+                    if (control != null)
                     {
                         control.SuspendLayout();
 
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Design
             finally
             {
                 //resume all suspended comps we found earlier
-                if (suspendedComponents is not null)
+                if (suspendedComponents != null)
                 {
                     foreach (Control c in suspendedComponents)
                     {
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Design
             {
                 InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(c)[typeof(InheritanceAttribute)];
 
-                if (ia is not null && ia.InheritanceLevel != InheritanceLevel.NotInherited)
+                if (ia != null && ia.InheritanceLevel != InheritanceLevel.NotInherited)
                 {
                     inheritedChildren = true;
                 }
@@ -137,12 +137,12 @@ namespace System.Windows.Forms.Design
 
             foreach (Control c in parent.Controls)
             {
-                if (c.Site is not null && c.Site.DesignMode)
+                if (c.Site != null && c.Site.DesignMode)
                 {
                     // We only emit Size/Location information for controls that are sited and not inherrited readonly.
                     InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(c)[typeof(InheritanceAttribute)];
 
-                    if (ia is not null && ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
+                    if (ia != null && ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
                     {
                         return true;
                     }
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Design
             InheritanceAttribute inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(value)[typeof(InheritanceAttribute)];
             InheritanceLevel inheritanceLevel = InheritanceLevel.NotInherited;
 
-            if (inheritanceAttribute is not null)
+            if (inheritanceAttribute != null)
             {
                 inheritanceLevel = inheritanceAttribute.InheritanceLevel;
             }
@@ -193,11 +193,11 @@ namespace System.Windows.Forms.Design
                 // control.
                 IDesignerHost host = (IDesignerHost)manager.GetService(typeof(IDesignerHost));
 
-                if (host is not null)
+                if (host != null)
                 {
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(host.RootComponent)["Localizable"];
 
-                    if (prop is not null && prop.PropertyType == typeof(bool) && ((bool)prop.GetValue(host.RootComponent)))
+                    if (prop != null && prop.PropertyType == typeof(bool) && ((bool)prop.GetValue(host.RootComponent)))
                     {
                         SerializeControlHierarchy(manager, host, value);
                     }
@@ -205,19 +205,19 @@ namespace System.Windows.Forms.Design
 
                 CodeStatementCollection csCollection = retVal as CodeStatementCollection;
 
-                if (csCollection is not null)
+                if (csCollection != null)
                 {
                     Control control = (Control)value;
 
                     // Serialize a suspend / resume pair.  We always serialize this
                     // for the root component
-                    if ((host is not null && control == host.RootComponent) || HasSitedNonReadonlyChildren(control))
+                    if ((host != null && control == host.RootComponent) || HasSitedNonReadonlyChildren(control))
                     {
                         SerializeSuspendLayout(manager, csCollection, value);
                         SerializeResumeLayout(manager, csCollection, value);
                         ControlDesigner controlDesigner = host.GetDesigner(control) as ControlDesigner;
 
-                        if (HasAutoSizedChildren(control) || (controlDesigner is not null && controlDesigner.SerializePerformLayout))
+                        if (HasAutoSizedChildren(control) || (controlDesigner != null && controlDesigner.SerializePerformLayout))
                         {
                             SerializePerformLayout(manager, csCollection, value);
                         }
@@ -242,7 +242,7 @@ namespace System.Windows.Forms.Design
         {
             Control control = value as Control;
 
-            if (control is not null)
+            if (control != null)
             {
                 // Object name
                 string name;
@@ -272,7 +272,7 @@ namespace System.Windows.Forms.Design
                         string componentName = manager.GetName(component);
                         string componentTypeName = mthelperSvc is null ? component.GetType().AssemblyQualifiedName : mthelperSvc.GetAssemblyQualifiedName(component.GetType());
 
-                        if (componentName is not null)
+                        if (componentName != null)
                         {
                             SerializeResourceInvariant(manager, ">>" + componentName + ".Name", componentName);
                             SerializeResourceInvariant(manager, ">>" + componentName + ".Type", componentTypeName);
@@ -299,7 +299,7 @@ namespace System.Windows.Forms.Design
                 // Parent
                 Control parent = control.Parent;
 
-                if (parent is not null && parent.Site is not null)
+                if (parent != null && parent.Site != null)
                 {
                     string parentName;
 
@@ -312,7 +312,7 @@ namespace System.Windows.Forms.Design
                         parentName = manager.GetName(parent);
                     }
 
-                    if (parentName is not null)
+                    if (parentName != null)
                     {
                         SerializeResourceInvariant(manager, ">>" + name + ".Parent", parentName);
                     }
@@ -367,14 +367,14 @@ namespace System.Windows.Forms.Design
                 paramTypes = ToTargetTypes(control, paramTypes);
                 MethodInfo mi = TypeDescriptor.GetReflectionType(control).GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance, null, paramTypes, null);
 
-                if (mi is not null)
+                if (mi != null)
                 {
                     CodeExpression field = SerializeToExpression(manager, control);
                     CodeMethodReferenceExpression method = new CodeMethodReferenceExpression(field, methodName);
                     CodeMethodInvokeExpression methodInvoke = new CodeMethodInvokeExpression();
                     methodInvoke.Method = method;
 
-                    if (parameters is not null)
+                    if (parameters != null)
                     {
                         methodInvoke.Parameters.AddRange(parameters);
                     }

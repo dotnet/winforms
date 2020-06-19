@@ -64,14 +64,14 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                 {
                     case WM.GETTEXTLENGTH:
                         string text = BeforeGetTextLengthCallback?.Invoke();
-                        if (text is not null)
+                        if (text != null)
                         {
                             SetWindowTextW(hWnd, text);
                         }
                         break;
                    case WM.GETTEXT:
                         text = BeforeGetTextCallback?.Invoke();
-                        if (text is not null)
+                        if (text != null)
                         {
                             SetWindowTextW(hWnd, text);
                         }

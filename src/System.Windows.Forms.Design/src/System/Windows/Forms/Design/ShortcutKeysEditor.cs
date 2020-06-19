@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
             _shortcutKeysUI.Start(edSvc, value);
             edSvc.DropDownControl(_shortcutKeysUI);
 
-            if (_shortcutKeysUI.Value is not null)
+            if (_shortcutKeysUI.Value != null)
             {
                 value = _shortcutKeysUI.Value;
             }
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.Design
                         keysConverter = TypeDescriptor.GetConverter(typeof(Keys));
                     }
 
-                    Debug.Assert(keysConverter is not null);
+                    Debug.Assert(keysConverter != null);
                     return keysConverter;
                 }
             }
@@ -432,7 +432,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
-                Debug.Assert(edSvc is not null);
+                Debug.Assert(edSvc != null);
                 Debug.Assert(!updateCurrentValue);
                 EditorService = edSvc;
                 originalValue = currentValue = value;

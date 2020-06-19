@@ -49,13 +49,13 @@ namespace System.Windows.Forms
                     catch
                     {
                     }
-                    if (nameToBind is not null)
+                    if (nameToBind != null)
                     {
                         if (string.CompareOrdinal(nameToBind.Name, s_allowedAssemblyName) == 0)
                         {
                             byte[] tokenToBind = nameToBind.GetPublicKeyToken();
-                            if ((tokenToBind is not null) &&
-                                (s_allowedToken is not null) &&
+                            if ((tokenToBind != null) &&
+                                (s_allowedToken != null) &&
                                 (tokenToBind.Length == s_allowedToken.Length))
                             {
                                 bool block = false;
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
                 // null strings will follow the default codepath in BinaryFormatter
                 assemblyName = null;
                 typeName = null;
-                if (serializedType is not null && !serializedType.Equals(typeof(string)) && !serializedType.Equals(typeof(Bitmap)))
+                if (serializedType != null && !serializedType.Equals(typeof(string)) && !serializedType.Equals(typeof(Bitmap)))
                 {
                     throw new SerializationException(string.Format(SR.UnexpectedTypeForClipboardFormat, serializedType.FullName));
                 }

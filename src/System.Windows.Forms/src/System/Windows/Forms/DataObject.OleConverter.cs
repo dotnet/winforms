@@ -105,7 +105,7 @@ namespace System.Windows.Forms
                     if (hglobal != IntPtr.Zero)
                         Kernel32.GlobalFree(hglobal);
 
-                    if (pStream is not null)
+                    if (pStream != null)
                         Marshal.ReleaseComObject(pStream);
 
                     Ole32.ReleaseStgMedium(ref medium);
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
             private object GetDataFromOleHGLOBAL(string format, out bool done)
             {
                 done = false;
-                Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
+                Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
 
                 FORMATETC formatetc = new FORMATETC();
                 STGMEDIUM medium = new STGMEDIUM();
@@ -209,7 +209,7 @@ namespace System.Windows.Forms
             /// </summary>
             private object GetDataFromOleOther(string format)
             {
-                Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
+                Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
 
                 FORMATETC formatetc = new FORMATETC();
                 STGMEDIUM medium = new STGMEDIUM();
@@ -256,7 +256,7 @@ namespace System.Windows.Forms
                             // This bitmap is created by the com object which originally copied the bitmap to the
                             // clipboard. We call Add here, since DeleteObject calls Remove.
                             Image clipboardImage = Image.FromHbitmap(medium.unionmember);
-                            if (clipboardImage is not null)
+                            if (clipboardImage != null)
                             {
                                 Image firstImage = clipboardImage;
                                 clipboardImage = (Image)clipboardImage.Clone();
@@ -465,14 +465,14 @@ namespace System.Windows.Forms
                 if (!done && autoConvert && (baseVar is null || baseVar is MemoryStream))
                 {
                     string[] mappedFormats = GetMappedFormats(format);
-                    if (mappedFormats is not null)
+                    if (mappedFormats != null)
                     {
                         for (int i = 0; ((!done) && (i < mappedFormats.Length)); i++)
                         {
                             if (!format.Equals(mappedFormats[i]))
                             {
                                 baseVar = GetDataFromBoundOleDataObject(mappedFormats[i], out done);
-                                if (!done && baseVar is not null && !(baseVar is MemoryStream))
+                                if (!done && baseVar != null && !(baseVar is MemoryStream))
                                 {
                                     original = null;
                                     break;
@@ -482,7 +482,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (original is not null)
+                if (original != null)
                 {
                     return original;
                 }
@@ -545,7 +545,7 @@ namespace System.Windows.Forms
 
             private bool GetDataPresentInner(string format)
             {
-                Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
+                Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
                 FORMATETC formatetc = new FORMATETC
                 {
                     cfFormat = unchecked((short)(ushort)(DataFormats.GetFormat(format).Id)),
@@ -569,7 +569,7 @@ namespace System.Windows.Forms
                 if (!baseVar && autoConvert)
                 {
                     string[] mappedFormats = GetMappedFormats(format);
-                    if (mappedFormats is not null)
+                    if (mappedFormats != null)
                     {
                         for (int i = 0; i < mappedFormats.Length; i++)
                         {
@@ -594,7 +594,7 @@ namespace System.Windows.Forms
 
             public virtual string[] GetFormats(bool autoConvert)
             {
-                Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
+                Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
 
                 IEnumFORMATETC enumFORMATETC = null;
                 ArrayList formats = new ArrayList();
@@ -606,7 +606,7 @@ namespace System.Windows.Forms
                 {
                 }
 
-                if (enumFORMATETC is not null)
+                if (enumFORMATETC != null)
                 {
                     enumFORMATETC.Reset();
 

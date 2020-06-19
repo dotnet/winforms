@@ -83,10 +83,10 @@ internal static partial class Interop
 
                 ArrayPool<byte>.Shared.Return(buffer);
 
-                if (pcbRead is not null)
+                if (pcbRead != null)
                     *pcbRead = totalRead;
 
-                if (pcbWritten is not null)
+                if (pcbWritten != null)
                     *pcbWritten = totalWritten;
             }
 
@@ -97,7 +97,7 @@ internal static partial class Interop
                 Span<byte> buffer = new Span<byte>(pv, checked((int)cb));
                 int read = _dataStream.Read(buffer);
 
-                if (pcbRead is not null)
+                if (pcbRead != null)
                     *pcbRead = (uint)read;
             }
 
@@ -199,7 +199,7 @@ internal static partial class Interop
                 var buffer = new ReadOnlySpan<byte>(pv, checked((int)cb));
                 _dataStream.Write(buffer);
 
-                if (pcbWritten is not null)
+                if (pcbWritten != null)
                     *pcbWritten = cb;
             }
 

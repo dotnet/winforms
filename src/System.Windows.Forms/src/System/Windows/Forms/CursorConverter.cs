@@ -174,7 +174,7 @@ namespace System.Windows.Forms
                 {
                     PropertyInfo prop = props[i];
                     object[] tempIndex = null;
-                    Debug.Assert(prop.GetValue(null, tempIndex) is not null, "Property " + prop.Name + " returned NULL");
+                    Debug.Assert(prop.GetValue(null, tempIndex) != null, "Property " + prop.Name + " returned NULL");
                     list.Add(prop.GetValue(null, tempIndex));
                 }
 

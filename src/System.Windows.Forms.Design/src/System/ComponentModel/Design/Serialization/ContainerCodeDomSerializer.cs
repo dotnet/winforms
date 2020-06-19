@@ -46,7 +46,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 object obj = manager.GetService(typeof(IContainer));
 
-                if (obj is not null)
+                if (obj != null)
                 {
                     Trace("Returning IContainer service as container");
                     manager.SetName(obj, name);

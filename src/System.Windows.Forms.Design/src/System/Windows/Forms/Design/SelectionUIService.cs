@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
             Text = "SelectionUIOverlay";
 
             _selSvc = (ISelectionService)host.GetService(typeof(ISelectionService));
-            if (_selSvc is not null)
+            if (_selSvc != null)
             {
                 _selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Design
         private void DisplayError(Exception e)
         {
             IUIService uis = (IUIService)_host.GetService(typeof(IUIService));
-            if (uis is not null)
+            if (uis != null)
             {
                 uis.ShowError(e);
             }
@@ -138,12 +138,12 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (_selSvc is not null)
+                if (_selSvc != null)
                 {
                     _selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 }
 
-                if (_host is not null)
+                if (_host != null)
                 {
                     _host.TransactionOpened -= new EventHandler(OnTransactionOpened);
                     _host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
@@ -249,7 +249,7 @@ namespace System.Windows.Forms.Design
                     string name = string.Empty;
                     if (objects.Length > 0)
                     {
-                        if (objects[0] is IComponent comp && comp.Site is not null)
+                        if (objects[0] is IComponent comp && comp.Site != null)
                         {
                             name = comp.Site.Name;
                         }
@@ -272,7 +272,7 @@ namespace System.Windows.Forms.Design
                     string name = string.Empty;
                     if (objects.Length > 0)
                     {
-                        if (objects[0] is IComponent comp && comp.Site is not null)
+                        if (objects[0] is IComponent comp && comp.Site != null)
                         {
                             name = comp.Site.Name;
                         }
@@ -376,7 +376,7 @@ namespace System.Windows.Forms.Design
             {
                 object existingItem = _selectionItems[comp];
                 bool create = true;
-                if (existingItem is not null)
+                if (existingItem != null)
                 {
                     if (existingItem is ContainerSelectionUIItem item)
                     {
@@ -428,7 +428,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragEnter(DragEventArgs devent)
         {
             base.OnDragEnter(devent);
-            if (_dragHandler is not null)
+            if (_dragHandler != null)
             {
                 _dragHandler.OleDragEnter(devent);
             }
@@ -440,7 +440,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragOver(DragEventArgs devent)
         {
             base.OnDragOver(devent);
-            if (_dragHandler is not null)
+            if (_dragHandler != null)
             {
                 _dragHandler.OleDragOver(devent);
             }
@@ -451,7 +451,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragLeave(EventArgs e)
         {
             base.OnDragLeave(e);
-            if (_dragHandler is not null)
+            if (_dragHandler != null)
             {
                 _dragHandler.OleDragLeave();
             }
@@ -463,7 +463,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragDrop(DragEventArgs devent)
         {
             base.OnDragDrop(devent);
-            if (_dragHandler is not null)
+            if (_dragHandler != null)
             {
                 _dragHandler.OleDragDrop(devent);
             }
@@ -475,14 +475,14 @@ namespace System.Windows.Forms.Design
         protected override void OnDoubleClick(EventArgs devent)
         {
             base.OnDoubleClick(devent);
-            if (_selSvc is not null)
+            if (_selSvc != null)
             {
                 object selComp = _selSvc.PrimarySelection;
-                Debug.Assert(selComp is not null, "Illegal selection on double-click");
-                if (selComp is not null)
+                Debug.Assert(selComp != null, "Illegal selection on double-click");
+                if (selComp != null)
                 {
                     ISelectionUIHandler handler = GetHandler(selComp);
-                    if (handler is not null)
+                    if (handler != null)
                     {
                         handler.OnSelectionDoubleClick((IComponent)selComp);
                     }
@@ -496,7 +496,7 @@ namespace System.Windows.Forms.Design
         // Standard 'catch all - rethrow critical' exception pattern
         protected override void OnMouseDown(MouseEventArgs me)
         {
-            if (_dragHandler is null && _selSvc is not null)
+            if (_dragHandler is null && _selSvc != null)
             {
                 try
                 {
@@ -591,7 +591,7 @@ namespace System.Windows.Forms.Design
             Point screenCoord = PointToScreen(new Point(me.X, me.Y));
             HitTestInfo hti = GetHitTest(screenCoord, HITTEST_CONTAINER_SELECTOR);
             int hitTest = hti.hitTest;
-            if (hitTest != SelectionUIItem.CONTAINER_SELECTOR && hti.selectionUIHit is not null)
+            if (hitTest != SelectionUIItem.CONTAINER_SELECTOR && hti.selectionUIHit != null)
             {
                 OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(hti.selectionUIHit._component));
             }
@@ -696,7 +696,7 @@ namespace System.Windows.Forms.Design
             try
             {
                 Point screenCoord = PointToScreen(new Point(me.X, me.Y));
-                if (_ctrlSelect && !_mouseDragging && _selSvc is not null)
+                if (_ctrlSelect && !_mouseDragging && _selSvc != null)
                 {
                     HitTestInfo hti = GetHitTest(screenCoord, HITTEST_DEFAULT);
                     _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Primary);
@@ -712,7 +712,7 @@ namespace System.Windows.Forms.Design
                         ((ISelectionUIService)this).EndDrag(false);
                     }
 
-                    if (me.Button == MouseButtons.Right && oldContainerDrag is not null && !oldDragMoved)
+                    if (me.Button == MouseButtons.Right && oldContainerDrag != null && !oldDragMoved)
                     {
                         OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(oldContainerDrag, ContainerSelectorActiveEventArgsType.Contextmenu));
                     }
@@ -778,7 +778,7 @@ namespace System.Windows.Forms.Design
                     continue;
                 }
                 Cursor cursor = item.GetCursorAtPoint(clientCoords);
-                if (cursor is not null)
+                if (cursor != null)
                 {
                     if (cursor == Cursors.Default)
                     {
@@ -797,7 +797,7 @@ namespace System.Windows.Forms.Design
                 if (item is ContainerSelectionUIItem)
                 {
                     Cursor cursor = item.GetCursorAtPoint(clientCoords);
-                    if (cursor is not null)
+                    if (cursor != null)
                     {
                         if (cursor == Cursors.Default)
                         {
@@ -863,7 +863,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         bool ISelectionUIService.Dragging
         {
-            get => _dragHandler is not null;
+            get => _dragHandler != null;
         }
 
         /// <summary>
@@ -890,7 +890,7 @@ namespace System.Windows.Forms.Design
         void ISelectionUIService.AssignSelectionUIHandler(object component, ISelectionUIHandler handler)
         {
             ISelectionUIHandler oldHandler = (ISelectionUIHandler)_selectionHandlers[component];
-            if (oldHandler is not null)
+            if (oldHandler != null)
             {
                 // The collection editors do not dispose objects from the collection before setting a new collection. This causes items that are common to the old and new collections to come through this code path  again, causing the exception to fire. So, we check to see if the SelectionUIHandler is same, and bail out in that case.
                 if (handler == oldHandler)
@@ -902,7 +902,7 @@ namespace System.Windows.Forms.Design
             }
             _selectionHandlers[component] = handler;
             // If this component is selected, create a new UI handler for it.
-            if (_selSvc is not null && _selSvc.GetComponentSelected(component))
+            if (_selSvc != null && _selSvc.GetComponentSelected(component))
             {
                 SelectionUIItem item = new SelectionUIItem(this, component);
                 _selectionItems[component] = item;
@@ -926,7 +926,7 @@ namespace System.Windows.Forms.Design
         // Standard 'catch all - rethrow critical' exception pattern
         bool ISelectionUIService.BeginDrag(SelectionRules rules, int initialX, int initialY)
         {
-            if (_dragHandler is not null)
+            if (_dragHandler != null)
             {
                 Debug.Fail("Caller is starting a drag, but there is already one in progress -- we cannot nest these!");
                 return false;
@@ -957,7 +957,7 @@ namespace System.Windows.Forms.Design
             // We allow all components with the same UI handler as the primary selection to participate in the drag.
             ISelectionUIHandler primaryHandler = null;
             object primary = _selSvc.PrimarySelection;
-            if (primary is not null)
+            if (primary != null)
             {
                 primaryHandler = GetHandler(primary);
             }
@@ -995,7 +995,7 @@ namespace System.Windows.Forms.Design
             {
                 if (primaryHandler.QueryBeginDrag(objects, rules, initialX, initialY))
                 {
-                    if (_dragHandler is not null)
+                    if (_dragHandler != null)
                     {
                         try
                         {
@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms.Design
                     _dragHandler = null;
 
                     // Always commit this -- BeginDrag returns false for our drags because it is a complete operation.
-                    if (_dragTransaction is not null)
+                    if (_dragTransaction != null)
                     {
                         _dragTransaction.Commit();
                         _dragTransaction = null;
@@ -1039,7 +1039,7 @@ namespace System.Windows.Forms.Design
                 throw new Exception(SR.DesignerBeginDragNotCalled);
             }
 
-            Debug.Assert(_dragComponents is not null, "We should have a set of drag controls here");
+            Debug.Assert(_dragComponents != null, "We should have a set of drag controls here");
             if ((_dragRules & SelectionRules.Moveable) == SelectionRules.None && (_dragRules & (SelectionRules.TopSizeable | SelectionRules.LeftSizeable)) == SelectionRules.None)
             {
                 newOffset = new Rectangle(0, 0, offset.Width, offset.Height);
@@ -1089,13 +1089,13 @@ namespace System.Windows.Forms.Design
             try
             {
                 IComponent comp = components[0] as IComponent;
-                if (components.Length > 1 || (components.Length == 1 && comp is not null && comp.Site is null))
+                if (components.Length > 1 || (components.Length == 1 && comp != null && comp.Site is null))
                 {
                     trans = _host.CreateTransaction(string.Format(SR.DragDropMoveComponents, components.Length));
                 }
                 else if (components.Length == 1)
                 {
-                    if (comp is not null)
+                    if (comp != null)
                     {
                         trans = _host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
                     }
@@ -1111,14 +1111,14 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
-                if (trans is not null)
+                if (trans != null)
                 {
                     trans.Commit();
                 }
                 // Reset the selection.  This will re-display our selection.
                 Visible = _savedVisible;
                 ((ISelectionUIService)this).SyncSelection();
-                if (_dragTransaction is not null)
+                if (_dragTransaction != null)
                 {
                     _dragTransaction.Commit();
                     _dragTransaction = null;
@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms.Design
                 foreach (object comp in components)
                 {
                     SelectionUIItem item = (SelectionUIItem)_selectionItems[comp];
-                    if (item is not null && !(item is ContainerSelectionUIItem))
+                    if (item != null && !(item is ContainerSelectionUIItem))
                     {
                         if ((item.GetRules() & selectionRules) == selectionRules)
                         {
@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Determines if the component is currently "container" selected. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
         /// </summary>
-        bool ISelectionUIService.GetContainerSelected(object component) => (component is not null && _selectionItems[component] is ContainerSelectionUIItem);
+        bool ISelectionUIService.GetContainerSelected(object component) => (component != null && _selectionItems[component] is ContainerSelectionUIItem);
 
         /// <summary>
         ///  Retrieves a set of flags that define rules for the selection.  Selection rules indicate if the given component can be moved or sized, for example.
@@ -1221,7 +1221,7 @@ namespace System.Windows.Forms.Design
                 SelectionUIItem existingItem = (SelectionUIItem)_selectionItems[component];
                 if (!(existingItem is ContainerSelectionUIItem))
                 {
-                    if (existingItem is not null)
+                    if (existingItem != null)
                     {
                         existingItem.Dispose();
                     }
@@ -1229,7 +1229,7 @@ namespace System.Windows.Forms.Design
                     _selectionItems[component] = item;
                     // Now update our region and invalidate
                     UpdateWindowRegion();
-                    if (existingItem is not null)
+                    if (existingItem != null)
                     {
                         existingItem.Invalidate();
                     }
@@ -1242,7 +1242,7 @@ namespace System.Windows.Forms.Design
                 if (existingItem is null || existingItem is ContainerSelectionUIItem)
                 {
                     _selectionItems.Remove(component);
-                    if (existingItem is not null)
+                    if (existingItem != null)
                     {
                         existingItem.Dispose();
                     }
@@ -1258,13 +1258,13 @@ namespace System.Windows.Forms.Design
         void ISelectionUIService.SetSelectionStyle(object component, SelectionStyles style)
         {
             SelectionUIItem selUI = (SelectionUIItem)_selectionItems[component];
-            if (_selSvc is not null && _selSvc.GetComponentSelected(component))
+            if (_selSvc != null && _selSvc.GetComponentSelected(component))
             {
                 selUI = new SelectionUIItem(this, component);
                 _selectionItems[component] = selUI;
             }
 
-            if (selUI is not null)
+            if (selUI != null)
             {
                 selUI.Style = style;
                 UpdateWindowRegion();
@@ -1415,7 +1415,7 @@ namespace System.Windows.Forms.Design
                     if (value != _selectionStyle)
                     {
                         _selectionStyle = value;
-                        if (_region is not null)
+                        if (_region != null)
                         {
                             _region.Dispose();
                             _region = null;
@@ -1437,7 +1437,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 bool fActive = false;
-                if (_selUIsvc._selSvc is not null)
+                if (_selUIsvc._selSvc != null)
                 {
                     fActive = _component == _selUIsvc._selSvc.PrimarySelection;
                     // Office rules:  If this is a multi-select, reverse the colors for active / inactive.
@@ -1449,7 +1449,7 @@ namespace System.Windows.Forms.Design
                 Rectangle outer = _outerRect;
                 Region oldClip = gr.Clip;
                 Color borderColor = SystemColors.Control;
-                if (_control is not null && _control.Parent is not null)
+                if (_control != null && _control.Parent != null)
                 {
                     Control parent = _control.Parent;
                     borderColor = parent.BackColor;
@@ -1645,7 +1645,7 @@ namespace System.Windows.Forms.Design
                         _region = new Region(new Rectangle(0, 0, 0, 0));
                     }
 
-                    if (_handler is not null)
+                    if (_handler != null)
                     {
                         Rectangle handlerClip = _handler.GetSelectionClipRect(_component);
                         if (!handlerClip.IsEmpty)
@@ -1664,7 +1664,7 @@ namespace System.Windows.Forms.Design
 
             public void Dispose()
             {
-                if (_region is not null)
+                if (_region != null)
                 {
                     _region.Dispose();
                     _region = null;
@@ -1818,7 +1818,7 @@ namespace System.Windows.Forms.Design
 
                         _outerRect = rcOuterNew;
                         Invalidate();
-                        if (_region is not null)
+                        if (_region != null)
                         {
                             _region.Dispose();
                             _region = null;

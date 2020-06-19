@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     {
         private const PD printRangeMask = PD.ALLPAGES | PD.PAGENUMS | PD.SELECTION | PD.CURRENTPAGE;
 
-        // If PrintDocument is not null, settings == printDocument.PrinterSettings
+        // If PrintDocument != null, settings == printDocument.PrinterSettings
         private PrinterSettings settings = null;
         private PrintDocument printDocument = null;
 
@@ -554,7 +554,7 @@ namespace System.Windows.Forms
             settings.SetHdevmode(hDevMode);
             settings.SetHdevnames(hDevNames);
 
-            if (pageSettings is not null)
+            if (pageSettings != null)
             {
                 pageSettings.SetHdevmode(hDevMode);
             }
