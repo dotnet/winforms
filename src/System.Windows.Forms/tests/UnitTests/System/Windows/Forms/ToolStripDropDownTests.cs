@@ -4916,7 +4916,8 @@ namespace System.Windows.Forms.Tests
         public void ToolStripDropDown_KeyboardAccelerators_Test()
         {
             using TestForm testForm = new TestForm();
-            Application.Run(testForm); //it needs for correct work of ToolStripDropDown.CanProcessMnemonic method
+
+            testForm.ShowDialog();
 
             //TestResult property is made as separate for the reason that
             //when the Assert is inside FormLoaded method and it fails,
@@ -4961,7 +4962,7 @@ namespace System.Windows.Forms.Tests
                 _result &= toolStrip.ProcessDialogChar('S');
                 _result &= !(toolStrip.ProcessDialogChar('T'));
 
-                BeginInvoke(new Action(Application.ExitThread));
+                BeginInvoke(new Action(Close));
             }
         }
 
