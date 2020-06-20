@@ -16,23 +16,6 @@ namespace System.Windows.Forms
 
         /* RichTextBox messages */
 
-        /* New edit control styles */
-        internal const int ES_SAVESEL = 0x00008000;
-        internal const int ES_SUNKEN = 0x00004000;
-        internal const int ES_DISABLENOSCROLL = 0x00002000;
-        /* same as WS_MAXIMIZE, but that doesn't make sense so we re-use the value */
-        internal const int ES_SELECTIONBAR = 0x01000000;
-        /* same as ES_UPPERCASE, but re-used to completely disable OLE drag'n'drop */
-        internal const int ES_NOOLEDRAGDROP = 0x00000008;
-
-        /* New edit control extended style */
-        internal const int ES_EX_NOCALLOLEINIT = 0x01000000;
-
-        /* These flags are used in FE Windows */
-        internal const int ES_VERTICAL = 0x00400000; // NOT IN RE3.0/2.0
-        internal const int ES_NOIME = 0x00080000;
-        internal const int ES_SELFIME = 0x00040000;
-
         /* TextBox control options */
         internal const int ECO_AUTOWORDSELECTION = 0x00000001;
         internal const int ECO_AUTOVSCROLL = 0x00000040;

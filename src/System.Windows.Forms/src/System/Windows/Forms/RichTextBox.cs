@@ -342,7 +342,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.WS.HSCROLL;
                         if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
                         {
-                            cp.Style |= RichTextBoxConstants.ES_DISABLENOSCROLL;
+                            cp.Style |= (int)ES.DISABLENOSCROLL;
                         }
                     }
 
@@ -351,7 +351,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.WS.VSCROLL;
                         if (((int)ScrollBars & RichTextBoxConstants.RTB_FORCE) != 0)
                         {
-                            cp.Style |= RichTextBoxConstants.ES_DISABLENOSCROLL;
+                            cp.Style |= (int)ES.DISABLENOSCROLL;
                         }
                     }
                 }
