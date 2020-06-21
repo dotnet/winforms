@@ -138,7 +138,7 @@ namespace System.ComponentModel.Design.Serialization
 #pragma warning disable 618
             ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
 #pragma warning restore 618
-            StringWriter sw = new StringWriter(CultureInfo.InvariantCulture);
+            using var sw = new StringWriter(CultureInfo.InvariantCulture);
 
             try
             {
