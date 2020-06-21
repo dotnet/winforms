@@ -101,7 +101,8 @@ namespace System.Windows.Forms
                             byte[] dat = (byte[])sie.Value;
                             if (dat != null)
                             {
-                                InitializeFromStream(new MemoryStream(dat));
+                                using var datMemoryStream = new MemoryStream(dat);
+                                InitializeFromStream(datMemoryStream);
                             }
                         }
                         catch (Exception e)
@@ -118,7 +119,8 @@ namespace System.Windows.Forms
                             if (dat != null)
                             {
                                 PropertyBagBinary = new PropertyBagStream();
-                                PropertyBagBinary.Read(new MemoryStream(dat));
+                                using var datMemoryStream = new MemoryStream(dat);
+                                PropertyBagBinary.Read(datMemoryStream);
                             }
                         }
                         catch (Exception e)
@@ -243,7 +245,7 @@ namespace System.Windows.Forms
 
             private void InitializeFromStream(Stream ids)
             {
-                BinaryReader br = new BinaryReader(ids);
+                using var br = new BinaryReader(ids);
 
                 type = br.ReadInt32();
                 int version = br.ReadInt32();
@@ -268,7 +270,7 @@ namespace System.Windows.Forms
 
             private void InitializeBufferFromStream(Stream ids)
             {
-                BinaryReader br = new BinaryReader(ids);
+                using var br = new BinaryReader(ids);
 
                 length = br.ReadInt32();
                 if (length > 0)
@@ -324,7 +326,7 @@ namespace System.Windows.Forms
 
             internal void Save(MemoryStream stream)
             {
-                BinaryWriter bw = new BinaryWriter(stream);
+                using var bw = new BinaryWriter(stream);
 
                 bw.Write(type);
                 bw.Write(VERSION);
@@ -360,7 +362,7 @@ namespace System.Windows.Forms
             /// </summary>
             void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
             {
-                MemoryStream stream = new MemoryStream();
+                using var stream = new MemoryStream();
                 Save(stream);
 
                 si.AddValue("Data", stream.ToArray());
@@ -369,9 +371,9 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        stream = new MemoryStream();
-                        PropertyBagBinary.Write(stream);
-                        si.AddValue(nameof(PropertyBagBinary), stream.ToArray());
+                        using var propertyBagBinaryStream = new MemoryStream();
+                        PropertyBagBinary.Write(propertyBagBinaryStream);
+                        si.AddValue(nameof(PropertyBagBinary), propertyBagBinaryStream.ToArray());
                     }
                     catch (Exception e)
                     {
