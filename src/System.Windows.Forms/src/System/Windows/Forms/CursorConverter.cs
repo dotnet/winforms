@@ -55,25 +55,23 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            if (value is string)
+            if (value is string s)
             {
-                string text = ((string)value).Trim();
+                string text = s.Trim();
 
                 PropertyInfo[] props = GetProperties();
-                for (int i = 0; i < props.Length; i++)
+                foreach (var prop in props)
                 {
-                    PropertyInfo prop = props[i];
                     if (string.Equals(prop.Name, text, StringComparison.OrdinalIgnoreCase))
                     {
-                        object[] tempIndex = null;
-                        return prop.GetValue(null, tempIndex);
+                        return prop.GetValue(null, null);
                     }
                 }
             }
 
-            if (value is byte[])
+            if (value is byte[] bytes)
             {
-                MemoryStream ms = new MemoryStream((byte[])value);
+                using MemoryStream ms = new MemoryStream(bytes);
                 return new Cursor(ms);
             }
 
