@@ -703,12 +703,10 @@ namespace System.Windows.Forms
                                 wg.TextPadding = TextPaddingOptions.LeftAndRightPadding;
                             }
 
-                            using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font))
-                            {
-                                User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
-                                iLeftMargin = dtParams.iLeftMargin;
-                                iRightMargin = dtParams.iRightMargin;
-                            }
+                            using WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font);
+                            User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
+                            iLeftMargin = dtParams.iLeftMargin;
+                            iRightMargin = dtParams.iRightMargin;
                         }
 
                         Rectangle visualRectangle = new Rectangle(clientRectWithPadding.X + iLeftMargin,
