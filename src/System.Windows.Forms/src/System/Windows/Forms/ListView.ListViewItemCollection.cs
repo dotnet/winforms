@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -343,28 +344,21 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
-                ArrayList foundItems = FindInternal(key, searchAllSubItems, this, new ArrayList());
+                List<ListViewItem> foundItems = new();
+                FindInternal(key, searchAllSubItems, this, foundItems);
 
-                ListViewItem[] stronglyTypedFoundItems = new ListViewItem[foundItems.Count];
-                foundItems.CopyTo(stronglyTypedFoundItems, 0);
-
-                return stronglyTypedFoundItems;
+                return foundItems.ToArray();
             }
 
             /// <summary>
-            ///  Searches for Controls by their Name property, builds up an arraylist
+            ///  Searches for Controls by their Name property, builds up a list
             ///  of all the controls that match.
             /// </summary>
-            private ArrayList FindInternal(string key, bool searchAllSubItems, ListViewItemCollection listViewItems, ArrayList foundItems)
+            private void FindInternal(string key, bool searchAllSubItems, ListViewItemCollection listViewItems, List<ListViewItem> foundItems)
             {
-                if ((listViewItems is null) || (foundItems is null))
-                {
-                    return null;  //
-                }
-
                 for (int i = 0; i < listViewItems.Count; i++)
                 {
-                    if (WindowsFormsUtils.SafeCompareStrings(listViewItems[i].Name, key, /* ignoreCase = */ true))
+                    if (WindowsFormsUtils.SafeCompareStrings(listViewItems[i].Name, key, ignoreCase: true))
                     {
                         foundItems.Add(listViewItems[i]);
                     }
@@ -375,7 +369,7 @@ namespace System.Windows.Forms
                             // start from 1, as we've already compared subitems[0]
                             for (int j = 1; j < listViewItems[i].SubItems.Count; j++)
                             {
-                                if (WindowsFormsUtils.SafeCompareStrings(listViewItems[i].SubItems[j].Name, key, /* ignoreCase = */ true))
+                                if (WindowsFormsUtils.SafeCompareStrings(listViewItems[i].SubItems[j].Name, key, ignoreCase: true))
                                 {
                                     foundItems.Add(listViewItems[i]);
                                     break;
@@ -384,8 +378,6 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-
-                return foundItems;
             }
 
             public IEnumerator GetEnumerator()

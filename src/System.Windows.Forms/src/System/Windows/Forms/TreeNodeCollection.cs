@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -274,25 +275,15 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
             }
 
-            ArrayList foundNodes = FindInternal(key, searchAllChildren, this, new ArrayList());
+            List<TreeNode> foundNodes = FindInternal(key, searchAllChildren, this, new List<TreeNode>());
 
-            //
-            TreeNode[] stronglyTypedFoundNodes = new TreeNode[foundNodes.Count];
-            foundNodes.CopyTo(stronglyTypedFoundNodes, 0);
-
-            return stronglyTypedFoundNodes;
+            return foundNodes.ToArray();
         }
 
-        private ArrayList FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, ArrayList foundTreeNodes)
+        private List<TreeNode> FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, List<TreeNode> foundTreeNodes)
         {
-            if ((treeNodeCollectionToLookIn is null) || (foundTreeNodes is null))
-            {
-                return null;
-            }
-
             // Perform breadth first search - as it's likely people will want tree nodes belonging
             // to the same parent close to each other.
-
             for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++)
             {
                 if (treeNodeCollectionToLookIn[i] is null)
@@ -300,14 +291,13 @@ namespace System.Windows.Forms
                     continue;
                 }
 
-                if (WindowsFormsUtils.SafeCompareStrings(treeNodeCollectionToLookIn[i].Name, key, /* ignoreCase = */ true))
+                if (WindowsFormsUtils.SafeCompareStrings(treeNodeCollectionToLookIn[i].Name, key, ignoreCase: true))
                 {
                     foundTreeNodes.Add(treeNodeCollectionToLookIn[i]);
                 }
             }
 
-            // Optional recurive search for controls in child collections.
-
+            // Optional recursive search for controls in child collections.
             if (searchAllChildren)
             {
                 for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++)
@@ -318,11 +308,12 @@ namespace System.Windows.Forms
                     }
                     if ((treeNodeCollectionToLookIn[i].Nodes != null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
                     {
-                        // if it has a valid child collecion, append those results to our collection
+                        // If it has a valid child collection, append those results to our collection.
                         foundTreeNodes = FindInternal(key, searchAllChildren, treeNodeCollectionToLookIn[i].Nodes, foundTreeNodes);
                     }
                 }
             }
+
             return foundTreeNodes;
         }
 

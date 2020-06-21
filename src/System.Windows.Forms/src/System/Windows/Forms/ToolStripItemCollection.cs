@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -38,7 +39,7 @@ namespace System.Windows.Forms
 
         public ToolStripItemCollection(ToolStrip owner, ToolStripItem[] value)
         {
-            this._owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            _owner = owner ?? throw new ArgumentNullException(nameof(owner));
             AddRange(value);
         }
 
@@ -239,31 +240,22 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripItem[] Find(string key, bool searchAllChildren)
         {
-            if ((key is null) || (key.Length == 0))
+            if (string.IsNullOrEmpty(key))
             {
                 throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
             }
 
-            ArrayList foundItems = FindInternal(key, searchAllChildren, this, new ArrayList());
-
-            // Make this a stongly typed collection.
-            ToolStripItem[] stronglyTypedFoundItems = new ToolStripItem[foundItems.Count];
-            foundItems.CopyTo(stronglyTypedFoundItems, 0);
-
-            return stronglyTypedFoundItems;
+            List<ToolStripItem> foundItems = new();
+            FindInternal(key, searchAllChildren, this, foundItems);
+            return foundItems.ToArray();
         }
 
         /// <summary>
-        ///  Searches for Items by their Name property, builds up an array list
+        ///  Searches for Items by their Name property, builds up a list
         ///  of all the items that match.
-            /// </summary>
-        private ArrayList FindInternal(string key, bool searchAllChildren, ToolStripItemCollection itemsToLookIn, ArrayList foundItems)
+        /// </summary>
+        private void FindInternal(string key, bool searchAllChildren, ToolStripItemCollection itemsToLookIn, List<ToolStripItem> foundItems)
         {
-            if ((itemsToLookIn is null) || (foundItems is null))
-            {
-                return null;  //
-            }
-
             try
             {
                 for (int i = 0; i < itemsToLookIn.Count; i++)
@@ -273,40 +265,33 @@ namespace System.Windows.Forms
                         continue;
                     }
 
-                    if (WindowsFormsUtils.SafeCompareStrings(itemsToLookIn[i].Name, key, /* ignoreCase = */ true))
+                    if (WindowsFormsUtils.SafeCompareStrings(itemsToLookIn[i].Name, key, ignoreCase: true))
                     {
                         foundItems.Add(itemsToLookIn[i]);
                     }
                 }
 
-                // Optional recurive search for controls in child collections.
-
+                // Optional recursive search for controls in child collections.
                 if (searchAllChildren)
                 {
                     for (int j = 0; j < itemsToLookIn.Count; j++)
                     {
-                        if (!(itemsToLookIn[j] is ToolStripDropDownItem item))
+                        if (itemsToLookIn[j] is not ToolStripDropDownItem item)
                         {
                             continue;
                         }
+
                         if (item.HasDropDownItems)
                         {
-                            // if it has a valid child collecion, append those results to our collection
-                            foundItems = FindInternal(key, searchAllChildren, item.DropDownItems, foundItems);
+                            // If it has a valid child collection, append those results to our collection.
+                            FindInternal(key, searchAllChildren, item.DropDownItems, foundItems);
                         }
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
             {
-                // Make sure we deal with non-critical failures gracefully.
-                if (ClientUtils.IsCriticalException(e))
-                {
-                    throw;
-                }
             }
-
-            return foundItems;
         }
 
         public override bool IsReadOnly { get { return _isReadOnly; } }
