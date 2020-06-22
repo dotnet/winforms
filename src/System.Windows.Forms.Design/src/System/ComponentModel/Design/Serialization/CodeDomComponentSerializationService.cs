@@ -606,13 +606,13 @@ namespace System.ComponentModel.Design.Serialization
 #pragma warning disable 618
                 System.CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
 #pragma warning restore 618
-                StringWriter sw = new StringWriter(CultureInfo.InvariantCulture);
+                using var sw = new StringWriter(CultureInfo.InvariantCulture);
                 Trace("Stored CodeDom for {0}: ", name);
                 Debug.Indent();
 
-                if (code is CodeTypeDeclaration)
+                if (code is CodeTypeDeclaration codeTypeDeclaration)
                 {
-                    codeGenerator.GenerateCodeFromType((CodeTypeDeclaration)code, sw, null);
+                    codeGenerator.GenerateCodeFromType(codeTypeDeclaration, sw, null);
                 }
                 else if (code is CodeStatementCollection statements)
                 {
@@ -621,13 +621,13 @@ namespace System.ComponentModel.Design.Serialization
                         codeGenerator.GenerateCodeFromStatement(statement, sw, null);
                     }
                 }
-                else if (code is CodeStatement)
+                else if (code is CodeStatement codeStatement)
                 {
-                    codeGenerator.GenerateCodeFromStatement((CodeStatement)code, sw, null);
+                    codeGenerator.GenerateCodeFromStatement(codeStatement, sw, null);
                 }
-                else if (code is CodeExpression)
+                else if (code is CodeExpression codeExpression)
                 {
-                    codeGenerator.GenerateCodeFromExpression((CodeExpression)code, sw, null);
+                    codeGenerator.GenerateCodeFromExpression(codeExpression, sw, null);
                 }
                 else
                 {

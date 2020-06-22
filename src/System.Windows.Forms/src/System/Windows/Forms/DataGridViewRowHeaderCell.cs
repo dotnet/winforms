@@ -214,7 +214,8 @@ namespace System.Windows.Forms
                 if (val != null)
                 {
                     sb.Append("<B>");
-                    FormatPlainTextAsHtml(val.ToString(), new StringWriter(sb, CultureInfo.CurrentCulture));
+                    using var sw = new StringWriter(sb, CultureInfo.CurrentCulture);
+                    FormatPlainTextAsHtml(val.ToString(), sw);
                     sb.Append("</B>");
                 }
                 else
@@ -243,7 +244,8 @@ namespace System.Windows.Forms
                     {
                         bool escapeApplied = false;
                         int insertionPoint = sb.Length;
-                        FormatPlainText(val.ToString(), csv, new StringWriter(sb, CultureInfo.CurrentCulture), ref escapeApplied);
+                        using var sw = new StringWriter(sb, CultureInfo.CurrentCulture);
+                        FormatPlainText(val.ToString(), csv, sw, ref escapeApplied);
                         if (escapeApplied)
                         {
                             Debug.Assert(csv);

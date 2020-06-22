@@ -163,7 +163,8 @@ namespace System.Windows.Forms
                 sb.Append("<TH>");
                 if (val != null)
                 {
-                    FormatPlainTextAsHtml(val.ToString(), new StringWriter(sb, CultureInfo.CurrentCulture));
+                    using var sw = new StringWriter(sb, CultureInfo.CurrentCulture);
+                    FormatPlainTextAsHtml(val.ToString(), sw);
                 }
                 else
                 {
@@ -191,7 +192,8 @@ namespace System.Windows.Forms
                     {
                         bool escapeApplied = false;
                         int insertionPoint = sb.Length;
-                        FormatPlainText(val.ToString(), csv, new StringWriter(sb, CultureInfo.CurrentCulture), ref escapeApplied);
+                        using var sw = new StringWriter(sb, CultureInfo.CurrentCulture);
+                        FormatPlainText(val.ToString(), csv, sw, ref escapeApplied);
                         if (escapeApplied)
                         {
                             Debug.Assert(csv);
