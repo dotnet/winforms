@@ -12,6 +12,7 @@ using static Interop.Ole32;
 
 namespace System.Windows.Forms.Tests
 {
+    [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
     public class AxHostPropertyDescriptorTests : IClassFixture<ThreadExceptionFixture>
     {
         private const string EmptyClsidString = "00000000-0000-0000-0000-000000000000";
