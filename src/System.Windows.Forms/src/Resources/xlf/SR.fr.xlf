@@ -5636,6 +5636,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">L'index {0} est hors limites.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InputLanguageCultureNotFound">
+        <source>Could not find an InputLanguage for culture '{0}'.</source>
+        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument=La valeur '{1}' n'est pas valide pour '{0}'.</target>

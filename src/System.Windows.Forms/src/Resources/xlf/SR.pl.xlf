@@ -5636,6 +5636,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Indeks {0} jest poza zakresem.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InputLanguageCultureNotFound">
+        <source>Could not find an InputLanguage for culture '{0}'.</source>
+        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument=Wartość '{1}' nie jest prawidłową wartością dla '{0}'.</target>

@@ -5636,6 +5636,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Der Index {0} liegt außerhalb des Bereichs.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InputLanguageCultureNotFound">
+        <source>Could not find an InputLanguage for culture '{0}'.</source>
+        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument=Value mit dem Wert {1} ist für {0} ungültig.</target>

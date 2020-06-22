@@ -5636,6 +5636,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">索引 {0} 超出范围。</target>
         <note />
       </trans-unit>
+      <trans-unit id="InputLanguageCultureNotFound">
+        <source>Could not find an InputLanguage for culture '{0}'.</source>
+        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument=“{1}”的值对于“{0}”无效。</target>

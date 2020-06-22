@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 
@@ -20,7 +18,13 @@ namespace System.Windows.Forms
         /// </summary>
         public InputLanguageChangingEventArgs(CultureInfo culture, bool sysCharSet)
         {
-            InputLanguage = InputLanguage.FromCulture(culture);
+            InputLanguage? language = InputLanguage.FromCulture(culture);
+            if (language == null)
+            {
+                throw new ArgumentException(string.Format(SR.InputLanguageCultureNotFound, culture), nameof(culture));
+            }
+
+            InputLanguage = language;
             Culture = culture;
             SysCharSet = sysCharSet;
         }

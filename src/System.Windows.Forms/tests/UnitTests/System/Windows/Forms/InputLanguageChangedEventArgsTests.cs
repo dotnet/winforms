@@ -13,8 +13,8 @@ namespace System.Windows.Forms.Tests
     {
         public static IEnumerable<object[]> Ctor_CultureInfo_Byte_TestData()
         {
-            yield return new object[] { CultureInfo.InvariantCulture, 0 };
-            yield return new object[] { new CultureInfo("en"), 1 };
+            yield return new object[] { new CultureInfo("en-US"), 0 };
+            yield return new object[] { new CultureInfo("en-US"), 1 };
         }
 
         [Theory]
@@ -31,6 +31,20 @@ namespace System.Windows.Forms.Tests
         public void Ctor_NullCultureInfo_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>("culture", () => new InputLanguageChangedEventArgs((CultureInfo)null, 0));
+        }
+
+        public static IEnumerable<object[]> Ctor_NoSuchCultureInfo_TestData()
+        {
+            yield return new object[] { CultureInfo.InvariantCulture };
+            yield return new object[] { new CultureInfo("en") };
+            yield return new object[] { new UnknownKeyboardCultureInfo() };
+        }
+
+        [Theory]
+        [MemberData(nameof(Ctor_NoSuchCultureInfo_TestData))]
+        public void Ctor_NoSuchCultureInfo_ThrowsArgumentException(CultureInfo culture)
+        {
+            Assert.Throws<ArgumentException>("culture", () => new InputLanguageChangedEventArgs(culture, 0));
         }
 
         public static IEnumerable<object[]> Ctor_InputLanguage_Byte_TestData()
@@ -59,6 +73,15 @@ namespace System.Windows.Forms.Tests
         public void Ctor_NullInputLanguage_ThrowsNullReferenceException()
         {
             Assert.Throws<ArgumentNullException>("inputLanguage", () => new InputLanguageChangedEventArgs((InputLanguage)null, 0));
+        }
+
+        private class UnknownKeyboardCultureInfo : CultureInfo
+        {
+            public UnknownKeyboardCultureInfo() : base("en-US")
+            {
+            }
+
+            public override int KeyboardLayoutId => int.MaxValue;
         }
     }
 }

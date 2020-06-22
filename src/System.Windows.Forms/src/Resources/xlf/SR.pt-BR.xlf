@@ -5636,6 +5636,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Índice {0} está fora do intervalo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InputLanguageCultureNotFound">
+        <source>Could not find an InputLanguage for culture '{0}'.</source>
+        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument=Value '{1}' não é um valor válido para '{0}'.</target>
