@@ -1,6 +1,0 @@
-System.Windows.Forms.ListViewGroup.Subtitle.get -> string!
-System.Windows.Forms.ListViewGroup.Subtitle.set -> void
-System.Windows.Forms.ListView.GroupTaskLinkClick -> System.EventHandler<System.Windows.Forms.ListViewGroupEventArgs>
-System.Windows.Forms.ListViewGroup.TaskLink.get -> string!
-System.Windows.Forms.ListViewGroup.TaskLink.set -> void
-~virtual System.Windows.Forms.ListView.OnGroupTaskLinkClick(System.Windows.Forms.ListViewGroupEventArgs e) -> void

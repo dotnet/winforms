@@ -3190,6 +3190,7 @@ System.Windows.Forms.ListView.GetItemRect(int index, System.Windows.Forms.ItemBo
 System.Windows.Forms.ListView.GridLines.get -> bool
 System.Windows.Forms.ListView.GridLines.set -> void
 System.Windows.Forms.ListView.GroupCollapsedStateChanged -> System.EventHandler<System.Windows.Forms.ListViewGroupEventArgs>
+System.Windows.Forms.ListView.GroupTaskLinkClick -> System.EventHandler<System.Windows.Forms.ListViewGroupEventArgs>
 System.Windows.Forms.ListView.HeaderStyle.get -> System.Windows.Forms.ColumnHeaderStyle
 System.Windows.Forms.ListView.HeaderStyle.set -> void
 System.Windows.Forms.ListView.HideSelection.get -> bool
@@ -3285,8 +3286,12 @@ System.Windows.Forms.ListViewGroup.ListViewGroup(string? header, System.Windows.
 System.Windows.Forms.ListViewGroup.ListViewGroup(string? key, string? headerText) -> void
 System.Windows.Forms.ListViewGroup.Name.get -> string?
 System.Windows.Forms.ListViewGroup.Name.set -> void
+System.Windows.Forms.ListViewGroup.Subtitle.get -> string!
+System.Windows.Forms.ListViewGroup.Subtitle.set -> void
 System.Windows.Forms.ListViewGroup.Tag.get -> object?
 System.Windows.Forms.ListViewGroup.Tag.set -> void
+System.Windows.Forms.ListViewGroup.TaskLink.get -> string!
+System.Windows.Forms.ListViewGroup.TaskLink.set -> void
 System.Windows.Forms.ListViewGroupCollapsedState
 System.Windows.Forms.ListViewGroupCollapsedState.Collapsed = 2 -> System.Windows.Forms.ListViewGroupCollapsedState
 System.Windows.Forms.ListViewGroupCollapsedState.Default = 0 -> System.Windows.Forms.ListViewGroupCollapsedState
@@ -13051,6 +13056,7 @@ static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.
 ~virtual System.Windows.Forms.ListView.OnDrawItem(System.Windows.Forms.DrawListViewItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ListView.OnDrawSubItem(System.Windows.Forms.DrawListViewSubItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ListView.OnGroupCollapsedStateChanged(System.Windows.Forms.ListViewGroupEventArgs e) -> void
+~virtual System.Windows.Forms.ListView.OnGroupTaskLinkClick(System.Windows.Forms.ListViewGroupEventArgs e) -> void
 ~virtual System.Windows.Forms.ListView.OnItemActivate(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ListView.OnItemCheck(System.Windows.Forms.ItemCheckEventArgs ice) -> void
 ~virtual System.Windows.Forms.ListView.OnItemChecked(System.Windows.Forms.ItemCheckedEventArgs e) -> void
