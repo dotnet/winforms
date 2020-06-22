@@ -4,7 +4,7 @@
 
 #nullable disable
 
-using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -129,9 +129,9 @@ namespace System.Windows.Forms
         ///  Lists are slow, so this section can be optimized.
         ///  Implementation is such that inserts are fast, removals are slow.
         /// </summary>
-        private readonly ArrayList _arrayOfDates = new ArrayList();
-        private readonly ArrayList _annualArrayOfDates = new ArrayList();
-        private readonly ArrayList _monthlyArrayOfDates = new ArrayList();
+        private readonly List<DateTime> _arrayOfDates = new List<DateTime>();
+        private readonly List<DateTime> _annualArrayOfDates = new List<DateTime>();
+        private readonly List<DateTime> _monthlyArrayOfDates = new List<DateTime>();
 
         private DateRangeEventHandler _onDateChanged;
         private DateRangeEventHandler _onDateSelected;
@@ -178,16 +178,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.MonthCalendarAnnuallyBoldedDatesDescr))]
         public DateTime[] AnnuallyBoldedDates
         {
-            get
-            {
-                DateTime[] dateTimes = new DateTime[_annualArrayOfDates.Count];
-                for (int i = 0; i < _annualArrayOfDates.Count; ++i)
-                {
-                    dateTimes[i] = (DateTime)_annualArrayOfDates[i];
-                }
+            get => _annualArrayOfDates.ToArray();
 
-                return dateTimes;
-            }
             set
             {
                 _annualArrayOfDates.Clear();
@@ -198,15 +190,11 @@ namespace System.Windows.Forms
 
                 if (value != null && value.Length > 0)
                 {
-                    // Add each bolded date to our ArrayList.
-                    for (int i = 0; i < value.Length; i++)
+                    // Add each bolded date to our List.
+                    foreach (var dateTime in value)
                     {
-                        _annualArrayOfDates.Add(value[i]);
-                    }
-
-                    for (int i = 0; i < value.Length; ++i)
-                    {
-                        _monthsOfYear[value[i].Month - 1] |= 0x00000001 << (value[i].Day - 1);
+                        _annualArrayOfDates.Add(dateTime);
+                        _monthsOfYear[dateTime.Month - 1] |= 0x00000001 << (dateTime.Day - 1);
                     }
                 }
 
@@ -268,25 +256,17 @@ namespace System.Windows.Forms
         [Localizable(true)]
         public DateTime[] BoldedDates
         {
-            get
-            {
-                DateTime[] dateTimes = new DateTime[_arrayOfDates.Count];
-                for (int i = 0; i < _arrayOfDates.Count; ++i)
-                {
-                    dateTimes[i] = (DateTime)_arrayOfDates[i];
-                }
+            get => _arrayOfDates.ToArray();
 
-                return dateTimes;
-            }
             set
             {
                 _arrayOfDates.Clear();
                 if (value != null && value.Length > 0)
                 {
-                    // Add each bolded date to our ArrayList.
-                    for (int i = 0; i < value.Length; i++)
+                    // Add each bolded date to our List.
+                    foreach (var dateTime in value)
                     {
-                        _arrayOfDates.Add(value[i]);
+                        _arrayOfDates.Add(dateTime);
                     }
                 }
 
@@ -536,16 +516,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.MonthCalendarMonthlyBoldedDatesDescr))]
         public DateTime[] MonthlyBoldedDates
         {
-            get
-            {
-                DateTime[] dateTimes = new DateTime[_monthlyArrayOfDates.Count];
-                for (int i = 0; i < _monthlyArrayOfDates.Count; ++i)
-                {
-                    dateTimes[i] = (DateTime)_monthlyArrayOfDates[i];
-                }
+            get => _monthlyArrayOfDates.ToArray();
 
-                return dateTimes;
-            }
             set
             {
                 _monthlyArrayOfDates.Clear();
@@ -553,15 +525,11 @@ namespace System.Windows.Forms
 
                 if (value != null && value.Length > 0)
                 {
-                    // Add each bolded date to our ArrayList.
-                    for (int i = 0; i < value.Length; i++)
+                    // Add each bolded date to our List.
+                    foreach (var  dateTime in value)
                     {
-                        _monthlyArrayOfDates.Add(value[i]);
-                    }
-
-                    for (int i = 0; i < value.Length; ++i)
-                    {
-                        _datesToBoldMonthly |= 0x00000001 << (value[i].Day - 1);
+                        _monthlyArrayOfDates.Add(dateTime);
+                        _datesToBoldMonthly |= 0x00000001 << (dateTime.Day - 1);
                     }
                 }
 
@@ -1125,7 +1093,7 @@ namespace System.Windows.Forms
             int numDates = _arrayOfDates.Count;
             for (int i = 0; i < numDates; ++i)
             {
-                DateTime date = (DateTime)_arrayOfDates[i];
+                DateTime date = _arrayOfDates[i];
                 if (DateTime.Compare(date, range.Start) >= 0 && DateTime.Compare(date, range.End) <= 0)
                 {
                     int month = date.Month;
@@ -1560,7 +1528,7 @@ namespace System.Windows.Forms
             int i = 0;
             for (; i < length; ++i)
             {
-                if (CompareDayAndMonth((DateTime)_annualArrayOfDates[i], date))
+                if (CompareDayAndMonth(_annualArrayOfDates[i], date))
                 {
                     _annualArrayOfDates.RemoveAt(i);
                     break;
@@ -1570,7 +1538,7 @@ namespace System.Windows.Forms
             --length;
             for (int j = i; j < length; ++j)
             {
-                if (CompareDayAndMonth((DateTime)_annualArrayOfDates[j], date))
+                if (CompareDayAndMonth(_annualArrayOfDates[j], date))
                 {
                     return;
                 }
@@ -1590,7 +1558,7 @@ namespace System.Windows.Forms
             int length = _arrayOfDates.Count;
             for (int i = 0; i < length; ++i)
             {
-                if (DateTime.Compare(((DateTime)_arrayOfDates[i]).Date, date.Date) == 0)
+                if (DateTime.Compare(_arrayOfDates[i].Date, date.Date) == 0)
                 {
                     _arrayOfDates.RemoveAt(i);
                     Invalidate();
@@ -1612,7 +1580,7 @@ namespace System.Windows.Forms
             int i = 0;
             for (; i < length; ++i)
             {
-                if (CompareDayAndMonth((DateTime)_monthlyArrayOfDates[i], date))
+                if (CompareDayAndMonth(_monthlyArrayOfDates[i], date))
                 {
                     _monthlyArrayOfDates.RemoveAt(i);
                     break;
@@ -1622,7 +1590,7 @@ namespace System.Windows.Forms
             --length;
             for (int j = i; j < length; ++j)
             {
-                if (CompareDayAndMonth((DateTime)_monthlyArrayOfDates[j], date))
+                if (CompareDayAndMonth(_monthlyArrayOfDates[j], date))
                 {
                     return;
                 }
