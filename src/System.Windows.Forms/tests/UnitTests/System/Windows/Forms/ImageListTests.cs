@@ -464,7 +464,7 @@ namespace System.Windows.Forms.Tests
             };
             var image = new Bitmap(10, 10);
             sourceList.Images.Add(image);
-            ImageListStreamer stream = RoundtripSerialize(sourceList.ImageStream);
+            using ImageListStreamer stream = RoundtripSerialize(sourceList.ImageStream);
             Assert.True(sourceList.HandleCreated);
 
             using var list = new ImageList();
