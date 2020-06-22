@@ -194,8 +194,8 @@ namespace System.Windows.Forms
                     User32.SendMessageW(
                         this,
                         (User32.WM)RichEditMessages.EM_SETOPTIONS,
-                        value ? (IntPtr)RichTextBoxConstants.ECOOP_OR : (IntPtr)RichTextBoxConstants.ECOOP_XOR,
-                        (IntPtr)RichTextBoxConstants.ECO_AUTOWORDSELECTION);
+                        (IntPtr)(value ? ECOOP.OR : ECOOP.XOR),
+                        (IntPtr)ECO.AUTOWORDSELECTION);
                 }
             }
         }
@@ -1409,8 +1409,8 @@ namespace System.Windows.Forms
                         User32.SendMessageW(
                             this,
                             (User32.WM)RichEditMessages.EM_SETOPTIONS,
-                            value ? (IntPtr)RichTextBoxConstants.ECOOP_OR : (IntPtr)RichTextBoxConstants.ECOOP_XOR,
-                            (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
+                            (IntPtr)(value ? ECOOP.OR : ECOOP.XOR),
+                            (IntPtr)ECO.SELECTIONBAR);
                     }
                 }
             }
@@ -2598,8 +2598,8 @@ namespace System.Windows.Forms
                 User32.PostMessageW(
                     this,
                     (User32.WM)RichEditMessages.EM_SETOPTIONS,
-                    (IntPtr)RichTextBoxConstants.ECOOP_OR,
-                    (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
+                    (IntPtr)ECOOP.OR,
+                    (IntPtr)ECO.SELECTIONBAR);
             }
 
             if (languageOption != LanguageOption)

@@ -589,7 +589,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETOPTIONS.
-            User32.SendMessageW(control.Handle, (User32.WM)RichEditMessages.EM_SETOPTIONS, (IntPtr)RichTextBoxConstants.ECOOP_OR, (IntPtr)RichTextBoxConstants.ECO_AUTOWORDSELECTION);
+            SendMessageW(control.Handle, (WM)RichEditMessages.EM_SETOPTIONS, (IntPtr)ECOOP.OR, (IntPtr)ECO.AUTOWORDSELECTION);
             Assert.False(control.AutoWordSelection);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -6586,7 +6586,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETOPTIONS.
-            User32.SendMessageW(control.Handle, (User32.WM)RichEditMessages.EM_SETOPTIONS, (IntPtr)RichTextBoxConstants.ECOOP_OR, (IntPtr)RichTextBoxConstants.ECO_SELECTIONBAR);
+            SendMessageW(control.Handle, (WM)RichEditMessages.EM_SETOPTIONS, (IntPtr)ECOOP.OR, (IntPtr)ECO.SELECTIONBAR);
             Assert.False(control.ShowSelectionMargin);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
