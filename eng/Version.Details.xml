@@ -95,5 +95,41 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>531ebcd1895aa32a106db5849cd4ace3909cefce</Sha>
     </Dependency>
+    <Dependency Name="System.Diagnostics.EventLog" Version="5.0.0-preview.7.20320.5">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>531ebcd1895aa32a106db5849cd4ace3909cefce</Sha>
+    </Dependency>
+    <Dependency Name="System.DirectoryServices" Version="5.0.0-preview.7.20320.5">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>531ebcd1895aa32a106db5849cd4ace3909cefce</Sha>
+    </Dependency>
+    <Dependency Name="System.Reflection.MetadataLoadContext" Version="5.0.0-preview.7.20320.5">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>531ebcd1895aa32a106db5849cd4ace3909cefce</Sha>
+    </Dependency>
+    <Dependency Name="System.Security.AccessControl" Version="5.0.0-preview.7.20320.5">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>531ebcd1895aa32a106db5849cd4ace3909cefce</Sha>
+    </Dependency>
+    <Dependency Name="System.Security.Cryptography.Xml" Version="5.0.0-preview.7.20320.5">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>531ebcd1895aa32a106db5849cd4ace3909cefce</Sha>
+    </Dependency>
+    <Dependency Name="System.Security.Principal.Windows" Version="5.0.0-preview.7.20320.5">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>531ebcd1895aa32a106db5849cd4ace3909cefce</Sha>
+    </Dependency>
+    <Dependency Name="System.IO.Packaging" Version="5.0.0-preview.7.20320.5">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>531ebcd1895aa32a106db5849cd4ace3909cefce</Sha>
+    </Dependency>
+    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="5.0.0-preview.7.20320.5">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>531ebcd1895aa32a106db5849cd4ace3909cefce</Sha>
+    </Dependency>
+    <Dependency Name="Microsoft.NETCore.App.Internal" Version="5.0.0-preview.7.20320.5">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>531ebcd1895aa32a106db5849cd4ace3909cefce</Sha>
+    </Dependency>
   </ToolsetDependencies>
 </Dependencies>
