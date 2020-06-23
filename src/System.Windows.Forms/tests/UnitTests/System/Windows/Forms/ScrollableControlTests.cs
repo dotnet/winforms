@@ -1388,19 +1388,24 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnLayout_TestData()
         {
-            yield return new object[] { true, null, 1 };
-            yield return new object[] { true, new LayoutEventArgs(null, null), 1 };
-            yield return new object[] { true, new LayoutEventArgs(new Control(), "affectedProperty"), 2 };
+            // The control must be passed along as separate variable in order to be disposed properly.
+            Control affectedControl = null;
 
-            yield return new object[] { false, null, 1 };
-            yield return new object[] { false, new LayoutEventArgs(null, null), 1 };
-            yield return new object[] { false, new LayoutEventArgs(new Control(), "affectedProperty"), 1 };
+            yield return new object[] { true, null, 1, null };
+            yield return new object[] { true, new LayoutEventArgs(null, null), 1, null };
+            yield return new object[] { true, new LayoutEventArgs(affectedControl = new Control(), "affectedProperty"), 2, affectedControl };
+
+            yield return new object[] { false, null, 1, null };
+            yield return new object[] { false, new LayoutEventArgs(null, null), 1, null };
+            yield return new object[] { false, new LayoutEventArgs(affectedControl = new Control(), "affectedProperty"), 1 , affectedControl };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(OnLayout_TestData))]
-        public void ScrollableControl_OnLayout_Invoke_CallsLayout(bool autoScroll, LayoutEventArgs eventArgs, int expectedCallCount)
+        public void ScrollableControl_OnLayout_Invoke_CallsLayout(bool autoScroll, LayoutEventArgs eventArgs, int expectedCallCount, Control affectedControl)
         {
+            Assert.Same(eventArgs?.AffectedComponent, affectedControl);
+
             using var control = new SubScrollableControl
             {
                 AutoScroll = autoScroll
@@ -1562,15 +1567,15 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnPaintBackground_WithParent_TestData()
         {
-            var control = new Control
+            Func<Control> controlFactory = () => new Control
             {
                 Bounds = new Rectangle(1, 2, 30, 40)
             };
-            var tabPage = new TabPage
+            Func<TabPage> tabPageFactory = () => new TabPage
             {
                 Bounds = new Rectangle(1, 2, 30, 40)
             };
-            foreach (Control parent in new Control[] { control, tabPage })
+            foreach (Func<Control> parentFactory in new Func<Control>[] { controlFactory, tabPageFactory })
             {
                 foreach (bool hScroll in new bool[] { true, false })
                 {
@@ -1581,28 +1586,28 @@ namespace System.Windows.Forms.Tests
                             foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
                             {
                                 int expected = backgroundImage != null && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center) && (hScroll || vScroll) ? 0 : 1;
-                                yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
-                                yield return new object[] { parent, hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, 0 };
-                                yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
-                                yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
-                                yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
-                                yield return new object[] { parent, hScroll, vScroll, false, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                                yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                                yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                                yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                                yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                                yield return new object[] { parentFactory(), hScroll, vScroll, false, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                                yield return new object[] { parentFactory(), hScroll, vScroll, false, Color.Red, backgroundImage, backgroundImageLayout, 0 };
                             }
                         }
 
-                        yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
-                        yield return new object[] { parent, hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
-                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
-                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
-                        yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
-                        yield return new object[] { parent, hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 1 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
 
-                        yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
-                        yield return new object[] { parent, hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
-                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
-                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
-                        yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
-                        yield return new object[] { parent, hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 2 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
+                        yield return new object[] { parentFactory(), hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, 1 };
                     }
                 }
             }
