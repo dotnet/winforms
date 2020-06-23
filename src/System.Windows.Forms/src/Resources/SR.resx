@@ -6710,4 +6710,7 @@ Stack trace where the illegal operation occurred was:
   <data name="InputLanguageCultureNotFound" xml:space="preserve">
     <value>Could not find an InputLanguage for culture '{0}'.</value>
   </data>
+  <data name="ListViewGroupImageListDescr" xml:space="preserve">
+    <value>The ImageList control used by the ListView for ListViewGroup images in all views.</value>
+  </data>
 </root>

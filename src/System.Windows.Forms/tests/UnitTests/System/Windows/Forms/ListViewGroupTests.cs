@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -36,6 +37,8 @@ namespace System.Windows.Forms.Tests
             Assert.Null(group.Tag);
             Assert.Equal(ListViewGroupCollapsedState.Default, group.CollapsedState);
             Assert.Empty(group.TaskLink);
+            Assert.Empty(group.TitleImageKey);
+            Assert.Equal(-1, group.TitleImageIndex);
         }
 
         [WinFormsTheory]
@@ -55,6 +58,8 @@ namespace System.Windows.Forms.Tests
             Assert.Null(group.Tag);
             Assert.Equal(ListViewGroupCollapsedState.Default, group.CollapsedState);
             Assert.Empty(group.TaskLink);
+            Assert.Empty(group.TitleImageKey);
+            Assert.Equal(-1, group.TitleImageIndex);
         }
 
         public static IEnumerable<object[]> Ctor_String_HorizontalAlignment_TestData()
@@ -83,6 +88,8 @@ namespace System.Windows.Forms.Tests
             Assert.Null(group.Tag);
             Assert.Equal(ListViewGroupCollapsedState.Default, group.CollapsedState);
             Assert.Empty(group.TaskLink);
+            Assert.Empty(group.TitleImageKey);
+            Assert.Equal(-1, group.TitleImageIndex);
         }
 
         public static IEnumerable<object[]> Ctor_String_String_TestData()
@@ -109,6 +116,243 @@ namespace System.Windows.Forms.Tests
             Assert.Null(group.Tag);
             Assert.Equal(ListViewGroupCollapsedState.Default, group.CollapsedState);
             Assert.Empty(group.TaskLink);
+            Assert.Empty(group.TitleImageKey);
+            Assert.Equal(-1, group.TitleImageIndex);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
+        [InlineData(-1)]
+        public void ListViewGroup_TitleImageIndex_SetWithoutListView_GetReturnsExpected(int value)
+        {
+            var group = new ListViewGroup
+            {
+                TitleImageIndex = value
+            };
+
+            Assert.Equal(value, group.TitleImageIndex);
+
+            // Set same.
+            group.TitleImageIndex = value;
+            Assert.Equal(value, group.TitleImageIndex);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
+        [InlineData(-1)]
+        public void ListViewGroup_TitleImageIndex_SetWithListView_GetReturnsExpected(int value)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+
+            group.TitleImageIndex = value;
+            Assert.Equal(value, group.TitleImageIndex);
+            Assert.False(listView.IsHandleCreated);
+
+            // Set same.
+            group.TitleImageIndex = value;
+            Assert.Equal(value, group.TitleImageIndex);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
+        [InlineData(-1)]
+        public void ListViewGroup_TitleImageIndex_SetWithListViewWithHandle_GetReturnsExpected(int value)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            int invalidatedCallCount = 0;
+            listView.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            listView.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            listView.HandleCreated += (sender, e) => createdCallCount++;
+
+            group.TitleImageIndex = value;
+            Assert.Equal(value, group.TitleImageIndex);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            group.TitleImageIndex = value;
+            Assert.Equal(value, group.TitleImageIndex);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        // Need to verify test once RE fixed.
+        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        public unsafe void ListViewGroup_TitleImageIndex_GetGroupInfo_Success()
+        {
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
+            {
+                var data = new (int, int)[] { (-1, -1), (0 , 0), (1, 1), (2, -1) };
+                foreach ((int Index, int Expected) value in data)
+                {
+                    Application.EnableVisualStyles();
+
+                    using var listView = new ListView();
+
+                    using var groupImageList = new ImageList();
+                    groupImageList.Images.Add(new Bitmap(10, 10));
+                    groupImageList.Images.Add(new Bitmap(20, 20));
+                    listView.GroupImageList = groupImageList;
+                    Assert.Equal(groupImageList.Handle,
+                        User32.SendMessageW(listView.Handle, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER, groupImageList.Handle));
+
+                    var group = new ListViewGroup();
+                    listView.Groups.Add(group);
+
+                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
+                    group.TitleImageIndex = value.Index;
+
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                    var lvgroup = new LVGROUPW
+                    {
+                        cbSize = (uint)sizeof(LVGROUPW),
+                        mask = LVGF.TITLEIMAGE | LVGF.GROUPID,
+                    };
+
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
+                    Assert.Equal(value.Expected, lvgroup.iTitleImage);
+                    Assert.True(lvgroup.iGroupId >= 0);
+                }
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroup_TitleImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException()
+        {
+            var random = new Random();
+            int value = random.Next(2, int.MaxValue) * -1;
+            var group = new ListViewGroup();
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => group.TitleImageIndex = value);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [InlineData("te\0xt", "te\0xt")]
+        public void ListViewGroup_TitleImageKey_SetWithoutListView_GetReturnsExpected(string value, string expected)
+        {
+            var group = new ListViewGroup
+            {
+                TitleImageKey = value
+            };
+
+            Assert.Equal(expected, group.TitleImageKey);
+
+            // Set same.
+            group.TitleImageKey = value;
+            Assert.Equal(expected, group.TitleImageKey);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [InlineData("te\0xt", "te\0xt")]
+        public void ListViewGroup_TitleImageKey_SetWithListView_GetReturnsExpected(string value, string expected)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+
+            group.TitleImageKey = value;
+            Assert.Equal(expected, group.TitleImageKey);
+            Assert.False(listView.IsHandleCreated);
+
+            // Set same.
+            group.TitleImageKey = value;
+            Assert.Equal(expected, group.TitleImageKey);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("header", "header")]
+        [InlineData("te\0xt", "te\0xt")]
+        [InlineData("ListViewGroup", "ListViewGroup")]
+        public void ListViewGroup_TitleImageKey_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup();
+            listView.Groups.Add(group);
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            int invalidatedCallCount = 0;
+            listView.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            listView.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            listView.HandleCreated += (sender, e) => createdCallCount++;
+
+            group.TitleImageKey = value;
+            Assert.Equal(expected, group.TitleImageKey);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            group.TitleImageKey = value;
+            Assert.Equal(expected, group.TitleImageKey);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        // Need to verify test once RE fixed.
+        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        public unsafe void ListViewGroup_TitleImageKey_GetGroupInfo_Success()
+        {
+            // Run this from another thread as we call Application.EnableVisualStyles.
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
+            {
+                var data = new (string, int)[] { (null, -1), (string.Empty, -1), ("text", 0), ("te\0t", 0) };
+                foreach ((string Key, int ExpectedIndex) value in data)
+                {
+                    Application.EnableVisualStyles();
+
+                    using var listView = new ListView();
+
+                    using var groupImageList = new ImageList();
+                    groupImageList.Images.Add(value.Key, new Bitmap(10, 10));
+                    listView.GroupImageList = groupImageList;
+                    Assert.Equal(groupImageList.Handle,
+                        User32.SendMessageW(listView.Handle, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER, groupImageList.Handle));
+
+                    var group = new ListViewGroup();
+                    listView.Groups.Add(group);
+
+                    Assert.NotEqual(IntPtr.Zero, listView.Handle);
+                    group.TitleImageKey = value.Key;
+
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                    var lvgroup = new LVGROUPW
+                    {
+                        cbSize = (uint)sizeof(LVGROUPW),
+                        mask = LVGF.TITLEIMAGE | LVGF.GROUPID
+                    };
+
+                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
+                    Assert.Equal(value.ExpectedIndex, lvgroup.iTitleImage);
+                    Assert.True(lvgroup.iGroupId >= 0);
+                }
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -120,6 +364,7 @@ namespace System.Windows.Forms.Tests
             {
                 Subtitle = value
             };
+
             Assert.Equal(expected, group.Subtitle);
 
             // Set same.
@@ -218,6 +463,7 @@ namespace System.Windows.Forms.Tests
                         pszSubtitle = buffer,
                         cchSubtitle = 256
                     };
+
                     Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
                     Assert.Equal(expected, new string(lvgroup.pszSubtitle));
                     Assert.True(lvgroup.iGroupId >= 0);
@@ -237,6 +483,7 @@ namespace System.Windows.Forms.Tests
             {
                 Footer = value
             };
+
             Assert.Equal(expected, group.Footer);
 
             // Set same.
@@ -327,6 +574,7 @@ namespace System.Windows.Forms.Tests
                         pszFooter = buffer,
                         cchFooter = 256
                     };
+
                     Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
                     Assert.Equal(expected, new string(lvgroup.pszFooter));
                     Assert.True(lvgroup.iGroupId >= 0);
@@ -357,6 +605,7 @@ namespace System.Windows.Forms.Tests
                 Footer = footer,
                 FooterAlignment = value
             };
+
             Assert.Equal(value, group.FooterAlignment);
             Assert.Equal(expectedFooter, group.Footer);
 
@@ -375,6 +624,7 @@ namespace System.Windows.Forms.Tests
             {
                 Footer = footer
             };
+
             listView.Groups.Add(group);
 
             group.FooterAlignment = value;
@@ -398,6 +648,7 @@ namespace System.Windows.Forms.Tests
             {
                 Footer = footer
             };
+
             listView.Groups.Add(group);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
             int invalidatedCallCount = 0;
@@ -452,6 +703,7 @@ namespace System.Windows.Forms.Tests
                 {
                     Footer = footer
                 };
+
                 listView.Groups.Add(group1);
 
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -466,6 +718,7 @@ namespace System.Windows.Forms.Tests
                     pszFooter = buffer,
                     cchFooter = 256
                 };
+
                 Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
                 Assert.Equal(footer, new string(lvgroup.pszFooter));
                 Assert.True(lvgroup.iGroupId >= 0);
@@ -490,6 +743,7 @@ namespace System.Windows.Forms.Tests
             {
                 Header = value
             };
+
             Assert.Equal(expected, group.Header);
 
             // Set same.
@@ -580,6 +834,7 @@ namespace System.Windows.Forms.Tests
                         pszHeader = buffer,
                         cchHeader = 256
                     };
+
                     Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
                     Assert.Equal(expected, new string(lvgroup.pszHeader));
                     Assert.True(lvgroup.iGroupId >= 0);
@@ -600,6 +855,7 @@ namespace System.Windows.Forms.Tests
                 Header = header,
                 HeaderAlignment = value
             };
+
             Assert.Equal(value, group.HeaderAlignment);
             Assert.Equal(expectedHeader, group.Header);
 
@@ -618,6 +874,7 @@ namespace System.Windows.Forms.Tests
             {
                 Header = header
             };
+
             listView.Groups.Add(group);
 
             group.HeaderAlignment = value;
@@ -641,6 +898,7 @@ namespace System.Windows.Forms.Tests
             {
                 Header = header
             };
+
             listView.Groups.Add(group);
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
             int invalidatedCallCount = 0;
@@ -695,6 +953,7 @@ namespace System.Windows.Forms.Tests
                 {
                     Header = header
                 };
+
                 listView.Groups.Add(group1);
 
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
@@ -709,6 +968,7 @@ namespace System.Windows.Forms.Tests
                     pszHeader = buffer,
                     cchHeader = 256
                 };
+
                 Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup));
                 Assert.Equal(header, new string(lvgroup.pszHeader));
                 Assert.True(lvgroup.iGroupId >= 0);
@@ -868,6 +1128,7 @@ namespace System.Windows.Forms.Tests
             {
                 Name = value
             };
+
             Assert.Same(value, group.Name);
 
             // Set same.
@@ -994,6 +1255,7 @@ namespace System.Windows.Forms.Tests
             {
                 Tag = value
             };
+
             Assert.Same(value, group.Tag);
 
             // Set same.

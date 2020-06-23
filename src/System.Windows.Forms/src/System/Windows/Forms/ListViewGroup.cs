@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -33,6 +32,8 @@ namespace System.Windows.Forms
         private static int s_nextID;
 
         private static int s_nextHeader = 1;
+
+        private ListViewGroupImageIndexer? _imageIndexer;
 
         /// <summary>
         ///  Creates a ListViewGroup.
@@ -175,7 +176,8 @@ namespace System.Windows.Forms
         ///  Controls which <see cref="ListViewGroupCollapsedState"/> the group will appear as.
         /// </summary>
         /// <value>
-        ///  One of the <see cref="ListViewGroupCollapsedState"/> values that specifies how the group is displayed. The default is <see cref="ListViewGroupCollapsedState.Default"/>.
+        ///  One of the <see cref="ListViewGroupCollapsedState"/> values that specifies how the group is displayed.
+        ///  The default is <see cref="ListViewGroupCollapsedState.Default"/>.
         /// </value>
         /// <exception cref="InvalidEnumArgumentException">
         ///  The specified value when setting this property is not a valid <see cref="ListViewGroupCollapsedState"/> value.
@@ -241,6 +243,74 @@ namespace System.Windows.Forms
                 UpdateListView();
             }
         }
+
+        /// <summary>
+        ///  Gets or sets the index of the image that is displayed for the group.
+        /// </summary>
+        /// <value>
+        ///  The zero-based index of the image in the ImageList that is displayed for the group. The default is -1.
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///  The value specified is less than -1.
+        /// </exception>
+        [DefaultValue(-1)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
+        public int TitleImageIndex
+        {
+            get
+            {
+                ImageList? imageList = ImageIndexer.ImageList;
+                return imageList == null || ImageIndexer.Index < imageList.Images.Count
+                    ? ImageIndexer.Index
+                    : imageList.Images.Count - 1;
+            }
+            set
+            {
+                if (value < ImageList.Indexer.DefaultIndex)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value,
+                        string.Format(SR.InvalidLowBoundArgumentEx, nameof(TitleImageIndex), value, ImageList.Indexer.DefaultIndex));
+                }
+
+                ImageIndexer.Index = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  Gets or sets the key of the image that is displayed for the group.
+        /// </summary>
+        /// <value>
+        ///  The key for the image that is displayed for the group.
+        /// </value>
+        [DefaultValue("")]
+        [TypeConverter(typeof(ImageKeyConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        public string TitleImageKey
+        {
+            get => ImageIndexer.Key;
+            set
+            {
+                if (ImageIndexer.Key == value)
+                {
+                    return;
+                }
+
+                ImageIndexer.Key = value;
+                UpdateListView();
+            }
+        }
+
+        internal ListViewGroupImageIndexer ImageIndexer => _imageIndexer ??= new ListViewGroupImageIndexer(this);
 
         internal int ID { get; }
 

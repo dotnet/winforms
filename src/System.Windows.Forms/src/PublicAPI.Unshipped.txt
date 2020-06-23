@@ -1,0 +1,6 @@
+System.Windows.Forms.ListViewGroup.TitleImageIndex.get -> int
+System.Windows.Forms.ListViewGroup.TitleImageIndex.set -> void
+System.Windows.Forms.ListViewGroup.TitleImageKey.get -> string!
+System.Windows.Forms.ListViewGroup.TitleImageKey.set -> void
+~System.Windows.Forms.ListView.GroupImageList.get -> System.Windows.Forms.ImageList
+~System.Windows.Forms.ListView.GroupImageList.set -> void

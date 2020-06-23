@@ -113,6 +113,7 @@ namespace System.Windows.Forms
         private ImageList imageListLarge;
         private ImageList imageListSmall;
         private ImageList imageListState;
+        private ImageList _imageListGroup;
 
         private MouseButtons downButton;
         private int itemCount;
@@ -921,6 +922,68 @@ namespace System.Windows.Forms
                 {
                     listViewState[LISTVIEWSTATE_gridLines] = value;
                     UpdateExtendedStyles();
+                }
+            }
+        }
+
+        /// <summary>
+        ///  The currently set GroupIcon image list.
+        /// </summary>
+        /// <value>
+        ///  An <see cref="ImageList"/> that contains the icons to use for <see cref="ListViewGroup"/>.
+        ///  The default is <see langword="null"/>.
+        /// </value>
+        /// <remarks>
+        ///  <para>
+        ///   The <see cref="GroupImageList"/> property allows you to specify an <see cref="ImageList"/> object that
+        ///   contains icons to use when displaying groups. The <see cref="ListView"/> control can accept any graphics
+        ///   format that the <see cref="ImageList"/> control supports when displaying icons. The <see cref="ListView"/>
+        ///   control is not limited to .ico files. Once an <see cref="ImageList"/> is assigned to the <see cref="GroupImageList"/>
+        ///   property, you can set the <see cref="ListViewGroup.TitleImageIndex"/> property of each <see cref="ListViewGroup"/>
+        ///   in the <see cref="ListView"/> control to the index position of the appropriate image in the <see cref="ImageList"/>.
+        ///   The size of the icons for the <see cref="GroupImageList"/> is specified by the <see cref="ImageList.ImageSize"/> property.
+        ///  </para>
+        /// </remarks>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.ListViewGroupImageListDescr))]
+        public ImageList GroupImageList
+        {
+            get
+            {
+                return _imageListGroup;
+            }
+            set
+            {
+                if (_imageListGroup == value)
+                {
+                    return;
+                }
+
+                EventHandler recreateHandler = new EventHandler(GroupImageListRecreateHandle);
+                EventHandler disposedHandler = new EventHandler(DetachImageList);
+                EventHandler changeHandler = new EventHandler(GroupImageListChangedHandle);
+
+                if (_imageListGroup != null)
+                {
+                    _imageListGroup.RecreateHandle -= recreateHandler;
+                    _imageListGroup.Disposed -= disposedHandler;
+                    _imageListGroup.ChangeHandle -= changeHandler;
+                }
+
+                _imageListGroup = value;
+
+                if (value != null)
+                {
+                    value.RecreateHandle += recreateHandler;
+                    value.Disposed += disposedHandler;
+                    value.ChangeHandle += changeHandler;
+                }
+
+                if (IsHandleCreated)
+                {
+                    User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER,
+                        value == null ? IntPtr.Zero : value.Handle);
                 }
             }
         }
@@ -2888,7 +2951,7 @@ namespace System.Windows.Forms
             try
             {
 #if DEBUG
-                if (sender != imageListSmall && sender != imageListState && sender != imageListLarge)
+                if (sender != imageListSmall && sender != imageListState && sender != imageListLarge && sender != _imageListGroup)
                 {
                     Debug.Fail("ListView sunk dispose event from unknown component");
                 }
@@ -2906,6 +2969,11 @@ namespace System.Windows.Forms
                 if (sender == imageListState)
                 {
                     StateImageList = null;
+                }
+
+                if (sender == _imageListGroup)
+                {
+                    GroupImageList = null;
                 }
             }
             finally
@@ -3580,6 +3648,29 @@ namespace System.Windows.Forms
             Rectangle result = Rectangle.FromLTRB(itemrect.left, itemrect.top, itemrect.right, itemrect.bottom);
 
             return result;
+        }
+
+        private void GroupImageListChangedHandle(object sender, EventArgs e)
+        {
+            if (!VirtualMode && sender != null && sender == _imageListGroup && IsHandleCreated)
+            {
+                foreach (ListViewGroup group in Groups)
+                {
+                    group.TitleImageIndex =
+                        (group.ImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex || group.ImageIndexer.ActualIndex < _imageListGroup.Images.Count)
+                        ? group.ImageIndexer.ActualIndex
+                        : _imageListGroup.Images.Count - 1;
+                }
+            }
+        }
+
+        private void GroupImageListRecreateHandle(object sender, EventArgs e)
+        {
+            if (IsHandleCreated)
+            {
+                IntPtr handle = (GroupImageList == null) ? IntPtr.Zero : GroupImageList.Handle;
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER, handle);
+            }
         }
 
         public ListViewHitTestInfo HitTest(Point point)
@@ -4728,19 +4819,24 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WM)LVM.SETTEXTCOLOR, IntPtr.Zero, PARAM.FromColor(c));
             }
 
-            if (null != imageListLarge)
+            if (imageListLarge != null)
             {
                 User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, imageListLarge.Handle);
             }
 
-            if (null != imageListSmall)
+            if (imageListSmall != null)
             {
                 User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, imageListSmall.Handle);
             }
 
-            if (null != imageListState)
+            if (imageListState != null)
             {
                 User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, imageListState.Handle);
+            }
+
+            if (_imageListGroup != null)
+            {
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER, _imageListGroup.Handle);
             }
         }
 
@@ -5124,11 +5220,11 @@ namespace System.Windows.Forms
             User32.DestroyWindow(oldHandle);
         }
 
-        internal void SetItemImage(int index, int image)
+        internal void SetItemImage(int itemIndex, int imageIndex)
         {
-            if (index < 0 || (VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount))
+            if (itemIndex < 0 || (VirtualMode && itemIndex >= VirtualListSize) || (!VirtualMode && itemIndex >= itemCount))
             {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
             }
 
             if (!IsHandleCreated)
@@ -5139,8 +5235,8 @@ namespace System.Windows.Forms
             var lvItem = new LVITEMW
             {
                 mask = LVIF.IMAGE,
-                iItem = index,
-                iImage = image
+                iItem = itemIndex,
+                iImage = imageIndex
             };
             User32.SendMessageW(this, (User32.WM)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
         }
@@ -5444,8 +5540,9 @@ namespace System.Windows.Forms
             var lvgroup = new LVGROUPW
             {
                 cbSize = (uint)sizeof(LVGROUPW),
-                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | LVGF.STATE | LVGF.SUBTITLE | LVGF.TASK | additionalMask,
+                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | LVGF.STATE | LVGF.SUBTITLE | LVGF.TASK | LVGF.TITLEIMAGE | additionalMask,
                 cchHeader = header.Length,
+                iTitleImage = -1,
                 iGroupId = group.ID
             };
 
@@ -5469,6 +5566,11 @@ namespace System.Windows.Forms
                 case HorizontalAlignment.Center:
                     lvgroup.uAlign = LVGA.HEADER_CENTER;
                     break;
+            }
+
+            if (group.TitleImageIndex != ImageList.Indexer.DefaultIndex || group.TitleImageKey != ImageList.Indexer.DefaultKey)
+            {
+                lvgroup.iTitleImage = group.ImageIndexer.ActualIndex;
             }
 
             fixed (char* pSubtitle = subtitle)

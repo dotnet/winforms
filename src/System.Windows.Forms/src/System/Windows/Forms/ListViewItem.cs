@@ -58,24 +58,6 @@ namespace System.Windows.Forms
         private string toolTipText = string.Empty;
         private object userData;
 
-        // We need a special way to defer to the ListView's image
-        // list for indexing purposes.
-        internal class ListViewItemImageIndexer : ImageList.Indexer
-        {
-            private readonly ListViewItem _owner;
-
-            public ListViewItemImageIndexer(ListViewItem item)
-            {
-                _owner = item;
-            }
-
-            public override ImageList ImageList
-            {
-                get => _owner?.ImageList;
-                set => Debug.Fail("We should never set the image list");
-            }
-        }
-
         public ListViewItem()
         {
             StateSelected = false;
@@ -443,30 +425,28 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ImageIndexer.Index != ImageList.Indexer.DefaultIndex && ImageList != null && ImageIndexer.Index >= ImageList.Images.Count)
-                {
-                    return ImageList.Images.Count - 1;
-                }
-
-                return ImageIndexer.Index;
+                return ImageList == null || ImageIndexer.Index < ImageList.Images.Count
+                    ? ImageIndexer.Index
+                    : ImageList.Images.Count - 1;
             }
             set
             {
                 if (value < ImageList.Indexer.DefaultIndex)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
+                    throw new ArgumentOutOfRangeException(nameof(value), value,
+                        string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
                 }
 
                 ImageIndexer.Index = value;
 
                 if (listView != null && listView.IsHandleCreated)
                 {
-                    listView.SetItemImage(Index, ImageIndexer.ActualIndex);
+                    listView.SetItemImage(itemIndex: Index, imageIndex: ImageIndexer.ActualIndex);
                 }
             }
         }
 
-        internal ListViewItemImageIndexer ImageIndexer => imageIndexer ?? (imageIndexer = new ListViewItemImageIndexer(this));
+        internal ListViewItemImageIndexer ImageIndexer => imageIndexer ??= new ListViewItemImageIndexer(this);
 
         /// <summary>
         ///  Returns the ListViewItem's currently set image index
