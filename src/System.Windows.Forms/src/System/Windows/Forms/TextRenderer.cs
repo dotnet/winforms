@@ -181,7 +181,7 @@ namespace System.Windows.Forms
                 return Size.Empty;
             }
 
-            WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
             return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf);
         }
 
@@ -192,8 +192,8 @@ namespace System.Windows.Forms
                 return Size.Empty;
             }
 
-            WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
-            return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, WindowsGraphicsCacheManager.GetWindowsFont(font), proposedSize);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
+            return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf, proposedSize);
         }
 
         public static Size MeasureText(string? text, Font? font, Size proposedSize, TextFormatFlags flags)
@@ -202,7 +202,8 @@ namespace System.Windows.Forms
             {
                 return Size.Empty;
             }
-            WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
+
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
             return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
         }
 

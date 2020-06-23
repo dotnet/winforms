@@ -538,18 +538,16 @@ namespace System.Windows.Forms
                             flags |= User32.DT.RIGHT;
                         }
 
-                        using (WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(Font))
-                        {
-                            textSize = wg.MeasureText(Text, wfont, new Size(textRectangle.Width, int.MaxValue), flags);
+                        using WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(Font);
+                        textSize = wg.MeasureText(Text, wfont, new Size(textRectangle.Width, int.MaxValue), flags);
 
-                            if (Enabled)
-                            {
-                                wg.DrawText(Text, wfont, textRectangle, ForeColor, flags);
-                            }
-                            else
-                            {
-                                ControlPaint.DrawStringDisabled(wg, Text, Font, backColor, textRectangle, ((TextFormatFlags)flags));
-                            }
+                        if (Enabled)
+                        {
+                            wg.DrawText(Text, wfont, textRectangle, ForeColor, flags);
+                        }
+                        else
+                        {
+                            ControlPaint.DrawStringDisabled(wg, Text, Font, backColor, textRectangle, (TextFormatFlags)flags);
                         }
                     }
                 }

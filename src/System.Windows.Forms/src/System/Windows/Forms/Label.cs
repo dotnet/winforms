@@ -1275,13 +1275,11 @@ namespace System.Windows.Forms
                     wg.TextPadding = TextPaddingOptions.LeftAndRightPadding;
                 }
 
-                using (WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font))
-                {
-                    User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
+                using WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font);
+                User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
 
-                    // This is actually leading margin.
-                    return dtParams.iLeftMargin;
-                }
+                // This is actually leading margin.
+                return dtParams.iLeftMargin;
             }
         }
 
