@@ -2171,12 +2171,13 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(LargeImageList_Set_GetReturnsExpected))]
         public void ListView_LargeImageList_SetWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
         {
+            using var imageList = new ImageList();
             using var listView = new ListView
             {
                 AutoArrange = autoArrange,
                 VirtualMode = virtualMode,
                 View = view,
-                LargeImageList = new ImageList()
+                LargeImageList = imageList
             };
 
             listView.LargeImageList = value;
@@ -2335,12 +2336,13 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(LargeImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected))]
         public void ListView_LargeImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value, int expectedInvalidatedCallCount)
         {
+            using var imageList = new ImageList();
             using var listView = new ListView
             {
                 AutoArrange = autoArrange,
                 VirtualMode = virtualMode,
                 View = view,
-                LargeImageList = new ImageList()
+                LargeImageList = imageList
             };
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
             int invalidatedCallCount = 0;
@@ -2778,12 +2780,13 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(SmallImageList_Set_GetReturnsExpected))]
         public void ListView_SmallImageList_SetWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
         {
+            using var imageList = new ImageList();
             using var listView = new ListView
             {
                 AutoArrange = autoArrange,
                 VirtualMode = virtualMode,
                 View = view,
-                SmallImageList = new ImageList()
+                SmallImageList = imageList
             };
 
             listView.SmallImageList = value;
@@ -2942,12 +2945,13 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(SmallImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected))]
         public void ListView_SmallImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value, int expectedInvalidatedCallCount, int expectedStyleChangedCallCount)
         {
+            using var imageList = new ImageList();
             using var listView = new ListView
             {
                 AutoArrange = autoArrange,
                 VirtualMode = virtualMode,
                 View = view,
-                SmallImageList = new ImageList()
+                SmallImageList = imageList
             };
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
             int invalidatedCallCount = 0;
@@ -3098,6 +3102,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(StateImageList_Set_GetReturnsExpected))]
         public void ListView_StateImageList_SetWithNonNullOldValue_GetReturnsExpected(bool useCompatibleStateImageBehavior, bool checkBoxes, bool autoArrange, bool virtualMode, View view, ImageList value)
         {
+            using var imageList = new ImageList();
             using var listView = new ListView
             {
                 UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
@@ -3105,7 +3110,7 @@ namespace System.Windows.Forms.Tests
                 AutoArrange = autoArrange,
                 VirtualMode = virtualMode,
                 View = view,
-                StateImageList = new ImageList()
+                StateImageList = imageList
             };
 
             listView.StateImageList = value;
@@ -3462,6 +3467,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(StateImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected))]
         public void ListView_StateImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected(bool useCompatibleStateImageBehavior, bool checkBoxes, bool autoArrange, bool virtualMode, View view, ImageList value, int expectedInvalidatedCallCount, int expectedCreatedCallCount)
         {
+            using var imageList = new ImageList();
             using var listView = new ListView
             {
                 UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior,
@@ -3469,7 +3475,7 @@ namespace System.Windows.Forms.Tests
                 AutoArrange = autoArrange,
                 VirtualMode = virtualMode,
                 View = view,
-                StateImageList = new ImageList()
+                StateImageList = imageList
             };
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
             int invalidatedCallCount = 0;

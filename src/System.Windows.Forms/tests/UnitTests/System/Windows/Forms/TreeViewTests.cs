@@ -2460,9 +2460,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ImageList_TestData))]
         public void ImageList_SetWithNonNullOldValue_GetReturnsExpected(ImageList value)
         {
+            using var imageList = new ImageList();
             using var treeView = new TreeView
             {
-                ImageList = new ImageList()
+                ImageList = imageList
             };
 
             treeView.ImageList = value;
@@ -2526,9 +2527,10 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ImageList_TestData))]
         public void ImageList_SetWithNonNullOldValueWithHandle_GetReturnsExpected(ImageList value)
         {
+            using var imageList = new ImageList();
             using var treeView = new TreeView
             {
-                ImageList = new ImageList()
+                ImageList = imageList
             };
             Assert.NotEqual(IntPtr.Zero, treeView.Handle);
 

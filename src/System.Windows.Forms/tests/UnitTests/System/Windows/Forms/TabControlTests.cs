@@ -1263,7 +1263,7 @@ namespace System.Windows.Forms.Tests
             control.TabPages.Add(page1);
             control.TabPages.Add(page2);
 
-            var imageList = new ImageList();
+            using var imageList = new ImageList();
             using var image1 = new Bitmap(10, 10);
             using var image2 = new Bitmap(10, 10);
             using var image3 = new Bitmap(10, 10);

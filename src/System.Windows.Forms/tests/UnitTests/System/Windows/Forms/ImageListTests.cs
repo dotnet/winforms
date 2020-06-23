@@ -462,9 +462,9 @@ namespace System.Windows.Forms.Tests
                 ColorDepth = colorDepth,
                 ImageSize = new Size(32, 32)
             };
-            var image = new Bitmap(10, 10);
+            using var image = new Bitmap(10, 10);
             sourceList.Images.Add(image);
-            ImageListStreamer stream = RoundtripSerialize(sourceList.ImageStream);
+            using ImageListStreamer stream = RoundtripSerialize(sourceList.ImageStream);
             Assert.True(sourceList.HandleCreated);
 
             using var list = new ImageList();
