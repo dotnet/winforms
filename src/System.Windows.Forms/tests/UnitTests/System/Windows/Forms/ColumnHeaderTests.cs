@@ -1633,6 +1633,7 @@ namespace System.Windows.Forms.Tests
             using (new NoAssertContext())
             {
                 using var imageList = new ImageList();
+                using var imageList2 = new ImageList();
                 using var listView = new ListView
                 {
                     SmallImageList = imageList
@@ -1640,7 +1641,7 @@ namespace System.Windows.Forms.Tests
                 using var header = new ColumnHeader();
                 listView.Columns.Add(header);
                 var indexer = new ColumnHeader.ColumnHeaderImageListIndexer(header);
-                indexer.ImageList = new ImageList();
+                indexer.ImageList = imageList2;
                 Assert.Same(imageList, indexer.ImageList);
             }
         }
