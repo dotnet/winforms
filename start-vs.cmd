@@ -23,12 +23,12 @@ set "DEVENV=%DevEnvDir%devenv.exe"
 
 if exist "%DEVENV%" (
     :: Fully qualified works
-    set "COMMAND="%ComSpec%" /S /C ""%DEVENV%" "%~dp0Winforms.sln"""
+    set "COMMAND=start "" /B "%ComSpec%" /S /C ""%DEVENV%" "%~dp0Winforms.sln"""
 ) else (
     where devenv.exe /Q
     if !errorlevel! equ 0 (
         :: On the PATH, use that.
-        set "COMMAND="%ComSpec%" /S /C "devenv.exe "%~dp0Winforms.sln"""
+        set "COMMAND=start "" /B "%ComSpec%" /S /C "devenv.exe "%~dp0Winforms.sln"""
     ) else (
         :: Can't find devenv.exe, let file associations take care of it
         set "COMMAND=start /B .\Winforms.sln"
