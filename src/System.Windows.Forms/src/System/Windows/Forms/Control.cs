@@ -5667,14 +5667,6 @@ namespace System.Windows.Forms
             return s_defaultFontHandleWrapper;
         }
 
-        internal Gdi32.HRGN GetHRgn(Region region)
-        {
-            Graphics graphics = CreateGraphicsInternal();
-            Gdi32.HRGN handle = new Gdi32.HRGN(region.GetHrgn(graphics));
-            graphics.Dispose();
-            return handle;
-        }
-
         /// <summary>
         ///  This is a helper method that is called by ScaleControl to retrieve the bounds
         ///  that the control should be scaled by.  You may override this method if you

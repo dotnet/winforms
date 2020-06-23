@@ -77,6 +77,9 @@ internal static partial class Interop
                 Region = new HRGN(region.GetHrgn(graphics));
             }
 
+            /// <summary>
+            ///  Returns true if this represents a null HRGN.
+            /// </summary>
             public bool IsNull => Region.Handle == IntPtr.Zero;
 
             public static implicit operator HRGN(RegionScope regionScope) => regionScope.Region;
@@ -90,8 +93,7 @@ internal static partial class Interop
             /// <summary>
             ///  Clears the handle. Use this to hand over ownership to another entity.
             /// </summary>
-            public void RelinquishOwnership()
-                => Region = default;
+            public void RelinquishOwnership() => Region = default;
 
             public void Dispose()
             {
