@@ -3173,7 +3173,7 @@ namespace System.Windows.Forms.Tests
 
             SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)row.Cells[0];
             Assert.Equal(new Size(10, 25), cell.GetSize(-1));
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -3197,7 +3197,7 @@ namespace System.Windows.Forms.Tests
             using var cell = new SubDataGridViewRowHeaderCell();
             row.HeaderCell = cell;
             Assert.Equal(new Size(20, 11), cell.GetSize(0));
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -3221,7 +3221,7 @@ namespace System.Windows.Forms.Tests
             using var cell = new SubDataGridViewColumnHeaderCell();
             column.HeaderCell = cell;
             Assert.Equal(new Size(10, 25), cell.GetSize(-1));
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -3235,7 +3235,7 @@ namespace System.Windows.Forms.Tests
                 TopLeftHeaderCell = cell
             };
             Assert.Equal(new Size(20, 25), cell.GetSize(-1));
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -3256,7 +3256,7 @@ namespace System.Windows.Forms.Tests
 
             SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows.SharedRow(0).Cells[0];
             Assert.Equal(new Size(10, 25), cell.GetSize(-1));
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
