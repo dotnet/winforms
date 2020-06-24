@@ -1172,37 +1172,18 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListViewLargeImageListDescr))]
         public ImageList LargeImageList
         {
-            get
-            {
-                return imageListLarge;
-            }
+            get => imageListLarge;
             set
             {
                 if (value != imageListLarge)
                 {
-                    EventHandler recreateHandler = new EventHandler(LargeImageListRecreateHandle);
-                    EventHandler disposedHandler = new EventHandler(DetachImageList);
-                    EventHandler changeHandler = new EventHandler(LargeImageListChangedHandle);
-
-                    if (imageListLarge != null)
-                    {
-                        imageListLarge.RecreateHandle -= recreateHandler;
-                        imageListLarge.Disposed -= disposedHandler;
-                        imageListLarge.ChangeHandle -= changeHandler;
-                    }
-
+                    DetachLargeImageListHandlers();
                     imageListLarge = value;
-
-                    if (value != null)
-                    {
-                        value.RecreateHandle += recreateHandler;
-                        value.Disposed += disposedHandler;
-                        value.ChangeHandle += changeHandler;
-                    }
+                    AttachLargeImageListHandlers();
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, value == null ? IntPtr.Zero : value.Handle);
+                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, value is null ? IntPtr.Zero : value.Handle);
                         if (AutoArrange && !listViewState1[LISTVIEWSTATE1_disposingImageLists])
                         {
                             UpdateListViewItemsLocations();
@@ -1426,32 +1407,18 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListViewSmallImageListDescr))]
         public ImageList SmallImageList
         {
-            get
-            {
-                return imageListSmall;
-            }
+            get => imageListSmall;
             set
             {
                 if (imageListSmall != value)
                 {
-                    EventHandler recreateHandler = new EventHandler(SmallImageListRecreateHandle);
-                    EventHandler disposedHandler = new EventHandler(DetachImageList);
-
-                    if (imageListSmall != null)
-                    {
-                        imageListSmall.RecreateHandle -= recreateHandler;
-                        imageListSmall.Disposed -= disposedHandler;
-                    }
+                    DetachSmallImageListListHandlers();
                     imageListSmall = value;
-                    if (value != null)
-                    {
-                        value.RecreateHandle += recreateHandler;
-                        value.Disposed += disposedHandler;
-                    }
+                    AttachSmallImageListListHandlers();
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, value == null ? IntPtr.Zero : value.Handle);
+                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, value is null ? IntPtr.Zero : value.Handle);
 
                         if (View == View.SmallIcon)
                         {
@@ -1465,7 +1432,7 @@ namespace System.Windows.Forms
 
                         if (View == View.Details)
                         {
-                            Invalidate(true /*invalidateChildren*/);
+                            Invalidate(invalidateChildren: true);
                         }
                     }
                 }
@@ -1545,30 +1512,16 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListViewStateImageListDescr))]
         public ImageList StateImageList
         {
-            get
-            {
-                return imageListState;
-            }
+            get => imageListState;
             set
             {
                 if (UseCompatibleStateImageBehavior)
                 {
                     if (imageListState != value)
                     {
-                        EventHandler recreateHandler = new EventHandler(StateImageListRecreateHandle);
-                        EventHandler disposedHandler = new EventHandler(DetachImageList);
-
-                        if (imageListState != null)
-                        {
-                            imageListState.RecreateHandle -= recreateHandler;
-                            imageListState.Disposed -= disposedHandler;
-                        }
+                        DetachStateImageListHandlers();
                         imageListState = value;
-                        if (value != null)
-                        {
-                            value.RecreateHandle += recreateHandler;
-                            value.Disposed += disposedHandler;
-                        }
+                        AttachStateImageListHandlers();
 
                         if (IsHandleCreated)
                         {
@@ -1580,33 +1533,21 @@ namespace System.Windows.Forms
                 {
                     if (imageListState != value)
                     {
-                        EventHandler recreateHandler = new EventHandler(StateImageListRecreateHandle);
-                        EventHandler disposedHandler = new EventHandler(DetachImageList);
-
-                        if (imageListState != null)
-                        {
-                            imageListState.RecreateHandle -= recreateHandler;
-                            imageListState.Disposed -= disposedHandler;
-                        }
+                        DetachStateImageListHandlers();
 
                         if (IsHandleCreated && imageListState != null && CheckBoxes)
                         {
-                            //
                             // If CheckBoxes are set to true, then we will have to recreate the handle.
                             // For some reason, if CheckBoxes are set to true and the list view has a state imageList, then the native listView destroys
                             // the state imageList.
                             // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
                             // So we make the native listView forget about its StateImageList just before we recreate the handle.
+                            // Likely related to https://devblogs.microsoft.com/oldnewthing/20171128-00/?p=97475
                             User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
                         }
 
                         imageListState = value;
-
-                        if (value != null)
-                        {
-                            value.RecreateHandle += recreateHandler;
-                            value.Disposed += disposedHandler;
-                        }
+                        AttachStateImageListHandlers();
 
                         if (IsHandleCreated)
                         {
@@ -1617,7 +1558,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, (imageListState == null || imageListState.Images.Count == 0) ? IntPtr.Zero : imageListState.Handle);
+                                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, (imageListState is null || imageListState.Images.Count == 0) ? IntPtr.Zero : imageListState.Handle);
                             }
 
                             // Comctl should handle auto-arrange for us, but doesn't
@@ -2254,6 +2195,43 @@ namespace System.Windows.Forms
         /// </summary>
         public void ArrangeIcons() => ArrangeIcons((ListViewAlignment)LVA.DEFAULT);
 
+        private void AttachLargeImageListHandlers()
+        {
+            if (imageListLarge is null)
+            {
+                return;
+            }
+
+            // NOTE: any handlers added here should be removed in DetachLargeImageListHandlers
+            imageListLarge.RecreateHandle += new EventHandler(LargeImageListRecreateHandle);
+            imageListLarge.Disposed += new EventHandler(DetachImageList);
+            imageListLarge.ChangeHandle += new EventHandler(LargeImageListChangedHandle);
+        }
+
+        private void AttachSmallImageListListHandlers()
+        {
+            if (imageListSmall is null)
+            {
+                return;
+            }
+
+            // NOTE: any handlers added here should be removed in DetachSmallImageListListHandlers
+            imageListSmall.RecreateHandle += new EventHandler(SmallImageListRecreateHandle);
+            imageListSmall.Disposed += new EventHandler(DetachImageList);
+        }
+
+        private void AttachStateImageListHandlers()
+        {
+            if (imageListState is null)
+            {
+                return;
+            }
+
+            // NOTE: any handlers added here should be removed in DetachStateImageListHandlers
+            imageListState.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
+            imageListState.Disposed += new EventHandler(DetachImageList);
+        }
+
         public void AutoResizeColumns(ColumnHeaderAutoResizeStyle headerAutoResize)
         {
             if (!IsHandleCreated)
@@ -2484,8 +2462,6 @@ namespace System.Windows.Forms
                 SetBackgroundImage();
             }
         }
-
-        //
 
         /// <summary>
         ///  Handles custom drawing of list items - for individual item font/color changes.
@@ -2931,6 +2907,40 @@ namespace System.Windows.Forms
             UpdateListViewItemsLocations();
         }
 
+        private void DetachLargeImageListHandlers()
+        {
+            if (imageListLarge is null)
+            {
+                return;
+            }
+
+            imageListLarge.RecreateHandle -= new EventHandler(LargeImageListRecreateHandle);
+            imageListLarge.Disposed -= new EventHandler(DetachImageList);
+            imageListLarge.ChangeHandle -= new EventHandler(LargeImageListChangedHandle);
+        }
+
+        private void DetachSmallImageListListHandlers()
+        {
+            if (imageListSmall is null)
+            {
+                return;
+            }
+
+            imageListSmall.RecreateHandle -= new EventHandler(SmallImageListRecreateHandle);
+            imageListSmall.Disposed -= new EventHandler(DetachImageList);
+        }
+
+        private void DetachStateImageListHandlers()
+        {
+            if (imageListState is null)
+            {
+                return;
+            }
+
+            imageListState.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
+            imageListState.Disposed -= new EventHandler(DetachImageList);
+        }
+
         /// <summary>
         ///  Disposes of the component.  Call dispose when the component is no longer needed.
         ///  This method removes the component from its container (if the component has a site)
@@ -2941,21 +2951,12 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 // Remove any event sinks we have hooked up to imageLists
-                if (imageListSmall != null)
-                {
-                    imageListSmall.Disposed -= new EventHandler(DetachImageList);
-                    imageListSmall = null;
-                }
-                if (imageListLarge != null)
-                {
-                    imageListLarge.Disposed -= new EventHandler(DetachImageList);
-                    imageListLarge = null;
-                }
-                if (imageListState != null)
-                {
-                    imageListState.Disposed -= new EventHandler(DetachImageList);
-                    imageListState = null;
-                }
+                DetachSmallImageListListHandlers();
+                imageListSmall = null;
+                DetachLargeImageListHandlers();
+                imageListLarge = null;
+                DetachStateImageListHandlers();
+                imageListState = null;
 
                 // Remove any ColumnHeaders contained in this control
                 if (columnHeaders != null)
@@ -4147,18 +4148,18 @@ namespace System.Windows.Forms
         {
             if (!VirtualMode && (null != sender) && (sender == imageListLarge) && IsHandleCreated)
             {
-                foreach (ListViewItem item in Items)
-                {
+            foreach (ListViewItem item in Items)
+            {
                     if (item.ImageIndexer.ActualIndex != -1 && item.ImageIndexer.ActualIndex >= imageListLarge.Images.Count)
-                    {
-                        SetItemImage(item.Index, imageListLarge.Images.Count - 1);
-                    }
-                    else
-                    {
-                        SetItemImage(item.Index, item.ImageIndexer.ActualIndex);
-                    }
+                {
+                    SetItemImage(item.Index, imageListLarge.Images.Count - 1);
+                }
+                else
+                {
+                    SetItemImage(item.Index, item.ImageIndexer.ActualIndex);
                 }
             }
+        }
         }
 
         internal void ListViewItemToolTipChanged(ListViewItem item)
@@ -5283,7 +5284,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr handle = IntPtr.Zero;
-                if (StateImageList != null)
+                if (imageListState != null)
                 {
                     handle = imageListState.Handle;
                 }
@@ -5992,7 +5993,7 @@ namespace System.Windows.Forms
             return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi));
         }
 
-        private LVHITTESTINFO SetupHitTestInfo ()
+        private LVHITTESTINFO SetupHitTestInfo()
         {
             Point pos = Cursor.Position;
             pos = PointToClient(pos);
