@@ -62,7 +62,11 @@ namespace System.Windows.Forms
                             !AreDpiAwarenessContextsEqual(originalAwareness, DPI_AWARENESS_CONTEXT.UNAWARE))
                         {
                             originalAwareness = SetThreadDpiAwarenessContext(awareness);
-                            dpiAwarenessScopeIsSet = true;
+
+                            // As reported in https://github.com/dotnet/winforms/issues/2969
+                            // under unknown conditions originalAwareness may remain 0 (which means the call failed)
+                            // causing us to set dpiAwarenessScopeIsSet=true, which would lead to a crash when we attempt to dispose the scope.
+                            dpiAwarenessScopeIsSet = originalAwareness != IntPtr.Zero;
                         }
                     }
                 }
