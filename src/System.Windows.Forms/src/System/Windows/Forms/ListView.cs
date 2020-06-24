@@ -1175,20 +1175,24 @@ namespace System.Windows.Forms
             get => imageListLarge;
             set
             {
-                if (value != imageListLarge)
+                if (value == imageListLarge)
                 {
-                    DetachLargeImageListHandlers();
-                    imageListLarge = value;
-                    AttachLargeImageListHandlers();
+                    return;
+                }
 
-                    if (IsHandleCreated)
-                    {
-                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, value is null ? IntPtr.Zero : value.Handle);
-                        if (AutoArrange && !listViewState1[LISTVIEWSTATE1_disposingImageLists])
-                        {
-                            UpdateListViewItemsLocations();
-                        }
-                    }
+                DetachLargeImageListHandlers();
+                imageListLarge = value;
+                AttachLargeImageListHandlers();
+
+                if (!IsHandleCreated)
+                {
+                    return;
+                }
+
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, value is null ? IntPtr.Zero : value.Handle);
+                if (AutoArrange && !listViewState1[LISTVIEWSTATE1_disposingImageLists])
+                {
+                    UpdateListViewItemsLocations();
                 }
             }
         }
@@ -1410,31 +1414,35 @@ namespace System.Windows.Forms
             get => imageListSmall;
             set
             {
-                if (imageListSmall != value)
+                if (imageListSmall == value)
                 {
-                    DetachSmallImageListListHandlers();
-                    imageListSmall = value;
-                    AttachSmallImageListListHandlers();
+                    return;
+                }
 
-                    if (IsHandleCreated)
-                    {
-                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, value is null ? IntPtr.Zero : value.Handle);
+                DetachSmallImageListListHandlers();
+                imageListSmall = value;
+                AttachSmallImageListListHandlers();
 
-                        if (View == View.SmallIcon)
-                        {
-                            View = View.LargeIcon;
-                            View = View.SmallIcon;
-                        }
-                        else if (!listViewState1[LISTVIEWSTATE1_disposingImageLists])
-                        {
-                            UpdateListViewItemsLocations();
-                        }
+                if (!IsHandleCreated)
+                {
+                    return;
+                }
 
-                        if (View == View.Details)
-                        {
-                            Invalidate(invalidateChildren: true);
-                        }
-                    }
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, value is null ? IntPtr.Zero : value.Handle);
+
+                if (View == View.SmallIcon)
+                {
+                    View = View.LargeIcon;
+                    View = View.SmallIcon;
+                }
+                else if (!listViewState1[LISTVIEWSTATE1_disposingImageLists])
+                {
+                    UpdateListViewItemsLocations();
+                }
+
+                if (View == View.Details)
+                {
+                    Invalidate(invalidateChildren: true);
                 }
             }
         }
@@ -1515,58 +1523,59 @@ namespace System.Windows.Forms
             get => imageListState;
             set
             {
+                if (imageListState == value)
+                {
+                    return;
+                }
+
                 if (UseCompatibleStateImageBehavior)
                 {
-                    if (imageListState != value)
-                    {
-                        DetachStateImageListHandlers();
-                        imageListState = value;
-                        AttachStateImageListHandlers();
+                    DetachStateImageListHandlers();
+                    imageListState = value;
+                    AttachStateImageListHandlers();
 
-                        if (IsHandleCreated)
-                        {
-                            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, value == null ? IntPtr.Zero : value.Handle);
-                        }
+                    if (IsHandleCreated)
+                    {
+                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, value is null ? IntPtr.Zero : value.Handle);
                     }
                 }
                 else
                 {
-                    if (imageListState != value)
+                    DetachStateImageListHandlers();
+
+                    if (IsHandleCreated && imageListState != null && CheckBoxes)
                     {
-                        DetachStateImageListHandlers();
+                        // If CheckBoxes are set to true, then we will have to recreate the handle.
+                        // For some reason, if CheckBoxes are set to true and the list view has a state imageList, then the native listView destroys
+                        // the state imageList.
+                        // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
+                        // So we make the native listView forget about its StateImageList just before we recreate the handle.
+                        // Likely related to https://devblogs.microsoft.com/oldnewthing/20171128-00/?p=97475
+                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
+                    }
 
-                        if (IsHandleCreated && imageListState != null && CheckBoxes)
-                        {
-                            // If CheckBoxes are set to true, then we will have to recreate the handle.
-                            // For some reason, if CheckBoxes are set to true and the list view has a state imageList, then the native listView destroys
-                            // the state imageList.
-                            // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
-                            // So we make the native listView forget about its StateImageList just before we recreate the handle.
-                            // Likely related to https://devblogs.microsoft.com/oldnewthing/20171128-00/?p=97475
-                            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
-                        }
+                    imageListState = value;
+                    AttachStateImageListHandlers();
 
-                        imageListState = value;
-                        AttachStateImageListHandlers();
+                    if (!IsHandleCreated)
+                    {
+                        return;
+                    }
 
-                        if (IsHandleCreated)
-                        {
-                            if (CheckBoxes)
-                            {
-                                // need to recreate to get the new images pushed in.
-                                RecreateHandleInternal();
-                            }
-                            else
-                            {
-                                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, (imageListState is null || imageListState.Images.Count == 0) ? IntPtr.Zero : imageListState.Handle);
-                            }
+                    if (CheckBoxes)
+                    {
+                        // need to recreate to get the new images pushed in.
+                        RecreateHandleInternal();
+                    }
+                    else
+                    {
+                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, (imageListState is null || imageListState.Images.Count == 0) ? IntPtr.Zero : imageListState.Handle);
+                    }
 
-                            // Comctl should handle auto-arrange for us, but doesn't
-                            if (!listViewState1[LISTVIEWSTATE1_disposingImageLists])
-                            {
-                                UpdateListViewItemsLocations();
-                            }
-                        }
+                    // Comctl should handle auto-arrange for us, but doesn't
+                    if (!listViewState1[LISTVIEWSTATE1_disposingImageLists])
+                    {
+                        UpdateListViewItemsLocations();
                     }
                 }
             }
@@ -4146,11 +4155,14 @@ namespace System.Windows.Forms
 
         private void LargeImageListChangedHandle(object sender, EventArgs e)
         {
-            if (!VirtualMode && (null != sender) && (sender == imageListLarge) && IsHandleCreated)
+            if (VirtualMode || sender is null || sender != imageListLarge || !IsHandleCreated)
             {
+                return;
+            }
+
             foreach (ListViewItem item in Items)
             {
-                    if (item.ImageIndexer.ActualIndex != -1 && item.ImageIndexer.ActualIndex >= imageListLarge.Images.Count)
+                if (item.ImageIndexer.ActualIndex != ImageList.Indexer.DefaultIndex && item.ImageIndexer.ActualIndex >= imageListLarge.Images.Count)
                 {
                     SetItemImage(item.Index, imageListLarge.Images.Count - 1);
                 }
@@ -4159,7 +4171,6 @@ namespace System.Windows.Forms
                     SetItemImage(item.Index, item.ImageIndexer.ActualIndex);
                 }
             }
-        }
         }
 
         internal void ListViewItemToolTipChanged(ListViewItem item)
