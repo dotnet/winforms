@@ -28,14 +28,14 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.AllowDrop);
             Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
             Assert.Empty(control.AnnuallyBoldedDates);
-            Assert.NotSame(control.AnnuallyBoldedDates, control.AnnuallyBoldedDates);
+            Assert.Same(control.AnnuallyBoldedDates, control.AnnuallyBoldedDates);
             Assert.False(control.AutoSize);
             Assert.Equal(SystemColors.Window, control.BackColor);
             Assert.Null(control.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
             Assert.Null(control.BindingContext);
             Assert.Empty(control.BoldedDates);
-            Assert.NotSame(control.BoldedDates, control.BoldedDates);
+            Assert.Same(control.BoldedDates, control.BoldedDates);
             Assert.True(control.Bottom > 0);
             Assert.Equal(0, control.Bounds.X);
             Assert.Equal(0, control.Bounds.Y);
@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new DateTime(1753, 1, 1), control.MinDate);
             Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Empty(control.MonthlyBoldedDates);
-            Assert.NotSame(control.MonthlyBoldedDates, control.MonthlyBoldedDates);
+            Assert.Same(control.MonthlyBoldedDates, control.MonthlyBoldedDates);
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.True(control.PreferredSize.Width > 0);
@@ -203,14 +203,30 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expected, calendar.AnnuallyBoldedDates);
             Assert.NotSame(value, calendar.AnnuallyBoldedDates);
-            Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            }
+
             Assert.False(calendar.IsHandleCreated);
 
             // Set same.
             calendar.AnnuallyBoldedDates = value;
             Assert.Equal(expected, calendar.AnnuallyBoldedDates);
             Assert.NotSame(value, calendar.AnnuallyBoldedDates);
-            Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            }
+
             Assert.False(calendar.IsHandleCreated);
         }
 
@@ -230,7 +246,15 @@ namespace System.Windows.Forms.Tests
             calendar.AnnuallyBoldedDates = value;
             Assert.Equal(expected, calendar.AnnuallyBoldedDates);
             Assert.NotSame(value, calendar.AnnuallyBoldedDates);
-            Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            }
+
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -240,7 +264,15 @@ namespace System.Windows.Forms.Tests
             calendar.AnnuallyBoldedDates = value;
             Assert.Equal(expected, calendar.AnnuallyBoldedDates);
             Assert.NotSame(value, calendar.AnnuallyBoldedDates);
-            Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
+            }
+
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -499,14 +531,30 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expected, calendar.BoldedDates);
             Assert.NotSame(value, calendar.BoldedDates);
-            Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.BoldedDates, calendar.BoldedDates);
+            }
+
             Assert.False(calendar.IsHandleCreated);
 
             // Set same.
             calendar.BoldedDates = value;
             Assert.Equal(expected, calendar.BoldedDates);
             Assert.NotSame(value, calendar.BoldedDates);
-            Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.BoldedDates, calendar.BoldedDates);
+            }
+
             Assert.False(calendar.IsHandleCreated);
         }
 
@@ -526,7 +574,15 @@ namespace System.Windows.Forms.Tests
             calendar.BoldedDates = value;
             Assert.Equal(expected, calendar.BoldedDates);
             Assert.NotSame(value, calendar.BoldedDates);
-            Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.BoldedDates, calendar.BoldedDates);
+            }
+
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -536,7 +592,15 @@ namespace System.Windows.Forms.Tests
             calendar.BoldedDates = value;
             Assert.Equal(expected, calendar.BoldedDates);
             Assert.NotSame(value, calendar.BoldedDates);
-            Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.BoldedDates, calendar.BoldedDates);
+            }
+
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1492,14 +1556,30 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expected, calendar.MonthlyBoldedDates);
             Assert.NotSame(value, calendar.MonthlyBoldedDates);
-            Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            }
+
             Assert.False(calendar.IsHandleCreated);
 
             // Set same.
             calendar.MonthlyBoldedDates = value;
             Assert.Equal(expected, calendar.MonthlyBoldedDates);
             Assert.NotSame(value, calendar.MonthlyBoldedDates);
-            Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            }
+
             Assert.False(calendar.IsHandleCreated);
         }
 
@@ -1519,7 +1599,15 @@ namespace System.Windows.Forms.Tests
             calendar.MonthlyBoldedDates = value;
             Assert.Equal(expected, calendar.MonthlyBoldedDates);
             Assert.NotSame(value, calendar.MonthlyBoldedDates);
-            Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            }
+
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -1529,7 +1617,15 @@ namespace System.Windows.Forms.Tests
             calendar.MonthlyBoldedDates = value;
             Assert.Equal(expected, calendar.MonthlyBoldedDates);
             Assert.NotSame(value, calendar.MonthlyBoldedDates);
-            Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            if (value?.Length > 0)
+            {
+                Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            }
+            else
+            {
+                Assert.Same(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
+            }
+
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
