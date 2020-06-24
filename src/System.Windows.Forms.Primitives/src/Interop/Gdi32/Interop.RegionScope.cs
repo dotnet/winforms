@@ -16,7 +16,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double deletion.
         /// </remarks>
-        internal ref struct RegionScope
+        public ref struct RegionScope
         {
             public HRGN Region { get; private set; }
 
