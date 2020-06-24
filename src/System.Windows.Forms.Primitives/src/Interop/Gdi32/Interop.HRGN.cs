@@ -8,7 +8,7 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        internal readonly struct HRGN
+        public readonly struct HRGN
         {
             public IntPtr Handle { get; }
 

@@ -15,7 +15,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double restore.
         /// </remarks>
-        internal ref struct SaveDcScope
+        public ref struct SaveDcScope
         {
             public IntPtr HDC { get; }
             private readonly int _savedState;
