@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Xunit;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class SplitterAccessibleObjectTests
+    public class Splitter_SplitterAccessibleObjectTests
     {
         [WinFormsFact]
         public void SplitterAccessibleObject_Ctor_NullControl_ThrowsArgumentNullException()
@@ -43,22 +42,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleRole.PushButton, splitterAccessibleObject.Role);
         }
 
-        public static IEnumerable<object[]> GetPropertyValue_TestData()
-        {
-            foreach (bool isHandleCreated in new bool[] { true, false })
-            {
-                yield return new object[] { UIA.NamePropertyId, isHandleCreated, "TestName" };
-                yield return new object[] { UIA.ControlTypePropertyId, isHandleCreated, UIA.PaneControlTypeId };
-                yield return new object[] { UIA.IsKeyboardFocusablePropertyId, isHandleCreated, true };
-            }
-
-            yield return new object[] { UIA.AutomationIdPropertyId, true, "Splitter1" };
-            yield return new object[] { UIA.AutomationIdPropertyId, false, "Splitter1" };
-        }
-
         [WinFormsTheory]
-        [MemberData(nameof(GetPropertyValue_TestData))]
-        internal void SplitterAccessibleObject_GetPropertyValue_returns_correct_values(UIA propertyID, bool isHandleCreated, object expected)
+        [InlineData(UIA.NamePropertyId, "TestName")]
+        [InlineData(UIA.ControlTypePropertyId, UIA.PaneControlTypeId)]
+        [InlineData(UIA.IsKeyboardFocusablePropertyId, true)]
+        [InlineData(UIA.AutomationIdPropertyId, "Splitter1")]
+        internal void SplitterAccessibleObject_GetPropertyValue_returns_correct_values(UIA propertyID, object expected)
         {
             using var splitter = new Splitter
             {
@@ -70,17 +59,11 @@ namespace System.Windows.Forms.Tests
 
             // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
             Assert.True(splitter.IsHandleCreated);
-
-            if (isHandleCreated)
-            {
-                Assert.NotEqual(IntPtr.Zero, splitter.Handle);
-            }
-
             object value = splitterAccessibleObject.GetPropertyValue(propertyID);
             Assert.Equal(expected, value);
 
             // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            // Assert.Equal(isHandleCreated, splitter.IsHandleCreated);
+            Assert.True(splitter.IsHandleCreated);
         }
 
         [WinFormsFact]
