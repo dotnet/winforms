@@ -1182,7 +1182,6 @@ namespace System.Windows.Forms
                 }
 
                 Region windowRegion = new Region(new Rectangle(0, 0, 0, 0));
-                IntPtr windowRegionHandle = IntPtr.Zero;
                 try
                 {
                     for (int i = 0; i < _items.Count; i++)
@@ -1249,21 +1248,20 @@ namespace System.Windows.Forms
                         Graphics graphics = Graphics.FromHdcInternal(_mirrordc.Hdc);
                         try
                         {
-                            windowRegionHandle = windowRegion.GetHrgn(graphics);
+                            using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, graphics);
+
+                            if (User32.SetWindowRgn(this, windowRegionHandle, BOOL.TRUE) != 0)
+                            {
+                                // The HWnd owns the region.
+                                windowRegionHandle.RelinquishOwnership();
+                            }
                         }
                         finally
                         {
                             graphics.Dispose();
                             RestoreMirrorDC();
                         }
-
-                        if (User32.SetWindowRgn(this, new HandleRef(windowRegion, windowRegionHandle), BOOL.TRUE) != 0)
-                        {
-                            // The HWnd owns the region.
-                            windowRegionHandle = IntPtr.Zero;
-                        }
                     }
-
                     finally
                     {
                         if (dc != null)
@@ -1275,10 +1273,6 @@ namespace System.Windows.Forms
                 finally
                 {
                     windowRegion.Dispose();
-                    if (windowRegionHandle != IntPtr.Zero)
-                    {
-                        Gdi32.DeleteObject(windowRegionHandle);
-                    }
                 }
 
                 User32.SetWindowPos(

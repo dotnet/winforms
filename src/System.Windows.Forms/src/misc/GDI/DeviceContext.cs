@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -232,7 +233,11 @@ namespace System.Windows.Forms.Internal
                 return;
             }
 
-            Disposing?.Invoke(this, EventArgs.Empty);
+            if (disposing)
+            {
+                // Only fire if we're not coming in on the finalizer
+                Disposing?.Invoke(this, EventArgs.Empty);
+            }
 
             _disposed = true;
 
@@ -322,7 +327,7 @@ namespace System.Windows.Forms.Internal
 
             if (_contextStack != null)
             {
-                GraphicsState g = (GraphicsState)_contextStack.Pop();
+                GraphicsState g = _contextStack.Pop();
 
                 _hCurrentBmp = g.hBitmap;
                 _hCurrentBrush = g.hBrush;
@@ -375,52 +380,6 @@ namespace System.Windows.Forms.Internal
             _contextStack.Push(g);
 
             return state;
-        }
-
-        /// <summary>
-        ///  Selects a region as the current clipping region for the device context.
-        ///  Remarks (From MSDN):
-        ///  - Only a copy of the selected region is used. The region itself can be selected for any number of other device contexts or it can be deleted.
-        ///  - The SelectClipRgn function assumes that the coordinates for a region are specified in device units.
-        ///  - To remove a device-context's clipping region, specify a NULL region handle.
-        /// </summary>
-        public void SetClip(WindowsRegion region)
-        {
-            HandleRef hdc = new HandleRef(this, Hdc);
-            HandleRef hRegion = new HandleRef(region, region.HRegion);
-            Gdi32.SelectClipRgn(hdc, hRegion);
-        }
-
-        /// <summary>
-        ///  Creates a new clipping region from the intersection of the current clipping region and
-        ///  the specified rectangle.
-        /// </summary>
-        public void IntersectClip(WindowsRegion wr)
-        {
-            //if the incoming windowsregion is infinite, there is no need to do any intersecting.
-            if (wr.HRegion == IntPtr.Zero)
-            {
-                return;
-            }
-
-            WindowsRegion clip = new WindowsRegion(0, 0, 0, 0);
-            try
-            {
-                int result = Gdi32.GetClipRgn(new HandleRef(this, Hdc), new HandleRef(clip, clip.HRegion));
-
-                // If the function succeeds and there is a clipping region for the given device context, the return value is 1.
-                if (result == 1)
-                {
-                    Debug.Assert(clip.HRegion != IntPtr.Zero);
-                    wr.CombineRegion(clip, wr, Gdi32.CombineMode.RGN_AND);
-                }
-
-                SetClip(wr);
-            }
-            finally
-            {
-                clip.Dispose();
-            }
         }
 
         /// <summary>

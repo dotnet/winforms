@@ -71,9 +71,11 @@ namespace System.Windows.Forms.Internal
         {
             get
             {
-                if (t_measurementGraphics == null || t_measurementGraphics.DeviceContext == null /*object disposed*/)
+                if (t_measurementGraphics?.DeviceContext is null)
                 {
-                    Debug.Assert(t_measurementGraphics == null || t_measurementGraphics.DeviceContext != null, "TLS MeasurementGraphics was disposed somewhere, enable TRACK_HDC macro to determine who did it, recreating it for now ...");
+                    Debug.Assert(
+                        t_measurementGraphics is null || t_measurementGraphics.DeviceContext != null,
+                        "TLS MeasurementGraphics was disposed somewhere.");
                     t_measurementGraphics = WindowsGraphics.CreateMeasurementWindowsGraphics();
                 }
 

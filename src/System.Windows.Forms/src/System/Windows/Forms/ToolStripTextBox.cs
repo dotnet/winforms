@@ -613,9 +613,13 @@ namespace System.Windows.Forms
                 RECT absoluteClientRectangle = AbsoluteClientRECT;
 
                 // Get the total client area, then exclude the client by using XOR
-                IntPtr hTotalRegion = Gdi32.CreateRectRgn(0, 0, Width, Height);
-                IntPtr hClientRegion = Gdi32.CreateRectRgn(absoluteClientRectangle.left, absoluteClientRectangle.top, absoluteClientRectangle.right, absoluteClientRectangle.bottom);
-                IntPtr hNonClientRegion = Gdi32.CreateRectRgn(0, 0, 0, 0);
+                using var hTotalRegion = new Gdi32.RegionScope(0, 0, Width, Height);
+                using var hClientRegion = new Gdi32.RegionScope(
+                    absoluteClientRectangle.left,
+                    absoluteClientRectangle.top,
+                    absoluteClientRectangle.right,
+                    absoluteClientRectangle.bottom);
+                using var hNonClientRegion = new Gdi32.RegionScope(0, 0, 0, 0);
 
                 Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Gdi32.CombineMode.RGN_XOR);
 
@@ -626,19 +630,6 @@ namespace System.Windows.Forms
                     hNonClientRegion,
                     User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.UPDATENOW
                         | User32.RDW.ERASENOW | User32.RDW.FRAME);
-
-                if (hNonClientRegion != IntPtr.Zero)
-                {
-                    Gdi32.DeleteObject(hNonClientRegion);
-                }
-                if (hClientRegion != IntPtr.Zero)
-                {
-                    Gdi32.DeleteObject(hClientRegion);
-                }
-                if (hTotalRegion != IntPtr.Zero)
-                {
-                    Gdi32.DeleteObject(hTotalRegion);
-                }
             }
 
             protected override void OnGotFocus(EventArgs e)

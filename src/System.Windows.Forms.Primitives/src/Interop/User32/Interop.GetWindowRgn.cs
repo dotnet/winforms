@@ -10,11 +10,11 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        private static extern int SetWindowRgn(IntPtr hwnd, IntPtr hrgn, BOOL fRedraw);
+        private static extern RegionType GetWindowRgn(IntPtr hwnd, Gdi32.HRGN hrgn);
 
-        public static int SetWindowRgn(IHandle hwnd, Gdi32.HRGN hrgn, BOOL fRedraw)
+        public static RegionType GetWindowRgn(IHandle hwnd, Gdi32.HRGN hrgn)
         {
-            int result = SetWindowRgn(hwnd.Handle, hrgn.Handle, fRedraw);
+            RegionType result = GetWindowRgn(hwnd.Handle, hrgn);
             GC.KeepAlive(hwnd);
             return result;
         }

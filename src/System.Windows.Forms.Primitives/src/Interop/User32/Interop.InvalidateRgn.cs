@@ -10,13 +10,12 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        private static extern BOOL InvalidateRgn(IntPtr hWnd, IntPtr hrgn, BOOL erase);
+        private static extern BOOL InvalidateRgn(IntPtr hWnd, Gdi32.HRGN hrgn, BOOL erase);
 
-        public static BOOL InvalidateRgn(IHandle hWnd, HandleRef hrgn, BOOL erase)
+        public static BOOL InvalidateRgn(IHandle hWnd, Gdi32.HRGN hrgn, BOOL erase)
         {
-            BOOL result = InvalidateRgn(hWnd.Handle, hrgn.Handle, erase);
+            BOOL result = InvalidateRgn(hWnd.Handle, hrgn, erase);
             GC.KeepAlive(hWnd);
-            GC.KeepAlive(hrgn.Wrapper);
             return result;
         }
     }

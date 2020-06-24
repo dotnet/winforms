@@ -10,21 +10,6 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern int GetClipRgn(IntPtr hdc, IntPtr hrgn);
-
-        public static int GetClipRgn(HandleRef hdc, IntPtr hrgn)
-        {
-            int result = GetClipRgn(hdc.Handle, hrgn);
-            GC.KeepAlive(hdc.Wrapper);
-            return result;
-        }
-
-        public static int GetClipRgn(HandleRef hdc, HandleRef hrgn)
-        {
-            int result = GetClipRgn(hdc.Handle, hrgn.Handle);
-            GC.KeepAlive(hdc.Wrapper);
-            GC.KeepAlive(hrgn.Wrapper);
-            return result;
-        }
+        public static extern int GetClipRgn(IntPtr hdc, HRGN hrgn);
     }
 }

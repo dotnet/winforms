@@ -15,7 +15,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double release.
         /// </remarks>
-        internal ref struct GetDcScope
+        public ref struct GetDcScope
         {
             public IntPtr HDC { get; }
             public IntPtr HWND { get; }
@@ -46,7 +46,7 @@ internal static partial class Interop
 
             public void Dispose()
             {
-                if (HDC != null)
+                if (HDC != IntPtr.Zero)
                 {
                     ReleaseDC(HWND, HDC);
                 }

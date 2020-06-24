@@ -39,12 +39,7 @@ internal static partial class Interop
             return result;
         }
 
-        public unsafe static BOOL RedrawWindow(HandleRef hWnd, RECT *lprcUpdate, HandleRef hrgnUpdate, RDW flags)
-        {
-            BOOL result = RedrawWindow(hWnd.Handle, lprcUpdate, hrgnUpdate.Handle, flags);
-            GC.KeepAlive(hWnd.Wrapper);
-            GC.KeepAlive(hrgnUpdate.Wrapper);
-            return result;
-        }
+        public unsafe static BOOL RedrawWindow(HandleRef hWnd, RECT* lprcUpdate, Gdi32.HRGN hrgnUpdate, RDW flags)
+            => RedrawWindow(hWnd, lprcUpdate, hrgnUpdate.Handle, flags);
     }
 }

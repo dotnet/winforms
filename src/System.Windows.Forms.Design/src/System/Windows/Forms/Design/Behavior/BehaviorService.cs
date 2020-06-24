@@ -896,36 +896,30 @@ namespace System.Windows.Forms.Design.Behavior
                 switch ((User32.WM)m.Msg)
                 {
                     case User32.WM.PAINT:
-                        // Stash off the region we have to update
-                        IntPtr hrgn = Gdi32.CreateRectRgn(0, 0, 0, 0);
-                        User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.TRUE);
-                        // The region we have to update in terms of the smallest rectangle that completely encloses the update region of the window gives us the clip rectangle
-                        RECT clip = new RECT();
-                        User32.GetUpdateRect(m.HWnd, ref clip, BOOL.TRUE);
-                        Rectangle paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);
+                        {
+                            // Stash off the region we have to update.
+                            using var hrgn = new Gdi32.RegionScope(0, 0, 0, 0);
+                            User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.TRUE);
 
-                        try
-                        {
-                            using (Region r = Region.FromHrgn(hrgn))
-                            {
-                                // Call the base class to do its painting.
-                                DefWndProc(ref m);
-                                // Now do our own painting.
-                                using (Graphics g = Graphics.FromHwnd(m.HWnd))
-                                {
-                                    using (PaintEventArgs pevent = new PaintEventArgs(g, paintRect))
-                                    {
-                                        g.Clip = r;
-                                        _behaviorService.PropagatePaint(pevent);
-                                    }
-                                }
-                            }
+                            // The region we have to update in terms of the smallest rectangle that completely encloses
+                            // the update region of the window gives us the clip rectangle.
+                            RECT clip = new RECT();
+                            User32.GetUpdateRect(m.HWnd, ref clip, BOOL.TRUE);
+                            Rectangle paintRect = clip;
+
+                            using Region region = hrgn.CreateGdiPlusRegion();
+
+                            // Call the base class to do its painting.
+                            DefWndProc(ref m);
+
+                            // Now do our own painting.
+                            using Graphics g = Graphics.FromHwnd(m.HWnd);
+                            using PaintEventArgs pevent = new PaintEventArgs(g, paintRect);
+                            g.Clip = region;
+                            _behaviorService.PropagatePaint(pevent);
+
+                            break;
                         }
-                        finally
-                        {
-                            Gdi32.DeleteObject(hrgn);
-                        }
-                        break;
 
                     case User32.WM.NCHITTEST:
                         Point pt = new Point((short)PARAM.LOWORD(m.LParam),

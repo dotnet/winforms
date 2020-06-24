@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
-        public static extern RegionType GetUpdateRgn(IntPtr hWnd, IntPtr hRgn, BOOL bErase);
+        public static extern RegionType GetUpdateRgn(IntPtr hWnd, Gdi32.HRGN hRgn, BOOL bErase);
     }
 }

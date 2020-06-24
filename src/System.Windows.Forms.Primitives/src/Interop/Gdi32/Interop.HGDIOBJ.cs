@@ -3,13 +3,16 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern RegionType SelectClipRgn(IntPtr hdc, HRGN hrgn);
+        public ref struct HGDIOBJ
+        {
+            public IntPtr Handle { get; }
+
+            public HGDIOBJ(IntPtr handle) => Handle = handle;
+        }
     }
 }
