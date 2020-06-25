@@ -14,14 +14,6 @@ namespace System.Windows.Forms
             {
             }
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
-                patternId switch
-                {
-                    var p when
-                        p == UiaCore.UIA.LegacyIAccessiblePatternId => true,
-                    _ => base.IsPatternSupported(patternId)
-                };
-
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {

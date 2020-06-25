@@ -19,27 +19,72 @@ namespace System.Windows.Forms.Tests
         public void SplitterAccessibleObject_Ctor_Default()
         {
             using var splitter = new Splitter();
+            Assert.False(splitter.IsHandleCreated);
             var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
-
             Assert.NotNull(splitterAccessibleObject.Owner);
-            Assert.Equal(AccessibleRole.Client, splitterAccessibleObject.Role);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(splitter.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void SplitterAccessibleObject_Property_returns_correct_value()
+        public void SplitterAccessibleObject_Descrpition_ReturnsExpected()
         {
             using var splitter = new Splitter
             {
-                Name = "Splitter1",
-                AccessibleName = "TestName",
-                AccessibleDescription = "TestDescription",
+                AccessibleDescription = "TestDescription"
+            };
+
+            Assert.False(splitter.IsHandleCreated);
+            var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
+            Assert.Equal("TestDescription", splitterAccessibleObject.Description);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(splitter.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void SplitterAccessibleObject_Name_ReturnsExpected()
+        {
+            using var splitter = new Splitter
+            {
+                AccessibleName = "TestName"
+            };
+
+            Assert.False(splitter.IsHandleCreated);
+            var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
+            Assert.Equal("TestName", splitterAccessibleObject.Name);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(splitter.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void SplitterAccessibleObject_CustomRole_ReturnsExpected()
+        {
+            using var splitter = new Splitter
+            {
                 AccessibleRole = AccessibleRole.PushButton
             };
 
+            Assert.False(splitter.IsHandleCreated);
             var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
-            Assert.Equal("TestName", splitterAccessibleObject.Name);
-            Assert.Equal("TestDescription", splitterAccessibleObject.Description);
             Assert.Equal(AccessibleRole.PushButton, splitterAccessibleObject.Role);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(splitter.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void SplitterAccessibleObject_DefaultRole_ReturnsExpected()
+        {
+            using var splitter = new Splitter();
+            Assert.False(splitter.IsHandleCreated);
+            var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
+            Assert.Equal(AccessibleRole.Client, splitterAccessibleObject.Role);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(splitter.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -47,7 +92,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(UIA.ControlTypePropertyId, UIA.PaneControlTypeId)]
         [InlineData(UIA.IsKeyboardFocusablePropertyId, true)]
         [InlineData(UIA.AutomationIdPropertyId, "Splitter1")]
-        internal void SplitterAccessibleObject_GetPropertyValue_returns_correct_values(UIA propertyID, object expected)
+        public void SplitterAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(object propertyID, object expected)
         {
             using var splitter = new Splitter
             {
@@ -55,11 +100,9 @@ namespace System.Windows.Forms.Tests
                 AccessibleName = "TestName"
             };
 
+            Assert.False(splitter.IsHandleCreated);
             var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
-
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(splitter.IsHandleCreated);
-            object value = splitterAccessibleObject.GetPropertyValue(propertyID);
+            object value = splitterAccessibleObject.GetPropertyValue((UIA)propertyID);
             Assert.Equal(expected, value);
 
             // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
@@ -67,15 +110,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        internal void SplitterAccessibleObject_IsPatternSupported_returns_correct_value()
+        public void SplitterAccessibleObject_IsPatternSupported_Invoke_ReturnsTrue_ForLegacyIAccessiblePattern()
         {
             using var splitter = new Splitter
             {
                 Name = "Splitter1"
             };
-
+            Assert.False(splitter.IsHandleCreated);
             var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
             Assert.True(splitterAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId));
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(splitter.IsHandleCreated);
         }
     }
 }
