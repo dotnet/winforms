@@ -609,218 +609,218 @@ namespace System.Windows.Forms
                 case (int)User32.EM.SCROLLCARET:
                     text = "EM_SCROLLCARET";
                     break;
-                case RichEditMessages.EM_CANPASTE:
+                case (int)Richedit.EM.CANPASTE:
                     text = "EM_CANPASTE";
                     break;
-                case RichEditMessages.EM_DISPLAYBAND:
+                case (int)Richedit.EM.DISPLAYBAND:
                     text = "EM_DISPLAYBAND";
                     break;
-                case RichEditMessages.EM_EXGETSEL:
+                case (int)Richedit.EM.EXGETSEL:
                     text = "EM_EXGETSEL";
                     break;
-                case RichEditMessages.EM_EXLIMITTEXT:
+                case (int)Richedit.EM.EXLIMITTEXT:
                     text = "EM_EXLIMITTEXT";
                     break;
-                case RichEditMessages.EM_EXLINEFROMCHAR:
+                case (int)Richedit.EM.EXLINEFROMCHAR:
                     text = "EM_EXLINEFROMCHAR";
                     break;
-                case RichEditMessages.EM_EXSETSEL:
+                case (int)Richedit.EM.EXSETSEL:
                     text = "EM_EXSETSEL";
                     break;
-                case RichEditMessages.EM_FINDTEXT:
+                case (int)Richedit.EM.FINDTEXT:
                     text = "EM_FINDTEXT";
                     break;
-                case RichEditMessages.EM_FORMATRANGE:
+                case (int)Richedit.EM.FORMATRANGE:
                     text = "EM_FORMATRANGE";
                     break;
-                case RichEditMessages.EM_GETCHARFORMAT:
+                case (int)Richedit.EM.GETCHARFORMAT:
                     text = "EM_GETCHARFORMAT";
                     break;
-                case RichEditMessages.EM_GETEVENTMASK:
+                case (int)Richedit.EM.GETEVENTMASK:
                     text = "EM_GETEVENTMASK";
                     break;
-                case RichEditMessages.EM_GETOLEINTERFACE:
+                case (int)Richedit.EM.GETOLEINTERFACE:
                     text = "EM_GETOLEINTERFACE";
                     break;
-                case RichEditMessages.EM_GETPARAFORMAT:
+                case (int)Richedit.EM.GETPARAFORMAT:
                     text = "EM_GETPARAFORMAT";
                     break;
-                case RichEditMessages.EM_GETSELTEXT:
+                case (int)Richedit.EM.GETSELTEXT:
                     text = "EM_GETSELTEXT";
                     break;
-                case RichEditMessages.EM_HIDESELECTION:
+                case (int)Richedit.EM.HIDESELECTION:
                     text = "EM_HIDESELECTION";
                     break;
-                case RichEditMessages.EM_PASTESPECIAL:
+                case (int)Richedit.EM.PASTESPECIAL:
                     text = "EM_PASTESPECIAL";
                     break;
-                case RichEditMessages.EM_REQUESTRESIZE:
+                case (int)Richedit.EM.REQUESTRESIZE:
                     text = "EM_REQUESTRESIZE";
                     break;
-                case RichEditMessages.EM_SELECTIONTYPE:
+                case (int)Richedit.EM.SELECTIONTYPE:
                     text = "EM_SELECTIONTYPE";
                     break;
-                case RichEditMessages.EM_SETBKGNDCOLOR:
+                case (int)Richedit.EM.SETBKGNDCOLOR:
                     text = "EM_SETBKGNDCOLOR";
                     break;
-                case RichEditMessages.EM_SETCHARFORMAT:
+                case (int)Richedit.EM.SETCHARFORMAT:
                     text = "EM_SETCHARFORMAT";
                     break;
-                case RichEditMessages.EM_SETEVENTMASK:
+                case (int)Richedit.EM.SETEVENTMASK:
                     text = "EM_SETEVENTMASK";
                     break;
-                case RichEditMessages.EM_SETOLECALLBACK:
+                case (int)Richedit.EM.SETOLECALLBACK:
                     text = "EM_SETOLECALLBACK";
                     break;
-                case RichEditMessages.EM_SETPARAFORMAT:
+                case (int)Richedit.EM.SETPARAFORMAT:
                     text = "EM_SETPARAFORMAT";
                     break;
-                case RichEditMessages.EM_SETTARGETDEVICE:
+                case (int)Richedit.EM.SETTARGETDEVICE:
                     text = "EM_SETTARGETDEVICE";
                     break;
-                case RichEditMessages.EM_STREAMIN:
+                case (int)Richedit.EM.STREAMIN:
                     text = "EM_STREAMIN";
                     break;
-                case RichEditMessages.EM_STREAMOUT:
+                case (int)Richedit.EM.STREAMOUT:
                     text = "EM_STREAMOUT";
                     break;
-                case RichEditMessages.EM_GETTEXTRANGE:
+                case (int)Richedit.EM.GETTEXTRANGE:
                     text = "EM_GETTEXTRANGE";
                     break;
-                case RichEditMessages.EM_FINDWORDBREAK:
+                case (int)Richedit.EM.FINDWORDBREAK:
                     text = "EM_FINDWORDBREAK";
                     break;
-                case RichEditMessages.EM_SETOPTIONS:
+                case (int)Richedit.EM.SETOPTIONS:
                     text = "EM_SETOPTIONS";
                     break;
-                case RichEditMessages.EM_GETOPTIONS:
+                case (int)Richedit.EM.GETOPTIONS:
                     text = "EM_GETOPTIONS";
                     break;
-                case RichEditMessages.EM_FINDTEXTEX:
+                case (int)Richedit.EM.FINDTEXTEX:
                     text = "EM_FINDTEXTEX";
                     break;
-                case RichEditMessages.EM_GETWORDBREAKPROCEX:
+                case (int)Richedit.EM.GETWORDBREAKPROCEX:
                     text = "EM_GETWORDBREAKPROCEX";
                     break;
-                case RichEditMessages.EM_SETWORDBREAKPROCEX:
+                case (int)Richedit.EM.SETWORDBREAKPROCEX:
                     text = "EM_SETWORDBREAKPROCEX";
                     break;
 
                 // Richedit v2.0 messages
-                case RichEditMessages.EM_SETUNDOLIMIT:
+                case (int)Richedit.EM.SETUNDOLIMIT:
                     text = "EM_SETUNDOLIMIT";
                     break;
-                case RichEditMessages.EM_REDO:
+                case (int)Richedit.EM.REDO:
                     text = "EM_REDO";
                     break;
-                case RichEditMessages.EM_CANREDO:
+                case (int)Richedit.EM.CANREDO:
                     text = "EM_CANREDO";
                     break;
-                case RichEditMessages.EM_GETUNDONAME:
+                case (int)Richedit.EM.GETUNDONAME:
                     text = "EM_GETUNDONAME";
                     break;
-                case RichEditMessages.EM_GETREDONAME:
+                case (int)Richedit.EM.GETREDONAME:
                     text = "EM_GETREDONAME";
                     break;
-                case RichEditMessages.EM_STOPGROUPTYPING:
+                case (int)Richedit.EM.STOPGROUPTYPING:
                     text = "EM_STOPGROUPTYPING";
                     break;
-                case RichEditMessages.EM_SETTEXTMODE:
+                case (int)Richedit.EM.SETTEXTMODE:
                     text = "EM_SETTEXTMODE";
                     break;
-                case RichEditMessages.EM_GETTEXTMODE:
+                case (int)Richedit.EM.GETTEXTMODE:
                     text = "EM_GETTEXTMODE";
                     break;
-                case RichEditMessages.EM_AUTOURLDETECT:
+                case (int)Richedit.EM.AUTOURLDETECT:
                     text = "EM_AUTOURLDETECT";
                     break;
-                case RichEditMessages.EM_GETAUTOURLDETECT:
+                case (int)Richedit.EM.GETAUTOURLDETECT:
                     text = "EM_GETAUTOURLDETECT";
                     break;
-                case RichEditMessages.EM_SETPALETTE:
+                case (int)Richedit.EM.SETPALETTE:
                     text = "EM_SETPALETTE";
                     break;
-                case RichEditMessages.EM_GETTEXTEX:
+                case (int)Richedit.EM.GETTEXTEX:
                     text = "EM_GETTEXTEX";
                     break;
-                case RichEditMessages.EM_GETTEXTLENGTHEX:
+                case (int)Richedit.EM.GETTEXTLENGTHEX:
                     text = "EM_GETTEXTLENGTHEX";
                     break;
 
                 // Asia specific messages
-                case RichEditMessages.EM_SETPUNCTUATION:
+                case (int)Richedit.EM.SETPUNCTUATION:
                     text = "EM_SETPUNCTUATION";
                     break;
-                case RichEditMessages.EM_GETPUNCTUATION:
+                case (int)Richedit.EM.GETPUNCTUATION:
                     text = "EM_GETPUNCTUATION";
                     break;
-                case RichEditMessages.EM_SETWORDWRAPMODE:
+                case (int)Richedit.EM.SETWORDWRAPMODE:
                     text = "EM_SETWORDWRAPMODE";
                     break;
-                case RichEditMessages.EM_GETWORDWRAPMODE:
+                case (int)Richedit.EM.GETWORDWRAPMODE:
                     text = "EM_GETWORDWRAPMODE";
                     break;
-                case RichEditMessages.EM_SETIMECOLOR:
+                case (int)Richedit.EM.SETIMECOLOR:
                     text = "EM_SETIMECOLOR";
                     break;
-                case RichEditMessages.EM_GETIMECOLOR:
+                case (int)Richedit.EM.GETIMECOLOR:
                     text = "EM_GETIMECOLOR";
                     break;
-                case RichEditMessages.EM_SETIMEOPTIONS:
+                case (int)Richedit.EM.SETIMEOPTIONS:
                     text = "EM_SETIMEOPTIONS";
                     break;
-                case RichEditMessages.EM_GETIMEOPTIONS:
+                case (int)Richedit.EM.GETIMEOPTIONS:
                     text = "EM_GETIMEOPTIONS";
                     break;
-                case RichEditMessages.EM_CONVPOSITION:
+                case (int)Richedit.EM.CONVPOSITION:
                     text = "EM_CONVPOSITION";
                     break;
-                case RichEditMessages.EM_SETLANGOPTIONS:
+                case (int)Richedit.EM.SETLANGOPTIONS:
                     text = "EM_SETLANGOPTIONS";
                     break;
-                case RichEditMessages.EM_GETLANGOPTIONS:
+                case (int)Richedit.EM.GETLANGOPTIONS:
                     text = "EM_GETLANGOPTIONS";
                     break;
-                case RichEditMessages.EM_GETIMECOMPMODE:
+                case (int)Richedit.EM.GETIMECOMPMODE:
                     text = "EM_GETIMECOMPMODE";
                     break;
-                case RichEditMessages.EM_FINDTEXTW:
+                case (int)Richedit.EM.FINDTEXTW:
                     text = "EM_FINDTEXTW";
                     break;
-                case RichEditMessages.EM_FINDTEXTEXW:
+                case (int)Richedit.EM.FINDTEXTEXW:
                     text = "EM_FINDTEXTEXW";
                     break;
 
                 // Rich Edit 3.0 Asia msgs
-                case RichEditMessages.EM_RECONVERSION:
+                case (int)Richedit.EM.RECONVERSION:
                     text = "EM_RECONVERSION";
                     break;
-                case RichEditMessages.EM_SETIMEMODEBIAS:
+                case (int)Richedit.EM.SETIMEMODEBIAS:
                     text = "EM_SETIMEMODEBIAS";
                     break;
-                case RichEditMessages.EM_GETIMEMODEBIAS:
+                case (int)Richedit.EM.GETIMEMODEBIAS:
                     text = "EM_GETIMEMODEBIAS";
                     break;
 
                 // BiDi Specific messages
-                case RichEditMessages.EM_SETBIDIOPTIONS:
+                case (int)Richedit.EM.SETBIDIOPTIONS:
                     text = "EM_SETBIDIOPTIONS";
                     break;
-                case RichEditMessages.EM_GETBIDIOPTIONS:
+                case (int)Richedit.EM.GETBIDIOPTIONS:
                     text = "EM_GETBIDIOPTIONS";
                     break;
-                case RichEditMessages.EM_SETTYPOGRAPHYOPTIONS:
+                case (int)Richedit.EM.SETTYPOGRAPHYOPTIONS:
                     text = "EM_SETTYPOGRAPHYOPTIONS";
                     break;
-                case RichEditMessages.EM_GETTYPOGRAPHYOPTIONS:
+                case (int)Richedit.EM.GETTYPOGRAPHYOPTIONS:
                     text = "EM_GETTYPOGRAPHYOPTIONS";
                     break;
 
                 // Extended Edit style specific messages
-                case RichEditMessages.EM_SETEDITSTYLE:
+                case (int)Richedit.EM.SETEDITSTYLE:
                     text = "EM_SETEDITSTYLE";
                     break;
-                case RichEditMessages.EM_GETEDITSTYLE:
+                case (int)Richedit.EM.GETEDITSTYLE:
                     text = "EM_GETEDITSTYLE";
                     break;
 
