@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -28,14 +27,6 @@ namespace System.Windows.Forms
                         => true,
                     _ => base.GetPropertyValue(propertyID)
                 };
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => patternId switch
-                {
-                var p when
-                    p == UiaCore.UIA.LegacyIAccessiblePatternId => true,
-                _ => base.IsPatternSupported(patternId)
-    };
         }
     }
 }

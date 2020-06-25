@@ -19,35 +19,80 @@ namespace System.Windows.Forms.Tests
         public void PictureBoxAccessibleObject_Ctor_Default()
         {
             using var pictureBox = new PictureBox();
+            Assert.False(pictureBox.IsHandleCreated);
             var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
 
             Assert.NotNull(pictureBoxAccessibleObject.Owner);
-            Assert.Equal(AccessibleRole.Client, pictureBoxAccessibleObject.Role);
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(pictureBox.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void PictureBoxAccessibleObject_Property_returns_correct_value()
+        public void PictureBoxAccessibleObject_Description_ReturnsExpected()
         {
             using var pictureBox = new PictureBox
             {
-                Name = "PictureBox1",
-                AccessibleName = "TestName",
                 AccessibleDescription = "TestDescription",
+            };
+
+            Assert.False(pictureBox.IsHandleCreated);
+            var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
+
+            Assert.Equal("TestDescription", pictureBoxAccessibleObject.Description);
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(pictureBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void PictureBoxAccessibleObject_Name_ReturnsExpected()
+        {
+            using var pictureBox = new PictureBox
+            {
+                AccessibleName = "TestName"
+            };
+
+            Assert.False(pictureBox.IsHandleCreated);
+            var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
+
+            Assert.Equal("TestName", pictureBoxAccessibleObject.Name);
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(pictureBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void PictureBoxAccessibleObject_CustomRole_ReturnsExpected()
+        {
+            using var pictureBox = new PictureBox
+            {
                 AccessibleRole = AccessibleRole.PushButton
             };
 
+            Assert.False(pictureBox.IsHandleCreated);
             var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
-            Assert.Equal("TestName", pictureBoxAccessibleObject.Name);
-            Assert.Equal("TestDescription", pictureBoxAccessibleObject.Description);
+
             Assert.Equal(AccessibleRole.PushButton, pictureBoxAccessibleObject.Role);
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(pictureBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void PictureBoxAccessibleObject_DefaultRole_ReturnsExpected()
+        {
+            using var pictureBox = new PictureBox();
+            Assert.False(pictureBox.IsHandleCreated);
+            var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
+            Assert.Equal(AccessibleRole.Client, pictureBoxAccessibleObject.Role);
+
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(pictureBox.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [InlineData(UIA.NamePropertyId, "TestName")]
-        [InlineData(UIA.ControlTypePropertyId, UIA.PaneControlTypeId)]
-        [InlineData(UIA.IsKeyboardFocusablePropertyId, true)]
-        [InlineData(UIA.AutomationIdPropertyId, "PictureBox1")]
-        internal void PictureBoxAccessibleObject_GetPropertyValue_returns_correct_values(UIA propertyID, object expected)
+        [InlineData((int)UIA.NamePropertyId, "TestName")]
+        [InlineData((int)UIA.ControlTypePropertyId, UIA.PaneControlTypeId)]
+        [InlineData((int)UIA.IsKeyboardFocusablePropertyId, true)]
+        [InlineData((int)UIA.AutomationIdPropertyId, "PictureBox1")]
+        public void PictureBoxAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
         {
             using var pictureBox = new PictureBox
             {
@@ -55,27 +100,25 @@ namespace System.Windows.Forms.Tests
                 AccessibleName = "TestName"
             };
 
+            Assert.False(pictureBox.IsHandleCreated);
             var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
+            object value = pictureBoxAccessibleObject.GetPropertyValue((UIA)propertyID);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(pictureBox.IsHandleCreated);
-            object value = pictureBoxAccessibleObject.GetPropertyValue(propertyID);
             Assert.Equal(expected, value);
-
             // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
             Assert.True(pictureBox.IsHandleCreated);
         }
 
         [WinFormsFact]
-        internal void PictureBoxAccessibleObject_IsPatternSupported_returns_correct_value()
+        public void PictureBoxAccessibleObject_IsPatternSupported_Invoke_ReturnsTrue_ForLegacyIAccessiblePatternId()
         {
-            using var pictureBox = new PictureBox
-            {
-                Name = "PictureBox1"
-            };
-
+            using var pictureBox = new PictureBox();
+            Assert.False(pictureBox.IsHandleCreated);
             var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
+
             Assert.True(pictureBoxAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId));
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(pictureBox.IsHandleCreated);
         }
     }
 }
