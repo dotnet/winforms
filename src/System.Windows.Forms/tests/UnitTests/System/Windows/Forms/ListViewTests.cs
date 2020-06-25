@@ -1092,6 +1092,38 @@ namespace System.Windows.Forms.Tests
             Assert.False(listView.CheckBoxes);
         }
 
+        [WinFormsFact]
+        public void ListView_DisposeWithReferencedImageListDoesNotLeak()
+        {
+            // must be separate function because GC of local variables is not precise
+            static WeakReference CreateAndDisposeListViewWithImageListReference(ImageList imageList)
+            {
+                // short lived test code, whatever you need to trigger the leak
+                using var listView = new ListView();
+                listView.LargeImageList = imageList;
+
+                // return a weak reference to whatever you want to track GC of
+                // creating a long weak reference to make sure finalizer does not resurrect the ListView
+                return new WeakReference(listView, true);
+            }
+
+            // simulate a long-living ImageList by keeping it alive for the test
+            using var imageList = new ImageList();
+
+            // simulate a short-living ListView by disposing it (returning a WeakReference to track finalization)
+            var listViewRef = CreateAndDisposeListViewWithImageListReference(imageList);
+
+            GC.Collect(); // mark for finalization (also would clear normal weak references)
+            GC.WaitForPendingFinalizers(); // wait until finalizer is executed
+            GC.Collect(); // wait for long weak reference to be cleared
+
+            // at this point the WeakReference is cleared if -and only if- the finalizer was called and did not resurrect the object
+            // (if the test ever fails you can set a breakpoint here, debug the test, and make heap snapshot in VS;
+            // then search for the ListView in the heap snapshot UI and look who is referencing it, usually you
+            // can derive from types referencing the ListView who is to blame)
+            Assert.False(listViewRef.IsAlive);
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListView_DoubleBuffered_Get_ReturnsExpected(bool value)
