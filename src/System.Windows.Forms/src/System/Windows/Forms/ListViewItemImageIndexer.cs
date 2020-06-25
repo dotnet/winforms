@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -29,9 +27,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the <see cref="ListViewItem.ImageList"/> associated with the item.
         /// </summary>
-        public override ImageList ImageList
+        public override ImageList? ImageList
         {
-            get => _owner?.ImageList;
+            get => _owner.ImageList;
             set => Debug.Fail("We should never set the image list");
         }
     }

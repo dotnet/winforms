@@ -277,6 +277,11 @@ namespace System.Windows.Forms
                         string.Format(SR.InvalidLowBoundArgumentEx, nameof(TitleImageIndex), value, ImageList.Indexer.DefaultIndex));
                 }
 
+                if (ImageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
+                {
+                    return;
+                }
+
                 ImageIndexer.Index = value;
                 UpdateListView();
             }
@@ -300,7 +305,7 @@ namespace System.Windows.Forms
             get => ImageIndexer.Key;
             set
             {
-                if (ImageIndexer.Key == value)
+                if (ImageIndexer.Key == value && value != ImageList.Indexer.DefaultKey)
                 {
                     return;
                 }

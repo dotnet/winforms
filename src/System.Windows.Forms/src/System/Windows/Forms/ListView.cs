@@ -3670,8 +3670,7 @@ namespace System.Windows.Forms
 
             foreach (ListViewGroup group in Groups)
             {
-                group.TitleImageIndex =
-                    (group.ImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex || group.ImageIndexer.ActualIndex < _imageListGroup.Images.Count)
+                group.TitleImageIndex = group.ImageIndexer.ActualIndex < _imageListGroup.Images.Count
                     ? group.ImageIndexer.ActualIndex
                     : _imageListGroup.Images.Count - 1;
             }
@@ -4270,8 +4269,7 @@ namespace System.Windows.Forms
 
             foreach (ListViewItem item in Items)
             {
-                int imageIndex =
-                    item.ImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex || item.ImageIndexer.ActualIndex < _imageListLarge.Images.Count
+                int imageIndex = item.ImageIndexer.ActualIndex < _imageListLarge.Images.Count
                     ? item.ImageIndexer.ActualIndex
                     : _imageListLarge.Images.Count - 1;
                 SetItemImage(item.Index, imageIndex);

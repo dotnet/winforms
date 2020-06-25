@@ -243,6 +243,23 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ListViewGroup_TitleImageIndex_SetTitleImageKey_GetReturnsExpected(string key, string expected)
+        {
+            var group = new ListViewGroup
+            {
+                TitleImageIndex = 0
+            };
+
+            Assert.Equal(0, group.TitleImageIndex);
+
+            // verify TitleImageIndex resets to default once TitleImageKey is set
+            group.TitleImageKey = key;
+            Assert.Equal(expected, group.TitleImageKey);
+            Assert.Equal(ImageList.Indexer.DefaultIndex, group.TitleImageIndex);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_TitleImageKey_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
@@ -353,6 +370,24 @@ namespace System.Windows.Forms.Tests
 
             // verify the remote process succeeded
             Assert.Equal(0, invokerHandle.ExitCode);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
+        [InlineData(-1)]
+        public void ListViewGroup_TitleImageKey_SetTitleImageIndex_GetReturnsExpected(int value)
+        {
+            var group = new ListViewGroup
+            {
+                TitleImageKey = "key"
+            };
+
+            Assert.Equal("key", group.TitleImageKey);
+
+            // verify TitleImageKey resets to default once TitleImageIndex is set
+            group.TitleImageIndex = value;
+            Assert.Equal(value, group.TitleImageIndex);
+            Assert.Equal(ImageList.Indexer.DefaultKey, group.TitleImageKey);
         }
 
         [WinFormsTheory]
