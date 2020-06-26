@@ -5756,28 +5756,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  - Returns child controls sorted according to their TabIndex property order.
-        ///  - Controls with the same TabIndex remain in original relative child index order (= z-order).
-        ///  - Returns a TabIndex sorted array of ControlTabOrderHolder objects.
-        /// </summary>
-        private ArrayList GetChildControlsTabOrderList(bool handleCreatedOnly)
-        {
-            ArrayList holders = new ArrayList();
-
-            foreach (Control c in Controls)
-            {
-                if (!handleCreatedOnly || c.IsHandleCreated)
-                {
-                    holders.Add(new ControlTabOrderHolder(holders.Count, c.TabIndex, c));
-                }
-            }
-
-            holders.Sort(new ControlTabOrderComparer());
-
-            return holders;
-        }
-
-        /// <summary>
         ///  - Returns native child windows sorted according to their TabIndex property order.
         ///  - Controls with the same TabIndex remain in original relative child index order (= z-order).
         ///  - Child windows with no corresponding Control objects (and therefore no discernable TabIndex)
@@ -5787,13 +5765,23 @@ namespace System.Windows.Forms
         /// </summary>
         private int[] GetChildWindowsInTabOrder()
         {
-            ArrayList holders = GetChildWindowsTabOrderList();
+            List<ControlTabOrderHolder> holders = new List<ControlTabOrderHolder>();
+
+            for (IntPtr hWndChild = User32.GetWindow(Handle, User32.GW.CHILD);
+                hWndChild != IntPtr.Zero;
+                hWndChild = User32.GetWindow(hWndChild, User32.GW.HWNDNEXT))
+            {
+                Control ctl = FromHandle(hWndChild);
+                int tabIndex = (ctl == null) ? -1 : ctl.TabIndex;
+                holders.Add(new ControlTabOrderHolder(holders.Count, tabIndex, ctl));
+            }
+
+            holders.Sort(new ControlTabOrderComparer());
 
             int[] indexes = new int[holders.Count];
-
             for (int i = 0; i < holders.Count; i++)
             {
-                indexes[i] = ((ControlTabOrderHolder)holders[i])._oldOrder;
+                indexes[i] = holders[i]._oldOrder;
             }
 
             return indexes;
@@ -5806,57 +5794,25 @@ namespace System.Windows.Forms
         /// </summary>
         internal Control[] GetChildControlsInTabOrder(bool handleCreatedOnly)
         {
-            ArrayList holders = GetChildControlsTabOrderList(handleCreatedOnly);
+            List<ControlTabOrderHolder> holders = new List<ControlTabOrderHolder>();
 
-            Control[] ctls = new Control[holders.Count];
-
-            for (int i = 0; i < holders.Count; i++)
+            foreach (Control c in Controls)
             {
-                ctls[i] = ((ControlTabOrderHolder)holders[i])._control;
-            }
-
-            return ctls;
-        }
-
-        /// <summary>
-        ///  Given a native window handle, returns array of handles to window's children (in z-order).
-        /// </summary>
-        private static ArrayList GetChildWindows(IntPtr hWndParent)
-        {
-            ArrayList windows = new ArrayList();
-
-            for (IntPtr hWndChild = User32.GetWindow(hWndParent, User32.GW.CHILD);
-                 hWndChild != IntPtr.Zero;
-                 hWndChild = User32.GetWindow(hWndChild, User32.GW.HWNDNEXT))
-            {
-                windows.Add(hWndChild);
-            }
-
-            return windows;
-        }
-
-        /// <summary>
-        ///  - Returns native child windows sorted according to their TabIndex property order.
-        ///  - Controls with the same TabIndex remain in original relative child index order (= z-order).
-        ///  - Child windows with no corresponding Control objects (and therefore no discernable TabIndex)
-        ///  are sorted to the front of the list (but remain in relative z-order to one another).
-        ///  - Returns a TabIndex sorted array of ControlTabOrderHolder objects.
-        /// </summary>
-        private ArrayList GetChildWindowsTabOrderList()
-        {
-            ArrayList holders = new ArrayList();
-            ArrayList windows = GetChildWindows(Handle);
-
-            foreach (IntPtr hWnd in windows)
-            {
-                Control ctl = FromHandle(hWnd);
-                int tabIndex = (ctl == null) ? -1 : ctl.TabIndex;
-                holders.Add(new ControlTabOrderHolder(holders.Count, tabIndex, ctl));
+                if (!handleCreatedOnly || c.IsHandleCreated)
+                {
+                    holders.Add(new ControlTabOrderHolder(holders.Count, c.TabIndex, c));
+                }
             }
 
             holders.Sort(new ControlTabOrderComparer());
 
-            return holders;
+            Control[] ctls = new Control[holders.Count];
+            for (int i = 0; i < holders.Count; i++)
+            {
+                ctls[i] = holders[i]._control;
+            }
+
+            return ctls;
         }
 
         internal virtual Control GetFirstChildControlInTabOrder(bool forward)
