@@ -5638,7 +5638,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">No se encontró un elemento InputLanguage para la referencia cultural "{0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">

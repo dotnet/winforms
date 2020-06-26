@@ -5638,7 +5638,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">Non è stato possibile trovare una lingua di input per le impostazioni cultura '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">

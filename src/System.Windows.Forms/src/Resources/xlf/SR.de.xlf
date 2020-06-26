@@ -5638,7 +5638,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">Für die Kultur "{0}" wurde kein Wert für "InputLanguage" gefunden.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">

@@ -5638,7 +5638,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">InputLanguage introuvable pour la culture '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">

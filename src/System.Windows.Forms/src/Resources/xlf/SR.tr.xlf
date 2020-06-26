@@ -5638,7 +5638,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">'{0}' kültürü için InputLanguage bulunamadı.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
