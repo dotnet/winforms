@@ -269,6 +269,11 @@ namespace System.Windows.Forms
 
         public TreeNode[] Find(string key, bool searchAllChildren)
         {
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
+            }
+
             ArrayList foundNodes = FindInternal(key, searchAllChildren, this, new ArrayList());
 
             //

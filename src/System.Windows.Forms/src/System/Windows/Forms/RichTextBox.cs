@@ -193,7 +193,7 @@ namespace System.Windows.Forms
                 {
                     User32.SendMessageW(
                         this,
-                        (User32.WM)RichEditMessages.EM_SETOPTIONS,
+                        (User32.WM)EM.SETOPTIONS,
                         (IntPtr)(value ? ECOOP.OR : ECOOP.XOR),
                         (IntPtr)ECO.AUTOWORDSELECTION);
                 }
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_CANREDO)) != 0;
+                    return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.CANREDO)) != 0;
                 }
                 return false;
             }
@@ -392,7 +392,7 @@ namespace System.Windows.Forms
                     richTextBoxFlags[autoUrlDetectSection] = value ? 1 : 0;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_AUTOURLDETECT, PARAM.FromBool(value));
+                        User32.SendMessageW(this, (User32.WM)EM.AUTOURLDETECT, PARAM.FromBool(value));
                         RecreateHandle();
                     }
                 }
@@ -534,7 +534,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return (RichTextBoxLanguageOptions)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETLANGOPTIONS);
+                    return (RichTextBoxLanguageOptions)User32.SendMessageW(this, (User32.WM)EM.GETLANGOPTIONS);
                 }
 
                 return languageOption;
@@ -546,7 +546,7 @@ namespace System.Windows.Forms
                     languageOption = value;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETLANGOPTIONS, IntPtr.Zero, (IntPtr)value);
+                        User32.SendMessageW(this, (User32.WM)EM.SETLANGOPTIONS, IntPtr.Zero, (IntPtr)value);
                     }
                 }
             }
@@ -597,7 +597,7 @@ namespace System.Windows.Forms
                     return "";
                 }
 
-                int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETREDONAME));
+                int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.GETREDONAME));
                 return GetEditorActionName(n);
             }
         }
@@ -654,7 +654,7 @@ namespace System.Windows.Forms
                         IntPtr hDC = Gdi32.CreateICW("DISPLAY", null, null, IntPtr.Zero);
                         try
                         {
-                            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETTARGETDEVICE, hDC, (IntPtr)Pixel2Twip(hDC, value, true));
+                            User32.SendMessageW(this, (User32.WM)EM.SETTARGETDEVICE, hDC, (IntPtr)Pixel2Twip(hDC, value, true));
                         }
                         finally
                         {
@@ -777,7 +777,7 @@ namespace System.Windows.Forms
                 };
 
                 // get the format for our currently selected paragraph
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
                 if ((PFM.ALIGNMENT & pf.dwMask) != 0)
@@ -830,7 +830,7 @@ namespace System.Windows.Forms
                 }
 
                 // set the format for our current paragraph or selection
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -855,7 +855,7 @@ namespace System.Windows.Forms
                 };
 
                 // get the format for our currently selected paragraph
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
                 if ((PFM.NUMBERING & pf.dwMask) != 0)
@@ -894,7 +894,7 @@ namespace System.Windows.Forms
                     pf.dxOffset = Pixel2Twip(IntPtr.Zero, bulletIndent, true);
                 }
                 // set the format for our current paragraph or selection
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -934,7 +934,7 @@ namespace System.Windows.Forms
                 // SendMessage will force the handle to be created if it hasn't already. Normally,
                 // we would cache property values until the handle is created - but for this property,
                 // it's far more simple to just create the handle.
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf);
+                User32.SendMessageW(this, (User32.WM)EM.SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf);
             }
         }
 
@@ -971,7 +971,7 @@ namespace System.Windows.Forms
                 cf.crTextColor = ColorTranslator.ToWin32(value);
 
                 // set the format information
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf);
+                User32.SendMessageW(this, (User32.WM)EM.SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf);
             }
         }
 
@@ -1028,7 +1028,7 @@ namespace System.Windows.Forms
                         cf2.crBackColor = ColorTranslator.ToWin32(value);
                     }
 
-                    User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf2);
+                    User32.SendMessageW(this, (User32.WM)EM.SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf2);
                 }
             }
         }
@@ -1075,7 +1075,7 @@ namespace System.Windows.Forms
                 };
 
                 // get the format for our currently selected paragraph
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
                 if ((PFM.OFFSET & pf.dwMask) != 0)
@@ -1097,7 +1097,7 @@ namespace System.Windows.Forms
                 };
 
                 // set the format for our current paragraph or selection
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -1123,7 +1123,7 @@ namespace System.Windows.Forms
                 };
 
                 // get the format for our currently selected paragraph
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
                 if ((PFM.STARTINDENT & pf.dwMask) != 0)
@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms
                 };
 
                 // set the format for our current paragraph or selection
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -1247,7 +1247,7 @@ namespace System.Windows.Forms
                 };
 
                 // get the format for our currently selected paragraph
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
                 if ((PFM.RIGHTINDENT & pf.dwMask) != 0)
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms
                 };
 
                 // set the format for our current paragraph or selection
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -1296,7 +1296,7 @@ namespace System.Windows.Forms
                 };
 
                 // get the format for our currently selected paragraph
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 // check if alignment has been set yet
                 if ((PFM.TABSTOPS & pf.dwMask) != 0)
@@ -1326,7 +1326,7 @@ namespace System.Windows.Forms
 
                 // get the format for our currently selected paragraph because
                 // we need to get the number of tabstops to copy
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, IntPtr.Zero, ref pf);
 
                 pf.cTabCount = (short)((value == null) ? 0 : value.Length);
                 pf.dwMask = PFM.TABSTOPS;
@@ -1336,7 +1336,7 @@ namespace System.Windows.Forms
                 }
 
                 // set the format for our current paragraph or selection
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETPARAFORMAT, IntPtr.Zero, ref pf);
+                User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
         }
 
@@ -1379,7 +1379,7 @@ namespace System.Windows.Forms
                 ForceHandleCreate();
                 if (SelectionLength > 0)
                 {
-                    int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SELECTIONTYPE));
+                    int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.SELECTIONTYPE));
                     return (RichTextBoxSelectionTypes)n;
                 }
                 else
@@ -1408,7 +1408,7 @@ namespace System.Windows.Forms
                     {
                         User32.SendMessageW(
                             this,
-                            (User32.WM)RichEditMessages.EM_SETOPTIONS,
+                            (User32.WM)EM.SETOPTIONS,
                             (IntPtr)(value ? ECOOP.OR : ECOOP.XOR),
                             (IntPtr)ECO.SELECTIONBAR);
                     }
@@ -1505,7 +1505,7 @@ namespace System.Windows.Forms
                     codepage = 1200u /* CP_UNICODE */
                 };
 
-                return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETTEXTLENGTHEX, (IntPtr)(&gtl)));
+                return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.GETTEXTLENGTHEX, (IntPtr)(&gtl)));
             }
         }
 
@@ -1529,7 +1529,7 @@ namespace System.Windows.Forms
                     return "";
                 }
 
-                int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETUNDONAME));
+                int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.GETUNDONAME));
                 return GetEditorActionName(n);
             }
         }
@@ -1573,7 +1573,7 @@ namespace System.Windows.Forms
                 {
                     int numerator = 0;
                     int denominator = 0;
-                    User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETZOOM, (IntPtr)(&numerator), ref denominator);
+                    User32.SendMessageW(this, (User32.WM)EM.GETZOOM, (IntPtr)(&numerator), ref denominator);
                     if ((numerator != 0) && (denominator != 0))
                     {
                         zoomMultiplier = ((float)numerator) / ((float)denominator);
@@ -1720,7 +1720,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool CanPaste(DataFormats.Format clipFormat)
         {
-            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_CANPASTE, (IntPtr)clipFormat.Id)) != 0;
+            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.CANPASTE, (IntPtr)clipFormat.Id)) != 0;
         }
 
         //DrawToBitmap doesn't work for this control, so we should hide it.  We'll
@@ -1978,7 +1978,7 @@ namespace System.Windows.Forms
             fixed (char* pText = str)
             {
                 ft.lpstrText = pText;
-                position = (int)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_FINDTEXT, (IntPtr)findOptions, ref ft);
+                position = (int)User32.SendMessageW(this, (User32.WM)EM.FINDTEXT, (IntPtr)findOptions, ref ft);
             }
 
             // if we didn't find anything, or we don't have to select what was found,
@@ -2020,7 +2020,7 @@ namespace System.Windows.Forms
                     chrg.cpMax = foundCursor;
                 }
 
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXSETSEL, IntPtr.Zero, ref chrg);
+                User32.SendMessageW(this, (User32.WM)EM.EXSETSEL, IntPtr.Zero, ref chrg);
                 User32.SendMessageW(this, (User32.WM)User32.EM.SCROLLCARET);
             }
 
@@ -2149,7 +2149,7 @@ namespace System.Windows.Forms
 
                     // go get the text in this range, if we didn't get any text then punt
                     int len;
-                    len = (int)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
+                    len = (int)User32.SendMessageW(this, (User32.WM)EM.GETTEXTRANGE, IntPtr.Zero, ref txrg);
                     if (len == 0)
                     {
                         chrg.cpMax = chrg.cpMin = -1; // Hit end of control without finding what we wanted
@@ -2242,7 +2242,7 @@ namespace System.Windows.Forms
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETCHARFORMAT, (IntPtr)(fSelection ? SCF.SELECTION : SCF.DEFAULT), ref cf);
+            User32.SendMessageW(this, (User32.WM)EM.GETCHARFORMAT, (IntPtr)(fSelection ? SCF.SELECTION : SCF.DEFAULT), ref cf);
             return cf;
         }
 
@@ -2363,7 +2363,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override int GetLineFromCharIndex(int index)
         {
-            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXLINEFROMCHAR, IntPtr.Zero, (IntPtr)index));
+            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.EXLINEFROMCHAR, IntPtr.Zero, (IntPtr)index));
         }
 
         /// <summary>
@@ -2465,7 +2465,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+                User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
             }
 
             base.OnBackColorChanged(e);
@@ -2532,7 +2532,7 @@ namespace System.Windows.Forms
             // even if it is hidden
             User32.SendMessageW(
                 this,
-                (User32.WM)RichEditMessages.EM_SETEVENTMASK,
+                (User32.WM)EM.SETEVENTMASK,
                 IntPtr.Zero,
                 (IntPtr)(ENM.PROTECTED | ENM.SELCHANGE |
                          ENM.DROPFILES | ENM.REQUESTRESIZE |
@@ -2545,7 +2545,7 @@ namespace System.Windows.Forms
             rightMargin = 0;
             RightMargin = rm;
 
-            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_AUTOURLDETECT, DetectUrls ? (IntPtr)1 : IntPtr.Zero, IntPtr.Zero);
+            User32.SendMessageW(this, (User32.WM)EM.AUTOURLDETECT, DetectUrls ? (IntPtr)1 : IntPtr.Zero, IntPtr.Zero);
             if (selectionBackColorToSetOnHandleCreated != Color.Empty)
             {
                 SelectionBackColor = selectionBackColorToSetOnHandleCreated;
@@ -2554,7 +2554,7 @@ namespace System.Windows.Forms
             // Initialize colors before initializing RTF, otherwise CFE_AUTOCOLOR will be in effect
             // and our text will all be Color.WindowText.
             AutoWordSelection = AutoWordSelection;
-            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+            User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
             InternalSetForeColor(ForeColor);
 
             // base sets the Text property.  It's important to do this *after* setting EM_AUTOUrlDETECT.
@@ -2597,7 +2597,7 @@ namespace System.Windows.Forms
                 // will resize itself to the size of the parent's client area.  Don't know why...
                 User32.PostMessageW(
                     this,
-                    (User32.WM)RichEditMessages.EM_SETOPTIONS,
+                    (User32.WM)EM.SETOPTIONS,
                     (IntPtr)ECOOP.OR,
                     (IntPtr)ECO.SELECTIONBAR);
             }
@@ -2690,7 +2690,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Paste(DataFormats.Format clipFormat)
         {
-            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_PASTESPECIAL, (IntPtr)clipFormat.Id);
+            User32.SendMessageW(this, (User32.WM)EM.PASTESPECIAL, (IntPtr)clipFormat.Id);
         }
 
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
@@ -2711,7 +2711,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Redoes the last undone editing operation.
         /// </summary>
-        public void Redo() => User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_REDO);
+        public void Redo() => User32.SendMessageW(this, (User32.WM)EM.REDO);
 
         //NOTE: Undo is implemented on TextBox
 
@@ -2801,7 +2801,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETZOOM, (IntPtr)numerator, (IntPtr)denominator);
+                User32.SendMessageW(this, (User32.WM)EM.SETZOOM, (IntPtr)numerator, (IntPtr)denominator);
             }
 
             if (numerator != 0)
@@ -2838,7 +2838,7 @@ namespace System.Windows.Forms
                 }
 
                 // set the format information
-                return User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf) != IntPtr.Zero;
+                return User32.SendMessageW(this, (User32.WM)EM.SETCHARFORMAT, (IntPtr)SCF.SELECTION, ref cf) != IntPtr.Zero;
             }
 
             return false;
@@ -2846,7 +2846,7 @@ namespace System.Windows.Forms
 
         private bool SetCharFormat(SCF charRange, CHARFORMAT2W cf)
         {
-            return User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETCHARFORMAT, (IntPtr)charRange, ref cf) != IntPtr.Zero;
+            return User32.SendMessageW(this, (User32.WM)EM.SETCHARFORMAT, (IntPtr)charRange, ref cf) != IntPtr.Zero;
         }
 
         private unsafe void SetCharFormatFont(bool selectionOnly, Font value)
@@ -2892,7 +2892,7 @@ namespace System.Windows.Forms
 
             User32.SendMessageW(
                 this,
-                (User32.WM)RichEditMessages.EM_SETCHARFORMAT,
+                (User32.WM)EM.SETCHARFORMAT,
                 (IntPtr)(selectionOnly ? SCF.SELECTION : SCF.ALL),
                 ref charFormat);
         }
@@ -2967,7 +2967,7 @@ namespace System.Windows.Forms
             if ((flags & SF.F_SELECTION) == 0)
             {
                 var cr = new CHARRANGE();
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXSETSEL, IntPtr.Zero, ref cr);
+                User32.SendMessageW(this, (User32.WM)EM.EXSETSEL, IntPtr.Zero, ref cr);
             }
 
             try
@@ -3024,10 +3024,10 @@ namespace System.Windows.Forms
 
                 // gives us TextBox compatible behavior, programatic text change shouldn't
                 // be limited...
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXLIMITTEXT, IntPtr.Zero, (IntPtr)int.MaxValue);
+                User32.SendMessageW(this, (User32.WM)EM.EXLIMITTEXT, IntPtr.Zero, (IntPtr)int.MaxValue);
 
                 // go get the text for the control
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_STREAMIN, (IntPtr)flags, ref es);
+                User32.SendMessageW(this, (User32.WM)EM.STREAMIN, (IntPtr)flags, ref es);
                 GC.KeepAlive(callback);
 
                 UpdateMaxLength();
@@ -3131,7 +3131,7 @@ namespace System.Windows.Forms
                 es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
 
                 // Get Text
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_STREAMOUT, (IntPtr)flags, ref es);
+                User32.SendMessageW(this, (User32.WM)EM.STREAMOUT, (IntPtr)flags, ref es);
                 GC.KeepAlive(callback);
 
                 // check to make sure things went well
@@ -3170,7 +3170,7 @@ namespace System.Windows.Forms
                         Marshal.QueryInterface(punk, ref iidRichEditOleCallback, out IntPtr pRichEditOleCallback);
                         try
                         {
-                            User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETOLECALLBACK, IntPtr.Zero, pRichEditOleCallback);
+                            User32.SendMessageW(this, (User32.WM)EM.SETOLECALLBACK, IntPtr.Zero, pRichEditOleCallback);
                         }
                         finally
                         {
@@ -3195,7 +3195,7 @@ namespace System.Windows.Forms
             {
                 if (BackColor.IsSystemColor)
                 {
-                    User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+                    User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
                 }
                 if (ForeColor.IsSystemColor)
                 {
@@ -3281,7 +3281,7 @@ namespace System.Windows.Forms
             }
 
             txrg.lpstrText = unmanagedBuffer;
-            int len = (int)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETTEXTRANGE, IntPtr.Zero, ref txrg);
+            int len = (int)User32.SendMessageW(this, (User32.WM)EM.GETTEXTRANGE, IntPtr.Zero, ref txrg);
             Debug.Assert(len != 0, "CHARRANGE from RichTextBox was bad! - impossible?");
             charBuffer.PutCoTaskMem(unmanagedBuffer);
             if (txrg.lpstrText != IntPtr.Zero)
@@ -3297,7 +3297,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_EXLIMITTEXT, IntPtr.Zero, (IntPtr)MaxLength);
+                User32.SendMessageW(this, (User32.WM)EM.EXLIMITTEXT, IntPtr.Zero, (IntPtr)MaxLength);
             }
         }
 
@@ -3399,7 +3399,7 @@ namespace System.Windows.Forms
 
                             switch (enprotected.msg)
                             {
-                                case RichEditMessages.EM_SETCHARFORMAT:
+                                case (int)EM.SETCHARFORMAT:
                                     // Allow change of protected style
                                     CHARFORMAT2W* charFormat = (CHARFORMAT2W*)enprotected.lParam;
                                     if ((charFormat->dwMask & CFM.PROTECTED) != 0)
@@ -3411,11 +3411,11 @@ namespace System.Windows.Forms
 
                                 // Throw an exception for the following
                                 //
-                                case RichEditMessages.EM_SETPARAFORMAT:
+                                case (int)EM.SETPARAFORMAT:
                                 case (int)User32.EM.REPLACESEL:
                                     break;
 
-                                case RichEditMessages.EM_STREAMIN:
+                                case (int)EM.STREAMIN:
                                     // Don't allow STREAMIN to replace protected selection
                                     if ((unchecked((SF)(long)enprotected.wParam) & SF.F_SELECTION) != 0)
                                     {
@@ -3429,7 +3429,7 @@ namespace System.Windows.Forms
                                 //
                                 case (int)User32.WM.COPY:
                                 case (int)User32.WM.SETTEXT:
-                                case RichEditMessages.EM_EXLIMITTEXT:
+                                case (int)EM.EXLIMITTEXT:
                                     m.Result = IntPtr.Zero;
                                     return;
 
@@ -3523,7 +3523,7 @@ namespace System.Windows.Forms
             if (ImeMode == ImeMode.Hangul || ImeMode == ImeMode.HangulFull)
             {
                 // Is the IME CompositionWindow open?
-                ICM compMode = unchecked((ICM)(long)User32.SendMessageW(this, (User32.WM)RichEditMessages.EM_GETIMECOMPMODE));
+                ICM compMode = unchecked((ICM)(long)User32.SendMessageW(this, (User32.WM)EM.GETIMECOMPMODE));
                 if (compMode != ICM.NOTOPEN)
                 {
                     int textLength = User32.GetWindowTextLengthW(new HandleRef(this, Handle));

@@ -6380,7 +6380,7 @@ namespace System.Windows.Forms.Tests
 
             protected unsafe override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)RichEditMessages.EM_GETOLEINTERFACE)
+                if (m.Msg == (int)Richedit.EM.GETOLEINTERFACE)
                 {
                     IntPtr* pParam = (IntPtr*)m.LParam;
                     *pParam = GetOleInterfaceLParam;

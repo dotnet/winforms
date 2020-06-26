@@ -6376,6 +6376,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">ListViewGroup</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupImageListDescr">
+        <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
+        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">
         <source>The name of this group.</source>
         <target state="translated">Nazwa tej grupy.</target>

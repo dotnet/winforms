@@ -26,7 +26,6 @@ internal static partial class Interop
                 _paintStruct = default;
                 HDC = BeginPaint(hwnd, ref _paintStruct);
                 HWND = hwnd;
-                HDC = GetDC(hwnd);
             }
 
             public static implicit operator IntPtr(BeginPaintScope paintScope) => paintScope.HDC;

@@ -1452,7 +1452,7 @@ namespace System.Windows.Forms.Tests
             // Don't search all children.
             Assert.Equal(new Control[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
 
-            // Call again..
+            // Call again.
             Assert.Equal(new Control[] { child2, child3 }, collection.Find(key, searchAllChildren: false));
         }
 

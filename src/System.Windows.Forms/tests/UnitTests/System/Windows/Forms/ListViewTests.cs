@@ -88,6 +88,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.GridLines);
             Assert.Empty(control.Groups);
             Assert.Same(control.Groups, control.Groups);
+            Assert.Null(control.GroupImageList);
             Assert.False(control.HasChildren);
             Assert.Equal(ColumnHeaderStyle.Clickable, control.HeaderStyle);
             Assert.Equal(97, control.Height);
@@ -1092,6 +1093,38 @@ namespace System.Windows.Forms.Tests
             Assert.False(listView.CheckBoxes);
         }
 
+        [WinFormsFact]
+        public void ListView_DisposeWithReferencedImageListDoesNotLeak()
+        {
+            // must be separate function because GC of local variables is not precise
+            static WeakReference CreateAndDisposeListViewWithImageListReference(ImageList imageList)
+            {
+                // short lived test code, whatever you need to trigger the leak
+                using var listView = new ListView();
+                listView.LargeImageList = imageList;
+
+                // return a weak reference to whatever you want to track GC of
+                // creating a long weak reference to make sure finalizer does not resurrect the ListView
+                return new WeakReference(listView, true);
+            }
+
+            // simulate a long-living ImageList by keeping it alive for the test
+            using var imageList = new ImageList();
+
+            // simulate a short-living ListView by disposing it (returning a WeakReference to track finalization)
+            var listViewRef = CreateAndDisposeListViewWithImageListReference(imageList);
+
+            GC.Collect(); // mark for finalization (also would clear normal weak references)
+            GC.WaitForPendingFinalizers(); // wait until finalizer is executed
+            GC.Collect(); // wait for long weak reference to be cleared
+
+            // at this point the WeakReference is cleared if -and only if- the finalizer was called and did not resurrect the object
+            // (if the test ever fails you can set a breakpoint here, debug the test, and make heap snapshot in VS;
+            // then search for the ListView in the heap snapshot UI and look who is referencing it, usually you
+            // can derive from types referencing the ListView who is to blame)
+            Assert.False(listViewRef.IsAlive);
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListView_DoubleBuffered_Get_ReturnsExpected(bool value)
@@ -1482,6 +1515,320 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(!value, listView.GridLines);
             Assert.True(listView.IsHandleCreated);
             Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> GroupImageList_Set_GetReturnsExpected()
+        {
+            var nonEmptyImageList = new ImageList();
+            nonEmptyImageList.Images.Add(new Bitmap(10, 10));
+
+            foreach (bool autoArrange in new bool[] { true, false })
+            {
+                foreach (bool virtualMode in new bool[] { true, false })
+                {
+                    foreach (View view in new View[] { View.Details, View.LargeIcon, View.List, View.SmallIcon })
+                    {
+                        yield return new object[] { autoArrange, virtualMode, view, null };
+                        yield return new object[] { autoArrange, virtualMode, view, new ImageList() };
+                        yield return new object[] { autoArrange, virtualMode, view, nonEmptyImageList };
+                    }
+                }
+
+                yield return new object[] { autoArrange, false, View.Tile, null };
+                yield return new object[] { autoArrange, false, View.Tile, new ImageList() };
+                yield return new object[] { autoArrange, false, View.Tile, nonEmptyImageList };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GroupImageList_Set_GetReturnsExpected))]
+        public void ListView_GroupImageList_Set_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
+        {
+            using var listView = new ListView
+            {
+                AutoArrange = autoArrange,
+                VirtualMode = virtualMode,
+                View = view,
+                GroupImageList = value
+            };
+
+            Assert.Same(value, listView.GroupImageList);
+            Assert.False(listView.IsHandleCreated);
+
+            // Set same.
+            listView.GroupImageList = value;
+            Assert.Same(value, listView.GroupImageList);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GroupImageList_Set_GetReturnsExpected))]
+        public void ListView_GroupImageList_SetWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
+        {
+            using var imageList = new ImageList();
+            using var listView = new ListView
+            {
+                AutoArrange = autoArrange,
+                VirtualMode = virtualMode,
+                View = view,
+                GroupImageList = imageList
+            };
+
+            listView.GroupImageList = value;
+            Assert.Same(value, listView.GroupImageList);
+            Assert.False(listView.IsHandleCreated);
+
+            // Set same.
+            listView.GroupImageList = value;
+            Assert.Same(value, listView.GroupImageList);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> GroupImageList_SetWithHandle_GetReturnsExpected()
+        {
+            var nonEmptyImageList = new ImageList();
+            nonEmptyImageList.Images.Add(new Bitmap(10, 10));
+
+            yield return new object[] { true, false, View.Details, null };
+            yield return new object[] { true, false, View.Details, new ImageList() };
+            yield return new object[] { true, false, View.Details, nonEmptyImageList };
+            yield return new object[] { true, false, View.LargeIcon, null };
+            yield return new object[] { true, false, View.LargeIcon, new ImageList() };
+            yield return new object[] { true, false, View.LargeIcon, nonEmptyImageList };
+            yield return new object[] { true, false, View.List, null };
+            yield return new object[] { true, false, View.List, new ImageList() };
+            yield return new object[] { true, false, View.List, nonEmptyImageList };
+            yield return new object[] { true, false, View.SmallIcon, null };
+            yield return new object[] { true, false, View.SmallIcon, new ImageList() };
+            yield return new object[] { true, false, View.SmallIcon, nonEmptyImageList };
+            yield return new object[] { true, false, View.Tile, null };
+            yield return new object[] { true, false, View.Tile, new ImageList() };
+            yield return new object[] { true, false, View.Tile, nonEmptyImageList };
+
+            foreach (bool autoArrange in new bool[] { true, false })
+            {
+                yield return new object[] { autoArrange, true, View.Details, null };
+                yield return new object[] { autoArrange, true, View.Details, new ImageList() };
+                yield return new object[] { autoArrange, true, View.Details, nonEmptyImageList };
+                yield return new object[] { autoArrange, true, View.LargeIcon, null };
+                yield return new object[] { autoArrange, true, View.LargeIcon, new ImageList() };
+                yield return new object[] { autoArrange, true, View.LargeIcon, nonEmptyImageList };
+                yield return new object[] { autoArrange, true, View.List, null };
+                yield return new object[] { autoArrange, true, View.List, new ImageList() };
+                yield return new object[] { autoArrange, true, View.List, nonEmptyImageList };
+                yield return new object[] { autoArrange, true, View.SmallIcon, null };
+                yield return new object[] { autoArrange, true, View.SmallIcon, new ImageList() };
+                yield return new object[] { autoArrange, true, View.SmallIcon, nonEmptyImageList };
+            }
+
+            yield return new object[] { false, false, View.Details, null };
+            yield return new object[] { false, false, View.Details, new ImageList() };
+            yield return new object[] { false, false, View.Details, nonEmptyImageList };
+            yield return new object[] { false, false, View.LargeIcon, null };
+            yield return new object[] { false, false, View.LargeIcon, new ImageList() };
+            yield return new object[] { false, false, View.LargeIcon, nonEmptyImageList };
+            yield return new object[] { false, false, View.List, null };
+            yield return new object[] { false, false, View.List, new ImageList() };
+            yield return new object[] { false, false, View.List, nonEmptyImageList };
+            yield return new object[] { false, false, View.SmallIcon, null };
+            yield return new object[] { false, false, View.SmallIcon, new ImageList() };
+            yield return new object[] { false, false, View.SmallIcon, nonEmptyImageList };
+            yield return new object[] { false, false, View.Tile, null };
+            yield return new object[] { false, false, View.Tile, new ImageList() };
+            yield return new object[] { false, false, View.Tile, nonEmptyImageList };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GroupImageList_SetWithHandle_GetReturnsExpected))]
+        public void ListView_GroupImageList_SetWithHandle_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
+        {
+            using var listView = new ListView
+            {
+                AutoArrange = autoArrange,
+                VirtualMode = virtualMode,
+                View = view
+            };
+
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            int invalidatedCallCount = 0;
+            listView.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            listView.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            listView.HandleCreated += (sender, e) => createdCallCount++;
+
+            listView.GroupImageList = value;
+            Assert.Same(value, listView.GroupImageList);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            listView.GroupImageList = value;
+            Assert.Same(value, listView.GroupImageList);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        public static IEnumerable<object[]> GroupImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected()
+        {
+            var nonEmptyImageList = new ImageList();
+            nonEmptyImageList.Images.Add(new Bitmap(10, 10));
+
+            yield return new object[] { true, false, View.Details, null };
+            yield return new object[] { true, false, View.Details, new ImageList() };
+            yield return new object[] { true, false, View.Details, nonEmptyImageList };
+            yield return new object[] { true, false, View.LargeIcon, null };
+            yield return new object[] { true, false, View.LargeIcon, new ImageList() };
+            yield return new object[] { true, false, View.LargeIcon, nonEmptyImageList };
+            yield return new object[] { true, false, View.List, null };
+            yield return new object[] { true, false, View.List, new ImageList() };
+            yield return new object[] { true, false, View.List, nonEmptyImageList };
+            yield return new object[] { true, false, View.SmallIcon, null };
+            yield return new object[] { true, false, View.SmallIcon, new ImageList() };
+            yield return new object[] { true, false, View.SmallIcon, nonEmptyImageList };
+            yield return new object[] { true, false, View.Tile, null };
+            yield return new object[] { true, false, View.Tile, new ImageList() };
+            yield return new object[] { true, false, View.Tile, nonEmptyImageList };
+
+            foreach (bool autoArrange in new bool[] { true, false })
+            {
+                yield return new object[] { autoArrange, true, View.Details, null };
+                yield return new object[] { autoArrange, true, View.Details, new ImageList() };
+                yield return new object[] { autoArrange, true, View.Details, nonEmptyImageList };
+                yield return new object[] { autoArrange, true, View.LargeIcon, null };
+                yield return new object[] { autoArrange, true, View.LargeIcon, new ImageList() };
+                yield return new object[] { autoArrange, true, View.LargeIcon, nonEmptyImageList };
+                yield return new object[] { autoArrange, true, View.List, null };
+                yield return new object[] { autoArrange, true, View.List, new ImageList() };
+                yield return new object[] { autoArrange, true, View.List, nonEmptyImageList };
+                yield return new object[] { autoArrange, true, View.SmallIcon, null };
+                yield return new object[] { autoArrange, true, View.SmallIcon, new ImageList() };
+                yield return new object[] { autoArrange, true, View.SmallIcon, nonEmptyImageList };
+            }
+
+            yield return new object[] { false, false, View.Details, null };
+            yield return new object[] { false, false, View.Details, new ImageList() };
+            yield return new object[] { false, false, View.Details, nonEmptyImageList };
+            yield return new object[] { false, false, View.LargeIcon, null };
+            yield return new object[] { false, false, View.LargeIcon, new ImageList() };
+            yield return new object[] { false, false, View.LargeIcon, nonEmptyImageList };
+            yield return new object[] { false, false, View.List, null };
+            yield return new object[] { false, false, View.List, new ImageList() };
+            yield return new object[] { false, false, View.List, nonEmptyImageList };
+            yield return new object[] { false, false, View.SmallIcon, null };
+            yield return new object[] { false, false, View.SmallIcon, new ImageList() };
+            yield return new object[] { false, false, View.SmallIcon, nonEmptyImageList };
+            yield return new object[] { false, false, View.Tile, null };
+            yield return new object[] { false, false, View.Tile, new ImageList() };
+            yield return new object[] { false, false, View.Tile, nonEmptyImageList };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(GroupImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected))]
+        public void ListView_GroupImageList_SetWithHandleWithNonNullOldValue_GetReturnsExpected(bool autoArrange, bool virtualMode, View view, ImageList value)
+        {
+            using var listView = new ListView
+            {
+                AutoArrange = autoArrange,
+                VirtualMode = virtualMode,
+                View = view,
+                GroupImageList = new ImageList()
+            };
+
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            int invalidatedCallCount = 0;
+            listView.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            listView.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            listView.HandleCreated += (sender, e) => createdCallCount++;
+
+            listView.GroupImageList = value;
+            Assert.Same(value, listView.GroupImageList);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Set same.
+            listView.GroupImageList = value;
+            Assert.Same(value, listView.GroupImageList);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ListView_GroupImageList_Dispose_DetachesFromListView(bool autoArrange)
+        {
+            using var imageList1 = new ImageList();
+            using var imageList2 = new ImageList();
+            using var listView = new ListView
+            {
+                AutoArrange = autoArrange,
+                GroupImageList = imageList1
+            };
+
+            Assert.Same(imageList1, listView.GroupImageList);
+
+            imageList1.Dispose();
+            Assert.Null(listView.GroupImageList);
+            Assert.False(listView.IsHandleCreated);
+
+            // Make sure we detached the setter.
+            listView.GroupImageList = imageList2;
+            imageList1.Dispose();
+            Assert.Same(imageList2, listView.GroupImageList);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ListView_GroupImageList_DisposeWithHandle_DetachesFromListView(bool autoArrange, int expectedInvalidatedCallCount)
+        {
+            using var imageList1 = new ImageList();
+            using var imageList2 = new ImageList();
+            using var listView = new ListView
+            {
+                AutoArrange = autoArrange
+            };
+
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            int invalidatedCallCount = 0;
+            listView.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            listView.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            listView.HandleCreated += (sender, e) => createdCallCount++;
+
+            listView.GroupImageList = imageList1;
+            Assert.Same(imageList1, listView.GroupImageList);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            imageList1.Dispose();
+            Assert.Null(listView.GroupImageList);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Make sure we detached the setter.
+            listView.GroupImageList = imageList2;
+            imageList1.Dispose();
+            Assert.Same(imageList2, listView.GroupImageList);
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }

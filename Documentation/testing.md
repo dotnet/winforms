@@ -2,11 +2,37 @@
 
 This document describes our approach to testing.
 
-We are _still working on_ a scalable solution for functional testing. For now, see [Functional Testing](testing.md#functional-testing) and the [issue #183][issue-#183].
+* [Building tests](#building-tests)
+* [Unit Tests](#unit-tests)
+    * [Running unit tests](#running-unit-tests)
+        - [Unit testing from the command line](#unit-testing-from-the-command-line)
+        - [Troubleshooting command-line unit test errors](#troubleshooting-command-line-unit-test-errors)
+        - [Unit testing from Visual Studio](#unit-testing-from-visual-studio)
+        - [Troubleshooting Visual Studio unit test errors](#troubleshooting-visual-studio-unit-test-errors)
+    * [Adding new unit tests](#adding-new-unit-tests)
+        - [Test placement](#therefore-you-just-need-to-put-your-tests-in-the-right-place-in-order-for-them-to-run)
+        - [Unit Test best practices](#unit-test-best-practices)
+            - [Naming](#naming)
+            - [Decoration](#decoration)
+            - [Disposal](#dispose-created-objects)
+            - [Theory tests](#theory-tests#theory-tests)
+        - [Throw unhandled exceptions](#throw-unhandled-exceptions)
+* [Functional Tests](#functional-tests)
+    * [Running functional tests](#running-functional-tests)
+        - [Functional testing from the command line](#functional-testing-from-the-command-line)
+        - [Troubleshooting command-line functional test errors](#troubleshooting-command-line-functional-test-errors)
+        - [Functional testing from Visual Studio](#functional-testing-from-visual-studio)
+        - [Troubleshooting Visual Studio functional test errors](#troubleshooting-visual-studio-functional-test-errors)
+    * [Adding new functional tests](#adding-new-functional-tests)
+        - [Test placement](#therefore-you-just-need-to-put-your-tests-in-the-right-place-in-order-for-them-to-run-1)
+ * [Testing for Accessibility](#testing-for-accessibility)
+    
 
-## Building tests
+# Building tests
 
 Tests are automatically built when running `.\build` since all test projects are referenced in `Winforms.sln` at the repository root.
+
+# Unit Tests
 
 ## Running unit tests
 
@@ -42,7 +68,7 @@ Build FAILED.
 
 ### Unit testing from Visual Studio
 
-To test from Visual Studio, open Winforms.sln in Visual Studio and test how you normally would (using the Test Explorer, for example)
+To test from Visual Studio, start Visual Studio via `.\start-vs.cmd`, and test how you normally would (using the Test Explorer, for example)
 
 ### Troubleshooting Visual Studio unit test errors
 
@@ -58,32 +84,37 @@ Tests are built and executed by file name convention
 * Each of those folders has a tests folder under it (src\System.Windows.Forms\tests, for example)
 * Each tests folder contains an xUnit test project (System.Windows.Forms.Tests.csproj)
   * These test projects automatically build when running `.\build`
-  * The tests from these projects automatically execute when running `.\build -test`
+  * The tests from these projects automatically execute when running `.\build -test`.<br/>
+    It is also possible to execute individual tests via `dotnet test --filter <filter expression>` command by switching to the desired test project directory first.
+  
 
 ### Therefore, you just need to put your tests in the right place in order for them to run
 
-* Browse to the tests folder for the binary you are testing
-* There should be one file per class being tested, and the file name should match the class name followed by a "Tests" suffix.
-  * For example, if I wanted to test the `Button` class in System.Windows.Forms.dll, I would look for a ButtonTests.cs under src\System.Windows.Forms\tests
+* Browse to the tests folder for the binary you are testing.
+* There should be one file per class being tested, and the file name should match the class name followed by a "**Tests**" suffix.
+  * For example, if I wanted to test the `Button` class in System.Windows.Forms.dll, I would look for a **ButtonTests.cs** under src\System.Windows.Forms\tests.
+  * For example, if I wanted to test the `Button.ButtonAccessibleObject` class in System.Windows.Forms.dll, I would look for a **Button.ButtonAccessibleObjectTests.cs** under src\System.Windows.Forms\tests.
 * If the file exists, add your tests there. If it doesn't exist, feel free to create it.
-  * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included
+  * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included.
 
 ### Unit Test best practices
 
 #### Naming
 
-* Test files names should match the class they are testing followed by a "Tests" suffix
-  * For example, tests for the `Button` class should be in ButtonTests.cs
-* Test class names should match the class they are testing, followed by a "Tests" suffix
-  * For example, tests for the `Button` class should in the `ButtonTests` class
-* Test names should start with the class they are testing
-  * For example, all tests for the `Button` class should start with "Button"
+* Test files names should match the class they are testing followed by a "**Tests**" suffix.
+  * For example, tests for the `Button` class should be in ButtonTests.cs.
+  * For example, tests for the `Button.ButtonAccessibleObject` class should be in **Button.ButtonAccessibleObjectTests.cs**.
+* Test class names should match the class they are testing, followed by a "**Tests**" suffix.
+  * For example, tests for the `Button` class should in the `ButtonTests` class.
+  * For example, tests for the `Button.ButtonAccessibleObject` class should in the `Button_ButtonAccessibleObjectTests` class.
+* Test names should start with the class they are testing.
+  * For example, all tests for the `Button` class should start with "Button".
 * Test names should end with a description of what the test does - this is very useful when viewing test results, and when browsing in the test explorer. As far as naming conventions are concerned we don't mandate a specific one, as long as a test name clearly communicates its purpose.
   * For example, `Button_AutoSizeModeGetSet` or `MyButton_Click_should_throw_ArgumentNullException`.
 
 #### Decoration
 
-* All tests that deal with UI controls or types that require synchro0nization context must be decorated with `WinFormsFact` or `WinFormsTheory` attributes.
+* All tests that deal with UI controls or types that require synchronization context must be decorated with `WinFormsFact` or `WinFormsTheory` attributes.
 * Other tests can be decorated with `StaFact`, `StaTheory`, `Fact` or `Theory`
 
 #### Dispose created objects
@@ -194,11 +225,16 @@ Each test class must implement the `IClassFixture<ThreadExceptionFixture>` inter
 ##### Whenever possible, mock up dependencies to run tests in isolation
   
 * For example, if your method accepts an abstraction, use Moq to mock it up
-* Search for Mock in the existing tests for examples, and see [Moq][moq] for details on how to use Moq.
+* Search for Mock in the existing tests for examples, and see [Moq](https://github.com/Moq/moq4/wiki/Quickstart) for details on how to use Moq.
 
-## Functional Testing
+
+
+
+# Functional Tests
 
 Currently, there is a single functional test suite in the repository: the **WinformsControlsTest**. There is an xUnit project that executes various commands against this binary.
+
+## Running functional tests
 
 ### Functional testing from the command line
 
@@ -215,10 +251,7 @@ Build succeeded.
     0 Error(s)
 ```
 
-[comment]: <> (URI Links)
 
-[issue-#183]: https://github.com/dotnet/winforms/issues/183
-[moq]: (https://github.com/Moq/moq4/wiki/Quickstart)
 
 ### Troubleshooting command-line functional test errors
 
@@ -250,7 +283,8 @@ Functional tests are built and executed by file name convention
   * For example, if I wanted to test the `Button` class in System.Windows.Forms.dll, I would look for a Button.cs under src\System.Windows.Forms\tests
 * If the file exists, add your tests there. If it doesn't exist, feel free to create it.
   * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included
+ 
   
-## Testing for Accessibility
+# Testing for Accessibility
 
 Our goal is to make writing accessible WinForms applications easy. Specifically, all default property values should yield accessible experience. To test that controls are accessible, find or add the changed control to [AccessibilityTests application](https://github.com/dotnet/winforms/tree/master/src/System.Windows.Forms/tests/AccessibilityTests) and run [Accessibility Insights for Windows](https://accessibilityinsights.io/docs/en/windows/overview) on it. 
