@@ -110,9 +110,10 @@ namespace System.Windows.Forms
         private IntPtr odCacheFontHandle = IntPtr.Zero;
         private FontHandleWrapper odCacheFontHandleWrapper = null;
 
-        private ImageList imageListLarge;
-        private ImageList imageListSmall;
-        private ImageList imageListState;
+        private ImageList _imageListLarge;
+        private ImageList _imageListSmall;
+        private ImageList _imageListState;
+        private ImageList _imageListGroup;
 
         private MouseButtons downButton;
         private int itemCount;
@@ -574,11 +575,11 @@ namespace System.Windows.Forms
                         // Setting the LVS_CHECKBOXES window style also causes the ListView to display the default checkbox
                         // images rather than the user specified StateImageList.  We send a LVM_SETIMAGELIST to restore the
                         // user's images.
-                        if (IsHandleCreated && imageListState != null)
+                        if (IsHandleCreated && _imageListState != null)
                         {
                             if (CheckBoxes)
                             { // we want custom checkboxes
-                                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, imageListState.Handle);
+                                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, _imageListState.Handle);
                             }
                             else
                             {
@@ -926,6 +927,51 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  The currently set GroupIcon image list.
+        /// </summary>
+        /// <value>
+        ///  An <see cref="ImageList"/> that contains the icons to use for <see cref="ListViewGroup"/>.
+        ///  The default is <see langword="null"/>.
+        /// </value>
+        /// <remarks>
+        ///  <para>
+        ///   The <see cref="GroupImageList"/> property allows you to specify an <see cref="ImageList"/> object that
+        ///   contains icons to use when displaying groups. The <see cref="ListView"/> control can accept any graphics
+        ///   format that the <see cref="ImageList"/> control supports when displaying icons. The <see cref="ListView"/>
+        ///   control is not limited to .ico files. Once an <see cref="ImageList"/> is assigned to the <see cref="GroupImageList"/>
+        ///   property, you can set the <see cref="ListViewGroup.TitleImageIndex"/> property of each <see cref="ListViewGroup"/>
+        ///   in the <see cref="ListView"/> control to the index position of the appropriate image in the <see cref="ImageList"/>.
+        ///   The size of the icons for the <see cref="GroupImageList"/> is specified by the <see cref="ImageList.ImageSize"/> property.
+        ///  </para>
+        /// </remarks>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.ListViewGroupImageListDescr))]
+        public ImageList GroupImageList
+        {
+            get => _imageListGroup;
+            set
+            {
+                if (_imageListGroup == value)
+                {
+                    return;
+                }
+
+                DetachGroupImageListHandlers();
+                _imageListGroup = value;
+                AttachGroupImageListHandlers();
+
+                if (!IsHandleCreated)
+                {
+                    return;
+                }
+
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER,
+                        value is null ? IntPtr.Zero : value.Handle);
+            }
+        }
+
+        /// <summary>
         ///  The collection of groups belonging to this ListView
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -1172,16 +1218,16 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListViewLargeImageListDescr))]
         public ImageList LargeImageList
         {
-            get => imageListLarge;
+            get => _imageListLarge;
             set
             {
-                if (value == imageListLarge)
+                if (value == _imageListLarge)
                 {
                     return;
                 }
 
                 DetachLargeImageListHandlers();
-                imageListLarge = value;
+                _imageListLarge = value;
                 AttachLargeImageListHandlers();
 
                 if (!IsHandleCreated)
@@ -1411,16 +1457,16 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListViewSmallImageListDescr))]
         public ImageList SmallImageList
         {
-            get => imageListSmall;
+            get => _imageListSmall;
             set
             {
-                if (imageListSmall == value)
+                if (_imageListSmall == value)
                 {
                     return;
                 }
 
                 DetachSmallImageListListHandlers();
-                imageListSmall = value;
+                _imageListSmall = value;
                 AttachSmallImageListListHandlers();
 
                 if (!IsHandleCreated)
@@ -1520,10 +1566,10 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListViewStateImageListDescr))]
         public ImageList StateImageList
         {
-            get => imageListState;
+            get => _imageListState;
             set
             {
-                if (imageListState == value)
+                if (_imageListState == value)
                 {
                     return;
                 }
@@ -1531,7 +1577,7 @@ namespace System.Windows.Forms
                 if (UseCompatibleStateImageBehavior)
                 {
                     DetachStateImageListHandlers();
-                    imageListState = value;
+                    _imageListState = value;
                     AttachStateImageListHandlers();
 
                     if (IsHandleCreated)
@@ -1543,7 +1589,7 @@ namespace System.Windows.Forms
                 {
                     DetachStateImageListHandlers();
 
-                    if (IsHandleCreated && imageListState != null && CheckBoxes)
+                    if (IsHandleCreated && _imageListState != null && CheckBoxes)
                     {
                         // If CheckBoxes are set to true, then we will have to recreate the handle.
                         // For some reason, if CheckBoxes are set to true and the list view has a state imageList, then the native listView destroys
@@ -1554,7 +1600,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
                     }
 
-                    imageListState = value;
+                    _imageListState = value;
                     AttachStateImageListHandlers();
 
                     if (!IsHandleCreated)
@@ -1569,7 +1615,8 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, (imageListState is null || imageListState.Images.Count == 0) ? IntPtr.Zero : imageListState.Handle);
+                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE,
+                            (_imageListState is null || _imageListState.Images.Count == 0) ? IntPtr.Zero : _imageListState.Handle);
                     }
 
                     // Comctl should handle auto-arrange for us, but doesn't
@@ -2204,41 +2251,54 @@ namespace System.Windows.Forms
         /// </summary>
         public void ArrangeIcons() => ArrangeIcons((ListViewAlignment)LVA.DEFAULT);
 
+        private void AttachGroupImageListHandlers()
+        {
+            if (_imageListGroup is null)
+            {
+                return;
+            }
+
+            // NOTE: any handlers added here should be removed in DetachGroupImageListHandlers
+            _imageListGroup.RecreateHandle += new EventHandler(GroupImageListRecreateHandle);
+            _imageListGroup.Disposed += new EventHandler(DetachImageList);
+            _imageListGroup.ChangeHandle += new EventHandler(GroupImageListChangedHandle);
+        }
+
         private void AttachLargeImageListHandlers()
         {
-            if (imageListLarge is null)
+            if (_imageListLarge is null)
             {
                 return;
             }
 
             // NOTE: any handlers added here should be removed in DetachLargeImageListHandlers
-            imageListLarge.RecreateHandle += new EventHandler(LargeImageListRecreateHandle);
-            imageListLarge.Disposed += new EventHandler(DetachImageList);
-            imageListLarge.ChangeHandle += new EventHandler(LargeImageListChangedHandle);
+            _imageListLarge.RecreateHandle += new EventHandler(LargeImageListRecreateHandle);
+            _imageListLarge.Disposed += new EventHandler(DetachImageList);
+            _imageListLarge.ChangeHandle += new EventHandler(LargeImageListChangedHandle);
         }
 
         private void AttachSmallImageListListHandlers()
         {
-            if (imageListSmall is null)
+            if (_imageListSmall is null)
             {
                 return;
             }
 
             // NOTE: any handlers added here should be removed in DetachSmallImageListListHandlers
-            imageListSmall.RecreateHandle += new EventHandler(SmallImageListRecreateHandle);
-            imageListSmall.Disposed += new EventHandler(DetachImageList);
+            _imageListSmall.RecreateHandle += new EventHandler(SmallImageListRecreateHandle);
+            _imageListSmall.Disposed += new EventHandler(DetachImageList);
         }
 
         private void AttachStateImageListHandlers()
         {
-            if (imageListState is null)
+            if (_imageListState is null)
             {
                 return;
             }
 
             // NOTE: any handlers added here should be removed in DetachStateImageListHandlers
-            imageListState.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
-            imageListState.Disposed += new EventHandler(DetachImageList);
+            _imageListState.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
+            _imageListState.Disposed += new EventHandler(DetachImageList);
         }
 
         public void AutoResizeColumns(ColumnHeaderAutoResizeStyle headerAutoResize)
@@ -2888,24 +2948,29 @@ namespace System.Windows.Forms
             try
             {
 #if DEBUG
-                if (sender != imageListSmall && sender != imageListState && sender != imageListLarge)
+                if (sender != _imageListSmall && sender != _imageListState && sender != _imageListLarge && sender != _imageListGroup)
                 {
                     Debug.Fail("ListView sunk dispose event from unknown component");
                 }
 #endif // DEBUG
-                if (sender == imageListSmall)
+                if (sender == _imageListSmall)
                 {
                     SmallImageList = null;
                 }
 
-                if (sender == imageListLarge)
+                if (sender == _imageListLarge)
                 {
                     LargeImageList = null;
                 }
 
-                if (sender == imageListState)
+                if (sender == _imageListState)
                 {
                     StateImageList = null;
+                }
+
+                if (sender == _imageListGroup)
+                {
+                    GroupImageList = null;
                 }
             }
             finally
@@ -2916,38 +2981,50 @@ namespace System.Windows.Forms
             UpdateListViewItemsLocations();
         }
 
-        private void DetachLargeImageListHandlers()
+        private void DetachGroupImageListHandlers()
         {
-            if (imageListLarge is null)
+            if (_imageListGroup is null)
             {
                 return;
             }
 
-            imageListLarge.RecreateHandle -= new EventHandler(LargeImageListRecreateHandle);
-            imageListLarge.Disposed -= new EventHandler(DetachImageList);
-            imageListLarge.ChangeHandle -= new EventHandler(LargeImageListChangedHandle);
+            _imageListGroup.RecreateHandle -= new EventHandler(GroupImageListRecreateHandle);
+            _imageListGroup.Disposed -= new EventHandler(DetachImageList);
+            _imageListGroup.ChangeHandle -= new EventHandler(GroupImageListChangedHandle);
+        }
+
+        private void DetachLargeImageListHandlers()
+        {
+            if (_imageListLarge is null)
+            {
+                return;
+            }
+
+            _imageListLarge.RecreateHandle -= new EventHandler(LargeImageListRecreateHandle);
+            _imageListLarge.Disposed -= new EventHandler(DetachImageList);
+            _imageListLarge.ChangeHandle -= new EventHandler(LargeImageListChangedHandle);
         }
 
         private void DetachSmallImageListListHandlers()
         {
-            if (imageListSmall is null)
+            if (_imageListSmall is null)
             {
                 return;
             }
 
-            imageListSmall.RecreateHandle -= new EventHandler(SmallImageListRecreateHandle);
-            imageListSmall.Disposed -= new EventHandler(DetachImageList);
+            _imageListSmall.RecreateHandle -= new EventHandler(SmallImageListRecreateHandle);
+            _imageListSmall.Disposed -= new EventHandler(DetachImageList);
         }
 
         private void DetachStateImageListHandlers()
         {
-            if (imageListState is null)
+            if (_imageListState is null)
             {
                 return;
             }
 
-            imageListState.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
-            imageListState.Disposed -= new EventHandler(DetachImageList);
+            _imageListState.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
+            _imageListState.Disposed -= new EventHandler(DetachImageList);
         }
 
         /// <summary>
@@ -2961,11 +3038,13 @@ namespace System.Windows.Forms
             {
                 // Remove any event sinks we have hooked up to imageLists
                 DetachSmallImageListListHandlers();
-                imageListSmall = null;
+                _imageListSmall = null;
                 DetachLargeImageListHandlers();
-                imageListLarge = null;
+                _imageListLarge = null;
                 DetachStateImageListHandlers();
-                imageListState = null;
+                _imageListState = null;
+                DetachGroupImageListHandlers();
+                _imageListGroup = null;
 
                 // Remove any ColumnHeaders contained in this control
                 if (columnHeaders != null)
@@ -3582,6 +3661,32 @@ namespace System.Windows.Forms
             return result;
         }
 
+        private void GroupImageListChangedHandle(object sender, EventArgs e)
+        {
+            if (VirtualMode || sender is null || sender != _imageListGroup || !IsHandleCreated)
+            {
+                return;
+            }
+
+            foreach (ListViewGroup group in Groups)
+            {
+                group.TitleImageIndex = group.ImageIndexer.ActualIndex < _imageListGroup.Images.Count
+                    ? group.ImageIndexer.ActualIndex
+                    : _imageListGroup.Images.Count - 1;
+            }
+        }
+
+        private void GroupImageListRecreateHandle(object sender, EventArgs e)
+        {
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            IntPtr handle = (GroupImageList is null) ? IntPtr.Zero : GroupImageList.Handle;
+            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER, handle);
+        }
+
         public ListViewHitTestInfo HitTest(Point point)
         {
             return HitTest(point.X, point.Y);
@@ -4144,32 +4249,30 @@ namespace System.Windows.Forms
 
         private void LargeImageListRecreateHandle(object sender, EventArgs e)
         {
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                IntPtr handle = (LargeImageList == null) ? IntPtr.Zero : LargeImageList.Handle;
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, handle);
-
-                ForceCheckBoxUpdate();
+                return;
             }
+
+            IntPtr handle = (LargeImageList is null) ? IntPtr.Zero : LargeImageList.Handle;
+            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, handle);
+
+            ForceCheckBoxUpdate();
         }
 
         private void LargeImageListChangedHandle(object sender, EventArgs e)
         {
-            if (VirtualMode || sender is null || sender != imageListLarge || !IsHandleCreated)
+            if (VirtualMode || sender is null || sender != _imageListLarge || !IsHandleCreated)
             {
                 return;
             }
 
             foreach (ListViewItem item in Items)
             {
-                if (item.ImageIndexer.ActualIndex != ImageList.Indexer.DefaultIndex && item.ImageIndexer.ActualIndex >= imageListLarge.Images.Count)
-                {
-                    SetItemImage(item.Index, imageListLarge.Images.Count - 1);
-                }
-                else
-                {
-                    SetItemImage(item.Index, item.ImageIndexer.ActualIndex);
-                }
+                int imageIndex = item.ImageIndexer.ActualIndex < _imageListLarge.Images.Count
+                    ? item.ImageIndexer.ActualIndex
+                    : _imageListLarge.Images.Count - 1;
+                SetItemImage(item.Index, imageIndex);
             }
         }
 
@@ -4728,19 +4831,24 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WM)LVM.SETTEXTCOLOR, IntPtr.Zero, PARAM.FromColor(c));
             }
 
-            if (null != imageListLarge)
+            if (_imageListLarge != null)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, imageListLarge.Handle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, _imageListLarge.Handle);
             }
 
-            if (null != imageListSmall)
+            if (_imageListSmall != null)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, imageListSmall.Handle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, _imageListSmall.Handle);
             }
 
-            if (null != imageListState)
+            if (_imageListState != null)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, imageListState.Handle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, _imageListState.Handle);
+            }
+
+            if (_imageListGroup != null)
+            {
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER, _imageListGroup.Handle);
             }
         }
 
@@ -5124,11 +5232,11 @@ namespace System.Windows.Forms
             User32.DestroyWindow(oldHandle);
         }
 
-        internal void SetItemImage(int index, int image)
+        internal void SetItemImage(int itemIndex, int imageIndex)
         {
-            if (index < 0 || (VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= itemCount))
+            if (itemIndex < 0 || (VirtualMode && itemIndex >= VirtualListSize) || (!VirtualMode && itemIndex >= itemCount))
             {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
             }
 
             if (!IsHandleCreated)
@@ -5139,8 +5247,8 @@ namespace System.Windows.Forms
             var lvItem = new LVITEMW
             {
                 mask = LVIF.IMAGE,
-                iItem = index,
-                iImage = image
+                iItem = itemIndex,
+                iImage = imageIndex
             };
             User32.SendMessageW(this, (User32.WM)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
         }
@@ -5262,13 +5370,15 @@ namespace System.Windows.Forms
 
         private void SmallImageListRecreateHandle(object sender, EventArgs e)
         {
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                IntPtr handle = (SmallImageList == null) ? IntPtr.Zero : SmallImageList.Handle;
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, handle);
-
-                ForceCheckBoxUpdate();
+                return;
             }
+
+            IntPtr handle = (SmallImageList is null) ? IntPtr.Zero : SmallImageList.Handle;
+            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, handle);
+
+            ForceCheckBoxUpdate();
         }
 
         /// <summary>
@@ -5292,15 +5402,13 @@ namespace System.Windows.Forms
 
         private void StateImageListRecreateHandle(object sender, EventArgs e)
         {
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                IntPtr handle = IntPtr.Zero;
-                if (imageListState != null)
-                {
-                    handle = imageListState.Handle;
-                }
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, handle);
+                return;
             }
+
+            IntPtr handle = (StateImageList is null) ? IntPtr.Zero : StateImageList.Handle;
+            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, handle);
         }
 
         /// <summary>
@@ -5444,8 +5552,9 @@ namespace System.Windows.Forms
             var lvgroup = new LVGROUPW
             {
                 cbSize = (uint)sizeof(LVGROUPW),
-                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | LVGF.STATE | LVGF.SUBTITLE | LVGF.TASK | additionalMask,
+                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | LVGF.STATE | LVGF.SUBTITLE | LVGF.TASK | LVGF.TITLEIMAGE | additionalMask,
                 cchHeader = header.Length,
+                iTitleImage = -1,
                 iGroupId = group.ID
             };
 
@@ -5469,6 +5578,11 @@ namespace System.Windows.Forms
                 case HorizontalAlignment.Center:
                     lvgroup.uAlign = LVGA.HEADER_CENTER;
                     break;
+            }
+
+            if (group.TitleImageIndex != ImageList.Indexer.DefaultIndex || group.TitleImageKey != ImageList.Indexer.DefaultKey)
+            {
+                lvgroup.iTitleImage = group.ImageIndexer.ActualIndex;
             }
 
             fixed (char* pSubtitle = subtitle)
@@ -5622,7 +5736,7 @@ namespace System.Windows.Forms
                 if (CheckBoxes)
                 {
                     ListViewHitTestInfo lvhti = HitTest(x, y);
-                    if (imageListState != null && imageListState.Images.Count < 2)
+                    if (_imageListState != null && _imageListState.Images.Count < 2)
                     {
                         // When the user clicks on the check box and the listView's state image list
                         // does not have 2 images, comctl will give us an AttemptToDivideByZero exception.

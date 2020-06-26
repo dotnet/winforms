@@ -6376,6 +6376,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">ListViewGroup</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupImageListDescr">
+        <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
+        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">
         <source>The name of this group.</source>
         <target state="translated">Nom de ce groupe.</target>
