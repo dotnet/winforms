@@ -5638,7 +5638,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">Não foi possível localizar um InputLanguage para a cultura '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">

@@ -5638,7 +5638,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">找不到文化特性 '{0}' 的 InputLanguage。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">

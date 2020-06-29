@@ -5638,7 +5638,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">Nie udało się znaleźć elementu InputLanguage dla kultury „{0}”.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">

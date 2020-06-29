@@ -5638,7 +5638,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">Nepovedlo se najít InputLanguage pro jazykovou verzi {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
