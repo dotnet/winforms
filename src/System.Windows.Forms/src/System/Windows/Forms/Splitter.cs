@@ -22,7 +22,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Dock))]
     [SRDescription(nameof(SR.DescriptionSplitter))]
     [Designer("System.Windows.Forms.Design.SplitterDesigner, " + AssemblyRef.SystemDesign)]
-    public class Splitter : Control
+    public partial class Splitter : Control
     {
         private const int DRAW_START = 1;
         private const int DRAW_MOVE = 2;
@@ -206,6 +206,9 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new SplitterAccessibleObject(this);
 
         /// <summary>
         ///  Returns the parameters needed to create the handle.  Inheriting classes
@@ -427,6 +430,8 @@ namespace System.Windows.Forms
                 OnSplitterMoved(new SplitterEventArgs(Left, Top, (Left + bounds.Width / 2), (Top + bounds.Height / 2)));
             }
         }
+
+        internal override bool SupportsUiaProviders => true;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

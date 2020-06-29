@@ -1,3 +1,4 @@
+~override System.Windows.Forms.Splitter.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 System.Windows.Forms.ListViewGroup.TitleImageIndex.get -> int
 System.Windows.Forms.ListViewGroup.TitleImageIndex.set -> void
 System.Windows.Forms.ListViewGroup.TitleImageKey.get -> string!
