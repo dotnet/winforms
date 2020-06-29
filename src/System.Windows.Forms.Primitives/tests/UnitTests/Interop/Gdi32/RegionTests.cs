@@ -4,6 +4,8 @@
 
 using Xunit;
 using static Interop.Gdi32;
+using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.InteropTests
 {
@@ -65,6 +67,39 @@ namespace System.Windows.Forms.Tests.InteropTests
                 {
                     using var hregion = new RegionScope(hdc);
                     Assert.True(hregion.IsNull);
+                }
+                finally
+                {
+                    DeleteObject(hbitmap);
+                }
+            }
+            finally
+            {
+                DeleteDC(hdc);
+            }
+        }
+
+        [Fact]
+        public void RegionScope_GetRegion()
+        {
+            // Create a bitmap using the screen's stats
+            IntPtr hdc = CreateCompatibleDC(IntPtr.Zero);
+            Assert.NotEqual(IntPtr.Zero, hdc);
+
+            try
+            {
+                IntPtr hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
+                Assert.NotEqual(IntPtr.Zero, hbitmap);
+                try
+                {
+                    Rectangle rectangle = new Rectangle(1, 2, 3, 4);
+                    using var originalRegion = new RegionScope(rectangle);
+                    SelectClipRgn(hdc, originalRegion);
+                    using var retrievedRegion = new RegionScope(hdc);
+                    RECT rect = default;
+                    RegionType type = GetRgnBox(retrievedRegion, ref rect);
+                    Assert.Equal(RegionType.SIMPLEREGION, type);
+                    Assert.Equal(rectangle, (Rectangle)rect);
                 }
                 finally
                 {

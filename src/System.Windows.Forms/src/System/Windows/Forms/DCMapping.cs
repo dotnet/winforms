@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     ///
     ///  Example:
     ///
-    ///  using(DCMapping mapping = new DCMapping(hDC, new Rectangle(10,10, 50, 50)\
+    ///  using(DCMapping mapping = new DCMapping(hDC, new Rectangle(10,10, 50, 50)
     ///  {
     ///      // inside here the hDC's mapping of (0,0) is inset by (10,10) and
     ///      // all painting is clipped at (0,0) - (50,50)
