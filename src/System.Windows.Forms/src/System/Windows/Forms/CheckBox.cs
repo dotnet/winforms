@@ -496,9 +496,7 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
             // UIA events:
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId,
-                Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On,
-                Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off);
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, Name, Name);
             AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
 
             if (FlatStyle == FlatStyle.System)
