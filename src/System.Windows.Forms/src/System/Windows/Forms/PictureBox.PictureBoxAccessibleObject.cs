@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     {
         internal class PictureBoxAccessibleObject : ControlAccessibleObject
         {
-            internal PictureBoxAccessibleObject(PictureBox owner) : base(owner)
+            public PictureBoxAccessibleObject(PictureBox owner) : base(owner)
             {
             }
 
