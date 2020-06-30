@@ -8,7 +8,6 @@ namespace System
     {
         public const string Comdlg32 = "comdlg32.dll";
         public const string Gdi32 = "gdi32.dll";
-        public const string Hhctrl = "hhctrl.ocx";
         public const string Kernel32 = "kernel32.dll";
         public const string User32 = "user32.dll";
     }
