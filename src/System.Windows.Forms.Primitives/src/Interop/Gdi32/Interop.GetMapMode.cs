@@ -4,18 +4,17 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern MM GetMapMode(IntPtr hdc);
+        public static extern MM GetMapMode(HDC hdc);
 
         public static MM GetMapMode(IHandle hdc)
         {
-            MM result = GetMapMode(hdc.Handle);
+            MM result = GetMapMode((HDC)hdc.Handle);
             GC.KeepAlive(hdc);
             return result;
         }

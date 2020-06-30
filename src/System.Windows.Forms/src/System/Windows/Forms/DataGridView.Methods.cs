@@ -5701,18 +5701,17 @@ namespace System.Windows.Forms
         {
             const byte DATAGRIDVIEW_shadowEdgeThickness = 3;
 
-            IntPtr dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
-            IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
+            using var dc = new User32.GetDcScope(Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+            Gdi32.HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
+            Gdi32.HGDIOBJ saveBrush = Gdi32.SelectObject(dc, halftone);
 
-            Gdi32.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
-            Gdi32.PatBlt(new HandleRef(this, dc), r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
-            Gdi32.PatBlt(new HandleRef(this, dc), r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
-            Gdi32.PatBlt(new HandleRef(this, dc), r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
+            Gdi32.PatBlt(dc, r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
+            Gdi32.PatBlt(dc, r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
+            Gdi32.PatBlt(dc, r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
+            Gdi32.PatBlt(dc, r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, Gdi32.ROP.PATINVERT);
 
             Gdi32.SelectObject(dc, saveBrush);
             Gdi32.DeleteObject(halftone);
-            User32.ReleaseDC(new HandleRef(this, Handle), dc);
         }
 
         /// <summary>
@@ -5721,10 +5720,10 @@ namespace System.Windows.Forms
         /// </summary>
         private void DrawSplitBar(Rectangle r)
         {
-            IntPtr dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
-            IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
-            Gdi32.PatBlt(new HandleRef(this, dc), r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
+            Gdi32.HDC dc = User32.GetDCEx(this, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+            Gdi32.HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
+            Gdi32.HGDIOBJ saveBrush = Gdi32.SelectObject(dc, halftone);
+            Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
             Gdi32.SelectObject(dc, saveBrush);
             Gdi32.DeleteObject(halftone);
             User32.ReleaseDC(new HandleRef(this, Handle), dc);

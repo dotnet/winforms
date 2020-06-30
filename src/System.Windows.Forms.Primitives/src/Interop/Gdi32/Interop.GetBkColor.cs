@@ -11,11 +11,11 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern int GetBkColor(IntPtr hdc);
+        public static extern int GetBkColor(HDC hdc);
 
         public static int GetBkColor(IHandle hdc)
         {
-            int result = GetBkColor(hdc.Handle);
+            int result = GetBkColor((HDC)hdc.Handle);
             GC.KeepAlive(hdc);
             return result;
         }

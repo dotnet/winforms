@@ -12,10 +12,10 @@ internal static partial class Interop
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
         public static extern BOOL LineTo(IntPtr hdc, int x, int y);
 
-        public static BOOL LineTo(HandleRef hdc, int x, int y)
+        public static BOOL LineTo(IHandle hdc, int x, int y)
         {
             BOOL result = LineTo(hdc.Handle, x, y);
-            GC.KeepAlive(hdc.Wrapper);
+            GC.KeepAlive(hdc);
             return result;
         }
     }

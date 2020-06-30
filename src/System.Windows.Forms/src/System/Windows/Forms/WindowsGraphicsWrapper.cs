@@ -7,6 +7,7 @@
 using System.Drawing;
 using System.Windows.Forms.Internal;
 using System.Diagnostics;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -16,7 +17,7 @@ namespace System.Windows.Forms
     ///  which could be a custom one.
     ///  This class was designed to help TextRenderer determine how to create the underlying WindowsGraphics.
     /// </summary>
-    internal sealed class WindowsGraphicsWrapper : IDisposable
+    internal sealed class WindowsGraphicsWrapper : IDisposable, IHandle
     {
         private IDeviceContext _deviceContext;
         private WindowsGraphics _windowsGraphics;
@@ -88,7 +89,7 @@ namespace System.Windows.Forms
                 try
                 {
                     _deviceContext = deviceContext;
-                    _windowsGraphics = WindowsGraphics.FromHdc(deviceContext.GetHdc());
+                    _windowsGraphics = WindowsGraphics.FromHdc((Gdi32.HDC)deviceContext.GetHdc());
                 }
                 catch
                 {
@@ -118,6 +119,8 @@ namespace System.Windows.Forms
                 return _windowsGraphics;
             }
         }
+
+        public IntPtr Handle => _windowsGraphics.DeviceContext.Hdc.Handle;
 
 #if DEBUG
         // We only need the finalizer to track missed Dispose() calls.

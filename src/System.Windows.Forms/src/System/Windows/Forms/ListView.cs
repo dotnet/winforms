@@ -107,7 +107,7 @@ namespace System.Windows.Forms
         private Color odCacheForeColor = SystemColors.WindowText;
         private Color odCacheBackColor = SystemColors.Window;
         private Font odCacheFont = null;
-        private IntPtr odCacheFontHandle = IntPtr.Zero;
+        private Gdi32.HFONT odCacheFontHandle = default;
         private FontHandleWrapper odCacheFontHandleWrapper = null;
 
         private ImageList _imageListLarge;
@@ -2555,8 +2555,10 @@ namespace System.Windows.Forms
                             m.Result = (IntPtr)CDRF.NOTIFYITEMDRAW;
                             return;
                         }
+
                         // We want custom draw for this paint cycle
                         m.Result = (IntPtr)(CDRF.NOTIFYSUBITEMDRAW | CDRF.NEWFONT);
+
                         // refresh the cache of the current color & font settings for this paint cycle
                         odCacheBackColor = BackColor;
                         odCacheForeColor = ForeColor;
@@ -2566,16 +2568,15 @@ namespace System.Windows.Forms
                         // If preparing to paint a group item, make sure its bolded.
                         if (nmcd->dwItemType == LVCDI.GROUP)
                         {
-                            if (odCacheFontHandleWrapper != null)
-                            {
-                                odCacheFontHandleWrapper.Dispose();
-                            }
+                            odCacheFontHandleWrapper?.Dispose();
+
                             odCacheFont = new Font(odCacheFont, FontStyle.Bold);
                             odCacheFontHandleWrapper = new FontHandleWrapper(odCacheFont);
                             odCacheFontHandle = odCacheFontHandleWrapper.Handle;
-                            Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
+                            Gdi32.SelectObject(nmcd->nmcd.hdc, odCacheFontHandleWrapper.Handle);
                             m.Result = (IntPtr)CDRF.NEWFONT;
                         }
+
                         return;
 
                     //We have to return a NOTIFYSUBITEMDRAW (called NOTIFYSUBITEMREDRAW in the docs) here to
@@ -2600,22 +2601,15 @@ namespace System.Windows.Forms
                         // If OwnerDraw is true, fire the onDrawItem event.
                         if (OwnerDraw)
                         {
-                            Graphics g = Graphics.FromHdcInternal(nmcd->nmcd.hdc);
-                            DrawListViewItemEventArgs e = null;
-                            try
-                            {
-                                e = new DrawListViewItemEventArgs(g,
-                                       Items[(int)nmcd->nmcd.dwItemSpec],
-                                       itemBounds,
-                                       (int)nmcd->nmcd.dwItemSpec,
-                                       (ListViewItemStates)nmcd->nmcd.uItemState);
+                            using Graphics g = nmcd->nmcd.hdc.CreateGraphics();
+                            DrawListViewItemEventArgs e =  new DrawListViewItemEventArgs(
+                                g,
+                                Items[(int)nmcd->nmcd.dwItemSpec],
+                                itemBounds,
+                                (int)nmcd->nmcd.dwItemSpec,
+                                (ListViewItemStates)nmcd->nmcd.uItemState);
 
-                                OnDrawItem(e);
-                            }
-                            finally
-                            {
-                                g.Dispose();
-                            }
+                            OnDrawItem(e);
 
                             itemDrawDefault = e.DrawDefault;
 
@@ -2671,49 +2665,44 @@ namespace System.Windows.Forms
                         // If OwnerDraw is true, fire the onDrawSubItem event.
                         if (OwnerDraw && !itemDrawDefault)
                         {
-                            Graphics g = Graphics.FromHdcInternal(nmcd->nmcd.hdc);
+                            using Graphics g = nmcd->nmcd.hdc.CreateGraphics();
                             DrawListViewSubItemEventArgs e = null;
 
                             // by default, we want to skip the customDrawCode
                             bool skipCustomDrawCode = true;
-                            try
+
+                            //The ListView will send notifications for every column, even if no
+                            //corresponding subitem exists for a particular item. We shouldn't
+                            //fire events in such cases.
+                            if (nmcd->iSubItem < Items[itemIndex].SubItems.Count)
                             {
-                                //The ListView will send notifications for every column, even if no
-                                //corresponding subitem exists for a particular item. We shouldn't
-                                //fire events in such cases.
-                                if (nmcd->iSubItem < Items[itemIndex].SubItems.Count)
+                                Rectangle subItemBounds = GetSubItemRect(itemIndex, nmcd->iSubItem);
+
+                                // For the first sub-item, the rectangle corresponds to the whole item.
+                                // We need to handle this case separately.
+                                if (nmcd->iSubItem == 0 && Items[itemIndex].SubItems.Count > 1)
                                 {
-                                    Rectangle subItemBounds = GetSubItemRect(itemIndex, nmcd->iSubItem);
-
-                                    // For the first sub-item, the rectangle corresponds to the whole item.
-                                    // We need to handle this case separately.
-                                    if (nmcd->iSubItem == 0 && Items[itemIndex].SubItems.Count > 1)
-                                    {
-                                        // Use the width for the first column header.
-                                        subItemBounds.Width = columnHeaders[0].Width;
-                                    }
-
-                                    if (ClientRectangle.IntersectsWith(subItemBounds))
-                                    {
-                                        e = new DrawListViewSubItemEventArgs(g,
-                                                  subItemBounds,
-                                                  Items[itemIndex],
-                                                  Items[itemIndex].SubItems[nmcd->iSubItem],
-                                                  itemIndex,
-                                                  nmcd->iSubItem,
-                                                  columnHeaders[nmcd->iSubItem],
-                                                  (ListViewItemStates)nmcd->nmcd.uItemState);
-                                        OnDrawSubItem(e);
-
-                                        // the customer still wants to draw the default.
-                                        // Don't skip the custom draw code then
-                                        skipCustomDrawCode = !e.DrawDefault;
-                                    }
+                                    // Use the width for the first column header.
+                                    subItemBounds.Width = columnHeaders[0].Width;
                                 }
-                            }
-                            finally
-                            {
-                                g.Dispose();
+
+                                if (ClientRectangle.IntersectsWith(subItemBounds))
+                                {
+                                    e = new DrawListViewSubItemEventArgs(
+                                        g,
+                                        subItemBounds,
+                                        Items[itemIndex],
+                                        Items[itemIndex].SubItems[nmcd->iSubItem],
+                                        itemIndex,
+                                        nmcd->iSubItem,
+                                        columnHeaders[nmcd->iSubItem],
+                                        (ListViewItemStates)nmcd->nmcd.uItemState);
+                                    OnDrawSubItem(e);
+
+                                    // the customer still wants to draw the default.
+                                    // Don't skip the custom draw code then
+                                    skipCustomDrawCode = !e.DrawDefault;
+                                }
                             }
 
                             if (skipCustomDrawCode)
@@ -2882,7 +2871,7 @@ namespace System.Windows.Forms
                             // safety net code just in case
                             if (odCacheFont != null)
                             {
-                                Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), odCacheFontHandle);
+                                Gdi32.SelectObject(nmcd->nmcd.hdc, odCacheFontHandle);
                             }
                         }
                         else
@@ -2892,7 +2881,7 @@ namespace System.Windows.Forms
                                 odCacheFontHandleWrapper.Dispose();
                             }
                             odCacheFontHandleWrapper = new FontHandleWrapper(subItemFont);
-                            Gdi32.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
+                            Gdi32.SelectObject(nmcd->nmcd.hdc, odCacheFontHandleWrapper.Handle);
                         }
 
                         if (!dontmess)
@@ -5783,31 +5772,29 @@ namespace System.Windows.Forms
                             }
                         case CDDS.ITEMPREPAINT:
                             {
-                                using (Graphics g = Graphics.FromHdcInternal(nmcd->hdc))
+                                using Graphics g = nmcd->hdc.CreateGraphics();
+                                Color foreColor = ColorTranslator.FromWin32(Gdi32.GetTextColor(nmcd->hdc));
+                                Color backColor = ColorTranslator.FromWin32(Gdi32.GetBkColor(nmcd->hdc));
+                                Font font = GetListHeaderFont();
+                                var e = new DrawListViewColumnHeaderEventArgs(
+                                    g,
+                                    nmcd->rc,
+                                    (int)nmcd->dwItemSpec,
+                                    columnHeaders[(int)nmcd->dwItemSpec],
+                                    (ListViewItemStates)nmcd->uItemState,
+                                    foreColor,
+                                    backColor,
+                                    font);
+                                OnDrawColumnHeader(e);
+                                if (e.DrawDefault)
                                 {
-                                    Color foreColor = ColorTranslator.FromWin32(Gdi32.GetTextColor(nmcd->hdc));
-                                    Color backColor = ColorTranslator.FromWin32(Gdi32.GetBkColor(nmcd->hdc));
-                                    Font font = GetListHeaderFont();
-                                    var e = new DrawListViewColumnHeaderEventArgs(
-                                        g,
-                                        nmcd->rc,
-                                        (int)nmcd->dwItemSpec,
-                                        columnHeaders[(int)nmcd->dwItemSpec],
-                                        (ListViewItemStates)nmcd->uItemState,
-                                        foreColor,
-                                        backColor,
-                                        font);
-                                    OnDrawColumnHeader(e);
-                                    if (e.DrawDefault)
-                                    {
-                                        m.Result = (IntPtr)CDRF.DODEFAULT;
-                                        return false;
-                                    }
-                                    else
-                                    {
-                                        m.Result = (IntPtr)CDRF.SKIPDEFAULT;
-                                        return true; // we are done - don't do default handling
-                                    }
+                                    m.Result = (IntPtr)CDRF.DODEFAULT;
+                                    return false;
+                                }
+                                else
+                                {
+                                    m.Result = (IntPtr)CDRF.SKIPDEFAULT;
+                                    return true; // we are done - don't do default handling
                                 }
                             }
 

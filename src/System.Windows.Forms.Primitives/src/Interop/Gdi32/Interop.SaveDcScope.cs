@@ -12,15 +12,25 @@ internal static partial class Interop
         ///  Helper to scope lifetime of a saved device context state.
         /// </summary>
         /// <remarks>
-        ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
-        ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double restore.
+        ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by <see langword="ref" />
+        ///  to avoid duplicating the handle and risking a double restore.
+        ///
+        ///  The state that is saved includes ICM (color management), palette, path drawing state, and other objects
+        ///  that are selected into the DC (bitmap, brush, pen, clipping region, font).
+        ///
+        ///  Ideally saving the entire DC state can be avoided for simple drawing operations and relying on restoring
+        ///  individual state pieces can be done instead (putting back the original pen, etc.).
         /// </remarks>
         public ref struct SaveDcScope
         {
-            public IntPtr HDC { get; }
+            public HDC HDC { get; }
             private readonly int _savedState;
 
-            public SaveDcScope(IntPtr hdc)
+            /// <summary>
+            ///  Saves the device context state using <see cref="SaveDC(HDC)"/>.
+            /// </summary>
+            /// <param name="hdc"></param>
+            public SaveDcScope(HDC hdc)
             {
                 _savedState = SaveDC(hdc);
                 HDC = hdc;

@@ -27,12 +27,12 @@ namespace System.Windows.Forms
         /// </summary>
         private class MetafileDCWrapper : IDisposable
         {
-            private IntPtr _hBitmap = IntPtr.Zero;
-            private IntPtr _hOriginalBmp = IntPtr.Zero;
-            private readonly IntPtr _hMetafileDC;
+            private Gdi32.HBITMAP _hBitmap = default;
+            private Gdi32.HBITMAP _hOriginalBmp = default;
+            private readonly Gdi32.HDC _hMetafileDC;
             private RECT _destRect;
 
-            internal unsafe MetafileDCWrapper(IntPtr hOriginalDC, Size size)
+            internal unsafe MetafileDCWrapper(Gdi32.HDC hOriginalDC, Size size)
             {
                 Debug.Assert(Gdi32.GetObjectType(hOriginalDC) == Gdi32.ObjectType.OBJ_ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
@@ -44,12 +44,12 @@ namespace System.Windows.Forms
 
                 _hMetafileDC = hOriginalDC;
                 _destRect = new RECT(0, 0, size.Width, size.Height);
-                HDC = Gdi32.CreateCompatibleDC(IntPtr.Zero);
+                HDC = Gdi32.CreateCompatibleDC((Gdi32.HDC)default);
 
                 int planes = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.PLANES);
                 int bitsPixel = Gdi32.GetDeviceCaps(HDC, Gdi32.DeviceCapability.BITSPIXEL);
                 _hBitmap = Gdi32.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, null);
-                _hOriginalBmp = Gdi32.SelectObject(HDC, _hBitmap);
+                _hOriginalBmp = (Gdi32.HBITMAP)Gdi32.SelectObject(HDC, _hBitmap);
             }
 
             ~MetafileDCWrapper()
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
 
             void IDisposable.Dispose()
             {
-                if (HDC == IntPtr.Zero || _hMetafileDC == IntPtr.Zero || _hBitmap == IntPtr.Zero)
+                if (HDC.IsNull || _hMetafileDC.IsNull || _hBitmap.IsNull)
                 {
                     return;
                 }
@@ -79,32 +79,32 @@ namespace System.Windows.Forms
                 finally
                 {
                     // Dispose is done. Set all the handles to IntPtr.Zero so this way the Dispose method executes only once.
-                    HDC = IntPtr.Zero;
-                    _hBitmap = IntPtr.Zero;
-                    _hOriginalBmp = IntPtr.Zero;
+                    HDC = default;
+                    _hBitmap = default;
+                    _hOriginalBmp = default;
 
                     GC.SuppressFinalize(this);
                 }
             }
 
-            internal IntPtr HDC { get; private set; } = IntPtr.Zero;
+            internal Gdi32.HDC HDC { get; private set; } = default;
 
             // ported form VB6 (Ctls\PortUtil\StdCtl.cpp:6176)
-            private unsafe bool DICopy(IntPtr hdcDest, IntPtr hdcSrc, RECT rect, bool bStretch)
+            private unsafe bool DICopy(Gdi32.HDC hdcDest, Gdi32.HDC hdcSrc, RECT rect, bool bStretch)
             {
                 long i;
 
                 // Get the bitmap from the DC by selecting in a 1x1 pixel temp bitmap
-                IntPtr hNullBitmap = Gdi32.CreateBitmap(1, 1, 1, 1, null);
-                if (hNullBitmap == IntPtr.Zero)
+                Gdi32.HBITMAP hNullBitmap = Gdi32.CreateBitmap(1, 1, 1, 1, null);
+                if (hNullBitmap.IsNull)
                 {
                     return false;
                 }
 
                 try
                 {
-                    IntPtr hBitmap = Gdi32.SelectObject(hdcSrc, hNullBitmap);
-                    if (hBitmap == IntPtr.Zero)
+                    Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)Gdi32.SelectObject(hdcSrc, hNullBitmap);
+                    if (hBitmap.IsNull)
                     {
                         return false;
                     }

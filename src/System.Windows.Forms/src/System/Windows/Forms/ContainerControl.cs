@@ -708,8 +708,8 @@ namespace System.Windows.Forms
             // Windows uses CreateCompatibleDC(NULL) to get a memory DC for
             // the monitor the application is currently on.
 
-            using var dc = new Gdi32.CreateDcScope(IntPtr.Zero);
-            if (dc.HDC == IntPtr.Zero)
+            using var dc = new Gdi32.CreateDcScope(default);
+            if (dc.IsNull)
             {
                 throw new Win32Exception();
             }

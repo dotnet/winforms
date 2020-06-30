@@ -1309,21 +1309,19 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            IntPtr hdc = e.Graphics.GetHdc();
-                            try
-                            {
-                                using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                                {
-                                    foreColor = wg.GetNearestColor(DisabledColor);
-                                }
-                            }
-                            finally
-                            {
-                                e.Graphics.ReleaseHdc();
-                            }
+                            using var hdc = new DeviceContextHdcScope(e.Graphics, saveState: false);
+                            foreColor = ColorTranslator.FromWin32(
+                                Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(DisabledColor)));
+
                             Rectangle clientRectWidthPadding = ClientRectWithPadding;
 
-                            ControlPaint.DrawStringDisabled(e.Graphics, Text, Font, foreColor, clientRectWidthPadding, CreateTextFormatFlags(clientRectWidthPadding.Size));
+                            ControlPaint.DrawStringDisabled(
+                                e.Graphics,
+                                Text,
+                                Font,
+                                foreColor,
+                                clientRectWidthPadding,
+                                CreateTextFormatFlags(clientRectWidthPadding.Size));
                         }
                     }
                     finally
@@ -1503,20 +1501,18 @@ namespace System.Windows.Forms
                             brushColor = linkBrush.Color;
                         }
 
-                        IntPtr hdc = g.GetHdc();
-                        try
-                        {
-                            using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                            {
-                                brushColor = wg.GetNearestColor(brushColor);
-                            }
-                        }
-                        finally
-                        {
-                            g.ReleaseHdc();
-                        }
+                        using var hdc = new DeviceContextHdcScope(g, saveState: false);
+                        brushColor = ColorTranslator.FromWin32(
+                            Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(brushColor)));
+
                         Rectangle clientRectWithPadding = ClientRectWithPadding;
-                        TextRenderer.DrawText(g, Text, font, clientRectWithPadding, brushColor, CreateTextFormatFlags(clientRectWithPadding.Size));
+                        TextRenderer.DrawText(
+                            g,
+                            Text,
+                            font,
+                            clientRectWithPadding,
+                            brushColor,
+                            CreateTextFormatFlags(clientRectWithPadding.Size));
                     }
 
                     if (Focused && ShowFocusCues && FocusLink == link)
@@ -1566,22 +1562,18 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Color color;
+                    using var hdc = new DeviceContextHdcScope(g, saveState: false);
+                    Color color = ColorTranslator.FromWin32(
+                        Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(foreBrush.Color)));
 
-                    IntPtr hdc = g.GetHdc();
-                    try
-                    {
-                        using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                        {
-                            color = wg.GetNearestColor(foreBrush.Color);
-                        }
-                    }
-                    finally
-                    {
-                        g.ReleaseHdc();
-                    }
                     Rectangle clientRectWithPadding = ClientRectWithPadding;
-                    TextRenderer.DrawText(g, Text, font, clientRectWithPadding, color, CreateTextFormatFlags(clientRectWithPadding.Size));
+                    TextRenderer.DrawText(
+                        g,
+                        Text,
+                        font,
+                        clientRectWithPadding,
+                        color,
+                        CreateTextFormatFlags(clientRectWithPadding.Size));
                 }
             }
         }

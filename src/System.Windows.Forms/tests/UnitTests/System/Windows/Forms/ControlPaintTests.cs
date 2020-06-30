@@ -36,13 +36,13 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ControlCreateHBitmap16Bit_TestData))]
         public void ControlPaint_CreateHBitmap16Bit_Invoke_ReturnsExpected(Bitmap bitmap, Color background)
         {
-            IntPtr hBitmap = ControlPaint.CreateHBitmap16Bit(bitmap, background);
+            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmap16Bit(bitmap, background);
             try
             {
-                Assert.NotEqual(IntPtr.Zero, hBitmap);
+                Assert.False(hBitmap.IsNull);
                 Assert.Equal(Gdi32.ObjectType.OBJ_BITMAP, Gdi32.GetObjectType(hBitmap));
 
-                using Bitmap result = Bitmap.FromHbitmap(hBitmap);
+                using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
                 Assert.Empty(result.Palette.Entries);
                 Assert.Equal(bitmap.Size, result.Size);
@@ -61,13 +61,13 @@ namespace System.Windows.Forms.Tests
             bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
             bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-            IntPtr hBitmap = ControlPaint.CreateHBitmap16Bit(bitmap, Color.Red);
+            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmap16Bit(bitmap, Color.Red);
             try
             {
-                Assert.NotEqual(IntPtr.Zero, hBitmap);
+                Assert.False(hBitmap.IsNull);
                 Assert.Equal(Gdi32.ObjectType.OBJ_BITMAP, Gdi32.GetObjectType(hBitmap));
 
-                using Bitmap result = Bitmap.FromHbitmap(hBitmap);
+                using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format16bppRgb555, result.PixelFormat);
                 Assert.Empty(result.Palette.Entries);
                 Assert.Equal(bitmap.Size, result.Size);
@@ -107,13 +107,13 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CreateHBitmapColorMask_TestData))]
         public void ControlPaint_CreateHBitmapColorMask_Invoke_ReturnsExpected(Bitmap bitmap, IntPtr monochromeMask)
         {
-            IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, monochromeMask);
+            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, monochromeMask);
             try
             {
-                Assert.NotEqual(IntPtr.Zero, hBitmap);
+                Assert.False(hBitmap.IsNull);
                 Assert.Equal(Gdi32.ObjectType.OBJ_BITMAP, Gdi32.GetObjectType(hBitmap));
 
-                using Bitmap result = Bitmap.FromHbitmap(hBitmap);
+                using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
                 Assert.Empty(result.Palette.Entries);
                 Assert.Equal(bitmap.Size, result.Size);
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.Tests
             mask.SetPixel(0, 0, Color.FromArgb(255, 255, 0, 0));
             mask.SetPixel(1, 0, Color.FromArgb(255, 0, 255, 0));
             mask.SetPixel(2, 0, Color.FromArgb(0, 0, 0, 255));
-            IntPtr monochromeMask = mask.GetHbitmap();
+            Gdi32.HBITMAP monochromeMask = (Gdi32.HBITMAP)mask.GetHbitmap();
             try
             {
                 using var bitmap = new Bitmap(3, 1);
@@ -139,13 +139,13 @@ namespace System.Windows.Forms.Tests
                 bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
                 bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-                IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, monochromeMask);
+                Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)monochromeMask);
                 try
                 {
-                    Assert.NotEqual(IntPtr.Zero, hBitmap);
+                    Assert.False(hBitmap.IsNull);
                     Assert.Equal(Gdi32.ObjectType.OBJ_BITMAP, Gdi32.GetObjectType(hBitmap));
 
-                    using Bitmap result = Bitmap.FromHbitmap(hBitmap);
+                    using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                     Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
                     Assert.Empty(result.Palette.Entries);
                     Assert.Equal(bitmap.Size, result.Size);
@@ -172,13 +172,13 @@ namespace System.Windows.Forms.Tests
             bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
             bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-            IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, IntPtr.Zero);
+            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, IntPtr.Zero);
             try
             {
-                Assert.NotEqual(IntPtr.Zero, hBitmap);
+                Assert.False(hBitmap.IsNull);
                 Assert.Equal(Gdi32.ObjectType.OBJ_BITMAP, Gdi32.GetObjectType(hBitmap));
 
-                using Bitmap result = Bitmap.FromHbitmap(hBitmap);
+                using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format32bppRgb, result.PixelFormat);
                 Assert.Empty(result.Palette.Entries);
                 Assert.Equal(bitmap.Size, result.Size);
@@ -215,13 +215,13 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(CreateHBitmapTransparencyMask_TestData))]
         public void ControlPaint_CreateHBitmapTransparencyMask_Invoke_ReturnsExpected(Bitmap bitmap)
         {
-            IntPtr hBitmap = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
             try
             {
-                Assert.NotEqual(IntPtr.Zero, hBitmap);
+                Assert.False(hBitmap.IsNull);
                 Assert.Equal(Gdi32.ObjectType.OBJ_BITMAP, Gdi32.GetObjectType(hBitmap));
 
-                using Bitmap result = Bitmap.FromHbitmap(hBitmap);
+                using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);
                 Assert.Equal(new Color[] { Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 255, 255, 255) }, result.Palette.Entries);
                 Assert.Equal(bitmap.Size, result.Size);
@@ -240,13 +240,13 @@ namespace System.Windows.Forms.Tests
             bitmap.SetPixel(1, 0, Color.FromArgb(1, 50, 100, 150));
             bitmap.SetPixel(2, 0, Color.FromArgb(0, 50, 100, 150));
 
-            IntPtr hBitmap = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
             try
             {
-                Assert.NotEqual(IntPtr.Zero, hBitmap);
+                Assert.False(hBitmap.IsNull);
                 Assert.Equal(Gdi32.ObjectType.OBJ_BITMAP, Gdi32.GetObjectType(hBitmap));
 
-                using Bitmap result = Bitmap.FromHbitmap(hBitmap);
+                using Bitmap result = Bitmap.FromHbitmap((IntPtr)hBitmap);
                 Assert.Equal(PixelFormat.Format1bppIndexed, result.PixelFormat);
                 Assert.Equal(new Color[] { Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 255, 255, 255) }, result.Palette.Entries);
                 Assert.Equal(bitmap.Size, result.Size);

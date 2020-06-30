@@ -488,7 +488,7 @@ namespace System.Windows.Forms
             return base.GetScaledBounds(bounds, factor, specified);
         }
 
-        internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg) => IntPtr.Zero;
+        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg) => default;
 
         protected override void OnEnabledChanged(EventArgs e)
         {

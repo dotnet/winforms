@@ -10,6 +10,19 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern int StretchDIBits(IntPtr hdc, int xDest, int yDest, int DestWidth, int DestHeight, int xSrc, int ySrc, int SrcWidth, int SrcHeight, byte[] lpBits, ref BITMAPINFO lpbmi, DIB usage, ROP rop);
+        public static extern int StretchDIBits(
+            HDC hdc,
+            int xDest,
+            int yDest,
+            int DestWidth,
+            int DestHeight,
+            int xSrc,
+            int ySrc,
+            int SrcWidth,
+            int SrcHeight,
+            byte[] lpBits,
+            ref BITMAPINFO lpbmi,
+            DIB usage,
+            ROP rop);
     }
 }

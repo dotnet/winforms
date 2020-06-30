@@ -41,6 +41,7 @@ namespace System.Windows.Forms.ButtonInternal
         protected void DrawCheckFlat(PaintEventArgs e, LayoutData layout, Color checkColor, Color checkBackground, Color checkBorder, ColorData colors)
         {
             Rectangle bounds = layout.checkBounds;
+
             // Removed subtracting one for Width and Height. In Everett we needed to do this,
             // since we were using GDI+ to draw the border. Now that we are using GDI,
             // we should not do before drawing the border.
@@ -50,12 +51,11 @@ namespace System.Windows.Forms.ButtonInternal
                 bounds.Width--;
                 bounds.Height--;
             }
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(e.Graphics))
+
+            using (var hdc = new DeviceContextHdcScope(e.Graphics, ApplyGraphicsProperties.All, saveState: false))
             {
-                using (WindowsPen pen = new WindowsPen(wg.DeviceContext, checkBorder))
-                {
-                    wg.DrawRectangle(pen, bounds);
-                }
+                using var hpen = new Gdi32.CreatePenScope(checkBorder);
+                hdc.DrawRectangle(bounds, hpen);
 
                 // Now subtract, since the rest of the code is like Everett.
                 if (layout.options.everettButtonCompat)
@@ -65,6 +65,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 bounds.Inflate(-1, -1);
             }
+
             if (Control.CheckState == CheckState.Indeterminate)
             {
                 bounds.Width++;
@@ -73,62 +74,53 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                using (WindowsGraphics wg = WindowsGraphics.FromGraphics(e.Graphics))
-                {
-                    using (WindowsBrush brush = new WindowsSolidBrush(wg.DeviceContext, checkBackground))
-                    {
-                        // Even though we are using GDI here as opposed to GDI+ in Everett, we still need to add 1.
-                        bounds.Width++;
-                        bounds.Height++;
-                        wg.FillRectangle(brush, bounds);
-                    }
-                }
+                using var hdc = new DeviceContextHdcScope(e.Graphics, ApplyGraphicsProperties.All, saveState: false);
+                using var hbrush = new Gdi32.CreateBrushScope(checkBackground);
+
+                // Even though we are using GDI here as opposed to GDI+ in Everett, we still need to add 1.
+                bounds.Width++;
+                bounds.Height++;
+                RECT rect = bounds;
+                User32.FillRect(hdc, ref rect, hbrush);
             }
+
             DrawCheckOnly(e, layout, colors, checkColor, checkBackground);
         }
 
         // used by DataGridViewCheckBoxCell
         internal static void DrawCheckBackground(bool controlEnabled, CheckState controlCheckState, Graphics g, Rectangle bounds, Color checkColor, Color checkBackground, bool disabledColors, ColorData colors)
         {
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
-            {
-                WindowsBrush brush;
-                if (!controlEnabled && disabledColors)
-                {
-                    brush = new WindowsSolidBrush(wg.DeviceContext, SystemColors.Control);
-                }
-                else if (controlCheckState == CheckState.Indeterminate && checkBackground == SystemColors.Window && disabledColors)
-                {
-                    Color comboColor = SystemInformation.HighContrast ? SystemColors.ControlDark :
-                            SystemColors.Control;
-                    byte R = (byte)((comboColor.R + SystemColors.Window.R) / 2);
-                    byte G = (byte)((comboColor.G + SystemColors.Window.G) / 2);
-                    byte B = (byte)((comboColor.B + SystemColors.Window.B) / 2);
-                    brush = new WindowsSolidBrush(wg.DeviceContext, Color.FromArgb(R, G, B));
-                }
-                else
-                {
-                    brush = new WindowsSolidBrush(wg.DeviceContext, checkBackground);
-                }
+            using var hdc = new DeviceContextHdcScope(g);
 
-                try
-                {
-                    wg.FillRectangle(brush, bounds);
-                }
-                finally
-                {
-                    if (brush != null)
-                    {
-                        brush.Dispose();
-                    }
-                }
+            Color color;
+
+            if (!controlEnabled && disabledColors)
+            {
+                color = SystemColors.Control;
             }
+            else if (controlCheckState == CheckState.Indeterminate && checkBackground == SystemColors.Window && disabledColors)
+            {
+                Color comboColor = SystemInformation.HighContrast ? SystemColors.ControlDark : SystemColors.Control;
+                color = Color.FromArgb(
+                    (byte)((comboColor.R + SystemColors.Window.R) / 2),
+                    (byte)((comboColor.G + SystemColors.Window.G) / 2),
+                    (byte)((comboColor.B + SystemColors.Window.B) / 2));
+            }
+            else
+            {
+                color = checkBackground;
+            }
+
+            using var hbrush = new Gdi32.CreateBrushScope(color);
+
+            RECT rect = bounds;
+            User32.FillRect(hdc, ref rect, hbrush);
         }
 
         protected void DrawCheckBackground(PaintEventArgs e, Rectangle bounds, Color checkColor, Color checkBackground, bool disabledColors, ColorData colors)
         {
-            // area behind check
-            //
+            // Area behind check
+
             if (Control.CheckState == CheckState.Indeterminate)
             {
                 DrawDitheredFill(e.Graphics, colors.buttonFace, checkBackground, bounds);
@@ -144,11 +136,10 @@ namespace System.Windows.Forms.ButtonInternal
             DrawCheckOnly(flatCheckSize, Control.Checked, Control.Enabled, Control.CheckState, e.Graphics, layout, colors, checkColor, checkBackground);
         }
 
-        // used by DataGridViewCheckBoxCell
         internal static void DrawCheckOnly(int checkSize, bool controlChecked, bool controlEnabled, CheckState controlCheckState, Graphics g, LayoutData layout, ColorData colors, Color checkColor, Color checkBackground)
         {
-            // check
-            //
+            // Check
+
             if (controlChecked)
             {
                 if (!controlEnabled)

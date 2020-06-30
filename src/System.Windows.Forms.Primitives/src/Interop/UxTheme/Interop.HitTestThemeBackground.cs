@@ -13,11 +13,11 @@ internal static partial class Interop
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
         public unsafe static extern HRESULT HitTestThemeBackground(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, uint dwOptions, ref RECT pRect, IntPtr hrgn, Point ptTest, out ushort pwHitTestCode);
 
-        public unsafe static HRESULT HitTestThemeBackground(IHandle hTheme, HandleRef hdc, int iPartId, int iStateId, uint dwOptions, ref RECT pRect, IntPtr hrgn, Point ptTest, out ushort pwHitTestCode)
+        public unsafe static HRESULT HitTestThemeBackground(IHandle hTheme, IHandle hdc, int iPartId, int iStateId, uint dwOptions, ref RECT pRect, IntPtr hrgn, Point ptTest, out ushort pwHitTestCode)
         {
             HRESULT hr = HitTestThemeBackground(hTheme.Handle, hdc.Handle, iPartId, iStateId, dwOptions, ref pRect, hrgn, ptTest, out pwHitTestCode);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc.Wrapper);
+            GC.KeepAlive(hdc);
             return hr;
         }
     }

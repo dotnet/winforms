@@ -32,13 +32,13 @@ namespace WinformsControlsTest
         {
             x = LogicalDpi;
             y = LogicalDpi;
-            IntPtr hDC = User32.GetDC(handleRef);
-            if (hDC != IntPtr.Zero)
+            Gdi32.HDC hDC = User32.GetDC(handleRef);
+            if (!hDC.IsNull)
             {
                 x = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSX);
                 y = Gdi32.GetDeviceCaps(hDC, Gdi32.DeviceCapability.LOGPIXELSY);
 
-                User32.ReleaseDC(handleRef, new HandleRef(null, hDC));
+                User32.ReleaseDC(handleRef, hDC);
             }
         }
 
@@ -111,6 +111,7 @@ namespace WinformsControlsTest
         public MyCheckBox() : base()
         {
         }
+
         protected override void WndProc(ref Message m)
         {
             uint dpi;

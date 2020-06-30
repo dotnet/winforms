@@ -10,13 +10,6 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        private static extern BOOL DrawEdge(IntPtr hdc, ref RECT qrc, EDGE edge, BF grfFlags);
-
-        public static BOOL DrawEdge(HandleRef hdc, ref RECT qrc, EDGE edge, BF grfFlags)
-        {
-            BOOL result = DrawEdge(hdc.Handle, ref qrc, edge, grfFlags);
-            GC.KeepAlive(hdc.Wrapper);
-            return result;
-        }
+        public static extern BOOL DrawEdge(Gdi32.HDC hdc, ref RECT qrc, EDGE edge, BF grfFlags);
     }
 }

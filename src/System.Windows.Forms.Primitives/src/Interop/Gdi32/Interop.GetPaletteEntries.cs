@@ -10,9 +10,9 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
-        private unsafe static extern uint GetPaletteEntries(IntPtr hpal, uint iStart, uint nEntries, PALETTEENTRY* lppe);
+        private unsafe static extern uint GetPaletteEntries(HPALETTE hpal, uint iStart, uint nEntries, PALETTEENTRY* lppe);
 
-        public unsafe static uint GetPaletteEntries(IntPtr hpal, Span<PALETTEENTRY> entries)
+        public unsafe static uint GetPaletteEntries(HPALETTE hpal, Span<PALETTEENTRY> entries)
         {
             fixed (PALETTEENTRY* entry = &MemoryMarshal.GetReference(entries))
             {

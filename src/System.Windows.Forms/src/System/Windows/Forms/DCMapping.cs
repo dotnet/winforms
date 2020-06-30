@@ -34,9 +34,9 @@ namespace System.Windows.Forms
     {
         private DeviceContext _dc;
 
-        public unsafe DCMapping(IntPtr hDC, Rectangle bounds)
+        public unsafe DCMapping(Gdi32.HDC hDC, Rectangle bounds)
         {
-            if (hDC == IntPtr.Zero)
+            if (hDC.IsNull)
             {
                 throw new ArgumentNullException(nameof(hDC));
             }
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                 }
 
                 // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-                RegionType selectResult = Gdi32.SelectClipRgn(hDC, hClippingRegion);
+                RegionType selectResult = Gdi32.SelectClipRgn((Gdi32.HDC)hDC, hClippingRegion);
                 Debug.Assert(
                     selectResult == RegionType.SIMPLEREGION || selectResult == RegionType.NULLREGION,
                     "SIMPLEREGION or NULLLREGION expected.");

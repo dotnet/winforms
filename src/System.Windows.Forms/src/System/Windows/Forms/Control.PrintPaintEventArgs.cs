@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -10,20 +11,12 @@ namespace System.Windows.Forms
     {
         private sealed class PrintPaintEventArgs : PaintEventArgs
         {
-            private Message _m;
+            internal Message Message { get; }
 
-            internal PrintPaintEventArgs(Message m, IntPtr dc, Rectangle clipRect)
+            internal PrintPaintEventArgs(Message m, Gdi32.HDC dc, Rectangle clipRect)
                 : base(dc, clipRect)
             {
-                _m = m;
-            }
-
-            internal Message Message
-            {
-                get
-                {
-                    return _m;
-                }
+                Message = m;
             }
         }
     }

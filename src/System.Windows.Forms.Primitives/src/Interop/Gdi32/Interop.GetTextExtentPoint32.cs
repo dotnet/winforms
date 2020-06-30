@@ -11,11 +11,11 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        public static extern BOOL GetTextExtentPoint32W(IntPtr hdc, string lpString, int c, ref Size psizl);
+        public static extern BOOL GetTextExtentPoint32W(HDC hdc, string lpString, int c, ref Size psizl);
 
         public static BOOL GetTextExtentPoint32W(HandleRef hdc, string lpString, int c, ref Size psizl)
         {
-            BOOL result = GetTextExtentPoint32W(hdc.Handle, lpString, c, ref psizl);
+            BOOL result = GetTextExtentPoint32W((HDC)hdc.Handle, lpString, c, ref psizl);
             GC.KeepAlive(hdc.Wrapper);
             return result;
         }

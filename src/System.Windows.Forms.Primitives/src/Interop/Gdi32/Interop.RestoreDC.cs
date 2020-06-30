@@ -10,12 +10,12 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern BOOL RestoreDC(IntPtr hdc, int nSavedDC);
+        public static extern BOOL RestoreDC(HDC hdc, int nSavedDC);
 
-        public static BOOL RestoreDC(HandleRef hdc, int nSavedDC)
+        public static BOOL RestoreDC(IHandle hdc, int nSavedDC)
         {
-            BOOL result = RestoreDC(hdc.Handle, nSavedDC);
-            GC.KeepAlive(hdc.Wrapper);
+            BOOL result = RestoreDC((HDC)hdc.Handle, nSavedDC);
+            GC.KeepAlive(hdc);
             return result;
         }
     }

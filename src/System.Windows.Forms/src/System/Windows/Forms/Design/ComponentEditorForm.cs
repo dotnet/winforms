@@ -620,7 +620,7 @@ namespace System.Windows.Forms.Design
             private const int STATE_SELECTED = 1;
             private const int STATE_HOT = 2;
 
-            private IntPtr _hbrushDither;
+            private Gdi32.HBRUSH _hbrushDither;
 
             public PageSelector()
             {
@@ -651,7 +651,7 @@ namespace System.Windows.Forms.Design
 
             private unsafe void CreateDitherBrush()
             {
-                Debug.Assert(_hbrushDither == IntPtr.Zero, "Brush should not be recreated.");
+                Debug.Assert(_hbrushDither.IsNull, "Brush should not be recreated.");
 
                 short* patternBits = stackalloc short[]
                 {
@@ -659,40 +659,49 @@ namespace System.Windows.Forms.Design
                     unchecked((short)0xAAAA), unchecked((short)0x5555), unchecked((short)0xAAAA), unchecked((short)0x5555)
                 };
 
-                IntPtr hbitmapTemp = Gdi32.CreateBitmap(8, 8, 1, 1, patternBits);
-                Debug.Assert(hbitmapTemp != IntPtr.Zero,
-                             "could not create dither bitmap. Page selector UI will not be correct");
+                Gdi32.HBITMAP hbitmapTemp = Gdi32.CreateBitmap(8, 8, 1, 1, patternBits);
+                Debug.Assert(
+                    !hbitmapTemp.IsNull,
+                    "could not create dither bitmap. Page selector UI will not be correct");
 
-                if (hbitmapTemp != IntPtr.Zero)
+                if (!hbitmapTemp.IsNull)
                 {
                     _hbrushDither = Gdi32.CreatePatternBrush(hbitmapTemp);
 
-                    Debug.Assert(_hbrushDither != IntPtr.Zero,
-                                 "Unable to created dithered brush. Page selector UI will not be correct");
+                    Debug.Assert(
+                        !_hbrushDither.IsNull,
+                        "Unable to created dithered brush. Page selector UI will not be correct");
 
                     Gdi32.DeleteObject(hbitmapTemp);
                 }
             }
 
-            private unsafe void DrawTreeItem(string itemText, int imageIndex, IntPtr dc, RECT rcIn,
-                                             int state, int backColor, int textColor)
+            private unsafe void DrawTreeItem(
+                string itemText,
+                int imageIndex,
+                Gdi32.HDC dc,
+                RECT rcIn,
+                int state,
+                int backColor,
+                int textColor)
             {
                 Size size = new Size();
                 var rc2 = new RECT();
                 var rc = new RECT(rcIn.left, rcIn.top, rcIn.right, rcIn.bottom);
                 ImageList imagelist = ImageList;
+
                 IntPtr hfontOld = IntPtr.Zero;
 
                 // Select the font of the dialog, so we don't get the underlined font
                 // when the item is being tracked
-                if ((state & STATE_HOT) != 0)
-                {
-                    hfontOld = Gdi32.SelectObject(dc, Parent.FontHandle);
-                    GC.KeepAlive(Parent);
-                }
+                using var fontSelection = new Gdi32.SelectObjectScope(
+                    dc,
+                    (state & STATE_HOT) != 0 ? (Gdi32.HGDIOBJ)Parent.FontHandle : default);
+
+                GC.KeepAlive(Parent);
 
                 // Fill the background
-                if (((state & STATE_SELECTED) != 0) && (_hbrushDither != IntPtr.Zero))
+                if (((state & STATE_SELECTED) != 0) && !_hbrushDither.IsNull)
                 {
                     FillRectDither(dc, rcIn);
                     Gdi32.SetBkMode(dc, Gdi32.BKMODE.TRANSPARENT);
@@ -756,11 +765,6 @@ namespace System.Windows.Forms.Design
 
                     Gdi32.SetBkColor(dc, savedColor);
                 }
-
-                if (hfontOld != IntPtr.Zero)
-                {
-                    Gdi32.SelectObject(dc, hfontOld);
-                }
             }
 
             protected override void OnHandleCreated(EventArgs e)
@@ -771,7 +775,7 @@ namespace System.Windows.Forms.Design
                 itemHeight += 2 * PADDING_VERT;
                 User32.SendMessageW(this, (User32.WM)ComCtl32.TVM.SETITEMHEIGHT, (IntPtr)itemHeight);
 
-                if (_hbrushDither == IntPtr.Zero)
+                if (_hbrushDither.IsNull)
                 {
                     CreateDitherBrush();
                 }
@@ -787,7 +791,7 @@ namespace System.Windows.Forms.Design
                         break;
                     case ComCtl32.CDDS.ITEMPREPAINT:
                         {
-                            TreeNode itemNode = TreeNode.FromHandle(this, (IntPtr)nmtvcd->nmcd.dwItemSpec);
+                            TreeNode itemNode = TreeNode.FromHandle(this, nmtvcd->nmcd.dwItemSpec);
                             if (itemNode != null)
                             {
                                 int state = STATE_NORMAL;
@@ -802,9 +806,14 @@ namespace System.Windows.Forms.Design
                                     state |= STATE_SELECTED;
                                 }
 
-                                DrawTreeItem(itemNode.Text, itemNode.ImageIndex,
-                                         nmtvcd->nmcd.hdc, nmtvcd->nmcd.rc,
-                                         state, ColorTranslator.ToWin32(SystemColors.Control), ColorTranslator.ToWin32(SystemColors.ControlText));
+                                DrawTreeItem(
+                                    itemNode.Text,
+                                    itemNode.ImageIndex,
+                                    nmtvcd->nmcd.hdc,
+                                    nmtvcd->nmcd.rc,
+                                    state,
+                                    ColorTranslator.ToWin32(SystemColors.Control),
+                                    ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
                             m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;
                         }
@@ -822,18 +831,18 @@ namespace System.Windows.Forms.Design
             {
                 base.OnHandleDestroyed(e);
 
-                if (!RecreatingHandle && (_hbrushDither != IntPtr.Zero))
+                if (!RecreatingHandle && !_hbrushDither.IsNull)
                 {
                     Gdi32.DeleteObject(_hbrushDither);
-                    _hbrushDither = IntPtr.Zero;
+                    _hbrushDither = default;
                 }
             }
 
-            private void FillRectDither(IntPtr dc, RECT rc)
+            private void FillRectDither(Gdi32.HDC dc, RECT rc)
             {
-                IntPtr hbrushOld = Gdi32.SelectObject(dc, _hbrushDither);
+                Gdi32.HGDIOBJ hbrushOld = Gdi32.SelectObject(dc, _hbrushDither);
 
-                if (hbrushOld != IntPtr.Zero)
+                if (!hbrushOld.IsNull)
                 {
                     int oldTextColor = Gdi32.SetTextColor(dc, ColorTranslator.ToWin32(SystemColors.ControlLightLight));
                     int oldBackColor = Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(SystemColors.Control));

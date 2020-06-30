@@ -4261,6 +4261,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 bool fBtnDropDown = gridEntry.NeedsDropDownButton;
                 bool fEnum = gridEntry.Enumerable;
                 bool fBtnDialog = gridEntry.NeedsCustomEditorButton;
+
                 if (fEnum && !fBtnDropDown)
                 {
                     DropDownListBox.Items.Clear();
@@ -4271,16 +4272,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // The listbox draws with GDI, not GDI+.  So, we
                     // use a normal DC here.
 
-                    IntPtr hdc = User32.GetDC(new HandleRef(DropDownListBox, DropDownListBox.Handle));
-
-                    // This creates a copy of the given Font, and as such we need to
-                    IntPtr hFont = Font.ToHfont();
+                    using var hdc = new User32.GetDcScope(DropDownListBox.Handle);
 
                     var tm = new Gdi32.TEXTMETRICW();
                     int iSel = -1;
-                    try
+
+                    // This creates a copy of the given Font, and as such we need to delete it
+                    Gdi32.HFONT hFont = (Gdi32.HFONT)Font.ToHfont();
+                    using (var fontScope = new Gdi32.ObjectScope(hFont))
                     {
-                        hFont = Gdi32.SelectObject(hdc, hFont);
+                        using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
 
                         iSel = GetCurrentValueIndex(gridEntry);
                         if (rgItems != null && rgItems.Length > 0)
@@ -4297,17 +4298,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                             }
                         }
 
-                        Gdi32.GetTextMetricsW(new HandleRef(DropDownListBox, hdc), ref tm);
+                        Gdi32.GetTextMetricsW(hdc, ref tm);
 
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
-
-                        hFont = Gdi32.SelectObject(hdc, hFont);
-                    }
-                    finally
-                    {
-                        Gdi32.DeleteObject(hFont);
-                        User32.ReleaseDC(new HandleRef(DropDownListBox, DropDownListBox.Handle), hdc);
                     }
 
                     // Microsoft, 4/25/1998 - must check for -1 and not call the set...
@@ -4315,6 +4309,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         DropDownListBox.SelectedIndex = iSel;
                     }
+
                     SetFlag(FlagDropDownCommit, false);
                     DropDownListBox.Height = Math.Max(tm.tmHeight + 2, Math.Min(maxListBoxHeight, DropDownListBox.PreferredHeight));
                     DropDownListBox.Width = Math.Max(maxWidth, GetRectangle(row, ROWVALUE).Width);

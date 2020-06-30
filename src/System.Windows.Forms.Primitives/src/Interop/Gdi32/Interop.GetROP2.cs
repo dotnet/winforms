@@ -11,11 +11,11 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern R2 GetROP2(IntPtr hdc);
+        public static extern R2 GetROP2(HDC hdc);
 
         public static R2 GetROP2(IHandle hdc)
         {
-            R2 result = GetROP2(hdc.Handle);
+            R2 result = GetROP2((HDC)hdc.Handle);
             GC.KeepAlive(hdc);
             return result;
         }

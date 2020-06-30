@@ -10,13 +10,29 @@ internal static partial class Interop
     public static partial class UxTheme
     {
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern HRESULT DrawThemeEdge(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, ref RECT pDestRect, User32.EDGE uEdge, User32.BF uFlags, ref RECT pContentRect);
+        public static extern HRESULT DrawThemeEdge(
+            IntPtr hTheme,
+            IntPtr hdc,
+            int iPartId,
+            int iStateId,
+            ref RECT pDestRect,
+            User32.EDGE uEdge,
+            User32.BF uFlags,
+            ref RECT pContentRect);
 
-        public static HRESULT DrawThemeEdge(IHandle hTheme, HandleRef hdc, int iPartId, int iStateId, ref RECT pDestRect, User32.EDGE uEdge, User32.BF uFlags, ref RECT pContentRect)
+        public static HRESULT DrawThemeEdge(
+            IHandle hTheme,
+            IHandle hdc,
+            int iPartId,
+            int iStateId,
+            ref RECT pDestRect,
+            User32.EDGE uEdge,
+            User32.BF uFlags,
+            ref RECT pContentRect)
         {
             HRESULT hr = DrawThemeEdge(hTheme.Handle, hdc.Handle, iPartId, iStateId, ref pDestRect, uEdge, uFlags, ref pContentRect);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc.Wrapper);
+            GC.KeepAlive(hdc);
             return hr;
         }
     }

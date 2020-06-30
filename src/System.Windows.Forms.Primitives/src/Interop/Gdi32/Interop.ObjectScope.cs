@@ -20,12 +20,12 @@ internal static partial class Interop
             public HGDIOBJ Object { get; }
 
             /// <param name="object">The object to be deleted when the scope closes.</param>
-            public ObjectScope(IntPtr @object)
+            public ObjectScope(HGDIOBJ @object)
             {
-                Object = new HGDIOBJ(@object);
+                Object = @object;
             }
 
-            public static implicit operator IntPtr(ObjectScope objectScope) => objectScope.Object.Handle;
+            public static implicit operator HGDIOBJ(ObjectScope objectScope) => objectScope.Object;
 
             public void Dispose()
             {

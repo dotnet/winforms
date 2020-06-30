@@ -7,6 +7,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -17,7 +18,7 @@ namespace System.Windows.Forms
     ///  event.
     ///  NOTE: Please keep this class consistent with PrintPageEventArgs.
     /// </summary>
-    public class PaintEventArgs : EventArgs, IDisposable
+    public class PaintEventArgs : EventArgs, IDisposable, IHandle
     {
         /// <summary>
         ///  Graphics object with which painting should be done.
@@ -33,9 +34,9 @@ namespace System.Windows.Forms
         ///  DC (Display context) for obtaining the graphics object. Used to delay
         ///  getting the graphics object until absolutely necessary (for perf reasons)
         /// </summary>
-        private readonly IntPtr _dc = IntPtr.Zero;
+        private readonly Gdi32.HDC _dc;
 
-        private IntPtr oldPal = IntPtr.Zero;
+        private Gdi32.HPALETTE _oldPal;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='PaintEventArgs'/>
@@ -51,7 +52,7 @@ namespace System.Windows.Forms
         ///  Internal version of constructor for performance
         ///  We try to avoid getting the graphics object until needed
         /// </summary>
-        internal PaintEventArgs(IntPtr dc, Rectangle clipRect)
+        internal PaintEventArgs(Gdi32.HDC dc, Rectangle clipRect)
         {
             _dc = dc;
             ClipRectangle = clipRect;
@@ -69,7 +70,7 @@ namespace System.Windows.Forms
         ///  HDC, or the GDI+ Graphics object has been created (meaning GDI+ now owns the
         ///  HDC), 0 is returned.
         /// </summary>
-        internal IntPtr HDC => _graphics == null ? _dc : IntPtr.Zero;
+        internal IntPtr HDC => _graphics == null ? (IntPtr)_dc : IntPtr.Zero;
 
         /// <summary>
         ///  Gets the <see cref='Drawing.Graphics'/> object used to paint.
@@ -78,10 +79,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_graphics == null && _dc != IntPtr.Zero)
+                if (_graphics == null && !_dc.IsNull)
                 {
-                    oldPal = Control.SetUpPalette(_dc, force: false, realizePalette: false);
-                    _graphics = Graphics.FromHdcInternal(_dc);
+                    // We need to manually unset the palette here so this scope shouldn't be disposed
+                    var palleteScope = Gdi32.SelectPaletteScope.HalftonePalette(_dc, forceBackground: false, realizePalette: false);
+                    _oldPal = palleteScope.HPalette;
+                    _graphics = Graphics.FromHdcInternal((IntPtr)_dc);
                     _graphics.PageUnit = GraphicsUnit.Pixel;
                     _savedGraphicsState = _graphics.Save(); // See ResetGraphics() below
                 }
@@ -89,6 +92,8 @@ namespace System.Windows.Forms
                 return _graphics;
             }
         }
+
+        IntPtr IHandle.Handle => (IntPtr)_dc;
 
         /// <summary>
         ///  Disposes of the resources (other than memory) used by the
@@ -105,16 +110,16 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 // Only dispose the graphics object if we created it via the dc.
-                if (_graphics != null && _dc != IntPtr.Zero)
+                if (_graphics != null && !_dc.IsNull)
                 {
                     _graphics.Dispose();
                 }
             }
 
-            if (oldPal != IntPtr.Zero && _dc != IntPtr.Zero)
+            if (!_oldPal.IsNull && !_dc.IsNull)
             {
-                Gdi32.SelectPalette(new HandleRef(this, _dc), new HandleRef(this, oldPal), BOOL.FALSE);
-                oldPal = IntPtr.Zero;
+                Gdi32.SelectPalette(_dc, _oldPal, BOOL.FALSE);
+                _oldPal = default;
             }
         }
 
@@ -129,7 +134,7 @@ namespace System.Windows.Forms
         {
             if (_graphics != null)
             {
-                Debug.Assert(_dc == IntPtr.Zero || _savedGraphicsState != null, "Called ResetGraphics more than once?");
+                Debug.Assert(_dc.IsNull || _savedGraphicsState != null, "Called ResetGraphics more than once?");
                 if (_savedGraphicsState != null)
                 {
                     _graphics.Restore(_savedGraphicsState);

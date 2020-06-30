@@ -1970,19 +1970,10 @@ namespace System.Windows.Forms
         private unsafe void WmReflectDrawItem(ref Message m)
         {
             User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
-            IntPtr oldPal = SetUpPalette(dis->hDC, force: false, realizePalette: false);
-            try
-            {
-                using Graphics g = Graphics.FromHdcInternal(dis->hDC);
-                OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState));
-            }
-            finally
-            {
-                if (oldPal != IntPtr.Zero)
-                {
-                    Gdi32.SelectPalette(dis->hDC, oldPal, BOOL.FALSE);
-                }
-            }
+            using var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(dis->hDC, forceBackground: false, realizePalette: false);
+            using Graphics g = dis->hDC.CreateGraphics();
+
+            OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState));
 
             m.Result = (IntPtr)1;
         }

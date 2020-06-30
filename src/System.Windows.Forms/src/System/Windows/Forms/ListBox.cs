@@ -2415,32 +2415,17 @@ namespace System.Windows.Forms
         private unsafe void WmReflectDrawItem(ref Message m)
         {
             DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
-            IntPtr oldPal = SetUpPalette(dis->hDC, force: false, realizePalette: false);
-            try
-            {
-                using Graphics g = Graphics.FromHdcInternal(dis->hDC);
-                Rectangle bounds = dis->rcItem;
-                if (HorizontalScrollbar)
-                {
-                    if (MultiColumn)
-                    {
-                        bounds.Width = Math.Max(ColumnWidth, bounds.Width);
-                    }
-                    else
-                    {
-                        bounds.Width = Math.Max(MaxItemWidth, bounds.Width);
-                    }
-                }
 
-                OnDrawItem(new DrawItemEventArgs(g, Font, bounds, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
-            }
-            finally
+            using var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(dis->hDC, forceBackground: false, realizePalette: false);
+
+            using Graphics g = dis->hDC.CreateGraphics();
+            Rectangle bounds = dis->rcItem;
+            if (HorizontalScrollbar)
             {
-                if (oldPal != IntPtr.Zero)
-                {
-                    Gdi32.SelectPalette(dis->hDC, oldPal, BOOL.FALSE);
-                }
+                bounds.Width = MultiColumn ? Math.Max(ColumnWidth, bounds.Width) : Math.Max(MaxItemWidth, bounds.Width);
             }
+
+            OnDrawItem(new DrawItemEventArgs(g, Font, bounds, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
 
             m.Result = (IntPtr)1;
         }

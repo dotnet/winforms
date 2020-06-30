@@ -11,9 +11,9 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, EntryPoint = "DrawTextExW", ExactSpelling = true, CharSet = CharSet.Unicode)]
-        private static extern int DrawTextExWInternal(IntPtr hdc, string lpchText, int cchText, ref RECT lprc, DT format, ref DRAWTEXTPARAMS lpdtp);
+        private static extern int DrawTextExWInternal(Gdi32.HDC hdc, string lpchText, int cchText, ref RECT lprc, DT format, ref DRAWTEXTPARAMS lpdtp);
 
-        public static unsafe int DrawTextExW(IntPtr hdc, string lpchText, int cchText, ref RECT lprc, DT format, ref DRAWTEXTPARAMS lpdtp)
+        public static unsafe int DrawTextExW(Gdi32.HDC hdc, string lpchText, int cchText, ref RECT lprc, DT format, ref DRAWTEXTPARAMS lpdtp)
         {
             lpdtp.cbSize = (uint)sizeof(DRAWTEXTPARAMS);
             return DrawTextExWInternal(hdc, lpchText, cchText, ref lprc, format, ref lpdtp);
@@ -21,7 +21,7 @@ internal static partial class Interop
 
         public static int DrawTextExW(IHandle hdc, string lpchText, int cchText, ref RECT lprc, DT format, ref DRAWTEXTPARAMS lpdtp)
         {
-            int result = DrawTextExW(hdc.Handle, lpchText, cchText, ref lprc, format, ref lpdtp);
+            int result = DrawTextExW((Gdi32.HDC)hdc.Handle, lpchText, cchText, ref lprc, format, ref lpdtp);
             GC.KeepAlive(hdc);
             return result;
         }

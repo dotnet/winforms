@@ -3345,7 +3345,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg)
+        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
         {
             if (isMaskEdit)
             {
@@ -3353,7 +3353,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return IntPtr.Zero; // bypass Control's anti-reflect logic
+                return default; // bypass Control's anti-reflect logic
             }
         }
 

@@ -1426,18 +1426,8 @@ namespace System.Windows.Forms
             }
             else
             {
-                IntPtr hdc = e.Graphics.GetHdc();
-                try
-                {
-                    using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                    {
-                        color = wg.GetNearestColor((Enabled) ? ForeColor : DisabledColor);
-                    }
-                }
-                finally
-                {
-                    e.Graphics.ReleaseHdc();
-                }
+                using var hdc = new DeviceContextHdcScope(e.Graphics, saveState: false);
+                color = hdc.GetNearestColor(Enabled ? ForeColor : DisabledColor);
             }
 
             // Do actual drawing
@@ -1528,12 +1518,12 @@ namespace System.Windows.Forms
             Animate();
         }
 
-        private protected override void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(Gdi32.HDC hDC, IntPtr lParam, Rectangle bounds)
         {
             base.PrintToMetaFileRecursive(hDC, lParam, bounds);
 
             using var mapping = new DCMapping(hDC, bounds);
-            using Graphics g = Graphics.FromHdcInternal(hDC);
+            using Graphics g = hDC.CreateGraphics();
             ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.SunkenOuter);
         }
 

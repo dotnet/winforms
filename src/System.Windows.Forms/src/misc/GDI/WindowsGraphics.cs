@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Internal
     ///  be modified by WindowsGraphics.  So we don't need to restore previous objects into
     ///  the dc in method calls.
     /// </summary>
-    internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable, IDeviceContext
+    internal sealed partial class WindowsGraphics : IDisposable, IDeviceContext, IHandle
     {
         private bool _disposeDc;
         private Graphics? _graphics; // cached when initialized FromGraphics to be able to call g.ReleaseHdc from Dispose.
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public static WindowsGraphics CreateMeasurementWindowsGraphics()
         {
-            DeviceContext dc = DeviceContext.FromCompatibleDC(IntPtr.Zero);
+            DeviceContext dc = DeviceContext.FromCompatibleDC(default);
             var wg = new WindowsGraphics(dc)
             {
                 _disposeDc = true // we create it, we dispose it.
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Internal
             };
         }
 
-        public static WindowsGraphics FromHdc(IntPtr hDc)
+        public static WindowsGraphics FromHdc(Gdi32.HDC hDc)
         {
             DeviceContext dc = DeviceContext.FromHdc(hDc);
             return new WindowsGraphics(dc)
@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Internal
             using var graphicsRegion = applyClipping ? new Gdi32.RegionScope(clipRegion!, graphics) : default;
 
             // GetHdc() locks the Graphics object, it cannot be used until ReleaseHdc() is called
-            IntPtr hdc = graphics.GetHdc();
+            Gdi32.HDC hdc = (Gdi32.HDC)graphics.GetHdc();
             WindowsGraphics wg = FromHdc(hdc);
             wg._graphics = graphics;
 
@@ -171,6 +171,8 @@ namespace System.Windows.Forms.Internal
 
         public DeviceContext DeviceContext { get; private set; }
 
+        public IntPtr Handle => ((IHandle)DeviceContext).Handle;
+
         public void Dispose()
         {
             // Disposing can throw. As such we'll suppress preemptively so we don't roll right back in on the finalizer.
@@ -192,7 +194,7 @@ namespace System.Windows.Forms.Internal
                 }
 
                 // GDI+ can fail here.
-                _graphics?.ReleaseHdcInternal(DeviceContext.Hdc);
+                _graphics?.ReleaseHdcInternal((IntPtr)DeviceContext.Hdc);
             }
             catch (Exception ex)
             {
@@ -209,7 +211,9 @@ namespace System.Windows.Forms.Internal
             _graphics = null;
         }
 
-        public IntPtr GetHdc() => DeviceContext.Hdc;
+        IntPtr IDeviceContext.GetHdc() => (IntPtr)DeviceContext.Hdc;
+
+        public Gdi32.HDC GetHdc() => DeviceContext.Hdc;
 
         public void ReleaseHdc() => DeviceContext.Dispose();
     }

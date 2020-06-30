@@ -111,7 +111,7 @@ namespace System.Windows.Forms.Internal
                     // We got a Font in the cache, let's see if we have a WindowsFont with the same quality as required by the caller.
 
                     // WARNING: It is not expected that the WindowsFont is disposed externally since it is created by this class.
-                    Debug.Assert(WindowsFontCache[index].Value.Hfont != IntPtr.Zero, "Cached WindowsFont was disposed, enable GDI_FINALIZATION_WATCH to track who did it!");
+                    Debug.Assert(!WindowsFontCache[index].Value.Hfont.IsNull, "Cached WindowsFont was disposed, enable GDI_FINALIZATION_WATCH to track who did it!");
 
                     WindowsFont wf = WindowsFontCache[index].Value;
                     if (wf.Quality == fontQuality)

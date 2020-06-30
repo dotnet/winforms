@@ -396,8 +396,13 @@ namespace System.Windows.Forms
         private int AddToHandle(Bitmap bitmap)
         {
             Debug.Assert(HandleCreated, "Calling AddToHandle when there is no handle");
-            IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);   // Calls GDI to create Bitmap.
-            IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask); // Calls GDI+ to create Bitmap. Need to add handle to HandleCollector.
+
+            // Calls GDI to create Bitmap.
+            Gdi32.HBITMAP hMask = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+
+            // Calls GDI+ to create Bitmap
+            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)hMask);
+
             int index;
             try
             {
@@ -662,8 +667,7 @@ namespace System.Windows.Forms
                     BitmapData targetData = null;
                     try
                     {
-                        tmpBitmap = Bitmap.FromHbitmap(imageInfo.hbmImage);
-                        //
+                        tmpBitmap = Bitmap.FromHbitmap((IntPtr)imageInfo.hbmImage);
 
                         bmpData = tmpBitmap.LockBits(new Rectangle(imageInfo.rcImage.left, imageInfo.rcImage.top, imageInfo.rcImage.right - imageInfo.rcImage.left, imageInfo.rcImage.bottom - imageInfo.rcImage.top), ImageLockMode.ReadOnly, tmpBitmap.PixelFormat);
 
