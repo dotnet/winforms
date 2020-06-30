@@ -14,13 +14,6 @@ internal partial class Interop
         {
             [DllImport(Libraries.Comctl32, ExactSpelling = true, EntryPoint = "ImageList_Duplicate")]
             public static extern IntPtr Duplicate(IntPtr himl);
-
-            public static IntPtr Duplicate(IHandle himl)
-            {
-                IntPtr result = Duplicate(himl.Handle);
-                GC.KeepAlive(himl);
-                return result;
-            }
         }
     }
 }

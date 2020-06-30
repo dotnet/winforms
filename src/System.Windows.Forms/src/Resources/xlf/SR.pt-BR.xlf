@@ -5556,6 +5556,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">A criação do identificador de ImageList não teve êxito.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">A imagem adicionada a ImageList deve derivar de Image ou ser um Ícone.</target>

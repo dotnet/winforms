@@ -5556,6 +5556,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Creazione dell'handle di ImageList non riuscita.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">Un'immagine aggiunta a ImageList deve essere un'icona o derivare da Image.</target>

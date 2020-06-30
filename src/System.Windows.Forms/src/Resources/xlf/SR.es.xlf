@@ -5556,6 +5556,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Error al crear el identificador de ImageList.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">Las imágenes que se agreguen a ImageList deben derivar de una imagen o ser un icono.</target>

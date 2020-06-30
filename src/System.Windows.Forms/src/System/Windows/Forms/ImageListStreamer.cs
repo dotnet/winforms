@@ -54,12 +54,11 @@ namespace System.Windows.Forms
 
                             try
                             {
-                                MemoryStream ms = new MemoryStream(Decompress(dat));
-
+                                using MemoryStream ms = new MemoryStream(Decompress(dat));
                                 lock (internalSyncObject)
                                 {
                                     ComCtl32.InitCommonControls();
-                                    nativeImageList = new ImageList.NativeImageList(ComCtl32.ImageList.Read(new Ole32.GPStream(ms)));
+                                    nativeImageList = new ImageList.NativeImageList(new Ole32.GPStream(ms));
                                 }
                             }
                             finally
