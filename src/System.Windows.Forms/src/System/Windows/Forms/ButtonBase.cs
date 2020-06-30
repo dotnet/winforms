@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     ///  Implements the basic functionality required by a button control.
     /// </summary>
     [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
-    public abstract class ButtonBase : Control
+    public abstract partial class ButtonBase : Control
     {
         private FlatStyle flatStyle = System.Windows.Forms.FlatStyle.Standard;
         private ContentAlignment imageAlign = ContentAlignment.MiddleCenter;
@@ -1346,34 +1346,6 @@ namespace System.Windows.Forms
                     default:
                         base.WndProc(ref m);
                         break;
-                }
-            }
-        }
-
-        public class ButtonBaseAccessibleObject : ControlAccessibleObject
-        {
-            public ButtonBaseAccessibleObject(Control owner) : base(owner)
-            {
-            }
-
-            public override void DoDefaultAction()
-            {
-                ((ButtonBase)Owner).OnClick(EventArgs.Empty);
-            }
-
-            public override AccessibleStates State
-            {
-                get
-                {
-                    AccessibleStates state = base.State;
-
-                    ButtonBase owner = (ButtonBase)Owner;
-                    if (owner.OwnerDraw && owner.MouseIsDown)
-                    {
-                        state |= AccessibleStates.Pressed;
-                    }
-
-                    return state;
                 }
             }
         }

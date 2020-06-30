@@ -1177,6 +1177,11 @@
         <target state="translated">İşlenmemiş {0} türü.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ConstructorArgumentInvalidValueType">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="new">Argument '{0}' cannot be converted to type '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
         <source>The currently active control.</source>
         <target state="translated">Şu anda etkin denetim.</target>

@@ -1177,6 +1177,11 @@
         <target state="translated">Tipo no controlado {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ConstructorArgumentInvalidValueType">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="new">Argument '{0}' cannot be converted to type '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
         <source>The currently active control.</source>
         <target state="translated">Control activo actual.</target>
