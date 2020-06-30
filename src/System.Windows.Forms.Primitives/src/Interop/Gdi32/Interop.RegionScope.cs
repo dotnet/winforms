@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 
 internal static partial class Interop
@@ -21,7 +22,7 @@ internal static partial class Interop
             public HRGN Region { get; private set; }
 
             /// <summary>
-            ///  Creates a region with the given rectangle.
+            ///  Creates a region with the given rectangle via <see cref="CreateRectRgn(int, int, int, int)"/>.
             /// </summary>
             public RegionScope(Rectangle rectangle)
             {
@@ -29,7 +30,7 @@ internal static partial class Interop
             }
 
             /// <summary>
-            ///  Creates a region with the given rectangle.
+            ///  Creates a region with the given rectangle via <see cref="CreateRectRgn(int, int, int, int)"/>.
             /// </summary>
             public RegionScope(int x1, int y1, int x2, int y2)
             {
@@ -37,14 +38,25 @@ internal static partial class Interop
             }
 
             /// <summary>
-            ///  Creates a clipping region copy for the given device context.
+            ///  Creates a clipping region copy via <see cref="GetClipRgn(IntPtr, HRGN)"/> for the given device context.
             /// </summary>
             /// <param name="hdc">Handle to a device context to copy the clipping region from.</param>
             public RegionScope(IntPtr hdc)
             {
-                HRGN region = default;
-                GetClipRgn(hdc, region);
-                Region = region;
+                HRGN region = CreateRectRgn(0, 0, 0, 0);
+                int result = GetClipRgn(hdc, region);
+                Debug.Assert(result != -1, "GetClipRgn failed");
+
+                if (result == 1)
+                {
+                    Region = region;
+                }
+                else
+                {
+                    // No region, delete our temporary region
+                    DeleteObject(region);
+                    Region = default;
+                }
             }
 
             /// <summary>

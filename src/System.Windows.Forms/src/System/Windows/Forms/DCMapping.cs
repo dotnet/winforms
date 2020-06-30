@@ -19,26 +19,11 @@ namespace System.Windows.Forms
     ///
     ///  Example:
     ///
-    ///  using(DCMapping mapping = new DCMapping(hDC, new Rectangle(10,10, 50, 50) {
-    ///  // inside here the hDC's mapping of (0,0) is inset by (10,10) and
-    ///  // all painting is clipped at (0,0) - (50,50)
+    ///  using(DCMapping mapping = new DCMapping(hDC, new Rectangle(10,10, 50, 50)
+    ///  {
+    ///      // inside here the hDC's mapping of (0,0) is inset by (10,10) and
+    ///      // all painting is clipped at (0,0) - (50,50)
     ///  }
-    ///
-    ///  To use with GDI+ you can get the hDC from the Graphics object. You'd want to do this in a situation where
-    ///  you're handing off a graphics object to someone, and you want the world translated some amount X,Y. This
-    ///  works better than g.TranslateTransform(x,y) - as if someone calls g.GetHdc and does a GDI operation - their
-    ///  world is NOT transformed.
-    ///
-    ///  HandleRef hDC = new HandleRef(this, originalGraphics.GetHdc());
-    ///  try {
-    ///  using(DCMapping mapping = new DCMapping(hDC, new Rectangle(10,10, 50, 50) {
-    ///
-    ///  // DO NOT ATTEMPT TO USE originalGraphics here - you'll get an Object Busy error
-    ///  // rather ask the mapping object for a graphics object.
-    ///  mapping.Graphics.DrawRectangle(Pens.Black, rect);
-    ///  }
-    ///  }
-    ///  finally { g.ReleaseHdc(hDC);}
     ///
     ///  PERF: DCMapping is a structure so that it will allocate on the stack rather than in GC managed
     ///  memory. This way disposing the object does not force a GC. Since DCMapping objects aren't
@@ -48,8 +33,6 @@ namespace System.Windows.Forms
     internal struct DCMapping : IDisposable
     {
         private DeviceContext _dc;
-        private Graphics _graphics;
-        private Rectangle _translatedBounds;
 
         public unsafe DCMapping(IntPtr hDC, Rectangle bounds)
         {
@@ -60,8 +43,6 @@ namespace System.Windows.Forms
 
             bool success;
 
-            _translatedBounds = bounds;
-            _graphics = null;
             _dc = DeviceContext.FromHdc(hDC);
             _dc.SaveHdc();
 
@@ -79,13 +60,7 @@ namespace System.Windows.Forms
 
             try
             {
-                // Create an empty region oriented at 0,0 so we can populate it with the original clipping region of the hDC passed in.
-                var hOriginalClippingRegion = new Gdi32.RegionScope(0, 0, 0, 0);
-                Debug.Assert(!hOriginalClippingRegion.IsNull, "CreateRectRgn() failed.");
-
-                // Get the clipping region from the hDC: result = {-1 = error, 0 = no region, 1 = success} per MSDN
-                int result = Gdi32.GetClipRgn(hDC, hOriginalClippingRegion);
-                Debug.Assert(result != -1, "GetClipRgn() failed.");
+                var hOriginalClippingRegion = new Gdi32.RegionScope(hDC);
 
                 // Shift the viewpoint origint by coordinates specified in "bounds".
                 var lastViewPort = new Point();
@@ -93,7 +68,7 @@ namespace System.Windows.Forms
                 Debug.Assert(success, "SetViewportOrgEx() failed.");
 
                 RegionType originalRegionType;
-                if (result != 0)
+                if (!hOriginalClippingRegion.IsNull)
                 {
                     // Get the origninal clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
                     RECT originalClipRect = new RECT();
@@ -138,42 +113,12 @@ namespace System.Windows.Forms
 
         public void Dispose()
         {
-            if (_graphics != null)
-            {
-                // Reset GDI+ if used.
-                // we need to dispose the graphics object first, as it will do
-                // some restoration to the ViewPort and ClipRectangle to restore the hDC to
-                // the same state it was created in
-                _graphics.Dispose();
-                _graphics = null;
-            }
-
             if (_dc != null)
             {
                 // Now properly reset GDI.
                 _dc.RestoreHdc();
                 _dc.Dispose();
                 _dc = null;
-            }
-        }
-
-        /// <summary>
-        ///  Allows you to get the graphics object based off of the translated HDC.
-        ///  Note this will be disposed when the DCMapping object is disposed.
-        /// </summary>
-        public Graphics Graphics
-        {
-            get
-            {
-                Debug.Assert(_dc != null, "unexpected null dc!");
-
-                if (_graphics == null)
-                {
-                    _graphics = Graphics.FromHdcInternal(_dc.Hdc);
-                    _graphics.SetClip(new Rectangle(Point.Empty, _translatedBounds.Size));
-                }
-
-                return _graphics;
             }
         }
     }
