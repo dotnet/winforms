@@ -9335,7 +9335,7 @@ System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject.ButtonBaseAccessibleO
 ~System.Windows.Forms.ButtonBase.ImageKey.set -> void
 ~System.Windows.Forms.ButtonBase.ImageList.get -> System.Windows.Forms.ImageList
 ~System.Windows.Forms.ButtonBase.ImageList.set -> void
-~System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(System.Windows.Forms.Control owner) -> void
+System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(System.Windows.Forms.Control! owner) -> void
 ~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.CopyTo(System.Array dest, int index) -> void
 ~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.CheckedListBox.CheckedIndices.get -> System.Windows.Forms.CheckedListBox.CheckedIndexCollection
@@ -11066,7 +11066,7 @@ System.Windows.Forms.VScrollProperties.VScrollProperties(System.Windows.Forms.Sc
 ~override System.Windows.Forms.ButtonBase.OnVisibleChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ButtonBase.Text.get -> string
 ~override System.Windows.Forms.ButtonBase.Text.set -> void
-~override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.get -> string
+override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.CheckBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.CheckBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.CheckBox.OnClick(System.EventArgs e) -> void

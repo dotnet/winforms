@@ -23,7 +23,7 @@ namespace System.Windows.Forms
     [DefaultBindingProperty(nameof(CheckState))]
     [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionCheckBox))]
-    public class CheckBox : ButtonBase
+    public partial class CheckBox : ButtonBase
     {
         private static readonly object EVENT_CHECKEDCHANGED = new object();
         private static readonly object EVENT_CHECKSTATECHANGED = new object();
@@ -405,6 +405,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         /// <summary>
         ///  Gets or sets a value indicating the alignment of the
         ///  text on the checkbox control.
@@ -489,8 +491,13 @@ namespace System.Windows.Forms
                 AccessibilityNotifyClients(AccessibleEvents.SystemCaptureStart, -1);
             }
 
+            // MSAA events:
             AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+
+            // UIA events:
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, Name, Name);
+            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
 
             if (FlatStyle == FlatStyle.System)
             {
@@ -644,85 +651,6 @@ namespace System.Windows.Forms
             // We shouldn't need to convert the enum to int
             int checkState = (int)CheckState;
             return s + ", CheckState: " + checkState.ToString(CultureInfo.InvariantCulture);
-        }
-
-        public class CheckBoxAccessibleObject : ButtonBaseAccessibleObject
-        {
-            public CheckBoxAccessibleObject(Control owner) : base(owner)
-            {
-            }
-
-            public override string DefaultAction
-            {
-                get
-                {
-                    string defaultAction = Owner.AccessibleDefaultActionDescription;
-                    if (defaultAction != null)
-                    {
-                        return defaultAction;
-                    }
-
-                    if (((CheckBox)Owner).Checked)
-                    {
-                        return SR.AccessibleActionUncheck;
-                    }
-                    else
-                    {
-                        return SR.AccessibleActionCheck;
-                    }
-                }
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    return AccessibleRole.CheckButton;
-                }
-            }
-
-            public override AccessibleStates State
-            {
-                get
-                {
-                    switch (((CheckBox)Owner).CheckState)
-                    {
-                        case CheckState.Checked:
-                            return AccessibleStates.Checked | base.State;
-                        case CheckState.Indeterminate:
-                            return AccessibleStates.Indeterminate | base.State;
-                    }
-
-                    return base.State;
-                }
-            }
-
-            public override void DoDefaultAction()
-            {
-                CheckBox cb = Owner as CheckBox;
-
-                if (cb != null)
-                {
-                    cb.AccObjDoDefaultAction = true;
-                }
-
-                try
-                {
-                    base.DoDefaultAction();
-                }
-                finally
-                {
-                    if (cb != null)
-                    {
-                        cb.AccObjDoDefaultAction = false;
-                    }
-                }
-            }
         }
     }
 }
