@@ -69,6 +69,11 @@
       "path": "Form1.cs"
     }
   ],
+  "sources": [
+    {
+      "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*", "**/*.filelist", "**/*.lock.json" ]
+    }
+  ],
   "defaultName": "WinFormsApp1",
   "postActions": [
     {
