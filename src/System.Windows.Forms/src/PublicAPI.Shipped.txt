@@ -10484,7 +10484,7 @@ System.Windows.Forms.InputLanguageCollection.this[int index].get -> System.Windo
 ~System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpString.get -> string
 ~System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpString.set -> void
 ~System.Windows.Forms.QueryAccessibilityHelpEventArgs.QueryAccessibilityHelpEventArgs(string helpNamespace, string helpString, string helpKeyword) -> void
-~System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.RadioButtonAccessibleObject(System.Windows.Forms.RadioButton owner) -> void
+System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.RadioButtonAccessibleObject(System.Windows.Forms.RadioButton! owner) -> void
 ~System.Windows.Forms.RelatedImageListAttribute.RelatedImageList.get -> string
 ~System.Windows.Forms.RelatedImageListAttribute.RelatedImageListAttribute(string relatedImageList) -> void
 ~System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem
@@ -11768,7 +11768,7 @@ override System.Windows.Forms.InputLanguage.Equals(object? value) -> bool
 ~override System.Windows.Forms.RadioButton.OnEnter(System.EventArgs e) -> void
 ~override System.Windows.Forms.RadioButton.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.RadioButton.OnMouseUp(System.Windows.Forms.MouseEventArgs mevent) -> void
-~override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.DefaultAction.get -> string
+override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.RadioButton.ToString() -> string
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.set -> void
