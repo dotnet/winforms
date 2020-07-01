@@ -2056,25 +2056,27 @@ namespace System.Windows.Forms
 
         private void Animate(bool animate)
         {
-            if (animate != _state[s_stateCurrentlyAnimatingImage])
+            if (animate == _state[s_stateCurrentlyAnimatingImage])
             {
-                if (animate)
-                {
-                    if (Image != null)
-                    {
-                        ImageAnimator.Animate(Image, new EventHandler(OnAnimationFrameChanged));
-                        _state[s_stateCurrentlyAnimatingImage] = animate;
-                    }
-                }
-                else
-                {
-                    if (Image != null)
-                    {
-                        ImageAnimator.StopAnimate(Image, new EventHandler(OnAnimationFrameChanged));
-                        _state[s_stateCurrentlyAnimatingImage] = animate;
-                    }
-                }
+                return;
             }
+
+            Image image = Image;
+            if (image == null)
+            {
+                return;
+            }
+
+            if (animate)
+            {
+                ImageAnimator.Animate(image, new EventHandler(OnAnimationFrameChanged));
+            }
+            else
+            {
+                ImageAnimator.StopAnimate(image, new EventHandler(OnAnimationFrameChanged));
+            }
+
+            _state[s_stateCurrentlyAnimatingImage] = animate;
         }
 
         internal bool BeginDragForItemReorder()
