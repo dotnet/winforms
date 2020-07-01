@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms
             get
             {
                 Image image = (Image)Properties.GetObject(s_imageProperty);
-                if (image == null && (Owner != null) && (Owner.ImageList != null) && ImageIndexer.ActualIndex >= 0)
+                if (image == null && Owner?.ImageList?.HandleCreated == true && ImageIndexer.ActualIndex >= 0)
                 {
                     if (ImageIndexer.ActualIndex < Owner.ImageList.Images.Count)
                     {
