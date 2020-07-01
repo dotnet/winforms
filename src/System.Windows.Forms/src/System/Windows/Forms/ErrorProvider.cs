@@ -988,7 +988,7 @@ namespace System.Windows.Forms
             ///  at all.
             ///  To work around that we create our own mirrored dc when we need to.
             /// </summary>
-            private void CreateMirrorDC(IntPtr hdc, int originOffset)
+            private void CreateMirrorDC(Gdi32.HDC hdc, int originOffset)
             {
                 Debug.Assert(_mirrordc == null, "Why is mirrordc non-null? Did you not call RestoreMirrorDC?");
 
@@ -1028,34 +1028,26 @@ namespace System.Windows.Forms
             /// </summary>
             private void OnPaint(ref Message m)
             {
-                var ps = new User32.PAINTSTRUCT();
-                IntPtr hdc = User32.BeginPaint(new HandleRef(this, Handle), ref ps);
+                using var hdc = new User32.BeginPaintScope(Handle);
+                CreateMirrorDC(hdc, _windowBounds.Width - 1);
+
                 try
                 {
-                    CreateMirrorDC(hdc, _windowBounds.Width - 1);
-
-                    try
+                    for (int i = 0; i < _items.Count; i++)
                     {
-                        for (int i = 0; i < _items.Count; i++)
-                        {
-                            ControlItem item = _items[i];
-                            Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
-                            User32.DrawIconEx(
-                                _mirrordc,
-                                bounds.X - _windowBounds.X,
-                                bounds.Y - _windowBounds.Y,
-                                _provider.Region,
-                                bounds.Width, bounds.Height);
-                        }
-                    }
-                    finally
-                    {
-                        RestoreMirrorDC();
+                        ControlItem item = _items[i];
+                        Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
+                        User32.DrawIconEx(
+                            _mirrordc,
+                            bounds.X - _windowBounds.X,
+                            bounds.Y - _windowBounds.Y,
+                            _provider.Region,
+                            bounds.Width, bounds.Height);
                     }
                 }
                 finally
                 {
-                    User32.EndPaint(new HandleRef(this, Handle), ref ps);
+                    RestoreMirrorDC();
                 }
             }
 
@@ -1245,7 +1237,7 @@ namespace System.Windows.Forms
                     {
                         CreateMirrorDC(dc.Hdc, _windowBounds.Width);
 
-                        Graphics graphics = Graphics.FromHdcInternal(_mirrordc.Hdc);
+                        using Graphics graphics = _mirrordc.Hdc.CreateGraphics();
                         try
                         {
                             using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, graphics);
@@ -1258,7 +1250,6 @@ namespace System.Windows.Forms
                         }
                         finally
                         {
-                            graphics.Dispose();
                             RestoreMirrorDC();
                         }
                     }

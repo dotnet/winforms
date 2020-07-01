@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
-        public static extern IntPtr CreateFontIndirectW(ref User32.LOGFONTW lplf);
+        public static extern HFONT CreateFontIndirectW(ref User32.LOGFONTW lplf);
     }
 }

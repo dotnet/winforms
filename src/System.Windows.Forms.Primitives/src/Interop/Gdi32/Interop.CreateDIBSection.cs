@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern IntPtr CreateDIBSection(IntPtr hdc, IntPtr pbmi, DIB usage, byte[] ppvBits, IntPtr hSection, uint offset);
+        public static extern HBITMAP CreateDIBSection(HDC hdc, IntPtr pbmi, DIB usage, byte[] ppvBits, IntPtr hSection, uint offset);
     }
 }

@@ -32,21 +32,21 @@ internal static partial class Interop
             public BOOL fIcon;
             public uint xHotspot;
             public uint yHotspot;
-            public IntPtr hbmMask;
-            public IntPtr hbmColor;
+            public Gdi32.HBITMAP hbmMask;
+            public Gdi32.HBITMAP hbmColor;
 
             public void Dispose()
             {
-                if (hbmMask != IntPtr.Zero)
+                if (!hbmMask.IsNull)
                 {
                     Gdi32.DeleteObject(hbmMask);
-                    hbmMask = IntPtr.Zero;
+                    hbmMask = default;
                 }
 
-                if (hbmColor != IntPtr.Zero)
+                if (!hbmColor.IsNull)
                 {
                     Gdi32.DeleteObject(hbmColor);
-                    hbmColor = IntPtr.Zero;
+                    hbmColor = default;
                 }
             }
         }

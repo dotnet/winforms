@@ -16,15 +16,15 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
         /// </remarks>
-        internal ref struct Rop2Scope
+        internal ref struct SetRop2Scope
         {
             private readonly R2 _previousRop;
-            private readonly IntPtr _hdc;
+            private readonly HDC _hdc;
 
             /// <summary>
             ///  Selects <paramref name="rop2"/> into the given <paramref name="hdc"/>.
             /// </summary>
-            public Rop2Scope(IntPtr hdc, R2 rop2)
+            public SetRop2Scope(HDC hdc, R2 rop2)
             {
                 _hdc = hdc;
                 _previousRop = SetROP2(hdc, rop2);

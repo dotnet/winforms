@@ -11,6 +11,6 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public unsafe static extern BOOL SetWindowExtEx(IntPtr hdc, int x, int y, Size *lpsz);
+        public unsafe static extern BOOL SetWindowExtEx(HDC hdc, int x, int y, Size *lpsz);
     }
 }

@@ -12,11 +12,11 @@ internal static partial class Interop
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
         public static extern HRESULT GetThemeBackgroundExtent(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, ref RECT pContentRect, out RECT pExtentRect);
 
-        public static HRESULT GetThemeBackgroundExtent(IHandle hTheme, HandleRef hdc, int iPartId, int iStateId, ref RECT pContentRect, out RECT pExtentRect)
+        public static HRESULT GetThemeBackgroundExtent(IHandle hTheme, IHandle hdc, int iPartId, int iStateId, ref RECT pContentRect, out RECT pExtentRect)
         {
             HRESULT hr = GetThemeBackgroundExtent(hTheme.Handle, hdc.Handle, iPartId, iStateId, ref pContentRect, out pExtentRect);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc.Wrapper);
+            GC.KeepAlive(hdc);
             return hr;
         }
     }

@@ -12,11 +12,11 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern BOOL GetViewportExtEx(IntPtr hdc, out Size lpsize);
+        public static extern BOOL GetViewportExtEx(HDC hdc, out Size lpsize);
 
         public static BOOL GetViewportExtEx(IHandle hdc, out Size lpsize)
         {
-            BOOL result = GetViewportExtEx(hdc.Handle, out lpsize);
+            BOOL result = GetViewportExtEx((HDC)hdc.Handle, out lpsize);
             GC.KeepAlive(hdc);
             return result;
         }

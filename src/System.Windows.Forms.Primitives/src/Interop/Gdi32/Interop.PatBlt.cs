@@ -10,11 +10,11 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern BOOL PatBlt(IntPtr hdc, int x, int y, int w, int h, ROP rop);
+        public static extern BOOL PatBlt(HDC hdc, int x, int y, int w, int h, ROP rop);
 
         public static BOOL PatBlt(HandleRef hdc, int x, int y, int w, int h, ROP rop)
         {
-            BOOL result = PatBlt(hdc.Handle, x, y, w, h, rop);
+            BOOL result = PatBlt((HDC)hdc.Handle, x, y, w, h, rop);
             GC.KeepAlive(hdc.Wrapper);
             return result;
         }

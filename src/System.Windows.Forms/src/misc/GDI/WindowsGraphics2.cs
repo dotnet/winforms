@@ -44,24 +44,24 @@ namespace System.Windows.Forms.Internal
             }
         }
 
-        private void DrawEllipse(WindowsPen? pen, WindowsBrush? brush,
+        private void DrawEllipse(
+            WindowsPen? pen,
+            WindowsBrush? brush,
             int nLeftRect,  // x-coord of upper-left corner of rectangle
             int nTopRect,   // y-coord of upper-left corner of rectangle
             int nRightRect, // x-coord of lower-right corner of rectangle
             int nBottomRect)
         {
             // y-coord of lower-right corner of rectangle
-            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
-
             if (pen != null)
             {
                 // 1. Select the pen in the DC
-                Gdi32.SelectObject(hdc, new HandleRef(pen, pen.HPen));
+                Gdi32.SelectObject(DeviceContext, pen.HPen);
             }
 
             if (brush != null)
             {
-                Gdi32.SelectObject(hdc, new HandleRef(brush, brush.HBrush));
+                Gdi32.SelectObject(DeviceContext, brush.HBrush);
             }
 
             // 2. call the function
@@ -184,12 +184,6 @@ namespace System.Windows.Forms.Internal
             User32.DrawTextExW(DeviceContext, text, text.Length, ref rect, flags, ref dtparams);
 
             // No need to restore previous objects into the dc (see comments on top of the class).
-        }
-
-        public Color GetNearestColor(Color color)
-        {
-            int colorResult = Gdi32.GetNearestColor(DeviceContext.Hdc, ColorTranslator.ToWin32(color));
-            return ColorTranslator.FromWin32(colorResult);
         }
 
         /// <summary>
@@ -450,7 +444,7 @@ namespace System.Windows.Forms.Internal
         {
             Debug.Assert(pen != null, "pen == null");
 
-            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
+            HandleRef hdc = new HandleRef(DeviceContext, (IntPtr)DeviceContext.Hdc);
 
             if (pen != null)
             {
@@ -477,19 +471,14 @@ namespace System.Windows.Forms.Internal
 
         // FillRectangle overloads
 
-        public void FillRectangle(WindowsBrush brush, Rectangle rect)
-        {
-            FillRectangle(brush, rect.X, rect.Y, rect.Width, rect.Height);
-        }
-
-        public void FillRectangle(WindowsBrush brush, int x, int y, int width, int height)
+        public void FillRectangle(WindowsBrush brush, Rectangle rectangle)
         {
             Debug.Assert(brush != null, "brush == null");
-            var rect = new RECT(x, y, x + width, y + height);
+            RECT rect = rectangle;
             User32.FillRect(
-                new HandleRef(DeviceContext, DeviceContext.Hdc),
+                DeviceContext,
                 ref rect,
-                new HandleRef(brush, brush.HBrush));
+                brush.HBrush);
         }
 
         // DrawLine overloads
@@ -504,8 +493,6 @@ namespace System.Windows.Forms.Internal
 
         public unsafe void DrawLine(WindowsPen pen, int x1, int y1, int x2, int y2)
         {
-            HandleRef hdc = new HandleRef(DeviceContext, DeviceContext.Hdc);
-
             Gdi32.R2 rasterOp = DeviceContext.BinaryRasterOperation;
             Gdi32.BKMODE bckMode = DeviceContext.BackgroundMode;
 
@@ -525,8 +512,8 @@ namespace System.Windows.Forms.Internal
             }
 
             Point oldPoint = new Point();
-            Gdi32.MoveToEx(hdc, x1, y1, &oldPoint);
-            Gdi32.LineTo(hdc, x2, y2);
+            Gdi32.MoveToEx(DeviceContext, x1, y1, &oldPoint);
+            Gdi32.LineTo(DeviceContext, x2, y2);
 
             if (bckMode != Gdi32.BKMODE.TRANSPARENT)
             {
@@ -538,7 +525,7 @@ namespace System.Windows.Forms.Internal
                 DeviceContext.SetRasterOperation(rasterOp);
             }
 
-            Gdi32.MoveToEx(hdc, oldPoint.X, oldPoint.Y, &oldPoint);
+            Gdi32.MoveToEx(DeviceContext, oldPoint.X, oldPoint.Y, &oldPoint);
         }
 
         /// <summary>
@@ -565,7 +552,7 @@ namespace System.Windows.Forms.Internal
                 }
 
                 var tm = new Gdi32.TEXTMETRICW();
-                Gdi32.GetTextMetricsW(new HandleRef(DeviceContext, DeviceContext.Hdc), ref tm);
+                Gdi32.GetTextMetricsW(DeviceContext, ref tm);
                 return tm;
             }
             finally

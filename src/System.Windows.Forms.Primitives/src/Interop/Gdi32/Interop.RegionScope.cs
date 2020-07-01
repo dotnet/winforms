@@ -38,10 +38,10 @@ internal static partial class Interop
             }
 
             /// <summary>
-            ///  Creates a clipping region copy via <see cref="GetClipRgn(IntPtr, HRGN)"/> for the given device context.
+            ///  Creates a clipping region copy via <see cref="GetClipRgn(HDC, HRGN)"/> for the given device context.
             /// </summary>
             /// <param name="hdc">Handle to a device context to copy the clipping region from.</param>
-            public RegionScope(IntPtr hdc)
+            public RegionScope(HDC hdc)
             {
                 HRGN region = CreateRectRgn(0, 0, 0, 0);
                 int result = GetClipRgn(hdc, region);

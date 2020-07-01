@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static unsafe extern IntPtr CreateBitmap(int nWidth, int nHeight, uint nPlanes, uint nBitCount, void* lpvBits);
+        public static unsafe extern HBITMAP CreateBitmap(int nWidth, int nHeight, uint nPlanes, uint nBitCount, void* lpvBits);
     }
 }

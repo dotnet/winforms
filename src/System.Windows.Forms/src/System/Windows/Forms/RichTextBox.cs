@@ -651,18 +651,8 @@ namespace System.Windows.Forms
                     }
                     else if (IsHandleCreated)
                     {
-                        IntPtr hDC = Gdi32.CreateICW("DISPLAY", null, null, IntPtr.Zero);
-                        try
-                        {
-                            User32.SendMessageW(this, (User32.WM)EM.SETTARGETDEVICE, hDC, (IntPtr)Pixel2Twip(hDC, value, true));
-                        }
-                        finally
-                        {
-                            if (hDC != IntPtr.Zero)
-                            {
-                                Gdi32.DeleteDC(hDC);
-                            }
-                        }
+                        using var hDC = new Gdi32.CreateDcScope("DISPLAY", null, null, IntPtr.Zero, informationOnly: true);
+                        User32.SendMessageW(this, (User32.WM)EM.SETTARGETDEVICE, (IntPtr)hDC, (IntPtr)Pixel2Twip(value, true));
                     }
                 }
             }
@@ -891,7 +881,7 @@ namespace System.Windows.Forms
                 else
                 {
                     pf.wNumbering = PFN.BULLET;
-                    pf.dxOffset = Pixel2Twip(IntPtr.Zero, bulletIndent, true);
+                    pf.dxOffset = Pixel2Twip(bulletIndent, true);
                 }
                 // set the format for our current paragraph or selection
                 User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, IntPtr.Zero, ref pf);
@@ -913,7 +903,7 @@ namespace System.Windows.Forms
             {
                 ForceHandleCreate();
                 CHARFORMAT2W cf = GetCharFormat(true);
-                return Twip2Pixel(IntPtr.Zero, cf.yOffset, false);
+                return Twip2Pixel(cf.yOffset, false);
             }
             set
             {
@@ -927,7 +917,7 @@ namespace System.Windows.Forms
                 {
                     cbSize = (uint)sizeof(CHARFORMAT2W),
                     dwMask = CFM.OFFSET,
-                    yOffset = Pixel2Twip(IntPtr.Zero, value, false)
+                    yOffset = Pixel2Twip(value, false)
                 };
 
                 // Set the format information
@@ -1083,7 +1073,7 @@ namespace System.Windows.Forms
                     selHangingIndent = pf.dxOffset;
                 }
 
-                return Twip2Pixel(IntPtr.Zero, selHangingIndent, true);
+                return Twip2Pixel(selHangingIndent, true);
             }
             set
             {
@@ -1093,7 +1083,7 @@ namespace System.Windows.Forms
                 {
                     cbSize = (uint)sizeof(PARAFORMAT),
                     dwMask = PFM.OFFSET,
-                    dxOffset = Pixel2Twip(IntPtr.Zero, value, true)
+                    dxOffset = Pixel2Twip(value, true)
                 };
 
                 // set the format for our current paragraph or selection
@@ -1131,7 +1121,7 @@ namespace System.Windows.Forms
                     selIndent = pf.dxStartIndent;
                 }
 
-                return Twip2Pixel(IntPtr.Zero, selIndent, true);
+                return Twip2Pixel(selIndent, true);
             }
             set
             {
@@ -1141,7 +1131,7 @@ namespace System.Windows.Forms
                 {
                     cbSize = (uint)sizeof(PARAFORMAT),
                     dwMask = PFM.STARTINDENT,
-                    dxStartIndent = Pixel2Twip(IntPtr.Zero, value, true)
+                    dxStartIndent = Pixel2Twip(value, true)
                 };
 
                 // set the format for our current paragraph or selection
@@ -1255,7 +1245,7 @@ namespace System.Windows.Forms
                     selRightIndent = pf.dxRightIndent;
                 }
 
-                return Twip2Pixel(IntPtr.Zero, selRightIndent, true);
+                return Twip2Pixel(selRightIndent, true);
             }
             set
             {
@@ -1269,7 +1259,7 @@ namespace System.Windows.Forms
                 {
                     cbSize = (uint)sizeof(PARAFORMAT),
                     dwMask = PFM.RIGHTINDENT,
-                    dxRightIndent = Pixel2Twip(IntPtr.Zero, value, true)
+                    dxRightIndent = Pixel2Twip(value, true)
                 };
 
                 // set the format for our current paragraph or selection
@@ -1304,7 +1294,7 @@ namespace System.Windows.Forms
                     selTabs = new int[pf.cTabCount];
                     for (int x = 0; x < pf.cTabCount; x++)
                     {
-                        selTabs[x] = Twip2Pixel(IntPtr.Zero, pf.rgxTabs[x], true);
+                        selTabs[x] = Twip2Pixel(pf.rgxTabs[x], true);
                     }
                 }
 
@@ -1332,7 +1322,7 @@ namespace System.Windows.Forms
                 pf.dwMask = PFM.TABSTOPS;
                 for (int x = 0; x < pf.cTabCount; x++)
                 {
-                    pf.rgxTabs[x] = Pixel2Twip(IntPtr.Zero, value[x], true);
+                    pf.rgxTabs[x] = Pixel2Twip(value[x], true);
                 }
 
                 // set the format for our current paragraph or selection
@@ -2897,23 +2887,23 @@ namespace System.Windows.Forms
                 ref charFormat);
         }
 
-        private static void SetupLogPixels(IntPtr hDC)
+        private static void SetupLogPixels()
         {
             using var dc = User32.GetDcScope.ScreenDC;
             logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
             logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
         }
 
-        private static int Pixel2Twip(IntPtr hDC, int v, bool xDirection)
+        private static int Pixel2Twip(int v, bool xDirection)
         {
-            SetupLogPixels(hDC);
+            SetupLogPixels();
             int logP = xDirection ? logPixelsX : logPixelsY;
             return (int)((((double)v) / logP) * 72.0 * 20.0);
         }
 
-        private static int Twip2Pixel(IntPtr hDC, int v, bool xDirection)
+        private static int Twip2Pixel(int v, bool xDirection)
         {
-            SetupLogPixels(hDC);
+            SetupLogPixels();
             int logP = xDirection ? logPixelsX : logPixelsY;
             return (int)(((((double)v) / 20.0) / 72.0) * logP);
         }

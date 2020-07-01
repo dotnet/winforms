@@ -15,13 +15,13 @@ namespace System.Windows.Forms.Tests.InteropTests
         public void GetClipRgn_NoRegion()
         {
             // Create a bitmap using the screen's stats
-            IntPtr hdc = CreateCompatibleDC(IntPtr.Zero);
-            Assert.NotEqual(IntPtr.Zero, hdc);
+            HDC hdc = CreateCompatibleDC((HDC)default);
+            Assert.False(hdc.IsNull);
 
             try
             {
-                IntPtr hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
-                Assert.NotEqual(IntPtr.Zero, hbitmap);
+                HBITMAP hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
+                Assert.False(hdc.IsNull);
 
                 try
                 {
@@ -56,13 +56,14 @@ namespace System.Windows.Forms.Tests.InteropTests
         public void RegionScope_NullWithNoClippingRegion()
         {
             // Create a bitmap using the screen's stats
-            IntPtr hdc = CreateCompatibleDC(IntPtr.Zero);
-            Assert.NotEqual(IntPtr.Zero, hdc);
+            HDC hdc = CreateCompatibleDC((HDC)default);
+            Assert.False(hdc.IsNull);
 
             try
             {
-                IntPtr hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
-                Assert.NotEqual(IntPtr.Zero, hbitmap);
+                HBITMAP hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
+                Assert.False(hdc.IsNull);
+
                 try
                 {
                     using var hregion = new RegionScope(hdc);
@@ -83,13 +84,14 @@ namespace System.Windows.Forms.Tests.InteropTests
         public void RegionScope_GetRegion()
         {
             // Create a bitmap using the screen's stats
-            IntPtr hdc = CreateCompatibleDC(IntPtr.Zero);
-            Assert.NotEqual(IntPtr.Zero, hdc);
+            HDC hdc = CreateCompatibleDC((HDC)default);
+            Assert.False(hdc.IsNull);
 
             try
             {
-                IntPtr hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
-                Assert.NotEqual(IntPtr.Zero, hbitmap);
+                HBITMAP hbitmap = CreateCompatibleBitmap(hdc, 20, 20);
+                Assert.False(hdc.IsNull);
+
                 try
                 {
                     Rectangle rectangle = new Rectangle(1, 2, 3, 4);

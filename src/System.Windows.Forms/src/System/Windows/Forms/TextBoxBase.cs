@@ -2074,14 +2074,14 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg)
+        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
         {
-            if ((msg == (int)WM.CTLCOLORSTATIC) && !ShouldSerializeBackColor())
+            if (msg == WM.CTLCOLORSTATIC && !ShouldSerializeBackColor())
             {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
                 // BackColor than when enabled.
-                return IntPtr.Zero;
+                return default;
             }
             else
             {

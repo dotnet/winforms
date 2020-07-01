@@ -384,12 +384,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Graphics tempGraphics = CreateGraphicsInternal();
-            IntPtr dc = tempGraphics.GetHdc();
-            screendpi = new Point(Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX),
-                                  Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY));
-            tempGraphics.ReleaseHdcInternal(dc);
-            tempGraphics.Dispose();
+            using var hdc = new User32.GetDcScope(Handle);
+            screendpi = new Point(Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSX),
+                                  Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSY));
 
             Size pageSize = pageInfo[StartPage].PhysicalSize;
             Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));

@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Internal
+namespace System.Windows.Forms
 {
     /// <summary>
     ///  Enumeration defining the different Graphics properties to apply to a WindowsGraphics when creating it
@@ -11,13 +11,21 @@ namespace System.Windows.Forms.Internal
     [Flags]
     internal enum ApplyGraphicsProperties
     {
-        // No properties to be applied to the DC obtained from the Graphics object.
         None = 0x00000000,
-        // Apply clipping region.
+
+        /// <summary>
+        ///  Apply clipping region.
+        /// </summary>
         Clipping = 0x00000001,
-        // Apply coordinate transformation.
+
+        /// <summary>
+        ///  Apply coordinate transformation.
+        /// </summary>
         TranslateTransform = 0x00000002,
-        // Apply all supported Graphics properties.
+
+        /// <summary>
+        ///  Apply all supported Graphics properties.
+        /// </summary>
         All = Clipping | TranslateTransform
     }
 }

@@ -13,11 +13,11 @@ internal static partial class Interop
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
         public unsafe static extern HRESULT GetThemeTextMetrics(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, out TextMetrics ptm);
 
-        public unsafe static HRESULT GetThemeTextMetrics(IHandle hTheme, HandleRef hdc, int iPartId, int iStateId, out TextMetrics ptm)
+        public unsafe static HRESULT GetThemeTextMetrics(IHandle hTheme, IHandle hdc, int iPartId, int iStateId, out TextMetrics ptm)
         {
             HRESULT hr = GetThemeTextMetrics(hTheme.Handle, hdc.Handle, iPartId, iStateId, out ptm);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc.Wrapper);
+            GC.KeepAlive(hdc);
             return hr;
         }
     }

@@ -18,19 +18,40 @@ internal static partial class Interop
         /// </remarks>
         public ref struct CreateDcScope
         {
-            public IntPtr HDC { get; }
+            public HDC HDC { get; }
 
-            /// <param name="hdc">Creates a compatible DC based off this.</param>
-            public CreateDcScope(IntPtr hdc)
+            /// <summary>
+            ///  Creates a compatible HDC for <paramref name="hdc"/> using <see cref="CreateCompatibleDC(HDC)"/>.
+            /// </summary>
+            /// <remarks>
+            ///  Passing a null HDC will use the current screen.
+            /// </remarks>
+            public CreateDcScope(HDC hdc)
             {
                 HDC = CreateCompatibleDC(hdc);
             }
 
-            public static implicit operator IntPtr(CreateDcScope dcScope) => dcScope.HDC;
+            public CreateDcScope(
+                string lpszDriverName,
+                string? lpszDeviceName = null,
+                string? lpszOutput = null,
+                IntPtr lpInitData = default,
+                bool informationOnly = true)
+            {
+                HDC = informationOnly
+                    ? CreateICW(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData)
+                    : CreateDC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData);
+            }
+
+            public static implicit operator HDC(CreateDcScope dcScope) => dcScope.HDC;
+            public static implicit operator HGDIOBJ(CreateDcScope dcScope) => dcScope.HDC;
+            public static explicit operator IntPtr(CreateDcScope dcScope) => dcScope.HDC.Handle;
+
+            public bool IsNull => HDC.IsNull;
 
             public void Dispose()
             {
-                if (HDC != IntPtr.Zero)
+                if (!HDC.IsNull)
                 {
                     DeleteDC(HDC);
                 }

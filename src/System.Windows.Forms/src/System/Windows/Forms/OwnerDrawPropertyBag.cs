@@ -6,6 +6,7 @@
 
 using System.Drawing;
 using System.Runtime.Serialization;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -47,7 +48,7 @@ namespace System.Windows.Forms
 
         public Color BackColor { get; set; }
 
-        internal IntPtr FontHandle
+        internal Gdi32.HFONT FontHandle
         {
             get
             {

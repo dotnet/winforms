@@ -10,13 +10,13 @@ internal static partial class Interop
     public static partial class UxTheme
     {
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern unsafe HRESULT DrawThemeBackground(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, ref RECT pRect, RECT* pClipRect);
+        public static extern unsafe HRESULT DrawThemeBackground(IntPtr hTheme, Gdi32.HDC hdc, int iPartId, int iStateId, ref RECT pRect, RECT* pClipRect);
 
-        public static unsafe HRESULT DrawThemeBackground(IHandle hTheme, HandleRef hdc, int iPartId, int iStateId, ref RECT pRect, RECT* pClipRect)
+        public static unsafe HRESULT DrawThemeBackground(IHandle hTheme, IHandle hdc, int iPartId, int iStateId, ref RECT pRect, RECT* pClipRect)
         {
-            HRESULT hr = DrawThemeBackground(hTheme.Handle, hdc.Handle, iPartId, iStateId, ref pRect, pClipRect);
+            HRESULT hr = DrawThemeBackground(hTheme.Handle, (Gdi32.HDC)hdc.Handle, iPartId, iStateId, ref pRect, pClipRect);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc.Wrapper);
+            GC.KeepAlive(hdc);
             return hr;
         }
     }

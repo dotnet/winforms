@@ -17,22 +17,25 @@ internal static partial class Interop
         /// </remarks>
         public ref struct BeginPaintScope
         {
-            public IntPtr HDC { get; }
+            public PAINTSTRUCT _paintStruct;
+
+            public Gdi32.HDC HDC { get; }
             public IntPtr HWND { get; }
-            private PAINTSTRUCT _paintStruct;
+
+            public PAINTSTRUCT PaintStruct => _paintStruct;
 
             public BeginPaintScope(IntPtr hwnd)
             {
                 _paintStruct = default;
-                HDC = BeginPaint(hwnd, ref _paintStruct);
+                HDC = (Gdi32.HDC)BeginPaint(hwnd, ref _paintStruct);
                 HWND = hwnd;
             }
 
-            public static implicit operator IntPtr(BeginPaintScope paintScope) => paintScope.HDC;
+            public static implicit operator Gdi32.HDC(BeginPaintScope paintScope) => paintScope.HDC;
 
             public void Dispose()
             {
-                if (HDC != IntPtr.Zero)
+                if (!HDC.IsNull)
                 {
                     EndPaint(HWND, ref _paintStruct);
                 }

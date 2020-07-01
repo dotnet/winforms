@@ -10,12 +10,12 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr WindowFromDC(IntPtr hDC);
+        public static extern IntPtr WindowFromDC(Gdi32.HDC hDC);
 
-        public static IntPtr WindowFromDC(HandleRef hDC)
+        public static IntPtr WindowFromDC(IHandle hDC)
         {
-            IntPtr result = WindowFromDC(hDC.Handle);
-            GC.KeepAlive(hDC.Wrapper);
+            IntPtr result = WindowFromDC((Gdi32.HDC)hDC.Handle);
+            GC.KeepAlive(hDC);
             return result;
         }
     }

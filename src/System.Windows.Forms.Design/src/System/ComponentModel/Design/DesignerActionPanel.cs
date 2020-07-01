@@ -12,7 +12,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
@@ -1937,6 +1936,7 @@ namespace System.ComponentModel.Design
                         IntegralHeight = false,
                         Font = ActionPanel.Font
                     };
+
                     listBox.KeyDown += new KeyEventHandler(OnListBoxKeyDown);
                     TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
                     if (standardValues != null)
@@ -1955,20 +1955,22 @@ namespace System.ComponentModel.Design
 
                     // All measurement code borrowed from WinForms PropertyGridView.cs
                     int maxWidth = 0;
+
                     // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
-                    IntPtr hdc = User32.GetDC(new HandleRef(listBox, listBox.Handle));
-                    IntPtr hFont = listBox.Font.ToHfont();
-                    var tm = new Gdi32.TEXTMETRICW();
-                    try
+                    using (var hdc = new User32.GetDcScope(listBox.Handle))
                     {
-                        hFont = Gdi32.SelectObject(hdc, hFont);
+                        using var hFont = new Gdi32.ObjectScope(listBox.Font.ToHFONT());
+                        using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
+
+                        var tm = new Gdi32.TEXTMETRICW();
+
                         if (listBox.Items.Count > 0)
                         {
                             foreach (string s in listBox.Items)
                             {
                                 var textSize = new Size();
-                                Gdi32.GetTextExtentPoint32W(new HandleRef(listBox, hdc), s, s.Length, ref textSize);
-                                maxWidth = Math.Max((int)textSize.Width, maxWidth);
+                                Gdi32.GetTextExtentPoint32W(hdc, s, s.Length, ref textSize);
+                                maxWidth = Math.Max(textSize.Width, maxWidth);
                             }
                         }
 
@@ -1976,17 +1978,12 @@ namespace System.ComponentModel.Design
 
                         // border + padding + scrollbar
                         maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
-                        hFont = Gdi32.SelectObject(hdc, hFont);
-                    }
-                    finally
-                    {
-                        Gdi32.DeleteObject(hFont);
-                        User32.ReleaseDC(new HandleRef(listBox, listBox.Handle), hdc);
+
+                        listBox.Height = Math.Max(tm.tmHeight + 2, Math.Min(ListBoxMaximumHeight, listBox.PreferredHeight));
+                        listBox.Width = Math.Max(maxWidth, EditRegionSize.Width);
+                        _ignoreDropDownValue = false;
                     }
 
-                    listBox.Height = Math.Max(tm.tmHeight + 2, Math.Min(ListBoxMaximumHeight, listBox.PreferredHeight));
-                    listBox.Width = Math.Max(maxWidth, EditRegionSize.Width);
-                    _ignoreDropDownValue = false;
                     try
                     {
                         ShowDropDown(listBox, SystemColors.ControlDark);

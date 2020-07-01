@@ -10,13 +10,12 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern int FillRect(IntPtr hDC, ref RECT lprc, IntPtr hbr);
+        public static extern int FillRect(Gdi32.HDC hDC, ref RECT lprc, Gdi32.HBRUSH hbr);
 
-        public static int FillRect(HandleRef hDC, ref RECT lprc, HandleRef hbr)
+        public static int FillRect(IHandle hDC, ref RECT lprc, Gdi32.HBRUSH hbr)
         {
-            int result = FillRect(hDC.Handle, ref lprc, hbr.Handle);
-            GC.KeepAlive(hDC.Wrapper);
-            GC.KeepAlive(hbr.Wrapper);
+            int result = FillRect((Gdi32.HDC)hDC.Handle, ref lprc, hbr);
+            GC.KeepAlive(hDC);
             return result;
         }
     }

@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern IntPtr CreatePen(PS nStyle, int nWidth, int crColor);
+        public static extern HPEN CreatePen(PS nStyle, int nWidth, int crColor);
     }
 }

@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Tests.Serialization
                     Assert.Equal(16, y);
                     var imageInfo = new ComCtl32.IMAGEINFO();
                     Assert.True(ComCtl32.ImageList.GetImageInfo(new HandleRef(this, nativeImageList.Handle), 0, ref imageInfo).IsTrue());
-                    Assert.True(IntPtr.Zero != imageInfo.hbmImage);
+                    Assert.False(imageInfo.hbmImage.IsNull);
                 }
             }
         }

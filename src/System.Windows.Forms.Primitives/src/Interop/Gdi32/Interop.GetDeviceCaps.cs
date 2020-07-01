@@ -18,12 +18,12 @@ internal static partial class Interop
         }
 
         [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern int GetDeviceCaps(IntPtr hDC, DeviceCapability nIndex);
+        public static extern int GetDeviceCaps(HDC hDC, DeviceCapability nIndex);
 
-        public static int GetDeviceCaps(HandleRef hDC, DeviceCapability nIndex)
+        public static int GetDeviceCaps(IHandle hDC, DeviceCapability nIndex)
         {
-            int caps = GetDeviceCaps(hDC.Handle, nIndex);
-            GC.KeepAlive(hDC.Wrapper);
+            int caps = GetDeviceCaps((HDC)hDC.Handle, nIndex);
+            GC.KeepAlive(hDC);
             return caps;
         }
     }

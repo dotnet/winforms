@@ -2418,9 +2418,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 Matrix m = g.Transform;
-                IntPtr hdc = g.GetHdc();
+
+                using var hdc = new DeviceContextHdcScope(g, saveState: false);
                 RECT lpRect = new Rectangle(rect.X + (int)m.OffsetX + 2, rect.Y + (int)m.OffsetY - 1, rect.Width - 4, rect.Height);
-                IntPtr hfont = GetHfont(valueModified);
+                Gdi32.HGDIOBJ hfont = (Gdi32.HGDIOBJ)GetHfont(valueModified);
 
                 int oldTextColor = 0;
                 int oldBkColor = 0;
@@ -2429,8 +2430,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 try
                 {
-                    oldTextColor = Gdi32.SetTextColor(new HandleRef(g, hdc), COLORREF.RgbToCOLORREF(textColor.ToArgb()));
-                    oldBkColor = Gdi32.SetBkColor(new HandleRef(g, hdc), COLORREF.RgbToCOLORREF(bkColor.ToArgb()));
+                    oldTextColor = Gdi32.SetTextColor(hdc, COLORREF.RgbToCOLORREF(textColor.ToArgb()));
+                    oldBkColor = Gdi32.SetBkColor(hdc, COLORREF.RgbToCOLORREF(bkColor.ToArgb()));
                     hfont = Gdi32.SelectObject(hdc, hfont);
                     User32.DT format = User32.DT.EDITCONTROL | User32.DT.EXPANDTABS | User32.DT.NOCLIP | User32.DT.SINGLELINE | User32.DT.NOPREFIX;
                     if (gridHost.DrawValuesRightToLeft)
@@ -2450,14 +2451,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                         strValue = new string(passwordReplaceChar, strValue.Length);
                     }
 
-                    User32.DrawTextW(new HandleRef(g, hdc), strValue, strValue.Length, ref lpRect, format);
+                    User32.DrawTextW(hdc, strValue, strValue.Length, ref lpRect, format);
                 }
                 finally
                 {
-                    Gdi32.SetTextColor(new HandleRef(g, hdc), oldTextColor);
-                    Gdi32.SetBkColor(new HandleRef(g, hdc), oldBkColor);
-                    hfont = Gdi32.SelectObject(hdc, hfont);
-                    g.ReleaseHdcInternal(hdc);
+                    Gdi32.SetTextColor(hdc, oldTextColor);
+                    Gdi32.SetBkColor(hdc, oldBkColor);
+                    Gdi32.SelectObject(hdc, hfont);
                 }
 
                 if (doToolTip)

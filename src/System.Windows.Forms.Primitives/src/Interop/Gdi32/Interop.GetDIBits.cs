@@ -10,6 +10,13 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32)]
-        public static extern int GetDIBits(IntPtr hdc, IntPtr hbm, uint start, uint cLines, byte[] lpvBits, ref BITMAPINFO lpbmi, DIB usage);
+        public static extern int GetDIBits(
+            HDC hdc,
+            HBITMAP hbm,
+            uint start,
+            uint cLines,
+            byte[] lpvBits,
+            ref BITMAPINFO lpbmi,
+            DIB usage);
     }
 }

@@ -19,7 +19,7 @@ internal static partial class Interop
             public IntPtr hInstance;
             public IntPtr hIcon;
             public IntPtr hCursor;
-            public IntPtr hbrBackground;
+            public Gdi32.HBRUSH hbrBackground;
             public char* lpszMenuName;
             public char* lpszClassName;
         }

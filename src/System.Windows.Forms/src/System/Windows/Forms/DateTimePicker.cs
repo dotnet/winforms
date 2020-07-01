@@ -245,7 +245,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private IntPtr CalendarFontHandle
+        private Gdi32.HFONT CalendarFontHandle
         {
             get
             {
@@ -1334,7 +1334,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETMCFONT, CalendarFontHandle, NativeMethods.InvalidIntPtr);
+                User32.SendMessageW(this, (User32.WM)DTM.SETMCFONT, (IntPtr)CalendarFontHandle, NativeMethods.InvalidIntPtr);
             }
         }
 

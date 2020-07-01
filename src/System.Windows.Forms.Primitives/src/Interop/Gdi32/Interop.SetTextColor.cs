@@ -4,25 +4,24 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern int SetTextColor(IntPtr hdc, int color);
+        public static extern int SetTextColor(HDC hdc, int color);
 
         public static int SetTextColor(IHandle hdc, int color)
         {
-            int result = SetTextColor(hdc.Handle, color);
+            int result = SetTextColor((HDC)hdc.Handle, color);
             GC.KeepAlive(hdc);
             return result;
         }
 
         public static int SetTextColor(HandleRef hdc, int color)
         {
-            int result = SetTextColor(hdc.Handle, color);
+            int result = SetTextColor((HDC)hdc.Handle, color);
             GC.KeepAlive(hdc.Wrapper);
             return result;
         }

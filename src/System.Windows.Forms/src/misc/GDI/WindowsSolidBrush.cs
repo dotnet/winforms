@@ -14,13 +14,9 @@ namespace System.Windows.Forms.Internal
     {
         protected override void CreateBrush()
         {
-            IntPtr nativeHandle = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(Color));
-            Debug.Assert(nativeHandle != IntPtr.Zero);
+            Gdi32.HBRUSH nativeHandle = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(Color));
+            Debug.Assert(!nativeHandle.IsNull);
             HBrush = nativeHandle;
-        }
-
-        public WindowsSolidBrush(DeviceContext dc) : base(dc)
-        {
         }
 
         public WindowsSolidBrush(DeviceContext dc, Color color) : base(dc, color)

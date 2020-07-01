@@ -6,28 +6,20 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms.Internal
 {
     /// <summary>
     ///  Encapsulates a GDI Brush object.
     /// </summary>
-    internal abstract class WindowsBrush : MarshalByRefObject, ICloneable, IDisposable
+    internal abstract class WindowsBrush : ICloneable, IDisposable, IHandle
     {
-        private IntPtr _nativeHandle;
+        private Gdi32.HBRUSH _nativeHandle;
 
         public abstract object Clone();
 
         protected abstract void CreateBrush();
-
-        /// <summary>
-        ///  Parameterless constructor to use default color.
-        ///  Notice that the actual object construction is done in the derived classes.
-        /// </summary>
-        public WindowsBrush(DeviceContext dc)
-        {
-            DC = dc;
-        }
 
         public WindowsBrush(DeviceContext dc, Color color)
         {
@@ -43,11 +35,10 @@ namespace System.Windows.Forms.Internal
 
         protected virtual void Dispose(bool disposing)
         {
-            if (DC != null && _nativeHandle != IntPtr.Zero)
+            if (DC != null && !_nativeHandle.IsNull)
             {
                 DC.DeleteObject(_nativeHandle, GdiObjectType.Brush);
-
-                _nativeHandle = IntPtr.Zero;
+                _nativeHandle = default;
             }
 
             if (disposing)
@@ -61,11 +52,11 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Gets the native Win32 brush handle. It creates it on demand.
         /// </summary>
-        public IntPtr HBrush
+        public Gdi32.HBRUSH HBrush
         {
             get
             {
-                if (_nativeHandle == IntPtr.Zero)
+                if (_nativeHandle.IsNull)
                 {
                     CreateBrush();
                 }
@@ -74,11 +65,13 @@ namespace System.Windows.Forms.Internal
             }
             protected set
             {
-                Debug.Assert(_nativeHandle == IntPtr.Zero, "WindowsBrush object is immutable");
-                Debug.Assert(value != IntPtr.Zero, "WARNING: assigning IntPtr.Zero to the nativeHandle object.");
+                Debug.Assert(_nativeHandle.IsNull, "WindowsBrush object is immutable");
+                Debug.Assert(!value.IsNull, "WARNING: assigning null handle to the nativeHandle object.");
 
                 _nativeHandle = value;
             }
         }
+
+        public IntPtr Handle => (IntPtr)_nativeHandle;
     }
 }
