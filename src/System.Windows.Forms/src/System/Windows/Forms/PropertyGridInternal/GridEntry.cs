@@ -2223,7 +2223,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 VisualStyleRenderer explorerTreeRenderer = new VisualStyleRenderer(element);
 
-                using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+                using var hdc = new DeviceContextHdcScope(g);
                 explorerTreeRenderer.DrawBackground(hdc, outline, handle);
             }
         }
@@ -2386,8 +2386,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 int textWidth = GetValueTextWidth(strValue, g, f);
                 bool doToolTip = false;
 
-                // To check if text contains multiple lines
-                //
+                // Check if text contains multiple lines
                 if (textWidth >= rect.Width || GetMultipleLines(strValue))
                 {
                     doToolTip = true;
@@ -2399,8 +2398,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // Do actual drawing
-
-                //strValue = ReplaceCRLF(strValue);
 
                 // bump the text down 2 pixels and over 1 pixel.
                 if ((paintFlags & PaintValueFlags.PaintInPlace) != PaintValueFlags.None)
@@ -2415,7 +2412,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Matrix m = g.Transform;
 
-                using var hdc = new DeviceContextHdcScope(g, saveState: false);
+                using var hdc = new DeviceContextHdcScope(g);
                 RECT lpRect = new Rectangle(rect.X + (int)m.OffsetX + 2, rect.Y + (int)m.OffsetY - 1, rect.Width - 4, rect.Height);
                 Gdi32.HGDIOBJ hfont = (Gdi32.HGDIOBJ)GetHfont(valueModified);
 
@@ -2428,7 +2425,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     oldTextColor = Gdi32.SetTextColor(hdc, COLORREF.RgbToCOLORREF(textColor.ToArgb()));
                     oldBkColor = Gdi32.SetBkColor(hdc, COLORREF.RgbToCOLORREF(bkColor.ToArgb()));
-                    hfont = Gdi32.SelectObject(hdc, hfont);
+                    using var fontSelection = new Gdi32.SelectObjectScope(hdc, hfont);
                     User32.DT format = User32.DT.EDITCONTROL | User32.DT.EXPANDTABS | User32.DT.NOCLIP | User32.DT.SINGLELINE | User32.DT.NOPREFIX;
                     if (gridHost.DrawValuesRightToLeft)
                     {
@@ -2453,7 +2450,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     Gdi32.SetTextColor(hdc, oldTextColor);
                     Gdi32.SetBkColor(hdc, oldBkColor);
-                    Gdi32.SelectObject(hdc, hfont);
                 }
 
                 if (doToolTip)

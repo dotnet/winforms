@@ -776,12 +776,6 @@ namespace System.Windows.Forms.ButtonInternal
 
         #region Draw Content Helpers
 
-        // the DataGridViewButtonCell uses this method
-        internal static void PaintButtonBackground(WindowsGraphics wg, Rectangle bounds, WindowsBrush background)
-        {
-            wg.FillRectangle(background, bounds);
-        }
-
         internal void PaintButtonBackground(PaintEventArgs e, Rectangle bounds, Brush background)
         {
             if (background == null)
@@ -906,16 +900,6 @@ namespace System.Windows.Forms.ButtonInternal
 
                 colors.windowFrame = foreColor;
 
-                /* debug * /
-                colors.buttonFace = Color.Yellow;
-                colors.buttonShadow = Color.Blue;
-                colors.highlight = Color.Brown;
-                colors.lowButtonFace = Color.Beige;
-                colors.lowHighlight = Color.Cyan;
-                colors.windowFrame = Color.Red;
-                colors.windowText = Color.Green;
-                / * debug */
-
                 if (colors.buttonFace.GetBrightness() < .5)
                 {
                     colors.constrastButtonShadow = colors.lowHighlight;
@@ -939,7 +923,7 @@ namespace System.Windows.Forms.ButtonInternal
                     colors.windowText = colors.windowFrame;
                 }
 
-                using var hdc = new DeviceContextHdcScope(graphics, saveState: false);
+                using var hdc = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
 
                 colors.buttonFace = hdc.GetNearestColor(colors.buttonFace);
                 colors.buttonShadow = hdc.GetNearestColor(colors.buttonShadow);

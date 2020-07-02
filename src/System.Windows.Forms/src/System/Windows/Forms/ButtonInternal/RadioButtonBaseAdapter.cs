@@ -141,34 +141,36 @@ namespace System.Windows.Forms.ButtonInternal
 
         protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, Color checkColor, Color checkBackground, bool disabledColors)
         {
-            if (Control.Checked)
+            if (!Control.Checked)
             {
-                if (!Control.Enabled && disabledColors)
-                {
-                    checkColor = SystemColors.ControlDark;
-                }
-
-                double scale = GetDpiScaleRatio();
-                using var paintScope = new PaintEventHdcScope(e);
-                Gdi32.HDC hdc = paintScope.HDC;
-                using var brush = new Gdi32.CreateBrushScope(checkColor);
-
-                // Circle drawing doesn't work at this size
-                int offset = 5;
-
-                Rectangle vCross = new Rectangle(
-                    layout.checkBounds.X + GetScaledNumber(offset, scale),
-                    layout.checkBounds.Y + GetScaledNumber(offset - 1, scale),
-                    GetScaledNumber(2, scale),
-                    GetScaledNumber(4, scale));
-                hdc.FillRectangle(vCross, brush);
-
-                Rectangle hCross = new Rectangle(
-                    layout.checkBounds.X + GetScaledNumber(offset - 1, scale),
-                    layout.checkBounds.Y + GetScaledNumber(offset, scale),
-                    GetScaledNumber(4, scale), GetScaledNumber(2, scale));
-                hdc.FillRectangle(hCross, brush);
+                return;
             }
+
+            if (!Control.Enabled && disabledColors)
+            {
+                checkColor = SystemColors.ControlDark;
+            }
+
+            double scale = GetDpiScaleRatio();
+            using var paintScope = new PaintEventHdcScope(e);
+            Gdi32.HDC hdc = paintScope.HDC;
+            using var brush = new Gdi32.CreateBrushScope(checkColor);
+
+            // Circle drawing doesn't work at this size
+            int offset = 5;
+
+            Rectangle vCross = new Rectangle(
+                layout.checkBounds.X + GetScaledNumber(offset, scale),
+                layout.checkBounds.Y + GetScaledNumber(offset - 1, scale),
+                GetScaledNumber(2, scale),
+                GetScaledNumber(4, scale));
+            hdc.FillRectangle(vCross, brush);
+
+            Rectangle hCross = new Rectangle(
+                layout.checkBounds.X + GetScaledNumber(offset - 1, scale),
+                layout.checkBounds.Y + GetScaledNumber(offset, scale),
+                GetScaledNumber(4, scale), GetScaledNumber(2, scale));
+            hdc.FillRectangle(hCross, brush);
         }
 
         protected ButtonState GetState()

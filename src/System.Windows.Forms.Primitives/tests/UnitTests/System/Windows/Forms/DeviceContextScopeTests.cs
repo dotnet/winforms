@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests
             graphics.Clip = region;
             graphics.Transform = new Matrix(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f);
 
-            using (var hdcScope = new DeviceContextHdcScope(graphics, ApplyGraphicsProperties.All))
+            using (var hdcScope = new DeviceContextHdcScope(graphics))
             {
                 using var regionScope = new Gdi32.RegionScope(hdcScope);
                 Assert.False(regionScope.IsNull);

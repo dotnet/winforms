@@ -1309,9 +1309,11 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            using var hdc = new DeviceContextHdcScope(e.Graphics, saveState: false);
-                            foreColor = ColorTranslator.FromWin32(
-                                Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(DisabledColor)));
+                            using (var scope = new PaintEventHdcScope(e))
+                            {
+                                foreColor = ColorTranslator.FromWin32(
+                                Gdi32.GetNearestColor(scope.HDC, ColorTranslator.ToWin32(DisabledColor)));
+                            }
 
                             Rectangle clientRectWidthPadding = ClientRectWithPadding;
 
@@ -1501,9 +1503,11 @@ namespace System.Windows.Forms
                             brushColor = linkBrush.Color;
                         }
 
-                        using var hdc = new DeviceContextHdcScope(g, saveState: false);
-                        brushColor = ColorTranslator.FromWin32(
-                            Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(brushColor)));
+                        using (var hdc = new DeviceContextHdcScope(g))
+                        {
+                            brushColor = ColorTranslator.FromWin32(
+                                Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(brushColor)));
+                        }
 
                         Rectangle clientRectWithPadding = ClientRectWithPadding;
                         TextRenderer.DrawText(
@@ -1562,9 +1566,12 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    using var hdc = new DeviceContextHdcScope(g, saveState: false);
-                    Color color = ColorTranslator.FromWin32(
-                        Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(foreBrush.Color)));
+                    Color color;
+                    using (var hdc = new DeviceContextHdcScope(g, applyGraphicsState: false))
+                    {
+                        color = ColorTranslator.FromWin32(
+                            Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(foreBrush.Color)));
+                    }
 
                     Rectangle clientRectWithPadding = ClientRectWithPadding;
                     TextRenderer.DrawText(

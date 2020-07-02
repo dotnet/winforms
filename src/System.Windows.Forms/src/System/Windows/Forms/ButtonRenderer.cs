@@ -109,7 +109,7 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+                using var hdc = new DeviceContextHdcScope(g);
                 visualStyleRenderer.DrawBackground(hdc, bounds, handle);
                 contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(hdc, bounds);
             }

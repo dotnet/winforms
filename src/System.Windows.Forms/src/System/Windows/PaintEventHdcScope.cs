@@ -11,10 +11,10 @@ namespace System.Windows.Forms
     ///  Scope for <see cref="PaintEventArgs"/> that prefers to avoid creating <see cref="System.Drawing.Graphics"/> if
     ///  possible to get HDC.
     /// </summary>
-    internal ref struct PaintEventHdcScope
+    internal readonly ref struct PaintEventHdcScope
     {
         internal Gdi32.HDC HDC { get; }
-        private DeviceContextHdcScope _scope;
+        private readonly DeviceContextHdcScope _scope;
 
         public PaintEventHdcScope(PaintEventArgs args)
         {
@@ -25,12 +25,12 @@ namespace System.Windows.Forms
             }
             else
             {
-                _scope = new DeviceContextHdcScope(args.Graphics, ApplyGraphicsProperties.All, saveState: false);
-                HDC = _scope;
+                _scope = new DeviceContextHdcScope(args.Graphics);
+                HDC = _scope.HDC;
             }
         }
 
-        public static implicit operator Gdi32.HDC(PaintEventHdcScope scope) => scope.HDC;
+        public static implicit operator Gdi32.HDC(in PaintEventHdcScope scope) => scope.HDC;
 
         public void Dispose()
         {

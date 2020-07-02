@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawDropDownButton(Graphics g, Rectangle bounds, ComboBoxState state)
         {
-            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(g);
             DrawDropDownButtonForHandle(hdc, bounds, state, IntPtr.Zero);
         }
 

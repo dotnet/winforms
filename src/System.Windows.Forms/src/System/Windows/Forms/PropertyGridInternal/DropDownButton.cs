@@ -104,12 +104,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     pevent.Graphics.FillRectangle(SystemBrushes.Window, dropDownButtonRect);
                 }
 
-                using var scope = new PaintEventHdcScope(pevent);
-                ComboBoxRenderer.DrawDropDownButtonForHandle(
-                    scope.HDC,
-                    dropDownButtonRect,
-                    cbState,
-                    DpiHelper.IsScalingRequirementMet ? HandleInternal :IntPtr.Zero);
+                using (var scope = new PaintEventHdcScope(pevent))
+                {
+                    ComboBoxRenderer.DrawDropDownButtonForHandle(
+                        scope.HDC,
+                        dropDownButtonRect,
+                        cbState,
+                        DpiHelper.IsScalingRequirementMet ? HandleInternal : IntPtr.Zero);
+                }
 
                 // Redraw focus cues
                 // For consistency with other PropertyGrid buttons, i.e. those opening system dialogs ("..."), that always show visual cues when focused,

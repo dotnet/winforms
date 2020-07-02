@@ -2904,7 +2904,7 @@ namespace System.Windows.Forms
         {
             using Bitmap image = new Bitmap(bounds.Width, bounds.Height);
             using Graphics g = Graphics.FromImage(image);
-            using var imageHdc = new DeviceContextHdcScope(g, saveState: false);
+            using var imageHdc = new DeviceContextHdcScope(g, applyGraphicsState: false);
 
             // Send the actual wm_print message
             User32.SendMessageW(

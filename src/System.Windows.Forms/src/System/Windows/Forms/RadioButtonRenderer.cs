@@ -78,17 +78,20 @@ namespace System.Windows.Forms
 
         internal static void DrawRadioButton(Graphics g, Point glyphLocation, RadioButtonState state, IntPtr hWnd)
         {
-            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
-            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
-
+            Rectangle glyphBounds;
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
-
+                using var hdc = new DeviceContextHdcScope(g);
+                glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
                 t_visualStyleRenderer.DrawBackground(hdc, glyphBounds, hWnd);
             }
             else
             {
+                using (var hdc = new DeviceContextHdcScope(g))
+                {
+                    glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
+                }
                 ControlPaint.DrawRadioButton(g, glyphBounds, ConvertToButtonState(state));
             }
         }
@@ -113,8 +116,11 @@ namespace System.Windows.Forms
 
         internal static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, TextFormatFlags flags, bool focused, RadioButtonState state, IntPtr hWnd)
         {
-            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
-            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
+            Rectangle glyphBounds;
+            using (var hdc = new DeviceContextHdcScope(g))
+            {
+                glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
+            }
             Color textColor;
 
             if (RenderWithVisualStyles)
@@ -158,8 +164,11 @@ namespace System.Windows.Forms
 
         internal static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, RadioButtonState state, IntPtr hWnd)
         {
-            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
-            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
+            Rectangle glyphBounds;
+            using (var hdc = new DeviceContextHdcScope(g))
+            {
+                glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
+            }
             Color textColor;
 
             if (RenderWithVisualStyles)
@@ -191,7 +200,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size GetGlyphSize(Graphics g, RadioButtonState state)
         {
-            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(g);
             return GetGlyphSize(hdc, state, IntPtr.Zero);
         }
 

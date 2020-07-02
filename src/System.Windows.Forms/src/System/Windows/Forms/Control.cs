@@ -5276,7 +5276,7 @@ namespace System.Windows.Forms
 
             using Bitmap image = new Bitmap(width, height, bitmap.PixelFormat);
             using Graphics g = Graphics.FromImage(image);
-            using var hDc = new DeviceContextHdcScope(g, saveState: false);
+            using var hDc = new DeviceContextHdcScope(g, applyGraphicsState: false);
 
             // Send the WM_PRINT message.
             User32.SendMessageW(
@@ -5287,7 +5287,7 @@ namespace System.Windows.Forms
 
             // Now BLT the result to the destination bitmap.
             using Graphics destGraphics = Graphics.FromImage(bitmap);
-            using var desthDC = new DeviceContextHdcScope(destGraphics, saveState: false);
+            using var desthDC = new DeviceContextHdcScope(destGraphics, applyGraphicsState: false);
             Gdi32.BitBlt(
                 desthDC,
                 targetBounds.X,
@@ -8467,7 +8467,7 @@ namespace System.Windows.Forms
                 Point scrollLocation = scrollOffset;
                 if (this is ScrollableControl scrollControl && scrollLocation != Point.Empty)
                 {
-                    scrollLocation = ((ScrollableControl)this).AutoScrollPosition;
+                    scrollLocation = scrollControl.AutoScrollPosition;
                 }
 
                 if (ControlPaint.IsImageTransparent(BackgroundImage))
@@ -8496,31 +8496,16 @@ namespace System.Windows.Forms
             // to use it without enough bookkeeping to negate any performance gain of using GDI.
             if (color.A == 255)
             {
-                if (!e.HDC.IsNull && DisplayInformation.BitsPerPixel > 8)
-                {
-                    Gdi32.HDC hdc = e.HDC;
-                    using var hbrush = new Gdi32.CreateBrushScope(hdc.GetNearestColor(color));
-                    hdc.FillRectangle(rectangle, hbrush);
-                }
-                else
-                {
-                    using var hdc = new DeviceContextHdcScope(e.Graphics, ApplyGraphicsProperties.All, saveState: false);
-                    using var hbrush = new Gdi32.CreateBrushScope(hdc.GetNearestColor(color));
-                    hdc.FillRectangle(rectangle, hbrush);
-                }
+                using var scope = new PaintEventHdcScope(e);
+                Gdi32.HDC hdc = scope.HDC;
+                using var hbrush = new Gdi32.CreateBrushScope(hdc.GetNearestColor(color));
+                hdc.FillRectangle(rectangle, hbrush);
             }
-            else
+            else if (color.A > 0)
             {
-                // don't paint anything from 100% transparent background
-                if (color.A > 0)
-                {
-                    // Color has some transparency or we have no HDC, so we must
-                    // fall back to using GDI+.
-                    using (Brush brush = new SolidBrush(color))
-                    {
-                        e.Graphics.FillRectangle(brush, rectangle);
-                    }
-                }
+                // Color has some transparency (but not completely transparent) use GDI+.
+                using Brush brush = new SolidBrush(color);
+                e.Graphics.FillRectangle(brush, rectangle);
             }
         }
 

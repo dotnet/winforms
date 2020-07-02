@@ -1417,10 +1417,8 @@ namespace System.Windows.Forms
                                                                         checkState,
                                                                         g,
                                                                         layout.checkBounds,
-                                                                        colors.windowText,
                                                                         colors.buttonFace,
-                                                                        true /*disabledColors*/,
-                                                                        colors);
+                                                                        disabledColors: true);
                                 CheckBoxBaseAdapter.DrawPopupBorder(g, layout.checkBounds, colors);
                                 CheckBoxBaseAdapter.DrawCheckOnly(checkBoxSize.Width,
                                                                     checkState == CheckState.Checked || checkState == CheckState.Indeterminate,
@@ -1461,14 +1459,14 @@ namespace System.Windows.Forms
                                                                                                         cellStyle.ForeColor,
                                                                                                         cellStyle.BackColor,
                                                                                                         DataGridView.Enabled).Calculate();
-                                CheckBoxBaseAdapter.DrawCheckBackground(DataGridView.Enabled,
-                                                                        checkState,
-                                                                        g,
-                                                                        layout.checkBounds,
-                                                                        colors.windowText,
-                                                                        colors.options.highContrast ? colors.buttonFace : colors.highlight,
-                                                                        true /*disabledColors*/,
-                                                                        colors);
+                                CheckBoxBaseAdapter.DrawCheckBackground(
+                                    DataGridView.Enabled,
+                                    checkState,
+                                    g,
+                                    layout.checkBounds,
+                                    colors.options.highContrast ? colors.buttonFace : colors.highlight,
+                                    disabledColors: true);
+
                                 CheckBoxBaseAdapter.DrawPopupBorder(g, layout.checkBounds, colors);
                                 CheckBoxBaseAdapter.DrawCheckOnly(checkBoxSize.Width,
                                                                     checkState == CheckState.Checked || checkState == CheckState.Indeterminate,
@@ -1506,14 +1504,14 @@ namespace System.Windows.Forms
                                                                                                         cellStyle.ForeColor,
                                                                                                         cellStyle.BackColor,
                                                                                                         DataGridView.Enabled).Calculate();
-                                CheckBoxBaseAdapter.DrawCheckBackground(DataGridView.Enabled,
-                                                                        checkState,
-                                                                        g,
-                                                                        layout.checkBounds,
-                                                                        colors.windowText,
-                                                                        colors.options.highContrast ? colors.buttonFace : colors.highlight,
-                                                                        true /*disabledColors*/,
-                                                                        colors);
+                                CheckBoxBaseAdapter.DrawCheckBackground(
+                                    DataGridView.Enabled,
+                                    checkState,
+                                    g,
+                                    layout.checkBounds,
+                                    colors.options.highContrast ? colors.buttonFace : colors.highlight,
+                                    disabledColors: true);
+
                                 ButtonBaseAdapter.DrawFlatBorder(g, layout.checkBounds, colors.buttonShadow);
                                 CheckBoxBaseAdapter.DrawCheckOnly(checkBoxSize.Width,
                                                                   checkState == CheckState.Checked || checkState == CheckState.Indeterminate,

@@ -7,7 +7,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Internal;
 using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
@@ -38,7 +37,13 @@ namespace System.Windows.Forms.ButtonInternal
 
         #region Drawing Helpers
 
-        protected void DrawCheckFlat(PaintEventArgs e, LayoutData layout, Color checkColor, Color checkBackground, Color checkBorder, ColorData colors)
+        protected void DrawCheckFlat(
+            PaintEventArgs e,
+            LayoutData layout,
+            Color checkColor,
+            Color checkBackground,
+            Color checkBorder,
+            ColorData colors)
         {
             Rectangle bounds = layout.checkBounds;
 
@@ -52,10 +57,10 @@ namespace System.Windows.Forms.ButtonInternal
                 bounds.Height--;
             }
 
-            using (var hdc = new DeviceContextHdcScope(e.Graphics, ApplyGraphicsProperties.All, saveState: false))
+            using (var scope = new PaintEventHdcScope(e))
             {
                 using var hpen = new Gdi32.CreatePenScope(checkBorder);
-                hdc.DrawRectangle(bounds, hpen);
+                scope.HDC.DrawRectangle(bounds, hpen);
 
                 // Now subtract, since the rest of the code is like Everett.
                 if (layout.options.everettButtonCompat)
@@ -74,21 +79,26 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                using var hdc = new DeviceContextHdcScope(e.Graphics, ApplyGraphicsProperties.All, saveState: false);
+                using var scope = new PaintEventHdcScope(e);
                 using var hbrush = new Gdi32.CreateBrushScope(checkBackground);
 
                 // Even though we are using GDI here as opposed to GDI+ in Everett, we still need to add 1.
                 bounds.Width++;
                 bounds.Height++;
-                RECT rect = bounds;
-                User32.FillRect(hdc, ref rect, hbrush);
+                scope.HDC.FillRectangle(bounds, hbrush);
             }
 
             DrawCheckOnly(e, layout, colors, checkColor, checkBackground);
         }
 
         // used by DataGridViewCheckBoxCell
-        internal static void DrawCheckBackground(bool controlEnabled, CheckState controlCheckState, Graphics g, Rectangle bounds, Color checkColor, Color checkBackground, bool disabledColors, ColorData colors)
+        internal static void DrawCheckBackground(
+            bool controlEnabled,
+            CheckState controlCheckState,
+            Graphics g,
+            Rectangle bounds,
+            Color checkBackground,
+            bool disabledColors)
         {
             using var hdc = new DeviceContextHdcScope(g);
 
@@ -117,7 +127,13 @@ namespace System.Windows.Forms.ButtonInternal
             User32.FillRect(hdc, ref rect, hbrush);
         }
 
-        protected void DrawCheckBackground(PaintEventArgs e, Rectangle bounds, Color checkColor, Color checkBackground, bool disabledColors, ColorData colors)
+        protected void DrawCheckBackground(
+            PaintEventArgs e,
+            Rectangle bounds,
+            Color checkColor,
+            Color checkBackground,
+            bool disabledColors,
+            ColorData colors)
         {
             // Area behind check
 
@@ -127,7 +143,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                DrawCheckBackground(Control.Enabled, Control.CheckState, e.Graphics, bounds, checkColor, checkBackground, disabledColors, colors);
+                DrawCheckBackground(Control.Enabled, Control.CheckState, e.Graphics, bounds, checkBackground, disabledColors);
             }
         }
 
@@ -189,7 +205,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static Rectangle DrawPopupBorder(Graphics g, Rectangle r, ColorData colors)
         {
-            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(g);
             return DrawPopupBorder(hdc, r, colors);
         }
 

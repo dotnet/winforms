@@ -228,7 +228,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             DrawBackground(hdc, bounds, IntPtr.Zero);
         }
 
@@ -258,7 +258,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             DrawBackground(hdc, bounds, clipRectangle, IntPtr.Zero);
         }
 
@@ -290,7 +290,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             return DrawEdge(hdc, bounds, edges, style, effects);
         }
 
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.VisualStyles
 
             if (childControl.IsHandleCreated)
             {
-                using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+                using var hdc = new DeviceContextHdcScope(dc);
                 RECT rc = bounds;
                 _lastHResult = DrawThemeParentBackground(childControl, hdc, ref rc);
             }
@@ -409,7 +409,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             DrawText(hdc, bounds, textToDraw, drawDisabled, flags);
         }
 
@@ -434,7 +434,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             return GetBackgroundContentRectangle(hdc, bounds);
         }
 
@@ -459,7 +459,7 @@ namespace System.Windows.Forms.VisualStyles
             if (contentBounds.Width < 0 || contentBounds.Height < 0)
                 return Rectangle.Empty;
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: true);
+            using var hdc = new DeviceContextHdcScope(dc);
             RECT contentBoundsRect = contentBounds;
             _lastHResult = GetThemeBackgroundExtent(this, hdc, Part, State, ref contentBoundsRect, out RECT extentRect);
             return extentRect;
@@ -478,7 +478,7 @@ namespace System.Windows.Forms.VisualStyles
             if (bounds.Width < 0 || bounds.Height < 0)
                 return null;
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             RECT boundsRect = bounds;
             _lastHResult = GetThemeBackgroundRegion(this, hdc, Part, State, ref boundsRect, out Gdi32.HRGN hRegion);
 
@@ -567,7 +567,7 @@ namespace System.Windows.Forms.VisualStyles
             if (!ClientUtils.IsEnumValid_NotSequential(prop, (int)prop, (int)FontProperty.TextFont, (int)FontProperty.GlyphFont))
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FontProperty));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeFont(this, hdc, Part, State, (int)prop, out User32.LOGFONTW logfont);
 
             // Check for a failed HR.
@@ -614,7 +614,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             return GetPartSize(hdc, type, IntPtr.Zero);
         }
 
@@ -647,7 +647,7 @@ namespace System.Windows.Forms.VisualStyles
             if (!ClientUtils.IsEnumValid(type, (int)type, (int)ThemeSizeType.Minimum, (int)ThemeSizeType.Draw))
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             RECT boundsRect = bounds;
             _lastHResult = GetThemePartSize(this, hdc, Part, State, &boundsRect, type, out Size size);
             return size;
@@ -678,7 +678,7 @@ namespace System.Windows.Forms.VisualStyles
             if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)MarginProperty.SizingMargins, (int)MarginProperty.CaptionMargins))
                 throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(MarginProperty));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeMargins(this, hdc, Part, State, (int)prop, null, out MARGINS margins);
 
             return new Padding(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);
@@ -712,7 +712,7 @@ namespace System.Windows.Forms.VisualStyles
             if (string.IsNullOrEmpty(textToDraw))
                 throw new ArgumentNullException(nameof(textToDraw));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeTextExtent(this, hdc, Part, State, textToDraw, textToDraw.Length, (uint)flags, null, out RECT rect);
             return rect;
         }
@@ -728,7 +728,7 @@ namespace System.Windows.Forms.VisualStyles
             if (string.IsNullOrEmpty(textToDraw))
                 throw new ArgumentNullException(nameof(textToDraw));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             RECT boundsRect = bounds;
             _lastHResult = GetThemeTextExtent(this, hdc, Part, State, textToDraw, textToDraw.Length, (uint)flags, &boundsRect, out RECT rect);
             return rect;
@@ -742,7 +742,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeTextMetrics(this, hdc, Part, State, out TextMetrics tm);
             return tm;
         }
@@ -755,7 +755,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             RECT backgroundRect = backgroundRectangle;
             _lastHResult = HitTestThemeBackground(this, hdc, Part, State, (uint)options, ref backgroundRect, IntPtr.Zero, pt, out ushort htCode);
             return (HitTestCode)htCode;
@@ -784,7 +784,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            using var hdc = new DeviceContextHdcScope(dc, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc);
             RECT backgroundRect = backgroundRectangle;
             _lastHResult = HitTestThemeBackground(this, hdc, Part, State, (uint)options, ref backgroundRect, hRgn, pt, out ushort htCode);
             return (HitTestCode)htCode;
