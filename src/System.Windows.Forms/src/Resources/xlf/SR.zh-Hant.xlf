@@ -5556,6 +5556,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">建立 ImageList 控制代碼失敗。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">只有衍生自 Image 或本身為 Icon 的影像才可以加入至 ImageList 中。</target>

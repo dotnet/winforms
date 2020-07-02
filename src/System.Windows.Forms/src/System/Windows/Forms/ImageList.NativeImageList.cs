@@ -1,10 +1,11 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics;
+using System.Drawing;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -12,37 +13,100 @@ namespace System.Windows.Forms
     {
         internal class NativeImageList : IDisposable, IHandle
         {
-            private IntPtr _himl;
-#if DEBUG
-            private readonly string _callStack;
-#endif
+            private const int GrowBy = 4;
+            private const int InitialCapacity = 4;
 
-            internal NativeImageList(IntPtr himl)
+            private static readonly object s_syncLock = new object();
+
+            public NativeImageList(Ole32.IStream pstm)
             {
-                _himl = himl;
-#if DEBUG
-                _callStack = Environment.StackTrace;
-#endif
-            }
-
-            public IntPtr Handle => _himl;
-
-            public void Dispose()
-            {
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
-
-            public void Dispose(bool disposing)
-            {
-                if (_himl != IntPtr.Zero)
+                IntPtr himl;
+                lock (s_syncLock)
                 {
-                    ComCtl32.ImageList.Destroy(_himl);
-                    _himl = IntPtr.Zero;
+                    himl = ComCtl32.ImageList.Read(pstm);
+                    Init(himl);
                 }
             }
 
-            ~NativeImageList() => Dispose(false);
+            public NativeImageList(Size imageSize, ILC flags)
+            {
+                IntPtr himl;
+                lock (s_syncLock)
+                {
+                    himl = ComCtl32.ImageList.Create(imageSize.Width, imageSize.Height, flags, InitialCapacity, GrowBy);
+                    Init(himl);
+                }
+            }
+
+            private NativeImageList(IntPtr himl)
+            {
+                Handle = himl;
+            }
+
+            private void Init(IntPtr himl)
+            {
+                if (himl != IntPtr.Zero)
+                {
+                    Handle = himl;
+                    return;
+                }
+
+#if DEBUG
+                Debug.Fail($"{nameof(NativeImageList)} could not be created. Originating stack:\n{_callStack}");
+#endif
+                throw new InvalidOperationException(SR.ImageListCreateFailed);
+            }
+
+            public IntPtr Handle { get; private set; }
+
+            public void Dispose()
+            {
+                lock (s_syncLock)
+                {
+                    if (Handle == IntPtr.Zero)
+                    {
+                        return;
+                    }
+
+                    ComCtl32.ImageList.Destroy(Handle);
+                    Handle = IntPtr.Zero;
+                }
+
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
+            }
+
+#if DEBUG
+            private readonly string _callStack = new StackTrace().ToString();
+
+            ~NativeImageList()
+            {
+                Debug.Fail($"{nameof(NativeImageList)} was not disposed properly. Originating stack:\n{_callStack}");
+
+                // We can't do anything with the fields when we're on the finalizer as they're all classes. If any of
+                // them become structs they'll be a part of this instance and possible to clean up. Ideally we fix
+                // the leaks and never come in on the finalizer.
+                return;
+            }
+#endif
+
+            internal NativeImageList Duplicate()
+            {
+                lock (s_syncLock)
+                {
+                    IntPtr himl = ComCtl32.ImageList.Duplicate(Handle);
+                    if (himl != IntPtr.Zero)
+                    {
+                        return new NativeImageList(himl);
+                    }
+                }
+
+#if DEBUG
+                Debug.Fail($"{nameof(NativeImageList)} could not be duplicated. Originating stack:\n{_callStack}");
+#endif
+                throw new InvalidOperationException(SR.ImageListDuplicateFailed);
+            }
         }
     }
 }

@@ -5556,6 +5556,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Nie można utworzyć uchwytu elementu ImageList.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">Obraz dodany do listy ImageList musi dziedziczyć po elemencie Image lub musi być elementem Icon.</target>

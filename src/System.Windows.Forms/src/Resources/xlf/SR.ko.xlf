@@ -5556,6 +5556,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ImageList 핸들을 만들지 못했습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">ImageList에 추가하는 이미지는 이미지에서 파생되거나 아이콘이어야 합니다.</target>
