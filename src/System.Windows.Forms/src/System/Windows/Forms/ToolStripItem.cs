@@ -1037,28 +1037,32 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (Image != value)
+                if (Image == value)
                 {
-                    StopAnimate();
-                    if (value is Bitmap bmp && ImageTransparentColor != Color.Empty)
-                    {
-                        if (bmp.RawFormat.Guid != ImageFormat.Icon.Guid && !ImageAnimator.CanAnimate(bmp))
-                        {
-                            bmp.MakeTransparent(ImageTransparentColor);
-                        }
-
-                        value = bmp;
-                    }
-                    if (value != null)
-                    {
-                        ImageIndex = ImageList.Indexer.DefaultIndex;
-                    }
-
-                    Properties.SetObject(s_imageProperty, value);
-                    _state[s_stateInvalidMirroredImage] = true;
-                    Animate();
-                    InvalidateItemLayout(PropertyNames.Image);
+                    return;
                 }
+
+                StopAnimate();
+
+                if (value is Bitmap bmp && ImageTransparentColor != Color.Empty)
+                {
+                    if (bmp.RawFormat.Guid != ImageFormat.Icon.Guid && !ImageAnimator.CanAnimate(bmp))
+                    {
+                        bmp.MakeTransparent(ImageTransparentColor);
+                    }
+
+                    value = bmp;
+                }
+                if (value != null)
+                {
+                    ImageIndex = ImageList.Indexer.DefaultIndex;
+                }
+
+                Properties.SetObject(s_imageProperty, value);
+                _state[s_stateInvalidMirroredImage] = true;
+
+                Animate();
+                InvalidateItemLayout(PropertyNames.Image);
             }
         }
 
@@ -2057,25 +2061,27 @@ namespace System.Windows.Forms
 
         private void Animate(bool animate)
         {
-            if (animate != _state[s_stateCurrentlyAnimatingImage])
+            if (animate == _state[s_stateCurrentlyAnimatingImage])
             {
-                if (animate)
-                {
-                    if (Image != null)
-                    {
-                        ImageAnimator.Animate(Image, new EventHandler(OnAnimationFrameChanged));
-                        _state[s_stateCurrentlyAnimatingImage] = animate;
-                    }
-                }
-                else
-                {
-                    if (Image != null)
-                    {
-                        ImageAnimator.StopAnimate(Image, new EventHandler(OnAnimationFrameChanged));
-                        _state[s_stateCurrentlyAnimatingImage] = animate;
-                    }
-                }
+                return;
             }
+
+            Image image = Image;
+            if (image == null)
+            {
+                return;
+            }
+
+            if (animate)
+            {
+                ImageAnimator.Animate(image, new EventHandler(OnAnimationFrameChanged));
+            }
+            else
+            {
+                ImageAnimator.StopAnimate(image, new EventHandler(OnAnimationFrameChanged));
+            }
+
+            _state[s_stateCurrentlyAnimatingImage] = animate;
         }
 
         internal bool BeginDragForItemReorder()
