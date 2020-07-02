@@ -1018,9 +1018,10 @@ namespace System.Windows.Forms
             get
             {
                 Image image = (Image)Properties.GetObject(s_imageProperty);
-                if (image == null && (Owner != null) && (Owner.ImageList != null) && ImageIndexer.ActualIndex >= 0)
+                if (image == null && Owner?.ImageList != null && ImageIndexer.ActualIndex >= 0)
                 {
-                    if (ImageIndexer.ActualIndex < Owner.ImageList.Images.Count)
+                    bool disposing = _state[s_stateDisposing];
+                    if (!disposing && ImageIndexer.ActualIndex < Owner.ImageList.Images.Count)
                     {
                         // CACHE (by design). If we fetched out of the image list every time it would dramatically hit perf.
                         image = Owner.ImageList.Images[ImageIndexer.ActualIndex];
