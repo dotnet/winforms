@@ -1179,7 +1179,7 @@
       </trans-unit>
       <trans-unit id="ConstructorArgumentInvalidValueType">
         <source>Argument '{0}' cannot be converted to type '{1}'.</source>
-        <target state="new">Argument '{0}' cannot be converted to type '{1}'.</target>
+        <target state="translated">引数 '{0}' は型 '{1}' に変換できません。</target>
         <note />
       </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
@@ -6388,7 +6388,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
         <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
-        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <target state="translated">すべてのビュー内の ListViewGroup イメージに対して、ListView により使用される ImageList コントロールです。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">

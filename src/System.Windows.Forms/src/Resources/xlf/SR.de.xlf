@@ -1179,7 +1179,7 @@
       </trans-unit>
       <trans-unit id="ConstructorArgumentInvalidValueType">
         <source>Argument '{0}' cannot be converted to type '{1}'.</source>
-        <target state="new">Argument '{0}' cannot be converted to type '{1}'.</target>
+        <target state="translated">Das Argument {0} kann nicht in den Typ {1} umgewandelt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
@@ -6388,7 +6388,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
         <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
-        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <target state="translated">Das ImageList-Steuerelement, das von ListView für ListViewGroup-Bilder in allen Ansichten verwendet wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">

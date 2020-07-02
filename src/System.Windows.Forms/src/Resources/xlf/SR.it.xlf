@@ -1179,7 +1179,7 @@
       </trans-unit>
       <trans-unit id="ConstructorArgumentInvalidValueType">
         <source>Argument '{0}' cannot be converted to type '{1}'.</source>
-        <target state="new">Argument '{0}' cannot be converted to type '{1}'.</target>
+        <target state="translated">Impossibile convertire l'argomento '{0}' nel tipo '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
@@ -6388,7 +6388,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
         <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
-        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <target state="translated">Controllo ImageList usato da ListView per immagini ListViewGroup in tutte le visualizzazioni.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">
