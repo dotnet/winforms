@@ -38,6 +38,7 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.NamePropertyId => Name,
+                    UiaCore.UIA.AutomationIdPropertyId => _owningScrollBar.Name,
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ScrollBarControlTypeId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => true,
                     UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
