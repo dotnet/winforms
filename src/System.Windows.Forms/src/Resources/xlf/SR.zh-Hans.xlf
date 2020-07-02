@@ -1179,7 +1179,7 @@
       </trans-unit>
       <trans-unit id="ConstructorArgumentInvalidValueType">
         <source>Argument '{0}' cannot be converted to type '{1}'.</source>
-        <target state="new">Argument '{0}' cannot be converted to type '{1}'.</target>
+        <target state="translated">参数“{0}”无法转换为类型“{1}”。</target>
         <note />
       </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
@@ -6388,7 +6388,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
         <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
-        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <target state="translated">ListView 对所有视图中的 ListViewGroup 图像使用的 ImageList 控件。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">
