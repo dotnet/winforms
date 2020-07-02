@@ -10,60 +10,60 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Core Setup for coherency -->
-    <Dependency Name="Microsoft.NETCore.App" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="Microsoft.NETCore.App" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
     <!-- CoreFX via Core Setup -->
-    <Dependency Name="Microsoft.NETCore.Platforms" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="Microsoft.NETCore.Platforms" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.Registry" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="Microsoft.Win32.Registry" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.SystemEvents" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="Microsoft.Win32.SystemEvents" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.CodeDom" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.CodeDom" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Configuration.ConfigurationManager" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Configuration.ConfigurationManager" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Drawing.Common" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Drawing.Common" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Resources.Extensions" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Resources.Extensions" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.Cng" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Security.Cryptography.Cng" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Permissions" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Security.Permissions" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Windows.Extensions" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Windows.Extensions" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
     <!-- CoreCLR via Core Setup -->
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
     <!-- Arcade -->
@@ -87,49 +87,49 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>71b580038fb704df63e03c6b7ae7d2c6a4fdd71d</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Diagnostics.EventLog" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Diagnostics.EventLog" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.DirectoryServices" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.DirectoryServices" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Reflection.MetadataLoadContext" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Reflection.MetadataLoadContext" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Security.AccessControl" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Security.AccessControl" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.Xml" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Security.Cryptography.Xml" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Principal.Windows" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.Security.Principal.Windows" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="System.IO.Packaging" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="System.IO.Packaging" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.App.Internal" Version="5.0.0-preview.8.20330.14">
+    <Dependency Name="Microsoft.NETCore.App.Internal" Version="5.0.0-preview.8.20351.9">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>2d0249e7ae75647c313623b7322cd71a72870deb</Sha>
+      <Sha>719c58c88dc22fe07bcb64f07ba5a74cc10d274c</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>
