@@ -2632,11 +2632,6 @@ namespace System.Windows.Forms
         }
         #endregion
 
-        internal static Graphics GetMeasurementGraphics()
-        {
-            return WindowsFormsUtils.CreateMeasurementGraphics();
-        }
-
         internal ToolStripItem GetSelectedItem()
         {
             ToolStripItem selectedItem = null;

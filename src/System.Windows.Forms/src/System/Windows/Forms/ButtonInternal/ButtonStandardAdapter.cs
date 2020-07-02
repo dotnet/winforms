@@ -95,7 +95,7 @@ namespace System.Windows.Forms.ButtonInternal
 
                 // Note: PaintEvent.HDC == 0 if GDI+ has used the HDC -- it wouldn't be safe for us
                 // to use it without enough bookkeeping to negate any performance gain of using GDI.
-                if (color.A == 255 && e.HDC != IntPtr.Zero)
+                if (color.A == 255 && !e.HDC.IsNull)
                 {
                     if (DisplayInformation.BitsPerPixel > 8)
                     {

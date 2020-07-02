@@ -320,12 +320,12 @@ namespace System.Windows.Forms
                             // Screen Dpi
                             if (DpiHelper.IsPerMonitorV2Awareness)
                             {
-                                _currentAutoScaleDimensions = new SizeF((float)_deviceDpi, (float)_deviceDpi);
+                                _currentAutoScaleDimensions = new SizeF(_deviceDpi, _deviceDpi);
                             }
                             else
                             {
                                 // this DPI value comes from the primary monitor.
-                                _currentAutoScaleDimensions = WindowsGraphicsCacheManager.MeasurementGraphics.DeviceContext.Dpi;
+                                _currentAutoScaleDimensions = new SizeF(DpiHelper.DeviceDpi, DpiHelper.DeviceDpi);
                             }
                             break;
 

@@ -2205,15 +2205,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                VisualStyleElement element = null;
-                if (fExpanded)
-                {
-                    element = VisualStyleElement.ExplorerTreeView.Glyph.Opened;
-                }
-                else
-                {
-                    element = VisualStyleElement.ExplorerTreeView.Glyph.Closed;
-                }
+                VisualStyleElement element = fExpanded
+                    ? VisualStyleElement.ExplorerTreeView.Glyph.Opened
+                    : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
 
                 // Invert color if it is not overriden by developer.
                 if (colorInversionNeededInHC)
@@ -2228,7 +2222,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 VisualStyleRenderer explorerTreeRenderer = new VisualStyleRenderer(element);
-                explorerTreeRenderer.DrawBackground(g, outline, handle);
+
+                using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+                explorerTreeRenderer.DrawBackground(hdc, outline, handle);
             }
         }
 

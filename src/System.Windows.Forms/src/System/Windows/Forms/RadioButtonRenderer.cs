@@ -6,6 +6,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -15,34 +16,24 @@ namespace System.Windows.Forms
     /// </summary>
     public static class RadioButtonRenderer
     {
-        //Make this per-thread, so that different threads can safely use these methods.
+        // Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer visualStyleRenderer = null;
-        private static readonly VisualStyleElement RadioElement = VisualStyleElement.Button.RadioButton.UncheckedNormal;
-        private static bool renderMatchingApplicationState = true;
+        private static VisualStyleRenderer t_visualStyleRenderer = null;
+
+        private static readonly VisualStyleElement s_radioElement = VisualStyleElement.Button.RadioButton.UncheckedNormal;
 
         /// <summary>
         ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
         ///  determine how to render.
         ///  If this property is false, the renderer will always render with visualstyles.
         /// </summary>
-        public static bool RenderMatchingApplicationState
-        {
-            get
-            {
-                return renderMatchingApplicationState;
-            }
-            set
-            {
-                renderMatchingApplicationState = value;
-            }
-        }
+        public static bool RenderMatchingApplicationState { get; set; } = true;
 
         private static bool RenderWithVisualStyles
         {
             get
             {
-                return (!renderMatchingApplicationState || Application.RenderWithVisualStyles);
+                return (!RenderMatchingApplicationState || Application.RenderWithVisualStyles);
             }
         }
 
@@ -55,7 +46,7 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                return visualStyleRenderer.IsBackgroundPartiallyTransparent();
+                return t_visualStyleRenderer.IsBackgroundPartiallyTransparent();
             }
             else
             {
@@ -73,7 +64,7 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer(0);
 
-                visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
+                t_visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
             }
         }
 
@@ -87,13 +78,14 @@ namespace System.Windows.Forms
 
         internal static void DrawRadioButton(Graphics g, Point glyphLocation, RadioButtonState state, IntPtr hWnd)
         {
-            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state, hWnd));
+            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
 
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
 
-                visualStyleRenderer.DrawBackground(g, glyphBounds, hWnd);
+                t_visualStyleRenderer.DrawBackground(hdc, glyphBounds, hWnd);
             }
             else
             {
@@ -121,15 +113,16 @@ namespace System.Windows.Forms
 
         internal static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, TextFormatFlags flags, bool focused, RadioButtonState state, IntPtr hWnd)
         {
-            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state, hWnd));
+            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
             Color textColor;
 
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
 
-                visualStyleRenderer.DrawBackground(g, glyphBounds);
-                textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+                t_visualStyleRenderer.DrawBackground(g, glyphBounds);
+                textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             }
             else
             {
@@ -165,17 +158,18 @@ namespace System.Windows.Forms
 
         internal static void DrawRadioButton(Graphics g, Point glyphLocation, Rectangle textBounds, string radioButtonText, Font font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, RadioButtonState state, IntPtr hWnd)
         {
-            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state, hWnd));
+            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
             Color textColor;
 
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
 
-                //Keep this drawing order! It matches default drawing order.
-                visualStyleRenderer.DrawImage(g, imageBounds, image);
-                visualStyleRenderer.DrawBackground(g, glyphBounds);
-                textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+                // Keep this drawing order! It matches default drawing order.
+                t_visualStyleRenderer.DrawImage(g, imageBounds, image);
+                t_visualStyleRenderer.DrawBackground(g, glyphBounds);
+                textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             }
             else
             {
@@ -197,16 +191,17 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size GetGlyphSize(Graphics g, RadioButtonState state)
         {
-            return GetGlyphSize(g, state, IntPtr.Zero);
+            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+            return GetGlyphSize(hdc, state, IntPtr.Zero);
         }
 
-        internal static Size GetGlyphSize(Graphics g, RadioButtonState state, IntPtr hWnd)
+        internal static Size GetGlyphSize(Gdi32.HDC hdc, RadioButtonState state, IntPtr hWnd)
         {
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
 
-                return visualStyleRenderer.GetPartSize(g, ThemeSizeType.Draw, hWnd);
+                return t_visualStyleRenderer.GetPartSize(hdc, ThemeSizeType.Draw, hWnd);
             }
 
             return new Size(13, 13);
@@ -275,21 +270,21 @@ namespace System.Windows.Forms
         private static void InitializeRenderer(int state)
         {
             RadioButtonState radioButtonState = (RadioButtonState)state;
-            int part = RadioElement.Part;
+            int part = s_radioElement.Part;
             if (SystemInformation.HighContrast
                 && (radioButtonState == RadioButtonState.CheckedDisabled || radioButtonState == RadioButtonState.UncheckedDisabled)
-                && VisualStyleRenderer.IsCombinationDefined(RadioElement.ClassName, VisualStyleElement.Button.RadioButton.HighContrastDisabledPart))
+                && VisualStyleRenderer.IsCombinationDefined(s_radioElement.ClassName, VisualStyleElement.Button.RadioButton.HighContrastDisabledPart))
             {
                 part = VisualStyleElement.Button.RadioButton.HighContrastDisabledPart;
             }
 
-            if (visualStyleRenderer == null)
+            if (t_visualStyleRenderer == null)
             {
-                visualStyleRenderer = new VisualStyleRenderer(RadioElement.ClassName, part, state);
+                t_visualStyleRenderer = new VisualStyleRenderer(s_radioElement.ClassName, part, state);
             }
             else
             {
-                visualStyleRenderer.SetParameters(RadioElement.ClassName, part, state);
+                t_visualStyleRenderer.SetParameters(s_radioElement.ClassName, part, state);
             }
         }
     }

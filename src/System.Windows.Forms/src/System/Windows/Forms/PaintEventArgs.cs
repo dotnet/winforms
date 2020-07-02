@@ -7,8 +7,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -70,7 +68,9 @@ namespace System.Windows.Forms
         ///  HDC, or the GDI+ Graphics object has been created (meaning GDI+ now owns the
         ///  HDC), 0 is returned.
         /// </summary>
-        internal IntPtr HDC => _graphics == null ? (IntPtr)_dc : IntPtr.Zero;
+        internal Gdi32.HDC HDC => _graphics == null ? _dc : default;
+
+        internal bool IsGraphicsCreated => _graphics != null;
 
         /// <summary>
         ///  Gets the <see cref='Drawing.Graphics'/> object used to paint.

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -276,7 +276,11 @@ namespace System.Windows.Forms
                         vsr.SetParameters(VisualStyleElement.Spin.Up.Pressed);
                     }
 
-                    vsr.DrawBackground(e.Graphics, new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height), HandleInternal);
+                    using var paintScope = new PaintEventHdcScope(e);
+                    vsr.DrawBackground(
+                        paintScope,
+                        new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
+                        HandleInternal);
 
                     if (!Enabled)
                     {
@@ -291,19 +295,24 @@ namespace System.Windows.Forms
                         vsr.SetParameters(_mouseOver == ButtonID.Down ? VisualStyleElement.Spin.Down.Hot : VisualStyleElement.Spin.Down.Normal);
                     }
 
-                    vsr.DrawBackground(e.Graphics, new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height), HandleInternal);
+                    vsr.DrawBackground(
+                        paintScope,
+                        new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
+                        HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawScrollButton(e.Graphics,
-                                                  new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
-                                                  ScrollButton.Up,
-                                                  _pushed == ButtonID.Up ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
+                    ControlPaint.DrawScrollButton(
+                        e.Graphics,
+                        new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
+                        ScrollButton.Up,
+                        _pushed == ButtonID.Up ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
 
-                    ControlPaint.DrawScrollButton(e.Graphics,
-                                                  new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
-                                                  ScrollButton.Down,
-                                                  _pushed == ButtonID.Down ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
+                    ControlPaint.DrawScrollButton(
+                        e.Graphics,
+                        new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
+                        ScrollButton.Down,
+                        _pushed == ButtonID.Down ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
                 }
 
                 if (half_height != (ClientSize.Height + 1) / 2)

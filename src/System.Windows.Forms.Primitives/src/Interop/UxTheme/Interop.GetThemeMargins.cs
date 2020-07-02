@@ -10,13 +10,26 @@ internal static partial class Interop
     public static partial class UxTheme
     {
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public unsafe static extern HRESULT GetThemeMargins(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, int iPropId, RECT* prc, out MARGINS pMargins);
+        public unsafe static extern HRESULT GetThemeMargins(
+            IntPtr hTheme,
+            Gdi32.HDC hdc,
+            int iPartId,
+            int iStateId,
+            int iPropId,
+            RECT* prc,
+            out MARGINS pMargins);
 
-        public unsafe static HRESULT GetThemeMargins(IHandle hTheme, IHandle hdc, int iPartId, int iStateId, int iPropId, RECT* prc, out MARGINS pMargins)
+        public unsafe static HRESULT GetThemeMargins(
+            IHandle hTheme,
+            Gdi32.HDC hdc,
+            int iPartId,
+            int iStateId,
+            int iPropId,
+            RECT* prc,
+            out MARGINS pMargins)
         {
-            HRESULT hr = GetThemeMargins(hTheme.Handle, hdc.Handle, iPartId, iStateId, iPropId, prc, out pMargins);
+            HRESULT hr = GetThemeMargins(hTheme.Handle, hdc, iPartId, iStateId, iPropId, prc, out pMargins);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc);
             return hr;
         }
     }

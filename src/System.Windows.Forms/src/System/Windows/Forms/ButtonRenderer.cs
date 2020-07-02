@@ -109,8 +109,9 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                visualStyleRenderer.DrawBackground(g, bounds, handle);
-                contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
+                using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+                visualStyleRenderer.DrawBackground(hdc, bounds, handle);
+                contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(hdc, bounds);
             }
             else
             {
@@ -137,9 +138,14 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, bool focused, PushButtonState state)
         {
-            DrawButton(g, bounds, buttonText, font,
-                       TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
-                       focused, state);
+            DrawButton(
+                g,
+                bounds,
+                buttonText,
+                font,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
+                focused,
+                state);
         }
 
         /// <summary>

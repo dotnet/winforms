@@ -12,7 +12,7 @@ internal static partial class Interop
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
         public static extern HRESULT DrawThemeEdge(
             IntPtr hTheme,
-            IntPtr hdc,
+            Gdi32.HDC hdc,
             int iPartId,
             int iStateId,
             ref RECT pDestRect,
@@ -22,7 +22,7 @@ internal static partial class Interop
 
         public static HRESULT DrawThemeEdge(
             IHandle hTheme,
-            IHandle hdc,
+            Gdi32.HDC hdc,
             int iPartId,
             int iStateId,
             ref RECT pDestRect,
@@ -30,9 +30,8 @@ internal static partial class Interop
             User32.BF uFlags,
             ref RECT pContentRect)
         {
-            HRESULT hr = DrawThemeEdge(hTheme.Handle, hdc.Handle, iPartId, iStateId, ref pDestRect, uEdge, uFlags, ref pContentRect);
+            HRESULT hr = DrawThemeEdge(hTheme.Handle, hdc, iPartId, iStateId, ref pDestRect, uEdge, uFlags, ref pContentRect);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc);
             return hr;
         }
     }

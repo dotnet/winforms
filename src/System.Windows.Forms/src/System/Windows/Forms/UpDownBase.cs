@@ -545,10 +545,15 @@ namespace System.Windows.Forms
                     clipTop.Intersect(clipBounds);
                     clipRight.Intersect(clipBounds);
                     clipBottom.Intersect(clipBounds);
-                    vsr.DrawBackground(e.Graphics, bounds, clipLeft, HandleInternal);
-                    vsr.DrawBackground(e.Graphics, bounds, clipTop, HandleInternal);
-                    vsr.DrawBackground(e.Graphics, bounds, clipRight, HandleInternal);
-                    vsr.DrawBackground(e.Graphics, bounds, clipBottom, HandleInternal);
+
+                    using (var scope = new PaintEventHdcScope(e))
+                    {
+                        vsr.DrawBackground(scope, bounds, clipLeft, HandleInternal);
+                        vsr.DrawBackground(scope, bounds, clipTop, HandleInternal);
+                        vsr.DrawBackground(scope, bounds, clipRight, HandleInternal);
+                        vsr.DrawBackground(scope, bounds, clipBottom, HandleInternal);
+                    }
+
                     // Draw rectangle around edit control with background color
                     using (Pen pen = new Pen(BackColor))
                     {

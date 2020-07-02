@@ -718,6 +718,7 @@ namespace System.Windows.Forms
                         checkBoxSize.Height -= 2;
                         break;
                 }
+
                 switch (freeDimension)
                 {
                     case DataGridViewFreeDimension.Width:
@@ -753,6 +754,7 @@ namespace System.Windows.Forms
                         checkBoxSize = SystemInformation.Border3DSize.Width * 2 + 9 + 2 * DATAGRIDVIEWCHECKBOXCELL_margin;
                         break;
                 }
+
                 switch (freeDimension)
                 {
                     case DataGridViewFreeDimension.Width:
@@ -1390,21 +1392,22 @@ namespace System.Windows.Forms
                         if ((ButtonState & (ButtonState.Pushed | ButtonState.Checked)) != 0)
                         {
                             // paint down
-                            ButtonBaseAdapter.LayoutOptions options = ButtonInternal.CheckBoxPopupAdapter.PaintPopupLayout(g,
-                                                                                                                        true /*show3D*/,
-                                                                                                                        checkBoxSize.Width,
-                                                                                                                        checkBounds,
-                                                                                                                        Padding.Empty,
-                                                                                                                        false,
-                                                                                                                        cellStyle.Font,
-                                                                                                                        string.Empty,
-                                                                                                                        DataGridView.Enabled,
-                                                                                                                        DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
-                                                                                                                        DataGridView.RightToLeft);
+                            ButtonBaseAdapter.LayoutOptions options = CheckBoxPopupAdapter.PaintPopupLayout(
+                                show3D: true,
+                                checkBoxSize.Width,
+                                checkBounds,
+                                Padding.Empty,
+                                isDefault: false,
+                                cellStyle.Font,
+                                string.Empty,
+                                DataGridView.Enabled,
+                                DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
+                                DataGridView.RightToLeft);
+
                             options.everettButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
-                            if (paint && DataGridViewCell.PaintContentForeground(paintParts))
+                            if (paint && PaintContentForeground(paintParts))
                             {
                                 ButtonBaseAdapter.ColorData colors = ButtonBaseAdapter.PaintPopupRender(g,
                                                                                                         cellStyle.ForeColor,
@@ -1437,21 +1440,22 @@ namespace System.Windows.Forms
                         {
                             // paint over
 
-                            ButtonBaseAdapter.LayoutOptions options = ButtonInternal.CheckBoxPopupAdapter.PaintPopupLayout(g,
-                                                                                                                        true /*show3D*/,
-                                                                                                                        checkBoxSize.Width,
-                                                                                                                        checkBounds,
-                                                                                                                        Padding.Empty,
-                                                                                                                        false,
-                                                                                                                        cellStyle.Font,
-                                                                                                                        string.Empty,
-                                                                                                                        DataGridView.Enabled,
-                                                                                                                        DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
-                                                                                                                        DataGridView.RightToLeft);
+                            ButtonBaseAdapter.LayoutOptions options = CheckBoxPopupAdapter.PaintPopupLayout(
+                                show3D: true,
+                                checkBoxSize.Width,
+                                checkBounds,
+                                Padding.Empty,
+                                isDefault: false,
+                                cellStyle.Font,
+                                string.Empty,
+                                DataGridView.Enabled,
+                                DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
+                                DataGridView.RightToLeft);
+
                             options.everettButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
-                            if (paint && DataGridViewCell.PaintContentForeground(paintParts))
+                            if (paint && PaintContentForeground(paintParts))
                             {
                                 ButtonBaseAdapter.ColorData colors = ButtonBaseAdapter.PaintPopupRender(g,
                                                                                                         cellStyle.ForeColor,
@@ -1481,17 +1485,17 @@ namespace System.Windows.Forms
                         else
                         {
                             // paint up
-                            ButtonBaseAdapter.LayoutOptions options = ButtonInternal.CheckBoxPopupAdapter.PaintPopupLayout(g,
-                                                                                                                       false /*show3D*/,
-                                                                                                                       checkBoxSize.Width,
-                                                                                                                       checkBounds,
-                                                                                                                       Padding.Empty,
-                                                                                                                       false,
-                                                                                                                       cellStyle.Font,
-                                                                                                                       string.Empty,
-                                                                                                                       DataGridView.Enabled,
-                                                                                                                       DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
-                                                                                                                       DataGridView.RightToLeft);
+                            ButtonBaseAdapter.LayoutOptions options = CheckBoxPopupAdapter.PaintPopupLayout(
+                                show3D: false,
+                                checkBoxSize.Width,
+                                checkBounds,
+                                Padding.Empty,
+                                false,
+                                cellStyle.Font,
+                                string.Empty,
+                                DataGridView.Enabled,
+                                DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
+                                DataGridView.RightToLeft);
 
                             options.everettButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();

@@ -189,22 +189,31 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static Rectangle DrawPopupBorder(Graphics g, Rectangle r, ColorData colors)
         {
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
-            {
-                using (WindowsPen high = new WindowsPen(wg.DeviceContext, colors.highlight),
-                   shadow = new WindowsPen(wg.DeviceContext, colors.buttonShadow),
-                   face = new WindowsPen(wg.DeviceContext, colors.buttonFace))
-                {
-                    wg.DrawLine(high, r.Right - 1, r.Top, r.Right - 1, r.Bottom);
-                    wg.DrawLine(high, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);
+            using var hdc = new DeviceContextHdcScope(g, ApplyGraphicsProperties.All, saveState: false);
+            return DrawPopupBorder(hdc, r, colors);
+        }
 
-                    wg.DrawLine(shadow, r.Left, r.Top, r.Left, r.Bottom);
-                    wg.DrawLine(shadow, r.Left, r.Top, r.Right - 1, r.Top);
+        internal static Rectangle DrawPopupBorder(PaintEventArgs e, Rectangle r, ColorData colors)
+        {
+            using var hdc = new PaintEventHdcScope(e);
+            return DrawPopupBorder(hdc, r, colors);
+        }
 
-                    wg.DrawLine(face, r.Right - 2, r.Top + 1, r.Right - 2, r.Bottom - 1);
-                    wg.DrawLine(face, r.Left + 1, r.Bottom - 2, r.Right - 1, r.Bottom - 2);
-                }
-            }
+        internal static Rectangle DrawPopupBorder(Gdi32.HDC hdc, Rectangle r, ColorData colors)
+        {
+            using var high = new Gdi32.CreatePenScope(colors.highlight);
+            using var shadow = new Gdi32.CreatePenScope(colors.buttonShadow);
+            using var face = new Gdi32.CreatePenScope(colors.buttonFace);
+
+            hdc.DrawLine(high, r.Right - 1, r.Top, r.Right - 1, r.Bottom);
+            hdc.DrawLine(high, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);
+
+            hdc.DrawLine(shadow, r.Left, r.Top, r.Left, r.Bottom);
+            hdc.DrawLine(shadow, r.Left, r.Top, r.Right - 1, r.Top);
+
+            hdc.DrawLine(face, r.Right - 2, r.Top + 1, r.Right - 2, r.Bottom - 1);
+            hdc.DrawLine(face, r.Left + 1, r.Bottom - 2, r.Right - 1, r.Bottom - 2);
+
             r.Inflate(-1, -1);
             return r;
         }
@@ -237,30 +246,36 @@ namespace System.Windows.Forms.ButtonInternal
 
         protected void DrawCheckBox(PaintEventArgs e, LayoutData layout)
         {
-            Graphics g = e.Graphics;
-
             ButtonState style = GetState();
 
             if (Control.CheckState == CheckState.Indeterminate)
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    CheckBoxRenderer.DrawCheckBox(g, new Point(layout.checkBounds.Left, layout.checkBounds.Top), CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver), Control.HandleInternal);
+                    CheckBoxRenderer.DrawCheckBox(
+                        e.Graphics,
+                        new Point(layout.checkBounds.Left, layout.checkBounds.Top),
+                        CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver),
+                        Control.HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawMixedCheckBox(g, layout.checkBounds, style);
+                    ControlPaint.DrawMixedCheckBox(e.Graphics, layout.checkBounds, style);
                 }
             }
             else
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    CheckBoxRenderer.DrawCheckBox(g, new Point(layout.checkBounds.Left, layout.checkBounds.Top), CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver), Control.HandleInternal);
+                    CheckBoxRenderer.DrawCheckBox(
+                        e.Graphics,
+                        new Point(layout.checkBounds.Left, layout.checkBounds.Top),
+                        CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver),
+                        Control.HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawCheckBox(g, layout.checkBounds, style);
+                    ControlPaint.DrawCheckBox(e.Graphics, layout.checkBounds, style);
                 }
             }
         }

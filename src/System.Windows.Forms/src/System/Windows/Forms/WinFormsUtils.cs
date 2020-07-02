@@ -42,7 +42,10 @@ namespace System.Windows.Forms
         ///  This <see cref="Graphics"/> requires disposal.
         /// </remarks>
         public static Graphics CreateMeasurementGraphics()
-            => WindowsGraphicsCacheManager.MeasurementGraphics.DeviceContext.Hdc.CreateGraphics();
+            => GetMeasurementDeviceContext().CreateGraphics();
+
+        public static Gdi32.HDC GetMeasurementDeviceContext()
+            => WindowsGraphicsCacheManager.MeasurementGraphics.DeviceContext.Hdc;
 
         /// <summary>
         ///  If you want to know if a piece of text contains one and only one &amp;

@@ -10,13 +10,24 @@ internal static partial class Interop
     public static partial class UxTheme
     {
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
-        public static extern HRESULT GetThemeBackgroundContentRect(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, ref RECT pBoundingRect, out RECT pContentRect);
+        public static extern HRESULT GetThemeBackgroundContentRect(
+            IntPtr hTheme,
+            Gdi32.HDC hdc,
+            int iPartId,
+            int iStateId,
+            ref RECT pBoundingRect,
+            out RECT pContentRect);
 
-        public static HRESULT GetThemeBackgroundContentRect(IHandle hTheme, IHandle hdc, int iPartId, int iStateId, ref RECT pBoundingRect, out RECT pContentRect)
+        public static HRESULT GetThemeBackgroundContentRect(
+            IHandle hTheme,
+            Gdi32.HDC hdc,
+            int iPartId,
+            int iStateId,
+            ref RECT pBoundingRect,
+            out RECT pContentRect)
         {
-            HRESULT hr = GetThemeBackgroundContentRect(hTheme.Handle, hdc.Handle, iPartId, iStateId, ref pBoundingRect, out pContentRect);
+            HRESULT hr = GetThemeBackgroundContentRect(hTheme.Handle, hdc, iPartId, iStateId, ref pBoundingRect, out pContentRect);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc);
             return hr;
         }
     }

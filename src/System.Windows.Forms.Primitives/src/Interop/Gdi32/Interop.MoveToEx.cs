@@ -11,11 +11,11 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public unsafe static extern BOOL MoveToEx(IntPtr hdc, int x, int y, Point* lppt);
+        public unsafe static extern BOOL MoveToEx(HDC hdc, int x, int y, Point* lppt);
 
         public unsafe static BOOL MoveToEx(IHandle hdc, int x, int y, Point* lppt)
         {
-            BOOL result = MoveToEx(hdc.Handle, x, y, lppt);
+            BOOL result = MoveToEx((HDC)hdc.Handle, x, y, lppt);
             GC.KeepAlive(hdc);
             return result;
         }

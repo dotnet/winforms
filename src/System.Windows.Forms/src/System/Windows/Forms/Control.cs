@@ -355,7 +355,6 @@ namespace System.Windows.Forms
 #endif
             Properties = new PropertyStore();
 
-            DpiHelper.InitializeDpiHelperForWinforms();
             // Initialize DPI to the value on the primary screen, we will have the correct value when the Handle is created.
             _deviceDpi = DpiHelper.DeviceDpi;
 
@@ -7497,38 +7496,18 @@ namespace System.Windows.Forms
             }
             else
             {
-                Message m;
-                bool releaseDC = false;
-                IntPtr hdc = IntPtr.Zero;
-
                 if (!(e is PrintPaintEventArgs ppev))
                 {
                     IntPtr flags = (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
-                    hdc = e.HDC;
 
-                    if (hdc == IntPtr.Zero)
-                    {
-                        // a manually created paintevent args
-                        hdc = e.Graphics.GetHdc();
-                        releaseDC = true;
-                    }
-                    m = Message.Create(Handle, User32.WM.PRINTCLIENT, hdc, flags);
+                    using var scope = new PaintEventHdcScope(e);
+                    Message m = Message.Create(Handle, User32.WM.PRINTCLIENT, (IntPtr)scope.HDC, flags);
+                    DefWndProc(ref m);
                 }
                 else
                 {
-                    m = ppev.Message;
-                }
-
-                try
-                {
+                    Message m = ppev.Message;
                     DefWndProc(ref m);
-                }
-                finally
-                {
-                    if (releaseDC)
-                    {
-                        e.Graphics.ReleaseHdcInternal(hdc);
-                    }
                 }
             }
         }
@@ -8510,16 +8489,16 @@ namespace System.Windows.Forms
             // use GDI because it is faster for simple things than creating
             // a graphics object, brush, etc.  Also, we may be able to
             // use a system brush, avoiding the brush create altogether.
-            //
+
             Color color = backColor;
 
             // Note: PaintEvent.HDC == 0 if GDI+ has used the HDC -- it wouldn't be safe for us
             // to use it without enough bookkeeping to negate any performance gain of using GDI.
             if (color.A == 255)
             {
-                if (e.HDC != IntPtr.Zero && DisplayInformation.BitsPerPixel > 8)
+                if (!e.HDC.IsNull && DisplayInformation.BitsPerPixel > 8)
                 {
-                    Gdi32.HDC hdc = (Gdi32.HDC)e.HDC;
+                    Gdi32.HDC hdc = e.HDC;
                     using var hbrush = new Gdi32.CreateBrushScope(hdc.GetNearestColor(color));
                     hdc.FillRectangle(rectangle, hbrush);
                 }
@@ -11689,6 +11668,7 @@ namespace System.Windows.Forms
         private void WmDisplayChange(ref Message m)
         {
             BufferedGraphicsManager.Current.Invalidate();
+
             DefWndProc(ref m);
         }
 
