@@ -12893,7 +12893,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Control_WndProc_InvokePrintClientWithoutHandleWithoutWParamUserPaint_ThrowsNullReferenceException()
+        public void Control_WndProc_InvokePrintClientWithoutHandleWithoutWParamUserPaint_DoesNotThrow()
         {
             using (new NoAssertContext())
             {
@@ -12908,10 +12908,10 @@ namespace System.Windows.Forms.Tests
                     Msg = (int)User32.WM.PRINTCLIENT,
                     Result = (IntPtr)250
                 };
-                Assert.Throws<NullReferenceException>(() => control.WndProc(ref m));
+                control.WndProc(ref m);
                 Assert.Equal((IntPtr)250, m.Result);
                 Assert.False(control.IsHandleCreated);
-                Assert.Equal(0, paintCallCount);
+                Assert.Equal(1, paintCallCount);
             }
         }
 
@@ -12997,7 +12997,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Control_WndProc_InvokePrintClientWithHandleWithoutWParamUserPaint_ThrowsNullReferenceException()
+        public void Control_WndProc_InvokePrintClientWithHandleWithoutWParamUserPaint_DoesNotThrow()
         {
             using var control = new SubControl();
             control.SetStyle(ControlStyles.UserPaint, true);
@@ -13017,13 +13017,14 @@ namespace System.Windows.Forms.Tests
                 Msg = (int)User32.WM.PRINTCLIENT,
                 Result = (IntPtr)250
             };
-            Assert.Throws<NullReferenceException>(() => control.WndProc(ref m));
+
+            control.WndProc(ref m);
             Assert.Equal((IntPtr)250, m.Result);
             Assert.True(control.IsHandleCreated);
-            Assert.Equal(1, invalidatedCallCount);
+            Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(0, paintCallCount);
+            Assert.Equal(1, paintCallCount);
         }
 
         public static IEnumerable<object[]> WndProc_PrintClientWithHandleWithWParam_TestData()
