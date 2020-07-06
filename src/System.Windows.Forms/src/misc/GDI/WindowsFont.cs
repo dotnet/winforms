@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Globalization;
 using static Interop;
 
@@ -367,33 +366,6 @@ namespace System.Windows.Forms.Internal
                 }
 
                 return _fontSize;
-            }
-        }
-
-        /// <summary>
-        ///  Attempts to match the TextRenderingHint of the specified Graphics object with a LOGFONT.lfQuality value.
-        /// </summary>
-        public static Gdi32.QUALITY WindowsFontQualityFromTextRenderingHint(Graphics? g)
-        {
-            if (g == null)
-            {
-                return Gdi32.QUALITY.DEFAULT;
-            }
-
-            switch (g.TextRenderingHint)
-            {
-                case TextRenderingHint.ClearTypeGridFit:
-                    return Gdi32.QUALITY.CLEARTYPE;
-                case TextRenderingHint.AntiAliasGridFit:
-                case TextRenderingHint.AntiAlias:
-                    return Gdi32.QUALITY.ANTIALIASED;
-                case TextRenderingHint.SingleBitPerPixelGridFit:
-                    return Gdi32.QUALITY.PROOF;
-                case TextRenderingHint.SingleBitPerPixel:
-                    return Gdi32.QUALITY.DRAFT;
-                default:
-                case TextRenderingHint.SystemDefault:
-                    return Gdi32.QUALITY.DEFAULT;
             }
         }
     }
