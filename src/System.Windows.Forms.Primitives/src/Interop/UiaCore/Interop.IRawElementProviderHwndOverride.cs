@@ -15,7 +15,7 @@ internal static partial class Interop
         /// </summary>
         [Guid("1d5df27c-8947-4425-b8d9-79787bb460b8")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IRawElementProviderHwndOverride : IRawElementProviderSimple
+        public interface IRawElementProviderHwndOverride
         {
             /// <summary>
             ///  Request a provider for the specified component. The returned provider can supply additional

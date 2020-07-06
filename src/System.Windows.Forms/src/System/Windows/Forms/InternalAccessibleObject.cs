@@ -400,20 +400,16 @@ namespace System.Windows.Forms
 
         int ILegacyIAccessibleProvider.ChildId => publicILegacyIAccessibleProvider.ChildId;
 
-        void ILegacyIAccessibleProvider.DoDefaultAction()
-            => publicILegacyIAccessibleProvider.DoDefaultAction();
+        void ILegacyIAccessibleProvider.DoDefaultAction() => publicILegacyIAccessibleProvider.DoDefaultAction();
 
         IAccessible? ILegacyIAccessibleProvider.GetIAccessible()
             => publicILegacyIAccessibleProvider.GetIAccessible();
 
-        object[]? ILegacyIAccessibleProvider.GetSelection()
-            => AsArrayOfNativeAccessibles(publicILegacyIAccessibleProvider.GetSelection());
+        IRawElementProviderSimple[] ILegacyIAccessibleProvider.GetSelection() => publicILegacyIAccessibleProvider.GetSelection();
 
-        void ILegacyIAccessibleProvider.Select(int flagsSelect)
-            => publicILegacyIAccessibleProvider.Select(flagsSelect);
+        void ILegacyIAccessibleProvider.Select(int flagsSelect) => publicILegacyIAccessibleProvider.Select(flagsSelect);
 
-        void ILegacyIAccessibleProvider.SetValue(string szValue)
-            => publicILegacyIAccessibleProvider.SetValue(szValue);
+        void ILegacyIAccessibleProvider.SetValue(string szValue) => publicILegacyIAccessibleProvider.SetValue(szValue);
 
         void IInvokeProvider.Invoke() => publicIInvokeProvider.Invoke();
 
