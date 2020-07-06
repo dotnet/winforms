@@ -33,6 +33,7 @@
             this.FolderBrowserDialog = new System.Windows.Forms.Button();
             this.OpenFileDialog = new System.Windows.Forms.Button();
             this.SaveFileDialog = new System.Windows.Forms.Button();
+            this.StartTaskDialog = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ColorDialog
@@ -85,11 +86,22 @@
             this.SaveFileDialog.UseVisualStyleBackColor = true;
             this.SaveFileDialog.Click += new System.EventHandler(this.SaveFileDialog_Click);
             // 
+            // TaskDialog
+            // 
+            this.StartTaskDialog.Location = new System.Drawing.Point(428, 34);
+            this.StartTaskDialog.Name = "StartTaskDialog";
+            this.StartTaskDialog.Size = new System.Drawing.Size(98, 23);
+            this.StartTaskDialog.TabIndex = 5;
+            this.StartTaskDialog.Text = "Open TaskDialog";
+            this.StartTaskDialog.UseVisualStyleBackColor = true;
+            this.StartTaskDialog.Click += new System.EventHandler(this.StartTaskDialog_Click);
+            // 
             // DialogsTesting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(623, 237);
+            this.Controls.Add(this.StartTaskDialog);
             this.Controls.Add(this.SaveFileDialog);
             this.Controls.Add(this.OpenFileDialog);
             this.Controls.Add(this.FolderBrowserDialog);
@@ -108,6 +120,7 @@
         private System.Windows.Forms.Button FolderBrowserDialog;
         private System.Windows.Forms.Button OpenFileDialog;
         private System.Windows.Forms.Button SaveFileDialog;
+        private System.Windows.Forms.Button StartTaskDialog;
     }
 }
 
