@@ -1177,6 +1177,11 @@
         <target state="translated">Nezpracovaný typ {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ConstructorArgumentInvalidValueType">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">Argument {0} nelze převést na typ {1}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
         <source>The currently active control.</source>
         <target state="translated">Aktivní ovládací prvek.</target>
@@ -5551,6 +5556,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Vytvoření popisovače ImageList se nezdařilo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">Obrázek přidaný do seznamu ImageList musí být buď odvozen od objektu Image, nebo musí být objektem Icon.</target>
@@ -5638,7 +5648,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">Nepovedlo se najít InputLanguage pro jazykovou verzi {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -6378,7 +6388,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
         <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
-        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <target state="translated">Ovládací prvek ImageList používaný v zobrazení ListView pro ListViewGroup pro obrázky ve všech zobrazeních</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">
@@ -9198,7 +9208,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="TaskDialogNavigationNotCompleted">
         <source>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</source>
-        <target state="translated">Navigace dialogem úlohy ještě neskončila. Počkejte prosím, než dojde k události {0}.</target>
+        <target state="translated">Navigace v dialogu úlohy ještě neskončila. Počkejte prosím, než dojde k události {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogOnlySingleRadioButtonCanBeChecked">

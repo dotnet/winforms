@@ -1177,6 +1177,11 @@
         <target state="translated">未處理的類型 {0}。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ConstructorArgumentInvalidValueType">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">引數 '{0}' 無法轉換為類型 '{1}'。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
         <source>The currently active control.</source>
         <target state="translated">目前作用中的控制項。</target>
@@ -5551,6 +5556,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">建立 ImageList 控制代碼失敗。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">只有衍生自 Image 或本身為 Icon 的影像才可以加入至 ImageList 中。</target>
@@ -5638,7 +5648,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">找不到文化特性 '{0}' 的 InputLanguage。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -6378,7 +6388,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
         <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
-        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <target state="translated">在所有檢視中，ListView 用於 ListViewGroup 影像的 ImageList 控制項。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">

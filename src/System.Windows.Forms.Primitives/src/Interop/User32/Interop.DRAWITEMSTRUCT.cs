@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
@@ -17,7 +16,7 @@ internal static partial class Interop
             public ODA itemAction;
             public ODS itemState;
             public IntPtr hwndItem;
-            public IntPtr hDC;
+            public Gdi32.HDC hDC;
             public RECT rcItem;
             public IntPtr itemData;
         }

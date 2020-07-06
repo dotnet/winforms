@@ -939,28 +939,18 @@ namespace System.Windows.Forms.ButtonInternal
                     colors.windowText = colors.windowFrame;
                 }
 
-                IntPtr hdc = graphics.GetHdc();
+                using var hdc = new DeviceContextHdcScope(graphics, saveState: false);
 
-                try
-                {
-                    using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                    {
-                        colors.buttonFace = wg.GetNearestColor(colors.buttonFace);
-                        colors.buttonShadow = wg.GetNearestColor(colors.buttonShadow);
-                        colors.buttonShadowDark = wg.GetNearestColor(colors.buttonShadowDark);
-                        colors.constrastButtonShadow = wg.GetNearestColor(colors.constrastButtonShadow);
-                        colors.windowText = wg.GetNearestColor(colors.windowText);
-                        colors.highlight = wg.GetNearestColor(colors.highlight);
-                        colors.lowHighlight = wg.GetNearestColor(colors.lowHighlight);
-                        colors.lowButtonFace = wg.GetNearestColor(colors.lowButtonFace);
-                        colors.windowFrame = wg.GetNearestColor(colors.windowFrame);
-                        colors.windowDisabled = wg.GetNearestColor(colors.windowDisabled);
-                    }
-                }
-                finally
-                {
-                    graphics.ReleaseHdc();
-                }
+                colors.buttonFace = hdc.GetNearestColor(colors.buttonFace);
+                colors.buttonShadow = hdc.GetNearestColor(colors.buttonShadow);
+                colors.buttonShadowDark = hdc.GetNearestColor(colors.buttonShadowDark);
+                colors.constrastButtonShadow = hdc.GetNearestColor(colors.constrastButtonShadow);
+                colors.windowText = hdc.GetNearestColor(colors.windowText);
+                colors.highlight = hdc.GetNearestColor(colors.highlight);
+                colors.lowHighlight = hdc.GetNearestColor(colors.lowHighlight);
+                colors.lowButtonFace = hdc.GetNearestColor(colors.lowButtonFace);
+                colors.windowFrame = hdc.GetNearestColor(colors.windowFrame);
+                colors.windowDisabled = hdc.GetNearestColor(colors.windowDisabled);
 
                 return colors;
             }

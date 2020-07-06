@@ -48,7 +48,7 @@ namespace System
             string className = default,
             IntPtr moduleInstance = default,
             User32.CS classStyle = User32.CS.HREDRAW | User32.CS.VREDRAW,
-            IntPtr backgroundBrush = default,
+            Gdi32.HBRUSH backgroundBrush = default,
             IntPtr icon = default,
             IntPtr cursor = default,
             string menuName = null,
@@ -59,11 +59,11 @@ namespace System
             // Handle default values
             className ??= Guid.NewGuid().ToString();
 
-            if (backgroundBrush == default)
+            if (backgroundBrush.IsNull)
             {
                 backgroundBrush = User32.GetSysColorBrush(COLOR_WINDOW);
             }
-            else if (backgroundBrush == (IntPtr)(-1))
+            else if (backgroundBrush.Handle == (IntPtr)(-1))
             {
                 backgroundBrush = default;
             }

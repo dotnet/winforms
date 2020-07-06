@@ -10,12 +10,12 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern int SaveDC(IntPtr hdc);
+        public static extern int SaveDC(HDC hdc);
 
-        public static int SaveDC(HandleRef hdc)
+        public static int SaveDC(IHandle hdc)
         {
-            int result = SaveDC(hdc.Handle);
-            GC.KeepAlive(hdc.Wrapper);
+            int result = SaveDC((HDC)hdc.Handle);
+            GC.KeepAlive(hdc);
             return result;
         }
     }

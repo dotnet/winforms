@@ -39,12 +39,10 @@ namespace System.Windows.Forms
         }
 
         /// <remarks>
-        ///  this graphics requires disposal.
+        ///  This <see cref="Graphics"/> requires disposal.
         /// </remarks>
         public static Graphics CreateMeasurementGraphics()
-        {
-            return Graphics.FromHdcInternal(WindowsGraphicsCacheManager.MeasurementGraphics.DeviceContext.Hdc);
-        }
+            => WindowsGraphicsCacheManager.MeasurementGraphics.DeviceContext.Hdc.CreateGraphics();
 
         /// <summary>
         ///  If you want to know if a piece of text contains one and only one &amp;

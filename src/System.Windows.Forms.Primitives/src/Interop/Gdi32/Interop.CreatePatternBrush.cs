@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true, SetLastError = true)]
-        public static extern IntPtr CreatePatternBrush(IntPtr hbm);
+        public static extern HBRUSH CreatePatternBrush(HBITMAP hbm);
     }
 }

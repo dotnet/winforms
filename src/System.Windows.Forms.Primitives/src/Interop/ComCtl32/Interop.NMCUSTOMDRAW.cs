@@ -12,7 +12,7 @@ internal static partial class Interop
         {
             public User32.NMHDR nmcd;
             public CDDS dwDrawStage;
-            public IntPtr hdc;
+            public Gdi32.HDC hdc;
             public RECT rc;
             public IntPtr dwItemSpec;
             public CDIS uItemState;

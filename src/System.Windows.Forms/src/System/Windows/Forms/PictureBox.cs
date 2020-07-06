@@ -27,7 +27,7 @@ namespace System.Windows.Forms
     [Docking(DockingBehavior.Ask)]
     [Designer("System.Windows.Forms.Design.PictureBoxDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionPictureBox))]
-    public class PictureBox : Control, ISupportInitialize
+    public partial class PictureBox : Control, ISupportInitialize
     {
         /// <summary>
         ///  The type of border this control will have.
@@ -837,6 +837,8 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_SIZEMODECHANGED, value);
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new bool TabStop
@@ -968,6 +970,9 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new PictureBoxAccessibleObject(this);
 
         protected override void Dispose(bool disposing)
         {

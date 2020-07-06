@@ -11,40 +11,65 @@ internal static partial class Interop
     {
         [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern BOOL BitBlt(
-            IntPtr hdc,
+            HDC hdc,
             int x,
             int y,
             int cx,
             int cy,
-            IntPtr hdcSrc,
+            HDC hdcSrc,
             int x1,
             int y1,
             ROP rop);
 
         public static BOOL BitBlt(
-            HandleRef hdc,
+            IHandle hdc,
             int x,
             int y,
             int cx,
             int cy,
-            HandleRef hdcSrc,
+            HDC hdcSrc,
             int x1,
             int y1,
             ROP rop)
         {
             BOOL result = BitBlt(
-                hdc.Handle,
+                (HDC)hdc.Handle,
                 x,
                 y,
                 cx,
                 cy,
-                hdcSrc.Handle,
+                hdcSrc,
                 x1,
                 y1,
                 rop
             );
-            GC.KeepAlive(hdc.Wrapper);
-            GC.KeepAlive(hdcSrc.Wrapper);
+            GC.KeepAlive(hdc);
+            return result;
+        }
+
+        public static BOOL BitBlt(
+            HDC hdc,
+            int x,
+            int y,
+            int cx,
+            int cy,
+            IHandle hdcSrc,
+            int x1,
+            int y1,
+            ROP rop)
+        {
+            BOOL result = BitBlt(
+                hdc,
+                x,
+                y,
+                cx,
+                cy,
+                (HDC)hdcSrc.Handle,
+                x1,
+                y1,
+                rop
+            );
+            GC.KeepAlive(hdcSrc);
             return result;
         }
     }

@@ -10,10 +10,10 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         /// <remarks>
-        ///  Use <see cref="DeleteDC(IntPtr)"/> when finished with the returned DC.
+        ///  Use <see cref="DeleteDC(HDC)"/> when finished with the returned DC.
         ///  Calling with ("DISPLAY", null, null, IntPtr.Zero) will retrieve a DC for the entire desktop.
         /// </remarks>
         [DllImport(Libraries.Gdi32, SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern IntPtr CreateDC(string lpszDriver, string? lpszDeviceName, string? lpszOutput, IntPtr devMode);
+        public static extern HDC CreateDC(string lpszDriver, string? lpszDeviceName, string? lpszOutput, IntPtr devMode);
     }
 }

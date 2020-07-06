@@ -93,50 +93,6 @@ namespace System.Windows.Forms
 
         public const string WinFormFrameworkId = "WinForm";
 
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class HH_AKLINK
-        {
-            internal int cbStruct = Marshal.SizeOf<HH_AKLINK>();
-            internal bool fReserved = false;
-            internal string? pszKeywords = null;
-            internal string? pszUrl = null;
-            internal string? pszMsgText = null;
-            internal string? pszMsgTitle = null;
-            internal string? pszWindow = null;
-            internal bool fIndexOnFail = false;
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class HH_POPUP
-        {
-            internal int cbStruct = Marshal.SizeOf<HH_POPUP>();
-            internal IntPtr hinst = IntPtr.Zero;
-            internal int idString = 0;
-            internal IntPtr pszText;
-            internal Point pt;
-            internal int clrForeground = -1;
-            internal int clrBackground = -1;
-            internal RECT rcMargins = new RECT(-1, -1, -1, -1);     // amount of space between edges of window and text, -1 for each member to ignore
-            internal string? pszFont = null;
-        }
-
-        public const int HH_FTS_DEFAULT_PROXIMITY = -1;
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class HH_FTS_QUERY
-        {
-            internal int cbStruct = Marshal.SizeOf<HH_FTS_QUERY>();
-            internal bool fUniCodeStrings = false;
-            [MarshalAs(UnmanagedType.LPStr)]
-            internal string? pszSearchQuery = null;
-            internal int iProximity = NativeMethods.HH_FTS_DEFAULT_PROXIMITY;
-            internal bool fStemmedSearch = false;
-            internal bool fTitleOnly = false;
-            internal bool fExecute = true;
-            [MarshalAs(UnmanagedType.LPStr)]
-            internal string? pszWindow = null;
-        }
-
         public delegate IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         public delegate int ListViewCompareCallback(IntPtr lParam1, IntPtr lParam2, IntPtr lParamSort);

@@ -5,8 +5,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Text;
 using Microsoft.Win32;
 using static Interop;
 using static Interop.UxTheme;
@@ -285,19 +283,18 @@ namespace System.Windows.Forms.VisualStyles
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
             {
-                var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 if (IntPtr.Zero != hWnd)
                 {
                     using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd)!)
                     {
                         RECT rect  = bounds;
-                        lastHResult = DrawThemeBackground(hTheme, hdc, part, state, ref rect, null);
+                        lastHResult = DrawThemeBackground(hTheme, wgr, part, state, ref rect, null);
                     }
                 }
                 else
                 {
                     RECT rect  = bounds;
-                    lastHResult = DrawThemeBackground(this, hdc, part, state, ref rect, null);
+                    lastHResult = DrawThemeBackground(this, wgr, part, state, ref rect, null);
                 }
             }
         }
@@ -327,21 +324,20 @@ namespace System.Windows.Forms.VisualStyles
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
             {
-                var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 if (IntPtr.Zero != hWnd)
                 {
                     using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd)!)
                     {
                         RECT rect = bounds;
                         RECT clipRect = clipRectangle;
-                        lastHResult = DrawThemeBackground(hTheme, hdc, part, state, ref rect, &clipRect);
+                        lastHResult = DrawThemeBackground(hTheme, wgr, part, state, ref rect, &clipRect);
                     }
                 }
                 else
                 {
                     RECT rect = bounds;
                     RECT clipRect = clipRectangle;
-                    lastHResult = DrawThemeBackground(this, hdc, part, state, ref rect, &clipRect);
+                    lastHResult = DrawThemeBackground(this, wgr, part, state, ref rect, &clipRect);
                 }
             }
         }
@@ -372,10 +368,9 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
             RECT destRect = bounds;
             var contentRect = new RECT();
-            lastHResult = DrawThemeEdge(this, hdc, part, state, ref destRect, (User32.EDGE)style, (User32.BF)edges | (User32.BF)effects | User32.BF.ADJUST, ref contentRect);
+            lastHResult = DrawThemeEdge(this, wgr, part, state, ref destRect, (User32.EDGE)style, (User32.BF)edges | (User32.BF)effects | User32.BF.ADJUST, ref contentRect);
             return contentRect;
         }
 
@@ -458,9 +453,8 @@ namespace System.Windows.Forms.VisualStyles
             if (childControl.IsHandleCreated)
             {
                 using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-                var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 RECT rc = bounds;
-                lastHResult = DrawThemeParentBackground(childControl, hdc, ref rc);
+                lastHResult = DrawThemeParentBackground(childControl, wgr, ref rc);
             }
         }
 
@@ -498,10 +492,9 @@ namespace System.Windows.Forms.VisualStyles
             if (!string.IsNullOrEmpty(textToDraw))
             {
                 using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-                var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
                 uint disableFlag = drawDisabled ? 0x1u : 0u;
                 RECT rect = bounds;
-                lastHResult = DrawThemeText(this, hdc, part, state, textToDraw, textToDraw.Length, (User32.DT)flags, disableFlag, ref rect);
+                lastHResult = DrawThemeText(this, wgr, part, state, textToDraw, textToDraw.Length, (User32.DT)flags, disableFlag, ref rect);
             }
         }
 
@@ -520,9 +513,8 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
             RECT boundsRect = bounds;
-            lastHResult = GetThemeBackgroundContentRect(this, hdc, part, state, ref boundsRect, out RECT rect);
+            lastHResult = GetThemeBackgroundContentRect(this, wgr, part, state, ref boundsRect, out RECT rect);
             return rect;
         }
 
@@ -541,9 +533,8 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
             RECT contentBoundsRect = contentBounds;
-            lastHResult = GetThemeBackgroundExtent(this, hdc, part, state, ref contentBoundsRect, out RECT extentRect);
+            lastHResult = GetThemeBackgroundExtent(this, wgr, part, state, ref contentBoundsRect, out RECT extentRect);
             return extentRect;
         }
 
@@ -564,9 +555,8 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
             RECT boundsRect = bounds;
-            lastHResult = GetThemeBackgroundRegion(this, hdc, part, state, ref boundsRect, out IntPtr hRegion);
+            lastHResult = GetThemeBackgroundRegion(this, wgr, part, state, ref boundsRect, out IntPtr hRegion);
 
             // GetThemeBackgroundRegion returns a null hRegion if it fails to create one, it could be because the bounding
             // box is too big. For more info see code in %xpsrc%\shell\themes\uxtheme\imagefile.cpp if you have an enlistment to it.
@@ -666,8 +656,7 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-            lastHResult = GetThemeFont(this, hdc, part, state, (int)prop, out User32.LOGFONTW logfont);
+            lastHResult = GetThemeFont(this, wgr, part, state, (int)prop, out User32.LOGFONTW logfont);
 
             // Check for a failed HR.
             if (!lastHResult.Succeeded())
@@ -729,17 +718,16 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
             if (DpiHelper.IsPerMonitorV2Awareness && hWnd != IntPtr.Zero)
             {
                 using (ThemeHandle hTheme = ThemeHandle.Create(_class, true, hWnd)!)
                 {
-                    lastHResult = GetThemePartSize(new HandleRef(this, hTheme.Handle), hdc, part, state, null, type, out Size dpiSize);
+                    lastHResult = GetThemePartSize(hTheme, wgr, part, state, null, type, out Size dpiSize);
                     return dpiSize;
                 }
             }
 
-            lastHResult = GetThemePartSize(this, hdc, part, state, null, type, out Size size);
+            lastHResult = GetThemePartSize(this, wgr, part, state, null, type, out Size size);
             return size;
         }
 
@@ -760,9 +748,8 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
             RECT boundsRect = bounds;
-            lastHResult = GetThemePartSize(this, hdc, part, state, &boundsRect, type, out Size size);
+            lastHResult = GetThemePartSize(this, wgr, part, state, &boundsRect, type, out Size size);
             return size;
         }
 
@@ -798,8 +785,7 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-            lastHResult = GetThemeMargins(this, hdc, part, state, (int)prop, null, out MARGINS margins);
+            lastHResult = GetThemeMargins(this, wgr, part, state, (int)prop, null, out MARGINS margins);
 
             return new Padding(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);
         }
@@ -839,8 +825,7 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-            lastHResult = GetThemeTextExtent(this, hdc, part, state, textToDraw, textToDraw.Length, (uint)flags, null, out RECT rect);
+            lastHResult = GetThemeTextExtent(this, wgr, part, state, textToDraw, textToDraw.Length, (uint)flags, null, out RECT rect);
             return rect;
         }
 
@@ -860,9 +845,8 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
             RECT boundsRect = bounds;
-            lastHResult = GetThemeTextExtent(this, hdc, part, state, textToDraw, textToDraw.Length, (uint)flags, &boundsRect, out RECT rect);
+            lastHResult = GetThemeTextExtent(this, wgr, part, state, textToDraw, textToDraw.Length, (uint)flags, &boundsRect, out RECT rect);
             return rect;
         }
 
@@ -877,8 +861,7 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
-            lastHResult = GetThemeTextMetrics(this, hdc, part, state, out TextMetrics tm);
+            lastHResult = GetThemeTextMetrics(this, wgr, part, state, out TextMetrics tm);
             return tm;
         }
 
@@ -893,9 +876,8 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
             RECT backgroundRect = backgroundRectangle;
-            lastHResult = HitTestThemeBackground(this, hdc, part, state, (uint)options, ref backgroundRect, IntPtr.Zero, pt, out ushort htCode);
+            lastHResult = HitTestThemeBackground(this, wgr, part, state, (uint)options, ref backgroundRect, IntPtr.Zero, pt, out ushort htCode);
             return (HitTestCode)htCode;
         }
 
@@ -928,9 +910,8 @@ namespace System.Windows.Forms.VisualStyles
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, AllGraphicsProperties);
-            var hdc = new HandleRef(wgr, wgr.WindowsGraphics.DeviceContext.Hdc);
             RECT backgroundRect = backgroundRectangle;
-            lastHResult = HitTestThemeBackground(this, hdc, part, state, (uint)options, ref backgroundRect, hRgn, pt, out ushort htCode);
+            lastHResult = HitTestThemeBackground(this, wgr, part, state, (uint)options, ref backgroundRect, hRgn, pt, out ushort htCode);
             return (HitTestCode)htCode;
         }
 

@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
 using static Interop;
 
@@ -28,10 +27,10 @@ namespace System.Windows.Forms.Design
         //brush used to draw the resizeable selection borders around controls/components
         private static HatchBrush s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
         //Pens and Brushes used via GDI to render our grabhandles
-        private static IntPtr s_grabHandleFillBrushPrimary = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
-        private static IntPtr s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
-        private static IntPtr s_grabHandlePenPrimary = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
-        private static IntPtr s_grabHandlePen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
+        private static Gdi32.HBRUSH s_grabHandleFillBrushPrimary = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.Window));
+        private static Gdi32.HBRUSH s_grabHandleFillBrush = Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(SystemColors.ControlText));
+        private static Gdi32.HPEN s_grabHandlePenPrimary = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.ControlText));
+        private static Gdi32.HPEN s_grabHandlePen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
 
         //The box-like image used as the user is dragging comps from the toolbox
         private static Bitmap s_boxImage = null;
@@ -282,24 +281,14 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static void DrawGrabHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
-            IntPtr hDC = graphics.GetHdc();
-            try
-            {
-                //set our pen and brush based on primary selection
-                IntPtr oldBrush = Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-                IntPtr oldPen = Gdi32.SelectObject(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
+            using var hDC = new DeviceContextHdcScope(graphics);
 
-                //draw our rounded rect grabhandle
-                Gdi32.RoundRect(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
+            // Set our pen and brush based on primary selection
+            using var brushSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+            using var penSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
 
-                //restore old pen and brush
-                Gdi32.SelectObject(hDC, oldBrush);
-                Gdi32.SelectObject(hDC, oldPen);
-            }
-            finally
-            {
-                graphics.ReleaseHdcInternal(hDC);
-            }
+            // Draw our rounded rect grabhandle
+            Gdi32.RoundRect(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
         }
 
         /// <summary>
@@ -307,23 +296,14 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static void DrawNoResizeHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
-            IntPtr hDC = graphics.GetHdc();
-            try
-            {
-                //set our pen and brush based on primary selection
-                IntPtr oldBrush = Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-                IntPtr oldPen = Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
+            using var hDC = new DeviceContextHdcScope(graphics);
 
-                //draw our rect no-resize handle
-                Gdi32.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
-                //restore old pen and brush
-                Gdi32.SelectObject(hDC, oldBrush);
-                Gdi32.SelectObject(hDC, oldPen);
-            }
-            finally
-            {
-                graphics.ReleaseHdcInternal(hDC);
-            }
+            // Set our pen and brush based on primary selection
+            using var brushSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+            using var penSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandlePenPrimary);
+
+            // Draw our rect no-resize handle
+            Gdi32.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
         }
 
         /// <summary>
@@ -331,26 +311,17 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static void DrawLockedHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
-            IntPtr hDC = graphics.GetHdc();
-            try
-            {
-                IntPtr oldPen = Gdi32.SelectObject(hDC, s_grabHandlePenPrimary);
-                // Upper rect - upper rect is always filled with the primary brush
-                IntPtr oldBrush = Gdi32.SelectObject(hDC, s_grabHandleFillBrushPrimary);
-                Gdi32.RoundRect(hDC, bounds.Left + LOCKHANDLEUPPER_OFFSET, bounds.Top, bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER, bounds.Top + LOCKHANDLESIZE_UPPER, 2, 2);
+            using var hDC = new DeviceContextHdcScope(graphics);
 
-                // Lower rect - its fillbrush depends on the primary selection
-                Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-                Gdi32.Rectangle(hDC, bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
+            using var penSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandlePenPrimary);
 
-                //restore old pen and brush
-                Gdi32.SelectObject(hDC, oldBrush);
-                Gdi32.SelectObject(hDC, oldPen);
-            }
-            finally
-            {
-                graphics.ReleaseHdcInternal(hDC);
-            }
+            // Upper rect - upper rect is always filled with the primary brush
+            using var brushSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandleFillBrushPrimary);
+            Gdi32.RoundRect(hDC, bounds.Left + LOCKHANDLEUPPER_OFFSET, bounds.Top, bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER, bounds.Top + LOCKHANDLESIZE_UPPER, 2, 2);
+
+            // Lower rect - its fillbrush depends on the primary selection
+            Gdi32.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+            Gdi32.Rectangle(hDC, bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
         }
 
         /// <summary>
@@ -455,39 +426,33 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static void GenerateSnapShotWithBitBlt(Control control, ref Image image)
         {
-            //get the DC's and create our image
-            HandleRef hWnd = new HandleRef(control, control.Handle);
-            IntPtr controlDC = User32.GetDC(hWnd);
-            image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), PixelFormat.Format32bppPArgb);
+            // Get the DC's and create our image
+            using var controlDC = new User32.GetDcScope(control.Handle);
+            image = new Bitmap(
+                Math.Max(control.Width, MINCONTROLBITMAPSIZE),
+                Math.Max(control.Height, MINCONTROLBITMAPSIZE),
+                PixelFormat.Format32bppPArgb);
 
-            using (Graphics gDest = Graphics.FromImage(image))
+            using Graphics gDest = Graphics.FromImage(image);
+
+            if (control.BackColor == Color.Transparent)
             {
-                if (control.BackColor == Color.Transparent)
-                {
-                    gDest.Clear(SystemColors.Control);
-                }
-
-                IntPtr destDC = gDest.GetHdc();
-                try
-                {
-                    // Perform our bitblit operation to push the image into the dest bitmap
-                    Gdi32.BitBlt(
-                        destDC,
-                        0,
-                        0,
-                        image.Width,
-                        image.Height,
-                        controlDC,
-                        0,
-                        0,
-                        Gdi32.ROP.SRCCOPY);
-                }
-                finally
-                {
-                    // Clean up all our handles and what not
-                    gDest.ReleaseHdc(destDC);
-                }
+                gDest.Clear(SystemColors.Control);
             }
+
+            using var destDC = new DeviceContextHdcScope(gDest);
+
+            // Perform our bitblit operation to push the image into the dest bitmap
+            Gdi32.BitBlt(
+                destDC,
+                0,
+                0,
+                image.Width,
+                image.Height,
+                controlDC,
+                0,
+                0,
+                Gdi32.ROP.SRCCOPY);
         }
 
         /// <summary>
@@ -613,29 +578,20 @@ namespace System.Windows.Forms.Design
             //get the font metrics via gdi
             int fontAscent = 0;
             int fontHeight = 0;
-            using (Graphics g = ctrl.CreateGraphics())
-            {
-                IntPtr dc = g.GetHdc();
-                IntPtr hFont = ctrl.Font.ToHfont();
-                IntPtr hFontOld;
-                try
-                {
-                    hFontOld = Gdi32.SelectObject(dc, hFont);
-                    var metrics = new Gdi32.TEXTMETRICW();
-                    Gdi32.GetTextMetricsW(new HandleRef(ctrl, dc), ref metrics);
-                    //add the font ascent to the baseline
-                    fontAscent = metrics.tmAscent + 1;
-                    fontHeight = metrics.tmHeight;
-                    Gdi32.SelectObject(dc, hFontOld);
-                }
-                finally
-                {
-                    Gdi32.DeleteObject(hFont);
-                    g.ReleaseHdc(dc);
-                }
-            }
 
-            //now add it all up
+            using Graphics g = ctrl.CreateGraphics();
+            using var dc = new DeviceContextHdcScope(g);
+            using var hFont = new Gdi32.ObjectScope(ctrl.Font.ToHFONT());
+            using var hFontOld = new Gdi32.SelectObjectScope(dc, hFont);
+
+            var metrics = new Gdi32.TEXTMETRICW();
+            Gdi32.GetTextMetricsW(dc, ref metrics);
+
+            // Add the font ascent to the baseline
+            fontAscent = metrics.tmAscent + 1;
+            fontHeight = metrics.tmHeight;
+
+            // Now add it all up
             if ((alignment & anyTopAlignment) != 0)
             {
                 return face.Top + fontAscent;

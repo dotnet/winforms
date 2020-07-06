@@ -22,18 +22,10 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            IntPtr hdc = dc.GetHdc();
-
-            try
-            {
-                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
-                wg.DrawText(text, wf, pt, foreColor);
-            }
-            finally
-            {
-                dc.ReleaseHdc();
-            }
+            using var hdc = new DeviceContextHdcScope(dc, saveState: false);
+            using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            wg.DrawText(text, wf, pt, foreColor);
         }
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor, Color backColor)
@@ -45,18 +37,10 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            IntPtr hdc = dc.GetHdc();
-
-            try
-            {
-                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
-                wg.DrawText(text, wf, pt, foreColor, backColor);
-            }
-            finally
-            {
-                dc.ReleaseHdc();
-            }
+            using var hdc = new DeviceContextHdcScope(dc);
+            using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            wg.DrawText(text, wf, pt, foreColor, backColor);
         }
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor, TextFormatFlags flags)
@@ -96,18 +80,10 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            IntPtr hdc = dc.GetHdc();
-
-            try
-            {
-                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
-                wg.DrawText(text, wf, bounds, foreColor);
-            }
-            finally
-            {
-                dc.ReleaseHdc();
-            }
+            using var hdc = new DeviceContextHdcScope(dc, saveState: false);
+            using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            wg.DrawText(text, wf, bounds, foreColor);
         }
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor, Color backColor)
@@ -119,18 +95,10 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            IntPtr hdc = dc.GetHdc();
-
-            try
-            {
-                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
-                wg.DrawText(text, wf, bounds, foreColor, backColor);
-            }
-            finally
-            {
-                dc.ReleaseHdc();
-            }
+            using var hdc = new DeviceContextHdcScope(dc, saveState: false);
+            using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            wg.DrawText(text, wf, bounds, foreColor, backColor);
         }
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor, TextFormatFlags flags)
@@ -220,18 +188,10 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            IntPtr hdc = dc.GetHdc();
-
-            try
-            {
-                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
-                return wg.MeasureText(text, wf);
-            }
-            finally
-            {
-                dc.ReleaseHdc();
-            }
+            using var hdc = new DeviceContextHdcScope(dc, saveState: false);
+            using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            return wg.MeasureText(text, wf);
         }
 
         public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize)
@@ -247,18 +207,10 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            IntPtr hdc = dc.GetHdc();
-
-            try
-            {
-                using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-                using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
-                return wg.MeasureText(text, wf, proposedSize);
-            }
-            finally
-            {
-                dc.ReleaseHdc();
-            }
+            using var hdc = new DeviceContextHdcScope(dc, saveState: false);
+            using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
+            return wg.MeasureText(text, wf, proposedSize);
         }
 
         public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize, TextFormatFlags flags)

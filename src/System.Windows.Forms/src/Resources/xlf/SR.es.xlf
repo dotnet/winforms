@@ -1177,6 +1177,11 @@
         <target state="translated">Tipo no controlado {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ConstructorArgumentInvalidValueType">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">El argumento '{0}' no se puede convertir en el tipo '{1}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
         <source>The currently active control.</source>
         <target state="translated">Control activo actual.</target>
@@ -5551,6 +5556,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Error al crear el identificador de ImageList.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">Las imágenes que se agreguen a ImageList deben derivar de una imagen o ser un icono.</target>
@@ -5638,7 +5648,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">No se encontró un elemento InputLanguage para la referencia cultural "{0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -6378,7 +6388,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
         <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
-        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <target state="translated">Control ImageList que usa ListView para las imágenes ListViewGroup en todas las vistas.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">

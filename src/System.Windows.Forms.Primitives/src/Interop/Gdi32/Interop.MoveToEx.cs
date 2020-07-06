@@ -13,10 +13,10 @@ internal static partial class Interop
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
         public unsafe static extern BOOL MoveToEx(IntPtr hdc, int x, int y, Point* lppt);
 
-        public unsafe static BOOL MoveToEx(HandleRef hdc, int x, int y, Point* lppt)
+        public unsafe static BOOL MoveToEx(IHandle hdc, int x, int y, Point* lppt)
         {
             BOOL result = MoveToEx(hdc.Handle, x, y, lppt);
-            GC.KeepAlive(hdc.Wrapper);
+            GC.KeepAlive(hdc);
             return result;
         }
     }

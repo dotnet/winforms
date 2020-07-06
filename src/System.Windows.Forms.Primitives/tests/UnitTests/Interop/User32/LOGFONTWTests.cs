@@ -39,8 +39,8 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
         public unsafe void CreateFontIndirect()
         {
             LOGFONTW logFont = default;
-            IntPtr handle = Gdi32.CreateFontIndirectW(ref logFont);
-            Assert.NotEqual(IntPtr.Zero, handle);
+            Gdi32.HFONT handle = Gdi32.CreateFontIndirectW(ref logFont);
+            Assert.False(handle.IsNull);
             Assert.True(Gdi32.DeleteObject(handle).IsTrue());
         }
     }

@@ -18,13 +18,13 @@ internal static partial class Interop
         /// </remarks>
         internal ref struct SelectObjectScope
         {
-            private readonly IntPtr _hdc;
-            public IntPtr PreviousObject;
+            private readonly HDC _hdc;
+            public HGDIOBJ PreviousObject;
 
             /// <summary>
             ///  Selects <paramref name="object"/> into the given <paramref name="hdc"/>.
             /// </summary>
-            public SelectObjectScope(IntPtr hdc, IntPtr @object)
+            public SelectObjectScope(HDC hdc, HGDIOBJ @object)
             {
                 _hdc = hdc;
                 PreviousObject = SelectObject(hdc, @object);

@@ -2905,38 +2905,30 @@ namespace System.Windows.Forms
 
         // This function will print to the PrinterDC. ToolStrip have there own buffered painting and doesnt play very well
         // with the DC translations done by base Control class. Hence we do our own Painting and the BitBLT the DC into the printerDc.
-        private protected override void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(Gdi32.HDC hDC, IntPtr lParam, Rectangle bounds)
         {
-            using (Bitmap image = new Bitmap(bounds.Width, bounds.Height))
-            using (Graphics g = Graphics.FromImage(image))
-            {
-                IntPtr imageHdc = g.GetHdc();
-                try
-                {
-                    //send the actual wm_print message
-                    User32.SendMessageW(
-                        this,
-                        User32.WM.PRINT,
-                        (IntPtr)imageHdc,
-                        (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+            using Bitmap image = new Bitmap(bounds.Width, bounds.Height);
+            using Graphics g = Graphics.FromImage(image);
+            using var imageHdc = new DeviceContextHdcScope(g, saveState: false);
 
-                    // Now BLT the result to the destination bitmap.
-                    Gdi32.BitBlt(
-                        new HandleRef(this, hDC),
-                        bounds.X,
-                        bounds.Y,
-                        bounds.Width,
-                        bounds.Height,
-                        new HandleRef(g, imageHdc),
-                        0,
-                        0,
-                        Gdi32.ROP.SRCCOPY);
-                }
-                finally
-                {
-                    g.ReleaseHdcInternal(imageHdc);
-                }
-            }
+            // Send the actual wm_print message
+            User32.SendMessageW(
+                this,
+                User32.WM.PRINT,
+                (IntPtr)imageHdc.HDC,
+                (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+
+            // Now BLT the result to the destination bitmap.
+            Gdi32.BitBlt(
+                hDC,
+                bounds.X,
+                bounds.Y,
+                bounds.Width,
+                bounds.Height,
+                imageHdc,
+                0,
+                0,
+                Gdi32.ROP.SRCCOPY);
         }
 
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
@@ -3796,10 +3788,10 @@ namespace System.Windows.Forms
                     using (WindowsGraphics toolStripWindowsGraphics = WindowsGraphics.FromGraphics(toolstripGraphics, ApplyGraphicsProperties.Clipping))
                     {
                         // get the cached item HDC.
-                        HandleRef toolStripHDC = new HandleRef(this, toolStripWindowsGraphics.GetHdc());
-                        IntPtr itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
+                        Gdi32.HDC toolStripHDC = toolStripWindowsGraphics.GetHdc();
+                        Gdi32.HDC itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
 
-                        Graphics itemGraphics = Graphics.FromHdcInternal(itemHDC);
+                        Graphics itemGraphics = itemHDC.CreateGraphics();
                         try
                         {
                             // Painting the individual items...
@@ -3810,7 +3802,7 @@ namespace System.Windows.Forms
                             {
                                 ToolStripItem item = DisplayedItems[i];
                                 if (item != null)
-                                { //
+                                {
                                     Rectangle clippingRect = e.ClipRectangle;
                                     Rectangle bounds = item.Bounds;
 
@@ -3847,7 +3839,7 @@ namespace System.Windows.Forms
                                         itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
 
                                         // allocate a new graphics.
-                                        itemGraphics = Graphics.FromHdcInternal(itemHDC);
+                                        itemGraphics = itemHDC.CreateGraphics();
                                     }
 
                                     // since the item graphics object will have 0,0 at the
@@ -3858,7 +3850,7 @@ namespace System.Windows.Forms
                                     // PERF - consider - we only actually need to copy the clipping rect.
                                     // copy the background from the toolstrip onto the offscreen bitmap
                                     Gdi32.BitBlt(
-                                        new HandleRef(ItemHdcInfo, itemHDC),
+                                        ItemHdcInfo,
                                         0,
                                         0,
                                         item.Size.Width,
@@ -3881,7 +3873,7 @@ namespace System.Windows.Forms
                                         item.Bounds.Y,
                                         item.Size.Width,
                                         item.Size.Height,
-                                        new HandleRef(ItemHdcInfo, itemHDC),
+                                        ItemHdcInfo,
                                         0,
                                         0,
                                         Gdi32.ROP.SRCCOPY);
@@ -5439,36 +5431,37 @@ namespace System.Windows.Forms
         }
     }
 
-    internal class CachedItemHdcInfo : IDisposable
+    internal class CachedItemHdcInfo : IDisposable, IHandle
     {
         internal CachedItemHdcInfo()
         {
         }
 
-        private IntPtr _cachedItemHDC = IntPtr.Zero;
+        private Gdi32.HDC _cachedItemHDC = default;
         private Size _cachedHDCSize = Size.Empty;
-        private IntPtr _cachedItemBitmap = IntPtr.Zero;
+        private Gdi32.HBITMAP _cachedItemBitmap = default;
+
+        public IntPtr Handle => (IntPtr)_cachedItemHDC;
 
         // this DC is cached and should only be deleted on Dispose or when the size changes.
 
-        public IntPtr GetCachedItemDC(HandleRef toolStripHDC, Size bitmapSize)
+        public Gdi32.HDC GetCachedItemDC(Gdi32.HDC toolStripHDC, Size bitmapSize)
         {
             if (_cachedHDCSize.Width < bitmapSize.Width
                  || _cachedHDCSize.Height < bitmapSize.Height)
             {
-                if (_cachedItemHDC == IntPtr.Zero)
+                if (_cachedItemHDC.IsNull)
                 {
-                    // create a new DC - we dont have one yet.
-                    IntPtr compatibleHDC = Gdi32.CreateCompatibleDC(toolStripHDC.Handle);
-                    _cachedItemHDC = compatibleHDC;
+                    // Create a new DC - we dont have one yet.
+                    _cachedItemHDC = Gdi32.CreateCompatibleDC(toolStripHDC);
                 }
 
-                // create compatible bitmap with the correct size.
+                // Create compatible bitmap with the correct size.
                 _cachedItemBitmap = Gdi32.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
-                IntPtr oldBitmap = Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
+                Gdi32.HGDIOBJ oldBitmap = Gdi32.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
-                // delete the old bitmap
-                if (oldBitmap != IntPtr.Zero)
+                // Delete the old bitmap
+                if (!oldBitmap.IsNull)
                 {
                     Gdi32.DeleteObject(oldBitmap);
                 }
@@ -5482,21 +5475,19 @@ namespace System.Windows.Forms
 
         public void Dispose()
         {
-            if (_cachedItemHDC != IntPtr.Zero)
+            if (!_cachedItemHDC.IsNull)
             {
-                // delete the bitmap
-                if (_cachedItemBitmap != IntPtr.Zero)
+                if (!_cachedItemBitmap.IsNull)
                 {
                     Gdi32.DeleteObject(_cachedItemBitmap);
-                    _cachedItemBitmap = IntPtr.Zero;
                 }
 
                 // delete the DC itself.
                 Gdi32.DeleteDC(_cachedItemHDC);
             }
 
-            _cachedItemHDC = IntPtr.Zero;
-            _cachedItemBitmap = IntPtr.Zero;
+            _cachedItemHDC = default;
+            _cachedItemBitmap = default;
             _cachedHDCSize = Size.Empty;
 
             GC.SuppressFinalize(this);

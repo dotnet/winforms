@@ -14,6 +14,8 @@ internal static partial class Interop
 
             public HRGN(IntPtr handle) => Handle = handle;
 
+            public bool IsNull => Handle == IntPtr.Zero;
+
             public static implicit operator HGDIOBJ(HRGN hrgn) => new HGDIOBJ(hrgn.Handle);
         }
     }

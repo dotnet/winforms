@@ -827,7 +827,7 @@ namespace System.Windows.Forms
         ///  Whidbey Note: Made this internal, since we need to use this in ButtonStandardAdapter. Also, renamed
         ///         from BackBrush to BackColorBrush due to a naming conflict with DataGrid's BackBrush.
         /// </summary>
-        internal IntPtr BackColorBrush
+        internal Gdi32.HBRUSH BackColorBrush
         {
             get
             {
@@ -835,7 +835,7 @@ namespace System.Windows.Forms
                 if (customBackBrush != null)
                 {
                     // We already have a valid brush.  Unbox, and return.
-                    return (IntPtr)customBackBrush;
+                    return (Gdi32.HBRUSH)customBackBrush;
                 }
 
                 if (!Properties.ContainsObject(s_backColorProperty))
@@ -852,7 +852,7 @@ namespace System.Windows.Forms
                 // No parent, or we have a custom back color.  Either way, we need to
                 // create our own.
                 Color color = BackColor;
-                IntPtr backBrush;
+                Gdi32.HBRUSH backBrush;
 
                 if (ColorTranslator.ToOle(color) < 0)
                 {
@@ -865,7 +865,7 @@ namespace System.Windows.Forms
                     SetState(States.OwnCtlBrush, true);
                 }
 
-                Debug.Assert(backBrush != IntPtr.Zero, "Failed to create brushHandle");
+                Debug.Assert(!backBrush.IsNull, "Failed to create brushHandle");
                 Properties.SetObject(s_backBrushProperty, backBrush);
 
                 return backBrush;
@@ -2176,7 +2176,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_fontEvent, value);
         }
 
-        internal IntPtr FontHandle
+        internal Gdi32.HFONT FontHandle
         {
             get
             {
@@ -5114,8 +5114,8 @@ namespace System.Windows.Forms
                 object backBrush = Properties.GetObject(s_backBrushProperty);
                 if (backBrush != null)
                 {
-                    IntPtr p = (IntPtr)backBrush;
-                    if (p != IntPtr.Zero)
+                    Gdi32.HBRUSH p = (Gdi32.HBRUSH)backBrush;
+                    if (!p.IsNull)
                     {
                         Gdi32.DeleteObject(p);
                     }
@@ -5275,44 +5275,30 @@ namespace System.Windows.Forms
             int width = Math.Min(Width, targetBounds.Width);
             int height = Math.Min(Height, targetBounds.Height);
 
-            using (Bitmap image = new Bitmap(width, height, bitmap.PixelFormat))
-            {
-                using (Graphics g = Graphics.FromImage(image))
-                {
-                    IntPtr hDc = g.GetHdc();
-                    //send the actual wm_print message
-                    User32.SendMessageW(
-                        this,
-                        User32.WM.PRINT,
-                        (IntPtr)hDc,
-                        (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+            using Bitmap image = new Bitmap(width, height, bitmap.PixelFormat);
+            using Graphics g = Graphics.FromImage(image);
+            using var hDc = new DeviceContextHdcScope(g, saveState: false);
 
-                    //now BLT the result to the destination bitmap.
-                    using (Graphics destGraphics = Graphics.FromImage(bitmap))
-                    {
-                        IntPtr desthDC = destGraphics.GetHdc();
-                        try
-                        {
-                            Gdi32.BitBlt(
-                                new HandleRef(destGraphics, desthDC),
-                                targetBounds.X,
-                                targetBounds.Y,
-                                width,
-                                height,
-                                new HandleRef(g, hDc),
-                                0,
-                                0,
-                                Gdi32.ROP.SRCCOPY);
-                        }
-                        finally
-                        {
-                            destGraphics.ReleaseHdcInternal(desthDC);
-                        }
-                    }
+            // Send the WM_PRINT message.
+            User32.SendMessageW(
+                this,
+                User32.WM.PRINT,
+                (IntPtr)hDc,
+                (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
-                    g.ReleaseHdcInternal(hDc);
-                }
-            }
+            // Now BLT the result to the destination bitmap.
+            using Graphics destGraphics = Graphics.FromImage(bitmap);
+            using var desthDC = new DeviceContextHdcScope(destGraphics, saveState: false);
+            Gdi32.BitBlt(
+                desthDC,
+                targetBounds.X,
+                targetBounds.Y,
+                width,
+                height,
+                hDc,
+                0,
+                0,
+                Gdi32.ROP.SRCCOPY);
         }
 
         /// <summary>
@@ -6184,7 +6170,7 @@ namespace System.Windows.Forms
         //
         // NOTE: this message may not have originally been sent to this HWND.
         //
-        internal virtual IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg)
+        internal virtual Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
         {
             if (!GetStyle(ControlStyles.UserPaint))
             {
@@ -6193,7 +6179,7 @@ namespace System.Windows.Forms
                 return BackColorBrush;
             }
 
-            return Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH);
+            return (Gdi32.HBRUSH)Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH);
         }
 
         /// <summary>
@@ -7014,8 +7000,8 @@ namespace System.Windows.Forms
             {
                 if (GetState(States.OwnCtlBrush))
                 {
-                    IntPtr p = (IntPtr)backBrush;
-                    if (p != IntPtr.Zero)
+                    Gdi32.HBRUSH p = (Gdi32.HBRUSH)backBrush;
+                    if (!p.IsNull)
                     {
                         Gdi32.DeleteObject(p);
                     }
@@ -7839,8 +7825,8 @@ namespace System.Windows.Forms
                     if (backBrush != null)
                     {
                         Properties.SetObject(s_backBrushProperty, null);
-                        IntPtr p = (IntPtr)backBrush;
-                        if (p != IntPtr.Zero)
+                        Gdi32.HBRUSH p = (Gdi32.HBRUSH)backBrush;
+                        if (!p.IsNull)
                         {
                             Gdi32.DeleteObject(p);
                         }
@@ -8517,6 +8503,7 @@ namespace System.Windows.Forms
                 PaintBackColor(e, rectangle, backColor);
             }
         }
+
         private static void PaintBackColor(PaintEventArgs e, Rectangle rectangle, Color backColor)
         {
             // Common case of just painting the background.  For this, we
@@ -8530,15 +8517,17 @@ namespace System.Windows.Forms
             // to use it without enough bookkeeping to negate any performance gain of using GDI.
             if (color.A == 255)
             {
-                using (WindowsGraphics wg = (e.HDC != IntPtr.Zero && DisplayInformation.BitsPerPixel > 8) ?
-                                WindowsGraphics.FromHdc(e.HDC) : WindowsGraphics.FromGraphics(e.Graphics))
+                if (e.HDC != IntPtr.Zero && DisplayInformation.BitsPerPixel > 8)
                 {
-                    color = wg.GetNearestColor(color);
-
-                    using (WindowsBrush brush = new WindowsSolidBrush(wg.DeviceContext, color))
-                    {
-                        wg.FillRectangle(brush, rectangle);
-                    }
+                    Gdi32.HDC hdc = (Gdi32.HDC)e.HDC;
+                    using var hbrush = new Gdi32.CreateBrushScope(hdc.GetNearestColor(color));
+                    hdc.FillRectangle(rectangle, hbrush);
+                }
+                else
+                {
+                    using var hdc = new DeviceContextHdcScope(e.Graphics, ApplyGraphicsProperties.All, saveState: false);
+                    using var hbrush = new Gdi32.CreateBrushScope(hdc.GetNearestColor(color));
+                    hdc.FillRectangle(rectangle, hbrush);
                 }
             }
             else
@@ -9140,7 +9129,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        private void PrintToMetaFile(IntPtr hDC, IntPtr lParam)
+        private void PrintToMetaFile(Gdi32.HDC hDC, IntPtr lParam)
         {
             Debug.Assert(Gdi32.GetObjectType(hDC) == Gdi32.ObjectType.OBJ_ENHMETADC,
                 "PrintToMetaFile() called with a non-Enhanced MetaFile DC.");
@@ -9172,7 +9161,7 @@ namespace System.Windows.Forms
             PrintToMetaFileRecursive(hDC, lParam, new Rectangle(Point.Empty, Size));
         }
 
-        private protected virtual void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)
+        private protected virtual void PrintToMetaFileRecursive(Gdi32.HDC hDC, IntPtr lParam, Rectangle bounds)
         {
             // We assume the target does not want us to offset the root control in the metafile.
 
@@ -9208,12 +9197,12 @@ namespace System.Windows.Forms
             }
         }
 
-        private void PrintToMetaFile_SendPrintMessage(IntPtr hDC, IntPtr lParam)
+        private void PrintToMetaFile_SendPrintMessage(Gdi32.HDC hDC, IntPtr lParam)
         {
             if (GetStyle(ControlStyles.UserPaint))
             {
                 // We let user paint controls paint directly into the metafile
-                User32.SendMessageW(this, User32.WM.PRINT, hDC, lParam);
+                User32.SendMessageW(this, User32.WM.PRINT, (IntPtr)hDC, lParam);
             }
             else
             {
@@ -9230,7 +9219,7 @@ namespace System.Windows.Forms
                 // which is then copied into the metafile.  (Old GDI line drawing
                 // is 1px thin, which causes borders to disappear, etc.)
                 using MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, Size);
-                User32.SendMessageW(this, User32.WM.PRINT, dcWrapper.HDC, lParam);
+                User32.SendMessageW(this, User32.WM.PRINT, (IntPtr)dcWrapper.HDC, lParam);
             }
         }
 
@@ -10821,22 +10810,6 @@ namespace System.Windows.Forms
             _controlStyle = value ? _controlStyle | flag : _controlStyle & ~flag;
         }
 
-        internal static IntPtr SetUpPalette(IntPtr dc, bool force, bool realizePalette)
-        {
-            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, "SetUpPalette(force:=" + force + ", ralizePalette:=" + realizePalette + ")");
-
-            IntPtr halftonePalette = Graphics.GetHalftonePalette();
-
-            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, "select palette " + !force);
-            IntPtr result = Gdi32.SelectPalette(dc, halftonePalette, force ? BOOL.FALSE : BOOL.TRUE);
-            if (result != IntPtr.Zero && realizePalette)
-            {
-                Gdi32.RealizePalette(dc);
-            }
-
-            return result;
-        }
-
         protected void SetTopLevel(bool value)
         {
             if (value && IsActiveX)
@@ -11174,7 +11147,7 @@ namespace System.Windows.Forms
 
         private void SetWindowFont()
         {
-            User32.SendMessageW(this, User32.WM.SETFONT, FontHandle, PARAM.FromBool(false));
+            User32.SendMessageW(this, User32.WM.SETFONT, (IntPtr)FontHandle, PARAM.FromBool(false));
         }
 
         private void SetWindowStyle(int flag, bool value)
@@ -11703,7 +11676,7 @@ namespace System.Windows.Forms
             Control control = FromHandle(m.LParam);
             if (control != null)
             {
-                m.Result = control.InitializeDCForWmCtlColor(m.WParam, m.Msg);
+                m.Result = (IntPtr)control.InitializeDCForWmCtlColor((Gdi32.HDC)m.WParam, (User32.WM)m.Msg);
                 if (m.Result != IntPtr.Zero)
                 {
                     return;
@@ -11730,14 +11703,16 @@ namespace System.Windows.Forms
                 // OptimizedDoubleBuffer is the "same" as turning on AllPaintingInWMPaint
                 if (!(GetStyle(ControlStyles.AllPaintingInWmPaint)))
                 {
-                    IntPtr dc = m.WParam;
-                    if (dc == IntPtr.Zero)
-                    {    // This happens under extreme stress conditions
+                    Gdi32.HDC dc = (Gdi32.HDC)m.WParam;
+                    if (dc.IsNull)
+                    {
+                        // This happens under extreme stress conditions
                         m.Result = (IntPtr)0;
                         return;
                     }
+
                     RECT rc = new RECT();
-                    User32.GetClientRect(new HandleRef(this, Handle), ref rc);
+                    User32.GetClientRect(this, ref rc);
                     using (PaintEventArgs pevent = new PaintEventArgs(dc, Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom)))
                     {
                         PaintWithErrorHandling(pevent, PaintLayerBackground);
@@ -12331,153 +12306,122 @@ namespace System.Windows.Forms
                 doubleBuffered = false;
             }
 #endif
-            IntPtr hWnd = IntPtr.Zero;
-            IntPtr dc;
             Rectangle clip;
-            var ps = new User32.PAINTSTRUCT();
-            bool needDisposeDC = false;
+            Gdi32.HDC dc = (Gdi32.HDC)m.WParam;
+            using var paintScope = dc.IsNull ? new User32.BeginPaintScope(Handle) : default;
 
-            try
+            if (dc.IsNull)
             {
-                if (m.WParam == IntPtr.Zero)
+                dc = paintScope.HDC;
+                clip = paintScope.PaintStruct.rcPaint;
+            }
+            else
+            {
+                clip = ClientRectangle;
+            }
+
+            // Consider: Why don't check the clip condition when non-doubleBuffered?
+            //           we should probably get rid of the !doubleBuffered condition.
+            if (doubleBuffered && (clip.Width <= 0 || clip.Height <= 0))
+            {
+                return;
+            }
+
+            BufferedGraphics bufferedGraphics = null;
+            PaintEventArgs pevent = null;
+            GraphicsState state = null;
+
+            using var paletteScope = (doubleBuffered || m.WParam == IntPtr.Zero)
+                ? Gdi32.SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
+                : default;
+
+            if (doubleBuffered)
+            {
+                try
                 {
-                    // Cache Handle not only for perf but to avoid object disposed exception in case the window
-                    // is destroyed in an event handler.
-                    hWnd = Handle;
-                    dc = User32.BeginPaint(new HandleRef(this, hWnd), ref ps);
-                    if (dc == IntPtr.Zero)
+                    bufferedGraphics = BufferContext.Allocate((IntPtr)dc, ClientRectangle);
+#if DEBUG
+                    if (s_bufferPinkRect.Enabled)
                     {
-                        return;
+                        Rectangle band = ClientRectangle;
+                        using (BufferedGraphics bufferedGraphics2 = BufferContext.Allocate((IntPtr)dc, band))
+                        {
+                            bufferedGraphics2.Graphics.FillRectangle(new SolidBrush(Color.Red), band);
+                            bufferedGraphics2.Render();
+                        }
+                        Thread.Sleep(50);
                     }
-                    needDisposeDC = true;
-                    clip = ps.rcPaint;
+#endif
                 }
-                else
+                catch (Exception ex)
                 {
-                    dc = m.WParam;
-                    clip = ClientRectangle;
-                }
+                    // BufferContext.Allocate will throw out of memory exceptions when it fails to create a device
+                    // dependent bitmap while trying to get information about the device we are painting on.
+                    //
+                    // That is not the same as a system running out of memory and there is a very good chance that we
+                    // can continue to paint successfully. We cannot check whether double buffering is supported in
+                    // this case, and we will disable it.
+                    //
+                    // We could set a specific string when throwing the exception and check for it here to distinguish
+                    // between that case and real out of memory exceptions but we see no reasons justifying the
+                    // additional complexity.
 
-                // Consider: Why don't check the clip condition when non-doubleBuffered?
-                //           we should probably get rid of the !doubleBuffered condition.
-                if (!doubleBuffered || (clip.Width > 0 && clip.Height > 0))
-                {
-                    IntPtr oldPal = IntPtr.Zero;
-                    BufferedGraphics bufferedGraphics = null;
-                    PaintEventArgs pevent = null;
-                    GraphicsState state = null;
-
-                    try
+                    if (ClientUtils.IsCriticalException(ex) && !(ex is OutOfMemoryException))
                     {
-                        if (doubleBuffered || m.WParam == IntPtr.Zero)
-                        {
-                            oldPal = SetUpPalette(dc, false, false);
-                        }
-
-                        if (doubleBuffered)
-                        {
-                            try
-                            {
-                                bufferedGraphics = BufferContext.Allocate(dc, ClientRectangle);
+                        throw;
+                    }
 #if DEBUG
-                                if (s_bufferPinkRect.Enabled)
-                                {
-                                    Rectangle band = ClientRectangle;
-                                    using (BufferedGraphics bufferedGraphics2 = BufferContext.Allocate(dc, band))
-                                    {
-                                        bufferedGraphics2.Graphics.FillRectangle(new SolidBrush(Color.Red), band);
-                                        bufferedGraphics2.Render();
-                                    }
-                                    Thread.Sleep(50);
-                                }
+                    if (s_bufferPinkRect.Enabled)
+                    {
+                        Debug.WriteLine("Could not create buffered graphics, will paint in the surface directly");
+                    }
 #endif
-                            }
-                            catch (Exception ex)
-                            {
-                                // BufferContext.Allocate will throw out of memory exceptions
-                                // when it fails to create a device dependent bitmap while trying to
-                                // get information about the device we are painting on.
-                                // That is not the same as a system running out of memory and there is a
-                                // very good chance that we can continue to paint successfully. We cannot
-                                // check whether double buffering is supported in this case, and we will disable it.
-                                // We could set a specific string when throwing the exception and check for it here
-                                // to distinguish between that case and real out of memory exceptions but we
-                                // see no reasons justifying the additional complexity.
-                                if (ClientUtils.IsCriticalException(ex) && !(ex is OutOfMemoryException))
-                                {
-                                    throw;
-                                }
-#if DEBUG
-                                if (s_bufferPinkRect.Enabled)
-                                {
-                                    Debug.WriteLine("Could not create buffered graphics, will paint in the surface directly");
-                                }
-#endif
-                                doubleBuffered = false; // paint directly on the window DC.
-                            }
-                        }
+                    doubleBuffered = false; // paint directly on the window DC.
+                }
+            }
 
-                        if (bufferedGraphics != null)
-                        {
-                            bufferedGraphics.Graphics.SetClip(clip);
-                            pevent = new PaintEventArgs(bufferedGraphics.Graphics, clip);
-                            state = pevent.Graphics.Save();
-                        }
-                        else
-                        {
-                            pevent = new PaintEventArgs(dc, clip);
-                        }
+            if (bufferedGraphics != null)
+            {
+                bufferedGraphics.Graphics.SetClip(clip);
+                pevent = new PaintEventArgs(bufferedGraphics.Graphics, clip);
+                state = pevent.Graphics.Save();
+            }
+            else
+            {
+                pevent = new PaintEventArgs(dc, clip);
+            }
 
-                        using (pevent)
-                        {
-                            try
-                            {
+            using (pevent)
+            {
+                try
+                {
 #pragma warning disable SA1408 // Conditional expressions should declare precedence
-                                if ((m.WParam == IntPtr.Zero) && GetStyle(ControlStyles.AllPaintingInWmPaint) || doubleBuffered)
+                    if ((m.WParam == IntPtr.Zero) && GetStyle(ControlStyles.AllPaintingInWmPaint) || doubleBuffered)
 #pragma warning restore SA1408 // Conditional expressions should declare precedence
-                                {
-                                    PaintWithErrorHandling(pevent, PaintLayerBackground);
-                                    // Consider: This condition could be elimiated,
-                                    //           do we have to save/restore the state of the buffered graphics?
-                                }
-                            }
-                            finally
-                            {
-                                if (state != null)
-                                {
-                                    pevent.Graphics.Restore(state);
-                                }
-                                else
-                                {
-                                    pevent.ResetGraphics();
-                                }
-                            }
-                            PaintWithErrorHandling(pevent, PaintLayerForeground);
-
-                            if (bufferedGraphics != null)
-                            {
-                                bufferedGraphics.Render();
-                            }
-                        }
-                    }
-                    finally
                     {
-                        if (oldPal != IntPtr.Zero)
-                        {
-                            Gdi32.SelectPalette(dc, oldPal, BOOL.FALSE);
-                        }
-
-                        bufferedGraphics?.Dispose();
+                        PaintWithErrorHandling(pevent, PaintLayerBackground);
+                        // Consider: This condition could be elimiated,
+                        //           do we have to save/restore the state of the buffered graphics?
                     }
                 }
-            }
-            finally
-            {
-                if (needDisposeDC)
+                finally
                 {
-                    User32.EndPaint(new HandleRef(this, hWnd), ref ps);
+                    if (state != null)
+                    {
+                        pevent.Graphics.Restore(state);
+                    }
+                    else
+                    {
+                        pevent.ResetGraphics();
+                    }
                 }
+
+                PaintWithErrorHandling(pevent, PaintLayerForeground);
+
+                bufferedGraphics?.Render();
             }
+
+            bufferedGraphics?.Dispose();
         }
 
         /// <summary>
@@ -12485,7 +12429,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmPrintClient(ref Message m)
         {
-            using (PaintEventArgs e = new PrintPaintEventArgs(m, m.WParam, ClientRectangle))
+            using (PaintEventArgs e = new PrintPaintEventArgs(m, (Gdi32.HDC)m.WParam, ClientRectangle))
             {
                 OnPrint(e);
             }
@@ -12493,17 +12437,12 @@ namespace System.Windows.Forms
 
         private void WmQueryNewPalette(ref Message m)
         {
-            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, Handle + ": WM_QUERYNEWPALETTE");
-            IntPtr dc = User32.GetDC(new HandleRef(this, Handle));
-            try
-            {
-                SetUpPalette(dc, true /*force*/, true/*realize*/);
-            }
-            finally
-            {
-                // Let WmPaletteChanged do any necessary invalidation
-                User32.ReleaseDC(new HandleRef(this, Handle), dc);
-            }
+            Debug.WriteLineIf(s_paletteTracing.TraceVerbose, $"{Handle}: WM_QUERYNEWPALETTE");
+            using var dc = new User32.GetDcScope(Handle);
+
+            // We don't want to unset the palette in this case so we don't do this in a using
+            var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(dc, forceBackground: true, realizePalette: true);
+
             Invalidate(true);
             m.Result = (IntPtr)1;
             DefWndProc(ref m);
@@ -13155,6 +13094,10 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                     break;
             }
+
+            // Keep ourselves rooted until we're done processing the current message. While unlikely, it is possible
+            // that we can lose the rooting for `this` and get finalized when it is no longer referenced as a local.
+            GC.KeepAlive(this);
         }
 
         /// <summary>

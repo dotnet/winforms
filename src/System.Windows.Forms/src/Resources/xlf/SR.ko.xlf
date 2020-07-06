@@ -1177,6 +1177,11 @@
         <target state="translated">처리되지 않은 {0} 형식입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ConstructorArgumentInvalidValueType">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">'{0}' 인수를 '{1}' 형식으로 변환할 수 없습니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
         <source>The currently active control.</source>
         <target state="translated">현재 활성 컨트롤입니다.</target>
@@ -5551,6 +5556,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ImageList 핸들을 만들지 못했습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">ImageList에 추가하는 이미지는 이미지에서 파생되거나 아이콘이어야 합니다.</target>
@@ -5638,7 +5648,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">'{0}' 문화의 InputLanguage를 찾을 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -6378,7 +6388,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
         <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
-        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <target state="translated">ListView에서 모든 보기의 ListViewGroup 이미지로 사용하는 ImageList 컨트롤입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">

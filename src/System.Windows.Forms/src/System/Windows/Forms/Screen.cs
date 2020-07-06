@@ -54,13 +54,13 @@ namespace System.Windows.Forms
         private static readonly bool multiMonitorSupport = (User32.GetSystemMetrics(User32.SystemMetric.SM_CMONITORS) != 0);
         private static Screen[] screens;
 
-        internal Screen(IntPtr monitor) : this(monitor, IntPtr.Zero)
+        internal Screen(IntPtr monitor) : this(monitor, default)
         {
         }
 
-        internal unsafe Screen(IntPtr monitor, IntPtr hdc)
+        internal unsafe Screen(IntPtr monitor, Gdi32.HDC hdc)
         {
-            IntPtr screenDC = hdc;
+            Gdi32.HDC screenDC = hdc;
 
             if (!multiMonitorSupport || monitor == (IntPtr)PRIMARY_MONITOR)
             {
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
                 deviceName = new string(info.szDevice);
 
-                if (hdc == IntPtr.Zero)
+                if (hdc.IsNull)
                 {
                     screenDC = Gdi32.CreateDC(deviceName, null, null, IntPtr.Zero);
                 }
@@ -207,7 +207,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return new Screen((IntPtr)PRIMARY_MONITOR, IntPtr.Zero);
+                    return new Screen((IntPtr)PRIMARY_MONITOR, default);
                 }
             }
         }
@@ -321,7 +321,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return new Screen((IntPtr)PRIMARY_MONITOR, IntPtr.Zero);
+                return new Screen((IntPtr)PRIMARY_MONITOR, default);
             }
         }
 
@@ -351,7 +351,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return new Screen((IntPtr)PRIMARY_MONITOR, IntPtr.Zero);
+                return new Screen((IntPtr)PRIMARY_MONITOR, default);
             }
         }
 
@@ -452,7 +452,7 @@ namespace System.Windows.Forms
         {
             public ArrayList screens = new ArrayList();
 
-            public virtual BOOL Callback(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lparam)
+            public virtual BOOL Callback(IntPtr monitor, Gdi32.HDC hdc, IntPtr lprcMonitor, IntPtr lparam)
             {
                 screens.Add(new Screen(monitor, hdc));
                 return BOOL.TRUE;

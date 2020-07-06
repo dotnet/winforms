@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     /// </summary>
     [SRDescription(nameof(SR.DescriptionButton))]
     [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
-    public class Button : ButtonBase, IButtonControl
+    public partial class Button : ButtonBase, IButtonControl
     {
         /// <summary>
         ///  The dialog result that will be sent to the parent dialog form when
@@ -86,6 +86,9 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new ButtonAccessibleObject(this);
 
         internal override ButtonBaseAdapter CreateFlatAdapter()
         {
@@ -182,6 +185,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         /// <summary>
         ///  Raises the <see cref='Control.OnMouseEnter'/> event.
         /// </summary>
@@ -248,6 +253,10 @@ namespace System.Windows.Forms
             //
             AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+
+            // UIA events:
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, Name, Name);
+            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
 
             base.OnClick(e);
         }

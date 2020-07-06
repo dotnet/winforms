@@ -729,51 +729,40 @@ namespace System.Windows.Forms
 
                 // Paint over the edges of the text box.
 
-                // Using GetWindowDC instead of GetDCEx as GetDCEx seems to return a null handle and a last error of
-                // the operation succeeded.  We're not going to use the clipping rect anyways - so it's not
-                // that bigga deal.
-                IntPtr hdc = User32.GetWindowDC(new HandleRef(this, m.HWnd));
-                if (hdc == IntPtr.Zero)
+                // Note that GetWindowDC just calls GetDCEx with DCX_WINDOW | DCX_USESTYLE.
+
+                using var hdc = new User32.GetDcScope(m.HWnd, IntPtr.Zero, User32.DCX.WINDOW | User32.DCX.USESTYLE);
+                if (hdc.IsNull)
                 {
                     throw new Win32Exception();
                 }
-                try
+
+                // Don't set the clipping region based on the WParam - windows seems to take out the two pixels intended for the non-client border.
+
+                Color outerBorderColor = (MouseIsOver || Focused) ? ColorTable.TextBoxBorder : BackColor;
+                Color innerBorderColor = BackColor;
+
+                if (!Enabled)
                 {
-                    // Don't set the clipping region based on the WParam - windows seems to take out the two pixels intended for the non-client border.
-
-                    Color outerBorderColor = (MouseIsOver || Focused) ? ColorTable.TextBoxBorder : BackColor;
-                    Color innerBorderColor = BackColor;
-
-                    if (!Enabled)
-                    {
-                        outerBorderColor = SystemColors.ControlDark;
-                        innerBorderColor = SystemColors.Control;
-                    }
-                    using (Graphics g = Graphics.FromHdcInternal(hdc))
-                    {
-                        Rectangle clientRect = AbsoluteClientRectangle;
-
-                        // could have set up a clip and fill-rectangled, thought this would be faster.
-                        using (Brush b = new SolidBrush(innerBorderColor))
-                        {
-                            g.FillRectangle(b, 0, 0, Width, clientRect.Top); // top border
-                            g.FillRectangle(b, 0, 0, clientRect.Left, Height); // left border
-                            g.FillRectangle(b, 0, clientRect.Bottom, Width, Height - clientRect.Height); // bottom border
-                            g.FillRectangle(b, clientRect.Right, 0, Width - clientRect.Right, Height); // right border
-                        }
-
-                        // paint the outside rect.
-                        using (Pen p = new Pen(outerBorderColor))
-                        {
-                            g.DrawRectangle(p, 0, 0, Width - 1, Height - 1);
-                        }
-                    }
+                    outerBorderColor = SystemColors.ControlDark;
+                    innerBorderColor = SystemColors.Control;
                 }
-                finally
-                {
-                    User32.ReleaseDC(new HandleRef(this, Handle), hdc);
-                }
-                // we've handled WM_NCPAINT.
+
+                using Graphics g = hdc.CreateGraphics();
+                Rectangle clientRect = AbsoluteClientRectangle;
+
+                // Could have set up a clip and fill-rectangled, thought this would be faster.
+                using Brush b = new SolidBrush(innerBorderColor);
+                g.FillRectangle(b, 0, 0, Width, clientRect.Top);                                // top border
+                g.FillRectangle(b, 0, 0, clientRect.Left, Height);                              // left border
+                g.FillRectangle(b, 0, clientRect.Bottom, Width, Height - clientRect.Height);    // bottom border
+                g.FillRectangle(b, clientRect.Right, 0, Width - clientRect.Right, Height);      // right border
+
+                // Paint the outside rect.
+                using Pen p = new Pen(outerBorderColor);
+                g.DrawRectangle(p, 0, 0, Width - 1, Height - 1);
+
+                // We've handled WM_NCPAINT.
                 m.Result = IntPtr.Zero;
             }
             protected override void WndProc(ref Message m)

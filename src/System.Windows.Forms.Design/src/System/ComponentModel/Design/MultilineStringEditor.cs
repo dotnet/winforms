@@ -227,7 +227,7 @@ namespace System.ComponentModel.Design
                 get
                 {
                     using var hdc = User32.GetDcScope.ScreenDC;
-                    using var font = new Gdi32.ObjectScope(Font.ToHfont());
+                    using var font = new Gdi32.ObjectScope(Font.ToHFONT());
                     using var fontSelection = new Gdi32.SelectObjectScope(hdc, font);
 
                     RECT rect = new RECT();

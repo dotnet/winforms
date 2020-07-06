@@ -4,10 +4,8 @@
 
 #nullable disable
 
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -15,31 +13,20 @@ namespace System.Windows.Forms
     public partial class Control
     {
         // Fonts can be a pain to track, so we wrap Hfonts in this class to get a Finalize method.
-        internal sealed class FontHandleWrapper : MarshalByRefObject, IDisposable
+        internal sealed class FontHandleWrapper : IDisposable
         {
-#if DEBUG
-            private readonly string _stackOnCreate = null;
-            private string _stackOnDispose = null;
-            private bool _finalizing = false;
-#endif
-            private IntPtr _handle;
+            private Gdi32.HFONT _handle;
 
             internal FontHandleWrapper(Font font)
             {
-#if DEBUG
-                if (CompModSwitches.LifetimeTracing.Enabled)
-                {
-                    _stackOnCreate = new StackTrace().ToString();
-                }
-#endif
-                _handle = font.ToHfont();
+                _handle = (Gdi32.HFONT)font.ToHfont();
             }
 
-            internal IntPtr Handle
+            internal Gdi32.HFONT Handle
             {
                 get
                 {
-                    Debug.Assert(_handle != IntPtr.Zero, "FontHandleWrapper disposed, but still being accessed");
+                    Debug.Assert(!_handle.IsNull, "FontHandleWrapper disposed, but still being accessed");
                     return _handle;
                 }
             }
@@ -52,28 +39,15 @@ namespace System.Windows.Forms
 
             private void Dispose(bool disposing)
             {
-#if DEBUG
-                Debug.Assert(_finalizing || this != s_defaultFontHandleWrapper, "Don't dispose the defaultFontHandleWrapper");
-#endif
-
-                if (_handle != IntPtr.Zero)
+                if (!_handle.IsNull)
                 {
-#if DEBUG
-                    if (CompModSwitches.LifetimeTracing.Enabled)
-                    {
-                        _stackOnDispose = new StackTrace().ToString();
-                    }
-#endif
                     Gdi32.DeleteObject(_handle);
-                    _handle = IntPtr.Zero;
+                    _handle = default;
                 }
             }
 
             ~FontHandleWrapper()
             {
-#if DEBUG
-                _finalizing = true;
-#endif
                 Dispose(false);
             }
         }

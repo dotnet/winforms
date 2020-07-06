@@ -10,11 +10,11 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern ObjectType GetObjectType(IntPtr h);
+        public static extern ObjectType GetObjectType(HGDIOBJ h);
 
         public static ObjectType GetObjectType(HandleRef h)
         {
-            ObjectType result = GetObjectType(h.Handle);
+            ObjectType result = GetObjectType((HGDIOBJ)h.Handle);
             GC.KeepAlive(h.Wrapper);
             return result;
         }

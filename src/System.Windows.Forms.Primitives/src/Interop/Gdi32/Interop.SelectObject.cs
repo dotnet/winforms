@@ -10,20 +10,19 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr SelectObject(IntPtr hdc, IntPtr h);
+        public static extern HGDIOBJ SelectObject(HDC hdc, HGDIOBJ h);
 
-        public static IntPtr SelectObject(HandleRef hdc, IntPtr h)
+        public static HGDIOBJ SelectObject(IHandle hdc, HGDIOBJ h)
         {
-            IntPtr lastObject = SelectObject(hdc.Handle, h);
-            GC.KeepAlive(hdc.Wrapper);
+            HGDIOBJ lastObject = SelectObject((HDC)hdc.Handle, h);
+            GC.KeepAlive(hdc);
             return lastObject;
         }
 
-        public static IntPtr SelectObject(HandleRef hdc, HandleRef h)
+        public static HGDIOBJ SelectObject(HandleRef hdc, HGDIOBJ h)
         {
-            IntPtr lastObject = SelectObject(hdc.Handle, h.Handle);
+            HGDIOBJ lastObject = SelectObject((HDC)hdc.Handle, h);
             GC.KeepAlive(hdc.Wrapper);
-            GC.KeepAlive(h.Wrapper);
             return lastObject;
         }
     }

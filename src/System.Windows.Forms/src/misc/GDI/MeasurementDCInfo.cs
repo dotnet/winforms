@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Internal
             };
         }
 
-        internal static void ResetIfIsMeasurementDC(IntPtr hdc)
+        internal static void ResetIfIsMeasurementDC(Gdi32.HDC hdc)
         {
             WindowsGraphics? sharedGraphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
             if (sharedGraphics != null && sharedGraphics.DeviceContext != null && sharedGraphics.DeviceContext.Hdc == hdc)

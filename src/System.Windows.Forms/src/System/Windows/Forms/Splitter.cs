@@ -22,7 +22,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Dock))]
     [SRDescription(nameof(SR.DescriptionSplitter))]
     [Designer("System.Windows.Forms.Design.SplitterDesigner, " + AssemblyRef.SystemDesign)]
-    public class Splitter : Control
+    public partial class Splitter : Control
     {
         private const int DRAW_START = 1;
         private const int DRAW_MOVE = 2;
@@ -206,6 +206,9 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new SplitterAccessibleObject(this);
 
         /// <summary>
         ///  Returns the parameters needed to create the handle.  Inheriting classes
@@ -427,6 +430,8 @@ namespace System.Windows.Forms
                 OnSplitterMoved(new SplitterEventArgs(Left, Top, (Left + bounds.Width / 2), (Top + bounds.Height / 2)));
             }
         }
+
+        internal override bool SupportsUiaProviders => true;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -692,13 +697,13 @@ namespace System.Windows.Forms
             }
 
             Rectangle r = CalcSplitLine(splitSize, 3);
-            IntPtr dc = User32.GetDCEx(ParentInternal, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
-            IntPtr halftone = ControlPaint.CreateHalftoneHBRUSH();
-            IntPtr saveBrush = Gdi32.SelectObject(dc, halftone);
-            Gdi32.PatBlt(new HandleRef(ParentInternal, dc), r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
-            Gdi32.SelectObject(dc, saveBrush);
-            Gdi32.DeleteObject(halftone);
-            User32.ReleaseDC(new HandleRef(ParentInternal, ParentInternal.Handle), dc);
+            using var dc = new User32.GetDcScope(ParentInternal.Handle, IntPtr.Zero, User32.DCX.CACHE | User32.DCX.LOCKWINDOWUPDATE);
+            Gdi32.HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
+            using var halftoneScope = new Gdi32.ObjectScope(halftone);
+            using var selection = new Gdi32.SelectObjectScope(dc, halftone);
+            Gdi32.PatBlt(dc, r.X, r.Y, r.Width, r.Height, Gdi32.ROP.PATINVERT);
+
+            GC.KeepAlive(ParentInternal);
         }
 
         /// <summary>

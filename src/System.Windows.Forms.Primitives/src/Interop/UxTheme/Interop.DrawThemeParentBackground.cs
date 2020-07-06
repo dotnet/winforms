@@ -12,11 +12,11 @@ internal static partial class Interop
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
         public static extern HRESULT DrawThemeParentBackground(IntPtr hwnd, IntPtr hdc, ref RECT prc);
 
-        public static HRESULT DrawThemeParentBackground(IHandle hwnd, HandleRef hdc, ref RECT prc)
+        public static HRESULT DrawThemeParentBackground(IHandle hwnd, IHandle hdc, ref RECT prc)
         {
             HRESULT hr = DrawThemeParentBackground(hwnd.Handle, hdc.Handle, ref prc);
             GC.KeepAlive(hwnd);
-            GC.KeepAlive(hdc.Wrapper);
+            GC.KeepAlive(hdc);
             return hr;
         }
     }

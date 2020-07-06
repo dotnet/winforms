@@ -226,12 +226,12 @@ namespace System.Windows.Forms
             base.OnResize(eventargs);
         }
 
-        private protected override void PrintToMetaFileRecursive(IntPtr hDC, IntPtr lParam, Rectangle bounds)
+        private protected override void PrintToMetaFileRecursive(Gdi32.HDC hDC, IntPtr lParam, Rectangle bounds)
         {
             base.PrintToMetaFileRecursive(hDC, lParam, bounds);
 
             using var mapping = new DCMapping(hDC, bounds);
-            using Graphics g = Graphics.FromHdcInternal(hDC);
+            using Graphics g = hDC.CreateGraphics();
             ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.Sunken);
         }
 

@@ -9,6 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
+    using static Interop.UiaCore;
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
@@ -415,6 +416,24 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.GetTopLevel());
         }
 
+        [WinFormsFact]
+        public void CheckBox_RaiseAutomationEvent_Invoke_Success()
+        {
+            using var checkBox = new TestCheckBox();
+            Assert.False(checkBox.IsHandleCreated);
+
+            var accessibleObject = (SubCheckBoxAccessibleObject)checkBox.AccessibilityObject;
+            Assert.Equal(0, accessibleObject.RaiseAutomationEventCallsCount);
+            Assert.Equal(0, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+
+            checkBox.Checked = true;
+
+            Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
+            Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
+            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.True(checkBox.IsHandleCreated);
+        }
+
         // the zero here may be an issue with cultural variance
         [WinFormsFact]
         public void CheckBox_ToStringTest()
@@ -494,6 +513,39 @@ namespace System.Windows.Forms.Tests
             public new bool GetTopLevel() => base.GetTopLevel();
 
             public new void OnClick(EventArgs e) => base.OnClick(e);
+        }
+
+        private class TestCheckBox : CheckBox
+        {
+            protected override AccessibleObject CreateAccessibilityInstance()
+            {
+                return new SubCheckBoxAccessibleObject(this);
+            }
+        }
+
+        private class SubCheckBoxAccessibleObject : CheckBox.CheckBoxAccessibleObject
+        {
+            public SubCheckBoxAccessibleObject(CheckBox owner) : base(owner)
+            {
+                RaiseAutomationEventCallsCount = 0;
+                RaiseAutomationPropertyChangedEventCallsCount = 0;
+            }
+
+            public int RaiseAutomationEventCallsCount { get; private set; }
+
+            public int RaiseAutomationPropertyChangedEventCallsCount { get; private set; }
+
+            internal override bool RaiseAutomationEvent(UIA eventId)
+            {
+                RaiseAutomationEventCallsCount++;
+                return base.RaiseAutomationEvent(eventId);
+            }
+
+            internal override bool RaiseAutomationPropertyChangedEvent(UIA propertyId, object oldValue, object newValue)
+            {
+                RaiseAutomationPropertyChangedEventCallsCount++;
+                return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
+            }
         }
     }
 }

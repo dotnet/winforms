@@ -33,9 +33,6 @@ namespace System.Windows.Forms
         private static readonly Color s_fakeTransparencyColor = Color.FromArgb(0x0d, 0x0b, 0x0c);
         private static readonly Size s_defaultImageSize = new Size(16, 16);
 
-        private const int InitialCapacity = 4;
-        private const int GrowBy = 4;
-
         private const int MaxDimension = 256;
         private static int s_maxImageWidth = MaxDimension;
         private static int s_maxImageHeight = MaxDimension;
@@ -235,7 +232,7 @@ namespace System.Windows.Forms
                     bool recreatingHandle = HandleCreated; // We only need to fire RecreateHandle if there was a previous handle
                     DestroyHandle();
                     _originals = null;
-                    _nativeImageList = new NativeImageList(ComCtl32.ImageList.Duplicate(himl));
+                    _nativeImageList = himl.Duplicate();
                     if (ComCtl32.ImageList.GetIconSize(new HandleRef(this, _nativeImageList.Handle), out int x, out int y).IsTrue())
                     {
                         _imageSize = new Size(x, y);
@@ -396,8 +393,13 @@ namespace System.Windows.Forms
         private int AddToHandle(Bitmap bitmap)
         {
             Debug.Assert(HandleCreated, "Calling AddToHandle when there is no handle");
-            IntPtr hMask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);   // Calls GDI to create Bitmap.
-            IntPtr hBitmap = ControlPaint.CreateHBitmapColorMask(bitmap, hMask); // Calls GDI+ to create Bitmap. Need to add handle to HandleCollector.
+
+            // Calls GDI to create Bitmap.
+            Gdi32.HBITMAP hMask = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
+
+            // Calls GDI+ to create Bitmap
+            Gdi32.HBITMAP hBitmap = (Gdi32.HBITMAP)ControlPaint.CreateHBitmapColorMask(bitmap, (IntPtr)hMask);
+
             int index;
             try
             {
@@ -455,16 +457,18 @@ namespace System.Windows.Forms
             try
             {
                 ComCtl32.InitCommonControls();
-                _nativeImageList = new NativeImageList(ComCtl32.ImageList.Create(_imageSize.Width, _imageSize.Height, flags, InitialCapacity, GrowBy));
+
+                if (_nativeImageList != null)
+                {
+                    _nativeImageList.Dispose();
+                    _nativeImageList = null;
+                }
+
+                _nativeImageList = new NativeImageList(_imageSize, flags);
             }
             finally
             {
                 ThemingScope.Deactivate(userCookie);
-            }
-
-            if (Handle == IntPtr.Zero)
-            {
-                throw new InvalidOperationException(SR.ImageListCreateFailed);
             }
 
             ComCtl32.ImageList.SetBkColor(this, ComCtl32.CLR.NONE);
@@ -526,6 +530,8 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
+                ImageStream?.Dispose();
 
                 DestroyHandle();
             }
@@ -662,8 +668,7 @@ namespace System.Windows.Forms
                     BitmapData targetData = null;
                     try
                     {
-                        tmpBitmap = Bitmap.FromHbitmap(imageInfo.hbmImage);
-                        //
+                        tmpBitmap = Bitmap.FromHbitmap((IntPtr)imageInfo.hbmImage);
 
                         bmpData = tmpBitmap.LockBits(new Rectangle(imageInfo.rcImage.left, imageInfo.rcImage.top, imageInfo.rcImage.right - imageInfo.rcImage.left, imageInfo.rcImage.bottom - imageInfo.rcImage.top), ImageLockMode.ReadOnly, tmpBitmap.PixelFormat);
 

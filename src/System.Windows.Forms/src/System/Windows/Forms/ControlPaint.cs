@@ -132,7 +132,7 @@ namespace System.Windows.Forms
 
         // Returns address of a BITMAPINFO for use by CreateHBITMAP16Bit.
         // The caller is resposible for freeing the memory returned by this method.
-        private unsafe static IntPtr CreateBitmapInfo(Bitmap bitmap, IntPtr hdcS)
+        private unsafe static IntPtr CreateBitmapInfo(Bitmap bitmap, Gdi32.HDC hdcS)
         {
             var header = new Gdi32.BITMAPINFOHEADER
             {
@@ -143,10 +143,11 @@ namespace System.Windows.Forms
                 biBitCount = 16,
                 biCompression = Gdi32.BI.RGB
             };
+
             // leave everything else 0
 
             // Set up color table --
-            IntPtr palette = Gdi32.CreateHalftonePalette(hdcS);
+            Gdi32.HPALETTE palette = Gdi32.CreateHalftonePalette(hdcS);
             Gdi32.GetObjectW(palette, out uint entryCount);
             var entries = new Gdi32.PALETTEENTRY[entryCount];
             Gdi32.GetPaletteEntries(palette, entries);
@@ -172,16 +173,16 @@ namespace System.Windows.Forms
         /// </summary>
         public static IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background)
         {
-            IntPtr hBitmap;
+            Gdi32.HBITMAP hBitmap;
             Size size = bitmap.Size;
 
             using (DeviceContext screenDc = DeviceContext.ScreenDC)
             {
-                IntPtr hdcS = screenDc.Hdc;
+                Gdi32.HDC hdcS = screenDc.Hdc;
 
                 using (DeviceContext compatDc = DeviceContext.FromCompatibleDC(hdcS))
                 {
-                    IntPtr dc = compatDc.Hdc;
+                    Gdi32.HDC dc = compatDc.Hdc;
 
                     byte[] enoughBits = new byte[bitmap.Width * bitmap.Height];
                     IntPtr bitmapInfo = CreateBitmapInfo(bitmap, hdcS);
@@ -195,22 +196,22 @@ namespace System.Windows.Forms
 
                     Marshal.FreeCoTaskMem(bitmapInfo);
 
-                    if (hBitmap == IntPtr.Zero)
+                    if (hBitmap.IsNull)
                     {
                         throw new Win32Exception();
                     }
 
                     try
                     {
-                        IntPtr previousBitmap = Gdi32.SelectObject(dc, hBitmap);
-                        if (previousBitmap == IntPtr.Zero)
+                        Gdi32.HGDIOBJ previousBitmap = Gdi32.SelectObject(dc, hBitmap);
+                        if (previousBitmap.IsNull)
                         {
                             throw new Win32Exception();
                         }
 
                         Gdi32.DeleteObject(previousBitmap);
 
-                        using (Graphics graphics = Graphics.FromHdcInternal(dc))
+                        using (Graphics graphics = dc.CreateGraphics())
                         {
                             using (Brush brush = new SolidBrush(background))
                             {
@@ -227,7 +228,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return hBitmap;
+            return (IntPtr)hBitmap;
         }
 
         /// <summary>
@@ -243,6 +244,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(bitmap));
             }
+
             Size size = bitmap.Size;
             int width = bitmap.Width;
             int height = bitmap.Height;
@@ -252,6 +254,7 @@ namespace System.Windows.Forms
             {
                 monochromeStride++;
             }
+
             // must be multiple of two -- i.e., bitmap
             // scanlines must fall on double-byte boundaries
             if ((monochromeStride % 2) != 0)
@@ -260,9 +263,10 @@ namespace System.Windows.Forms
             }
 
             byte[] bits = new byte[monochromeStride * height];
-            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, width, height),
-                                              ImageLockMode.ReadOnly,
-                                              PixelFormat.Format32bppArgb);
+            BitmapData data = bitmap.LockBits(
+                new Rectangle(0, 0, width, height),
+                ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb);
 
             Debug.Assert(data.Scan0 != IntPtr.Zero, "BitmapData.Scan0 is null; check marshalling");
 
@@ -286,7 +290,7 @@ namespace System.Windows.Forms
             // Create 1bpp.
             fixed (byte* pBits = bits)
             {
-                return Gdi32.CreateBitmap(size.Width, size.Height, 1, 1, pBits);
+                return (IntPtr)Gdi32.CreateBitmap(size.Width, size.Height, 1, 1, pBits);
             }
         }
 
@@ -301,11 +305,11 @@ namespace System.Windows.Forms
         {
             Size size = bitmap.Size;
 
-            IntPtr colorMask = bitmap.GetHbitmap();
+            Gdi32.HBITMAP colorMask = (Gdi32.HBITMAP)bitmap.GetHbitmap();
             using var screenDC = new User32.GetDcScope(IntPtr.Zero);
             using var sourceDC = new Gdi32.CreateDcScope(screenDC);
             using var targetDC = new Gdi32.CreateDcScope(screenDC);
-            using var sourceBitmapSelection = new Gdi32.SelectObjectScope(sourceDC, monochromeMask);
+            using var sourceBitmapSelection = new Gdi32.SelectObjectScope(sourceDC, (Gdi32.HBITMAP)monochromeMask);
             using var targetBitmapSelection = new Gdi32.SelectObjectScope(targetDC, colorMask);
 
             // Now the trick is to make colorBitmap black wherever the transparent
@@ -328,10 +332,10 @@ namespace System.Windows.Forms
                 0,
                 (Gdi32.ROP)0x220326); // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
-            return colorMask;
+            return (IntPtr)colorMask;
         }
 
-        internal unsafe static IntPtr CreateHalftoneHBRUSH()
+        internal unsafe static Gdi32.HBRUSH CreateHalftoneHBRUSH()
         {
             short* grayPattern = stackalloc short[8];
             for (int i = 0; i < 8; i++)
@@ -339,21 +343,16 @@ namespace System.Windows.Forms
                 grayPattern[i] = (short)(0x5555 << (i & 1));
             }
 
-            IntPtr hBitmap = Gdi32.CreateBitmap(8, 8, 1, 1, grayPattern);
-            try
+            using var hBitmap = new Gdi32.CreateBitmapScope(8, 8, 1, 1, grayPattern);
+
+            var lb = new Gdi32.LOGBRUSH
             {
-                var lb = new Gdi32.LOGBRUSH
-                {
-                    lbColor = ColorTranslator.ToWin32(Color.Black),
-                    lbStyle = Gdi32.BS.PATTERN,
-                    lbHatch = hBitmap
-                };
-                return Gdi32.CreateBrushIndirect(ref lb);
-            }
-            finally
-            {
-                Gdi32.DeleteObject(hBitmap);
-            }
+                lbColor = ColorTranslator.ToWin32(Color.Black),
+                lbStyle = Gdi32.BS.PATTERN,
+                lbHatch = (IntPtr)hBitmap
+            };
+
+            return Gdi32.CreateBrushIndirect(ref lb);
         }
 
         // roughly the same code as in Graphics.cs
@@ -362,32 +361,25 @@ namespace System.Windows.Forms
             int destWidth = blockRegionSize.Width;
             int destHeight = blockRegionSize.Height;
 
-            DeviceContext dc = DeviceContext.FromHwnd(sourceHwnd);
-            IntPtr targetHDC = targetDC.GetHdc();
-            try
-            {
-                BOOL result = Gdi32.BitBlt(
-                    targetHDC,
-                    destinationLocation.X,
-                    destinationLocation.Y,
-                    destWidth,
-                    destHeight,
-                    dc.Hdc,
-                    sourceLocation.X,
-                    sourceLocation.Y,
-                    (Gdi32.ROP)copyPixelOperation);
+            using var dc = new User32.GetDcScope(sourceHwnd);
+            using var targetHDC = new DeviceContextHdcScope(targetDC, saveState: false);
+
+            BOOL result = Gdi32.BitBlt(
+                targetHDC,
+                destinationLocation.X,
+                destinationLocation.Y,
+                destWidth,
+                destHeight,
+                dc,
+                sourceLocation.X,
+                sourceLocation.Y,
+                (Gdi32.ROP)copyPixelOperation);
 
                 // Zero result indicates a win32 exception has been thrown
                 if (!result.IsTrue())
                 {
                     throw new Win32Exception();
                 }
-            }
-            finally
-            {
-                targetDC.ReleaseHdc();
-                dc.Dispose();
-            }
         }
 
         /// <summary>
@@ -1099,11 +1091,9 @@ namespace System.Windows.Forms
                 flags &= ~(User32.BF)Border3DStyle.Adjust;
             }
 
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(graphics))
-            {
-                // Get Win32 dc with Graphics properties applied to it.
-                User32.DrawEdge(new HandleRef(wg, wg.DeviceContext.Hdc), ref rc, edge, flags);
-            }
+            // Get Win32 dc with Graphics properties applied to it.
+            using var hdc = new DeviceContextHdcScope(graphics, ApplyGraphicsProperties.All, saveState: false);
+            User32.DrawEdge(hdc, ref rc, edge, flags);
         }
 
         /// <summary>
@@ -1155,7 +1145,8 @@ namespace System.Windows.Forms
                 pen.Dispose();
             }
             else
-            { // Standard button
+            {
+                // Standard button
                 Debug.Assert(style == ButtonBorderStyle.Outset, "Caller should have known how to use us.");
 
                 bool stockColor = color.ToKnownColor() == SystemColors.Control.ToKnownColor();
@@ -1433,16 +1424,10 @@ namespace System.Windows.Forms
                     using (Graphics g2 = Graphics.FromImage(bitmap))
                     {
                         g2.Clear(Color.Transparent);
-                        IntPtr dc = g2.GetHdc();
-                        try
-                        {
-                            User32.DrawFrameControl(dc, ref rcCheck, User32.DFC.MENU, User32.DFCS.MENUCHECK);
-                        }
-                        finally
-                        {
-                            g2.ReleaseHdcInternal(dc);
-                        }
+                        using var dc = new DeviceContextHdcScope(g2, saveState: false);
+                        User32.DrawFrameControl(dc, ref rcCheck, User32.DFC.MENU, User32.DFCS.MENUCHECK);
                     }
+
                     bitmap.MakeTransparent();
                     checkImage = bitmap;
                 }
@@ -1532,10 +1517,10 @@ namespace System.Windows.Forms
                 {
                     g2.Clear(Color.Transparent);
 
-                    using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g2))
+                    using (var hdc = new DeviceContextHdcScope(g2, saveState: false))
                     {
                         // Get Win32 dc with Graphics properties applied to it.
-                        User32.DrawFrameControl(new HandleRef(wg, wg.DeviceContext.Hdc), ref rcFrame, kind, state);
+                        User32.DrawFrameControl(hdc, ref rcFrame, kind, state);
                     }
 
                     if (foreColor == Color.Empty || backColor == Color.Empty)
@@ -1943,10 +1928,10 @@ namespace System.Windows.Forms
             {
                 FrameStyle.Dashed => Gdi32.CreatePen(Gdi32.PS.DOT, 1, ColorTranslator.ToWin32(backColor)),
                 FrameStyle.Thick => Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor)),
-                _ => IntPtr.Zero
+                _ => default
             });
 
-            using var rop2Scope = new Gdi32.Rop2Scope(desktopDC, rop2);
+            using var rop2Scope = new Gdi32.SetRop2Scope(desktopDC, rop2);
             using var brushSelection = new Gdi32.SelectObjectScope(desktopDC, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
             using var penSelection = new Gdi32.SelectObjectScope(desktopDC, pen);
 
@@ -1968,7 +1953,7 @@ namespace System.Windows.Forms
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
 
             using var pen = new Gdi32.ObjectScope(Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(backColor)));
-            using var ropScope = new Gdi32.Rop2Scope(desktopDC, rop2);
+            using var ropScope = new Gdi32.SetRop2Scope(desktopDC, rop2);
             using var brushSelection = new Gdi32.SelectObjectScope(
                 desktopDC,
                 Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
@@ -2155,7 +2140,7 @@ namespace System.Windows.Forms
                 IntPtr.Zero,
                 User32.DCX.WINDOW | User32.DCX.LOCKWINDOWUPDATE | User32.DCX.CACHE);
             using var brush = new Gdi32.ObjectScope(Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backColor)));
-            using var ropScope = new Gdi32.Rop2Scope(desktopDC, rop2);
+            using var ropScope = new Gdi32.SetRop2Scope(desktopDC, rop2);
             using var brushSelection = new Gdi32.SelectObjectScope(desktopDC, brush);
 
             // PatBlt must be the only Win32 function that wants height in width rather than x2,y2.

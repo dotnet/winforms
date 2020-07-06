@@ -1018,9 +1018,10 @@ namespace System.Windows.Forms
             get
             {
                 Image image = (Image)Properties.GetObject(s_imageProperty);
-                if (image == null && (Owner != null) && (Owner.ImageList != null) && ImageIndexer.ActualIndex >= 0)
+                if (image == null && Owner?.ImageList != null && ImageIndexer.ActualIndex >= 0)
                 {
-                    if (ImageIndexer.ActualIndex < Owner.ImageList.Images.Count)
+                    bool disposing = _state[s_stateDisposing];
+                    if (!disposing && ImageIndexer.ActualIndex < Owner.ImageList.Images.Count)
                     {
                         // CACHE (by design). If we fetched out of the image list every time it would dramatically hit perf.
                         image = Owner.ImageList.Images[ImageIndexer.ActualIndex];
@@ -1036,28 +1037,32 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (Image != value)
+                if (Image == value)
                 {
-                    StopAnimate();
-                    if (value is Bitmap bmp && ImageTransparentColor != Color.Empty)
-                    {
-                        if (bmp.RawFormat.Guid != ImageFormat.Icon.Guid && !ImageAnimator.CanAnimate(bmp))
-                        {
-                            bmp.MakeTransparent(ImageTransparentColor);
-                        }
-
-                        value = bmp;
-                    }
-                    if (value != null)
-                    {
-                        ImageIndex = ImageList.Indexer.DefaultIndex;
-                    }
-
-                    Properties.SetObject(s_imageProperty, value);
-                    _state[s_stateInvalidMirroredImage] = true;
-                    Animate();
-                    InvalidateItemLayout(PropertyNames.Image);
+                    return;
                 }
+
+                StopAnimate();
+
+                if (value is Bitmap bmp && ImageTransparentColor != Color.Empty)
+                {
+                    if (bmp.RawFormat.Guid != ImageFormat.Icon.Guid && !ImageAnimator.CanAnimate(bmp))
+                    {
+                        bmp.MakeTransparent(ImageTransparentColor);
+                    }
+
+                    value = bmp;
+                }
+                if (value != null)
+                {
+                    ImageIndex = ImageList.Indexer.DefaultIndex;
+                }
+
+                Properties.SetObject(s_imageProperty, value);
+                _state[s_stateInvalidMirroredImage] = true;
+
+                Animate();
+                InvalidateItemLayout(PropertyNames.Image);
             }
         }
 
@@ -2056,25 +2061,27 @@ namespace System.Windows.Forms
 
         private void Animate(bool animate)
         {
-            if (animate != _state[s_stateCurrentlyAnimatingImage])
+            if (animate == _state[s_stateCurrentlyAnimatingImage])
             {
-                if (animate)
-                {
-                    if (Image != null)
-                    {
-                        ImageAnimator.Animate(Image, new EventHandler(OnAnimationFrameChanged));
-                        _state[s_stateCurrentlyAnimatingImage] = animate;
-                    }
-                }
-                else
-                {
-                    if (Image != null)
-                    {
-                        ImageAnimator.StopAnimate(Image, new EventHandler(OnAnimationFrameChanged));
-                        _state[s_stateCurrentlyAnimatingImage] = animate;
-                    }
-                }
+                return;
             }
+
+            Image image = Image;
+            if (image == null)
+            {
+                return;
+            }
+
+            if (animate)
+            {
+                ImageAnimator.Animate(image, new EventHandler(OnAnimationFrameChanged));
+            }
+            else
+            {
+                ImageAnimator.StopAnimate(image, new EventHandler(OnAnimationFrameChanged));
+            }
+
+            _state[s_stateCurrentlyAnimatingImage] = animate;
         }
 
         internal bool BeginDragForItemReorder()

@@ -100,11 +100,12 @@ namespace System.Windows.Forms.ButtonInternal
                     if (DisplayInformation.BitsPerPixel > 8)
                     {
                         var r = new RECT(bounds.X, bounds.Y, bounds.Right, bounds.Bottom);
+
                         // SysColorBrush does not have to be deleted.
                         User32.FillRect(
-                            new HandleRef(e, e.HDC),
+                            e,
                             ref r,
-                            new HandleRef(this, isHighContrastHighlighted ? User32.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF) : Control.BackColorBrush));
+                            isHighContrastHighlighted ? User32.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF) : Control.BackColorBrush);
                         painted = true;
                     }
                 }

@@ -1177,6 +1177,11 @@
         <target state="translated">Необработанный тип {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ConstructorArgumentInvalidValueType">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">Невозможно привести аргумент "{0}" к типу "{1}".</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
         <source>The currently active control.</source>
         <target state="translated">Активный в текущий момент элемент управления.</target>
@@ -5552,6 +5557,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Не удалось создать дескриптор ImageList.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">Изображение, добавляемое к ImageList, должно иметь тип, производный от Image, либо тип Icon.</target>
@@ -5639,7 +5649,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">Не удалось найти InputLanguage для языка и региональных параметров "{0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -6379,7 +6389,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
         <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
-        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <target state="translated">Элемент управления ImageList, который ListView использует для изображений ListViewGroup во всех представлениях.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">

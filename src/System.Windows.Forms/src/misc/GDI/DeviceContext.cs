@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -18,49 +17,49 @@ namespace System.Windows.Forms.Internal
     ///  This class is divided into two files separating the code that needs to be compiled into
     ///  reatail builds and debugging code.
     /// </summary>
+    /// <remarks>
+    ///  This class is a wrapper to a Win32 device context, and the Hdc property is the way to get a
+    ///  handle to it.
+    ///
+    ///  The hDc is released/deleted only when owned by the object, meaning it was created internally;
+    ///  in this case, the object is responsible for releasing/deleting it.
+    ///  In the case the object is created from an exisiting hdc, it is not released; this is consistent
+    ///  with the Win32 guideline that says if you call GetDC/CreateDC/CreatIC/CreateEnhMetafile, you are
+    ///  responsible for calling ReleaseDC/DeleteDC/DeleteEnhMetafile respectivelly.
+    ///
+    ///  This class implements some of the operations commonly performed on the properties of a dc  in WinForms,
+    ///  specially for interacting with GDI+, like clipping and coordinate transformation.
+    ///  Several properties are not persisted in the dc but instead they are set/reset during a more comprehensive
+    ///  operation like text rendering or painting; for instance text alignment is set and reset during DrawText (GDI),
+    ///  DrawString (GDI+).
+    ///
+    ///  Other properties are persisted from operation to operation until they are reset, like clipping,
+    ///  one can make several calls to Graphics or WindowsGraphics obect after setting the dc clip area and
+    ///  before resetting it; these kinds of properties are the ones implemented in this class.
+    ///  This kind of properties place an extra chanllenge in the scenario where a DeviceContext is obtained
+    ///  from a Graphics object that has been used with GDI+, because GDI+ saves the hdc internally, rendering the
+    ///  DeviceContext underlying hdc out of sync.  DeviceContext needs to support these kind of properties to
+    ///  be able to keep the GDI+ and GDI HDCs in sync.
+    ///
+    ///  A few other persisting properties have been implemented in DeviceContext2, among them:
+    ///
+    ///   1. Window origin.
+    ///   2. Bounding rectangle.
+    ///   3. DC origin.
+    ///   4. View port extent.
+    ///   5. View port origin.
+    ///   6. Window extent
+    ///
+    ///  Other non-persisted properties just for information: Background/Forground color, Palette, Color adjustment,
+    ///  Color space, ICM mode and profile, Current pen position, Binary raster op (not supported by GDI+),
+    ///  Background mode, Logical Pen, DC pen color, ARc direction, Miter limit, Logical brush, DC brush color,
+    ///  Brush origin, Polygon filling mode, Bitmap stretching mode, Logical font, Intercharacter spacing,
+    ///  Font mapper flags, Text alignment, Test justification, Layout, Path, Meta region.
+    ///  See book "Windows Graphics Programming - Feng Yuang", P315 - Device Context Attributes.
+    /// </remarks>
     internal sealed partial class DeviceContext : MarshalByRefObject, IDeviceContext, IDisposable, IHandle
     {
-        /// <summary>
-        ///  This class is a wrapper to a Win32 device context, and the Hdc property is the way to get a
-        ///  handle to it.
-        ///
-        ///  The hDc is released/deleted only when owned by the object, meaning it was created internally;
-        ///  in this case, the object is responsible for releasing/deleting it.
-        ///  In the case the object is created from an exisiting hdc, it is not released; this is consistent
-        ///  with the Win32 guideline that says if you call GetDC/CreateDC/CreatIC/CreateEnhMetafile, you are
-        ///  responsible for calling ReleaseDC/DeleteDC/DeleteEnhMetafile respectivelly.
-        ///
-        ///  This class implements some of the operations commonly performed on the properties of a dc  in WinForms,
-        ///  specially for interacting with GDI+, like clipping and coordinate transformation.
-        ///  Several properties are not persisted in the dc but instead they are set/reset during a more comprehensive
-        ///  operation like text rendering or painting; for instance text alignment is set and reset during DrawText (GDI),
-        ///  DrawString (GDI+).
-        ///
-        ///  Other properties are persisted from operation to operation until they are reset, like clipping,
-        ///  one can make several calls to Graphics or WindowsGraphics obect after setting the dc clip area and
-        ///  before resetting it; these kinds of properties are the ones implemented in this class.
-        ///  This kind of properties place an extra chanllenge in the scenario where a DeviceContext is obtained
-        ///  from a Graphics object that has been used with GDI+, because GDI+ saves the hdc internally, rendering the
-        ///  DeviceContext underlying hdc out of sync.  DeviceContext needs to support these kind of properties to
-        ///  be able to keep the GDI+ and GDI HDCs in sync.
-        ///
-        ///  A few other persisting properties have been implemented in DeviceContext2, among them:
-        ///
-        ///   1. Window origin.
-        ///   2. Bounding rectangle.
-        ///   3. DC origin.
-        ///   4. View port extent.
-        ///   5. View port origin.
-        ///   6. Window extent
-        ///
-        ///  Other non-persisted properties just for information: Background/Forground color, Palette, Color adjustment,
-        ///  Color space, ICM mode and profile, Current pen position, Binary raster op (not supported by GDI+),
-        ///  Background mode, Logical Pen, DC pen color, ARc direction, Miter limit, Logical brush, DC brush color,
-        ///  Brush origin, Polygon filling mode, Bitmap stretching mode, Logical font, Intercharacter spacing,
-        ///  Font mapper flags, Text alignment, Test justification, Layout, Path, Meta region.
-        ///  See book "Windows Graphics Programming - Feng Yuang", P315 - Device Context Attributes.
-        /// </summary>
-        private IntPtr _hDC;
+        private Gdi32.HDC _hDC;
         public event EventHandler? Disposing;
         private bool _disposed;
 
@@ -68,15 +67,15 @@ namespace System.Windows.Forms.Internal
         // This hWnd could be null, in such case it is referring to the screen.
         private readonly IntPtr _hWnd = (IntPtr)(-1); // Unlikely to be a valid hWnd.
 
-        private IntPtr _hInitialPen;
-        private IntPtr _hInitialBrush;
-        private IntPtr _hInitialBmp;
-        private IntPtr _hInitialFont;
+        private Gdi32.HGDIOBJ _hInitialPen;
+        private Gdi32.HGDIOBJ _hInitialBrush;
+        private Gdi32.HGDIOBJ _hInitialBmp;
+        private Gdi32.HGDIOBJ _hInitialFont;
 
-        private IntPtr _hCurrentPen;
-        private IntPtr _hCurrentBrush;
-        private IntPtr _hCurrentBmp;
-        private IntPtr _hCurrentFont;
+        private Gdi32.HGDIOBJ _hCurrentPen;
+        private Gdi32.HGDIOBJ _hCurrentBrush;
+        private Gdi32.HGDIOBJ _hCurrentBmp;
+        private Gdi32.HGDIOBJ _hCurrentFont;
 
         private Stack<GraphicsState>? _contextStack;
 
@@ -85,18 +84,18 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public DeviceContextType DeviceContextType { get; }
 
-        IntPtr IHandle.Handle => Hdc;
+        IntPtr IHandle.Handle => (IntPtr)Hdc;
 
         /// <summary>
         ///  This object's hdc.  If this property is called, then the object will be used as an HDC wrapper,
         ///  so the hdc is cached and calls to GetHdc/ReleaseHdc won't PInvoke into GDI.
         ///  Call Dispose to properly release the hdc.
         /// </summary>
-        public IntPtr Hdc
+        public Gdi32.HDC Hdc
         {
             get
             {
-                if (_hDC == IntPtr.Zero)
+                if (_hDC.IsNull)
                 {
                     if (DeviceContextType == DeviceContextType.Display)
                     {
@@ -104,7 +103,7 @@ namespace System.Windows.Forms.Internal
 
                         // Note: ReleaseDC must be called from the same thread. This applies only to HDC obtained
                         // from calling GetDC. This means Display DeviceContext objects should never be finalized.
-                        _hDC = ((IDeviceContext)this).GetHdc();  // this.hDC will be released on call to Dispose.
+                        _hDC = (Gdi32.HDC)((IDeviceContext)this).GetHdc();  // this.hDC will be released on call to Dispose.
                         CacheInitialState();
                     }
                 }
@@ -121,41 +120,41 @@ namespace System.Windows.Forms.Internal
 
         private void CacheInitialState()
         {
-            _hCurrentPen = _hInitialPen = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_PEN);
-            _hCurrentBrush = _hInitialBrush = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_BRUSH);
-            _hCurrentBmp = _hInitialBmp = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_BITMAP);
-            _hCurrentFont = _hInitialFont = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_FONT);
+            _hCurrentPen = _hInitialPen = Gdi32.GetCurrentObject(this, Gdi32.ObjectType.OBJ_PEN);
+            _hCurrentBrush = _hInitialBrush = Gdi32.GetCurrentObject(this, Gdi32.ObjectType.OBJ_BRUSH);
+            _hCurrentBmp = _hInitialBmp = Gdi32.GetCurrentObject(this, Gdi32.ObjectType.OBJ_BITMAP);
+            _hCurrentFont = _hInitialFont = Gdi32.GetCurrentObject(this, Gdi32.ObjectType.OBJ_FONT);
         }
 
-        public void DeleteObject(IntPtr handle, GdiObjectType type)
+        public void DeleteObject(Gdi32.HGDIOBJ handle, GdiObjectType type)
         {
-            IntPtr handleToDelete = IntPtr.Zero;
+            Gdi32.HGDIOBJ handleToDelete = default;
             switch (type)
             {
                 case GdiObjectType.Pen:
                     if (handle == _hCurrentPen)
                     {
-                        IntPtr currentPen = Gdi32.SelectObject(new HandleRef(this, Hdc), _hInitialPen);
+                        Gdi32.HGDIOBJ currentPen = Gdi32.SelectObject(this, _hInitialPen);
                         Debug.Assert(currentPen == _hCurrentPen, "DeviceContext thinks a different pen is selected than the HDC");
-                        _hCurrentPen = IntPtr.Zero;
+                        _hCurrentPen = default;
                     }
                     handleToDelete = handle;
                     break;
                 case GdiObjectType.Brush:
                     if (handle == _hCurrentBrush)
                     {
-                        IntPtr currentBrush = Gdi32.SelectObject(new HandleRef(this, Hdc), _hInitialBrush);
+                        Gdi32.HGDIOBJ currentBrush = Gdi32.SelectObject(this, _hInitialBrush);
                         Debug.Assert(currentBrush == _hCurrentBrush, "DeviceContext thinks a different brush is selected than the HDC");
-                        _hCurrentBrush = IntPtr.Zero;
+                        _hCurrentBrush = default;
                     }
                     handleToDelete = handle;
                     break;
                 case GdiObjectType.Bitmap:
                     if (handle == _hCurrentBmp)
                     {
-                        IntPtr currentBmp = Gdi32.SelectObject(new HandleRef(this, Hdc), _hInitialBmp);
+                        Gdi32.HGDIOBJ currentBmp = Gdi32.SelectObject(this, _hInitialBmp);
                         Debug.Assert(currentBmp == _hCurrentBmp, "DeviceContext thinks a different brush is selected than the HDC");
-                        _hCurrentBmp = IntPtr.Zero;
+                        _hCurrentBmp = default;
                     }
                     handleToDelete = handle;
                     break;
@@ -180,7 +179,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Constructor to contruct a DeviceContext object from an existing Win32 device context handle.
         /// </summary>
-        private DeviceContext(IntPtr hDC, DeviceContextType dcType)
+        private DeviceContext(Gdi32.HDC hDC, DeviceContextType dcType)
         {
             _hDC = hDC;
             DeviceContextType = dcType;
@@ -190,20 +189,20 @@ namespace System.Windows.Forms.Internal
 
             if (dcType == DeviceContextType.Display)
             {
-                _hWnd = User32.WindowFromDC(new HandleRef(this, this._hDC));
+                _hWnd = User32.WindowFromDC(this);
             }
         }
 
         /// <summary>
         ///  Creates a DeviceContext object wrapping a memory DC compatible with the specified device.
         /// </summary>
-        public static DeviceContext FromCompatibleDC(IntPtr hdc)
+        public static DeviceContext FromCompatibleDC(Gdi32.HDC hdc)
         {
             // If hdc is null, the function creates a memory DC compatible with the application's current screen.
             // In this case the thread that calls CreateCompatibleDC owns the HDC that is created. When this thread is destroyed,
             // the HDC is no longer valid.
 
-            IntPtr compatibleDc = Gdi32.CreateCompatibleDC(hdc);
+            Gdi32.HDC compatibleDc = Gdi32.CreateCompatibleDC(hdc);
             return new DeviceContext(compatibleDc, DeviceContextType.Memory);
         }
 
@@ -211,7 +210,7 @@ namespace System.Windows.Forms.Internal
         ///  Used for wrapping an existing hdc.  In this case, this object doesn't own the hdc
         ///  so calls to GetHdc/ReleaseHdc don't PInvoke into GDI.
         /// </summary>
-        public static DeviceContext FromHdc(IntPtr hdc) => new DeviceContext(hdc, DeviceContextType.Unknown);
+        public static DeviceContext FromHdc(Gdi32.HDC hdc) => new DeviceContext(hdc, DeviceContextType.Unknown);
 
         /// <summary>
         ///  When hwnd is null, we are getting the screen DC.
@@ -257,7 +256,7 @@ namespace System.Windows.Forms.Internal
                     // CreateDC and CreateIC add an HDC handle to the HandleCollector; to remove it properly we need
                     // to call DeleteHDC.
                     Gdi32.DeleteDC(_hDC);
-                    _hDC = IntPtr.Zero;
+                    _hDC = default;
                     break;
 
                 case DeviceContextType.Memory:
@@ -265,7 +264,7 @@ namespace System.Windows.Forms.Internal
                     // CreatCompatibleDC adds a GDI handle to HandleCollector, to remove it properly we need to call
                     // DeleteDC.
                     Gdi32.DeleteDC(_hDC);
-                    _hDC = IntPtr.Zero;
+                    _hDC = default;
                     break;
 
                 case DeviceContextType.Unknown:
@@ -283,7 +282,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         IntPtr IDeviceContext.GetHdc()
         {
-            if (_hDC == IntPtr.Zero)
+            if (_hDC.IsNull)
             {
                 Debug.Assert(DeviceContextType == DeviceContextType.Display, "Calling GetDC from a non display/window device.");
 
@@ -292,7 +291,7 @@ namespace System.Windows.Forms.Internal
                 _hDC = User32.GetDC(new HandleRef(this, _hWnd));
             }
 
-            return _hDC;
+            return (IntPtr)_hDC;
         }
 
         /// <summary>
@@ -301,10 +300,10 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         void IDeviceContext.ReleaseHdc()
         {
-            if (_hDC != IntPtr.Zero && DeviceContextType == DeviceContextType.Display)
+            if (!_hDC.IsNull && DeviceContextType == DeviceContextType.Display)
             {
                 User32.ReleaseDC(new HandleRef(this, _hWnd), _hDC);
-                _hDC = IntPtr.Zero;
+                _hDC = default;
             }
         }
 
@@ -322,7 +321,7 @@ namespace System.Windows.Forms.Internal
         public void RestoreHdc()
         {
             // Note: Don't use the Hdc property here, it would force handle creation.
-            Gdi32.RestoreDC(new HandleRef(this, _hDC), -1);
+            Gdi32.RestoreDC(_hDC, -1);
             Debug.Assert(_contextStack != null, "Someone is calling RestoreHdc() before SaveHdc()");
 
             if (_contextStack != null)
@@ -365,8 +364,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         public int SaveHdc()
         {
-            HandleRef hdc = new HandleRef(this, Hdc);
-            int state = Gdi32.SaveDC(hdc);
+            int state = Gdi32.SaveDC(this);
 
             var g = new GraphicsState
             {
@@ -388,7 +386,7 @@ namespace System.Windows.Forms.Internal
         public void TranslateTransform(int dx, int dy)
         {
             var origin = new Point();
-            Gdi32.OffsetViewportOrgEx(new HandleRef(this, Hdc), dx, dy, ref origin);
+            Gdi32.OffsetViewportOrgEx(this, dx, dy, ref origin);
         }
 
         public override bool Equals(object? obj)
@@ -406,7 +404,7 @@ namespace System.Windows.Forms.Internal
             }
 
             // Note: Use property instead of field so the HDC is initialized.  Also, this avoid serialization issues (the obj could be a proxy that does not have access to private fields).
-            return other.Hdc == Hdc;
+            return other.Hdc.Handle == Hdc.Handle;
         }
 
         /// <summary>
@@ -416,10 +414,10 @@ namespace System.Windows.Forms.Internal
 
         internal struct GraphicsState
         {
-            internal IntPtr hBrush;
-            internal IntPtr hFont;
-            internal IntPtr hPen;
-            internal IntPtr hBitmap;
+            internal Gdi32.HGDIOBJ hBrush;
+            internal Gdi32.HGDIOBJ hFont;
+            internal Gdi32.HGDIOBJ hPen;
+            internal Gdi32.HGDIOBJ hBitmap;
             internal WeakReference font;
         }
     }

@@ -14,19 +14,11 @@ internal static partial class Interop
         [DllImport(Libraries.UxTheme, ExactSpelling = true)]
         public unsafe static extern HRESULT GetThemePartSize(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, RECT* prc, ThemeSizeType eSize, out Size psz);
 
-        public unsafe static HRESULT GetThemePartSize(IHandle hTheme, HandleRef hdc, int iPartId, int iStateId, RECT* prc, ThemeSizeType eSize, out Size psz)
+        public unsafe static HRESULT GetThemePartSize(IHandle hTheme, IHandle hdc, int iPartId, int iStateId, RECT* prc, ThemeSizeType eSize, out Size psz)
         {
             HRESULT hr = GetThemePartSize(hTheme.Handle, hdc.Handle, iPartId, iStateId, prc, eSize, out psz);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc.Wrapper);
-            return hr;
-        }
-
-        public unsafe static HRESULT GetThemePartSize(HandleRef hTheme, HandleRef hdc, int iPartId, int iStateId, RECT* prc, ThemeSizeType eSize, out Size psz)
-        {
-            HRESULT hr = GetThemePartSize(hTheme.Handle, hdc.Handle, iPartId, iStateId, prc, eSize, out psz);
-            GC.KeepAlive(hTheme.Wrapper);
-            GC.KeepAlive(hdc.Wrapper);
+            GC.KeepAlive(hdc);
             return hr;
         }
     }

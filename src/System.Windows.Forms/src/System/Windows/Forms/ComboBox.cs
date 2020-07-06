@@ -2170,16 +2170,16 @@ namespace System.Windows.Forms
             return listNativeWindow != null ? listNativeWindow.GetHashCode() : 0;
         }
 
-        internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg)
+        internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
         {
-            if ((msg == (int)WM.CTLCOLORSTATIC) && !ShouldSerializeBackColor())
+            if (msg == WM.CTLCOLORSTATIC && !ShouldSerializeBackColor())
             {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
                 // BackColor than when enabled.
-                return IntPtr.Zero;
+                return default;
             }
-            else if ((msg == (int)WM.CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint))
+            else if (msg == WM.CTLCOLORLISTBOX && GetStyle(ControlStyles.UserPaint))
             {
                 // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
@@ -3690,19 +3690,10 @@ namespace System.Windows.Forms
         private unsafe void WmReflectDrawItem(ref Message m)
         {
             DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
-            IntPtr oldPal = SetUpPalette(dis->hDC, force: false, realizePalette: false);
-            try
-            {
-                using Graphics g = Graphics.FromHdcInternal(dis->hDC);
-                OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
-            }
-            finally
-            {
-                if (oldPal != IntPtr.Zero)
-                {
-                    Gdi32.SelectPalette(dis->hDC, oldPal, BOOL.FALSE);
-                }
-            }
+            using var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(dis->hDC, forceBackground: false, realizePalette: false);
+
+            using Graphics g = dis->hDC.CreateGraphics();
+            OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
 
             m.Result = (IntPtr)1;
         }
@@ -3781,7 +3772,7 @@ namespace System.Windows.Forms
                     break;
                 case WM.CTLCOLOREDIT:
                 case WM.CTLCOLORLISTBOX:
-                    m.Result = InitializeDCForWmCtlColor(m.WParam, m.Msg);
+                    m.Result = (IntPtr)InitializeDCForWmCtlColor((Gdi32.HDC)m.WParam, (User32.WM)m.Msg);
                     break;
                 case WM.ERASEBKGND:
                     WmEraseBkgnd(ref m);
@@ -3858,7 +3849,7 @@ namespace System.Windows.Forms
                         bool useBeginPaint = m.WParam == IntPtr.Zero;
                         var paintScope = useBeginPaint ? new BeginPaintScope(Handle) : default;
 
-                        IntPtr dc = useBeginPaint ? paintScope : m.WParam;
+                        Gdi32.HDC dc = useBeginPaint ? paintScope : (Gdi32.HDC)m.WParam;
 
                         using var savedDcState = new Gdi32.SaveDcScope(dc);
 
@@ -3867,7 +3858,7 @@ namespace System.Windows.Forms
                             Gdi32.SelectClipRgn(dc, dropDownRegion);
                         }
 
-                        m.WParam = dc;
+                        m.WParam = (IntPtr)dc;
                         DefWndProc(ref m);
 
                         if (getRegionSucceeded)
@@ -3875,7 +3866,7 @@ namespace System.Windows.Forms
                             Gdi32.SelectClipRgn(dc, windowRegion);
                         }
 
-                        using Graphics g = Graphics.FromHdcInternal(dc);
+                        using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);
                         FlatComboBoxAdapter.DrawFlatCombo(this, g);
 
                         return;

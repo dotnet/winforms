@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.Internal
@@ -67,13 +66,13 @@ namespace System.Windows.Forms.Internal
         ///  Get the number of pixels per logical inch along the device width. In a system with multiple display
         ///  monitors, this value is the same for all monitors.
         /// </summary>
-        public int DpiX => Gdi32.GetDeviceCaps(new HandleRef(this, Hdc), Gdi32.DeviceCapability.LOGPIXELSX);
+        public int DpiX => Gdi32.GetDeviceCaps(this, Gdi32.DeviceCapability.LOGPIXELSX);
 
         /// <summary>
         ///  Get the number of pixels per logical inch along the device (screen) height. In a system with multiple
         ///  display monitors, this value is the same for all monitors.
         /// </summary>
-        public int DpiY => Gdi32.GetDeviceCaps(new HandleRef(this, Hdc), Gdi32.DeviceCapability.LOGPIXELSY);
+        public int DpiY => Gdi32.GetDeviceCaps(this, Gdi32.DeviceCapability.LOGPIXELSY);
 
         /// <summary>
         ///  The font selected into the device context.
@@ -87,7 +86,7 @@ namespace System.Windows.Forms.Internal
                 if (MeasurementDCInfo.IsMeasurementDC(this))
                 {
                     WindowsFont? font = MeasurementDCInfo.LastUsedFont;
-                    if (font != null && (font.Hfont != IntPtr.Zero))
+                    if (font != null && !font.Hfont.IsNull)
                     {
 #if DEBUG
                         WindowsFont currentDCFont = WindowsFont.FromHdc(Hdc);
@@ -124,13 +123,13 @@ namespace System.Windows.Forms.Internal
                 DeviceContexts.RemoveDeviceContext(this);
             }
 
-            if (ActiveFont != null && ActiveFont.Hfont != IntPtr.Zero)
+            if (ActiveFont != null && !ActiveFont.Hfont.IsNull)
             {
-                IntPtr hCurrentFont = Gdi32.GetCurrentObject(new HandleRef(this, _hDC), Gdi32.ObjectType.OBJ_FONT);
+                Gdi32.HGDIOBJ hCurrentFont = Gdi32.GetCurrentObject(this, Gdi32.ObjectType.OBJ_FONT);
                 if (hCurrentFont == ActiveFont.Hfont)
                 {
-                    // select initial font back in
-                    Gdi32.SelectObject(new HandleRef(this, Hdc), _hInitialFont);
+                    // Select initial font back in
+                    Gdi32.SelectObject(this, _hInitialFont);
                 }
 
                 ActiveFont.Dispose(disposing);
@@ -142,7 +141,7 @@ namespace System.Windows.Forms.Internal
         ///  Selects the specified object into the dc.  If the specified object is the same as the one currently selected
         ///  in the dc, the object is not set and a null value is returned.
         /// </summary>
-        public IntPtr SelectFont(WindowsFont font)
+        public Gdi32.HGDIOBJ SelectFont(WindowsFont font)
         {
             // Fonts are one of the most expensive objects to select in an hdc and in many cases we are passed a Font that is the
             // same as the one already selected in the dc so to avoid a perf hit we get the hdc font's log font and compare it
@@ -151,9 +150,10 @@ namespace System.Windows.Forms.Internal
             // reducing the size of the metafile.
             if (font.Equals(Font))
             {
-                return IntPtr.Zero;
+                return default;
             }
-            IntPtr result = SelectObject(font.Hfont, GdiObjectType.Font);
+
+            Gdi32.HGDIOBJ result = SelectObject(font.Hfont, GdiObjectType.Font);
 
             WindowsFont? previousFont = ActiveFont;
             ActiveFont = font;
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Internal
             // once we've changed the font, update the last used font.
             if (MeasurementDCInfo.IsMeasurementDC(this))
             {
-                if (result != IntPtr.Zero)
+                if (!result.IsNull)
                 {
                     MeasurementDCInfo.LastUsedFont = font;
                 }
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.Internal
             // we dont actually know what the font is in our measurement DC so
             // we need to clear it off.
             MeasurementDCInfo.ResetIfIsMeasurementDC(Hdc);
-            Gdi32.SelectObject(new HandleRef(this, Hdc), _hInitialFont);
+            Gdi32.SelectObject(this, _hInitialFont);
             ActiveFont = null;
             _hCurrentFont = _hInitialFont;
         }
@@ -228,7 +228,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Selects the specified object into the dc and returns the old object.
         /// </summary>
-        public IntPtr SelectObject(IntPtr hObj, GdiObjectType type)
+        public Gdi32.HGDIOBJ SelectObject(Gdi32.HGDIOBJ hObj, GdiObjectType type)
         {
             switch (type)
             {
@@ -243,7 +243,7 @@ namespace System.Windows.Forms.Internal
                     break;
             }
 
-            return Gdi32.SelectObject(new HandleRef(this, Hdc), hObj);
+            return Gdi32.SelectObject(this, hObj);
         }
 
         /// <summary>

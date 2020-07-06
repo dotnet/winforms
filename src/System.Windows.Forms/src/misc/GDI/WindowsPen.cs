@@ -14,9 +14,9 @@ namespace System.Windows.Forms.Internal
     /// <summary>
     ///  Encapsulates a GDI Pen object.
     /// </summary>
-    internal sealed partial class WindowsPen : MarshalByRefObject, ICloneable, IDisposable
+    internal sealed partial class WindowsPen : ICloneable, IDisposable
     {
-        private IntPtr _nativeHandle;
+        private Gdi32.HPEN _nativeHandle;
 
         private readonly DeviceContext _dc;
 
@@ -107,10 +107,10 @@ namespace System.Windows.Forms.Internal
 
         void Dispose(bool disposing)
         {
-            if (_nativeHandle != IntPtr.Zero && _dc != null)
+            if (!_nativeHandle.IsNull && _dc != null)
             {
                 _dc.DeleteObject(_nativeHandle, GdiObjectType.Pen);
-                _nativeHandle = IntPtr.Zero;
+                _nativeHandle = default;
             }
 
             if (_wndBrush != null)
@@ -125,11 +125,11 @@ namespace System.Windows.Forms.Internal
             }
         }
 
-        public IntPtr HPen
+        public Gdi32.HPEN HPen
         {
             get
             {
-                if (_nativeHandle == IntPtr.Zero)
+                if (_nativeHandle.IsNull)
                 {
                     CreatePen();
                 }

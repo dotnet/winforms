@@ -1177,6 +1177,11 @@
         <target state="translated">Unbehandelter Typ {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ConstructorArgumentInvalidValueType">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">Das Argument {0} kann nicht in den Typ {1} umgewandelt werden.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
         <source>The currently active control.</source>
         <target state="translated">Das zurzeit aktivierte Steuerelement.</target>
@@ -5551,6 +5556,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Fehler beim Erstellen des ImageList-Handles.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ImageListEntryType">
         <source>Image added to an ImageList must either derive from Image or be an Icon.</source>
         <target state="translated">Das zu einer ImageList hinzugefügte Bild muss von "Image" abgeleitet oder ein Symbol sein.</target>
@@ -5638,7 +5648,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="InputLanguageCultureNotFound">
         <source>Could not find an InputLanguage for culture '{0}'.</source>
-        <target state="new">Could not find an InputLanguage for culture '{0}'.</target>
+        <target state="translated">Für die Kultur "{0}" wurde kein Wert für "InputLanguage" gefunden.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -6378,7 +6388,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
         <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
-        <target state="new">The ImageList control used by the ListView for ListViewGroup images in all views.</target>
+        <target state="translated">Das ImageList-Steuerelement, das von ListView für ListViewGroup-Bilder in allen Ansichten verwendet wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">

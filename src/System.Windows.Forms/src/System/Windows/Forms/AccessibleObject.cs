@@ -831,14 +831,14 @@ namespace System.Windows.Forms
 
         IAccessible? UiaCore.ILegacyIAccessibleProvider.GetIAccessible() => AsIAccessible(this);
 
-        object[]? UiaCore.ILegacyIAccessibleProvider.GetSelection()
+        UiaCore.IRawElementProviderSimple[] UiaCore.ILegacyIAccessibleProvider.GetSelection()
         {
             if (GetSelected() is UiaCore.IRawElementProviderSimple selected)
             {
                 return new UiaCore.IRawElementProviderSimple[] { selected };
             }
 
-            return null;
+            return Array.Empty<UiaCore.IRawElementProviderSimple>();
         }
 
         void UiaCore.ILegacyIAccessibleProvider.Select(int flagsSelect) => Select((AccessibleSelection)flagsSelect);

@@ -396,12 +396,12 @@ namespace System.Windows.Forms
         private Size GetIconSize(IntPtr iconHandle)
         {
             using User32.ICONINFO info = User32.GetIconInfo(iconHandle);
-            if (info.hbmColor != IntPtr.Zero)
+            if (!info.hbmColor.IsNull)
             {
                 Gdi32.GetObjectW(info.hbmColor, out Gdi32.BITMAP bitmap);
                 return new Size(bitmap.bmWidth, bitmap.bmHeight);
             }
-            else if (info.hbmMask != IntPtr.Zero)
+            else if (!info.hbmMask.IsNull)
             {
                 Gdi32.GetObjectW(info.hbmMask, out Gdi32.BITMAP bitmap);
                 return new Size(bitmap.bmWidth, bitmap.bmHeight / 2);

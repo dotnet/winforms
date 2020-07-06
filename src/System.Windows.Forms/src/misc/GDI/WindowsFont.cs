@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.Internal
@@ -14,7 +13,7 @@ namespace System.Windows.Forms.Internal
     /// <summary>
     ///  Encapsulates a GDI Font object.
     /// </summary>
-    internal sealed partial class WindowsFont : MarshalByRefObject, ICloneable, IDisposable
+    internal sealed partial class WindowsFont : ICloneable, IDisposable
     {
         private float _fontSize = -1.0f;        // invalid value.
         private int _lineSpacing;
@@ -35,7 +34,7 @@ namespace System.Windows.Forms.Internal
         /// </summary>
         private unsafe WindowsFont(User32.LOGFONTW logFont, FontStyle style, bool createHandle)
         {
-            Debug.Assert(Hfont == IntPtr.Zero, "hFont is not null, this will generate a handle leak.");
+            Debug.Assert(Hfont.IsNull, "hFont is not null, this will generate a handle leak.");
 
             _logFont = logFont;
             if (_logFont.FaceName.Length == 0)
@@ -48,7 +47,7 @@ namespace System.Windows.Forms.Internal
             {
                 Hfont = Gdi32.CreateFontIndirectW(ref _logFont);
 
-                if (Hfont == IntPtr.Zero)
+                if (Hfont.IsNull)
                 {
                     _logFont.FaceName = DefaultFaceName;
                     _logFont.lfOutPrecision = Gdi32.OUT_PRECIS.TT_ONLY; // TrueType only.
@@ -57,7 +56,7 @@ namespace System.Windows.Forms.Internal
                 }
 
                 // Update logFont height and other adjusted parameters.
-                Gdi32.GetObjectW(new HandleRef(this, Hfont), out _logFont);
+                Gdi32.GetObjectW(Hfont, out _logFont);
 
                 // We created the hFont, we will delete it on dispose.
                 _ownHandle = true;
@@ -115,9 +114,9 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Creates a WindowsFont from the font selected in the supplied dc.
         /// </summary>
-        public static WindowsFont FromHdc(IntPtr hdc)
+        public static WindowsFont FromHdc(Gdi32.HDC hdc)
         {
-            IntPtr hFont = Gdi32.GetCurrentObject(hdc, Gdi32.ObjectType.OBJ_FONT);
+            Gdi32.HFONT hFont = (Gdi32.HFONT)Gdi32.GetCurrentObject(hdc, Gdi32.ObjectType.OBJ_FONT);
 
             // don't call DeleteObject on handle from GetCurrentObject, it is the one selected in the hdc.
             return FromHfont(hFont);
@@ -127,7 +126,7 @@ namespace System.Windows.Forms.Internal
         ///  Creates a WindowsFont from the handle to a native GDI font and optionally takes ownership of managing
         ///  the lifetime of the handle.
         /// </summary>
-        public unsafe static WindowsFont FromHfont(IntPtr hFont, bool takeOwnership = false)
+        public unsafe static WindowsFont FromHfont(Gdi32.HFONT hFont, bool takeOwnership = false)
         {
             Gdi32.GetObjectW(hFont, out User32.LOGFONTW logFont);
 
@@ -182,10 +181,10 @@ namespace System.Windows.Forms.Internal
                     // and that means we're being called from the finalizer.
                     if (_everOwnedByCacheManager || !disposing || !DeviceContexts.IsFontInUse(this))
                     {
-                        Debug.Assert(Hfont != IntPtr.Zero, "Unexpected null hFont.");
+                        Debug.Assert(!Hfont.IsNull, "Unexpected null hFont.");
 
                         Gdi32.DeleteObject(Hfont);
-                        Hfont = IntPtr.Zero;
+                        Hfont = default;
                         _ownHandle = false;
                         deletedHandle = true;
                     }
@@ -249,18 +248,7 @@ namespace System.Windows.Forms.Internal
         ///  Returns this object's native Win32 font handle.  Should NOT be deleted externally.
         ///  Compare with ToHfont method.
         /// </summary>
-        public IntPtr Hfont { get; private set; }
-
-        /// <summary>
-        ///  Determines whether the font has the italic style or not.
-        /// </summary>
-        public bool Italic
-        {
-            get
-            {
-                return _logFont.lfItalic == 1;
-            }
-        }
+        public Gdi32.HFONT Hfont { get; private set; }
 
         public bool OwnedByCacheManager
         {

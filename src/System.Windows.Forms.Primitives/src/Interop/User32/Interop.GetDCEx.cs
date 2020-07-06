@@ -11,11 +11,11 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern IntPtr GetDCEx(IntPtr hWnd, IntPtr hrgnClip, DCX flags);
+        public static extern Gdi32.HDC GetDCEx(IntPtr hWnd, IntPtr hrgnClip, DCX flags);
 
-        public static IntPtr GetDCEx(IHandle hWnd, IntPtr hrgnClip, DCX flags)
+        public static Gdi32.HDC GetDCEx(IHandle hWnd, IntPtr hrgnClip, DCX flags)
         {
-            IntPtr result = GetDCEx(hWnd.Handle, hrgnClip, flags);
+            Gdi32.HDC result = GetDCEx(hWnd.Handle, hrgnClip, flags);
             GC.KeepAlive(hWnd);
             return result;
         }

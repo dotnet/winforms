@@ -12,11 +12,11 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public unsafe static extern BOOL GetViewportOrgEx(IntPtr hdc, out Point lppoint);
+        public unsafe static extern BOOL GetViewportOrgEx(HDC hdc, out Point lppoint);
 
         public unsafe static BOOL GetViewportOrgEx(IHandle hdc, out Point lppoint)
         {
-            BOOL result = GetViewportOrgEx(hdc.Handle, out lppoint);
+            BOOL result = GetViewportOrgEx((HDC)hdc.Handle, out lppoint);
             GC.KeepAlive(hdc);
             return result;
         }

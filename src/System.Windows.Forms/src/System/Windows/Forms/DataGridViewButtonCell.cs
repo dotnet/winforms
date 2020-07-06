@@ -765,67 +765,54 @@ namespace System.Windows.Forms
                     {
                         // ButtonBase::PaintFlatDown and ButtonBase::PaintFlatUp paint the border in the same way
                         valBounds.Inflate(-1, -1);
-                        if (paint && DataGridViewCell.PaintContentBackground(paintParts))
+                        if (paint && PaintContentBackground(paintParts))
                         {
-                            ButtonInternal.ButtonBaseAdapter.DrawDefaultBorder(g, valBounds, foreBrush.Color, true /*isDefault == true*/);
+                            ButtonBaseAdapter.DrawDefaultBorder(g, valBounds, foreBrush.Color, true /*isDefault == true*/);
 
                             if (backBrush.Color.A == 255)
                             {
                                 if ((ButtonState & (ButtonState.Pushed | ButtonState.Checked)) != 0)
                                 {
-                                    ButtonBaseAdapter.ColorData colors = ButtonBaseAdapter.PaintFlatRender(g,
-                                                                                                           cellStyle.ForeColor,
-                                                                                                           cellStyle.BackColor,
-                                                                                                           DataGridView.Enabled).Calculate();
+                                    ButtonBaseAdapter.ColorData colors = ButtonBaseAdapter.PaintFlatRender(
+                                        g,
+                                        cellStyle.ForeColor,
+                                        cellStyle.BackColor,
+                                        DataGridView.Enabled).Calculate();
 
-                                    IntPtr hdc = g.GetHdc();
-                                    try
+                                    using var hdc = new DeviceContextHdcScope(g);
+                                    using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
                                     {
-                                        using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
+                                        WindowsBrush windowsBrush;
+                                        if (colors.options.highContrast)
                                         {
-                                            WindowsBrush windowsBrush;
-                                            if (colors.options.highContrast)
-                                            {
-                                                windowsBrush = new WindowsSolidBrush(wg.DeviceContext, colors.buttonShadow);
-                                            }
-                                            else
-                                            {
-                                                windowsBrush = new WindowsSolidBrush(wg.DeviceContext, colors.lowHighlight);
-                                            }
-                                            try
-                                            {
-                                                ButtonInternal.ButtonBaseAdapter.PaintButtonBackground(wg, valBounds, windowsBrush);
-                                            }
-                                            finally
-                                            {
-                                                windowsBrush.Dispose();
-                                            }
+                                            windowsBrush = new WindowsSolidBrush(wg.DeviceContext, colors.buttonShadow);
                                         }
-                                    }
-                                    finally
-                                    {
-                                        g.ReleaseHdc();
+                                        else
+                                        {
+                                            windowsBrush = new WindowsSolidBrush(wg.DeviceContext, colors.lowHighlight);
+                                        }
+                                        try
+                                        {
+                                            ButtonBaseAdapter.PaintButtonBackground(wg, valBounds, windowsBrush);
+                                        }
+                                        finally
+                                        {
+                                            windowsBrush.Dispose();
+                                        }
                                     }
                                 }
                                 else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
                                          DataGridView.MouseEnteredCellAddress.X == ColumnIndex &&
                                          mouseInContentBounds)
                                 {
-                                    IntPtr hdc = g.GetHdc();
-                                    try
+                                    using var hdc = new DeviceContextHdcScope(g);
+                                    using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
                                     {
-                                        using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
+                                        Color mouseOverBackColor = SystemColors.ControlDark;
+                                        using (WindowsBrush windowBrush = new WindowsSolidBrush(wg.DeviceContext, mouseOverBackColor))
                                         {
-                                            Color mouseOverBackColor = SystemColors.ControlDark;
-                                            using (WindowsBrush windowBrush = new WindowsSolidBrush(wg.DeviceContext, mouseOverBackColor))
-                                            {
-                                                ButtonInternal.ButtonBaseAdapter.PaintButtonBackground(wg, valBounds, windowBrush);
-                                            }
+                                            ButtonBaseAdapter.PaintButtonBackground(wg, valBounds, windowBrush);
                                         }
-                                    }
-                                    finally
-                                    {
-                                        g.ReleaseHdc();
                                     }
                                 }
                             }

@@ -8,6 +8,6 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        public delegate BOOL MONITORENUMPROC(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
+        public delegate BOOL MONITORENUMPROC(IntPtr monitor, Gdi32.HDC hdc, IntPtr lprcMonitor, IntPtr lParam);
     }
 }

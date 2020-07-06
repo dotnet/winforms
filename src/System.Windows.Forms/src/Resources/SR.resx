@@ -3344,6 +3344,9 @@ Stack trace where the illegal operation occurred was:
   <data name="ImageListCreateFailed" xml:space="preserve">
     <value>Creation of the ImageList handle did not succeed.</value>
   </data>
+  <data name="ImageListDuplicateFailed" xml:space="preserve">
+    <value>Duplication of the ImageList handle did not succeed.</value>
+  </data>
   <data name="ImageListEntryType" xml:space="preserve">
     <value>Image added to an ImageList must either derive from Image or be an Icon.</value>
   </data>
@@ -6712,5 +6715,8 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ListViewGroupImageListDescr" xml:space="preserve">
     <value>The ImageList control used by the ListView for ListViewGroup images in all views.</value>
+  </data>
+  <data name="ConstructorArgumentInvalidValueType" xml:space="preserve">
+    <value>Argument '{0}' cannot be converted to type '{1}'.</value> 
   </data>
 </root>
