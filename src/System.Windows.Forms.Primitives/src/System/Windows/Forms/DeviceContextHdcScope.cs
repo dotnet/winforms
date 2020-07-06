@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         ///  region isn't reflected in <see cref="Graphics.Clip"/>, which is combined with the HDC HRegion.
         ///
         ///  The Graphics object saves and restores DC state when performing operations that would modify the DC to
-        ///  maintain the DC in it's original or returned state after <see cref="Graphics.ReleaseHdc()"/>.
+        ///  maintain the DC in its original or returned state after <see cref="Graphics.ReleaseHdc()"/>.
         /// </remarks>
         /// <param name="applyGraphicsState">
         ///  Applies the origin transform and clipping region of the <paramref name="deviceContext"/> if it is an
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
             ApplyGraphicsProperties apply = applyGraphicsState ? ApplyGraphicsProperties.All : ApplyGraphicsProperties.None;
             _savedHdcState = 0;
 
-            if (!(DeviceContext is Graphics graphics) || apply == ApplyGraphicsProperties.None)
+            if (apply == ApplyGraphicsProperties.None || !(DeviceContext is Graphics graphics))
             {
                 // GetHdc() locks the Graphics object, it cannot be used until ReleaseHdc() is called
                 HDC = (Gdi32.HDC)DeviceContext.GetHdc();

@@ -22,7 +22,9 @@ internal static partial class Interop
             IHandle hTheme,
             Gdi32.HDC hdc,
             int iPartId,
-            int iStateId, ref RECT pRect, RECT* pClipRect)
+            int iStateId,
+            ref RECT pRect,
+            RECT* pClipRect)
         {
             HRESULT hr = DrawThemeBackground(hTheme.Handle, (Gdi32.HDC)hdc.Handle, iPartId, iStateId, ref pRect, pClipRect);
             GC.KeepAlive(hTheme);
