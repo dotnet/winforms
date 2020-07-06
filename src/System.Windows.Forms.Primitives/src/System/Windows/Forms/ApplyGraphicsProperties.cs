@@ -26,16 +26,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Apply all supported Graphics properties.
         /// </summary>
-        All                 = Clipping | TranslateTransform,
-
-        /// <summary>
-        ///  For internal use in <see cref="DeviceContextHdcScope"/>
-        /// </summary>
-        Initialized         = 0x0000_0004,
-
-        /// <summary>
-        ///  For internal use in <see cref="DeviceContextHdcScope"/>
-        /// </summary>
-        SaveState           = 0x0000_0008
+        All                 = Clipping | TranslateTransform
     }
 }
