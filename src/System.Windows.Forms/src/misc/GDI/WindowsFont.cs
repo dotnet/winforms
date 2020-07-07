@@ -89,7 +89,7 @@ namespace System.Windows.Forms.Internal
             // Get the font height from the specified size.  size is in point units and height in logical
             // units (pixels when using MM_TEXT) so we need to make the conversion using the number of
             // pixels per logical inch along the screen height. (1 point = 1/72 inch.)
-            int pixelsY = (int)Math.Ceiling(WindowsGraphicsCacheManager.MeasurementGraphics.DeviceContext.DpiY * font.SizeInPoints / 72);
+            int pixelsY = (int)Math.Ceiling(DpiHelper.DeviceDpi * font.SizeInPoints / 72);
 
             // The lfHeight represents the font cell height (line spacing) which includes the internal
             // leading; we specify a negative size value (in pixels) for the height so the font mapper

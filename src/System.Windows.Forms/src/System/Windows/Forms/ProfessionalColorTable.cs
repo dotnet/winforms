@@ -340,16 +340,16 @@ namespace System.Windows.Forms
             {
                 using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
                 {
-                    rgbTable[ProfessionalColorTable.KnownColors.ButtonPressedHighlight] = GetAlphaBlendedColor(g, SystemColors.Window, GetAlphaBlendedColor(g, SystemColors.Highlight, SystemColors.Window, 160), 50);
-                    rgbTable[ProfessionalColorTable.KnownColors.ButtonCheckedHighlight] = GetAlphaBlendedColor(g, SystemColors.Window, GetAlphaBlendedColor(g, SystemColors.Highlight, SystemColors.Window, 80), 20);
-                    rgbTable[ProfessionalColorTable.KnownColors.ButtonSelectedHighlight] = rgbTable[ProfessionalColorTable.KnownColors.ButtonCheckedHighlight];
+                    rgbTable[KnownColors.ButtonPressedHighlight] = GetAlphaBlendedColor(g, SystemColors.Window, GetAlphaBlendedColor(g, SystemColors.Highlight, SystemColors.Window, 160), 50);
+                    rgbTable[KnownColors.ButtonCheckedHighlight] = GetAlphaBlendedColor(g, SystemColors.Window, GetAlphaBlendedColor(g, SystemColors.Highlight, SystemColors.Window, 80), 20);
+                    rgbTable[KnownColors.ButtonSelectedHighlight] = rgbTable[KnownColors.ButtonCheckedHighlight];
                 }
             }
             else
             {
-                rgbTable[ProfessionalColorTable.KnownColors.ButtonPressedHighlight] = SystemColors.Highlight;
-                rgbTable[ProfessionalColorTable.KnownColors.ButtonCheckedHighlight] = SystemColors.ControlLight;
-                rgbTable[ProfessionalColorTable.KnownColors.ButtonSelectedHighlight] = SystemColors.ControlLight;
+                rgbTable[KnownColors.ButtonPressedHighlight] = SystemColors.Highlight;
+                rgbTable[KnownColors.ButtonCheckedHighlight] = SystemColors.ControlLight;
+                rgbTable[KnownColors.ButtonSelectedHighlight] = SystemColors.ControlLight;
             }
         }
 

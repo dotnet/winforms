@@ -11,21 +11,21 @@ namespace System.Windows.Forms
     [Flags]
     internal enum ApplyGraphicsProperties
     {
-        None = 0x00000000,
+        None                = 0x0000_0000,
 
         /// <summary>
         ///  Apply clipping region.
         /// </summary>
-        Clipping = 0x00000001,
+        Clipping            = 0x0000_0001,
 
         /// <summary>
         ///  Apply coordinate transformation.
         /// </summary>
-        TranslateTransform = 0x00000002,
+        TranslateTransform  = 0x0000_0002,
 
         /// <summary>
         ///  Apply all supported Graphics properties.
         /// </summary>
-        All = Clipping | TranslateTransform
+        All                 = Clipping | TranslateTransform
     }
 }

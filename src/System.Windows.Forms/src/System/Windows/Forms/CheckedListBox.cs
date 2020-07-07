@@ -594,12 +594,15 @@ namespace System.Windows.Forms
                 // the Renderer might return a different size in different DPI modes..
                 if (Application.RenderWithVisualStyles)
                 {
-                    VisualStyles.CheckBoxState cbState = CheckBoxRenderer.ConvertFromButtonState(state, false, ((e.State & DrawItemState.HotLight) == DrawItemState.HotLight));
-                    idealCheckSize = (int)(CheckBoxRenderer.GetGlyphSize(e.Graphics, cbState, HandleInternal)).Width;
+                    VisualStyles.CheckBoxState cbState = CheckBoxRenderer.ConvertFromButtonState(
+                        state,
+                        isMixed: false,
+                        (e.State & DrawItemState.HotLight) == DrawItemState.HotLight);
+
+                    idealCheckSize = CheckBoxRenderer.GetGlyphSize(e.Graphics, cbState, HandleInternal).Width;
                 }
 
                 // Determine bounds for the checkbox
-                //
                 int centeringFactor = Math.Max((height - idealCheckSize) / 2, 0);
 
                 // Keep the checkbox within the item's upper and lower bounds

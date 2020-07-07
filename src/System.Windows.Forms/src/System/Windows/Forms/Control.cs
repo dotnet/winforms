@@ -355,7 +355,6 @@ namespace System.Windows.Forms
 #endif
             Properties = new PropertyStore();
 
-            DpiHelper.InitializeDpiHelperForWinforms();
             // Initialize DPI to the value on the primary screen, we will have the correct value when the Handle is created.
             _deviceDpi = DpiHelper.DeviceDpi;
 
@@ -5277,7 +5276,7 @@ namespace System.Windows.Forms
 
             using Bitmap image = new Bitmap(width, height, bitmap.PixelFormat);
             using Graphics g = Graphics.FromImage(image);
-            using var hDc = new DeviceContextHdcScope(g, saveState: false);
+            using var hDc = new DeviceContextHdcScope(g, applyGraphicsState: false);
 
             // Send the WM_PRINT message.
             User32.SendMessageW(
@@ -5288,7 +5287,7 @@ namespace System.Windows.Forms
 
             // Now BLT the result to the destination bitmap.
             using Graphics destGraphics = Graphics.FromImage(bitmap);
-            using var desthDC = new DeviceContextHdcScope(destGraphics, saveState: false);
+            using var desthDC = new DeviceContextHdcScope(destGraphics, applyGraphicsState: false);
             Gdi32.BitBlt(
                 desthDC,
                 targetBounds.X,
@@ -7497,38 +7496,18 @@ namespace System.Windows.Forms
             }
             else
             {
-                Message m;
-                bool releaseDC = false;
-                IntPtr hdc = IntPtr.Zero;
-
                 if (!(e is PrintPaintEventArgs ppev))
                 {
                     IntPtr flags = (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
-                    hdc = e.HDC;
 
-                    if (hdc == IntPtr.Zero)
-                    {
-                        // a manually created paintevent args
-                        hdc = e.Graphics.GetHdc();
-                        releaseDC = true;
-                    }
-                    m = Message.Create(Handle, User32.WM.PRINTCLIENT, hdc, flags);
+                    using var scope = new PaintEventHdcScope(e);
+                    Message m = Message.Create(Handle, User32.WM.PRINTCLIENT, (IntPtr)scope.HDC, flags);
+                    DefWndProc(ref m);
                 }
                 else
                 {
-                    m = ppev.Message;
-                }
-
-                try
-                {
+                    Message m = ppev.Message;
                     DefWndProc(ref m);
-                }
-                finally
-                {
-                    if (releaseDC)
-                    {
-                        e.Graphics.ReleaseHdcInternal(hdc);
-                    }
                 }
             }
         }
@@ -8488,7 +8467,7 @@ namespace System.Windows.Forms
                 Point scrollLocation = scrollOffset;
                 if (this is ScrollableControl scrollControl && scrollLocation != Point.Empty)
                 {
-                    scrollLocation = ((ScrollableControl)this).AutoScrollPosition;
+                    scrollLocation = scrollControl.AutoScrollPosition;
                 }
 
                 if (ControlPaint.IsImageTransparent(BackgroundImage))
@@ -8510,38 +8489,23 @@ namespace System.Windows.Forms
             // use GDI because it is faster for simple things than creating
             // a graphics object, brush, etc.  Also, we may be able to
             // use a system brush, avoiding the brush create altogether.
-            //
+
             Color color = backColor;
 
             // Note: PaintEvent.HDC == 0 if GDI+ has used the HDC -- it wouldn't be safe for us
             // to use it without enough bookkeeping to negate any performance gain of using GDI.
             if (color.A == 255)
             {
-                if (e.HDC != IntPtr.Zero && DisplayInformation.BitsPerPixel > 8)
-                {
-                    Gdi32.HDC hdc = (Gdi32.HDC)e.HDC;
-                    using var hbrush = new Gdi32.CreateBrushScope(hdc.GetNearestColor(color));
-                    hdc.FillRectangle(rectangle, hbrush);
-                }
-                else
-                {
-                    using var hdc = new DeviceContextHdcScope(e.Graphics, ApplyGraphicsProperties.All, saveState: false);
-                    using var hbrush = new Gdi32.CreateBrushScope(hdc.GetNearestColor(color));
-                    hdc.FillRectangle(rectangle, hbrush);
-                }
+                using var scope = new PaintEventHdcScope(e);
+                Gdi32.HDC hdc = scope.HDC;
+                using var hbrush = new Gdi32.CreateBrushScope(hdc.GetNearestColor(color));
+                hdc.FillRectangle(rectangle, hbrush);
             }
-            else
+            else if (color.A > 0)
             {
-                // don't paint anything from 100% transparent background
-                if (color.A > 0)
-                {
-                    // Color has some transparency or we have no HDC, so we must
-                    // fall back to using GDI+.
-                    using (Brush brush = new SolidBrush(color))
-                    {
-                        e.Graphics.FillRectangle(brush, rectangle);
-                    }
-                }
+                // Color has some transparency (but not completely transparent) use GDI+.
+                using Brush brush = new SolidBrush(color);
+                e.Graphics.FillRectangle(brush, rectangle);
             }
         }
 
@@ -11689,6 +11653,7 @@ namespace System.Windows.Forms
         private void WmDisplayChange(ref Message m)
         {
             BufferedGraphicsManager.Current.Invalidate();
+
             DefWndProc(ref m);
         }
 

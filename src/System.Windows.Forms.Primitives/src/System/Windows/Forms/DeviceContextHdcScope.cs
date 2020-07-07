@@ -19,59 +19,52 @@ namespace System.Windows.Forms
     ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by+
     ///  <see langword="ref" /> to avoid duplicating the handle and risking a double release.
     /// </remarks>
-    internal ref struct DeviceContextHdcScope
+    internal readonly ref struct DeviceContextHdcScope
     {
-        public readonly Gdi32.HDC HDC { get; }
         public IDeviceContext DeviceContext { get; }
-        public int _savedState;
+        public Gdi32.HDC HDC { get; }
+
+        private readonly int _savedHdcState;
 
         /// <summary>
         ///  Gets the <see cref="Gdi32.HDC"/> from the the given <paramref name="deviceContext"/>.
         /// </summary>
-        /// <param name="saveState">When true, saves the state.</param>
-        public DeviceContextHdcScope(IDeviceContext deviceContext, bool saveState = true)
-        {
-            DeviceContext = deviceContext;
-            HDC = (Gdi32.HDC)deviceContext.GetHdc();
-            _savedState = saveState ? Gdi32.SaveDC(HDC) : 0;
-        }
-
-        /// <summary>
-        ///  Gets the <see cref="Gdi32.HDC"/> from the the given <paramref name="graphics"/>. Applies <paramref name="apply"/>
-        ///  properties as specified.
-        /// </summary>
         /// <remarks>
         ///  When a <see cref="Graphics"/> object is created from a <see cref="Gdi32.HDC"/> the clipping region and
         ///  the viewport origin are applied (<see cref="Gdi32.GetViewportExtEx(Gdi32.HDC, out Size)"/>). The clipping
-        ///  region isn't reflected in <see cref="Graphics.Clip"/>, which is combined with the HDC HRegion. We provide
-        ///  the capacity to do the same to the retrieved HDC with <see cref="ApplyGraphicsProperties.Clipping"/>.
+        ///  region isn't reflected in <see cref="Graphics.Clip"/>, which is combined with the HDC HRegion.
         ///
         ///  The Graphics object saves and restores DC state when performing operations that would modify the DC to
-        ///  maintain the DC in it's original or returned state after <see cref="Graphics.ReleaseHdc()"/>.
-        ///
-        ///  Outside of munging the DC with <paramref name="apply"/> we should consider adding an option to skip saving
-        ///  the state here when we know we aren't changing the DC state without restoring it (e.g. selecting a pen into
-        ///  the HDC without selecting the original pen back.
+        ///  maintain the DC in its original or returned state after <see cref="Graphics.ReleaseHdc()"/>.
         /// </remarks>
-        /// <param name="saveState">
-        ///  When true, always saves the state. Otherwise only saves the state if the HDC is modified due
-        ///  to <paramref name="apply" />.
+        /// <param name="applyGraphicsState">
+        ///  Applies the origin transform and clipping region of the <paramref name="deviceContext"/> if it is an
+        ///  object of type <see cref="Graphics"/>. Otherwise this is a no-op.
         /// </param>
-        public DeviceContextHdcScope(Graphics graphics, ApplyGraphicsProperties apply, bool saveState = true)
+        /// <param name="saveHdcState">
+        ///  When true, saves and restores the <see cref="Gdi32.HDC"/> state.
+        /// </param>
+        public DeviceContextHdcScope(
+            IDeviceContext deviceContext,
+            bool applyGraphicsState = true,
+            bool saveHdcState = false)
         {
-            DeviceContext = graphics;
-            _savedState = 0;
+            DeviceContext = deviceContext ?? throw new ArgumentNullException(nameof(deviceContext));
+            ApplyGraphicsProperties apply = applyGraphicsState ? ApplyGraphicsProperties.All : ApplyGraphicsProperties.None;
+            _savedHdcState = 0;
 
-            if (apply == ApplyGraphicsProperties.None)
+            if (apply == ApplyGraphicsProperties.None || !(DeviceContext is Graphics graphics))
             {
                 // GetHdc() locks the Graphics object, it cannot be used until ReleaseHdc() is called
-                HDC = (Gdi32.HDC)graphics.GetHdc();
-                _savedState = saveState ? Gdi32.SaveDC(HDC) : 0;
+                HDC = (Gdi32.HDC)DeviceContext.GetHdc();
+                _savedHdcState = saveHdcState ? Gdi32.SaveDC(HDC) : 0;
                 return;
             }
 
             bool applyTransform = apply.HasFlag(ApplyGraphicsProperties.TranslateTransform);
             bool applyClipping = apply.HasFlag(ApplyGraphicsProperties.Clipping);
+
+            // This API is very expensive
             object[]? data = applyTransform || applyClipping ? (object[])graphics.GetContextInfo() : null;
 
             using Region? clipRegion = (Region?)data?[0];
@@ -88,9 +81,9 @@ namespace System.Windows.Forms
 
             HDC = (Gdi32.HDC)graphics.GetHdc();
 
-            if (saveState || applyClipping || applyTransform)
+            if (saveHdcState || applyClipping || applyTransform)
             {
-                _savedState = Gdi32.SaveDC(HDC);
+                _savedHdcState = Gdi32.SaveDC(HDC);
             }
 
             if (applyClipping)
@@ -125,24 +118,18 @@ namespace System.Windows.Forms
             }
         }
 
-        public static implicit operator Gdi32.HDC(DeviceContextHdcScope scope) => scope.HDC;
-        public static explicit operator IntPtr(DeviceContextHdcScope scope) => scope.HDC.Handle;
+        public static implicit operator Gdi32.HDC(in DeviceContextHdcScope scope) => scope.HDC;
+        public static explicit operator IntPtr(in DeviceContextHdcScope scope) => scope.HDC.Handle;
 
         public void Dispose()
         {
-            if (_savedState != 0)
+            if (_savedHdcState != 0)
             {
-                Gdi32.RestoreDC(HDC, _savedState);
+                Gdi32.RestoreDC(HDC, _savedHdcState);
             }
 
-            if (DeviceContext is Graphics graphics)
-            {
-                graphics.ReleaseHdc((IntPtr)HDC);
-            }
-            else
-            {
-                DeviceContext.ReleaseHdc();
-            }
+            // Note that Graphics keeps track of the HDC it passes back, so we don't need to pass it back in
+            DeviceContext?.ReleaseHdc();
         }
     }
 }

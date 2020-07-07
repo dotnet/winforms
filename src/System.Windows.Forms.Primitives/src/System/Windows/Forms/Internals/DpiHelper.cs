@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -15,69 +16,49 @@ namespace System.Windows.Forms
     internal static partial class DpiHelper
     {
         internal const double LogicalDpi = 96.0;
-        private static bool s_isInitialized = false;
-        private static bool s_isInitializeDpiHelperForWinforms = false;
-
-        /// <summary>
-        ///  The primary screen's (device) current DPI
-        /// </summary>
-        private static double s_deviceDpi = LogicalDpi;
-        private static double s_logicalToDeviceUnitsScalingFactor = 0.0;
         private static InterpolationMode s_interpolationMode = InterpolationMode.Invalid;
 
         // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
-        private static bool s_doesNeedQueryForPerMonitorV2Awareness = false;
+        private static readonly bool s_perMonitorAware = GetPerMonitorAware();
 
-        // Backing field, indicating that either DPI is <> 96 or we are in some PerMonitor HighDpi mode.
-        private static bool s_isScalingRequirementMet = false;
+        internal static int DeviceDpi { get; } = GetDeviceDPI();
 
-        private static void Initialize()
+        private static int GetDeviceDPI()
         {
-            if (s_isInitialized)
-                return;
+            // This never changes for the process. Depending on what the DPI awareness settings are we'll get
+            // either the actual DPI of the primary display at process startup or the default LogicalDpi;
 
-            using var dc = User32.GetDcScope.ScreenDC;
-            s_deviceDpi = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
-            s_isInitialized = true;
+            if (!OsVersion.IsWindows10_1607OrGreater)
+            {
+                using var dc = User32.GetDcScope.ScreenDC;
+                return Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
+            }
+            // This avoids needing to create a DC
+            return (int)User32.GetDpiForSystem();
         }
 
-        internal static void InitializeDpiHelperForWinforms()
+        private static bool GetPerMonitorAware()
         {
-            if (s_isInitializeDpiHelperForWinforms)
+            if (!OsVersion.IsWindows10_1607OrGreater)
             {
-                return;
+                return false;
             }
 
-            // initialize shared fields
-            Initialize();
+            HRESULT result = SHCore.GetProcessDpiAwareness(
+                IntPtr.Zero,
+                out SHCore.PROCESS_DPI_AWARENESS processDpiAwareness);
 
-            if (OsVersion.IsWindows10_1607OrGreater)
+            Debug.Assert(result.Succeeded(), $"Failed to get ProcessDpi HRESULT: {result}");
+            Debug.Assert(Enum.IsDefined(typeof(SHCore.PROCESS_DPI_AWARENESS), processDpiAwareness));
+
+            return result.Succeeded() && processDpiAwareness switch
             {
-                // We are on Windows 10/1603 or greater, but we could still be DpiUnaware or SystemAware, so let's find that out...
-                IntPtr hProcess = Kernel32.OpenProcess(
-                    Kernel32.ProcessAccessOptions.QUERY_INFORMATION,
-                    BOOL.FALSE,
-                    Kernel32.GetCurrentProcessId());
-                SHCore.GetProcessDpiAwareness(hProcess, out SHCore.PROCESS_DPI_AWARENESS processDpiAwareness);
-
-                // Only if we're not, it makes sense to query for PerMonitorV2 awareness from now on, if needed.
-                if (!(processDpiAwareness == SHCore.PROCESS_DPI_AWARENESS.UNAWARE ||
-                      processDpiAwareness == SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE))
-                {
-                    s_doesNeedQueryForPerMonitorV2Awareness = true;
-                }
-            }
-
-            if (IsScalingRequired || s_doesNeedQueryForPerMonitorV2Awareness)
-            {
-                s_isScalingRequirementMet = true;
-            }
-
-            s_isInitializeDpiHelperForWinforms = true;
+                SHCore.PROCESS_DPI_AWARENESS.UNAWARE => false,
+                SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE => false,
+                SHCore.PROCESS_DPI_AWARENESS.PER_MONITOR_AWARE => true,
+                _ => true
+            };
         }
-
-        internal static bool DoesCurrentContextRequireScaling
-            => true;
 
         /// <summary>
         ///  Returns a boolean to specify if we should enable processing of WM_DPICHANGED and related messages
@@ -86,8 +67,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                InitializeDpiHelperForWinforms();
-                if (s_doesNeedQueryForPerMonitorV2Awareness)
+                if (s_perMonitorAware)
                 {
                     // We can't cache this value because different top level windows can have different DPI awareness context
                     // for mixed mode applications.
@@ -104,36 +84,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Indicates, if rescaling becomes necessary, either because we are not 96 DPI or we're PerMonitorV2Aware.
         /// </summary>
-        internal static bool IsScalingRequirementMet
-        {
-            get
-            {
-                InitializeDpiHelperForWinforms();
-                return s_isScalingRequirementMet;
-            }
-        }
+        internal static bool IsScalingRequirementMet => IsScalingRequired || s_perMonitorAware;
 
-        internal static int DeviceDpi
-        {
-            get
-            {
-                Initialize();
-                return (int)s_deviceDpi;
-            }
-        }
-
-        private static double LogicalToDeviceUnitsScalingFactor
-        {
-            get
-            {
-                if (s_logicalToDeviceUnitsScalingFactor == 0.0)
-                {
-                    Initialize();
-                    s_logicalToDeviceUnitsScalingFactor = s_deviceDpi / LogicalDpi;
-                }
-                return s_logicalToDeviceUnitsScalingFactor;
-            }
-        }
+        /// <summary>
+        ///  Returns the ratio of <see cref="DeviceDpi"/> to <see cref="LogicalDpi"/>.
+        /// </summary>
+        internal static double LogicalToDeviceUnitsScalingFactor => DeviceDpi / LogicalDpi;
 
         private static InterpolationMode InterpolationMode
         {
@@ -201,14 +157,7 @@ namespace System.Windows.Forms
         ///  Returns whether scaling is required when converting between logical-device units,
         ///  if the application opted in the automatic scaling in the .config file.
         /// </summary>
-        public static bool IsScalingRequired
-        {
-            get
-            {
-                Initialize();
-                return s_deviceDpi != LogicalDpi;
-            }
-        }
+        public static bool IsScalingRequired => DeviceDpi != LogicalDpi;
 
         /// <summary>
         /// scale logical pixel to the factor
@@ -221,7 +170,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Transforms a horizontal or vertical integer coordinate from logical to device units
-        ///  by scaling it up  for current DPI and rounding to nearest integer value
+        ///  by scaling it up for current DPI and rounding to nearest integer value
         /// </summary>
         /// <param name="value">value in logical units</param>
         /// <returns>value in device units</returns>
@@ -229,10 +178,11 @@ namespace System.Windows.Forms
         {
             if (devicePixels == 0)
             {
-                return (int)Math.Round(LogicalToDeviceUnitsScalingFactor * (double)value);
+                return (int)Math.Round(LogicalToDeviceUnitsScalingFactor * value);
             }
+
             double scalingFactor = devicePixels / LogicalDpi;
-            return (int)Math.Round(scalingFactor * (double)value);
+            return (int)Math.Round(scalingFactor * value);
         }
 
         /// <summary>
@@ -243,10 +193,11 @@ namespace System.Windows.Forms
         /// <returns>Padding in device units</returns>
         public static Padding LogicalToDeviceUnits(Padding logicalPadding, int deviceDpi = 0)
         {
-            return new Padding(LogicalToDeviceUnits(logicalPadding.Left, deviceDpi),
-                               LogicalToDeviceUnits(logicalPadding.Top, deviceDpi),
-                               LogicalToDeviceUnits(logicalPadding.Right, deviceDpi),
-                               LogicalToDeviceUnits(logicalPadding.Bottom, deviceDpi));
+            return new Padding(
+                LogicalToDeviceUnits(logicalPadding.Left, deviceDpi),
+                LogicalToDeviceUnits(logicalPadding.Top, deviceDpi),
+                LogicalToDeviceUnits(logicalPadding.Right, deviceDpi),
+                LogicalToDeviceUnits(logicalPadding.Bottom, deviceDpi));
         }
 
         /// <summary>

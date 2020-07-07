@@ -780,40 +780,17 @@ namespace System.Windows.Forms
                                         DataGridView.Enabled).Calculate();
 
                                     using var hdc = new DeviceContextHdcScope(g);
-                                    using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                                    {
-                                        WindowsBrush windowsBrush;
-                                        if (colors.options.highContrast)
-                                        {
-                                            windowsBrush = new WindowsSolidBrush(wg.DeviceContext, colors.buttonShadow);
-                                        }
-                                        else
-                                        {
-                                            windowsBrush = new WindowsSolidBrush(wg.DeviceContext, colors.lowHighlight);
-                                        }
-                                        try
-                                        {
-                                            ButtonBaseAdapter.PaintButtonBackground(wg, valBounds, windowsBrush);
-                                        }
-                                        finally
-                                        {
-                                            windowsBrush.Dispose();
-                                        }
-                                    }
+                                    using var hbrush = new Gdi32.CreateBrushScope(
+                                        colors.options.highContrast ? colors.buttonShadow : colors.lowHighlight);
+                                    hdc.FillRectangle(valBounds, hbrush);
                                 }
                                 else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
                                          DataGridView.MouseEnteredCellAddress.X == ColumnIndex &&
                                          mouseInContentBounds)
                                 {
                                     using var hdc = new DeviceContextHdcScope(g);
-                                    using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                                    {
-                                        Color mouseOverBackColor = SystemColors.ControlDark;
-                                        using (WindowsBrush windowBrush = new WindowsSolidBrush(wg.DeviceContext, mouseOverBackColor))
-                                        {
-                                            ButtonBaseAdapter.PaintButtonBackground(wg, valBounds, windowBrush);
-                                        }
-                                    }
+                                    using var hbrush = new Gdi32.CreateBrushScope(SystemColors.ControlDark);
+                                    hdc.FillRectangle(valBounds, hbrush);
                                 }
                             }
                         }

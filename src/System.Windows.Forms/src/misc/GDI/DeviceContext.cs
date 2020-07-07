@@ -196,9 +196,12 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Creates a DeviceContext object wrapping a memory DC compatible with the specified device.
         /// </summary>
+        /// <param name="hdc">
+        ///  If <see cref="Gdi32.HDC"/> is default a memory DC compatible with the application's current screen is
+        ///  created. In this case the returned DC is only valid for the lifetime of the creating thread.
+        /// </param>
         public static DeviceContext FromCompatibleDC(Gdi32.HDC hdc)
         {
-            // If hdc is null, the function creates a memory DC compatible with the application's current screen.
             // In this case the thread that calls CreateCompatibleDC owns the HDC that is created. When this thread is destroyed,
             // the HDC is no longer valid.
 

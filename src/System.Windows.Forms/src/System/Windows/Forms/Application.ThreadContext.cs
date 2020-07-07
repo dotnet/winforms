@@ -1040,8 +1040,6 @@ namespace System.Windows.Forms
                     {
                         ApplicationContext.MainForm.Visible = true;
                     }
-
-                    DpiHelper.InitializeDpiHelperForWinforms();
                 }
 
                 Form oldForm = _currentForm;

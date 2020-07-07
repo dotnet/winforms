@@ -7,6 +7,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Internal;
+using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
 {
@@ -75,7 +76,7 @@ namespace System.Windows.Forms.ButtonInternal
                 field = SystemColors.Control;
             }
 
-            double scale = GetDpiScaleRatio(e.Graphics);
+            double scale = GetDpiScaleRatio();
 
             using (WindowsGraphics wg = WindowsGraphics.FromGraphics(e.Graphics))
             {
@@ -140,29 +141,36 @@ namespace System.Windows.Forms.ButtonInternal
 
         protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, Color checkColor, Color checkBackground, bool disabledColors)
         {
-            // check
-            //
-            if (Control.Checked)
+            if (!Control.Checked)
             {
-                if (!Control.Enabled && disabledColors)
-                {
-                    checkColor = SystemColors.ControlDark;
-                }
-
-                double scale = GetDpiScaleRatio(e.Graphics);
-                using (WindowsGraphics wg = WindowsGraphics.FromGraphics(e.Graphics))
-                {
-                    using (WindowsBrush brush = new WindowsSolidBrush(wg.DeviceContext, checkColor))
-                    {
-                        // circle drawing doesn't work at this size
-                        int offset = 5;
-                        Rectangle vCross = new Rectangle(layout.checkBounds.X + GetScaledNumber(offset, scale), layout.checkBounds.Y + GetScaledNumber(offset - 1, scale), GetScaledNumber(2, scale), GetScaledNumber(4, scale));
-                        wg.FillRectangle(brush, vCross);
-                        Rectangle hCross = new Rectangle(layout.checkBounds.X + GetScaledNumber(offset - 1, scale), layout.checkBounds.Y + GetScaledNumber(offset, scale), GetScaledNumber(4, scale), GetScaledNumber(2, scale));
-                        wg.FillRectangle(brush, hCross);
-                    }
-                }
+                return;
             }
+
+            if (!Control.Enabled && disabledColors)
+            {
+                checkColor = SystemColors.ControlDark;
+            }
+
+            double scale = GetDpiScaleRatio();
+            using var paintScope = new PaintEventHdcScope(e);
+            Gdi32.HDC hdc = paintScope.HDC;
+            using var brush = new Gdi32.CreateBrushScope(checkColor);
+
+            // Circle drawing doesn't work at this size
+            int offset = 5;
+
+            Rectangle vCross = new Rectangle(
+                layout.checkBounds.X + GetScaledNumber(offset, scale),
+                layout.checkBounds.Y + GetScaledNumber(offset - 1, scale),
+                GetScaledNumber(2, scale),
+                GetScaledNumber(4, scale));
+            hdc.FillRectangle(vCross, brush);
+
+            Rectangle hCross = new Rectangle(
+                layout.checkBounds.X + GetScaledNumber(offset - 1, scale),
+                layout.checkBounds.Y + GetScaledNumber(offset, scale),
+                GetScaledNumber(4, scale), GetScaledNumber(2, scale));
+            hdc.FillRectangle(hCross, brush);
         }
 
         protected ButtonState GetState()
@@ -193,8 +201,6 @@ namespace System.Windows.Forms.ButtonInternal
 
         protected void DrawCheckBox(PaintEventArgs e, LayoutData layout)
         {
-            Graphics g = e.Graphics;
-
             Rectangle check = layout.checkBounds;
             if (!Application.RenderWithVisualStyles)
             {
@@ -205,11 +211,15 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (Application.RenderWithVisualStyles)
             {
-                RadioButtonRenderer.DrawRadioButton(g, new Point(check.Left, check.Top), RadioButtonRenderer.ConvertFromButtonState(style, Control.MouseIsOver), Control.HandleInternal);
+                RadioButtonRenderer.DrawRadioButton(
+                    e.Graphics,
+                    new Point(check.Left, check.Top),
+                    RadioButtonRenderer.ConvertFromButtonState(style, Control.MouseIsOver),
+                    Control.HandleInternal);
             }
             else
             {
-                ControlPaint.DrawRadioButton(g, check, style);
+                ControlPaint.DrawRadioButton(e.Graphics, check, style);
             }
         }
 

@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using var hdc = new DeviceContextHdcScope(dc, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
             using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
             wg.DrawText(text, wf, pt, foreColor);
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using var hdc = new DeviceContextHdcScope(dc);
+            using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
             using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
             wg.DrawText(text, wf, pt, foreColor, backColor);
@@ -80,7 +80,7 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using var hdc = new DeviceContextHdcScope(dc, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
             using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
             wg.DrawText(text, wf, bounds, foreColor);
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using var hdc = new DeviceContextHdcScope(dc, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
             using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
             wg.DrawText(text, wf, bounds, foreColor, backColor);
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using var hdc = new DeviceContextHdcScope(dc, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
             using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
             return wg.MeasureText(text, wf);
@@ -207,7 +207,7 @@ namespace System.Windows.Forms
 
             Gdi32.QUALITY fontQuality = WindowsFont.WindowsFontQualityFromTextRenderingHint(dc as Graphics);
 
-            using var hdc = new DeviceContextHdcScope(dc, saveState: false);
+            using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
             using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, fontQuality);
             return wg.MeasureText(text, wf, proposedSize);

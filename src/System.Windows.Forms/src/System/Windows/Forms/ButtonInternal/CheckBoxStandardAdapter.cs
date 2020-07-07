@@ -126,10 +126,13 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (Application.RenderWithVisualStyles)
             {
-                using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
-                {
-                    layout.checkSize = CheckBoxRenderer.GetGlyphSize(g, CheckBoxRenderer.ConvertFromButtonState(GetState(), true, Control.MouseIsOver), Control.HandleInternal).Width;
-                }
+                layout.checkSize = CheckBoxRenderer.GetGlyphSize(
+                    WindowsFormsUtils.GetMeasurementDeviceContext(),
+                    CheckBoxRenderer.ConvertFromButtonState(
+                        GetState(),
+                        true,
+                        Control.MouseIsOver),
+                    Control.HandleInternal).Width;
             }
             else
             {
@@ -139,7 +142,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else
                 {
-                    layout.checkSize = (int)(layout.checkSize * GetDpiScaleRatio(e.Graphics));
+                    layout.checkSize = (int)(layout.checkSize * GetDpiScaleRatio());
                 }
             }
 

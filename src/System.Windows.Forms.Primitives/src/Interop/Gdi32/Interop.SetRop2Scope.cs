@@ -26,13 +26,18 @@ internal static partial class Interop
             /// </summary>
             public SetRop2Scope(HDC hdc, R2 rop2)
             {
-                _hdc = hdc;
                 _previousRop = SetROP2(hdc, rop2);
+
+                // If we didn't actually change the ROP, don't keep the HDC so we skip putting back the same state.
+                _hdc = _previousRop == rop2 ? default : hdc;
             }
 
             public void Dispose()
             {
-                SetROP2(_hdc, _previousRop);
+                if (!_hdc.IsNull)
+                {
+                    SetROP2(_hdc, _previousRop);
+                }
             }
         }
     }

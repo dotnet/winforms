@@ -6,6 +6,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -120,17 +121,18 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawDropDownButton(Graphics g, Rectangle bounds, ComboBoxState state)
         {
-            DrawDropDownButtonForHandle(g, bounds, state, IntPtr.Zero);
+            using var hdc = new DeviceContextHdcScope(g);
+            DrawDropDownButtonForHandle(hdc, bounds, state, IntPtr.Zero);
         }
 
         /// <summary>
         ///  Renders a ComboBox drop-down button in per-monitor scenario.
         /// </summary>
-        /// <param name="g">graphics object</param>
+        /// <param name="hdc">device context</param>
         /// <param name="bounds">dropdown button bounds</param>
         /// <param name="state"> state</param>
         /// <param name="handle"> handle of the control</param>
-        internal static void DrawDropDownButtonForHandle(Graphics g, Rectangle bounds, ComboBoxState state, IntPtr handle)
+        internal static void DrawDropDownButtonForHandle(Gdi32.HDC hdc, Rectangle bounds, ComboBoxState state, IntPtr handle)
         {
             if (visualStyleRenderer == null)
             {
@@ -141,7 +143,7 @@ namespace System.Windows.Forms
                 visualStyleRenderer.SetParameters(ComboBoxElement.ClassName, ComboBoxElement.Part, (int)state);
             }
 
-            visualStyleRenderer.DrawBackground(g, bounds, handle);
+            visualStyleRenderer.DrawBackground(hdc, bounds, handle);
         }
     }
 }

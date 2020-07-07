@@ -10,13 +10,40 @@ internal static partial class Interop
     public static partial class UxTheme
     {
         [DllImport(Libraries.UxTheme, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public unsafe static extern HRESULT GetThemeTextExtent(IntPtr hTheme, IntPtr hdc, int iPartId, int iStateId, string pszText, int cchCharCount, uint dwTextFlags, RECT* pBoundingRect, out RECT pExtentRect);
+        public unsafe static extern HRESULT GetThemeTextExtent(
+            IntPtr hTheme,
+            Gdi32.HDC hdc,
+            int iPartId,
+            int iStateId,
+            string pszText,
+            int cchCharCount,
+            uint dwTextFlags,
+            RECT* pBoundingRect,
+            out RECT pExtentRect);
 
-        public unsafe static HRESULT GetThemeTextExtent(IHandle hTheme, IHandle hdc, int iPartId, int iStateId, string pszText, int cchCharCount, uint dwTextFlags, RECT* pBoundingRect, out RECT pExtentRect)
+        public unsafe static HRESULT GetThemeTextExtent(
+            IHandle hTheme,
+            Gdi32.HDC hdc,
+            int iPartId,
+            int iStateId,
+            string pszText,
+            int cchCharCount,
+            uint dwTextFlags,
+            RECT* pBoundingRect,
+            out RECT pExtentRect)
         {
-            HRESULT hr = GetThemeTextExtent(hTheme.Handle, hdc.Handle, iPartId, iStateId, pszText, cchCharCount, dwTextFlags, pBoundingRect, out pExtentRect);
+            HRESULT hr = GetThemeTextExtent(
+                hTheme.Handle,
+                hdc,
+                iPartId,
+                iStateId,
+                pszText,
+                cchCharCount,
+                dwTextFlags,
+                pBoundingRect,
+                out pExtentRect);
+
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc);
             return hr;
         }
     }

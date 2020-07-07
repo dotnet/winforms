@@ -7,7 +7,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Internal;
 using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
@@ -38,7 +37,13 @@ namespace System.Windows.Forms.ButtonInternal
 
         #region Drawing Helpers
 
-        protected void DrawCheckFlat(PaintEventArgs e, LayoutData layout, Color checkColor, Color checkBackground, Color checkBorder, ColorData colors)
+        protected void DrawCheckFlat(
+            PaintEventArgs e,
+            LayoutData layout,
+            Color checkColor,
+            Color checkBackground,
+            Color checkBorder,
+            ColorData colors)
         {
             Rectangle bounds = layout.checkBounds;
 
@@ -52,10 +57,10 @@ namespace System.Windows.Forms.ButtonInternal
                 bounds.Height--;
             }
 
-            using (var hdc = new DeviceContextHdcScope(e.Graphics, ApplyGraphicsProperties.All, saveState: false))
+            using (var scope = new PaintEventHdcScope(e))
             {
                 using var hpen = new Gdi32.CreatePenScope(checkBorder);
-                hdc.DrawRectangle(bounds, hpen);
+                scope.HDC.DrawRectangle(bounds, hpen);
 
                 // Now subtract, since the rest of the code is like Everett.
                 if (layout.options.everettButtonCompat)
@@ -74,21 +79,26 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                using var hdc = new DeviceContextHdcScope(e.Graphics, ApplyGraphicsProperties.All, saveState: false);
+                using var scope = new PaintEventHdcScope(e);
                 using var hbrush = new Gdi32.CreateBrushScope(checkBackground);
 
                 // Even though we are using GDI here as opposed to GDI+ in Everett, we still need to add 1.
                 bounds.Width++;
                 bounds.Height++;
-                RECT rect = bounds;
-                User32.FillRect(hdc, ref rect, hbrush);
+                scope.HDC.FillRectangle(bounds, hbrush);
             }
 
             DrawCheckOnly(e, layout, colors, checkColor, checkBackground);
         }
 
         // used by DataGridViewCheckBoxCell
-        internal static void DrawCheckBackground(bool controlEnabled, CheckState controlCheckState, Graphics g, Rectangle bounds, Color checkColor, Color checkBackground, bool disabledColors, ColorData colors)
+        internal static void DrawCheckBackground(
+            bool controlEnabled,
+            CheckState controlCheckState,
+            Graphics g,
+            Rectangle bounds,
+            Color checkBackground,
+            bool disabledColors)
         {
             using var hdc = new DeviceContextHdcScope(g);
 
@@ -117,7 +127,13 @@ namespace System.Windows.Forms.ButtonInternal
             User32.FillRect(hdc, ref rect, hbrush);
         }
 
-        protected void DrawCheckBackground(PaintEventArgs e, Rectangle bounds, Color checkColor, Color checkBackground, bool disabledColors, ColorData colors)
+        protected void DrawCheckBackground(
+            PaintEventArgs e,
+            Rectangle bounds,
+            Color checkColor,
+            Color checkBackground,
+            bool disabledColors,
+            ColorData colors)
         {
             // Area behind check
 
@@ -127,7 +143,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                DrawCheckBackground(Control.Enabled, Control.CheckState, e.Graphics, bounds, checkColor, checkBackground, disabledColors, colors);
+                DrawCheckBackground(Control.Enabled, Control.CheckState, e.Graphics, bounds, checkBackground, disabledColors);
             }
         }
 
@@ -189,22 +205,31 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static Rectangle DrawPopupBorder(Graphics g, Rectangle r, ColorData colors)
         {
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
-            {
-                using (WindowsPen high = new WindowsPen(wg.DeviceContext, colors.highlight),
-                   shadow = new WindowsPen(wg.DeviceContext, colors.buttonShadow),
-                   face = new WindowsPen(wg.DeviceContext, colors.buttonFace))
-                {
-                    wg.DrawLine(high, r.Right - 1, r.Top, r.Right - 1, r.Bottom);
-                    wg.DrawLine(high, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);
+            using var hdc = new DeviceContextHdcScope(g);
+            return DrawPopupBorder(hdc, r, colors);
+        }
 
-                    wg.DrawLine(shadow, r.Left, r.Top, r.Left, r.Bottom);
-                    wg.DrawLine(shadow, r.Left, r.Top, r.Right - 1, r.Top);
+        internal static Rectangle DrawPopupBorder(PaintEventArgs e, Rectangle r, ColorData colors)
+        {
+            using var hdc = new PaintEventHdcScope(e);
+            return DrawPopupBorder(hdc, r, colors);
+        }
 
-                    wg.DrawLine(face, r.Right - 2, r.Top + 1, r.Right - 2, r.Bottom - 1);
-                    wg.DrawLine(face, r.Left + 1, r.Bottom - 2, r.Right - 1, r.Bottom - 2);
-                }
-            }
+        internal static Rectangle DrawPopupBorder(Gdi32.HDC hdc, Rectangle r, ColorData colors)
+        {
+            using var high = new Gdi32.CreatePenScope(colors.highlight);
+            using var shadow = new Gdi32.CreatePenScope(colors.buttonShadow);
+            using var face = new Gdi32.CreatePenScope(colors.buttonFace);
+
+            hdc.DrawLine(high, r.Right - 1, r.Top, r.Right - 1, r.Bottom);
+            hdc.DrawLine(high, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);
+
+            hdc.DrawLine(shadow, r.Left, r.Top, r.Left, r.Bottom);
+            hdc.DrawLine(shadow, r.Left, r.Top, r.Right - 1, r.Top);
+
+            hdc.DrawLine(face, r.Right - 2, r.Top + 1, r.Right - 2, r.Bottom - 1);
+            hdc.DrawLine(face, r.Left + 1, r.Bottom - 2, r.Right - 1, r.Bottom - 2);
+
             r.Inflate(-1, -1);
             return r;
         }
@@ -237,30 +262,36 @@ namespace System.Windows.Forms.ButtonInternal
 
         protected void DrawCheckBox(PaintEventArgs e, LayoutData layout)
         {
-            Graphics g = e.Graphics;
-
             ButtonState style = GetState();
 
             if (Control.CheckState == CheckState.Indeterminate)
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    CheckBoxRenderer.DrawCheckBox(g, new Point(layout.checkBounds.Left, layout.checkBounds.Top), CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver), Control.HandleInternal);
+                    CheckBoxRenderer.DrawCheckBox(
+                        e.Graphics,
+                        new Point(layout.checkBounds.Left, layout.checkBounds.Top),
+                        CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver),
+                        Control.HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawMixedCheckBox(g, layout.checkBounds, style);
+                    ControlPaint.DrawMixedCheckBox(e.Graphics, layout.checkBounds, style);
                 }
             }
             else
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    CheckBoxRenderer.DrawCheckBox(g, new Point(layout.checkBounds.Left, layout.checkBounds.Top), CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver), Control.HandleInternal);
+                    CheckBoxRenderer.DrawCheckBox(
+                        e.Graphics,
+                        new Point(layout.checkBounds.Left, layout.checkBounds.Top),
+                        CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver),
+                        Control.HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawCheckBox(g, layout.checkBounds, style);
+                    ControlPaint.DrawCheckBox(e.Graphics, layout.checkBounds, style);
                 }
             }
         }

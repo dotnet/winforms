@@ -355,33 +355,6 @@ namespace System.Windows.Forms
             return Gdi32.CreateBrushIndirect(ref lb);
         }
 
-        // roughly the same code as in Graphics.cs
-        internal static void CopyPixels(IntPtr sourceHwnd, IDeviceContext targetDC, Point sourceLocation, Point destinationLocation, Size blockRegionSize, CopyPixelOperation copyPixelOperation)
-        {
-            int destWidth = blockRegionSize.Width;
-            int destHeight = blockRegionSize.Height;
-
-            using var dc = new User32.GetDcScope(sourceHwnd);
-            using var targetHDC = new DeviceContextHdcScope(targetDC, saveState: false);
-
-            BOOL result = Gdi32.BitBlt(
-                targetHDC,
-                destinationLocation.X,
-                destinationLocation.Y,
-                destWidth,
-                destHeight,
-                dc,
-                sourceLocation.X,
-                sourceLocation.Y,
-                (Gdi32.ROP)copyPixelOperation);
-
-                // Zero result indicates a win32 exception has been thrown
-                if (!result.IsTrue())
-                {
-                    throw new Win32Exception();
-                }
-        }
-
         /// <summary>
         ///  Draws a border of the specified style and color to the given graphics.
         /// </summary>
@@ -1092,7 +1065,7 @@ namespace System.Windows.Forms
             }
 
             // Get Win32 dc with Graphics properties applied to it.
-            using var hdc = new DeviceContextHdcScope(graphics, ApplyGraphicsProperties.All, saveState: false);
+            using var hdc = new DeviceContextHdcScope(graphics);
             User32.DrawEdge(hdc, ref rc, edge, flags);
         }
 
@@ -1424,7 +1397,7 @@ namespace System.Windows.Forms
                     using (Graphics g2 = Graphics.FromImage(bitmap))
                     {
                         g2.Clear(Color.Transparent);
-                        using var dc = new DeviceContextHdcScope(g2, saveState: false);
+                        using var dc = new DeviceContextHdcScope(g2, applyGraphicsState: false);
                         User32.DrawFrameControl(dc, ref rcCheck, User32.DFC.MENU, User32.DFCS.MENUCHECK);
                     }
 
@@ -1511,40 +1484,36 @@ namespace System.Windows.Forms
             }
 
             RECT rcFrame = new RECT(0, 0, width, height);
-            using (Bitmap bitmap = new Bitmap(width, height))
+            using Bitmap bitmap = new Bitmap(width, height);
+            using Graphics g2 = Graphics.FromImage(bitmap);
+            g2.Clear(Color.Transparent);
+
+            using (var hdc = new DeviceContextHdcScope(g2, applyGraphicsState: false))
             {
-                using (Graphics g2 = Graphics.FromImage(bitmap))
+                // Get Win32 dc with Graphics properties applied to it.
+                User32.DrawFrameControl(hdc, ref rcFrame, kind, state);
+            }
+
+            if (foreColor == Color.Empty || backColor == Color.Empty)
+            {
+                graphics.DrawImage(bitmap, x, y);
+            }
+            else
+            {
+                // Replace black/white with foreColor/backColor.
+                ImageAttributes attrs = new ImageAttributes();
+                ColorMap cm1 = new ColorMap
                 {
-                    g2.Clear(Color.Transparent);
-
-                    using (var hdc = new DeviceContextHdcScope(g2, saveState: false))
-                    {
-                        // Get Win32 dc with Graphics properties applied to it.
-                        User32.DrawFrameControl(hdc, ref rcFrame, kind, state);
-                    }
-
-                    if (foreColor == Color.Empty || backColor == Color.Empty)
-                    {
-                        graphics.DrawImage(bitmap, x, y);
-                    }
-                    else
-                    {
-                        // Replace black/white with foreColor/backColor.
-                        ImageAttributes attrs = new ImageAttributes();
-                        ColorMap cm1 = new ColorMap
-                        {
-                            OldColor = Color.Black,
-                            NewColor = foreColor
-                        };
-                        ColorMap cm2 = new ColorMap
-                        {
-                            OldColor = Color.White,
-                            NewColor = backColor
-                        };
-                        attrs.SetRemapTable(new ColorMap[2] { cm1, cm2 }, ColorAdjustType.Bitmap);
-                        graphics.DrawImage(bitmap, new Rectangle(x, y, width, height), 0, 0, width, height, GraphicsUnit.Pixel, attrs, null, IntPtr.Zero);
-                    }
-                }
+                    OldColor = Color.Black,
+                    NewColor = foreColor
+                };
+                ColorMap cm2 = new ColorMap
+                {
+                    OldColor = Color.White,
+                    NewColor = backColor
+                };
+                attrs.SetRemapTable(new ColorMap[2] { cm1, cm2 }, ColorAdjustType.Bitmap);
+                graphics.DrawImage(bitmap, new Rectangle(x, y, width, height), 0, 0, width, height, GraphicsUnit.Pixel, attrs, null, IntPtr.Zero);
             }
         }
 

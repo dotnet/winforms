@@ -1426,8 +1426,8 @@ namespace System.Windows.Forms
             }
             else
             {
-                using var hdc = new DeviceContextHdcScope(e.Graphics, saveState: false);
-                color = hdc.GetNearestColor(Enabled ? ForeColor : DisabledColor);
+                using var scope = new PaintEventHdcScope(e);
+                color = scope.HDC.GetNearestColor(Enabled ? ForeColor : DisabledColor);
             }
 
             // Do actual drawing

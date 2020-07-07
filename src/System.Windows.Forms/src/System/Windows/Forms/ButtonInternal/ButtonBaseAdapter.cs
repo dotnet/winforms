@@ -776,12 +776,6 @@ namespace System.Windows.Forms.ButtonInternal
 
         #region Draw Content Helpers
 
-        // the DataGridViewButtonCell uses this method
-        internal static void PaintButtonBackground(WindowsGraphics wg, Rectangle bounds, WindowsBrush background)
-        {
-            wg.FillRectangle(background, bounds);
-        }
-
         internal void PaintButtonBackground(PaintEventArgs e, Rectangle bounds, Brush background)
         {
             if (background == null)
@@ -906,16 +900,6 @@ namespace System.Windows.Forms.ButtonInternal
 
                 colors.windowFrame = foreColor;
 
-                /* debug * /
-                colors.buttonFace = Color.Yellow;
-                colors.buttonShadow = Color.Blue;
-                colors.highlight = Color.Brown;
-                colors.lowButtonFace = Color.Beige;
-                colors.lowHighlight = Color.Cyan;
-                colors.windowFrame = Color.Red;
-                colors.windowText = Color.Green;
-                / * debug */
-
                 if (colors.buttonFace.GetBrightness() < .5)
                 {
                     colors.constrastButtonShadow = colors.lowHighlight;
@@ -939,7 +923,7 @@ namespace System.Windows.Forms.ButtonInternal
                     colors.windowText = colors.windowFrame;
                 }
 
-                using var hdc = new DeviceContextHdcScope(graphics, saveState: false);
+                using var hdc = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
 
                 colors.buttonFace = hdc.GetNearestColor(colors.buttonFace);
                 colors.buttonShadow = hdc.GetNearestColor(colors.buttonShadow);
@@ -1620,12 +1604,13 @@ namespace System.Windows.Forms.ButtonInternal
 
             protected virtual Size GetTextSize(Size proposedSize)
             {
-                //set the Prefix field of TextFormatFlags
+                // Set the Prefix field of TextFormatFlags
                 proposedSize = LayoutUtils.FlipSizeIf(verticalText, proposedSize);
                 Size textSize = Size.Empty;
 
                 if (useCompatibleTextRendering)
-                { // GDI+ text rendering.
+                {
+                    // GDI+ text rendering.
                     using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
                     {
                         using (StringFormat gdipStringFormat = StringFormat)
@@ -1635,10 +1620,12 @@ namespace System.Windows.Forms.ButtonInternal
                     }
                 }
                 else if (!string.IsNullOrEmpty(text))
-                { // GDI text rendering (Whidbey feature).
+                {
+                    // GDI text rendering (Whidbey feature).
                     textSize = TextRenderer.MeasureText(text, font, proposedSize, TextFormatFlags);
                 }
-                //else skip calling MeasureText, it should return 0,0
+
+                // Else skip calling MeasureText, it should return 0,0
 
                 return LayoutUtils.FlipSizeIf(verticalText, textSize);
             }

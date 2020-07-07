@@ -12,7 +12,7 @@ internal static partial class Interop
         [DllImport(Libraries.UxTheme, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public static extern HRESULT DrawThemeText(
             IntPtr hTheme,
-            IntPtr hdc,
+            Gdi32.HDC hdc,
             int iPartId,
             int iStateId,
             string pszText,
@@ -23,7 +23,7 @@ internal static partial class Interop
 
         public static HRESULT DrawThemeText(
             IHandle hTheme,
-            IHandle hdc,
+            Gdi32.HDC hdc,
             int iPartId,
             int iStateId,
             string pszText,
@@ -32,9 +32,8 @@ internal static partial class Interop
             uint dwTextFlags2,
             ref RECT pRect)
         {
-            HRESULT hr = DrawThemeText(hTheme.Handle, hdc.Handle, iPartId, iStateId, pszText, iCharCount, dwTextFlags, dwTextFlags2, ref pRect);
+            HRESULT hr = DrawThemeText(hTheme.Handle, hdc, iPartId, iStateId, pszText, iCharCount, dwTextFlags, dwTextFlags2, ref pRect);
             GC.KeepAlive(hTheme);
-            GC.KeepAlive(hdc);
             return hr;
         }
     }

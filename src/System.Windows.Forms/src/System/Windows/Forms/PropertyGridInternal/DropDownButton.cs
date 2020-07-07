@@ -103,13 +103,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     pevent.Graphics.FillRectangle(SystemBrushes.Window, dropDownButtonRect);
                 }
-                if (!DpiHelper.IsScalingRequirementMet)
+
+                using (var scope = new PaintEventHdcScope(pevent))
                 {
-                    ComboBoxRenderer.DrawDropDownButton(pevent.Graphics, dropDownButtonRect, cbState);
-                }
-                else
-                {
-                    ComboBoxRenderer.DrawDropDownButtonForHandle(pevent.Graphics, dropDownButtonRect, cbState, HandleInternal);
+                    ComboBoxRenderer.DrawDropDownButtonForHandle(
+                        scope.HDC,
+                        dropDownButtonRect,
+                        cbState,
+                        DpiHelper.IsScalingRequirementMet ? HandleInternal : IntPtr.Zero);
                 }
 
                 // Redraw focus cues

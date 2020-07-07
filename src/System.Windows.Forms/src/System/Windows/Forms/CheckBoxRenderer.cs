@@ -6,6 +6,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -93,7 +94,8 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                visualStyleRenderer.DrawBackground(g, glyphBounds, hWnd);
+                using var hdc = new DeviceContextHdcScope(g);
+                visualStyleRenderer.DrawBackground(hdc, glyphBounds, hWnd);
             }
             else
             {
@@ -173,7 +175,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a CheckBox control.
         /// </summary>
-        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, CheckBoxState state)
+        public static void DrawCheckBox(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string checkBoxText,
+            Font font,
+            TextFormatFlags flags,
+            Image image,
+            Rectangle imageBounds,
+            bool focused,
+            CheckBoxState state)
         {
             Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state));
             Color textColor;
@@ -214,17 +226,26 @@ namespace System.Windows.Forms
         ///  Returns the size of the CheckBox glyph.
         /// </summary>
         public static Size GetGlyphSize(Graphics g, CheckBoxState state)
-        {
-            return GetGlyphSize(g, state, IntPtr.Zero);
-        }
+            => GetGlyphSize(g, state, default);
 
         internal static Size GetGlyphSize(Graphics g, CheckBoxState state, IntPtr hWnd)
+        {
+            if (!RenderWithVisualStyles)
+            {
+                return new Size(13, 13);
+            }
+
+            using var hdc = new DeviceContextHdcScope(g);
+            return GetGlyphSize(hdc, state, IntPtr.Zero);
+        }
+
+        internal static Size GetGlyphSize(Gdi32.HDC hdc, CheckBoxState state, IntPtr hWnd)
         {
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
 
-                return visualStyleRenderer.GetPartSize(g, ThemeSizeType.Draw, hWnd);
+                return visualStyleRenderer.GetPartSize(hdc, ThemeSizeType.Draw, hWnd);
             }
 
             return new Size(13, 13);

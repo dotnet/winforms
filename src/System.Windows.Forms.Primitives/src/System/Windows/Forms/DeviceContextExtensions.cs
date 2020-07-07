@@ -48,6 +48,27 @@ namespace System.Windows.Forms
                 hbrush);
         }
 
+        internal static void DrawLine(this DeviceContextHdcScope hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
+            => DrawLine(hdc.HDC, pen, x1, y1, x2, y2);
+
+        internal static void DrawLine(this Gdi32.CreateDcScope hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
+            => DrawLine(hdc.HDC, pen, x1, y1, x2, y2);
+
+        internal static void DrawLine(this User32.GetDcScope hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
+            => DrawLine(hdc.HDC, pen, x1, y1, x2, y2);
+
+        internal unsafe static void DrawLine(this Gdi32.HDC hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
+        {
+            using var ropScope = new Gdi32.SetRop2Scope(hdc, Gdi32.R2.COPYPEN);
+            using var bkScope = new Gdi32.SetBkModeScope(hdc, Gdi32.BKMODE.TRANSPARENT);
+            using var selection = new Gdi32.SelectObjectScope(hdc, pen);
+
+            Point oldPoint = new Point();
+            Gdi32.MoveToEx(hdc, x1, y1, &oldPoint);
+            Gdi32.LineTo(hdc, x2, y2);
+            Gdi32.MoveToEx(hdc, oldPoint.X, oldPoint.Y, &oldPoint);
+        }
+
         internal static Color GetNearestColor(this DeviceContextHdcScope hdc, Color color)
             => GetNearestColor(hdc.HDC, color);
 
@@ -63,5 +84,17 @@ namespace System.Windows.Forms
         internal static Graphics CreateGraphics(this Gdi32.HDC hdc) => Graphics.FromHdcInternal(hdc.Handle);
         internal static Graphics CreateGraphics(this Gdi32.CreateDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC.Handle);
         internal static Graphics CreateGraphics(this User32.GetDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC.Handle);
+
+        /// <summary>
+        ///  Get the number of pixels per logical inch along the device width. In a system with multiple display
+        ///  monitors, this value is always from the primary display.
+        /// </summary>
+        internal static int GetDpiX(this Gdi32.HDC hdc) => Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSX);
+
+        /// <summary>
+        ///  Get the number of pixels per logical inch along the device (screen) height. In a system with multiple
+        ///  display monitors, this value is always from the primary display.
+        /// </summary>
+        internal static int GetDpiY(this Gdi32.HDC hdc) => Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSY);
     }
 }

@@ -97,7 +97,7 @@ namespace System.Windows.Forms.ButtonInternal
         protected override LayoutOptions Layout(PaintEventArgs e)
         {
             LayoutOptions layout = CommonLayout();
-            layout.checkSize = (int)(flatCheckSize * GetDpiScaleRatio(e.Graphics));
+            layout.checkSize = (int)(flatCheckSize * GetDpiScaleRatio());
             layout.shadowedText = false;
 
             return layout;

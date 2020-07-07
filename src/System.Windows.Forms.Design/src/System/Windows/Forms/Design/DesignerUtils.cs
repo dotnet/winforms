@@ -281,7 +281,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static void DrawGrabHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
-            using var hDC = new DeviceContextHdcScope(graphics);
+            using var hDC = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
 
             // Set our pen and brush based on primary selection
             using var brushSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
@@ -296,7 +296,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static void DrawNoResizeHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
-            using var hDC = new DeviceContextHdcScope(graphics);
+            using var hDC = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
 
             // Set our pen and brush based on primary selection
             using var brushSelection = new Gdi32.SelectObjectScope(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
@@ -311,7 +311,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static void DrawLockedHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
         {
-            using var hDC = new DeviceContextHdcScope(graphics);
+            using var hDC = new DeviceContextHdcScope(graphics, applyGraphicsState: false);
 
             using var penSelection = new Gdi32.SelectObjectScope(hDC, s_grabHandlePenPrimary);
 
@@ -440,7 +440,7 @@ namespace System.Windows.Forms.Design
                 gDest.Clear(SystemColors.Control);
             }
 
-            using var destDC = new DeviceContextHdcScope(gDest);
+            using var destDC = new DeviceContextHdcScope(gDest, applyGraphicsState: false);
 
             // Perform our bitblit operation to push the image into the dest bitmap
             Gdi32.BitBlt(
@@ -580,7 +580,7 @@ namespace System.Windows.Forms.Design
             int fontHeight = 0;
 
             using Graphics g = ctrl.CreateGraphics();
-            using var dc = new DeviceContextHdcScope(g);
+            using var dc = new DeviceContextHdcScope(g, applyGraphicsState: false);
             using var hFont = new Gdi32.ObjectScope(ctrl.Font.ToHFONT());
             using var hFontOld = new Gdi32.SelectObjectScope(dc, hFont);
 
