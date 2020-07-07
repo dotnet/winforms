@@ -31,25 +31,6 @@ namespace System.Windows.Forms.Tests.Text
         }
 
         [Theory()]
-        [InlineData("Arial", 9.0f, 9.0f)]
-        [InlineData("Arial", 12.0f, 12.0f)]
-        [InlineData("Microsoft Sans Serif", 16.0f, 16.5f)]
-        [InlineData("Times New Roman", 11.0f, 11.25f)]
-        [InlineData("MS Gothic", 10.0f, 10.5f)]
-        public void Font_GetSize(string family, float size, float expected)
-        {
-            using Font font = new Font(family, size);
-            if (font.Name != family)
-            {
-                // Not installed on this machine
-                return;
-            }
-
-            using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            Assert.Equal(expected, windowsFont.Size);
-        }
-
-        [Theory()]
         [InlineData("Arial", 9.0f, 1 /* DEFAULT_CHARSET */)]
         [InlineData("Arial", 12.0f, 1)]
         [InlineData("Microsoft Sans Serif", 16.0f, 1)]
