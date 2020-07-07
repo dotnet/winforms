@@ -7,16 +7,6 @@
         <target state="translated">Nezpracovaná hodnota VT: {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Nelze převést typ Double na typ Date.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Nelze převést typ Integer na typ Float.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">Nejméně jedna položka není platná v parametru IDictionary. Ověřte, zda všechny hodnoty odpovídají vlastnostem objektu.</target>

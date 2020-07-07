@@ -18,6 +18,7 @@ internal static partial class Interop
         DISP_E_UNKNOWNNAME = unchecked((int)0x80020006),
         DISP_E_EXCEPTION = unchecked((int)0x80020009),
         DISP_E_UNKNOWNLCID = unchecked((int)0x8002000C),
+        DISP_E_DIVBYZERO = unchecked((int)0x80020012),
         TYPE_E_BADMODULEKIND = unchecked((int)0x800288BD),
         E_NOTIMPL = unchecked((int)0x80004001),
         E_NOINTERFACE = unchecked((int)0x80004002),

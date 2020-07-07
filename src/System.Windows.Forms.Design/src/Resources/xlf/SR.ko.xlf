@@ -406,16 +406,6 @@
         <target state="translated">처리되지 않은 VT입니다. {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">double 형식을 date 형식으로 변환할 수 없습니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">integer 형식을 float 형식으로 변환할 수 없습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ContentAlignmentEditorAccName">
         <source>Alignment Picker</source>
         <target state="translated">맞춤 선택</target>

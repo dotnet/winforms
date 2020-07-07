@@ -687,16 +687,6 @@
         <target state="translated">После печати внесение изменений или добавление данных в документ невозможно.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Тип double нельзя привести к типу date.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Тип integer нельзя привести к типу float.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">Запуск второго цикла сообщения в единичном потоке является недопустимой операцией. Вместо этого используйте Form.ShowDialog.</target>

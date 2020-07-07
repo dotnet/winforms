@@ -687,16 +687,6 @@
         <target state="translated">Das Dokument kann nach dem Drucken nicht mehr geändert oder ergänzt werden.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">"Double" kann nicht in "Date" konvertiert werden.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">"Integer" kann nicht in "Float" konvertiert werden.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">Das Starten einer zweiten Meldungsschleife auf einem einzelnen Thread ist ein ungültiger Vorgang. Verwenden Sie Form.ShowDialog.</target>

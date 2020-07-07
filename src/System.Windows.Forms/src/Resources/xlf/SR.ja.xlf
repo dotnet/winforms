@@ -687,16 +687,6 @@
         <target state="translated">ドキュメントが印刷された後にドキュメントの変更やドキュメントへの追加はできません。</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">double を date に変換できません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">integer を float に変換できません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">単一スレッド上で 2 回目のメッセージ ループを開始することは有効な操作ではありません。Form.ShowDialog を使用してください。</target>

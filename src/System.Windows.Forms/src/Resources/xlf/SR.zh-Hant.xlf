@@ -687,16 +687,6 @@
         <target state="translated">一旦列印文件之後，您就不能變更或增加文件內容。</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Double 無法轉換為 Date。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Integer 無法轉換為 Float。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">在單一執行緒上啟動第二個訊息迴圈不是有效的作業。請使用 Form.ShowDialog 代替。</target>

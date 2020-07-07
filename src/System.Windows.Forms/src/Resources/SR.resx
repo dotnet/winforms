@@ -436,12 +436,6 @@
   <data name="CannotChangePrintedDocument" xml:space="preserve">
     <value>You cannot alter the document or add to it once you have printed it.</value>
   </data>
-  <data name="CannotConvertDoubleToDate" xml:space="preserve">
-    <value>Double cannot be converted to a date.</value>
-  </data>
-  <data name="CannotConvertIntToFloat" xml:space="preserve">
-    <value>Integer cannot be converted to a float.</value>
-  </data>
   <data name="CantNestMessageLoops" xml:space="preserve">
     <value>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</value>
   </data>
