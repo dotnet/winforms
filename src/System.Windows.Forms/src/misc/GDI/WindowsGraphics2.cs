@@ -244,21 +244,6 @@ namespace System.Windows.Forms.Internal
         }
 
         /// <summary>
-        ///  Returns the Size in logical units of the given text using the given Font.
-        ///  CR/LF/TAB are taken into account.
-        /// </summary>
-        public Size MeasureText(string? text, WindowsFont? font)
-            => MeasureText(text, font, MaxSize, User32.DT.BOTTOM);
-
-        /// <summary>
-        ///  Returns the Size in logical units of the given text using the given Font and using the specified rectangle
-        ///  as the text bounding box (see overload below for more info).
-        ///  TAB/CR/LF are taken into account.
-        /// </summary>
-        public Size MeasureText(string? text, WindowsFont? font, Size proposedSize)
-            =>  MeasureText(text, font, proposedSize, User32.DT.BOTTOM);
-
-        /// <summary>
         ///  Returns the Size in logical units of the given text using the given Font, and according to the formatting flags.
         ///  The proposed size is used to create a bounding rectangle as follows:
         ///  - If there are multiple lines of text, DrawText uses the width of the rectangle pointed to by

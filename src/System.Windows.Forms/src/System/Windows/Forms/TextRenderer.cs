@@ -118,88 +118,55 @@ namespace System.Windows.Forms
         }
 
         public static Size MeasureText(string? text, Font? font)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                return Size.Empty;
-            }
-
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
-            return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf);
-        }
+            => MeasureTextInternal(text, font, WindowsGraphics.MaxSize);
 
         public static Size MeasureText(string? text, Font? font, Size proposedSize)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                return Size.Empty;
-            }
-
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
-            return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf, proposedSize);
-        }
+            => MeasureTextInternal(text, font, proposedSize);
 
         public static Size MeasureText(string? text, Font? font, Size proposedSize, TextFormatFlags flags)
+            => MeasureTextInternal(text, font, proposedSize, flags);
+
+        public static Size MeasureText(IDeviceContext dc, string? text, Font? font)
+            => MeasureTextInternal(dc, text, font, WindowsGraphics.MaxSize);
+
+        public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize)
+            => MeasureTextInternal(dc, text, font, proposedSize);
+
+        public static Size MeasureText(
+            IDeviceContext dc,
+            string? text,
+            Font? font,
+            Size proposedSize,
+            TextFormatFlags flags)
+            => MeasureTextInternal(dc, text, font, proposedSize, flags);
+
+        private static Size MeasureTextInternal(
+            string? text,
+            Font? font,
+            Size proposedSize,
+            TextFormatFlags flags = TextFormatFlags.Bottom)
         {
             if (string.IsNullOrEmpty(text))
-            {
                 return Size.Empty;
-            }
 
             using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font);
             return WindowsGraphicsCacheManager.MeasurementGraphics.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
         }
 
-        public static Size MeasureText(IDeviceContext dc, string? text, Font? font)
+        private static Size MeasureTextInternal(
+            IDeviceContext dc,
+            string? text,
+            Font? font,
+            Size proposedSize,
+            TextFormatFlags flags = TextFormatFlags.Bottom)
         {
             if (dc == null)
-            {
                 throw new ArgumentNullException(nameof(dc));
-            }
 
             if (string.IsNullOrEmpty(text))
-            {
                 return Size.Empty;
-            }
 
-            Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
-
-            using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
-            using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, quality);
-            return wg.MeasureText(text, wf);
-        }
-
-        public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize)
-        {
-            if (dc == null)
-            {
-                throw new ArgumentNullException(nameof(dc));
-            }
-            if (string.IsNullOrEmpty(text))
-            {
-                return Size.Empty;
-            }
-
-            Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
-
-            using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
-            using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, quality);
-            return wg.MeasureText(text, wf, proposedSize);
-        }
-
-        public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize, TextFormatFlags flags)
-        {
-            if (dc == null)
-            {
-                throw new ArgumentNullException(nameof(dc));
-            }
-            if (string.IsNullOrEmpty(text))
-            {
-                return Size.Empty;
-            }
-
+            // This MUST come before retreiving the HDC, which locks the Graphics object
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
             using var wgr = new WindowsGraphicsWrapper(dc, flags);
@@ -214,14 +181,12 @@ namespace System.Windows.Forms
                 return SystemColors.GrayText;
             }
 
-            // Theme specs -- if the backcolor is darker than Control, we use ControlPaint.Dark(backcolor).  Otherwise
-            // we use ControlDark.
-            Color disabledTextForeColor = SystemColors.ControlDark;
-            if (ControlPaint.IsDarker(backColor, SystemColors.Control))
-            {
-                disabledTextForeColor = ControlPaint.Dark(backColor);
-            }
-            return disabledTextForeColor;
+            // If the color is darker than SystemColors.Control make it slightly darker,
+            // otherwise use the standard control dark color.
+
+            return ControlPaint.IsDarker(backColor, SystemColors.Control)
+                ? ControlPaint.Dark(backColor)
+                : SystemColors.ControlDark;
         }
 
         /// <summary>
