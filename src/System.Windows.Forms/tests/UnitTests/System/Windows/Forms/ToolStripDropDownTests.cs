@@ -4912,51 +4912,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
         }
 
-        [WinFormsFact(Skip = "Suspect causing deadlocks, see: https://github.com/dotnet/winforms/issues/3095")]
-        public void ToolStripDropDown_KeyboardAccelerators_Test()
-        {
-            TestForm testForm = new TestForm();
-            Application.Run(testForm); //it needs for correct work of ToolStripDropDown.CanProcessMnemonic method
-
-            //TestResult property is made as separate for the reason that
-            //when the Assert is inside FormLoaded method and it fails,
-            //the Application doesn't exit and the process freezes.
-            Assert.True(testForm.TestResult);
-        }
-
-        class TestForm : Form
-        {
-            private SubToolStripDropDown toolStrip;
-            private bool _result = true;
-
-            public TestForm()
-            {
-                toolStrip = new SubToolStripDropDown();
-                Load += FormLoaded;
-            }
-
-            public bool TestResult => _result;
-
-            private void FormLoaded(object sender, EventArgs e)
-            {
-                toolStrip.Enabled = true; // it needs for correct work of Control.CanProcessMnemonic method
-                toolStrip.Visible = true; //
-
-                _result &= !(toolStrip.ProcessDialogChar('F'));
-
-                toolStrip.DisplayedItems.Add("&First item");
-                toolStrip.DisplayedItems.Add("&Second item");
-                toolStrip.DisplayedItems.Add("Third item");
-                toolStrip.Visible = true; // it needs for correct work of Control.CanProcessMnemonic method
-
-                _result &= toolStrip.ProcessDialogChar('F');
-                _result &= toolStrip.ProcessDialogChar('S');
-                _result &= !(toolStrip.ProcessDialogChar('T'));
-
-                Application.Exit();
-            }
-        }
-
         private class SubAxHost : AxHost
         {
             public SubAxHost(string clsid) : base(clsid)
