@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests.Text
 {
     public class FontMetrics
     {
-        [Theory()]
+        [Theory]
         [InlineData("Arial", 9.0f, 15)]
         [InlineData("Arial", 12.0f, 18)]
         [InlineData("Microsoft Sans Serif", 16.0f, 26)]
@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Tests.Text
             Assert.Equal(height, windowsFont.Height);
         }
 
-        [Theory()]
+        [Theory]
         [InlineData("Arial", 9.0f, 1 /* DEFAULT_CHARSET */)]
         [InlineData("Arial", 12.0f, 1)]
         [InlineData("Microsoft Sans Serif", 16.0f, 1)]
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Tests.Text
             Assert.Equal(charset, windowsFont.CharSet);
         }
 
-        [Theory()]
+        [Theory]
         [InlineData("Arial", 9.0f, 2.5f)]
         [InlineData("Arial", 12.0f, 3.0f)]
         [InlineData("Microsoft Sans Serif", 16.0f, 4.3333335f)]
@@ -69,13 +69,12 @@ namespace System.Windows.Forms.Tests.Text
             Assert.Equal(expected, graphics.GetOverhangPadding(windowsFont));
         }
 
-        [Theory(),
-            InlineData("Arial", 9.0f, 3, 4),
-            InlineData("Arial", 12.0f, 3, 5),
-            InlineData("Microsoft Sans Serif", 16.0f, 5, 7),
-            InlineData("Times New Roman", 11.0f, 3, 5),
-            InlineData("MS Gothic", 10.0f, 3, 4),
-            ]
+        [Theory]
+        [InlineData("Arial", 9.0f, 3, 4)]
+        [InlineData("Arial", 12.0f, 3, 5)]
+        [InlineData("Microsoft Sans Serif", 16.0f, 5, 7)]
+        [InlineData("Times New Roman", 11.0f, 3, 5)]
+        [InlineData("MS Gothic", 10.0f, 3, 4)]
         public void Font_GetTextMargins(string family, float size, int left, int right)
         {
             using Font font = new Font(family, size);
@@ -92,13 +91,12 @@ namespace System.Windows.Forms.Tests.Text
             Assert.Equal(right, margins.iRightMargin);
         }
 
-        [Theory(),
-            InlineData("Arial", 9.0f, 73, 15),
-            InlineData("Arial", 12.0f, 95, 18),
-            InlineData("Microsoft Sans Serif", 16.0f, 136, 26),
-            InlineData("Times New Roman", 11.0f, 84, 17),
-            InlineData("MS Gothic", 10.0f, 91, 14),
-            ]
+        [Theory]
+        [InlineData("Arial", 9.0f, 73, 15)]
+        [InlineData("Arial", 12.0f, 95, 18)]
+        [InlineData("Microsoft Sans Serif", 16.0f, 136, 26)]
+        [InlineData("Times New Roman", 11.0f, 84, 17)]
+        [InlineData("MS Gothic", 10.0f, 91, 14)]
         public void Font_GetTextExtent(string family, float size, int width, int height)
         {
             using Font font = new Font(family, size);

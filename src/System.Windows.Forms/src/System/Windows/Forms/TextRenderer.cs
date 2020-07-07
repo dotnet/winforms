@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Drawing.Text;
 using System.Windows.Forms.Internal;
 using static Interop;
 
@@ -22,7 +23,7 @@ namespace System.Windows.Forms
 
             using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             wg.DrawText(text, wf, pt, foreColor);
         }
 
@@ -35,7 +36,7 @@ namespace System.Windows.Forms
 
             using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             wg.DrawText(text, wf, pt, foreColor, backColor);
         }
 
@@ -47,7 +48,7 @@ namespace System.Windows.Forms
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, flags);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             wgr.WindowsGraphics.DrawText(text, wf, pt, foreColor, GetTextFormatFlags(flags));
         }
 
@@ -59,7 +60,7 @@ namespace System.Windows.Forms
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, flags);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             wgr.WindowsGraphics.DrawText(text, wf, pt, foreColor, backColor, GetTextFormatFlags(flags));
         }
 
@@ -72,7 +73,7 @@ namespace System.Windows.Forms
 
             using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             wg.DrawText(text, wf, bounds, foreColor);
         }
 
@@ -85,7 +86,7 @@ namespace System.Windows.Forms
 
             using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             wg.DrawText(text, wf, bounds, foreColor, backColor);
         }
 
@@ -97,7 +98,7 @@ namespace System.Windows.Forms
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, flags);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             wgr.WindowsGraphics.DrawText(text, wf, bounds, foreColor, GetTextFormatFlags(flags));
         }
 
@@ -109,7 +110,7 @@ namespace System.Windows.Forms
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, flags);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             wgr.WindowsGraphics.DrawText(text, wf, bounds, foreColor, backColor, GetTextFormatFlags(flags));
         }
 
@@ -172,7 +173,7 @@ namespace System.Windows.Forms
 
             using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             return wg.MeasureText(text, wf);
         }
 
@@ -189,7 +190,7 @@ namespace System.Windows.Forms
 
             using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
             using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
-            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             return wg.MeasureText(text, wf, proposedSize);
         }
 
@@ -205,7 +206,7 @@ namespace System.Windows.Forms
             }
 
             using var wgr = new WindowsGraphicsWrapper(dc, flags);
-            using var wf = WindowsGraphicsCacheManager.GetWindowsFont(font, dc.FontQualityFromTextRenderingHint());
+            using var wf = WindowsGraphicsCacheManager.GetWindowsFont(font, FontQualityFromTextRenderingHint(dc));
             return wgr.WindowsGraphics.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
         }
 
@@ -224,6 +225,33 @@ namespace System.Windows.Forms
                 disabledTextForeColor = ControlPaint.Dark(backColor);
             }
             return disabledTextForeColor;
+        }
+
+        /// <summary>
+        ///  Attempts to match the TextRenderingHint of the specified Graphics object with a LOGFONT.lfQuality value.
+        /// </summary>
+        private static Gdi32.QUALITY FontQualityFromTextRenderingHint(IDeviceContext? deviceContext)
+        {
+            if (!(deviceContext is Graphics g))
+            {
+                return Gdi32.QUALITY.DEFAULT;
+            }
+
+            switch (g.TextRenderingHint)
+            {
+                case TextRenderingHint.ClearTypeGridFit:
+                    return Gdi32.QUALITY.CLEARTYPE;
+                case TextRenderingHint.AntiAliasGridFit:
+                case TextRenderingHint.AntiAlias:
+                    return Gdi32.QUALITY.ANTIALIASED;
+                case TextRenderingHint.SingleBitPerPixelGridFit:
+                    return Gdi32.QUALITY.PROOF;
+                case TextRenderingHint.SingleBitPerPixel:
+                    return Gdi32.QUALITY.DRAFT;
+                default:
+                case TextRenderingHint.SystemDefault:
+                    return Gdi32.QUALITY.DEFAULT;
+            }
         }
     }
 }
