@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Tests.Text
             }
 
             using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            WindowsGraphics graphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
+            WindowsGraphics graphics = WindowsGraphicsCacheManager.MeasurementGraphics;
             Assert.Equal(expected, graphics.GetOverhangPadding(windowsFont));
         }
 
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Tests.Text
             }
 
             using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            WindowsGraphics graphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
+            WindowsGraphics graphics = WindowsGraphicsCacheManager.MeasurementGraphics;
             User32.DRAWTEXTPARAMS margins = graphics.GetTextMargins(windowsFont);
             Assert.Equal(left, margins.iLeftMargin);
             Assert.Equal(right, margins.iRightMargin);
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Tests.Text
             }
 
             using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            WindowsGraphics graphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
+            WindowsGraphics graphics = WindowsGraphicsCacheManager.MeasurementGraphics;
             Size extent = graphics.GetTextExtent("Whizzo Butter", windowsFont);
             Assert.Equal(width, extent.Width);
             Assert.Equal(height, extent.Height);
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Tests.Text
             }
 
             using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            WindowsGraphics graphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
+            WindowsGraphics graphics = WindowsGraphicsCacheManager.MeasurementGraphics;
             Size measure = graphics.MeasureText("Windows Foundation Classes", windowsFont, proposedSize, (User32.DT)dt);
             Assert.Equal(expected, measure);
         }
@@ -182,7 +182,7 @@ namespace System.Windows.Forms.Tests.Text
             }
 
             using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            WindowsGraphics graphics = WindowsGraphicsCacheManager.GetCurrentMeasurementGraphics();
+            WindowsGraphics graphics = WindowsGraphicsCacheManager.MeasurementGraphics;
             graphics.DeviceContext.SelectFont(windowsFont);
             User32.DRAWTEXTPARAMS param = default;
             Rectangle result = WindowsGraphics.AdjustForVerticalAlignment(
