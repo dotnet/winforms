@@ -117,11 +117,11 @@ namespace AccessibilityTests
                 page1.Navigate(page2);
             };
 
-            page1.Verification = new TaskDialogVerificationCheckBox("&CheckBox");
+            page1.Verification = new TaskDialogVerificationCheckBox("&CheckBox1");
             page1.Verification.CheckedChanged += (s, e) => Console.WriteLine("CheckBox CheckedChanged: " + page1.Verification.Checked);
 
-            var radioButton1 = page1.RadioButtons.Add("Radi&oButton 1");
-            var radioButton2 = page1.RadioButtons.Add("RadioB&utton 2");
+            var radioButton1 = page1.RadioButtons.Add("Radi&oButton1");
+            var radioButton2 = page1.RadioButtons.Add("RadioB&utton2");
 
             radioButton1.CheckedChanged += (s, e) => Console.WriteLine("RadioButton1 CheckedChanged: " + radioButton1.Checked);
             radioButton2.CheckedChanged += (s, e) => Console.WriteLine("RadioButton2 CheckedChanged: " + radioButton2.Checked);
