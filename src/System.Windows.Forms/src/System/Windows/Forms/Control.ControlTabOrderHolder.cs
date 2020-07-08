@@ -4,7 +4,7 @@
 
 #nullable disable
 
-using System.Collections;
+using System.Collections.Generic;
 
 namespace System.Windows.Forms
 {
@@ -32,17 +32,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Used to sort controls based on tab index and z-order.
         /// </summary>
-        private class ControlTabOrderComparer : IComparer
+        private class ControlTabOrderComparer : IComparer<ControlTabOrderHolder>
         {
-            int IComparer.Compare(object x, object y)
+            public int Compare(ControlTabOrderHolder x, ControlTabOrderHolder y)
             {
-                ControlTabOrderHolder hx = (ControlTabOrderHolder)x;
-                ControlTabOrderHolder hy = (ControlTabOrderHolder)y;
-
-                int delta = hx._newOrder - hy._newOrder;
+                int delta = x._newOrder - y._newOrder;
                 if (delta == 0)
                 {
-                    delta = hx._oldOrder - hy._oldOrder;
+                    delta = x._oldOrder - y._oldOrder;
                 }
 
                 return delta;
