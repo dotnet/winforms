@@ -75,17 +75,15 @@ namespace System.Windows.Forms
             this Gdi32.HDC hdc,
             Gdi32.HPEN pen,
             Gdi32.HBRUSH brush,
-            int nLeftRect,  // x-coord of upper-left corner of rectangle
-            int nTopRect,   // y-coord of upper-left corner of rectangle
-            int nRightRect, // x-coord of lower-right corner of rectangle
-            int nBottomRect)
+            int left,
+            int top,
+            int right,
+            int bottom)
         {
-            // y-coord of lower-right corner of rectangle
-
             using var penSelection = pen.IsNull ? default : new Gdi32.SelectObjectScope(hdc, pen);
             using var brushSelection = brush.IsNull ? default : new Gdi32.SelectObjectScope(hdc, brush);
 
-            Gdi32.Ellipse(hdc, nLeftRect, nTopRect, nRightRect, nBottomRect);
+            Gdi32.Ellipse(hdc, left, top, right, bottom);
         }
 
         internal static void FillRectangle(this Gdi32.HDC hdc, Gdi32.HBRUSH brush, Rectangle rectangle)
