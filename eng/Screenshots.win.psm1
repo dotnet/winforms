@@ -15,6 +15,10 @@ Add-Type -AssemblyName 'System.Windows.Forms'
 
 . $PSScriptRoot\common\pipeline-logging-functions.ps1
 
+function Get-Now {
+  return (Get-Date).ToString("yyyy-MM-yy HH:mm:ss")
+}
+
 function Save-Screenshot() {
   Param (
     [string] $TargetFileName,
@@ -93,7 +97,8 @@ None.
 
 #>
   Param (
-    [string] $TargetDir
+    [string] $TargetDir,
+    [int] $WaitSeconds
   )
 
   $flagFile = Join-Path $TargetDir $FLAG_FILE;
@@ -103,7 +108,7 @@ None.
   $hasFlagFile = Test-Path $flagFile
   if ($hasFlagFile) {
     Write-PipelineTaskError -Message "Screenshots are already being taken!" -Type 'warning'
-    "[START] Screenshots are already being taken!" >> $logFile;
+    "[$(Get-Now)] Screenshots are already being taken!" >> $logFile;
     return;
   }
 
@@ -114,13 +119,14 @@ None.
     $hasFlagFile = Test-Path $flagFile
     if (!$hasFlagFile) {
       Write-PipelineTaskError -Message "Screenshots no longer being taken" -Type 'warning'
-      "[START] Screenshots no longer being taken" >> $logFile;
+      "[$(Get-Now)] Screenshots no longer being taken" >> $logFile;
       return;
     }
 
+    Start-Sleep -Seconds $WaitSeconds
+
     Capture-Screenshot -TargetDir $TargetDir -LogFile $logFile;
-    "[START] Screenshot taken" >> $logFile;
-    Start-Sleep -Seconds 180
+    "[$(Get-Now)] Screenshot taken" >> $logFile;
 
     $hasFlagFile = Test-Path $flagFile
   }
@@ -156,16 +162,14 @@ None.
 
   $flagFile = Join-Path $TargetDir $FLAG_FILE;
   $logFile = $flagFile.Replace('.lock', '.log');
-  "[STOP] Flag: $flagFile" >> $logFile;
 
   $hasFlagFile = Test-Path $flagFile
-
   if ($hasFlagFile) {
     Remove-Item -Path $flagFile -Force
-    "[STOP] Flag file removed" >> $logFile;
+    "[$(Get-Now)] Flag file removed" >> $logFile;
   }
 
-  "[STOP] Stopped" >> $logFile;
+  "[$(Get-Now)] Stopped" >> $logFile;
 }
 
 Export-ModuleMember -Function Start-CaptureScreenshots
