@@ -16,7 +16,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
         /// </remarks>
-        public ref struct CreateDcScope
+        public readonly ref struct CreateDcScope
         {
             public HDC HDC { get; }
 
@@ -43,9 +43,9 @@ internal static partial class Interop
                     : CreateDC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData);
             }
 
-            public static implicit operator HDC(CreateDcScope dcScope) => dcScope.HDC;
-            public static implicit operator HGDIOBJ(CreateDcScope dcScope) => dcScope.HDC;
-            public static explicit operator IntPtr(CreateDcScope dcScope) => dcScope.HDC.Handle;
+            public static implicit operator HDC(in CreateDcScope dcScope) => dcScope.HDC;
+            public static implicit operator HGDIOBJ(in CreateDcScope dcScope) => dcScope.HDC;
+            public static explicit operator IntPtr(in CreateDcScope dcScope) => dcScope.HDC.Handle;
 
             public bool IsNull => HDC.IsNull;
 

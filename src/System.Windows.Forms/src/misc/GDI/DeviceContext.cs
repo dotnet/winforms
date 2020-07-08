@@ -386,10 +386,9 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Modifies the viewport origin for a device context using the specified horizontal and vertical offsets in logical units.
         /// </summary>
-        public void TranslateTransform(int dx, int dy)
+        public unsafe void TranslateTransform(int dx, int dy)
         {
-            var origin = new Point();
-            Gdi32.OffsetViewportOrgEx(this, dx, dy, ref origin);
+            Gdi32.OffsetViewportOrgEx(this, dx, dy, null);
         }
 
         public override bool Equals(object? obj)

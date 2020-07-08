@@ -11,6 +11,7 @@ using System.Drawing.Text;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
+using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
 {
@@ -179,193 +180,96 @@ namespace System.Windows.Forms.ButtonInternal
             bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
             bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
-            {
-                // Draw counter-clock-wise.
-                Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
-                Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
-                Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
-                Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
+            using var hdc = new DeviceContextHdcScope(g);
 
-                WindowsPen penTopLeft = null;
-                WindowsPen penBottomRight = null;
-                WindowsPen insetPen = null;
-                WindowsPen bottomRightInsetPen = null;
+            // Draw counter-clock-wise.
+            Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
+            Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
+            Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
+            Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
 
-                try
-                {
-                    // top + left
-                    if (disabledHighContrast)
-                    {
-                        penTopLeft = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
-                    }
-                    else
-                    {
-                        penTopLeft = stockColor ? new WindowsPen(wg.DeviceContext, SystemColors.ControlLightLight) : new WindowsPen(wg.DeviceContext, colors.highlight);
-                    }
-                    wg.DrawLine(penTopLeft, p1, p2); // top  (right-left)
-                    wg.DrawLine(penTopLeft, p2, p3); // left (up-down)
+            // top + left
+            using var penTopLeft = new Gdi32.CreatePenScope(
+                disabledHighContrast ? colors.windowDisabled : stockColor ? SystemColors.ControlLightLight : colors.highlight);
 
-                    // bottom + right
-                    if (disabledHighContrast)
-                    {
-                        penBottomRight = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
-                    }
-                    else
-                    {
-                        penBottomRight = stockColor ? new WindowsPen(wg.DeviceContext, SystemColors.ControlDarkDark) : new WindowsPen(wg.DeviceContext, colors.buttonShadowDark);
-                    }
-                    p1.Offset(0, -1); // need to paint last pixel too.
-                    wg.DrawLine(penBottomRight, p3, p4);  // bottom (left-right)
-                    wg.DrawLine(penBottomRight, p4, p1);  // right  (bottom-up )
+            hdc.DrawLine(penTopLeft, p1, p2); // top  (right-left)
+            hdc.DrawLine(penTopLeft, p2, p3); // left (up-down)
 
-                    // Draw inset using the background color to make the top and left lines thinner
-                    if (stockColor)
-                    {
-                        if (SystemInformation.HighContrast)
-                        {
-                            insetPen = new WindowsPen(wg.DeviceContext, SystemColors.ControlLight);
-                        }
-                        else
-                        {
-                            insetPen = new WindowsPen(wg.DeviceContext, SystemColors.Control);
-                        }
-                    }
-                    else
-                    {
-                        if (SystemInformation.HighContrast)
-                        {
-                            insetPen = new WindowsPen(wg.DeviceContext, colors.highlight);
-                        }
-                        else
-                        {
-                            insetPen = new WindowsPen(wg.DeviceContext, colors.buttonFace);
-                        }
-                    }
+            // bottom + right
+            using var penBottomRight = new Gdi32.CreatePenScope(
+                disabledHighContrast ? colors.windowDisabled : stockColor ? SystemColors.ControlDarkDark : colors.buttonShadowDark);
 
-                    p1.Offset(-1, 2);
-                    p2.Offset(1, 1);
-                    p3.Offset(1, -1);
-                    p4.Offset(-1, -1);
+            p1.Offset(0, -1); // need to paint last pixel too.
+            hdc.DrawLine(penBottomRight, p3, p4);  // bottom (left-right)
+            hdc.DrawLine(penBottomRight, p4, p1);  // right  (bottom-up )
 
-                    // top + left inset
-                    wg.DrawLine(insetPen, p1, p2); // top (right-left)
-                    wg.DrawLine(insetPen, p2, p3); // left( up-down)
+            // Draw inset using the background color to make the top and left lines thinner
+            using var insetPen = new Gdi32.CreatePenScope(
+                stockColor
+                    ? SystemInformation.HighContrast ? SystemColors.ControlLight : SystemColors.Control
+                    : SystemInformation.HighContrast ? colors.highlight : colors.buttonFace);
 
-                    // Bottom + right inset
-                    if (disabledHighContrast)
-                    {
-                        bottomRightInsetPen = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
-                    }
-                    else
-                    {
-                        bottomRightInsetPen = stockColor ? new WindowsPen(wg.DeviceContext, SystemColors.ControlDark) : new WindowsPen(wg.DeviceContext, colors.buttonShadow);
-                    }
-                    p1.Offset(0, -1); // need to paint last pixel too.
-                    wg.DrawLine(bottomRightInsetPen, p3, p4); // bottom (left-right)
-                    wg.DrawLine(bottomRightInsetPen, p4, p1); // right  (bottom-up)
-                }
-                finally
-                {
-                    if (penTopLeft != null)
-                    {
-                        penTopLeft.Dispose();
-                    }
+            p1.Offset(-1, 2);
+            p2.Offset(1, 1);
+            p3.Offset(1, -1);
+            p4.Offset(-1, -1);
 
-                    if (penBottomRight != null)
-                    {
-                        penBottomRight.Dispose();
-                    }
+            // top + left inset
+            hdc.DrawLine(insetPen, p1, p2); // top (right-left)
+            hdc.DrawLine(insetPen, p2, p3); // left( up-down)
 
-                    if (insetPen != null)
-                    {
-                        insetPen.Dispose();
-                    }
+            // Bottom + right inset
+            using var bottomRightInsetPen = new Gdi32.CreatePenScope(
+                disabledHighContrast ? colors.windowDisabled : stockColor ? SystemColors.ControlDark : colors.buttonShadow);
 
-                    if (bottomRightInsetPen != null)
-                    {
-                        bottomRightInsetPen.Dispose();
-                    }
-                }
-            }
+            p1.Offset(0, -1); // need to paint last pixel too.
+            hdc.DrawLine(bottomRightInsetPen, p3, p4); // bottom (left-right)
+            hdc.DrawLine(bottomRightInsetPen, p4, p1); // right  (bottom-up)
         }
 
         private void Draw3DBorderNormal(Graphics g, ref Rectangle bounds, ColorData colors)
         {
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
-            {
-                // Draw counter-clock-wise.
-                Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
-                Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
-                Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
-                Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
+            using var hdc = new DeviceContextHdcScope(g);
 
-                // top + left
-                WindowsPen pen = new WindowsPen(wg.DeviceContext, colors.buttonShadowDark);
-                try
-                {
-                    wg.DrawLine(pen, p1, p2); // top (right-left)
-                    wg.DrawLine(pen, p2, p3); // left(up-down)
-                }
-                finally
-                {
-                    pen.Dispose();
-                }
+            // Draw counter-clock-wise.
+            Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
+            Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
+            Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
+            Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
 
-                // bottom + right
-                pen = new WindowsPen(wg.DeviceContext, colors.highlight);
-                try
-                {
-                    p1.Offset(0, -1); // need to paint last pixel too.
-                    wg.DrawLine(pen, p3, p4); // bottom(left-right)
-                    wg.DrawLine(pen, p4, p1); // right (bottom-up)
-                }
-                finally
-                {
-                    pen.Dispose();
-                }
+            // top + left
+            using var shadowPen = new Gdi32.CreatePenScope(colors.buttonShadowDark);
+            hdc.DrawLine(shadowPen, p1, p2); // top (right-left)
+            hdc.DrawLine(shadowPen, p2, p3); // left(up-down)
 
-                // Draw inset
+            // bottom + right
+            using var highlightPen = new Gdi32.CreatePenScope(colors.highlight);
+            p1.Offset(0, -1); // need to paint last pixel too.
+            hdc.DrawLine(highlightPen, p3, p4); // bottom(left-right)
+            hdc.DrawLine(highlightPen, p4, p1); // right (bottom-up)
 
-                pen = new WindowsPen(wg.DeviceContext, colors.buttonFace);
+            // Draw inset
 
-                p1.Offset(-1, 2);
-                p2.Offset(1, 1);
-                p3.Offset(1, -1);
-                p4.Offset(-1, -1);
+            using var facePen = new Gdi32.CreatePenScope(colors.buttonFace);
 
-                // top + left inset
-                try
-                {
-                    wg.DrawLine(pen, p1, p2); // top (right-left)
-                    wg.DrawLine(pen, p2, p3); // left(up-down)
-                }
-                finally
-                {
-                    pen.Dispose();
-                }
+            p1.Offset(-1, 2);
+            p2.Offset(1, 1);
+            p3.Offset(1, -1);
+            p4.Offset(-1, -1);
 
-                // bottom + right inset
-                if (colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor())
-                {
-                    pen = new WindowsPen(wg.DeviceContext, SystemColors.ControlLight);
-                }
-                else
-                {
-                    pen = new WindowsPen(wg.DeviceContext, colors.buttonFace);
-                }
+            // top + left inset
+            hdc.DrawLine(facePen, p1, p2); // top (right-left)
+            hdc.DrawLine(facePen, p2, p3); // left(up-down)
 
-                try
-                {
-                    p1.Offset(0, -1); // need to paint last pixel too.
-                    wg.DrawLine(pen, p3, p4); // bottom(left-right)
-                    wg.DrawLine(pen, p4, p1); // right (bottom-up)
-                }
-                finally
-                {
-                    pen.Dispose();
-                }
-            }
+            // bottom + right inset
+            using var insetPen = new Gdi32.CreatePenScope(
+                colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor()
+                    ? SystemColors.ControlLight
+                    : colors.buttonFace);
+
+            p1.Offset(0, -1); // need to paint last pixel too.
+            hdc.DrawLine(insetPen, p3, p4); // bottom(left-right)
+            hdc.DrawLine(insetPen, p4, p1); // right (bottom-up)
         }
 
         private void Draw3DBorderRaised(Graphics g, ref Rectangle bounds, ColorData colors)
@@ -373,124 +277,52 @@ namespace System.Windows.Forms.ButtonInternal
             bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
             bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
-            {
-                // Draw counter-clock-wise.
-                Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
-                Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
-                Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
-                Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
+            using var hdc = new DeviceContextHdcScope(g);
 
-                // Draw counter-clock-wise.
+            // Draw counter-clock-wise.
+            Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
+            Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
+            Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
+            Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
 
-                // top + left
-                WindowsPen pen;
-                if (disabledHighContrast)
-                {
-                    pen = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
-                }
-                else if (stockColor)
-                {
-                    pen = new WindowsPen(wg.DeviceContext, SystemColors.ControlLightLight);
-                }
-                else
-                {
-                    pen = new WindowsPen(wg.DeviceContext, colors.highlight);
-                }
+            // Draw counter-clock-wise.
 
-                try
-                {
-                    wg.DrawLine(pen, p1, p2);   // top (right-left)
-                    wg.DrawLine(pen, p2, p3);   // left(up-down)
-                }
-                finally
-                {
-                    pen.Dispose();
-                }
+            // top + left
+            using var topLeftPen = new Gdi32.CreatePenScope(
+                disabledHighContrast ? colors.windowDisabled : stockColor ? SystemColors.ControlLightLight : colors.highlight);
 
-                // bottom + right
-                if (disabledHighContrast)
-                {
-                    pen = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
-                }
-                else if (stockColor)
-                {
-                    pen = new WindowsPen(wg.DeviceContext, SystemColors.ControlDarkDark);
-                }
-                else
-                {
-                    pen = new WindowsPen(wg.DeviceContext, colors.buttonShadowDark);
-                }
+            hdc.DrawLine(topLeftPen, p1, p2);   // top (right-left)
+            hdc.DrawLine(topLeftPen, p2, p3);   // left(up-down)
 
-                try
-                {
-                    p1.Offset(0, -1); // need to paint last pixel too.
-                    wg.DrawLine(pen, p3, p4);    // bottom(left-right)
-                    wg.DrawLine(pen, p4, p1);    // right (bottom-up)
-                }
-                finally
-                {
-                    pen.Dispose();
-                }
+            // bottom + right
+            using var bottomRightPen = new Gdi32.CreatePenScope(
+                disabledHighContrast ? colors.windowDisabled : stockColor ? SystemColors.ControlDarkDark : colors.buttonShadowDark);
 
-                // Draw inset - use the back ground color here to have a thinner border
-                p1.Offset(-1, 2);
-                p2.Offset(1, 1);
-                p3.Offset(1, -1);
-                p4.Offset(-1, -1);
+            p1.Offset(0, -1); // need to paint last pixel too.
+            hdc.DrawLine(bottomRightPen, p3, p4);    // bottom(left-right)
+            hdc.DrawLine(bottomRightPen, p4, p1);    // right (bottom-up)
 
-                if (stockColor)
-                {
-                    if (SystemInformation.HighContrast)
-                    {
-                        pen = new WindowsPen(wg.DeviceContext, SystemColors.ControlLight);
-                    }
-                    else
-                    {
-                        pen = new WindowsPen(wg.DeviceContext, SystemColors.Control);
-                    }
-                }
-                else
-                {
-                    pen = new WindowsPen(wg.DeviceContext, colors.buttonFace);
-                }
+            // Draw inset - use the back ground color here to have a thinner border
+            p1.Offset(-1, 2);
+            p2.Offset(1, 1);
+            p3.Offset(1, -1);
+            p4.Offset(-1, -1);
 
-                // top + left inset
-                try
-                {
-                    wg.DrawLine(pen, p1, p2); // top (right-left)
-                    wg.DrawLine(pen, p2, p3); // left(up-down)
-                }
-                finally
-                {
-                    pen.Dispose();
-                }
+            using var topLeftInsetPen = new Gdi32.CreatePenScope(
+                !stockColor ? colors.buttonFace : SystemInformation.HighContrast ? SystemColors.ControlLight : SystemColors.Control);
 
-                // Bottom + right inset
-                if (disabledHighContrast)
-                {
-                    pen = new WindowsPen(wg.DeviceContext, colors.windowDisabled);
-                }
-                else if (stockColor)
-                {
-                    pen = new WindowsPen(wg.DeviceContext, SystemColors.ControlDark);
-                }
-                else
-                {
-                    pen = new WindowsPen(wg.DeviceContext, colors.buttonShadow);
-                }
+            // top + left inset
+            hdc.DrawLine(topLeftInsetPen, p1, p2); // top (right-left)
+            hdc.DrawLine(topLeftInsetPen, p2, p3); // left(up-down)
 
-                try
-                {
-                    p1.Offset(0, -1); // need to paint last pixel too.
-                    wg.DrawLine(pen, p3, p4);  // bottom(left-right)
-                    wg.DrawLine(pen, p4, p1);  // right (bottom-up)
-                }
-                finally
-                {
-                    pen.Dispose();
-                }
-            }
+            // Bottom + right inset
+
+            using var bottomRightInsetPen = new Gdi32.CreatePenScope(
+                disabledHighContrast ? colors.windowDisabled : stockColor ? SystemColors.ControlDark : colors.buttonShadow);
+
+            p1.Offset(0, -1); // need to paint last pixel too.
+            hdc.DrawLine(bottomRightInsetPen, p3, p4);  // bottom(left-right)
+            hdc.DrawLine(bottomRightInsetPen, p4, p1);  // right (bottom-up)
         }
 
         /// <summary>
@@ -498,41 +330,26 @@ namespace System.Windows.Forms.ButtonInternal
         /// </summary>
         protected internal static void Draw3DLiteBorder(Graphics g, Rectangle r, ColorData colors, bool up)
         {
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
-            {
-                // Draw counter-clock-wise.
-                Point p1 = new Point(r.Right - 1, r.Top);  // upper inner right.
-                Point p2 = new Point(r.Left, r.Top);  // upper left.
-                Point p3 = new Point(r.Left, r.Bottom - 1);  // bottom inner left.
-                Point p4 = new Point(r.Right - 1, r.Bottom - 1);  // inner bottom right.
+            using var hdc = new DeviceContextHdcScope(g);
 
-                // top, left
-                WindowsPen pen = up ? new WindowsPen(wg.DeviceContext, colors.highlight) : new WindowsPen(wg.DeviceContext, colors.buttonShadow);
+            // Draw counter-clock-wise.
+            Point p1 = new Point(r.Right - 1, r.Top);  // upper inner right.
+            Point p2 = new Point(r.Left, r.Top);  // upper left.
+            Point p3 = new Point(r.Left, r.Bottom - 1);  // bottom inner left.
+            Point p4 = new Point(r.Right - 1, r.Bottom - 1);  // inner bottom right.
 
-                try
-                {
-                    wg.DrawLine(pen, p1, p2); // top (right-left)
-                    wg.DrawLine(pen, p2, p3); // left (top-down)
-                }
-                finally
-                {
-                    pen.Dispose();
-                }
+            // top, left
+            using var topLeftPen = new Gdi32.CreatePenScope(up ? colors.highlight : colors.buttonShadow);
 
-                // bottom, right
-                pen = up ? new WindowsPen(wg.DeviceContext, colors.buttonShadow) : new WindowsPen(wg.DeviceContext, colors.highlight);
+            hdc.DrawLine(topLeftPen, p1, p2); // top (right-left)
+            hdc.DrawLine(topLeftPen, p2, p3); // left (top-down)
 
-                try
-                {
-                    p1.Offset(0, -1); // need to paint last pixel too.
-                    wg.DrawLine(pen, p3, p4); // bottom (left-right)
-                    wg.DrawLine(pen, p4, p1); // right(bottom-up)
-                }
-                finally
-                {
-                    pen.Dispose();
-                }
-            }
+            // bottom, right
+            using var bottomRightPen = new Gdi32.CreatePenScope(up ? colors.buttonShadow : colors.highlight);
+
+            p1.Offset(0, -1); // need to paint last pixel too.
+            hdc.DrawLine(bottomRightPen, p3, p4); // bottom (left-right)
+            hdc.DrawLine(bottomRightPen, p4, p1); // right(bottom-up)
         }
 
         internal static void DrawFlatBorder(Graphics g, Rectangle r, Color c)
@@ -593,19 +410,15 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static void DrawFlatFocus(Graphics g, Rectangle r, Color c)
         {
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
-            {
-                using (WindowsPen focus = new WindowsPen(wg.DeviceContext, c))
-                {
-                    wg.DrawRectangle(focus, r);
-                }
-            }
+            using var hdc = new DeviceContextHdcScope(g);
+            using var focusPen = new Gdi32.CreatePenScope(c);
+            hdc.DrawRectangle(r, focusPen);
         }
 
         /// <summary>
         ///  Draws the focus rectangle if the control has focus.
         /// </summary>
-        void DrawFocus(Graphics g, Rectangle r)
+        private void DrawFocus(Graphics g, Rectangle r)
         {
             if (Control.Focused && Control.ShowFocusCues)
             {
@@ -616,7 +429,7 @@ namespace System.Windows.Forms.ButtonInternal
         /// <summary>
         ///  Draws the button's image.
         /// </summary>
-        void DrawImage(Graphics graphics, LayoutData layout)
+        private void DrawImage(Graphics graphics, LayoutData layout)
         {
             if (Control.Image != null)
             {
@@ -631,7 +444,8 @@ namespace System.Windows.Forms.ButtonInternal
             Region oldClip = graphics.Clip;
 
             if (!layout.options.everettButtonCompat)
-            { // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
+            {
+                // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
                 Rectangle bounds = new Rectangle(buttonBorderSize, buttonBorderSize, Control.Width - (2 * buttonBorderSize), Control.Height - (2 * buttonBorderSize));
 
                 Region newClip = oldClip.Clone();
@@ -704,7 +518,8 @@ namespace System.Windows.Forms.ButtonInternal
             bool disabledText3D = layout.options.shadowedText;
 
             if (Control.UseCompatibleTextRendering)
-            { // Draw text using GDI+
+            {
+                // Draw text using GDI+
                 using (StringFormat stringFormat = CreateStringFormat())
                 {
                     // DrawString doesn't seem to draw where it says it does
@@ -712,6 +527,7 @@ namespace System.Windows.Forms.ButtonInternal
                     {
                         r.X -= 1;
                     }
+
                     r.Width += 1;
                     if (disabledText3D && !Control.Enabled && !colors.options.highContrast)
                     {
@@ -737,6 +553,7 @@ namespace System.Windows.Forms.ButtonInternal
                         {
                             brush = new SolidBrush(c);
                         }
+
                         g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
 
                         if (!c.IsSystemColor)
@@ -747,7 +564,8 @@ namespace System.Windows.Forms.ButtonInternal
                 }
             }
             else
-            { // Draw text using GDI (Whidbey+ feature).
+            {
+                // Draw text using GDI (Whidbey+ feature).
                 TextFormatFlags formatFlags = CreateTextFormatFlags();
                 if (disabledText3D && !Control.Enabled && !colors.options.highContrast)
                 {

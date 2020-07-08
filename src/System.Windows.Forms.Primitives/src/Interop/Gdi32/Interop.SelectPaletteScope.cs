@@ -16,7 +16,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double pallete reset.
         /// </remarks>
-        public ref struct SelectPaletteScope
+        public readonly ref struct SelectPaletteScope
         {
             public HDC HDC { get; }
             public HPALETTE HPalette { get; }
@@ -34,7 +34,7 @@ internal static partial class Interop
             public static SelectPaletteScope HalftonePalette(HDC hdc, bool forceBackground, bool realizePalette)
                 => new SelectPaletteScope(hdc, (HPALETTE)Graphics.GetHalftonePalette(), forceBackground, realizePalette);
 
-            public static implicit operator HPALETTE(SelectPaletteScope paletteScope) => paletteScope.HPalette;
+            public static implicit operator HPALETTE(in SelectPaletteScope paletteScope) => paletteScope.HPalette;
 
             public void Dispose()
             {

@@ -16,7 +16,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
         /// </remarks>
-        internal ref struct SetRop2Scope
+        internal readonly ref struct SetRop2Scope
         {
             private readonly R2 _previousRop;
             private readonly HDC _hdc;

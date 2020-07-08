@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
@@ -13,12 +14,6 @@ namespace System.Windows.Forms
     internal static class DeviceContextExtensions
     {
         internal static void DrawRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, Gdi32.HPEN hpen)
-            => DrawRectangle(hdc.HDC, rectangle, hpen);
-
-        internal static void DrawRectangle(this Gdi32.CreateDcScope hdc, Rectangle rectangle, Gdi32.HPEN hpen)
-            => DrawRectangle(hdc.HDC, rectangle, hpen);
-
-        internal static void DrawRectangle(this User32.GetDcScope hdc, Rectangle rectangle, Gdi32.HPEN hpen)
             => DrawRectangle(hdc.HDC, rectangle, hpen);
 
         internal static void DrawRectangle(this Gdi32.HDC hdc, Rectangle rectangle, Gdi32.HPEN hpen)
@@ -33,12 +28,6 @@ namespace System.Windows.Forms
         internal static void FillRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, Gdi32.HBRUSH hbrush)
             => FillRectangle(hdc.HDC, rectangle, hbrush);
 
-        internal static void FillRectangle(this Gdi32.CreateDcScope hdc, Rectangle rectangle, Gdi32.HBRUSH hbrush)
-            => FillRectangle(hdc.HDC, rectangle, hbrush);
-
-        internal static void FillRectangle(this User32.GetDcScope hdc, Rectangle rectangle, Gdi32.HBRUSH hbrush)
-            => FillRectangle(hdc.HDC, rectangle, hbrush);
-
         internal static void FillRectangle(this Gdi32.HDC hdc, Rectangle rectangle, Gdi32.HBRUSH hbrush)
         {
             RECT rect = rectangle;
@@ -51,11 +40,11 @@ namespace System.Windows.Forms
         internal static void DrawLine(this DeviceContextHdcScope hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
             => DrawLine(hdc.HDC, pen, x1, y1, x2, y2);
 
-        internal static void DrawLine(this Gdi32.CreateDcScope hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
-            => DrawLine(hdc.HDC, pen, x1, y1, x2, y2);
+        internal static void DrawLine(this DeviceContextHdcScope hdc, Gdi32.HPEN pen, Point p1, Point p2)
+            => DrawLine(hdc.HDC, pen, p1.X, p1.Y, p2.X, p2.Y);
 
-        internal static void DrawLine(this User32.GetDcScope hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
-            => DrawLine(hdc.HDC, pen, x1, y1, x2, y2);
+        internal static void DrawLine(this Gdi32.HDC hdc, Gdi32.HPEN pen, Point p1, Point p2)
+            => DrawLine(hdc, pen, p1.X, p1.Y, p2.X, p2.Y);
 
         internal unsafe static void DrawLine(this Gdi32.HDC hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
         {
@@ -72,12 +61,6 @@ namespace System.Windows.Forms
         internal static Color GetNearestColor(this DeviceContextHdcScope hdc, Color color)
             => GetNearestColor(hdc.HDC, color);
 
-        internal static Color GetNearestColor(this Gdi32.CreateDcScope hdc, Color color)
-            => GetNearestColor(hdc.HDC, color);
-
-        internal static Color GetNearestColor(this User32.GetDcScope hdc, Color color)
-            => GetNearestColor(hdc.HDC, color);
-
         internal static Color GetNearestColor(this Gdi32.HDC hdc, Color color)
             => ColorTranslator.FromWin32(Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(color)));
 
@@ -85,16 +68,34 @@ namespace System.Windows.Forms
         internal static Graphics CreateGraphics(this Gdi32.CreateDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC.Handle);
         internal static Graphics CreateGraphics(this User32.GetDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC.Handle);
 
-        /// <summary>
-        ///  Get the number of pixels per logical inch along the device width. In a system with multiple display
-        ///  monitors, this value is always from the primary display.
-        /// </summary>
-        internal static int GetDpiX(this Gdi32.HDC hdc) => Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSX);
+        internal static void DrawAndFillEllipse(this Gdi32.HDC hdc, Gdi32.HPEN pen, Gdi32.HBRUSH brush, Rectangle bounds)
+            => DrawEllipse(hdc, pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
 
-        /// <summary>
-        ///  Get the number of pixels per logical inch along the device (screen) height. In a system with multiple
-        ///  display monitors, this value is always from the primary display.
-        /// </summary>
-        internal static int GetDpiY(this Gdi32.HDC hdc) => Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSY);
+        private static void DrawEllipse(
+            this Gdi32.HDC hdc,
+            Gdi32.HPEN pen,
+            Gdi32.HBRUSH brush,
+            int nLeftRect,  // x-coord of upper-left corner of rectangle
+            int nTopRect,   // y-coord of upper-left corner of rectangle
+            int nRightRect, // x-coord of lower-right corner of rectangle
+            int nBottomRect)
+        {
+            // y-coord of lower-right corner of rectangle
+
+            using var penSelection = pen.IsNull ? default : new Gdi32.SelectObjectScope(hdc, pen);
+            using var brushSelection = brush.IsNull ? default : new Gdi32.SelectObjectScope(hdc, brush);
+
+            Gdi32.Ellipse(hdc, nLeftRect, nTopRect, nRightRect, nBottomRect);
+        }
+
+        internal static void FillRectangle(this Gdi32.HDC hdc, Gdi32.HBRUSH brush, Rectangle rectangle)
+        {
+            Debug.Assert(!brush.IsNull, "brush == null");
+            RECT rect = rectangle;
+            User32.FillRect(
+                hdc,
+                ref rect,
+                brush);
+        }
     }
 }

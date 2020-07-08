@@ -16,7 +16,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
         /// </remarks>
-        public ref struct CreateBrushScope
+        public readonly ref struct CreateBrushScope
         {
             public HBRUSH HBrush { get; }
 
@@ -28,8 +28,8 @@ internal static partial class Interop
                 HBrush = CreateSolidBrush(ColorTranslator.ToWin32(color));
             }
 
-            public static implicit operator HBRUSH(CreateBrushScope scope) => scope.HBrush;
-            public static implicit operator HGDIOBJ(CreateBrushScope scope) => scope.HBrush;
+            public static implicit operator HBRUSH(in CreateBrushScope scope) => scope.HBrush;
+            public static implicit operator HGDIOBJ(in CreateBrushScope scope) => scope.HBrush;
 
             public bool IsNull => HBrush.IsNull;
 

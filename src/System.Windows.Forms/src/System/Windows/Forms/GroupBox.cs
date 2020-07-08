@@ -523,7 +523,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    using (WindowsGraphics wg = WindowsGraphics.FromGraphics(graphics))
+                    using (WindowsGraphics wg = WindowsGraphics.FromDeviceContext(graphics))
                     {
                         User32.DT flags = User32.DT.WORDBREAK | User32.DT.EDITCONTROL;
 

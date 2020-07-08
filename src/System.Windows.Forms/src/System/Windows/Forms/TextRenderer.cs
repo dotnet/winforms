@@ -98,8 +98,7 @@ namespace System.Windows.Forms
             // This MUST come before retreiving the HDC, which locks the Graphics object
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
-            using var hdc = new DeviceContextHdcScope(dc, applyGraphicsState: false);
-            using WindowsGraphics wg = WindowsGraphics.FromHdc(hdc);
+            using WindowsGraphics wg = WindowsGraphics.FromDeviceContext(dc);
             using WindowsFont? wf = WindowsGraphicsCacheManager.GetWindowsFont(font, quality);
             wg.DrawText(text, wf, bounds, foreColor, backColor, flags);
         }
@@ -169,9 +168,9 @@ namespace System.Windows.Forms
             // This MUST come before retreiving the HDC, which locks the Graphics object
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
-            using var wgr = new WindowsGraphicsWrapper(dc, flags);
+            using var wg = WindowsGraphics.FromDeviceContext(dc, flags);
             using var wf = WindowsGraphicsCacheManager.GetWindowsFont(font, quality);
-            return wgr.WindowsGraphics.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
+            return wg.MeasureText(text, wf, proposedSize, GetTextFormatFlags(flags));
         }
 
         internal static Color DisabledTextColor(Color backColor)

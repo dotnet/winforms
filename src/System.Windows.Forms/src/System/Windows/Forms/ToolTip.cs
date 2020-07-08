@@ -2338,43 +2338,35 @@ namespace System.Windows.Forms
                 case (int)User32.WM.PAINT:
                     if (OwnerDraw && !_isBalloon && !_trackPosition)
                     {
-                        var ps = new User32.PAINTSTRUCT();
-                        IntPtr dc = User32.BeginPaint(new HandleRef(this, Handle), ref ps);
-                        Graphics g = Graphics.FromHdcInternal(dc);
-                        try
+                        using var paintScope = new User32.BeginPaintScope(Handle);
+                        Rectangle bounds = paintScope.PaintStruct.rcPaint;
+                        if (bounds == Rectangle.Empty)
                         {
-                            Rectangle bounds = ps.rcPaint;
-                            if (bounds == Rectangle.Empty)
-                            {
-                                return;
-                            }
-
-                            IWin32Window window = GetCurrentToolWindow();
-                            if (window != null)
-                            {
-                                Font font;
-                                try
-                                {
-                                    font = Font.FromHfont(User32.SendMessageW(this, User32.WM.GETFONT));
-                                }
-                                catch (ArgumentException)
-                                {
-                                    // If the current default tooltip font is a non-TrueType font, then
-                                    // Font.FromHfont throws this exception, so fall back to the default control font.
-                                    font = Control.DefaultFont;
-                                }
-
-                                Control control = window as Control ?? Control.FromHandle(window.Handle);
-                                OnDraw(new DrawToolTipEventArgs(
-                                    g, window, control, bounds, GetToolTip(control), BackColor, ForeColor, font));
-
-                                break;
-                            }
+                            return;
                         }
-                        finally
+
+                        using Graphics g = paintScope.HDC.CreateGraphics();
+
+                        IWin32Window window = GetCurrentToolWindow();
+                        if (window != null)
                         {
-                            g.Dispose();
-                            User32.EndPaint(new HandleRef(this, Handle), ref ps);
+                            Font font;
+                            try
+                            {
+                                font = Font.FromHfont(User32.SendMessageW(this, User32.WM.GETFONT));
+                            }
+                            catch (ArgumentException)
+                            {
+                                // If the current default tooltip font is a non-TrueType font, then
+                                // Font.FromHfont throws this exception, so fall back to the default control font.
+                                font = Control.DefaultFont;
+                            }
+
+                            Control control = window as Control ?? Control.FromHandle(window.Handle);
+                            OnDraw(new DrawToolTipEventArgs(
+                                g, window, control, bounds, GetToolTip(control), BackColor, ForeColor, font));
+
+                            break;
                         }
                     }
 

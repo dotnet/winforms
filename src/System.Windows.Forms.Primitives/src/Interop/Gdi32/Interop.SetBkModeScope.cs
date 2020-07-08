@@ -16,7 +16,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
         ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
         /// </remarks>
-        internal ref struct SetBkModeScope
+        internal readonly ref struct SetBkModeScope
         {
             private readonly BKMODE _previousMode;
             private readonly HDC _hdc;

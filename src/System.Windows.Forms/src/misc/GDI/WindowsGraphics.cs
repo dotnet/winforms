@@ -28,9 +28,9 @@ namespace System.Windows.Forms.Internal
     internal sealed partial class WindowsGraphics : IDisposable, IDeviceContext, IHandle
     {
         private bool _disposeDc;
-        private Graphics? _graphics; // cached when initialized FromGraphics to be able to call g.ReleaseHdc from Dispose.
+        private IDeviceContext? _deviceContext; // cached when initialized FromGraphics to be able to call g.ReleaseHdc from Dispose.
 
-        public WindowsGraphics(DeviceContext dc)
+        private WindowsGraphics(DeviceContext dc)
         {
             Debug.Assert(dc != null, "null dc!");
             DeviceContext = dc;
@@ -98,12 +98,21 @@ namespace System.Windows.Forms.Internal
         ///  Please note that this only applies the HDC created graphics, for Bitmap derived graphics, GetHdc creates a new DIBSection and
         ///  things get a lot more complicated.
         /// </summary>
-        public static WindowsGraphics FromGraphics(Graphics g) => FromGraphics(g, ApplyGraphicsProperties.All);
+        public static WindowsGraphics FromDeviceContext(IDeviceContext deviceContext)
+            => FromDeviceContext(deviceContext, ApplyGraphicsProperties.All);
 
-        public static WindowsGraphics FromGraphics(Graphics graphics, ApplyGraphicsProperties properties)
+        public static WindowsGraphics FromDeviceContext(IDeviceContext deviceContext, ApplyGraphicsProperties properties)
         {
             bool applyTransform = properties.HasFlag(ApplyGraphicsProperties.TranslateTransform);
             bool applyClipping = properties.HasFlag(ApplyGraphicsProperties.Clipping);
+
+            if (!(deviceContext is Graphics graphics))
+            {
+                WindowsGraphics wgdc = FromHdc((Gdi32.HDC)deviceContext.GetHdc());
+                wgdc._deviceContext = deviceContext;
+                return wgdc;
+            }
+
             object[]? data = applyTransform || applyClipping ? (object[])graphics.GetContextInfo() : null;
 
             using Region? clipRegion = (Region?)data?[0];
@@ -119,7 +128,7 @@ namespace System.Windows.Forms.Internal
             // GetHdc() locks the Graphics object, it cannot be used until ReleaseHdc() is called
             Gdi32.HDC hdc = (Gdi32.HDC)graphics.GetHdc();
             WindowsGraphics wg = FromHdc(hdc);
-            wg._graphics = graphics;
+            wg._deviceContext = graphics;
 
             try
             {
@@ -148,6 +157,64 @@ namespace System.Windows.Forms.Internal
             }
 
             return wg;
+        }
+
+        /// <summary>
+        ///  Constructor that determines how to create the WindowsGraphics, there are three posible cases
+        ///  for the IDeviceContext object type:
+        ///  1. It is a Graphics object: In this case we need to check the TextFormatFlags to determine whether
+        ///     we need to re-apply some of the Graphics properties to the WindowsGraphics, if so we call
+        ///     WindowsGraphics.FromGraphics passing the corresponding flags. If not, we treat it as a custom
+        ///     IDeviceContext (see below).
+        ///  2. It is a WindowsGraphics object:
+        ///     In this case we just need to use the wg directly and be careful not to dispose of it since
+        ///     it is owned by the caller.
+        ///  3. It is a custom IDeviceContext object:
+        ///     In this case we create the WindowsGraphics from the native DC by calling IDeviceContext.GetHdc,
+        ///     on dispose we need to call IDeviceContext.ReleaseHdc.
+        /// </summary>
+        public static WindowsGraphics FromDeviceContext(IDeviceContext deviceContext, TextFormatFlags flags)
+        {
+            WindowsGraphics? windowsGraphics = null;
+
+            if (deviceContext is Graphics graphics)
+            {
+                ApplyGraphicsProperties properties = ApplyGraphicsProperties.None;
+
+                if ((flags & TextFormatFlags.PreserveGraphicsClipping) != 0)
+                {
+                    properties |= ApplyGraphicsProperties.Clipping;
+                }
+
+                if ((flags & TextFormatFlags.PreserveGraphicsTranslateTransform) != 0)
+                {
+                    properties |= ApplyGraphicsProperties.TranslateTransform;
+                }
+
+                windowsGraphics = FromDeviceContext(graphics, properties);
+            }
+            else
+            {
+                // If passed-in IDeviceContext object is a WindowsGraphics we can use it directly.
+                windowsGraphics = deviceContext as WindowsGraphics;
+            }
+
+            if (windowsGraphics == null)
+            {
+                windowsGraphics = FromHdc((Gdi32.HDC)deviceContext.GetHdc());
+            }
+
+            // Set text padding on the WindowsGraphics (if any).
+            if ((flags & TextFormatFlags.LeftAndRightPadding) != 0)
+            {
+                windowsGraphics.TextPadding = TextPaddingOptions.LeftAndRightPadding;
+            }
+            else if ((flags & TextFormatFlags.NoPadding) != 0)
+            {
+                windowsGraphics.TextPadding = TextPaddingOptions.NoPadding;
+            }
+
+            return windowsGraphics;
         }
 
 #if DEBUG
@@ -194,7 +261,7 @@ namespace System.Windows.Forms.Internal
                 }
 
                 // GDI+ can fail here.
-                _graphics?.ReleaseHdcInternal((IntPtr)DeviceContext.Hdc);
+                _deviceContext?.ReleaseHdc();
             }
             catch (Exception ex)
             {
@@ -208,7 +275,7 @@ namespace System.Windows.Forms.Internal
 
             // Clear our fields that have finalizers
             DeviceContext = null!;
-            _graphics = null;
+            _deviceContext = null;
         }
 
         IntPtr IDeviceContext.GetHdc() => (IntPtr)DeviceContext.Hdc;

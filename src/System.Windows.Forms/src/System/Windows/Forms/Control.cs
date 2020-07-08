@@ -8545,13 +8545,14 @@ namespace System.Windows.Forms
         //
         // If you only want a region of the control to be transparent, pass in a region into the
         // last parameter.  A null region implies that you want the entire rectangle to be transparent.
-        internal void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle, Region transparentRegion)
+        internal unsafe void PaintTransparentBackground(PaintEventArgs e, Rectangle rectangle, Region transparentRegion)
         {
-            Graphics g = e.Graphics;
             Control parent = ParentInternal;
 
             if (parent != null)
             {
+                Graphics g = e.Graphics;
+
                 // We need to use themeing painting for certain controls (like TabPage) when they parent other controls.
                 // But we dont want to to this always as this causes serious preformance (at Runtime and DesignTime)
                 // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
@@ -8567,6 +8568,7 @@ namespace System.Windows.Forms
                     {
                         graphicsState = g.Save();
                     }
+
                     try
                     {
                         if (transparentRegion != null)
@@ -8592,28 +8594,29 @@ namespace System.Windows.Forms
                     // moving the clipping rectangle to the parent coordinate system
                     Rectangle newClipRect = new Rectangle(rectangle.Left + Left, rectangle.Top + Top, rectangle.Width, rectangle.Height);
 
-                    using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
+                    using var hdc = new PaintEventHdcScope(e);
+                    using var savedc = new Gdi32.SaveDcScope(e.HDC);
+
+                    Gdi32.OffsetViewportOrgEx(hdc, -Left, -Top, null);
+
+                    using (PaintEventArgs np = new PaintEventArgs(hdc, newClipRect))
                     {
-                        wg.DeviceContext.TranslateTransform(-Left, -Top);
-                        using (PaintEventArgs np = new PaintEventArgs(wg.GetHdc(), newClipRect))
+                        if (transparentRegion != null)
+                        {
+                            np.Graphics.Clip = transparentRegion;
+                            np.Graphics.TranslateClip(-shift.X, -shift.Y);
+                        }
+                        try
+                        {
+                            InvokePaintBackground(parent, np);
+                            InvokePaint(parent, np);
+                        }
+                        finally
                         {
                             if (transparentRegion != null)
                             {
-                                np.Graphics.Clip = transparentRegion;
-                                np.Graphics.TranslateClip(-shift.X, -shift.Y);
-                            }
-                            try
-                            {
-                                InvokePaintBackground(parent, np);
-                                InvokePaint(parent, np);
-                            }
-                            finally
-                            {
-                                if (transparentRegion != null)
-                                {
-                                    // restore region back to original state.
-                                    np.Graphics.TranslateClip(shift.X, shift.Y);
-                                }
+                                // restore region back to original state.
+                                np.Graphics.TranslateClip(shift.X, shift.Y);
                             }
                         }
                     }
@@ -8623,7 +8626,7 @@ namespace System.Windows.Forms
             {
                 // For whatever reason, our parent can't paint our background, but we need some kind of background
                 // since we're transparent.
-                g.FillRectangle(SystemBrushes.Control, rectangle);
+                e.Graphics.FillRectangle(SystemBrushes.Control, rectangle);
             }
         }
 

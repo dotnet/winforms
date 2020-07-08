@@ -11,11 +11,11 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true, SetLastError = true)]
-        public static extern BOOL Ellipse(IntPtr hdc, int left, int top, int right, int bottom);
+        public static extern BOOL Ellipse(HDC hdc, int left, int top, int right, int bottom);
 
         public static BOOL Ellipse(IHandle hdc, int left, int top, int right, int bottom)
         {
-            BOOL result = Ellipse(hdc.Handle, left, top, right, bottom);
+            BOOL result = Ellipse((HDC)hdc.Handle, left, top, right, bottom);
             GC.KeepAlive(hdc);
             return result;
         }

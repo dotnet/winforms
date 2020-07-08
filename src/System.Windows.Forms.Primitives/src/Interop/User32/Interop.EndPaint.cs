@@ -10,13 +10,6 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL EndPaint(IntPtr hWnd, ref PAINTSTRUCT lpPaint);
-
-        public static BOOL EndPaint(HandleRef hWnd, ref PAINTSTRUCT lpPaint)
-        {
-            BOOL result = EndPaint(hWnd.Handle, ref lpPaint);
-            GC.KeepAlive(hWnd.Wrapper);
-            return result;
-        }
+        public unsafe static extern BOOL EndPaint(IntPtr hWnd, PAINTSTRUCT* lpPaint);
     }
 }

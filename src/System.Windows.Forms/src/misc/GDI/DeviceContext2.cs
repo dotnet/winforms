@@ -47,34 +47,6 @@ namespace System.Windows.Forms.Internal
         public Gdi32.BKMODE SetBackgroundMode(Gdi32.BKMODE newMode) => Gdi32.SetBkMode(this, newMode);
 
         /// <summary>
-        ///  ROP2 currently on the DC.
-        /// </summary>
-        public Gdi32.R2 BinaryRasterOperation => Gdi32.GetROP2(this);
-
-        /// <summary>
-        ///  Sets the DC ROP2 and returns the old value.
-        /// </summary>
-        public Gdi32.R2 SetRasterOperation(Gdi32.R2 rasterOperation) => Gdi32.SetROP2(this, rasterOperation);
-
-        /// <summary>
-        ///  Get the number of pixels per logical inch along the device axes. In a system with multiple display
-        ///  monitors, this value is the same for all monitors.
-        /// </summary>
-        public Size Dpi => new Size(DpiX, DpiY);
-
-        /// <summary>
-        ///  Get the number of pixels per logical inch along the device width. In a system with multiple display
-        ///  monitors, this value is the same for all monitors.
-        /// </summary>
-        public int DpiX => Gdi32.GetDeviceCaps(this, Gdi32.DeviceCapability.LOGPIXELSX);
-
-        /// <summary>
-        ///  Get the number of pixels per logical inch along the device (screen) height. In a system with multiple
-        ///  display monitors, this value is the same for all monitors.
-        /// </summary>
-        public int DpiY => Gdi32.GetDeviceCaps(this, Gdi32.DeviceCapability.LOGPIXELSY);
-
-        /// <summary>
         ///  The font selected into the device context.
         ///  It's OK to call dispose on it, the HFONT won't be deleted since the WindowsFont did not create it,
         ///  it got it from the HDC.
