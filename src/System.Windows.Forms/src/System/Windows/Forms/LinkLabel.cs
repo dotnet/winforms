@@ -692,7 +692,7 @@ namespace System.Windows.Forms
 
                         // We need to take into account the padding that GDI adds around the text.
                         int iLeftMargin, iRightMargin;
-                        using (WindowsGraphics wg = WindowsGraphics.FromGraphics(g))
+                        using (WindowsGraphics wg = WindowsGraphics.FromDeviceContext(g))
                         {
                             if ((flags & TextFormatFlags.NoPadding) == TextFormatFlags.NoPadding)
                             {

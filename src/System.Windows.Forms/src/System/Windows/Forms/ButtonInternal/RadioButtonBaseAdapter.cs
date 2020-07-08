@@ -78,60 +78,56 @@ namespace System.Windows.Forms.ButtonInternal
 
             double scale = GetDpiScaleRatio();
 
-            using (WindowsGraphics wg = WindowsGraphics.FromGraphics(e.Graphics))
+            using var scope = new PaintEventHdcScope(e);
+            Gdi32.HDC hdc = scope.HDC;
+            using var borderPen = new Gdi32.CreatePenScope(border);
+            using var fieldBrush = new Gdi32.CreateBrushScope(field);
+
+            // In high DPI mode when we draw ellipse as three rectantles,
+            // the quality of ellipse is poor. Draw it directly as ellipse
+            if (scale > 1.1)
             {
-                using (WindowsPen borderPen = new WindowsPen(wg.DeviceContext, border))
-                {
-                    using (WindowsBrush fieldBrush = new WindowsSolidBrush(wg.DeviceContext, field))
-                    {
-                        // In high DPI mode when we draw ellipse as three rectantles,
-                        // the quality of ellipse is poor. Draw it directly as ellipse
-                        if (scale > 1.1)
-                        {
-                            bounds.Width--;
-                            bounds.Height--;
-                            wg.DrawAndFillEllipse(borderPen, fieldBrush, bounds);
-                            bounds.Inflate(-1, -1);
-                        }
-                        else
-                        {
-                            DrawAndFillEllipse(wg, borderPen, fieldBrush, bounds);
-                        }
-                    }
-                }
+                bounds.Width--;
+                bounds.Height--;
+                hdc.DrawAndFillEllipse(borderPen, fieldBrush, bounds);
+                bounds.Inflate(-1, -1);
+            }
+            else
+            {
+                DrawAndFillEllipse(hdc, borderPen, fieldBrush, bounds);
             }
         }
 
         // Helper method to overcome the poor GDI ellipse drawing routine
-        private static void DrawAndFillEllipse(WindowsGraphics wg, WindowsPen borderPen, WindowsBrush fieldBrush, Rectangle bounds)
+        private static void DrawAndFillEllipse(Gdi32.HDC hdc, Gdi32.HPEN borderPen, Gdi32.HBRUSH fieldBrush, Rectangle bounds)
         {
-            Debug.Assert(wg != null, "Calling DrawAndFillEllipse with null wg");
-            if (wg == null)
+            Debug.Assert(!hdc.IsNull, "Calling DrawAndFillEllipse with null wg");
+            if (hdc.IsNull)
             {
                 return;
             }
 
-            wg.FillRectangle(fieldBrush, new Rectangle(bounds.X + 2, bounds.Y + 2, 8, 8));
-            wg.FillRectangle(fieldBrush, new Rectangle(bounds.X + 4, bounds.Y + 1, 4, 10));
-            wg.FillRectangle(fieldBrush, new Rectangle(bounds.X + 1, bounds.Y + 4, 10, 4));
+            hdc.FillRectangle(fieldBrush, new Rectangle(bounds.X + 2, bounds.Y + 2, 8, 8));
+            hdc.FillRectangle(fieldBrush, new Rectangle(bounds.X + 4, bounds.Y + 1, 4, 10));
+            hdc.FillRectangle(fieldBrush, new Rectangle(bounds.X + 1, bounds.Y + 4, 10, 4));
 
-            wg.DrawLine(borderPen, new Point(bounds.X + 4, bounds.Y + 0), new Point(bounds.X + 8, bounds.Y + 0));
-            wg.DrawLine(borderPen, new Point(bounds.X + 4, bounds.Y + 11), new Point(bounds.X + 8, bounds.Y + 11));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 4, bounds.Y + 0), new Point(bounds.X + 8, bounds.Y + 0));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 4, bounds.Y + 11), new Point(bounds.X + 8, bounds.Y + 11));
 
-            wg.DrawLine(borderPen, new Point(bounds.X + 2, bounds.Y + 1), new Point(bounds.X + 4, bounds.Y + 1));
-            wg.DrawLine(borderPen, new Point(bounds.X + 8, bounds.Y + 1), new Point(bounds.X + 10, bounds.Y + 1));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 2, bounds.Y + 1), new Point(bounds.X + 4, bounds.Y + 1));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 8, bounds.Y + 1), new Point(bounds.X + 10, bounds.Y + 1));
 
-            wg.DrawLine(borderPen, new Point(bounds.X + 2, bounds.Y + 10), new Point(bounds.X + 4, bounds.Y + 10));
-            wg.DrawLine(borderPen, new Point(bounds.X + 8, bounds.Y + 10), new Point(bounds.X + 10, bounds.Y + 10));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 2, bounds.Y + 10), new Point(bounds.X + 4, bounds.Y + 10));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 8, bounds.Y + 10), new Point(bounds.X + 10, bounds.Y + 10));
 
-            wg.DrawLine(borderPen, new Point(bounds.X + 0, bounds.Y + 4), new Point(bounds.X + 0, bounds.Y + 8));
-            wg.DrawLine(borderPen, new Point(bounds.X + 11, bounds.Y + 4), new Point(bounds.X + 11, bounds.Y + 8));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 0, bounds.Y + 4), new Point(bounds.X + 0, bounds.Y + 8));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 11, bounds.Y + 4), new Point(bounds.X + 11, bounds.Y + 8));
 
-            wg.DrawLine(borderPen, new Point(bounds.X + 1, bounds.Y + 2), new Point(bounds.X + 1, bounds.Y + 4));
-            wg.DrawLine(borderPen, new Point(bounds.X + 1, bounds.Y + 8), new Point(bounds.X + 1, bounds.Y + 10));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 1, bounds.Y + 2), new Point(bounds.X + 1, bounds.Y + 4));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 1, bounds.Y + 8), new Point(bounds.X + 1, bounds.Y + 10));
 
-            wg.DrawLine(borderPen, new Point(bounds.X + 10, bounds.Y + 2), new Point(bounds.X + 10, bounds.Y + 4));
-            wg.DrawLine(borderPen, new Point(bounds.X + 10, bounds.Y + 8), new Point(bounds.X + 10, bounds.Y + 10));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 10, bounds.Y + 2), new Point(bounds.X + 10, bounds.Y + 4));
+            hdc.DrawLine(borderPen, new Point(bounds.X + 10, bounds.Y + 8), new Point(bounds.X + 10, bounds.Y + 10));
         }
 
         private static int GetScaledNumber(int n, double scale)
@@ -175,7 +171,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         protected ButtonState GetState()
         {
-            ButtonState style = (ButtonState)0;
+            ButtonState style = default;
 
             if (Control.Checked)
             {

@@ -2025,10 +2025,10 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            var ps = new User32.PAINTSTRUCT();
-                            User32.BeginPaint(m.HWnd, ref ps);
-                            PaintException(pevent, _thrownException);
-                            User32.EndPaint(m.HWnd, ref ps);
+                            using (var scope = new User32.BeginPaintScope())
+                            {
+                                PaintException(pevent, _thrownException);
+                            }
                         }
 
                         if (OverlayService != null)

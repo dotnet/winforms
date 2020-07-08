@@ -16,7 +16,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
         /// </remarks>
-        public ref struct CreateBitmapScope
+        public readonly ref struct CreateBitmapScope
         {
             public HBITMAP HBitmap { get; }
 
@@ -36,9 +36,9 @@ internal static partial class Interop
                 HBitmap = CreateCompatibleBitmap(hdc, cx, cy);
             }
 
-            public static implicit operator HBITMAP(CreateBitmapScope scope) => scope.HBitmap;
-            public static implicit operator HGDIOBJ(CreateBitmapScope scope) => scope.HBitmap;
-            public static explicit operator IntPtr(CreateBitmapScope scope) => scope.HBitmap.Handle;
+            public static implicit operator HBITMAP(in CreateBitmapScope scope) => scope.HBitmap;
+            public static implicit operator HGDIOBJ(in CreateBitmapScope scope) => scope.HBitmap;
+            public static explicit operator IntPtr(in CreateBitmapScope scope) => scope.HBitmap.Handle;
 
             public bool IsNull => HBitmap.IsNull;
 

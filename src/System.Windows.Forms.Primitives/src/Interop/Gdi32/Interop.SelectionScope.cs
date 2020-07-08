@@ -16,10 +16,10 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double selection.
         /// </remarks>
-        internal ref struct SelectObjectScope
+        internal readonly ref struct SelectObjectScope
         {
             private readonly HDC _hdc;
-            public HGDIOBJ PreviousObject;
+            public HGDIOBJ PreviousObject { get; }
 
             /// <summary>
             ///  Selects <paramref name="object"/> into the given <paramref name="hdc"/>.

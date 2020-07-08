@@ -16,12 +16,13 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
         /// </remarks>
-        public ref struct CreatePenScope
+        public readonly ref struct CreatePenScope
         {
             public HPEN HPen { get; }
 
             /// <summary>
-            ///  Creates a solid pen based on the <paramref name="color"/> and <paramref name="width"/>.
+            ///  Creates a solid pen based on the <paramref name="color"/> and <paramref name="width"/> using
+            ///  <see cref="CreatePen(PS, int, int)" />.
             /// </summary>
             public CreatePenScope(Color color, int width = 1)
             {
@@ -32,7 +33,7 @@ internal static partial class Interop
                     ColorTranslator.ToWin32(color));
             }
 
-            public static implicit operator HPEN(CreatePenScope scope) => scope.HPen;
+            public static implicit operator HPEN(in CreatePenScope scope) => scope.HPen;
 
             public bool IsNull => HPen.IsNull;
 

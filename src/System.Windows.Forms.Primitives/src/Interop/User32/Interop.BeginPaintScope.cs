@@ -15,9 +15,9 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double EndPaint.
         /// </remarks>
-        public ref struct BeginPaintScope
+        public readonly ref struct BeginPaintScope
         {
-            public PAINTSTRUCT _paintStruct;
+            public readonly PAINTSTRUCT _paintStruct;
 
             public Gdi32.HDC HDC { get; }
             public IntPtr HWND { get; }
@@ -31,13 +31,16 @@ internal static partial class Interop
                 HWND = hwnd;
             }
 
-            public static implicit operator Gdi32.HDC(BeginPaintScope paintScope) => paintScope.HDC;
+            public static implicit operator Gdi32.HDC(in BeginPaintScope paintScope) => paintScope.HDC;
 
-            public void Dispose()
+            public unsafe void Dispose()
             {
                 if (!HDC.IsNull)
                 {
-                    EndPaint(HWND, ref _paintStruct);
+                    fixed (PAINTSTRUCT* ps = &_paintStruct)
+                    {
+                        EndPaint(HWND, ps);
+                    }
                 }
             }
         }

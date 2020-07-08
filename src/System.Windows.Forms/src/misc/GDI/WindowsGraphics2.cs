@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.Internal
@@ -43,33 +42,6 @@ namespace System.Windows.Forms.Internal
                 }
             }
         }
-
-        private void DrawEllipse(
-            WindowsPen? pen,
-            WindowsBrush? brush,
-            int nLeftRect,  // x-coord of upper-left corner of rectangle
-            int nTopRect,   // y-coord of upper-left corner of rectangle
-            int nRightRect, // x-coord of lower-right corner of rectangle
-            int nBottomRect)
-        {
-            // y-coord of lower-right corner of rectangle
-            if (pen != null)
-            {
-                // 1. Select the pen in the DC
-                Gdi32.SelectObject(DeviceContext, pen.HPen);
-            }
-
-            if (brush != null)
-            {
-                Gdi32.SelectObject(DeviceContext, brush.HBrush);
-            }
-
-            // 2. call the function
-            Gdi32.Ellipse(DeviceContext, nLeftRect, nTopRect, nRightRect, nBottomRect);
-        }
-
-        public void DrawAndFillEllipse(WindowsPen pen, WindowsBrush brush, Rectangle bounds)
-            => DrawEllipse(pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
 
         /// <summary>
         ///  Draws the text in the given bounds, using the given Font and foreColor, and according to the specified flags.
@@ -376,101 +348,6 @@ namespace System.Windows.Forms.Internal
             }
 
             return adjustedBounds;
-        }
-
-        // DrawRectangle overloads
-
-        public void DrawRectangle(WindowsPen pen, Rectangle rect)
-        {
-            DrawRectangle(pen, rect.X, rect.Y, rect.Width, rect.Height);
-        }
-
-        public void DrawRectangle(WindowsPen pen, int x, int y, int width, int height)
-        {
-            Debug.Assert(pen != null, "pen == null");
-
-            HandleRef hdc = new HandleRef(DeviceContext, (IntPtr)DeviceContext.Hdc);
-
-            if (pen != null)
-            {
-                DeviceContext.SelectObject(pen.HPen, GdiObjectType.Pen);
-            }
-
-            Gdi32.R2 rasterOp = DeviceContext.BinaryRasterOperation;
-
-            if (rasterOp != Gdi32.R2.COPYPEN)
-            {
-                rasterOp = DeviceContext.SetRasterOperation(Gdi32.R2.COPYPEN);
-            }
-
-            Gdi32.SelectObject(hdc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
-
-            // Add 1 to width and height to create the 'bounding box' (convert from point to size).
-            Gdi32.Rectangle(hdc, x, y, x + width, y + height);
-
-            if (rasterOp != Gdi32.R2.COPYPEN)
-            {
-                DeviceContext.SetRasterOperation(rasterOp);
-            }
-        }
-
-        // FillRectangle overloads
-
-        public void FillRectangle(WindowsBrush brush, Rectangle rectangle)
-        {
-            Debug.Assert(brush != null, "brush == null");
-            RECT rect = rectangle;
-            User32.FillRect(
-                DeviceContext,
-                ref rect,
-                brush.HBrush);
-        }
-
-        // DrawLine overloads
-
-        /// <summary>
-        ///  Draws a line starting from p1 (included) to p2 (excluded).  LineTo doesn't paint the last
-        ///  pixel because if it did the intersection points of connected lines would be drawn multiple
-        ///  times turning them back to the background color.
-        /// </summary>
-        public void DrawLine(WindowsPen pen, Point p1, Point p2)
-            => DrawLine(pen, p1.X, p1.Y, p2.X, p2.Y);
-
-        public unsafe void DrawLine(WindowsPen pen, int x1, int y1, int x2, int y2)
-        {
-            Gdi32.R2 rasterOp = DeviceContext.BinaryRasterOperation;
-            Gdi32.BKMODE bckMode = DeviceContext.BackgroundMode;
-
-            if (rasterOp != Gdi32.R2.COPYPEN)
-            {
-                rasterOp = DeviceContext.SetRasterOperation(Gdi32.R2.COPYPEN);
-            }
-
-            if (bckMode != Gdi32.BKMODE.TRANSPARENT)
-            {
-                bckMode = DeviceContext.SetBackgroundMode(Gdi32.BKMODE.TRANSPARENT);
-            }
-
-            if (pen != null)
-            {
-                DeviceContext.SelectObject(pen.HPen, GdiObjectType.Pen);
-            }
-
-            Point oldPoint = new Point();
-            Gdi32.MoveToEx(DeviceContext, x1, y1, &oldPoint);
-            Gdi32.LineTo(DeviceContext, x2, y2);
-
-            if (bckMode != Gdi32.BKMODE.TRANSPARENT)
-            {
-                DeviceContext.SetBackgroundMode(bckMode);
-            }
-
-            if (rasterOp != Gdi32.R2.COPYPEN)
-            {
-                DeviceContext.SetRasterOperation(rasterOp);
-            }
-
-            Gdi32.MoveToEx(DeviceContext, oldPoint.X, oldPoint.Y, &oldPoint);
         }
 
         /// <summary>

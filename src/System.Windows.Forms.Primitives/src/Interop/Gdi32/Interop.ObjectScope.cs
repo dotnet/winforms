@@ -15,7 +15,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double deletion.
         /// </remarks>
-        internal ref struct ObjectScope
+        internal readonly ref struct ObjectScope
         {
             public HGDIOBJ Object { get; }
 
@@ -25,7 +25,7 @@ internal static partial class Interop
                 Object = @object;
             }
 
-            public static implicit operator HGDIOBJ(ObjectScope objectScope) => objectScope.Object;
+            public static implicit operator HGDIOBJ(in ObjectScope objectScope) => objectScope.Object;
 
             public void Dispose()
             {

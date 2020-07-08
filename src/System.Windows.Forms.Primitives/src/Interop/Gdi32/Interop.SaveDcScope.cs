@@ -21,7 +21,7 @@ internal static partial class Interop
         ///  Ideally saving the entire DC state can be avoided for simple drawing operations and relying on restoring
         ///  individual state pieces can be done instead (putting back the original pen, etc.).
         /// </remarks>
-        public ref struct SaveDcScope
+        public readonly ref struct SaveDcScope
         {
             public HDC HDC { get; }
             private readonly int _savedState;

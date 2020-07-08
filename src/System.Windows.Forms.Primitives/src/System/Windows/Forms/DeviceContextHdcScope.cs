@@ -47,13 +47,22 @@ namespace System.Windows.Forms
         public DeviceContextHdcScope(
             IDeviceContext deviceContext,
             bool applyGraphicsState = true,
+            bool saveHdcState = false) : this (
+                deviceContext,
+                applyGraphicsState ? ApplyGraphicsProperties.All : ApplyGraphicsProperties.None,
+                saveHdcState)
+        {
+        }
+
+        public unsafe DeviceContextHdcScope(
+            IDeviceContext deviceContext,
+            ApplyGraphicsProperties applyGraphicsState,
             bool saveHdcState = false)
         {
             DeviceContext = deviceContext ?? throw new ArgumentNullException(nameof(deviceContext));
-            ApplyGraphicsProperties apply = applyGraphicsState ? ApplyGraphicsProperties.All : ApplyGraphicsProperties.None;
             _savedHdcState = 0;
 
-            if (apply == ApplyGraphicsProperties.None || !(DeviceContext is Graphics graphics))
+            if (applyGraphicsState == ApplyGraphicsProperties.None || !(DeviceContext is Graphics graphics))
             {
                 // GetHdc() locks the Graphics object, it cannot be used until ReleaseHdc() is called
                 HDC = (Gdi32.HDC)DeviceContext.GetHdc();
@@ -61,8 +70,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            bool applyTransform = apply.HasFlag(ApplyGraphicsProperties.TranslateTransform);
-            bool applyClipping = apply.HasFlag(ApplyGraphicsProperties.Clipping);
+            bool applyTransform = applyGraphicsState.HasFlag(ApplyGraphicsProperties.TranslateTransform);
+            bool applyClipping = applyGraphicsState.HasFlag(ApplyGraphicsProperties.Clipping);
 
             // This API is very expensive
             object[]? data = applyTransform || applyClipping ? (object[])graphics.GetContextInfo() : null;
@@ -113,8 +122,7 @@ namespace System.Windows.Forms
 
             if (applyTransform)
             {
-                Point origin = default;
-                Gdi32.OffsetViewportOrgEx(HDC, dx, dy, ref origin);
+                Gdi32.OffsetViewportOrgEx(HDC, dx, dy, null);
             }
         }
 

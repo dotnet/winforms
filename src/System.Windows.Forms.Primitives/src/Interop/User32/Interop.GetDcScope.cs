@@ -17,7 +17,7 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by <see langword="ref" />
         ///  to avoid duplicating the handle and risking a double release.
         /// </remarks>
-        public ref struct GetDcScope
+        public readonly ref struct GetDcScope
         {
             public Gdi32.HDC HDC { get; }
             public IntPtr HWND { get; }
@@ -54,8 +54,8 @@ internal static partial class Interop
 
             public bool IsNull => HDC.IsNull;
 
-            public static implicit operator IntPtr(GetDcScope dcScope) => dcScope.HDC.Handle;
-            public static implicit operator Gdi32.HDC(GetDcScope dcScope) => dcScope.HDC;
+            public static implicit operator IntPtr(in GetDcScope dcScope) => dcScope.HDC.Handle;
+            public static implicit operator Gdi32.HDC(in GetDcScope dcScope) => dcScope.HDC;
 
             public void Dispose()
             {
