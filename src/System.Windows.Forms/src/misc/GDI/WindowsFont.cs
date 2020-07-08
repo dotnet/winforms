@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Globalization;
 using static Interop;
 
@@ -15,7 +14,6 @@ namespace System.Windows.Forms.Internal
     /// </summary>
     internal sealed partial class WindowsFont : ICloneable, IDisposable
     {
-        private float _fontSize = -1.0f;        // invalid value.
         private int _lineSpacing;
         private bool _ownHandle;
         private bool _ownedByCacheManager;
@@ -226,7 +224,7 @@ namespace System.Windows.Forms.Internal
         /// <summary>
         ///  Gets the hash code for this WindowsFont.
         /// </summary>
-        public override int GetHashCode() => HashCode.Combine(Style, CharSet, Size);
+        public override int GetHashCode() => HashCode.Combine(Style, CharSet, LogFontHeight);
 
         /// <summary>
         ///  Clones this object.
@@ -238,7 +236,10 @@ namespace System.Windows.Forms.Internal
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "[{0}: Name={1}, Size={2} points, Height={3} pixels, Sytle={4}]", GetType().Name, _logFont.FaceName.ToString(), Size, Height, Style);
+            return string.Format(
+                CultureInfo.CurrentCulture,
+                "[{0}: Name={1}, lfHeight={2}, Height={3} pixels, Sytle={4}]",
+                GetType().Name, _logFont.FaceName.ToString(), LogFontHeight, Height, Style);
         }
 
         ////////////////////////////////////////////
@@ -338,63 +339,5 @@ namespace System.Windows.Forms.Internal
         ///  The font's face name.
         /// </summary>
         public string Name => _logFont.FaceName.ToString();
-
-        /// <summary>
-        ///  Gets the character height (as opposed to the cell height) of the font represented by this object in points.
-        ///  Consider
-        /// </summary>
-        public float Size
-        {
-            get
-            {
-                if (_fontSize < 0.0f)
-                {
-                    WindowsGraphics wg = WindowsGraphicsCacheManager.MeasurementGraphics;
-
-                    // No need to reset the font (if changed) since we always set the font before using the MeasurementGraphics
-                    // in WindowsGraphics methods.
-                    wg.DeviceContext.SelectFont(this);
-
-                    Gdi32.TEXTMETRICW tm = wg.GetTextMetrics();
-
-                    // Convert the font character height to points.  If lfHeight is negative, Windows
-                    // treats the absolute value of that number as a desired font height compatible with
-                    // the point size; in this case lfHeight will roughly match the tmHeight field of
-                    // the TEXTMETRIC structure less the tmInternalLeading field.
-                    int height = _logFont.lfHeight > 0 ? tm.tmHeight : (tm.tmHeight - tm.tmInternalLeading);
-
-                    _fontSize = height * 72f / wg.DeviceContext.DpiY;
-                }
-
-                return _fontSize;
-            }
-        }
-
-        /// <summary>
-        ///  Attempts to match the TextRenderingHint of the specified Graphics object with a LOGFONT.lfQuality value.
-        /// </summary>
-        public static Gdi32.QUALITY WindowsFontQualityFromTextRenderingHint(Graphics? g)
-        {
-            if (g == null)
-            {
-                return Gdi32.QUALITY.DEFAULT;
-            }
-
-            switch (g.TextRenderingHint)
-            {
-                case TextRenderingHint.ClearTypeGridFit:
-                    return Gdi32.QUALITY.CLEARTYPE;
-                case TextRenderingHint.AntiAliasGridFit:
-                case TextRenderingHint.AntiAlias:
-                    return Gdi32.QUALITY.ANTIALIASED;
-                case TextRenderingHint.SingleBitPerPixelGridFit:
-                    return Gdi32.QUALITY.PROOF;
-                case TextRenderingHint.SingleBitPerPixel:
-                    return Gdi32.QUALITY.DRAFT;
-                default:
-                case TextRenderingHint.SystemDefault:
-                    return Gdi32.QUALITY.DEFAULT;
-            }
-        }
     }
 }

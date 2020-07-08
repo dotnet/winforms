@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Drawing.Text;
 using static Interop;
 
 namespace System.Windows.Forms

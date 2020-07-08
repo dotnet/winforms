@@ -72,46 +72,6 @@ namespace System.Windows.Forms.Internal
             => DrawEllipse(pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
 
         /// <summary>
-        ///  Draws the text at the specified point, using the given Font and foreColor.
-        ///  CR/LF are honored.
-        /// </summary>
-        public void DrawText(string? text, WindowsFont? font, Point pt, Color foreColor)
-            => DrawText(text, font, pt, foreColor, Color.Empty, User32.DT.DEFAULT);
-
-        /// <summary>
-        ///  Draws the text at the specified point, using the given Font, foreColor and backColor.
-        ///  CR/LF are honored.
-        /// </summary>
-        public void DrawText(string? text, WindowsFont? font, Point pt, Color foreColor, Color backColor)
-            =>  DrawText(text, font, pt, foreColor, backColor, User32.DT.DEFAULT);
-
-        /// <summary>
-        ///  Draws the text at the specified point, using the given Font and foreColor, and according to the
-        ///  specified flags.
-        /// </summary>
-        public void DrawText(string? text, WindowsFont? font, Point pt, Color foreColor, User32.DT flags)
-            => DrawText(text, font, pt, foreColor, Color.Empty, flags);
-
-        /// <summary>
-        ///  Draws the text at the specified point, using the given Font, foreColor and backColor, and according
-        ///  to the specified flags.
-        /// </summary>
-        public void DrawText(string? text, WindowsFont? font, Point pt, Color foreColor, Color backColor, User32.DT flags)
-            =>  DrawText(text, font, new Rectangle(pt, MaxSize), foreColor, backColor, flags);
-
-        /// <summary>
-        ///  Draws the text centered in the given rectangle and using the given Font and foreColor.
-        /// </summary>
-        public void DrawText(string? text, WindowsFont? font, Rectangle bounds, Color foreColor)
-            => DrawText(text, font, bounds, foreColor, Color.Empty);
-
-        /// <summary>
-        ///  Draws the text centered in the given rectangle and using the given Font, foreColor and backColor.
-        /// </summary>
-        public void DrawText(string? text, WindowsFont? font, Rectangle bounds, Color foreColor, Color backColor)
-            => DrawText(text, font, bounds, foreColor, backColor, User32.DT.CENTER | User32.DT.VCENTER);
-
-        /// <summary>
         ///  Draws the text in the given bounds, using the given Font and foreColor, and according to the specified flags.
         /// </summary>
         public void DrawText(string? text, WindowsFont? font, Rectangle bounds, Color color, User32.DT flags)
@@ -282,21 +242,6 @@ namespace System.Windows.Forms.Internal
 
             return new Size(size.Width, size.Height);
         }
-
-        /// <summary>
-        ///  Returns the Size in logical units of the given text using the given Font.
-        ///  CR/LF/TAB are taken into account.
-        /// </summary>
-        public Size MeasureText(string? text, WindowsFont? font)
-            => MeasureText(text, font, MaxSize, User32.DT.BOTTOM);
-
-        /// <summary>
-        ///  Returns the Size in logical units of the given text using the given Font and using the specified rectangle
-        ///  as the text bounding box (see overload below for more info).
-        ///  TAB/CR/LF are taken into account.
-        /// </summary>
-        public Size MeasureText(string? text, WindowsFont? font, Size proposedSize)
-            =>  MeasureText(text, font, proposedSize, User32.DT.BOTTOM);
 
         /// <summary>
         ///  Returns the Size in logical units of the given text using the given Font, and according to the formatting flags.
