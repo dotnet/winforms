@@ -11,37 +11,37 @@
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <!-- Core Setup for coherency -->
   <PropertyGroup>
-    <MicrosoftNETCoreAppPackageVersion>5.0.0-preview.8.20328.6</MicrosoftNETCoreAppPackageVersion>
-    <SystemDiagnosticsEventLogPackageVersion>5.0.0-preview.8.20328.6</SystemDiagnosticsEventLogPackageVersion>
-    <SystemDirectoryServicesPackageVersion>5.0.0-preview.8.20328.6</SystemDirectoryServicesPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>5.0.0-preview.8.20328.6</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemSecurityAccessControlPackageVersion>5.0.0-preview.8.20328.6</SystemSecurityAccessControlPackageVersion>
-    <SystemSecurityCryptographyXmlPackageVersion>5.0.0-preview.8.20328.6</SystemSecurityCryptographyXmlPackageVersion>
-    <SystemSecurityPrincipalWindowsPackageVersion>5.0.0-preview.8.20328.6</SystemSecurityPrincipalWindowsPackageVersion>
-    <SystemIOPackagingPackageVersion>5.0.0-preview.8.20328.6</SystemIOPackagingPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>5.0.0-preview.8.20357.14</MicrosoftNETCoreAppPackageVersion>
+    <SystemDiagnosticsEventLogPackageVersion>5.0.0-preview.8.20357.14</SystemDiagnosticsEventLogPackageVersion>
+    <SystemDirectoryServicesPackageVersion>5.0.0-preview.8.20357.14</SystemDirectoryServicesPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>5.0.0-preview.8.20357.14</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemSecurityAccessControlPackageVersion>5.0.0-preview.8.20357.14</SystemSecurityAccessControlPackageVersion>
+    <SystemSecurityCryptographyXmlPackageVersion>5.0.0-preview.8.20357.14</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemSecurityPrincipalWindowsPackageVersion>5.0.0-preview.8.20357.14</SystemSecurityPrincipalWindowsPackageVersion>
+    <SystemIOPackagingPackageVersion>5.0.0-preview.8.20357.14</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>5.0.0-preview.8.20328.6</MicrosoftNETCoreILDAsmPackageVersion>
-    <MicrosoftNETCoreAppInternalPackageVersion>5.0.0-preview.8.20328.6</MicrosoftNETCoreAppInternalPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>5.0.0-preview.8.20357.14</MicrosoftNETCoreILDAsmPackageVersion>
+    <MicrosoftNETCoreAppInternalPackageVersion>5.0.0-preview.8.20357.14</MicrosoftNETCoreAppInternalPackageVersion>
   </PropertyGroup>
   <!-- CoreFX via Core Setup -->
   <PropertyGroup>
-    <MicrosoftNETCorePlatformsPackageVersion>5.0.0-preview.8.20328.6</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32RegistryPackageVersion>5.0.0-preview.8.20328.6</MicrosoftWin32RegistryPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>5.0.0-preview.8.20328.6</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>5.0.0-preview.8.20328.6</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>5.0.0-preview.8.20328.6</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>5.0.0-preview.8.20328.6</SystemDrawingCommonPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>5.0.0-preview.8.20328.6</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>5.0.0-preview.8.20328.6</SystemSecurityCryptographyCngPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>5.0.0-preview.8.20328.6</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>5.0.0-preview.8.20328.6</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>5.0.0-preview.8.20357.14</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>5.0.0-preview.8.20357.14</MicrosoftWin32RegistryPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>5.0.0-preview.8.20357.14</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>5.0.0-preview.8.20357.14</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>5.0.0-preview.8.20357.14</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>5.0.0-preview.8.20357.14</SystemDrawingCommonPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>5.0.0-preview.8.20357.14</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>5.0.0-preview.8.20357.14</SystemSecurityCryptographyCngPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>5.0.0-preview.8.20357.14</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>5.0.0-preview.8.20357.14</SystemWindowsExtensionsPackageVersion>
   </PropertyGroup>
   <!-- CoreCLR via Core Setup -->
   <PropertyGroup>
     <MicrosoftNETCoreILPackageVersion>3.0.0-preview5-27616-73</MicrosoftNETCoreILPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>5.0.0-preview.8.20328.6</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>5.0.0-preview.8.20328.6</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>5.0.0-preview.8.20328.6</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>5.0.0-preview.8.20357.14</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>5.0.0-preview.8.20357.14</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>5.0.0-preview.8.20357.14</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
