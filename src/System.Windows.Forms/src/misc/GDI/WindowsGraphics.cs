@@ -202,6 +202,7 @@ namespace System.Windows.Forms.Internal
             if (windowsGraphics == null)
             {
                 windowsGraphics = FromHdc((Gdi32.HDC)deviceContext.GetHdc());
+                windowsGraphics._deviceContext = deviceContext;
             }
 
             // Set text padding on the WindowsGraphics (if any).
