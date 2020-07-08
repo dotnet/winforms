@@ -5427,6 +5427,11 @@ Do you want to replace it?</source>
         <target state="translated">테이블의 행 개수입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="new">Horizontal</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">창 핸들이 이미 있습니다.</target>
@@ -10789,6 +10794,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">사용자 정의 컨트롤이 로드될 때마다 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="new">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">

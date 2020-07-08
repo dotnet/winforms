@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     ///  Represents a standard Windows vertical scroll bar.
     /// </summary>
     [SRDescription(nameof(SR.DescriptionVScrollBar))]
-    public class VScrollBar : ScrollBar
+    public partial class VScrollBar : ScrollBar
     {
         private const int DefaultHeight = 80;
 
@@ -55,5 +55,8 @@ namespace System.Windows.Forms
             add => base.RightToLeftChanged += value;
             remove => base.RightToLeftChanged -= value;
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new VScrollBarAccessibleObject(this);
     }
 }

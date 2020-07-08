@@ -5427,6 +5427,11 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Die Anzahl der Zeilen für die Tabelle.</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="new">Horizontal</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">Der Fensterhandle ist bereits vorhanden.</target>
@@ -10789,6 +10794,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">Tritt ein, wenn das Benutzersteuerelement geladen wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="new">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">

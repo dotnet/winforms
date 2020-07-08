@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(Value))]
     [DefaultEvent(nameof(Scroll))]
-    public abstract class ScrollBar : Control
+    public abstract partial class ScrollBar : Control
     {
         private static readonly object s_scrollEvent = new object();
         private static readonly object s_valueChangedEvent = new object();
@@ -738,5 +738,15 @@ namespace System.Windows.Forms
                     break;
             }
         }
+
+        /// <summary>
+        ///  Creates a new AccessibleObject for this <see cref='ScrollBar'/> instance.
+        ///  The AccessibleObject instance returned by this method supports ControlType UIA property.
+        /// </summary>
+        /// <returns>
+        ///  AccessibleObject for this <see cref='ScrollBar'/> instance.
+        /// </returns>
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new ScrollBarAccessibleObject(this);
     }
 }
