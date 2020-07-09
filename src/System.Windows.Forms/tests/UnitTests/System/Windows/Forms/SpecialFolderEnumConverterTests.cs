@@ -102,7 +102,6 @@ namespace System.Windows.Forms.Tests
 
         private class CustomReflectionType
         {
-            public static int Personal = 0;
         }
 
         private enum CustomEnum

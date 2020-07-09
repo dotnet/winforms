@@ -12,7 +12,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
     public class MauiButtonTests : ReflectBase
     {
         private readonly Button _button;
-        private bool _wasClicked = false;
+        private bool _wasClicked;
 
         public MauiButtonTests(string[] args) : base(args)
         {

@@ -14,7 +14,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
     {
         private const int NumItems = 200;
         private readonly ComboBox _comboBox;
-        private int _numEvents = 0;
+        private int _numEvents;
 
         public MauiComboBoxTests(string[] args) : base(args)
         {
