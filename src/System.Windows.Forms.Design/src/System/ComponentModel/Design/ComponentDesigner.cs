@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design
         DesignerVerbCollection _verbs;
         DesignerActionListCollection _actionLists;
         ShadowPropertyCollection _shadowProperties;
-        bool _settingsKeyExplicitlySet = false;
+        bool _settingsKeyExplicitlySet;
 
         private protected const string SettingsKeyName = "SettingsKey";
 

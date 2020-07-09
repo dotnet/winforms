@@ -429,10 +429,10 @@ namespace System.ComponentModel.Design
         {
             private PushButtonState _state;
             private const int PushButtonWidth = 14;
-            private Rectangle _dropDownRectangle = new Rectangle();
-            private bool _showSplit = false;
+            private Rectangle _dropDownRectangle;
+            private bool _showSplit;
 
-            private static bool s_isScalingInitialized = false;
+            private static bool s_isScalingInitialized;
             private const int Offset2Pixels = 2;
             private static int s_offset2X = Offset2Pixels;
             private static int s_offset2Y = Offset2Pixels;
@@ -749,7 +749,7 @@ namespace System.ComponentModel.Design
             private TableLayoutPanel _overArchingTableLayoutPanel;
             private TableLayoutPanel _addRemoveTableLayoutPanel;
 
-            private int _suspendEnabledCount = 0;
+            private int _suspendEnabledCount;
 
             private bool _dirty;
 
@@ -2378,7 +2378,7 @@ namespace System.ComponentModel.Design
         internal class PropertyGridSite : ISite
         {
             private readonly IServiceProvider _sp;
-            private bool _inGetService = false;
+            private bool _inGetService;
 
             public PropertyGridSite(IServiceProvider sp, IComponent comp)
             {

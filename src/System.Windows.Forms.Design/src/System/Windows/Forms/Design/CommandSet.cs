@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
         private const int SORT_ZORDER = 2;
         private const string CF_DESIGNER = "CF_DESIGNERCOMPONENTS_V2";
         //these are used for snapping control via keyboard movement
-        protected DragAssistanceManager dragManager = null;//point to the snapline engine (only valid between keydown and timer expiration)
+        protected DragAssistanceManager dragManager; //point to the snapline engine (only valid between keydown and timer expiration)
         private Timer _snapLineTimer;//used to track the time from when a snapline is rendered until it should expire
         private BehaviorService _behaviorService;//demand created pointer to the behaviorservice
         private StatusCommandUI _statusCommandUI; //Used to update the statusBar Information.
@@ -3197,7 +3197,7 @@ namespace System.Windows.Forms.Design
             private readonly IUIService _uiService;
             private readonly CommandSet _commandSet;
             private static Hashtable s_commandStatusHash; // list of the command statuses we are tracking.
-            private bool _updatingCommand = false; // flag we set when we're updating the command so we don't call back on the status handler.
+            private bool _updatingCommand; // flag we set when we're updating the command so we don't call back on the status handler.
 
             public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, IUIService uiService) : this(commandSet, statusHandler, invokeHandler, id, false, uiService)
             {
@@ -3411,10 +3411,10 @@ namespace System.Windows.Forms.Design
                 private const int Checked = 0x04;
                 private const int Supported = 0x08;
                 private const int NeedsUpdate = 0x10;
-                private int _selectionVersion = 0; // the version of the selection that this was initialized with.
+                private int _selectionVersion; // the version of the selection that this was initialized with.
                 private int _statusFlags = NeedsUpdate; // our flags.
                 // Multiple CommandSetItem instances can share a same status handler within a designer host. We use a simple ref count to make sure the CommandSetItem can be properly removed.
-                internal int refCount = 0;
+                internal int refCount;
 
                 /// <summary>
                 ///  Just what it says...

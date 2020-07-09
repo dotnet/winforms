@@ -15,9 +15,9 @@ namespace System.Windows.Forms.Design
         private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
         private static readonly ToolboxItem s_invalidToolboxItem = new ToolboxItem();
         private readonly Type _itemType;
-        private bool _convertTo = false;
+        private bool _convertTo;
         private ToolboxItem _tbxItem = s_invalidToolboxItem;
-        private Image _image = null;
+        private Image _image;
 
         public ItemTypeToolStripMenuItem(Type t) => _itemType = t;
 

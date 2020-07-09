@@ -39,7 +39,7 @@ namespace System.ComponentModel.Design.Serialization
         private static readonly int s_stateOwnTypeResolution = BitVector32.CreateMask(s_stateCodeParserChecked);    // True if we have added our own type resolution service
 
         // State for the designer loader.
-        private BitVector32 _state = new BitVector32();
+        private BitVector32 _state;
         private IExtenderProvider[] _extenderProviders;
         private IExtenderProviderService _extenderProviderService;
 

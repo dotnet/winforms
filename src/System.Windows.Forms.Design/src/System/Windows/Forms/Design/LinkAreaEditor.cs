@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Design
             private TableLayoutPanel _okCancelTableLayoutPanel;
             private readonly LinkAreaEditor _editor;
             private IWindowsFormsEditorService _edSvc;
-            private readonly IHelpService _helpService = null;
+            private readonly IHelpService _helpService;
 
             public LinkAreaUI(LinkAreaEditor editor, IHelpService helpService)
             {

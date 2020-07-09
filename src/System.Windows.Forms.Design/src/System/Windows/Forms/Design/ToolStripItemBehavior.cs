@@ -22,12 +22,12 @@ namespace System.Windows.Forms.Design
         private const int GLYPHINSET = 2;
         //new privates for "Drag Drop"
         internal Rectangle _dragBoxFromMouseDown = Rectangle.Empty;
-        private Timer _timer = null;
+        private Timer _timer;
         private ToolStripItemGlyph _selectedGlyph;
-        private bool _doubleClickFired = false;
-        private bool _mouseUpFired = false;
+        private bool _doubleClickFired;
+        private bool _mouseUpFired;
         private Control _dropSource;
-        private IEventHandlerService _eventSvc = null;
+        private IEventHandlerService _eventSvc;
 
         public ToolStripItemBehavior()
         {

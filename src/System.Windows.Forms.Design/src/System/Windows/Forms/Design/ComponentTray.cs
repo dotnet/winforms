@@ -43,14 +43,13 @@ namespace System.Windows.Forms.Design
         internal OleDragDropHandler oleDragDropHandler; // handler class for ole drag drop operations.
 
         private readonly IDesigner mainDesigner; // the designer that is associated with this tray
-        private IEventHandlerService eventHandlerService = null; // Event Handler service to handle keyboard and focus.
+        private IEventHandlerService eventHandlerService; // Event Handler service to handle keyboard and focus.
         private bool queriedTabOrder;
         private MenuCommand tabOrderCommand;
         private ICollection selectedObjects;
 
         // Services that we use on a high enough frequency to merit caching.
         private IMenuCommandService menuCommandService;
-        private readonly CommandSet privateCommandSet = null;
         private InheritanceUI inheritanceUI;
 
         private Point mouseDragStart = InvalidPoint; // the starting location of a drag
@@ -58,16 +57,16 @@ namespace System.Windows.Forms.Design
         private Rectangle mouseDragWorkspace = Rectangle.Empty; // a temp work rectangle we cache for perf
         private ToolboxItem mouseDragTool; // the tool that's being dragged; only for drag/drop
         private Point mouseDropLocation = InvalidPoint; // where the tool was dropped
-        private bool showLargeIcons = false;// Show Large icons or not.
-        private bool autoArrange = false; // allows for auto arranging icons.
+        private bool showLargeIcons;// Show Large icons or not.
+        private bool autoArrange; // allows for auto arranging icons.
         private Point autoScrollPosBeforeDragging = Point.Empty;//Used to return the correct scroll pos. after a drag
 
         // Component Tray Context menu items...
-        private readonly MenuCommand menucmdArrangeIcons = null;
-        private readonly MenuCommand menucmdLineupIcons = null;
-        private readonly MenuCommand menucmdLargeIcons = null;
-        private bool fResetAmbient = false;
-        private bool fSelectionChanged = false;
+        private readonly MenuCommand menucmdArrangeIcons;
+        private readonly MenuCommand menucmdLineupIcons;
+        private readonly MenuCommand menucmdLargeIcons;
+        private bool fResetAmbient;
+        private bool fSelectionChanged;
         private ComponentTrayGlyphManager glyphManager;//used to manage any glyphs added to the tray
 
         // Empty class for build time dependancy
@@ -889,15 +888,6 @@ namespace System.Windows.Forms.Design
                     mcs.RemoveCommand(menucmdLargeIcons);
                 }
 
-                if (privateCommandSet != null)
-                {
-                    privateCommandSet.Dispose();
-                    // If we created a private command set, we also added a selection ui service to the host
-                    if (host != null)
-                    {
-                        host.RemoveService(typeof(ISelectionUIService));
-                    }
-                }
                 selectionUISvc = null;
 
                 if (inheritanceUI != null)
@@ -1912,11 +1902,11 @@ namespace System.Windows.Forms.Design
             // transient values that are used during mouse drags
             private Point _mouseDragLast = InvalidPoint; // the last position of the mouse during a drag.
             private bool _mouseDragMoved; // has the mouse been moved during this drag?
-            private bool _ctrlSelect = false; // was the ctrl key down on the mouse down?
-            private bool _positioned = false; // Have we given this control an explicit location yet?
+            private bool _ctrlSelect; // was the ctrl key down on the mouse down?
+            private bool _positioned; // Have we given this control an explicit location yet?
             private const int WhiteSpace = 5;
             private readonly int _borderWidth;
-            internal bool _fRecompute = false; // This flag tells the TrayControl that it needs to retrieve the font and the background color before painting.
+            internal bool _fRecompute; // This flag tells the TrayControl that it needs to retrieve the font and the background color before painting.
 
             /// <summary>
             ///  Creates a new TrayControl based on the component.

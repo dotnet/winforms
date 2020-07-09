@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design
     internal class ContextMenuStripActionList : DesignerActionList
     {
         private readonly ToolStripDropDown _toolStripDropDown;
-        private bool _autoShow = false;
+        private bool _autoShow;
 
         public ContextMenuStripActionList(ToolStripDropDownDesigner designer) : base(designer.Component)
         {

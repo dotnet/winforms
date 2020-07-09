@@ -25,15 +25,15 @@ namespace System.Windows.Forms.Design
         private TableLayoutPanel _okCancelTableLayoutPanel;
         private TableLayoutPanel _overarchingTableLayoutPanel;
         private TableLayoutPanel _sampleViewGridsTableLayoutPanel;
-        private Container _components = null;
-        private Label _normalLabel = null;
-        private Label _selectedLabel = null;
-        private IHelpService _helpService = null;
-        private IComponent _comp = null;
-        private IServiceProvider _serviceProvider = null;
+        private Container _components;
+        private Label _normalLabel;
+        private Label _selectedLabel;
+        private IHelpService _helpService;
+        private IComponent _comp;
+        private IServiceProvider _serviceProvider;
 
         private DataGridViewCellStyle _cellStyle;
-        private ITypeDescriptorContext _context = null;
+        private ITypeDescriptorContext _context;
 
         public DataGridViewCellStyleBuilder(IServiceProvider serviceProvider, IComponent comp)
         {
@@ -346,7 +346,7 @@ namespace System.Windows.Forms.Design
 
         private class DialogDataGridViewCell : DataGridViewTextBoxCell
         {
-            DialogDataGridViewCellAccessibleObject _accObj = null;
+            DialogDataGridViewCellAccessibleObject _accObj;
             protected override AccessibleObject CreateAccessibilityInstance()
             {
                 if (_accObj == null)

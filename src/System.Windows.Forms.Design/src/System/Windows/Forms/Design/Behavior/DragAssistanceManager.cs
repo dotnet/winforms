@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Point _dragOffset; //the offset from the new drag pos compared to the last
         private Rectangle _cachedDragRect; //used to store drag rect between erasing & waiting to render
         private readonly Pen _edgePen = SystemPens.Highlight;
-        private readonly bool _disposeEdgePen = false;
+        private readonly bool _disposeEdgePen;
         private readonly Pen _baselinePen = new Pen(Color.Fuchsia);
         // These are global lists of all the existing vertical and hoirizontal snaplineson the designer's surface excluding the targetControl.  All SnapLine coords in theselists have been properly adjusted for the AdornerWindow coords.
         private readonly ArrayList _verticalSnapLines = new ArrayList();

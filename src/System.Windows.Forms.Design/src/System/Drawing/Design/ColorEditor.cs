@@ -99,7 +99,7 @@ namespace System.Drawing.Design
             public const int CELL_SIZE = 16;
             public const int MARGIN = 8;
 
-            private static bool isScalingInitialized = false;
+            private static bool isScalingInitialized;
             private static int cellSizeX = CELL_SIZE;
             private static int cellSizeY = CELL_SIZE;
             private static int marginX = MARGIN;

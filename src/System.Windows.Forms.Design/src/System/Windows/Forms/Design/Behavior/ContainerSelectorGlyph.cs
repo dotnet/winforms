@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Design.Behavior
             return null;
         }
 
-        private Bitmap _glyph = null;
+        private Bitmap _glyph;
         private Bitmap MoveGlyph
         {
             get

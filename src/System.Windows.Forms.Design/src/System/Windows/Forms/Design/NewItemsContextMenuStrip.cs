@@ -8,10 +8,10 @@ namespace System.Windows.Forms.Design
 {
     internal class NewItemsContextMenuStrip : GroupedContextMenuStrip
     {
-        private readonly IComponent _component = null;
-        private readonly EventHandler _onClick = null;
-        private readonly bool _convertTo = false;
-        private readonly IServiceProvider _serviceProvider = null;
+        private readonly IComponent _component;
+        private readonly EventHandler _onClick;
+        private readonly bool _convertTo;
+        private readonly IServiceProvider _serviceProvider;
         private readonly ToolStripItem _currentItem;
 
         public NewItemsContextMenuStrip(IComponent component, ToolStripItem currentItem, EventHandler onClick, bool convertTo, IServiceProvider serviceProvider)

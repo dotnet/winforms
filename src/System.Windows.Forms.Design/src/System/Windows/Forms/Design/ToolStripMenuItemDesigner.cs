@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design
         private const int GLYPHINSET = 2;
         // This is the typeHereNode that appears to the bottom and right  of each commited ToolStripDropDownItem
         private DesignerToolStripControlHost typeHereNode;
-        private ToolStripTemplateNode typeHereTemplateNode = null;
+        private ToolStripTemplateNode typeHereTemplateNode;
         // This is the TemplateNode.EditorToolStrip. The editor ToolStrip is encapsulated in a ToolStripControlHost and then added as a  ToolStripDropDownItem on the current ToolStripDropDownItems DropDown.
         private DesignerToolStripControlHost commitedEditorNode;
         // Actual InSitu Editor. This is created for every selected  ToolStripDropDownItem and is DISPOSED immediately after the item comes out of InSitu edit Mode.
@@ -29,16 +29,16 @@ namespace System.Windows.Forms.Design
 
         // DesignerHost for current Component
         private IDesignerHost designerHost;
-        private ToolStripItem parentItem = null;
-        private ToolStripAdornerWindowService toolStripAdornerWindowService = null;
-        private ToolStripKeyboardHandlingService keyboardHandlingService = null;
+        private ToolStripItem parentItem;
+        private ToolStripAdornerWindowService toolStripAdornerWindowService;
+        private ToolStripKeyboardHandlingService keyboardHandlingService;
         //Make Selection service a class level member.. used a lot.
-        private ISelectionService selSvc = null;
+        private ISelectionService selSvc;
         //DesignerTrnasaction used for removing Items
-        private DesignerTransaction _pendingTransaction = null;
-        private bool fireComponentChanged = false;
+        private DesignerTransaction _pendingTransaction;
+        private bool fireComponentChanged;
         //indicates that we are adding new MenuItem ..
-        private bool componentAddingFired = false;
+        private bool componentAddingFired;
         //new item index
         private int indexToInsertNewItem = -1;
         //only used by DropDownMenu, DropDown or ContextMenuStrip.
@@ -54,18 +54,18 @@ namespace System.Windows.Forms.Design
         //DropDownToInvalidate while ComponentRemove
         private Rectangle boundsToInvalidateOnRemove = Rectangle.Empty;
         private ToolStripDropDownGlyph rootControlGlyph;
-        private bool initialized = false;
+        private bool initialized;
 
         // Hook on the Undoing and Undone Events...
-        private UndoEngine undoEngine = null;
-        private bool undoingCalled = false;
-        private bool addingDummyItem = false;
+        private UndoEngine undoEngine;
+        private bool undoingCalled;
+        private bool addingDummyItem;
 
         //custom DropDown
-        private ToolStripDropDown customDropDown = null;
-        private bool dropDownSet = false;
-        private SerializationStore serializedDataForDropDownItems = null;
-        private bool dropDownSetFailed = false;
+        private ToolStripDropDown customDropDown;
+        private bool dropDownSet;
+        private SerializationStore serializedDataForDropDownItems;
+        private bool dropDownSetFailed;
 
         /// <summary>
         ///  The ToolStripDropDownItems are the associated components.

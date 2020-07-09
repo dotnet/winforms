@@ -21,15 +21,15 @@ namespace System.Windows.Forms.Design
         private IMenuCommandService _menuCommandService;
         private readonly IDesignerHost _designerHost;
         //primary selection during shift operation is the LAST selected item which is different from selSvc.PrimarySelection, hence cache it
-        private object _shiftPrimary = null;
-        private bool _shiftPressed = false;
+        private object _shiftPrimary;
+        private bool _shiftPressed;
         // our cache of currently selected DesignerToolStripControl Host....
         private object _currentSelection;
         //is the templateNode in Insitu Mode?
-        private bool _templateNodeActive = false;
-        private ToolStripTemplateNode _activeTemplateNode = null;
+        private bool _templateNodeActive;
+        private ToolStripTemplateNode _activeTemplateNode;
         //is the TemplateNode ContextMenu open. When the TemplateNode AddItems ContextMenu is opened we want to Disable all the Commands... And we enable them when the contextMenu closes...  But if the menu closes by "enter Key" we get OnKeyDefault and hence go into InSitu Edit Mode.. to avoid this we have a new flag to IGNORE the first OnKeyDefault.
-        private bool _templateNodeContextMenuOpen = false;
+        private bool _templateNodeContextMenuOpen;
         // old commands
         private ArrayList _oldCommands;
         // our commands
@@ -37,11 +37,11 @@ namespace System.Windows.Forms.Design
         // need to add this separately since the VbDATA guys return us their paste command when the DataSource is copy pasted.
         private MenuCommand _oldCommandPaste;
         private MenuCommand _newCommandPaste;
-        private bool _commandsAdded = false;
-        private bool _copyInProgress = false;
-        private bool _cutOrDeleteInProgress = false;
-        private bool _contextMenuShownByKeyBoard = false; //We should know when the contextMenu is shown by KeyBoard shortcut.
-        private object _ownerItemAfterCut = null; // This value is set only of the ToolStripMenuItem is cut and now we need to reopen the dropDown which was closed in the previous CUT operation.
+        private bool _commandsAdded;
+        private bool _copyInProgress;
+        private bool _cutOrDeleteInProgress;
+        private bool _contextMenuShownByKeyBoard; //We should know when the contextMenu is shown by KeyBoard shortcut.
+        private object _ownerItemAfterCut; // This value is set only of the ToolStripMenuItem is cut and now we need to reopen the dropDown which was closed in the previous CUT operation.
 
         /// <summary>
         ///  This creates a service for handling the keyboard navigation at desgin time.

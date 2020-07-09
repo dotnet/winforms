@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Design
     {
         private readonly IServiceProvider _sp;
         private readonly IComponent _comp;
-        private bool _inGetService = false;
+        private bool _inGetService;
 
         public DataGridViewComponentPropertyGridSite(IServiceProvider sp, IComponent comp)
         {

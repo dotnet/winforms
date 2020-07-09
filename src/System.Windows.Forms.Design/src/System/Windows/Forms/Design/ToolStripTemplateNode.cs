@@ -36,15 +36,15 @@ namespace System.Windows.Forms.Design
         private static int TEMPLATE_HOTREGION_WIDTH = TEMPLATE_HOTREGION_WIDTH_ORIGINAL;
         private static int MINITOOLSTRIP_TEXTBOX_WIDTH = MINITOOLSTRIP_TEXTBOX_WIDTH_ORIGINAL;
 
-        private static bool s_isScalingInitialized = false;
+        private static bool s_isScalingInitialized;
         internal const string CenterLabelName = "centerLabel";
 
         // Component for this InSitu Editor... (this is a ToolStripItem) that wants to go into InSitu
         private readonly IComponent _component;
         // Current Designer for the comopenent that in InSitu mode
-        private IDesigner _designer = null;
+        private IDesigner _designer;
         //Get DesignerHost.
-        private readonly IDesignerHost _designerHost = null;
+        private readonly IDesignerHost _designerHost;
         // Menu Commands to override
         private readonly MenuCommand[] _commands;
         // MenuCommands to Add
@@ -59,17 +59,17 @@ namespace System.Windows.Forms.Design
         private ToolStripControlHost _centerTextBox;
 
         //reqd as rtb does accept Enter..
-        internal bool ignoreFirstKeyUp = false;
+        internal bool ignoreFirstKeyUp;
 
         // This is the Bounding Rectangle for the ToolStripTemplateNode. This is set by the itemDesigner in terms of the "AdornerWindow" bounds.  The ToolStripEditorManager uses this Bounds to actually activate the  editor on the AdornerWindow.
         private Rectangle _boundingRect;
         // Keeps track of Insitu Mode.
-        private bool _inSituMode = false;
+        private bool _inSituMode;
         // Tells whether the editorNode is listening to Menu commands.
-        private bool _active = false;
+        private bool _active;
 
         // Need to keep a track of Last Selection to uncheck it. This is the Checked property on ToolStripItems on the Menu. We check this cached in value to the current Selection on the addItemButton and if different then uncheck the Checked for this lastSelection.. Check for the currentSelection and finally save the currentSelection as the lastSelection for future check.
-        private ItemTypeToolStripMenuItem _lastSelection = null;
+        private ItemTypeToolStripMenuItem _lastSelection;
 
         // This is the renderer used to Draw the Strips.....
         private MiniToolStripRenderer _renderer;
@@ -83,25 +83,25 @@ namespace System.Windows.Forms.Design
         //Cached BehaviorService
         private BehaviorService _behaviorService;
         //ControlHost for selection on mouseclicks
-        private DesignerToolStripControlHost _controlHost = null;
+        private DesignerToolStripControlHost _controlHost;
         // On DropDowns the component passed in is the parent (ownerItem) and hence we need the  reference for actual item
-        private ToolStripItem _activeItem = null;
+        private ToolStripItem _activeItem;
 
         private EventHandler _onActivated;
         private EventHandler _onClosed;
         private EventHandler _onDeactivated;
-        private MenuCommand _oldUndoCommand = null;
-        private MenuCommand _oldRedoCommand = null;
+        private MenuCommand _oldUndoCommand;
+        private MenuCommand _oldRedoCommand;
         // The DropDown for the TemplateNode
         private NewItemsContextMenuStrip _contextMenu;
         // the Hot Region within the templateNode ... this is used for the menustrips
         private Rectangle _hotRegion;
 
-        private bool _imeModeSet = false;
+        private bool _imeModeSet;
         //DesignSurface to hook up to the Flushed event
-        private DesignSurface _designSurface = null;
+        private DesignSurface _designSurface;
         // Is system context menu displayed for the insitu text box?
-        private bool _isSystemContextMenuDisplayed = false;
+        private bool _isSystemContextMenuDisplayed;
         // delay population of custom menu items until ready to open the drop down
         private bool _isPopulated;
 

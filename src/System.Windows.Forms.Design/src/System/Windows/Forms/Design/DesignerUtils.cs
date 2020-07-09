@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
         private static Gdi32.HPEN s_grabHandlePen = Gdi32.CreatePen(Gdi32.PS.SOLID, 1, ColorTranslator.ToWin32(SystemColors.Window));
 
         //The box-like image used as the user is dragging comps from the toolbox
-        private static Bitmap s_boxImage = null;
+        private static Bitmap s_boxImage;
         public static int BOXIMAGESIZE = 16;
 
         // selection border size

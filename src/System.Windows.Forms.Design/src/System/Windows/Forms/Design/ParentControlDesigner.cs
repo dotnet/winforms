@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design
         private IComponentChangeService componentChangeSvc;
         private StatusCommandUI statusCommandUI; // UI for setting the StatusBar Information..
 
-        private int suspendChanging = 0;
+        private int suspendChanging;
 
         /// <summary>
         ///  This is called after the user selects a toolbox item (that has a ParentControlDesigner

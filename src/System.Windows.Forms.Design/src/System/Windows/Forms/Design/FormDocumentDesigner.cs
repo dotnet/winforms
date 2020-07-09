@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -19,10 +19,10 @@ namespace System.Windows.Forms.Design
     internal class FormDocumentDesigner : DocumentDesigner
     {
         private Size _autoScaleBaseSize = Size.Empty;
-        private bool _inAutoscale = false;
-        private bool _initializing = false;
-        private bool _autoSize = false;
-        private ToolStripAdornerWindowService _toolStripAdornerWindowService = null;
+        private bool _inAutoscale;
+        private bool _initializing;
+        private bool _autoSize;
+        private ToolStripAdornerWindowService _toolStripAdornerWindowService;
 
         /// <summary>
         ///  Shadow the AcceptButton property at design-time so that we can preserve it when the form is rebuilt.  Otherwise, form.Controls.Clear() will clear it out when we don't want it to.

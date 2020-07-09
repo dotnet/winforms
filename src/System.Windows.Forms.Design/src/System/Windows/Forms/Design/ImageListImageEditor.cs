@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design
         // VSWhidbey 95227: Metafile types are not supported in the ImageListImageEditor and should
         // not be displayed as an option.
         internal static Type[] s_imageExtenders = new Type[] { typeof(BitmapEditor)/*, gpr typeof(Icon), typeof(MetafileEditor)*/};
-        private OpenFileDialog _fileDialog = null;
+        private OpenFileDialog _fileDialog;
 
         // VSWhidbey 95227: accessor needed into the static field so that derived classes
         // can implement a different list of supported image types.

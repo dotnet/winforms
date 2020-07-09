@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Design.Behavior
         private object prevPrimarySelection; //used to check if the primary selection changed
         private Rectangle[] curSelectionBounds;
         private int curCompIndex;
-        private DesignerActionUI designerActionUI = null; // the "container" for all things related to the designer action (smartags) UI
+        private DesignerActionUI designerActionUI; // the "container" for all things related to the designer action (smartags) UI
         private bool selectionChanging; //we dont want the OnSelectionChanged to be recursively called.
 
         /// <summary>

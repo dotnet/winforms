@@ -63,15 +63,15 @@ namespace System.Windows.Forms.Design
 
         private bool _ctrlSelect; // if the CTRL key was down at the mouse down
         private bool _toolPassThrough; // a tool is selected, allow the parent to draw a rect for it.
-        private bool _removalNotificationHooked = false;
+        private bool _removalNotificationHooked;
         private bool _revokeDragDrop = true;
         private bool _hadDragDrop;
-        private static bool s_inContextMenu = false;
+        private static bool s_inContextMenu;
         private DockingActionList _dockingAction;
         private StatusCommandUI _statusCommandUI; // UI for setting the StatusBar Information..
 
         private bool _forceVisible = true;
-        private bool _autoResizeHandles = false; // used for disabling AutoSize effect on resize modes. Needed for compat.
+        private bool _autoResizeHandles; // used for disabling AutoSize effect on resize modes. Needed for compat.
         private Dictionary<IntPtr, bool> _subclassedChildren;
 
         protected BehaviorService BehaviorService
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        protected AccessibleObject accessibilityObj = null;
+        protected AccessibleObject accessibilityObj;
 
         public virtual AccessibleObject AccessibilityObject
         {
@@ -2341,10 +2341,10 @@ namespace System.Windows.Forms.Design
 
         public class ControlDesignerAccessibleObject : AccessibleObject
         {
-            private readonly ControlDesigner _designer = null;
-            private readonly Control _control = null;
-            private IDesignerHost _host = null;
-            private ISelectionService _selSvc = null;
+            private readonly ControlDesigner _designer;
+            private readonly Control _control;
+            private IDesignerHost _host;
+            private ISelectionService _selSvc;
 
             public ControlDesignerAccessibleObject(ControlDesigner designer, Control control)
             {

@@ -13,8 +13,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class ListViewSubItemCollectionEditor : CollectionEditor
     {
-        private static int _count = 0;
-        private ListViewItem.ListViewSubItem _firstSubItem = null;
+        private static int _count;
+        private ListViewItem.ListViewSubItem _firstSubItem;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='System.Windows.Forms.Design.ListViewSubItemCollectionEditor'/> class.
