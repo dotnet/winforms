@@ -18,11 +18,11 @@ namespace System.Windows.Forms
     public class ToolStripPanelRow : Component, IArrangedElement
     {
         private Rectangle bounds = Rectangle.Empty;
-        private readonly ToolStripPanel parent = null;
-        private BitVector32 state = new BitVector32();
+        private readonly ToolStripPanel parent;
+        private BitVector32 state;
         private readonly PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
-        private int suspendCount = 0;
-        private ToolStripPanelRowManager rowManager = null;
+        private int suspendCount;
+        private ToolStripPanelRowManager rowManager;
 
         private const int MINALLOWEDWIDTH = 50;
         private readonly int minAllowedWidth = MINALLOWEDWIDTH;
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
 #endif
 
 #if DEBUG
-        private static int rowCreationCount = 0;
+        private static int rowCreationCount;
         private readonly int thisRowID;
 #endif
 
@@ -768,9 +768,9 @@ namespace System.Windows.Forms
 
         private abstract class ToolStripPanelRowManager
         {
-            private FlowLayoutSettings flowLayoutSettings = null;
+            private FlowLayoutSettings flowLayoutSettings;
 
-            private readonly ToolStripPanelRow owner = null;
+            private readonly ToolStripPanelRow owner;
 
             public ToolStripPanelRowManager(ToolStripPanelRow owner)
             {

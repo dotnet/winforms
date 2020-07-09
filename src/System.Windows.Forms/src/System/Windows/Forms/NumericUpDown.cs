@@ -60,10 +60,10 @@ namespace System.Windows.Forms
         private bool currentValueChanged;
 
         // Event handler for the onValueChanged event
-        private EventHandler onValueChanged = null;
+        private EventHandler onValueChanged;
 
         // Disable value range checking while initializing the control
-        private bool initializing = false;
+        private bool initializing;
 
         // Provides for finer acceleration behavior.
         private NumericUpDownAccelerationCollection accelerations;

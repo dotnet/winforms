@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -26,12 +26,12 @@ namespace System.Windows.Forms
             // forward [de]activation messages to the requisite container...
             private AxHost siteUIActive;
             private AxHost siteActive;
-            private bool formAlreadyCreated = false;
+            private bool formAlreadyCreated;
             private readonly Hashtable containerCache = new Hashtable();  // name -> Control
-            private int lockCount = 0;
-            private Hashtable components = null;  // Control -> any
-            private Hashtable proxyCache = null;
-            private AxHost ctlInEditMode = null;
+            private int lockCount;
+            private Hashtable components;  // Control -> any
+            private Hashtable proxyCache;
+            private AxHost ctlInEditMode;
 
             internal AxContainer(ContainerControl parent)
             {

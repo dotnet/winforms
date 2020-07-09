@@ -19,16 +19,16 @@ namespace System.Windows.Forms
         private object dataSource;
         private IList list;
 
-        private bool bound = false;
+        private bool bound;
         private bool shouldBind = true;
 
         protected int listposition = -1;
 
         private int lastGoodKnownRow = -1;
-        private bool pullingData = false;
+        private bool pullingData;
 
-        private bool inChangeRecordState = false;
-        private bool suspendPushDataInCurrentChanged = false;
+        private bool inChangeRecordState;
+        private bool suspendPushDataInCurrentChanged;
         private ItemChangedEventHandler onItemChanged;
         private ListChangedEventHandler onListChanged;
         private readonly ItemChangedEventArgs resetEvent = new ItemChangedEventArgs(-1);

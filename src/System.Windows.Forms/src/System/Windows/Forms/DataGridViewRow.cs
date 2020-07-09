@@ -1774,7 +1774,7 @@ namespace System.Windows.Forms
         {
             private int[] runtimeId;
             private DataGridViewRow owner;
-            private DataGridViewSelectedRowCellsAccessibleObject selectedCellsAccessibilityObject = null;
+            private DataGridViewSelectedRowCellsAccessibleObject selectedCellsAccessibilityObject;
 
             public DataGridViewRowAccessibleObject()
             {

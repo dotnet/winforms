@@ -16,7 +16,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     internal class Com2FontConverter : Com2DataTypeToManagedDataTypeConverter
     {
         private IntPtr _lastHandle = IntPtr.Zero;
-        private Font _lastFont = null;
+        private Font _lastFont;
 
         public override bool AllowExpand => true;
 

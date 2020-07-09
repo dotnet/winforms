@@ -98,13 +98,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         private CacheItems cacheItems;
 
         // instance variables.
-        protected TypeConverter converter = null;
-        protected UITypeEditor editor = null;
-        internal GridEntry parentPE = null;
-        private GridEntryCollection childCollection = null;
-        internal int flags = 0;
-        private int propertyDepth = 0;
-        protected bool hasFocus = false;
+        protected TypeConverter converter;
+        protected UITypeEditor editor;
+        internal GridEntry parentPE;
+        private GridEntryCollection childCollection;
+        internal int flags;
+        private int propertyDepth;
+        protected bool hasFocus;
         private Rectangle outlineRect = Rectangle.Empty;
         protected PropertySort PropertySort;
 
@@ -121,9 +121,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         private static readonly object EVENT_OUTLINE_DBLCLICK = new object();
         private static readonly object EVENT_RECREATE_CHILDREN = new object();
 
-        private GridEntryAccessibleObject accessibleObject = null;
+        private GridEntryAccessibleObject accessibleObject;
 
-        private bool lastPaintWithExplorerStyle = false;
+        private bool lastPaintWithExplorerStyle;
 
         private static Color InvertColor(Color color)
         {
@@ -3003,9 +3003,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public class GridEntryAccessibleObject : AccessibleObject
         {
-            protected GridEntry owner = null;
+            protected GridEntry owner;
             private delegate void SelectDelegate(AccessibleSelection flags);
-            private int[] runtimeId = null; // Used by UIAutomation
+            private int[] runtimeId; // Used by UIAutomation
 
             public GridEntryAccessibleObject(GridEntry owner) : base()
             {

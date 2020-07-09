@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     public class ToolStripItemTextRenderEventArgs : ToolStripItemRenderEventArgs
     {
         private Color _textColor = SystemColors.ControlText;
-        private bool _textColorChanged = false;
+        private bool _textColorChanged;
 
         /// <summary>
         ///  This class represents all the information to render the ToolStrip

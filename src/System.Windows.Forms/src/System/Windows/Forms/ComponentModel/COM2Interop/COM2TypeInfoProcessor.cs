@@ -33,7 +33,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
         }
 
-        private static ModuleBuilder moduleBuilder = null;
+        private static ModuleBuilder moduleBuilder;
 
         private static ModuleBuilder ModuleBuilder
         {

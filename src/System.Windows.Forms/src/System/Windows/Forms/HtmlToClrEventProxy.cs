@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     {
         private readonly EventHandler eventHandler;
         private readonly IReflect typeIReflectImplementation;
-        private readonly object sender = null;
+        private readonly object sender;
         private readonly string eventName;
 
         public HtmlToClrEventProxy(object sender, string eventName, EventHandler eventHandler)

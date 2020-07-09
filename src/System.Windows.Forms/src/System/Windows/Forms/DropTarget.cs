@@ -14,7 +14,7 @@ namespace System.Windows.Forms
 {
     internal class DropTarget : Ole32.IDropTarget
     {
-        private IDataObject lastDataObject = null;
+        private IDataObject lastDataObject;
         private DragDropEffects lastEffect = DragDropEffects.None;
         private readonly IDropTarget owner;
 

@@ -54,7 +54,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The current border for this edit control.
         /// </summary>
-        private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+        private BorderStyle borderStyle = BorderStyle.Fixed3D;
 
         /// <summary>
         ///  Controls the maximum length of text in the edit control.
@@ -67,25 +67,25 @@ namespace System.Windows.Forms
         ///  the edit box.
         /// </summary>
         private int requestedHeight;
-        bool integralHeightAdjust = false;
+        bool integralHeightAdjust;
 
         //these indices are used to cache the values of the selection, by doing this
         //if the handle isn't created yet, we don't force a creation.
-        private int selectionStart = 0;
-        private int selectionLength = 0;
+        private int selectionStart;
+        private int selectionLength;
 
         /// <summary>
         ///  Controls firing of click event (Left click).
         ///  This is used by TextBox, RichTextBox and MaskedTextBox, code was moved down from TextBox/RichTextBox
         ///  but cannot make it as default behavior to avoid introducing breaking changes.
         /// </summary>
-        private bool doubleClickFired = false;
+        private bool doubleClickFired;
 
         private static int[] shortcutsToDisable;
 
         // We store all boolean properties in here.
         //
-        private BitVector32 textBoxFlags = new BitVector32();
+        private BitVector32 textBoxFlags;
 
         /// <summary>
         ///  Creates a new TextBox control.  Uses the parent's current font and color

@@ -13,9 +13,9 @@ namespace System.Windows.Forms
     internal class ToolStripGrip : ToolStripButton
     {
         private Cursor oldCursor;
-        private int gripThickness = 0;
+        private int gripThickness;
         Point startLocation = Point.Empty;
-        private bool movingToolStrip = false;
+        private bool movingToolStrip;
         private Point lastEndLocation = ToolStrip.InvalidMouseEnter;
         private static Size DragSize = LayoutUtils.MaxSize;
 

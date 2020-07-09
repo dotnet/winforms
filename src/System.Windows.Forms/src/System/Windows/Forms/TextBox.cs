@@ -28,13 +28,13 @@ namespace System.Windows.Forms
         ///  presses.  While this is typically desired by multiline edits, this
         ///  can interfere with normal key processing in a dialog.
         /// </summary>
-        private bool acceptsReturn = false;
+        private bool acceptsReturn;
 
         /// <summary>
         ///  Indicates what the current special password character is.  This is
         ///  displayed instead of any other text the user might enter.
         /// </summary>
-        private char passwordChar = (char)0;
+        private char passwordChar;
 
         private bool useSystemPasswordChar;
 
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
         ///  never been set and we get focus, we focus all the text in the control
         ///  so we mimic the Windows dialog manager.
         /// </summary>
-        private bool selectionSet = false;
+        private bool selectionSet;
 
         /// <summary>
         ///  This stores the value for the autocomplete mode which can be either
@@ -77,8 +77,8 @@ namespace System.Windows.Forms
         ///  This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
         /// </summary>
         private AutoCompleteStringCollection autoCompleteCustomSource;
-        private bool fromHandleCreate = false;
-        private StringSource stringSource = null;
+        private bool fromHandleCreate;
+        private StringSource stringSource;
         private string placeholderText = string.Empty;
 
         public TextBox()

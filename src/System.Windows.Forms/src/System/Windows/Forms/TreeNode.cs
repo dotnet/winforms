@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         // we use it to store font and color data in a minimal-memory-cost manner
         // ie. nodes which don't use fancy fonts or colors (ie. that use the TreeView settings for these)
         //     will take up less memory than those that do.
-        internal OwnerDrawPropertyBag propBag = null;
+        internal OwnerDrawPropertyBag propBag;
         internal IntPtr handle;
         internal string text;
         internal string name;
@@ -55,8 +55,8 @@ namespace System.Windows.Forms
         private TreeNodeImageIndexer stateImageIndexer;
 
         private string toolTipText = string.Empty;
-        private ContextMenuStrip contextMenuStrip = null;
-        internal bool nodesCleared = false;
+        private ContextMenuStrip contextMenuStrip;
+        internal bool nodesCleared;
 
         // We need a special way to defer to the TreeView's image
         // list for indexing purposes.
@@ -146,9 +146,9 @@ namespace System.Windows.Forms
         internal TreeNode[] children;
         internal TreeNode parent;
         internal TreeView treeView;
-        private bool expandOnRealization = false;
-        private bool collapseOnRealization = false;
-        private TreeNodeCollection nodes = null;
+        private bool expandOnRealization;
+        private bool collapseOnRealization;
+        private TreeNodeCollection nodes;
         object userData;
 
         private readonly static TVIF insertMask =

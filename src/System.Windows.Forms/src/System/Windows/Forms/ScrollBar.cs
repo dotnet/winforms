@@ -19,13 +19,13 @@ namespace System.Windows.Forms
         private static readonly object s_scrollEvent = new object();
         private static readonly object s_valueChangedEvent = new object();
 
-        private int _minimum = 0;
+        private int _minimum;
         private int _maximum = 100;
         private int _smallChange = 1;
         private int _largeChange = 10;
-        private int _value = 0;
+        private int _value;
         private readonly ScrollOrientation _scrollOrientation;
-        private int _wheelDelta = 0;
+        private int _wheelDelta;
         private bool _scaleScrollBarForDpiChange = true;
 
         /// <summary>

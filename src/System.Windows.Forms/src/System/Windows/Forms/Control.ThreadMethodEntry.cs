@@ -31,7 +31,7 @@ namespace System.Windows.Forms
 
             // Optionally store the synchronization context associated with the callee thread.
             // This overrides the sync context in the execution context of the caller thread.
-            internal SynchronizationContext _syncContext = null;
+            internal SynchronizationContext _syncContext;
 
             internal ThreadMethodEntry(Control caller, Control marshaler, Delegate method, object[] args, bool synchronous, ExecutionContext executionContext)
             {

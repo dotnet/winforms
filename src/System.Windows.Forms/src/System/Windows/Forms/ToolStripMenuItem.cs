@@ -28,9 +28,9 @@ namespace System.Windows.Forms
         private static readonly int PropCheckState = PropertyStore.CreateKey();
         private static readonly int PropMdiForm = PropertyStore.CreateKey();
 
-        private bool checkOnClick = false;
+        private bool checkOnClick;
         private bool showShortcutKeys = true;
-        private ToolStrip lastOwner = null;
+        private ToolStrip lastOwner;
 
         // SUPPORT for mapping NATIVE menu commands to ToolStripMenuItems -----
         // corresponds to wID in MENUITEMINFO structure
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         private Padding scaledDefaultDropDownPadding = defaultDropDownPadding;
         private Size scaledCheckMarkBitmapSize = checkMarkBitmapSize;
 
-        private byte openMouseId = 0;
+        private byte openMouseId;
 
         private static readonly object EventCheckedChanged = new object();
         private static readonly object EventCheckStateChanged = new object();
@@ -1264,7 +1264,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal class ToolStripMenuItemAccessibleObject : ToolStripDropDownItemAccessibleObject
         {
-            private readonly ToolStripMenuItem ownerItem = null;
+            private readonly ToolStripMenuItem ownerItem;
 
             public ToolStripMenuItemAccessibleObject(ToolStripMenuItem ownerItem) : base(ownerItem)
             {
@@ -1318,9 +1318,9 @@ namespace System.Windows.Forms
         private readonly Timer autoMenuExpandTimer = new Timer();
 
         // consider - weak reference?
-        private ToolStripMenuItem currentItem = null;
-        private ToolStripMenuItem fromItem = null;
-        private bool inTransition = false;
+        private ToolStripMenuItem currentItem;
+        private ToolStripMenuItem fromItem;
+        private bool inTransition;
 
         private readonly int quickShow = 1;
 

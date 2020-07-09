@@ -19,12 +19,12 @@ namespace System.Windows.Forms
     ///  set up for it.
     internal class ToolStripPanelCell : ArrangedElement
     {
-        private ToolStrip _wrappedToolStrip = null;
-        private ToolStripPanelRow parent = null;
+        private ToolStrip _wrappedToolStrip;
+        private ToolStripPanelRow parent;
         private Size maxSize = LayoutUtils.MaxSize;
-        private bool currentlySizing = false;
-        private bool currentlyDragging = false;
-        private bool restoreOnVisibleChanged = false;
+        private bool currentlySizing;
+        private bool currentlyDragging;
+        private bool restoreOnVisibleChanged;
 
         private Rectangle cachedBounds = Rectangle.Empty;
 #if DEBUG

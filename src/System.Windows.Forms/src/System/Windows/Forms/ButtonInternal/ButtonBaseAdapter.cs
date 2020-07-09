@@ -805,8 +805,8 @@ namespace System.Windows.Forms.ButtonInternal
             internal bool textOffset;
             internal bool shadowedText;
             internal bool layoutRTL;
-            internal bool verticalText = false;
-            internal bool useCompatibleTextRendering = false;
+            internal bool verticalText;
+            internal bool useCompatibleTextRendering;
             internal bool everettButtonCompat = true;
             internal TextFormatFlags gdiTextFormatFlags = TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
             internal StringFormatFlags gdipFormatFlags;

@@ -27,8 +27,8 @@ namespace System.Windows.Forms
         /// </summary>
         private class MetafileDCWrapper : IDisposable
         {
-            private Gdi32.HBITMAP _hBitmap = default;
-            private Gdi32.HBITMAP _hOriginalBmp = default;
+            private Gdi32.HBITMAP _hBitmap;
+            private Gdi32.HBITMAP _hOriginalBmp;
             private readonly Gdi32.HDC _hMetafileDC;
             private RECT _destRect;
 
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal Gdi32.HDC HDC { get; private set; } = default;
+            internal Gdi32.HDC HDC { get; private set; }
 
             // ported form VB6 (Ctls\PortUtil\StdCtl.cpp:6176)
             private unsafe bool DICopy(Gdi32.HDC hdcDest, Gdi32.HDC hdcSrc, RECT rect, bool bStretch)

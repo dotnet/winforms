@@ -54,7 +54,7 @@ namespace System.Windows.Forms
         private static readonly Type cellType = typeof(DataGridViewComboBoxCell);
 
         private byte flags;  // see DATAGRIDVIEWCOMBOBOXCELL_ consts above
-        private static bool mouseInDropDownButtonBounds = false;
+        private static bool mouseInDropDownButtonBounds;
         private static int cachedDropDownWidth = -1;
 
         // Autosizing changed for VS
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         //private object keyUsedDuringAutoSize    = null;
         //private object valueUsedDuringAutoSize  = null;
 
-        private static bool isScalingInitialized = false;
+        private static bool isScalingInitialized;
         private static readonly int OFFSET_2PIXELS = 2;
         private static int offset2X = OFFSET_2PIXELS;
         private static int offset2Y = OFFSET_2PIXELS;

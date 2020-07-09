@@ -483,7 +483,7 @@ namespace System.Windows.Forms
 
         internal class ToolStripComboBoxControl : ComboBox
         {
-            private ToolStripComboBox owner = null;
+            private ToolStripComboBox owner;
 
             public ToolStripComboBoxControl()
             {

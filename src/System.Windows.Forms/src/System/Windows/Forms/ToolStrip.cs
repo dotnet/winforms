@@ -35,51 +35,51 @@ namespace System.Windows.Forms
         private static Size onePixel = new Size(1, 1);
         internal static Point InvalidMouseEnter = new Point(int.MaxValue, int.MaxValue);
 
-        private ToolStripItemCollection toolStripItemCollection = null;
-        private ToolStripOverflowButton toolStripOverflowButton = null;
-        private ToolStripGrip toolStripGrip = null;
-        private ToolStripItemCollection displayedItems = null;
-        private ToolStripItemCollection overflowItems = null;
-        private ToolStripDropTargetManager dropTargetManager = null;
+        private ToolStripItemCollection toolStripItemCollection;
+        private ToolStripOverflowButton toolStripOverflowButton;
+        private ToolStripGrip toolStripGrip;
+        private ToolStripItemCollection displayedItems;
+        private ToolStripItemCollection overflowItems;
+        private ToolStripDropTargetManager dropTargetManager;
         private IntPtr hwndThatLostFocus = IntPtr.Zero;
-        private ToolStripItem lastMouseActiveItem = null;
-        private ToolStripItem lastMouseDownedItem = null;
-        private LayoutEngine layoutEngine = null;
+        private ToolStripItem lastMouseActiveItem;
+        private ToolStripItem lastMouseDownedItem;
+        private LayoutEngine layoutEngine;
         private ToolStripLayoutStyle layoutStyle = ToolStripLayoutStyle.StackWithOverflow;
-        private LayoutSettings layoutSettings = null;
+        private LayoutSettings layoutSettings;
         private Rectangle lastInsertionMarkRect = Rectangle.Empty;
-        private ImageList imageList = null;
+        private ImageList imageList;
         private ToolStripGripStyle toolStripGripStyle = ToolStripGripStyle.Visible;
-        private ISupportOleDropSource itemReorderDropSource = null;
-        private IDropTarget itemReorderDropTarget = null;
-        private int toolStripState = 0;
-        private bool showItemToolTips = false;
-        private MouseHoverTimer mouseHoverTimer = null;
+        private ISupportOleDropSource itemReorderDropSource;
+        private IDropTarget itemReorderDropTarget;
+        private int toolStripState;
+        private bool showItemToolTips;
+        private MouseHoverTimer mouseHoverTimer;
         private ToolStripItem currentlyActiveTooltipItem;
         private NativeWindow dropDownOwnerWindow;
-        private byte mouseDownID = 0;  // NEVER use this directly from another class, 0 should never be returned to another class.
+        private byte mouseDownID;  // NEVER use this directly from another class, 0 should never be returned to another class.
 
         private Orientation orientation = Orientation.Horizontal;
 
         private readonly ArrayList activeDropDowns = new ArrayList(1);
-        private ToolStripRenderer renderer = null;
+        private ToolStripRenderer renderer;
         private Type currentRendererType = typeof(Type);
-        private Hashtable shortcuts = null;
-        private Stack<MergeHistory> mergeHistoryStack = null;
+        private Hashtable shortcuts;
+        private Stack<MergeHistory> mergeHistoryStack;
         private ToolStripDropDownDirection toolStripDropDownDirection = ToolStripDropDownDirection.Default;
         private Size largestDisplayedItemSize = Size.Empty;
-        private CachedItemHdcInfo cachedItemHdcInfo = null;
-        private bool alreadyHooked = false;
+        private CachedItemHdcInfo cachedItemHdcInfo;
+        private bool alreadyHooked;
 
         private Size imageScalingSize;
         private const int ICON_DIMENSION = 16;
         private static int iconWidth = ICON_DIMENSION;
         private static int iconHeight = ICON_DIMENSION;
 
-        private Font defaultFont = null;
+        private Font defaultFont;
         private RestoreFocusMessageFilter restoreFocusFilter;
 
-        private bool layoutRequired = false;
+        private bool layoutRequired;
 
         private static readonly Padding defaultPadding = new Padding(0, 0, 1, 0);
         private static readonly Padding defaultGripMargin = new Padding(2);
@@ -5422,9 +5422,9 @@ namespace System.Windows.Forms
         {
         }
 
-        private Gdi32.HDC _cachedItemHDC = default;
+        private Gdi32.HDC _cachedItemHDC;
         private Size _cachedHDCSize = Size.Empty;
-        private Gdi32.HBITMAP _cachedItemBitmap = default;
+        private Gdi32.HBITMAP _cachedItemBitmap;
 
         public IntPtr Handle => (IntPtr)_cachedItemHDC;
 
@@ -5488,7 +5488,7 @@ namespace System.Windows.Forms
     {
         private Timer mouseHoverTimer = new Timer();
         // consider - weak reference?
-        private ToolStripItem currentItem = null;
+        private ToolStripItem currentItem;
 
         public MouseHoverTimer()
         {

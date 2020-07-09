@@ -16,9 +16,9 @@ namespace System.Windows.Forms
         private static readonly int stateUseDefaultRenderer = BitVector32.CreateMask();
         private static readonly int stateAttachedRendererChanged = BitVector32.CreateMask(stateUseDefaultRenderer);
 
-        private ToolStripRenderer renderer = null;
+        private ToolStripRenderer renderer;
         private Type currentRendererType = typeof(Type);
-        private BitVector32 state = new BitVector32();
+        private BitVector32 state;
 
         private readonly ToolStripRenderMode defaultRenderMode = ToolStripRenderMode.ManagerRenderMode;
 

@@ -13,11 +13,11 @@ namespace System.Windows.Forms
     /// </summary>
     public abstract class ScrollProperties
     {
-        internal int _minimum = 0;
+        internal int _minimum;
         internal int _maximum = 100;
         internal int _smallChange = 1;
         internal int _largeChange = 10;
-        internal int _value = 0;
+        internal int _value;
         internal bool _maximumSetExternally;
         internal bool _smallChangeSetExternally;
         internal bool _largeChangeSetExternally;
@@ -26,7 +26,7 @@ namespace System.Windows.Forms
 
         protected ScrollableControl? ParentControl => _parent;
 
-        internal bool _visible = false;
+        internal bool _visible;
 
         private bool _enabled = true;
 

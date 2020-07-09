@@ -21,7 +21,7 @@ namespace System.Windows.Forms
             private static IntPtr s_oleAccAvailable = NativeMethods.InvalidIntPtr;
 
             private IntPtr _handle = IntPtr.Zero; // Associated window handle (if any)
-            private int[]? _runtimeId = null;     // Used by UIAutomation
+            private int[]? _runtimeId;     // Used by UIAutomation
 
             public ControlAccessibleObject(Control ownerControl)
             {

@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_MOVED = new object();
 
         // Cannot expose IMessageFilter.PreFilterMessage through this unsealed class
-        private SplitterMessageFilter splitterMessageFilter = null;
+        private SplitterMessageFilter splitterMessageFilter;
 
         /// <summary>
         ///  Creates a new Splitter.
@@ -986,7 +986,7 @@ namespace System.Windows.Forms
 
         private class SplitterMessageFilter : IMessageFilter
         {
-            private readonly Splitter owner = null;
+            private readonly Splitter owner;
 
             public SplitterMessageFilter(Splitter splitter)
             {

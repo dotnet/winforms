@@ -13,14 +13,14 @@ namespace System.Windows.Forms
     public abstract class BindingManagerBase
     {
         private BindingsCollection _bindings;
-        private bool _pullingData = false;
+        private bool _pullingData;
 
         protected EventHandler onCurrentChangedHandler; // Don't rename (breaking change)
 
         protected EventHandler onPositionChangedHandler; // Don't rename (breaking change)
 
         // Hook BindingComplete events on all owned Binding objects, and propagate those events through our own BindingComplete event
-        private BindingCompleteEventHandler _onBindingCompleteHandler = null;
+        private BindingCompleteEventHandler _onBindingCompleteHandler;
 
         // same deal about the new currentItemChanged event
         private protected EventHandler _onCurrentItemChangedHandler;

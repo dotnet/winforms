@@ -57,13 +57,13 @@ namespace System.Windows.Forms
         /// </summary>
         private Point _scrollPosition = Point.Empty;
 
-        private DockPaddingEdges dockPadding = null;
+        private DockPaddingEdges dockPadding;
 
         private int _scrollState;
 
-        private VScrollProperties _verticalScroll = null;
+        private VScrollProperties _verticalScroll;
 
-        private HScrollProperties _horizontalScroll = null;
+        private HScrollProperties _horizontalScroll;
 
         private static readonly object s_scrollEvent = new object();
 
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         ///  Used to figure out what the horizontal scroll value should be set to when the horizontal
         ///  scrollbar is first shown.
         /// </summary>
-        private bool resetRTLHScrollValue = false;
+        private bool resetRTLHScrollValue;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ScrollableControl'/> class.

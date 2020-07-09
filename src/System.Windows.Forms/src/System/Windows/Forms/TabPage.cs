@@ -26,9 +26,9 @@ namespace System.Windows.Forms
     {
         private ImageList.Indexer _imageIndexer;
         private string _toolTipText = string.Empty;
-        private bool _enterFired = false;
-        private bool _leaveFired = false;
-        private bool _useVisualStyleBackColor = false;
+        private bool _enterFired;
+        private bool _leaveFired;
+        private bool _useVisualStyleBackColor;
 
         /// <summary>
         ///  Constructs an empty TabPage.

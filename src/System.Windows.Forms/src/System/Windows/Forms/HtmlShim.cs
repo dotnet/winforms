@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     internal abstract class HtmlShim : IDisposable
     {
         private EventHandlerList events;
-        private int eventCount = 0;
+        private int eventCount;
         private Dictionary<EventHandler, HtmlToClrEventProxy> attachedEventList;
 
         protected HtmlShim()

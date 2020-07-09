@@ -31,14 +31,14 @@ namespace System.Windows.Forms
         private BindingMemberInfo _valueMember;
 
         private string _formatString = string.Empty;
-        private IFormatProvider _formatInfo = null;
-        private bool _formattingEnabled = false;
-        private TypeConverter _displayMemberConverter = null;
-        private static TypeConverter _stringTypeConverter = null;
+        private IFormatProvider _formatInfo;
+        private bool _formattingEnabled;
+        private TypeConverter _displayMemberConverter;
+        private static TypeConverter _stringTypeConverter;
 
         private bool _isDataSourceInitialized;
         private bool _isDataSourceInitEventHooked;
-        private bool _inSetDataConnection = false;
+        private bool _inSetDataConnection;
 
         /// <summary>
         ///  The ListSource to consume as this ListBox's source of data.

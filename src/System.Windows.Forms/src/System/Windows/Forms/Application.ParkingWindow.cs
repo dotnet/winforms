@@ -24,7 +24,7 @@ namespace System.Windows.Forms
 
             private const int WM_CHECKDESTROY = (int)User32.WM.USER + 0x01;
 
-            private int _childCount = 0;
+            private int _childCount;
 
             public ParkingWindow()
             {

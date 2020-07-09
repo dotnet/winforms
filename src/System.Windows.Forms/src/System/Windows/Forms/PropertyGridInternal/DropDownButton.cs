@@ -13,7 +13,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal sealed class DropDownButton : Button
     {
-        private bool useComboBoxTheme = false;
+        private bool useComboBoxTheme;
 
         private bool ignoreMouse;
 

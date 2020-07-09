@@ -34,15 +34,15 @@ namespace System.Windows.Forms
         private const int DRAW_MOVE = 2;
         private const int DRAW_END = 3;
 
-        private int BORDERSIZE = 0;
+        private int BORDERSIZE;
 
         //
         // SplitContainer private Cached copies of public properties...
         //
         private Orientation orientation = Orientation.Vertical;
-        private readonly SplitterPanel panel1 = null;
-        private readonly SplitterPanel panel2 = null;
-        private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
+        private readonly SplitterPanel panel1;
+        private readonly SplitterPanel panel2;
+        private BorderStyle borderStyle = BorderStyle.None;
         private FixedPanel fixedPanel = FixedPanel.None;
 
         private int panel1MinSize = 25; //Panel1 Minimum Size
@@ -73,19 +73,19 @@ namespace System.Windows.Forms
         private int initialSplitterDistance;
         private Rectangle initialSplitterRectangle;
         private Point anchor = Point.Empty;
-        private bool splitBegin = false;
-        private bool splitMove = false;
-        private bool splitBreak = false;
+        private bool splitBegin;
+        private bool splitMove;
+        private bool splitBreak;
 
         //
         // Split Cursor
         //
-        Cursor overrideCursor = null;
+        Cursor overrideCursor;
 
         //
         //Needed For Tabbing
         //
-        Control nextActiveControl = null;
+        Control nextActiveControl;
         private bool callBaseVersion;
         private bool splitterFocused;
 
@@ -100,11 +100,11 @@ namespace System.Windows.Forms
         // to keep the Width/Height Ratio Depending on SplitContainer.Orientation
         //
 
-        double ratioWidth = 0.0f;
-        double ratioHeight = 0.0f;
-        bool resizeCalled = false;
-        bool splitContainerScaling = false;
-        bool setSplitterDistance = false;
+        double ratioWidth;
+        double ratioHeight;
+        bool resizeCalled;
+        bool splitContainerScaling;
+        bool setSplitterDistance;
 
         //
         //Events
@@ -113,13 +113,13 @@ namespace System.Windows.Forms
         private static readonly object EVENT_MOVED = new object();
 
         // private IMessageFilter implementation
-        SplitContainerMessageFilter splitContainerMessageFilter = null;
+        SplitContainerMessageFilter splitContainerMessageFilter;
 
         //This would avoid re-entrant code into SelectNextControl.
-        private bool selectNextControl = false;
+        private bool selectNextControl;
 
         // Initialization flag for ISupportInitialize
-        private bool initializing = false;
+        private bool initializing;
 
         //
         // Constructor
@@ -2508,7 +2508,7 @@ namespace System.Windows.Forms
         ///////////////////////////////////////////////////////////////////////////////////////////////////
         private class SplitContainerMessageFilter : IMessageFilter
         {
-            private readonly SplitContainer owner = null;
+            private readonly SplitContainer owner;
 
             public SplitContainerMessageFilter(SplitContainer splitContainer)
             {

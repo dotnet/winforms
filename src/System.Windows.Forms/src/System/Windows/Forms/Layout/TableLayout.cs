@@ -1599,7 +1599,7 @@ namespace System.Windows.Forms.Layout
             private int _minColumns; // The minimum number of columns required in order to put all absolutely positioned control on the table
             private int _minRows; // The minimum number of rows required in order to put all absolutely positioned control on the table
 
-            private BitVector32 _state = new BitVector32();
+            private BitVector32 _state;
 
             public ContainerInfo(IArrangedElement container)
             {

@@ -1037,7 +1037,7 @@ namespace System.Windows.Forms
 
             private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native HtmlElement
             private HtmlElement htmlElement;
-            private readonly IHTMLWindow2 associatedWindow = null;
+            private readonly IHTMLWindow2 associatedWindow;
 
             public HtmlElementShim(HtmlElement element)
             {

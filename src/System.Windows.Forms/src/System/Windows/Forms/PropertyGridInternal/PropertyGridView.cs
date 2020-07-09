@@ -72,16 +72,16 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected static readonly Point InvalidPosition = new Point(int.MinValue, int.MinValue);
 
         // colors and fonts
-        private Brush backgroundBrush = null;
-        private Font fontBold = null;
+        private Brush backgroundBrush;
+        private Font fontBold;
         private Color grayTextColor;
 
         // for backwards compatibility of default colors
-        private bool grayTextColorModified = false; // true if someone has set the grayTextColor property
+        private bool grayTextColorModified; // true if someone has set the grayTextColor property
 
         // property collections
-        private GridEntryCollection topLevelGridEntries = null;     // top level props
-        private GridEntryCollection allGridEntries = null;  // cache of viewable props
+        private GridEntryCollection topLevelGridEntries;     // top level props
+        private GridEntryCollection allGridEntries;  // cache of viewable props
 
         // row information
         internal int totalProps = -1;        // # of viewable props
@@ -93,20 +93,20 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         // current selected row and tooltip.
         private int selectedRow = -1;
-        private GridEntry selectedGridEntry = null;
+        private GridEntry selectedGridEntry;
         private int tipInfo = -1;
 
         // editors & controls
-        private GridViewEdit edit = null;
-        private DropDownButton btnDropDown = null;
-        private DropDownButton btnDialog = null;
-        private GridViewListBox listBox = null;
-        private DropDownHolder dropDownHolder = null;
+        private GridViewEdit edit;
+        private DropDownButton btnDropDown;
+        private DropDownButton btnDialog;
+        private GridViewListBox listBox;
+        private DropDownHolder dropDownHolder;
         private Rectangle lastClientRect = Rectangle.Empty;
-        private Control currentEditor = null;
-        private ScrollBar scrollBar = null;
-        internal GridToolTip toolTip = null;
-        private GridErrorDlg errorDlg = null;
+        private Control currentEditor;
+        private ScrollBar scrollBar;
+        internal GridToolTip toolTip;
+        private GridErrorDlg errorDlg;
 
         // flags
         private const short FlagNeedsRefresh = 0x0001;
@@ -126,9 +126,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private Point ptOurLocation = new Point(1, 1);
 
-        private string originalTextValue = null;     // original text, in case of ESC
-        private int cumulativeVerticalWheelDelta = 0;
-        private long rowSelectTime = 0;
+        private string originalTextValue;     // original text, in case of ESC
+        private int cumulativeVerticalWheelDelta;
+        private long rowSelectTime;
         private Point rowSelectPos = Point.Empty; // the position that we clicked on a row to test for double clicks
         private Point lastMouseDown = InvalidPosition;
         private int lastMouseMove;
@@ -6129,17 +6129,17 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private class DropDownHolder : Form, IMouseHookClient
         {
-            private Control currentControl = null; // the control that is hosted in the holder
+            private Control currentControl; // the control that is hosted in the holder
             private readonly PropertyGridView gridView;              // the owner gridview
             private readonly MouseHook mouseHook;             // we use this to hook mouse downs, etc. to know when to close the dropdown.
 
-            private LinkLabel createNewLink = null;
+            private LinkLabel createNewLink;
 
             // all the resizing goo...
             //
             private bool resizable = true;  // true if we're showing the resize widget.
-            private bool resizing = false; // true if we're in the middle of a resize operation.
-            private bool resizeUp = false; // true if the dropdown is above the grid row, which means the resize widget is at the top.
+            private bool resizing; // true if we're in the middle of a resize operation.
+            private bool resizeUp; // true if the dropdown is above the grid row, which means the resize widget is at the top.
             private Point dragStart = Point.Empty;     // the point at which the drag started to compute the delta
             private Rectangle dragBaseRect = Rectangle.Empty; // the original bounds of our control.
             private int currentMoveType = MoveTypeNone;    // what type of move are we processing? left, bottom, or both?
@@ -6842,7 +6842,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private class GridViewListBox : ListBox
         {
-            internal bool fInSetSelectedIndex = false;
+            internal bool fInSetSelectedIndex;
             private readonly PropertyGridView _owningPropertyGridView;
 
             public GridViewListBox(PropertyGridView gridView)
@@ -7287,10 +7287,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private class GridViewEdit : TextBox, IMouseHookClient
         {
-            internal bool fInSetText = false;
-            internal bool filter = false;
-            internal PropertyGridView psheet = null;
-            private bool dontFocusMe = false;
+            internal bool fInSetText;
+            internal bool filter;
+            internal PropertyGridView psheet;
+            private bool dontFocusMe;
             private int lastMove;
 
             private readonly MouseHook mouseHook;
@@ -7910,10 +7910,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly Control control;
             private readonly IMouseHookClient client;
 
-            internal uint _thisProcessID = 0;
+            internal uint _thisProcessID;
             private GCHandle _mouseHookRoot;
             private IntPtr _mouseHookHandle = IntPtr.Zero;
-            private bool hookDisable = false;
+            private bool hookDisable;
 
             private bool processing;
 

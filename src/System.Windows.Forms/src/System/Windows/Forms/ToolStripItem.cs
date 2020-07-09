@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         private TextImageRelation _textImageRelation = TextImageRelation.ImageBeforeText;
         private ToolStripItemImageIndexer _imageIndexer;
         private ToolStripItemInternalLayout _toolStripItemInternalLayout;
-        private BitVector32 _state = new BitVector32();
+        private BitVector32 _state;
         private string _toolTipText;
         private Color _imageTransparentColor = Color.Empty;
         private ToolStripItemImageScaling _imageScaling = ToolStripItemImageScaling.SizeToFit;

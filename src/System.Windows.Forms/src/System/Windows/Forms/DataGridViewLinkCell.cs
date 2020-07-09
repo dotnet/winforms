@@ -37,10 +37,10 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWLINKCELL_verticalTextMarginBottom = 1;
 
         // we cache LinkVisited because it will be set multiple times
-        private bool linkVisited = false;
-        private bool linkVisitedSet = false;
+        private bool linkVisited;
+        private bool linkVisitedSet;
 
-        private static Cursor dataGridViewCursor = null;
+        private static Cursor dataGridViewCursor;
 
         public DataGridViewLinkCell()
         {

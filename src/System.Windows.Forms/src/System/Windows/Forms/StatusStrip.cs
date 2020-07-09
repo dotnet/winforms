@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         private const AnchorStyles HorizontalAnchor = AnchorStyles.Left | AnchorStyles.Right;
         private const AnchorStyles VerticalAnchor = AnchorStyles.Top | AnchorStyles.Bottom;
 
-        private BitVector32 state = new BitVector32();
+        private BitVector32 state;
 
         private static readonly int stateSizingGrip = BitVector32.CreateMask();
         private static readonly int stateCalledSpringTableLayout = BitVector32.CreateMask(stateSizingGrip);

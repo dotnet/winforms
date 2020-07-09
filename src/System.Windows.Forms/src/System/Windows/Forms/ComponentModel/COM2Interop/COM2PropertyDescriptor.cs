@@ -69,7 +69,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Should we bother asking if refresh is needed?
         /// </summary>
-        private readonly bool queryRefresh = false;
+        private readonly bool queryRefresh;
 
         /// <summary>
         ///  Our properties manager

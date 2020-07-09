@@ -61,7 +61,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private readonly string dbgObjClass;
 #endif
 
-        private int alwaysValid = 0;
+        private int alwaysValid;
 
         /// <summary>
         ///  These are the interfaces we recognize for extended browsing.

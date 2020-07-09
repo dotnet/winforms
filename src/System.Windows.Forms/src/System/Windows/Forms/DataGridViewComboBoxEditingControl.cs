@@ -176,7 +176,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The parent is changed when the editing control is attached to another editing cell.
         /// </summary>
-        private AccessibleObject _parentAccessibleObject = null;
+        private AccessibleObject _parentAccessibleObject;
 
         public DataGridViewComboBoxEditingControlAccessibleObject(DataGridViewComboBoxEditingControl ownerControl) : base(ownerControl)
         {

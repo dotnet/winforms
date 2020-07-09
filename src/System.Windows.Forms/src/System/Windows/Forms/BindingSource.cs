@@ -40,13 +40,13 @@ namespace System.Windows.Forms
         private static readonly object s_eventInitialized = new object();
 
         // Public property values
-        private object _dataSource = null;
+        private object _dataSource;
         private string _dataMember = string.Empty;
-        private string _sort = null;
-        private string _filter = null;
+        private string _sort;
+        private string _filter;
         private readonly CurrencyManager _currencyManager;
-        private bool _parentsCurrentItemChanging = false;
-        private bool _disposedOrFinalized = false;
+        private bool _parentsCurrentItemChanging;
+        private bool _disposedOrFinalized;
 
         // Description of the current bound list
         private IList _innerList; // ...DON'T access this directly. ALWAYS use the List property.
@@ -63,21 +63,21 @@ namespace System.Windows.Forms
         private Dictionary<string, BindingSource> _relatedBindingSources;
 
         // Support for user-overriding of the AllowNew property
-        private bool _allowNewIsSet = false;
+        private bool _allowNewIsSet;
         private bool _allowNewSetValue = true;
 
         // Support for property change event hooking on list items
-        private object _currentItemHookedForItemChange = null;
-        private object _lastCurrentItem = null;
+        private object _currentItemHookedForItemChange;
+        private object _lastCurrentItem;
         private readonly EventHandler _listItemPropertyChangedHandler;
 
         // State data
         private int _addNewPos = -1;
-        private bool _initializing = false;
-        private bool _needToSetList = false;
-        private bool _recursionDetectionFlag = false;
-        private bool _innerListChanging = false;
-        private bool _endingEdit = false;
+        private bool _initializing;
+        private bool _needToSetList;
+        private bool _recursionDetectionFlag;
+        private bool _innerListChanging;
+        private bool _endingEdit;
 
         public BindingSource() : this(null, string.Empty)
         {

@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         ///  Decides whether or not to ignore the next LBN_SELCHANGE
         ///  message - used to prevent cursor keys from toggling checkboxes
         /// </summary>
-        private bool killnextselect = false;
+        private bool killnextselect;
 
         /// <summary>
         ///  Current listener of the onItemCheck event.
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         ///  click on an item, or whether we should wait for the user to click
         ///  again.
         /// </summary>
-        private bool checkOnClick = false;
+        private bool checkOnClick;
 
         /// <summary>
         ///  Should we use 3d checkboxes or flat ones?
@@ -65,8 +65,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The collection of checked items in the CheckedListBox.
         /// </summary>
-        private CheckedItemCollection checkedItemCollection = null;
-        private CheckedIndexCollection checkedIndexCollection = null;
+        private CheckedItemCollection checkedItemCollection;
+        private CheckedIndexCollection checkedIndexCollection;
 
         private static readonly WM LBC_GETCHECKSTATE;
         private static readonly WM LBC_SETCHECKSTATE;

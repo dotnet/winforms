@@ -18,7 +18,8 @@ namespace System.Windows.Forms
     public class ToolStripLabel : ToolStripItem
     {
         private LinkBehavior linkBehavior = LinkBehavior.SystemDefault;
-        private bool isLink = false, linkVisited = false;
+        private bool isLink;
+        private bool linkVisited;
 
         private Color linkColor = Color.Empty;
         private Color activeLinkColor = Color.Empty;
@@ -391,7 +392,7 @@ namespace System.Windows.Forms
 
         internal class ToolStripLabelAccessibleObject : ToolStripItemAccessibleObject
         {
-            private readonly ToolStripLabel ownerItem = null;
+            private readonly ToolStripLabel ownerItem;
 
             public ToolStripLabelAccessibleObject(ToolStripLabel ownerItem) : base(ownerItem)
             {

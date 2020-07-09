@@ -21,8 +21,8 @@ namespace System.Windows.Forms
         private static readonly Type defaultTypeImage = typeof(Image);
         private static readonly Type defaultTypeIcon = typeof(Icon);
         private static readonly Type cellType = typeof(DataGridViewImageCell);
-        private static Bitmap errorBmp = null;
-        private static Icon errorIco = null;
+        private static Bitmap errorBmp;
+        private static Icon errorIco;
 
         private const byte DATAGRIDVIEWIMAGECELL_valueIsIcon = 0x01;
 

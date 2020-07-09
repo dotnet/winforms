@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     public class ToolStripArrowRenderEventArgs : EventArgs
     {
         private Color _arrowColor = Color.Empty;
-        private bool _arrowColorChanged = false;
+        private bool _arrowColorChanged;
 
         public ToolStripArrowRenderEventArgs(Graphics g, ToolStripItem toolStripItem, Rectangle arrowRectangle, Color arrowColor, ArrowDirection arrowDirection)
         {

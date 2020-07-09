@@ -33,8 +33,8 @@ namespace System.Windows.Forms
         private Color color;
         private int minSize = defaultMinSize;
         private int maxSize = defaultMaxSize;
-        private bool showColor = false;
-        private bool usingDefaultIndirectColor = false;
+        private bool showColor;
+        private bool usingDefaultIndirectColor;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='FontDialog'/>

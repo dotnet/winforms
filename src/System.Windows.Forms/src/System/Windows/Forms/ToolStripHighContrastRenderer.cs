@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     {
         private const int GRIP_PADDING = 4;
 
-        BitVector32 options = new BitVector32();
+        BitVector32 options;
         private static readonly int optionsDottedBorder = BitVector32.CreateMask();
         private static readonly int optionsDottedGrip = BitVector32.CreateMask(optionsDottedBorder);
         private static readonly int optionsFillWhenSelected = BitVector32.CreateMask(optionsDottedGrip);

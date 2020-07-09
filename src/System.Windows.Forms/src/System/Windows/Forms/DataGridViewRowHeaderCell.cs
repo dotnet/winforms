@@ -21,14 +21,14 @@ namespace System.Windows.Forms
         // ColorMap used to map the black color of the resource bitmaps to the fore color in use in the row header cell
         private static readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
 
-        private static Bitmap rightArrowBmp = null;
-        private static Bitmap leftArrowBmp = null;
+        private static Bitmap rightArrowBmp;
+        private static Bitmap leftArrowBmp;
         private static Bitmap rightArrowStarBmp;
         private static Bitmap leftArrowStarBmp;
         //private static Bitmap errorBmp = null;
-        private static Bitmap pencilLTRBmp = null;
-        private static Bitmap pencilRTLBmp = null;
-        private static Bitmap starBmp = null;
+        private static Bitmap pencilLTRBmp;
+        private static Bitmap pencilRTLBmp;
+        private static Bitmap starBmp;
 
         private static readonly Type cellType = typeof(DataGridViewRowHeaderCell);
 

@@ -15,10 +15,10 @@ namespace System.Windows.Forms
     internal abstract class ArrangedElement : Component, IArrangedElement
     {
         private Rectangle bounds = Rectangle.Empty;
-        private IArrangedElement parent = null;
-        private BitVector32 state = new BitVector32();
+        private IArrangedElement parent;
+        private BitVector32 state;
         private readonly PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
-        private readonly int suspendCount = 0;
+        private readonly int suspendCount;
 
         private static readonly int stateVisible = BitVector32.CreateMask();
 
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
         {
             if (suspendCount <= 0)
             {
-                OnLayout(new LayoutEventArgs(container, propertyName));
+            OnLayout(new LayoutEventArgs(container, propertyName));
             }
         }
 

@@ -30,9 +30,9 @@ namespace System.Windows.Forms
 
         private string countItemFormat = SR.BindingNavigatorCountItemFormat;
 
-        private EventHandler onRefreshItems = null;
+        private EventHandler onRefreshItems;
 
-        private bool initializing = false;
+        private bool initializing;
 
         private bool addNewItemUserEnabled = true;
         private bool deleteItemUserEnabled = true;

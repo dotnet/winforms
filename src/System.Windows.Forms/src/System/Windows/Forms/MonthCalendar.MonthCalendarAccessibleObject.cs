@@ -20,7 +20,9 @@ namespace System.Windows.Forms
             internal const int MAX_WEEKS = 6;
 
             private readonly MonthCalendar _owner;
+#pragma warning disable CA1805 // Do not initialize unnecessarily
             private int _calendarIndex = 0;
+#pragma warning restore CA1805 // Do not initialize unnecessarily
             private AccessibleObject _focused;
 
             public MonthCalendarAccessibleObject(Control owner)

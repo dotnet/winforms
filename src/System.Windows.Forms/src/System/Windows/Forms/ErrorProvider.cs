@@ -62,7 +62,7 @@ namespace System.Windows.Forms
 
         private EventHandler _onRightToLeftChanged;
 
-        private bool _rightToLeft = false;
+        private bool _rightToLeft;
 
         /// <summary>
         ///  Default constructor.

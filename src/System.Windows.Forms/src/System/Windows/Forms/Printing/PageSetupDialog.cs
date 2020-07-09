@@ -22,9 +22,9 @@ namespace System.Windows.Forms
     public sealed class PageSetupDialog : CommonDialog
     {
         // If PrintDocument != null, pageSettings == printDocument.PageSettings
-        private PrintDocument _printDocument = null;
-        private PageSettings _pageSettings = null;
-        private PrinterSettings _printerSettings = null;
+        private PrintDocument _printDocument;
+        private PageSettings _pageSettings;
+        private PrinterSettings _printerSettings;
 
         private Margins _minMargins;
 

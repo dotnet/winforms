@@ -18,8 +18,8 @@ namespace System.Windows.Forms
     [ToolboxItem(false)]
     public class ToolStripContentPanel : Panel
     {
-        private ToolStripRendererSwitcher rendererSwitcher = null;
-        private BitVector32 state = new BitVector32();
+        private ToolStripRendererSwitcher rendererSwitcher;
+        private BitVector32 state;
         private static readonly int stateLastDoubleBuffer = BitVector32.CreateMask();
 
         private static readonly object EventRendererChanged = new object();

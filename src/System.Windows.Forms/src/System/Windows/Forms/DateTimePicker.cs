@@ -81,7 +81,7 @@ namespace System.Windows.Forms
 
         // DateTime changeover: DateTime is a value class, not an object, so we need to keep track
         // of whether or not its values have been initialised in a separate boolean.
-        private bool userHasSetValue = false;
+        private bool userHasSetValue;
         private DateTime value = DateTime.Now;
         private DateTime creationTime = DateTime.Now;
         // Reconcile out-of-range min/max values in the property getters.
@@ -92,8 +92,8 @@ namespace System.Windows.Forms
         private Color calendarTitleForeColor = DefaultTitleForeColor;
         private Color calendarMonthBackground = DefaultMonthBackColor;
         private Color calendarTrailingText = DefaultTrailingForeColor;
-        private Font calendarFont = null;
-        private FontHandleWrapper calendarFontHandleWrapper = null;
+        private Font calendarFont;
+        private FontHandleWrapper calendarFontHandleWrapper;
 
         // Since there is no way to get the customFormat from the DTP, we need to
         // cache it. Also we have to track if the user wanted customFormat or
@@ -104,7 +104,7 @@ namespace System.Windows.Forms
 
         private DateTimePickerFormat format;
 
-        private bool rightToLeftLayout = false;
+        private bool rightToLeftLayout;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='DateTimePicker'/> class.
