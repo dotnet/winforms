@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
 
     public partial class TextBoxBaseTests : IClassFixture<ThreadExceptionFixture>
     {
-        private static int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
+        private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
         [WinFormsFact]
         public void TextBoxBase_CreateParams_GetDefault_ReturnsExpected()
@@ -4094,6 +4094,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Trait(TestTraits.Category.Synchronous, TestTraits.Type.Clipboard)]
         public void TextBoxBase_ClearUndo_CanUndo_Success()
         {
             using var control = new SubTextBox
@@ -4129,6 +4130,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Trait(TestTraits.Category.Synchronous, TestTraits.Type.Clipboard)]
         public void TextBoxBase_Copy_PasteNotEmpty_Success()
         {
             using var control = new SubTextBox
@@ -4179,6 +4181,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Trait(TestTraits.Category.Synchronous, TestTraits.Type.Clipboard)]
         public void TextBoxBase_Copy_PasteNotEmptyWithHandle_Success()
         {
             using var control = new SubTextBox
@@ -4259,6 +4262,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Trait(TestTraits.Category.Synchronous, TestTraits.Type.Clipboard)]
         public void TextBoxBase_Cut_PasteNotEmpty_Success()
         {
             using var control = new SubTextBox
@@ -4309,6 +4313,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Trait(TestTraits.Category.Synchronous, TestTraits.Type.Clipboard)]
         public void TextBoxBase_Cut_PasteNotEmptyWithHandle_Success()
         {
             using var control = new SubTextBox
@@ -5936,6 +5941,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Trait(TestTraits.Category.Synchronous, TestTraits.Type.Clipboard)]
         public void TextBoxBase_Paste_InvokeEmpty_Success()
         {
             using var control = new SubTextBox();
@@ -5945,6 +5951,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Trait(TestTraits.Category.Synchronous, TestTraits.Type.Clipboard)]
         public void TextBoxBase_Paste_InvokeNotEmpty_Success()
         {
             using var control = new SubTextBox
@@ -7111,6 +7118,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        [Trait(TestTraits.Category.Synchronous, TestTraits.Type.Clipboard)]
         public void TextBoxBase_Undo_CanUndo_Success()
         {
             using var control = new SubTextBox
