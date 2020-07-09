@@ -4732,7 +4732,7 @@ namespace System.Windows.Forms
                 {
                     if (_owningComboBox != null)
                     {
-                        return _owningItem.ToString();
+                        return _owningComboBox.GetItemText(_owningItem);
                     }
 
                     return base.Name;
@@ -4907,15 +4907,15 @@ namespace System.Windows.Forms
                     {
                         return false;
                     }
+
                     return true;
                 }
-                else
+
+                if (patternId == UiaCore.UIA.ValuePatternId)
                 {
-                    if (patternId == UiaCore.UIA.ValuePatternId)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
+
                 return base.IsPatternSupported(patternId);
             }
 
@@ -4934,6 +4934,7 @@ namespace System.Windows.Forms
                         runtimeId[0] = RuntimeIDFirstItem;
                         runtimeId[1] = (int)(long)_owningComboBox.Handle;
                         runtimeId[2] = _owningComboBox.GetHashCode();
+
                         return runtimeId;
                     }
 
@@ -4967,10 +4968,8 @@ namespace System.Windows.Forms
                 {
                     return Name;
                 }
-                else
-                {
-                    return base.get_accNameInternal(childID);
-                }
+
+                return base.get_accNameInternal(childID);
             }
 
             internal override string get_accKeyboardShortcutInternal(object childID)
@@ -4980,10 +4979,8 @@ namespace System.Windows.Forms
                 {
                     return KeyboardShortcut;
                 }
-                else
-                {
-                    return base.get_accKeyboardShortcutInternal(childID);
-                }
+
+                return base.get_accKeyboardShortcutInternal(childID);
             }
 
             /// <summary>

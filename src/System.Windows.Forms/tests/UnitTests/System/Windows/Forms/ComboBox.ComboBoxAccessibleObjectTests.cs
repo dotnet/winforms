@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Xunit;
 using static Interop;
 
-namespace System.Windows.Forms.Tests.AccessibleObjects
+namespace System.Windows.Forms.Tests
 {
-    public class ComboBoxAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class ComboBox_ComboBoxAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ComboBoxAccessibleObject_Ctor_Default()

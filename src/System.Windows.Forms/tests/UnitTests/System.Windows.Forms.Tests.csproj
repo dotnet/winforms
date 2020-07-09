@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
+    <ProjectReference Include="..\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
     <ProjectReference Include="..\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
   </ItemGroup>
 

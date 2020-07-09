@@ -421,7 +421,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(DataSource_Set_TestData))]
-        public void ComBox_DataSource_Set_GetReturnsExpected(object value)
+        public void ComboBox_DataSource_Set_GetReturnsExpected(object value)
         {
             using var control = new SubComboBox
             {
@@ -441,7 +441,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ComBox_DataSource_SetWithHandler_CallsDataSourceChanged()
+        public void ComboBox_DataSource_SetWithHandler_CallsDataSourceChanged()
         {
             using var control = new ComboBox();
             int dataSourceCallCount = 0;
@@ -1934,43 +1934,6 @@ namespace System.Windows.Forms.Tests
         private class DataClass
         {
             public string Value { get; set; }
-        }
-
-        [WinFormsFact]
-        public void GettingComboBoxItemAccessibleObject_Not_ThrowsException()
-        {
-            using var control = new ComboBox();
-
-            var h1 = new HashNotImplementedObject();
-            var h2 = new HashNotImplementedObject();
-            var h3 = new HashNotImplementedObject();
-
-            control.Items.AddRange(new[] { h1, h2, h3 });
-
-            var comboBoxAccObj = (ComboBox.ComboBoxAccessibleObject)control.AccessibilityObject;
-
-            var exceptionThrown = false;
-
-            try
-            {
-                var itemAccObj1 = comboBoxAccObj.ItemAccessibleObjects[h1];
-                var itemAccObj2 = comboBoxAccObj.ItemAccessibleObjects[h2];
-                var itemAccObj3 = comboBoxAccObj.ItemAccessibleObjects[h3];
-            }
-            catch
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.False(exceptionThrown, "Getting accessible object for ComboBox item has thrown an exception.");
-        }
-
-        public class HashNotImplementedObject
-        {
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }
