@@ -15,9 +15,6 @@ namespace System.Windows.Forms
         [DllImport(ExternDll.User32)]
         public static extern int GetClassName(HandleRef hwnd, StringBuilder lpClassName, int nMaxCount);
 
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
-        public static extern int GetLocaleInfo(uint Locale, int LCType, StringBuilder lpLCData, int cchData);
-
         [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern HRESULT PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 

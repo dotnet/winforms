@@ -22,7 +22,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetCategoryName(
                 PROPCAT propcat,
-                uint lcid,
+                Kernel32.LCID lcid,
                 out string pbstrName);
         }
     }

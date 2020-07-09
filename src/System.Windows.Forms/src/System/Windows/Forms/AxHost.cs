@@ -2309,7 +2309,7 @@ namespace System.Windows.Forms
                     return rval;
                 case Ole32.DispatchID.AMBIENT_LOCALEID:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for localeid");
-                    return Thread.CurrentThread.CurrentCulture.LCID;
+                    return Kernel32.GetThreadLocale().RawValue;
                 case Ole32.DispatchID.AMBIENT_RIGHTTOLEFT:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for right to left");
                     Control ctl = this;
@@ -2545,7 +2545,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            hr = icp.GetCategoryName(propcat, (uint)CultureInfo.CurrentCulture.LCID, out string name);
+            hr = icp.GetCategoryName(propcat, Kernel32.GetThreadLocale(), out string name);
             if (hr == HRESULT.S_OK && name != null)
             {
                 var rval = new CategoryAttribute(name);
@@ -3228,7 +3228,7 @@ namespace System.Windows.Forms
                         ppUnk = (IntPtr)(&pUnk),
                         cPages = 1,
                         lpPages = (IntPtr)(&guid),
-                        lcid = (uint)Application.CurrentCulture.LCID,
+                        lcid = Kernel32.GetThreadLocale(),
                         dispidInitialProperty = dispid
                     };
                     Oleaut32.OleCreatePropertyFrameIndirect(ref opcparams);
@@ -3317,7 +3317,7 @@ namespace System.Windows.Forms
                         &pUnk,
                         uuids.cElems,
                         uuids.pElems,
-                        (uint)Application.CurrentCulture.LCID,
+                        Kernel32.GetThreadLocale(),
                         0,
                         IntPtr.Zero);
                 }
@@ -3637,7 +3637,7 @@ namespace System.Windows.Forms
             qaContainer.pPropertyNotifySink = oleSite;
             qaContainer.pFont = (Ole32.IFont)GetIFontFromFont(GetParentContainer().parent.Font);
             qaContainer.dwAppearance = 0;
-            qaContainer.lcid = Application.CurrentCulture.LCID;
+            qaContainer.lcid = Kernel32.GetThreadLocale();
 
             Control p = ParentInternal;
 

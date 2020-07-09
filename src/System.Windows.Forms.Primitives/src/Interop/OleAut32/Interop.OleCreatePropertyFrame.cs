@@ -4,6 +4,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using static Interop.Kernel32;
 
 internal partial class Interop
 {
@@ -19,7 +20,7 @@ internal partial class Interop
             IntPtr* pobjs,
             uint cPages,
             Guid* pClsid,
-            uint lcid,
+            LCID lcid,
             uint dwReserved,
             IntPtr pvReserved);
 
@@ -32,7 +33,7 @@ internal partial class Interop
             IntPtr* pobjs,
             uint cPages,
             Guid* pClsid,
-            uint lcid,
+            LCID lcid,
             uint dwReserved,
             IntPtr pvReserved)
         {
@@ -41,4 +42,3 @@ internal partial class Interop
         }
     }
 }
-

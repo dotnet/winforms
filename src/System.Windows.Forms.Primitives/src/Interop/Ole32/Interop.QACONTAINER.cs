@@ -25,7 +25,7 @@ internal static partial class Interop
             public IFont? pFont;
             public IntPtr pUndoMgr;
             public uint dwAppearance;
-            public int lcid;
+            public Kernel32.LCID lcid;
             public IntPtr hpal;
             public IServiceProvider? pBindHost;
         }

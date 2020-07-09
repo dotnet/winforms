@@ -1814,7 +1814,7 @@ namespace System.Windows.Forms
 
             //for getting the current Locale to set the Scrollbars...
             //
-            SendMessageW(this, (WM)LB.SETLOCALE, (IntPtr)CultureInfo.CurrentCulture.LCID);
+            SendMessageW(this, (WM)LB.SETLOCALE, (IntPtr)Kernel32.GetThreadLocale().RawValue);
 
             if (columnWidth != 0)
             {

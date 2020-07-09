@@ -21,46 +21,6 @@ namespace System.Windows.Forms
         public const int
         HCF_HIGHCONTRASTON = 0x00000001;
 
-        public const int LANG_NEUTRAL = 0x00,
-                         LOCALE_IFIRSTDAYOFWEEK = 0x0000100C;   /* first day of week specifier */
-
-        public const int LOCALE_IMEASURE = 0x0000000D;   // 0 = metric, 1 = US
-
-        public static readonly uint LOCALE_USER_DEFAULT = MAKELCID(LANG_USER_DEFAULT);
-        public static readonly uint LANG_USER_DEFAULT = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
-
-        public static uint MAKELANGID(uint primary, uint sub)
-        {
-            return unchecked((uint)((((ushort)(sub)) << 10) | (ushort)(primary)));
-        }
-
-        /// <summary>
-        ///  Creates an LCID from a LangId
-        /// </summary>
-        public static uint MAKELCID(uint lgid)
-        {
-            return MAKELCID(lgid, SORT_DEFAULT);
-        }
-
-        /// <summary>
-        ///  Creates an LCID from a LangId
-        /// </summary>
-        public static uint MAKELCID(uint lgid, uint sort)
-        {
-            return ((0xFFFF & lgid) | (((0x000f) & sort) << 16));
-        }
-
-        public const int
-        MDIS_ALLCHILDSTYLES = 0x0001;
-
-        public const int
-        PATCOPY = 0x00F00021,
-        PATINVERT = 0x005A0049;
-
-        public const int
-        SORT_DEFAULT = 0x0,
-        SUBLANG_DEFAULT = 0x01;
-
         public const int HLP_FILE = 1,
         HLP_KEYWORD = 2,
         HLP_NAVIGATOR = 3,

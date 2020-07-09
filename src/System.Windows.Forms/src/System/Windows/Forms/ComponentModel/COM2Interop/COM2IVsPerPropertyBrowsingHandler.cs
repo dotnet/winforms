@@ -80,7 +80,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // should we localize this?
             string[] pHelpString = new string[1];
-            HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, CultureInfo.CurrentCulture.LCID, null, pHelpString);
+            HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, Kernel32.GetThreadLocale(), null, pHelpString);
             if (hr == HRESULT.S_OK && pHelpString[0] != null)
             {
                 attrEvent.Add(new DescriptionAttribute(pHelpString[0]));
@@ -150,7 +150,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 // get the localized name, if applicable
                 string[] pNameString = new string[1];
-                HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, CultureInfo.CurrentCulture.LCID, pNameString, null);
+                HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, Kernel32.GetThreadLocale(), pNameString, null);
                 if (hr == HRESULT.S_OK && pNameString[0] != null)
                 {
                     nameItem.Name = pNameString[0];
