@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
             [MarshalAs(UnmanagedType.LPStr)]
             public string? lpPrintTemplateName;
 
-            public WndProc? lpCallback = null;
+            public WndProc? lpCallback;
 
             public int nPropertyPages;
 
@@ -141,8 +141,8 @@ namespace System.Windows.Forms
         [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Auto)]
         public class PRINTPAGERANGE
         {
-            public int nFromPage = 0;
-            public int nToPage = 0;
+            public int nFromPage;
+            public int nToPage;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
             public IntPtr hInstance;
             public string? lpstrFilter;   // use embedded nulls to separate filters
             public IntPtr lpstrCustomFilter = IntPtr.Zero;
-            public int nMaxCustFilter = 0;
+            public int nMaxCustFilter;
             public int nFilterIndex;
             public IntPtr lpstrFile;
             public int nMaxFile = Kernel32.MAX_PATH;
@@ -162,14 +162,14 @@ namespace System.Windows.Forms
             public string? lpstrInitialDir;
             public string? lpstrTitle;
             public int Flags;
-            public short nFileOffset = 0;
-            public short nFileExtension = 0;
+            public short nFileOffset;
+            public short nFileExtension;
             public string? lpstrDefExt;
             public IntPtr lCustData = IntPtr.Zero;
             public WndProc? lpfnHook;
-            public string? lpTemplateName = null;
+            public string? lpTemplateName;
             public IntPtr pvReserved = IntPtr.Zero;
-            public int dwReserved = 0;
+            public int dwReserved;
             public int FlagsEx;
         }
 
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
         public class ENLINK
         {
             public User32.NMHDR nmhdr;
-            public int msg = 0;
+            public int msg;
             public IntPtr wParam = IntPtr.Zero;
             public IntPtr lParam = IntPtr.Zero;
             public Richedit.CHARRANGE charrange;

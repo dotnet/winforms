@@ -34,7 +34,7 @@ namespace System
         public static bool IsWindowsNanoServer => (IsNotWindowsIoTCore && GetInstallationType().Equals("Nano Server", StringComparison.OrdinalIgnoreCase));
         public static bool IsWindowsServerCore => GetInstallationType().Equals("Server Core", StringComparison.OrdinalIgnoreCase);
         public static int WindowsVersion => GetWindowsVersion();
-        public static bool IsMacOsHighSierraOrHigher { get; } = false;
+        public static bool IsMacOsHighSierraOrHigher { get; }
         public static Version ICUVersion => new Version(0, 0, 0, 0);
         public static bool IsRedHatFamily => false;
         public static bool IsNotRedHatFamily => true;
