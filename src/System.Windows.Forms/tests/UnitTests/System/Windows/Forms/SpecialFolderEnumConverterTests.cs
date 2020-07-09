@@ -102,6 +102,9 @@ namespace System.Windows.Forms.Tests
 
         private class CustomReflectionType
         {
+#pragma warning disable CS0649
+            public static int Personal;
+#pragma warning restore CS0649
         }
 
         private enum CustomEnum
