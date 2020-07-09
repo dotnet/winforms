@@ -67,11 +67,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private int refreshState;
 
         /// <summary>
-        ///  Should we bother asking if refresh is needed?
-        /// </summary>
-        private readonly bool queryRefresh;
-
-        /// <summary>
         ///  Our properties manager
         /// </summary>
         private Com2Properties com2props;
@@ -342,13 +337,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             get
             {
                 bool currentRefresh = !GetNeedsRefresh(Com2PropertyDescriptorRefresh.Attributes);
-                if (queryRefresh)
-                {
-                    GetRefreshStateEvent rse = new GetRefreshStateEvent(Com2ShouldRefreshTypes.Attributes, !currentRefresh);
-                    OnShouldRefresh(rse);
-                    currentRefresh = !rse.Value;
-                    SetNeedsRefresh(Com2PropertyDescriptorRefresh.Attributes, rse.Value);
-                }
+
                 return currentRefresh;
             }
         }
@@ -457,13 +446,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             get
             {
                 bool currentRefresh = !(displayName == null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName));
-                if (queryRefresh)
-                {
-                    GetRefreshStateEvent rse = new GetRefreshStateEvent(Com2ShouldRefreshTypes.DisplayName, !currentRefresh);
-                    OnShouldRefresh(rse);
-                    SetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName, rse.Value);
-                    currentRefresh = !rse.Value;
-                }
+
                 return currentRefresh;
             }
         }
@@ -553,13 +536,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 bool currentRefresh = !GetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly);
 
-                if (queryRefresh)
-                {
-                    GetRefreshStateEvent rse = new GetRefreshStateEvent(Com2ShouldRefreshTypes.ReadOnly, !currentRefresh);
-                    OnShouldRefresh(rse);
-                    SetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly, rse.Value);
-                    currentRefresh = !rse.Value;
-                }
                 return currentRefresh;
             }
         }
@@ -585,13 +561,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             get
             {
                 bool currentRefresh = !(converter == null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter));
-                if (queryRefresh)
-                {
-                    GetRefreshStateEvent rse = new GetRefreshStateEvent(Com2ShouldRefreshTypes.TypeConverter, !currentRefresh);
-                    OnShouldRefresh(rse);
-                    SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, rse.Value);
-                    currentRefresh = !rse.Value;
-                }
+
                 return currentRefresh;
             }
         }
@@ -602,13 +572,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 bool currentRefresh = !(editor == null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor));
 
-                if (queryRefresh)
-                {
-                    GetRefreshStateEvent rse = new GetRefreshStateEvent(Com2ShouldRefreshTypes.TypeEditor, !currentRefresh);
-                    OnShouldRefresh(rse);
-                    SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, rse.Value);
-                    currentRefresh = !rse.Value;
-                }
                 return currentRefresh;
             }
         }

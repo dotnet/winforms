@@ -19,7 +19,6 @@ namespace System.Windows.Forms
     {
         private readonly EventHandler eventHandler;
         private readonly IReflect typeIReflectImplementation;
-        private readonly object sender;
         private readonly string eventName;
 
         public HtmlToClrEventProxy(object sender, string eventName, EventHandler eventHandler)
@@ -44,7 +43,7 @@ namespace System.Windows.Forms
 
         private void InvokeClrEvent()
         {
-            eventHandler?.Invoke(sender, EventArgs.Empty);
+            eventHandler?.Invoke(null, EventArgs.Empty);
         }
 
         #region IReflect

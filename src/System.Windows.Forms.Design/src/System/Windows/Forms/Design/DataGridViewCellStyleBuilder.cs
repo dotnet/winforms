@@ -25,7 +25,6 @@ namespace System.Windows.Forms.Design
         private TableLayoutPanel _okCancelTableLayoutPanel;
         private TableLayoutPanel _overarchingTableLayoutPanel;
         private TableLayoutPanel _sampleViewGridsTableLayoutPanel;
-        private Container _components;
         private Label _normalLabel;
         private Label _selectedLabel;
         private IHelpService _helpService;
@@ -101,21 +100,6 @@ namespace System.Windows.Forms.Design
             DataGridViewCellStyle cellStyleTmp = new DataGridViewCellStyle(_cellStyle);
             _sampleDataGridView.DefaultCellStyle = cellStyleTmp;
             _sampleDataGridViewSelected.DefaultCellStyle = cellStyleTmp;
-        }
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_components != null)
-                {
-                    _components.Dispose();
-                }
-            }
-            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code

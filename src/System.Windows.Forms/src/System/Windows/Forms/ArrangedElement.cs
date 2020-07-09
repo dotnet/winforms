@@ -18,7 +18,6 @@ namespace System.Windows.Forms
         private IArrangedElement parent;
         private BitVector32 state;
         private readonly PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
-        private readonly int suspendCount;
 
         private static readonly int stateVisible = BitVector32.CreateMask();
 
@@ -163,10 +162,7 @@ namespace System.Windows.Forms
 
         public virtual void PerformLayout(IArrangedElement container, string propertyName)
         {
-            if (suspendCount <= 0)
-            {
             OnLayout(new LayoutEventArgs(container, propertyName));
-            }
         }
 
         protected virtual void OnLayout(LayoutEventArgs e)

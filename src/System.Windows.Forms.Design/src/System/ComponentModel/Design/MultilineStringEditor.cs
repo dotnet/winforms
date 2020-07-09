@@ -444,7 +444,6 @@ namespace System.ComponentModel.Design
         private class OleCallback : Richedit.IRichEditOleCallback
         {
             private readonly RichTextBox _owner;
-            readonly bool _unrestricted;
             static TraceSwitch _richTextDbg;
 
             static TraceSwitch RichTextDbg
@@ -492,12 +491,7 @@ namespace System.ComponentModel.Design
             public HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::QueryInsertObject(" + lpclsid.ToString() + ")");
-                if (_unrestricted)
-                {
-                    return HRESULT.S_OK;
-                }
-                else
-                {
+
                 HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "real clsid:" + realClsid.ToString() + " (hr=" + hr.ToString("X") + ")");
 
@@ -521,7 +515,6 @@ namespace System.ComponentModel.Design
                     default:
                         Debug.WriteLineIf(RichTextDbg.TraceVerbose, "   denying '" + lpclsid.ToString() + "' from being inserted due to security restrictions");
                         return HRESULT.S_FALSE;
-                    }
                 }
             }
 
