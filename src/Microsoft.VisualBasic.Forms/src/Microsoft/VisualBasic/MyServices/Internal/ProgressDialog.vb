@@ -1,4 +1,4 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -193,7 +193,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Private _closing As Boolean
 
         ' Indicates whether or not the user has canceled the copy
-        Private _canceled As Boolean = False
+        Private _canceled As Boolean
 
         ' Used to signal when the dialog is in a closable state. The dialog is in a closable
         ' state when it has been activated or when it has been flagged to be closed before
