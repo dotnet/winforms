@@ -2,6 +2,10 @@
 <RuleSet Name="Common diagnostic rules for all non-shipping projects" Description="Enables/disable rules specific to all non-shipping projects." ToolsVersion="14.0">
   <Include Path=".\Shipping.ruleset" Action="Default" />
 
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.FxCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FxCopAnalyzers">
+    <Rule Id="CA1507" Action="None" />          <!-- Use nameof to express symbol names -->
+  </Rules>
+
   <Rules AnalyzerId="xunit.analyzers" RuleNamespace="xunit.analyzers">
     <Rule Id="xUnit2013" Action="None" />       <!-- Do not use equality check to check for collection size. -->
   </Rules>
