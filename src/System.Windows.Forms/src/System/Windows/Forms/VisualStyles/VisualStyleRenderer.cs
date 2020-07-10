@@ -232,7 +232,7 @@ namespace System.Windows.Forms.VisualStyles
             DrawBackground(hdc, bounds, IntPtr.Zero);
         }
 
-        internal unsafe void DrawBackground(Gdi32.HDC dc, Rectangle bounds, IntPtr hWnd)
+        internal unsafe void DrawBackground(Gdi32.HDC dc, Rectangle bounds, IntPtr hWnd = default)
         {
             if (bounds.Width < 0 || bounds.Height < 0)
                 return;

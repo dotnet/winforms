@@ -266,7 +266,10 @@ namespace System.Windows.Forms
                 // Draw the up and down buttons
                 if (Application.RenderWithVisualStyles)
                 {
-                    var vsr = new VisualStyleRenderer(_mouseOver == ButtonID.Up ? VisualStyleElement.Spin.Up.Hot : VisualStyleElement.Spin.Up.Normal);
+                    var vsr = new VisualStyleRenderer(_mouseOver == ButtonID.Up
+                        ? VisualStyleElement.Spin.Up.Hot
+                        : VisualStyleElement.Spin.Up.Normal);
+
                     if (!Enabled)
                     {
                         vsr.SetParameters(VisualStyleElement.Spin.Up.Disabled);
@@ -276,9 +279,9 @@ namespace System.Windows.Forms
                         vsr.SetParameters(VisualStyleElement.Spin.Up.Pressed);
                     }
 
-                    using var paintScope = new PaintEventHdcScope(e);
+                    using var hdc = new DeviceContextHdcScope(e);
                     vsr.DrawBackground(
-                        paintScope,
+                        hdc,
                         new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
                         HandleInternal);
 
@@ -292,11 +295,13 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        vsr.SetParameters(_mouseOver == ButtonID.Down ? VisualStyleElement.Spin.Down.Hot : VisualStyleElement.Spin.Down.Normal);
+                        vsr.SetParameters(_mouseOver == ButtonID.Down
+                            ? VisualStyleElement.Spin.Down.Hot
+                            : VisualStyleElement.Spin.Down.Normal);
                     }
 
                     vsr.DrawBackground(
-                        paintScope,
+                        hdc,
                         new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
                         HandleInternal);
                 }
@@ -318,10 +323,23 @@ namespace System.Windows.Forms
                 if (half_height != (ClientSize.Height + 1) / 2)
                 {
                     // When control has odd height, a line needs to be drawn below the buttons with the backcolor.
-                    using (Pen pen = new Pen(_parent.BackColor))
+
+                    bool transparent = _parent.BackColor.A != byte.MaxValue;
+
+                    Rectangle clientRect = ClientRectangle;
+                    Point pt1 = new Point(clientRect.Left, clientRect.Bottom - 1);
+                    Point pt2 = new Point(clientRect.Right - 1, clientRect.Bottom - 1);
+
+                    if (!transparent)
                     {
-                        Rectangle clientRect = ClientRectangle;
-                        e.Graphics.DrawLine(pen, clientRect.Left, clientRect.Bottom - 1, clientRect.Right - 1, clientRect.Bottom - 1);
+                        using var hdc = new DeviceContextHdcScope(e);
+                        using var hpen = new Gdi32.CreatePenScope(_parent.BackColor);
+                        hdc.DrawLine(hpen, pt1, pt2);
+                    }
+                    else
+                    {
+                        using Pen pen = new Pen(_parent.BackColor);
+                        e.Graphics.DrawLine(pen, pt1, pt2);
                     }
                 }
 

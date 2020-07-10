@@ -4,7 +4,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -12,7 +11,7 @@ internal static partial class Interop
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
         public static extern BOOL DrawIconEx(
-            IntPtr hDC,
+            Gdi32.HDC hDC,
             int xLeft,
             int yTop,
             IntPtr hIcon,
@@ -23,7 +22,7 @@ internal static partial class Interop
             DI diFlags);
 
         public static BOOL DrawIconEx(
-            IntPtr hDC,
+            Gdi32.HDC hDC,
             int xLeft,
             int yTop,
             IHandle hIcon,
@@ -43,7 +42,7 @@ internal static partial class Interop
             int cxWidth,
             int cyWidth)
         {
-            BOOL result = DrawIconEx(hDC.Handle, xLeft, yTop, hIcon.Handle, cxWidth, cyWidth, 0, IntPtr.Zero, DI.NORMAL);
+            BOOL result = DrawIconEx((Gdi32.HDC)hDC.Handle, xLeft, yTop, hIcon.Handle, cxWidth, cyWidth, 0, IntPtr.Zero, DI.NORMAL);
             GC.KeepAlive(hIcon);
             GC.KeepAlive(hDC);
             return result;

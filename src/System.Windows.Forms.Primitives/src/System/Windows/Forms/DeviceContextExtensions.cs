@@ -14,15 +14,30 @@ namespace System.Windows.Forms
     internal static class DeviceContextExtensions
     {
         internal static void DrawRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, Gdi32.HPEN hpen)
-            => DrawRectangle(hdc.HDC, rectangle, hpen);
+            => DrawRectangle(hdc.HDC, rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom, hpen);
 
-        internal static void DrawRectangle(this Gdi32.HDC hdc, Rectangle rectangle, Gdi32.HPEN hpen)
+        internal static void DrawRectangle(
+            this DeviceContextHdcScope hdc,
+            int left,
+            int top,
+            int right,
+            int bottom,
+            Gdi32.HPEN hpen)
+            => DrawRectangle(hdc.HDC, left, top, right, bottom, hpen);
+
+        internal static void DrawRectangle(
+            this Gdi32.HDC hdc,
+            int left,
+            int top,
+            int right,
+            int bottom,
+            Gdi32.HPEN hpen)
         {
             using var penScope = new Gdi32.SelectObjectScope(hdc, hpen);
             using var ropScope = new Gdi32.SetRop2Scope(hdc, Gdi32.R2.COPYPEN);
             using var brushScope = new Gdi32.SelectObjectScope(hdc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
 
-            Gdi32.Rectangle(hdc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+            Gdi32.Rectangle(hdc, left, top, right, bottom);
         }
 
         internal static void FillRectangle(this DeviceContextHdcScope hdc, Rectangle rectangle, Gdi32.HBRUSH hbrush)
@@ -37,14 +52,14 @@ namespace System.Windows.Forms
                 hbrush);
         }
 
-        internal static void DrawLine(this DeviceContextHdcScope hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
-            => DrawLine(hdc.HDC, pen, x1, y1, x2, y2);
-
         internal static void DrawLine(this DeviceContextHdcScope hdc, Gdi32.HPEN pen, Point p1, Point p2)
             => DrawLine(hdc.HDC, pen, p1.X, p1.Y, p2.X, p2.Y);
 
         internal static void DrawLine(this Gdi32.HDC hdc, Gdi32.HPEN pen, Point p1, Point p2)
             => DrawLine(hdc, pen, p1.X, p1.Y, p2.X, p2.Y);
+
+        internal unsafe static void DrawLine(this DeviceContextHdcScope hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
+            => DrawLine(hdc.HDC, pen, x1, y1, x2, y2);
 
         internal unsafe static void DrawLine(this Gdi32.HDC hdc, Gdi32.HPEN pen, int x1, int y1, int x2, int y2)
         {
@@ -68,10 +83,14 @@ namespace System.Windows.Forms
         internal static Graphics CreateGraphics(this Gdi32.CreateDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC.Handle);
         internal static Graphics CreateGraphics(this User32.GetDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC.Handle);
 
-        internal static void DrawAndFillEllipse(this Gdi32.HDC hdc, Gdi32.HPEN pen, Gdi32.HBRUSH brush, Rectangle bounds)
-            => DrawEllipse(hdc, pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
+        internal static void DrawAndFillEllipse(
+            this DeviceContextHdcScope hdc,
+            Gdi32.HPEN pen,
+            Gdi32.HBRUSH brush,
+            Rectangle bounds)
+            => DrawAndFillEllipse(hdc.HDC, pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
 
-        private static void DrawEllipse(
+        internal static void DrawAndFillEllipse(
             this Gdi32.HDC hdc,
             Gdi32.HPEN pen,
             Gdi32.HBRUSH brush,

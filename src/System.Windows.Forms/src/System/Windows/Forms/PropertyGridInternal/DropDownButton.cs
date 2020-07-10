@@ -89,11 +89,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 ComboBoxState cbState = ComboBoxState.Normal;
 
-                if (base.MouseIsDown)
+                if (MouseIsDown)
                 {
                     cbState = ComboBoxState.Pressed;
                 }
-                else if (base.MouseIsOver)
+                else if (MouseIsOver)
                 {
                     cbState = ComboBoxState.Hot;
                 }
@@ -104,10 +104,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     pevent.Graphics.FillRectangle(SystemBrushes.Window, dropDownButtonRect);
                 }
 
-                using (var scope = new PaintEventHdcScope(pevent))
+                using (var hdc = new DeviceContextHdcScope(pevent))
                 {
                     ComboBoxRenderer.DrawDropDownButtonForHandle(
-                        scope.HDC,
+                        hdc,
                         dropDownButtonRect,
                         cbState,
                         DpiHelper.IsScalingRequirementMet ? HandleInternal : IntPtr.Zero);
@@ -232,7 +232,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, LayoutData layout)
         {
-            ControlPaint.DrawImageReplaceColor(graphics, image, imageBounds, Color.Black, IsHighContrastHighlighted() && !Control.MouseIsDown ? SystemColors.HighlightText : Control.ForeColor);
+            ControlPaint.DrawImageReplaceColor(
+                graphics,
+                image,
+                imageBounds,
+                Color.Black,
+                IsHighContrastHighlighted() && !Control.MouseIsDown ? SystemColors.HighlightText : Control.ForeColor);
         }
     }
 

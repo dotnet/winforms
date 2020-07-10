@@ -11,12 +11,5 @@ internal static partial class Interop
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
         public static extern HDC CreateCompatibleDC(HDC hDC);
-
-        public static HDC CreateCompatibleDC(HandleRef hDC)
-        {
-            HDC result = CreateCompatibleDC((HDC)hDC.Handle);
-            GC.KeepAlive(hDC.Wrapper);
-            return result;
-        }
     }
 }

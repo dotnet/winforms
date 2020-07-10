@@ -68,11 +68,14 @@ namespace System.Windows.Forms
         ///  this isn't required and does nothing.
         /// </summary>
         public static void DrawParentBackground(Graphics g, Rectangle bounds, Control childControl)
+            => DrawParentBackground((IDeviceContext)g, bounds, childControl);
+
+        internal static void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl)
         {
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer(0);
-                visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
+                visualStyleRenderer.DrawParentBackground(dc, bounds, childControl);
             }
         }
 

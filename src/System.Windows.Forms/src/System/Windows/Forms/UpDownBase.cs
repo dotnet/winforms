@@ -546,23 +546,34 @@ namespace System.Windows.Forms
                     clipRight.Intersect(clipBounds);
                     clipBottom.Intersect(clipBounds);
 
-                    using (var scope = new PaintEventHdcScope(e))
+                    Rectangle backRect = editBounds;
+                    backRect.X--;
+                    backRect.Y--;
+                    backRect.Width++;
+                    backRect.Height++;
+
+                    bool transparent = BackColor.A != byte.MaxValue;
+
+                    using (var hdc = new DeviceContextHdcScope(e))
                     {
-                        vsr.DrawBackground(scope, bounds, clipLeft, HandleInternal);
-                        vsr.DrawBackground(scope, bounds, clipTop, HandleInternal);
-                        vsr.DrawBackground(scope, bounds, clipRight, HandleInternal);
-                        vsr.DrawBackground(scope, bounds, clipBottom, HandleInternal);
+                        vsr.DrawBackground(hdc, bounds, clipLeft, HandleInternal);
+                        vsr.DrawBackground(hdc, bounds, clipTop, HandleInternal);
+                        vsr.DrawBackground(hdc, bounds, clipRight, HandleInternal);
+                        vsr.DrawBackground(hdc, bounds, clipBottom, HandleInternal);
+
+                        if (!transparent)
+                        {
+                            // Draw rectangle around edit control with background color
+                            using var hpen = new Gdi32.CreatePenScope(BackColor);
+                            hdc.DrawRectangle(backRect, hpen);
+                        }
                     }
 
-                    // Draw rectangle around edit control with background color
-                    using (Pen pen = new Pen(BackColor))
+                    if (transparent)
                     {
-                        Rectangle backRect = editBounds;
-                        backRect.X--;
-                        backRect.Y--;
-                        backRect.Width++;
-                        backRect.Height++;
-                        e.Graphics.DrawRectangle(pen, backRect);
+                        // Need to use GDI+
+                        using (Pen pen = new Pen(BackColor))
+                        e.GraphicsInternal.DrawRectangle(pen, backRect);
                     }
                 }
             }

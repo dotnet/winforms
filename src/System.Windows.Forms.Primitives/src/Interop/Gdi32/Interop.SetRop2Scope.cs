@@ -9,12 +9,12 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         /// <summary>
-        ///  Helper to scope selecting a given foreground mix mode into a HDC. Restores the original
-        ///  mix mode into the HDC when disposed.
+        ///  Helper to scope selecting a given foreground mix mode into a HDC. Restores the original mix mode into the
+        ///  HDC when disposed.
         /// </summary>
         /// <remarks>
-        ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
-        ///  by <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
+        ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
+        ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
         /// </remarks>
         internal readonly ref struct SetRop2Scope
         {
@@ -22,7 +22,7 @@ internal static partial class Interop
             private readonly HDC _hdc;
 
             /// <summary>
-            ///  Selects <paramref name="rop2"/> into the given <paramref name="hdc"/>.
+            ///  Selects <paramref name="rop2"/> into the given <paramref name="hdc"/> using <see cref="SetROP2(HDC, R2)"/>.
             /// </summary>
             public SetRop2Scope(HDC hdc, R2 rop2)
             {

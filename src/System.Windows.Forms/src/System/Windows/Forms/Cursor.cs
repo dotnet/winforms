@@ -338,7 +338,7 @@ namespace System.Windows.Forms
                 // is merely a matter of offsetting and clipping.
                 Gdi32.IntersectClipRect(this, targetX, targetY, targetX + clipWidth, targetY + clipHeight);
                 User32.DrawIconEx(
-                    dc,
+                    (Gdi32.HDC)dc,
                     targetX - imageX,
                     targetY - imageY,
                     this,

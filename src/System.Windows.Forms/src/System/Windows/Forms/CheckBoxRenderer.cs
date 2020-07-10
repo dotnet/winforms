@@ -86,19 +86,28 @@ namespace System.Windows.Forms
             DrawCheckBox(g, glyphLocation, state, IntPtr.Zero);
         }
 
-        internal static void DrawCheckBox(Graphics g, Point glyphLocation, CheckBoxState state, IntPtr hWnd)
+        internal static void DrawCheckBoxWithVisualStyles(
+            IDeviceContext deviceContext,
+            Point glyphLocation,
+            CheckBoxState state,
+            IntPtr hwnd)
         {
-            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state, hWnd));
+            InitializeRenderer((int)state);
 
+            using var hdc = new DeviceContextHdcScope(deviceContext);
+            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
+            visualStyleRenderer.DrawBackground(hdc, glyphBounds, hwnd);
+        }
+
+        internal static void DrawCheckBox(Graphics g, Point glyphLocation, CheckBoxState state, IntPtr hwnd)
+        {
             if (RenderWithVisualStyles)
             {
-                InitializeRenderer((int)state);
-
-                using var hdc = new DeviceContextHdcScope(g);
-                visualStyleRenderer.DrawBackground(hdc, glyphBounds, hWnd);
+                DrawCheckBoxWithVisualStyles(g, glyphLocation, state, hwnd);
             }
             else
             {
+                Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state, hwnd));
                 if (IsMixed(state))
                 {
                     ControlPaint.DrawMixedCheckBox(g, glyphBounds, ConvertToButtonState(state));
@@ -226,16 +235,16 @@ namespace System.Windows.Forms
         ///  Returns the size of the CheckBox glyph.
         /// </summary>
         public static Size GetGlyphSize(Graphics g, CheckBoxState state)
-            => GetGlyphSize(g, state, default);
+            => GetGlyphSize((IDeviceContext)g, state);
 
-        internal static Size GetGlyphSize(Graphics g, CheckBoxState state, IntPtr hWnd)
+        internal static Size GetGlyphSize(IDeviceContext deviceContext, CheckBoxState state, IntPtr hWnd = default)
         {
             if (!RenderWithVisualStyles)
             {
                 return new Size(13, 13);
             }
 
-            using var hdc = new DeviceContextHdcScope(g);
+            using var hdc = new DeviceContextHdcScope(deviceContext);
             return GetGlyphSize(hdc, state, IntPtr.Zero);
         }
 

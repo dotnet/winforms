@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -626,11 +625,11 @@ namespace System.Windows.Forms
         private void EnsureRun(Graphics g)
         {
             // bail early if everything is valid!
-            //
             if (textLayoutValid)
             {
                 return;
             }
+
             if (textRegion != null)
             {
                 textRegion.Dispose();
@@ -692,22 +691,22 @@ namespace System.Windows.Forms
 
                         // We need to take into account the padding that GDI adds around the text.
                         int iLeftMargin, iRightMargin;
-                        using (WindowsGraphics wg = WindowsGraphics.FromDeviceContext(g))
-                        {
-                            if ((flags & TextFormatFlags.NoPadding) == TextFormatFlags.NoPadding)
-                            {
-                                wg.TextPadding = TextPaddingOptions.NoPadding;
-                            }
-                            else if ((flags & TextFormatFlags.LeftAndRightPadding) == TextFormatFlags.LeftAndRightPadding)
-                            {
-                                wg.TextPadding = TextPaddingOptions.LeftAndRightPadding;
-                            }
 
-                            using WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font);
-                            User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
-                            iLeftMargin = dtParams.iLeftMargin;
-                            iRightMargin = dtParams.iRightMargin;
+                        TextPaddingOptions padding = default;
+                        if ((flags & TextFormatFlags.NoPadding) == TextFormatFlags.NoPadding)
+                        {
+                            padding = TextPaddingOptions.NoPadding;
                         }
+                        else if ((flags & TextFormatFlags.LeftAndRightPadding) == TextFormatFlags.LeftAndRightPadding)
+                        {
+                            padding = TextPaddingOptions.LeftAndRightPadding;
+                        }
+
+                        using var hfont = GdiCache.GetHFONT(Font);
+                        User32.DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
+
+                        iLeftMargin = dtParams.iLeftMargin;
+                        iRightMargin = dtParams.iRightMargin;
 
                         Rectangle visualRectangle = new Rectangle(clientRectWithPadding.X + iLeftMargin,
                                                                   clientRectWithPadding.Y,
@@ -727,12 +726,10 @@ namespace System.Windows.Forms
                 finally
                 {
                     alwaysUnderlined.Dispose();
-                    alwaysUnderlined = null;
 
                     if (created != null)
                     {
                         created.Dispose();
-                        created = null;
                     }
                 }
 
@@ -1163,18 +1160,19 @@ namespace System.Windows.Forms
             Animate();
 
             ImageAnimator.UpdateFrames(Image);
-            EnsureRun(e.Graphics);
 
-            // bail early for no text
-            //
+            Graphics g = e.GraphicsInternal;
+
+            EnsureRun(g);
+
             if (Text.Length == 0)
             {
-                PaintLinkBackground(e.Graphics);
+                // bail early for no text
+                PaintLinkBackground(g);
             }
-            // Paint enabled link label
-            //
             else
             {
+                // Paint enabled link label
                 if (AutoEllipsis)
                 {
                     Rectangle clientRect = ClientRectWithPadding;
@@ -1187,7 +1185,8 @@ namespace System.Windows.Forms
                 }
 
                 if (Enabled)
-                { // Control.Enabled not to be confused with Link.Enabled
+                {
+                    // Control.Enabled not to be confused with Link.Enabled
                     bool optimizeBackgroundRendering = !GetStyle(ControlStyles.OptimizedDoubleBuffer);
                     SolidBrush foreBrush = new SolidBrush(ForeColor);
                     SolidBrush linkBrush = new SolidBrush(LinkColor);
@@ -1196,20 +1195,20 @@ namespace System.Windows.Forms
                     {
                         if (!optimizeBackgroundRendering)
                         {
-                            PaintLinkBackground(e.Graphics);
+                            PaintLinkBackground(g);
                         }
 
                         LinkUtilities.EnsureLinkFonts(Font, LinkBehavior, ref linkFont, ref hoverLinkFont);
 
-                        Region originalClip = e.Graphics.Clip;
+                        Region originalClip = g.Clip;
 
                         try
                         {
                             if (IsOneLink())
                             {
                                 //exclude the area to draw the focus rectangle
-                                e.Graphics.Clip = originalClip;
-                                RectangleF[] rects = ((Link)links[0]).VisualRegion.GetRegionScans(e.Graphics.Transform);
+                                g.Clip = originalClip;
+                                RectangleF[] rects = ((Link)links[0]).VisualRegion.GetRegionScans(e.GraphicsInternal.Transform);
                                 if (rects != null && rects.Length > 0)
                                 {
                                     if (UseCompatibleTextRendering)
@@ -1233,11 +1232,12 @@ namespace System.Windows.Forms
                                         {
                                             finalrect.Height = requiredSize.Height;
                                         }
-                                        finalrect = CalcTextRenderBounds(System.Drawing.Rectangle.Round(finalrect) /*textRect*/, ClientRectWithPadding /*clientRect*/, RtlTranslateContent(TextAlign));
+                                        finalrect = CalcTextRenderBounds(Rectangle.Round(finalrect) /*textRect*/, ClientRectWithPadding /*clientRect*/, RtlTranslateContent(TextAlign));
                                     }
+
                                     using (Region region = new Region(finalrect))
                                     {
-                                        e.Graphics.ExcludeClip(region);
+                                        g.ExcludeClip(region);
                                     }
                                 }
                             }
@@ -1247,7 +1247,7 @@ namespace System.Windows.Forms
                                 {
                                     if (link.VisualRegion != null)
                                     {
-                                        e.Graphics.ExcludeClip(link.VisualRegion);
+                                        g.ExcludeClip(link.VisualRegion);
                                     }
                                 }
                             }
@@ -1258,24 +1258,24 @@ namespace System.Windows.Forms
 
                             if (!IsOneLink())
                             {
-                                PaintLink(e.Graphics, null, foreBrush, linkBrush, optimizeBackgroundRendering, finalrect);
+                                PaintLink(g, null, foreBrush, linkBrush, optimizeBackgroundRendering, finalrect);
                             }
 
                             foreach (Link link in links)
                             {
-                                PaintLink(e.Graphics, link, foreBrush, linkBrush, optimizeBackgroundRendering, finalrect);
+                                PaintLink(g, link, foreBrush, linkBrush, optimizeBackgroundRendering, finalrect);
                             }
 
                             if (optimizeBackgroundRendering)
                             {
-                                e.Graphics.Clip = originalClip;
-                                e.Graphics.ExcludeClip(textRegion);
-                                PaintLinkBackground(e.Graphics);
+                                g.Clip = originalClip;
+                                g.ExcludeClip(textRegion);
+                                PaintLinkBackground(g);
                             }
                         }
                         finally
                         {
-                            e.Graphics.Clip = originalClip;
+                            g.Clip = originalClip;
                         }
                     }
                     finally
@@ -1284,19 +1284,18 @@ namespace System.Windows.Forms
                         linkBrush.Dispose();
                     }
                 }
-                // Paint disabled link label (disabled control, not to be confused with disabled link).
-                //
                 else
                 {
-                    Region originalClip = e.Graphics.Clip;
+                    // Paint disabled link label (disabled control, not to be confused with disabled link).
+                    Region originalClip = g.Clip;
 
                     try
                     {
                         // We need to paint the background first before clipping to textRegion because it is calculated using
                         // ClientRectWithPadding which in some cases is smaller that ClientRectangle.
                         //
-                        PaintLinkBackground(e.Graphics);
-                        e.Graphics.IntersectClip(textRegion);
+                        PaintLinkBackground(g);
+                        g.IntersectClip(textRegion);
 
                         Color foreColor;
 
@@ -1305,11 +1304,11 @@ namespace System.Windows.Forms
                             // APPCOMPAT: Use DisabledColor because Everett used DisabledColor.
                             // (ie, dont use Graphics.GetNearestColor(DisabledColor.)
                             StringFormat stringFormat = CreateStringFormat();
-                            ControlPaint.DrawStringDisabled(e.Graphics, Text, Font, DisabledColor, ClientRectWithPadding, stringFormat);
+                            ControlPaint.DrawStringDisabled(g, Text, Font, DisabledColor, ClientRectWithPadding, stringFormat);
                         }
                         else
                         {
-                            using (var scope = new PaintEventHdcScope(e))
+                            using (var scope = new DeviceContextHdcScope(e))
                             {
                                 foreColor = ColorTranslator.FromWin32(
                                 Gdi32.GetNearestColor(scope.HDC, ColorTranslator.ToWin32(DisabledColor)));
@@ -1318,7 +1317,7 @@ namespace System.Windows.Forms
                             Rectangle clientRectWidthPadding = ClientRectWithPadding;
 
                             ControlPaint.DrawStringDisabled(
-                                e.Graphics,
+                                g,
                                 Text,
                                 Font,
                                 foreColor,
@@ -1328,14 +1327,14 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        e.Graphics.Clip = originalClip;
+                        g.Clip = originalClip;
                     }
                 }
             }
 
             // We can't call base.OnPaint because labels paint differently from link labels,
             // but we still need to raise the Paint event.
-            //
+
             RaisePaintEvent(this, e);
         }
 

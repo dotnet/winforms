@@ -963,10 +963,11 @@ namespace System.Windows.Forms
             // controls to be the same height.
             Size textExtent = Size.Empty;
 
-            using (WindowsFont font = WindowsFont.FromFont(Font))
+            using (var hfont = GdiCache.GetHFONT(Font))
+            using (var screen = GdiCache.GetScreenDC())
             {
                 // this is the character that Windows uses to determine the extent
-                textExtent = WindowsGraphicsCacheManager.MeasurementGraphics.GetTextExtent("0", font);
+                textExtent = screen.HDC.GetTextExtent("0", hfont);
             }
 
             int dyEdit = textExtent.Height + SystemInformation.Border3DSize.Height;
@@ -3690,10 +3691,17 @@ namespace System.Windows.Forms
         private unsafe void WmReflectDrawItem(ref Message m)
         {
             DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
-            using var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(dis->hDC, forceBackground: false, realizePalette: false);
 
-            using Graphics g = dis->hDC.CreateGraphics();
-            OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
+            using var e = new DrawItemEventArgs(
+                dis->hDC,
+                Font,
+                dis->rcItem,
+                dis->itemID,
+                dis->itemState,
+                ForeColor,
+                BackColor);
+
+            OnDrawItem(e);
 
             m.Result = (IntPtr)1;
         }

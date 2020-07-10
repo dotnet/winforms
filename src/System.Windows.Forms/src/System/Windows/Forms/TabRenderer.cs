@@ -143,10 +143,12 @@ namespace System.Windows.Forms
         ///  Renders a TabPage.
         /// </summary>
         public static void DrawTabPage(Graphics g, Rectangle bounds)
+            => DrawTabPage((IDeviceContext)g, bounds);
+
+        internal static void DrawTabPage(IDeviceContext deviceContext, Rectangle bounds)
         {
             InitializeRenderer(VisualStyleElement.Tab.Pane.Normal, 0);
-
-            visualStyleRenderer.DrawBackground(g, bounds);
+            visualStyleRenderer.DrawBackground(deviceContext, bounds);
         }
 
         private static void InitializeRenderer(VisualStyleElement element, int state)

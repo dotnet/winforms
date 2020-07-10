@@ -76,23 +76,36 @@ namespace System.Windows.Forms
             DrawRadioButton(g, glyphLocation, state, IntPtr.Zero);
         }
 
-        internal static void DrawRadioButton(Graphics g, Point glyphLocation, RadioButtonState state, IntPtr hWnd)
+        internal static void DrawRadioButtonWithVisualStyles(
+            Gdi32.HDC hdc,
+            Point glyphLocation,
+            RadioButtonState state,
+            IntPtr hWnd)
+        {
+            InitializeRenderer((int)state);
+            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
+            t_visualStyleRenderer.DrawBackground(hdc, glyphBounds, hWnd);
+        }
+
+        internal static void DrawRadioButton(
+            Graphics graphics,
+            Point glyphLocation,
+            RadioButtonState state,
+            IntPtr hWnd)
         {
             Rectangle glyphBounds;
             if (RenderWithVisualStyles)
             {
-                InitializeRenderer((int)state);
-                using var hdc = new DeviceContextHdcScope(g);
-                glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
-                t_visualStyleRenderer.DrawBackground(hdc, glyphBounds, hWnd);
+                using var hdc = new DeviceContextHdcScope(graphics);
+                DrawRadioButtonWithVisualStyles(hdc, glyphLocation, state, hWnd);
             }
             else
             {
-                using (var hdc = new DeviceContextHdcScope(g))
+                using (var hdc = new DeviceContextHdcScope(graphics))
                 {
                     glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
                 }
-                ControlPaint.DrawRadioButton(g, glyphBounds, ConvertToButtonState(state));
+                ControlPaint.DrawRadioButton(graphics, glyphBounds, ConvertToButtonState(state));
             }
         }
 

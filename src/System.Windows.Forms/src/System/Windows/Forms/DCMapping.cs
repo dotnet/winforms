@@ -6,16 +6,13 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms.Internal;
 using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  DCMapping is used to change the mapping and clip region of the
-    ///  the specified device context to the given bounds. When the
-    ///  DCMapping is disposed, the original mapping and clip rectangle
-    ///  are restored.
+    ///  DCMapping is used to change the mapping and clip region of the the specified device context to the given
+    ///  bounds. When the DCMapping is disposed, the original mapping and clip rectangle are restored.
     ///
     ///  Example:
     ///
@@ -25,29 +22,29 @@ namespace System.Windows.Forms
     ///      // all painting is clipped at (0,0) - (50,50)
     ///  }
     ///
-    ///  PERF: DCMapping is a structure so that it will allocate on the stack rather than in GC managed
-    ///  memory. This way disposing the object does not force a GC. Since DCMapping objects aren't
-    ///  likely to be passed between functions rather used and disposed in the same one, this reduces
-    ///  overhead.
+    ///  PERF: DCMapping is a structure so that it will allocate on the stack rather than in GC managed memory. This
+    ///  way disposing the object does not force a GC. Since DCMapping objects aren't likely to be passed between
+    ///  functions rather used and disposed in the same one, this reduces overhead.
     /// </summary>
     internal struct DCMapping : IDisposable
     {
-        private DeviceContext _dc;
+        private Gdi32.HDC _hdc;
+        private int _savedState;
 
-        public unsafe DCMapping(Gdi32.HDC hDC, Rectangle bounds)
+        public unsafe DCMapping(Gdi32.HDC hdc, Rectangle bounds)
         {
-            if (hDC.IsNull)
+            if (hdc.IsNull)
             {
-                throw new ArgumentNullException(nameof(hDC));
+                throw new ArgumentNullException(nameof(hdc));
             }
 
             bool success;
 
-            _dc = DeviceContext.FromHdc(hDC);
-            _dc.SaveHdc();
+            _hdc = hdc;
+            _savedState = Gdi32.SaveDC(hdc);
 
             // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
-            success = Gdi32.GetViewportOrgEx(hDC, out Point viewportOrg).IsTrue();
+            success = Gdi32.GetViewportOrgEx(hdc, out Point viewportOrg).IsTrue();
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
             // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
@@ -60,11 +57,15 @@ namespace System.Windows.Forms
 
             try
             {
-                var hOriginalClippingRegion = new Gdi32.RegionScope(hDC);
+                var hOriginalClippingRegion = new Gdi32.RegionScope(hdc);
 
                 // Shift the viewpoint origint by coordinates specified in "bounds".
                 var lastViewPort = new Point();
-                success = Gdi32.SetViewportOrgEx(hDC, viewportOrg.X + bounds.Left, viewportOrg.Y + bounds.Top, &lastViewPort).IsTrue();
+                success = Gdi32.SetViewportOrgEx(
+                    hdc,
+                    viewportOrg.X + bounds.Left,
+                    viewportOrg.Y + bounds.Top,
+                    &lastViewPort).IsTrue();
                 Debug.Assert(success, "SetViewportOrgEx() failed.");
 
                 RegionType originalRegionType;
@@ -99,26 +100,21 @@ namespace System.Windows.Forms
                 }
 
                 // Select the new clipping region; make sure it's a SIMPLEREGION or NULLREGION
-                RegionType selectResult = Gdi32.SelectClipRgn((Gdi32.HDC)hDC, hClippingRegion);
+                RegionType selectResult = Gdi32.SelectClipRgn(hdc, hClippingRegion);
                 Debug.Assert(
                     selectResult == RegionType.SIMPLEREGION || selectResult == RegionType.NULLREGION,
                     "SIMPLEREGION or NULLLREGION expected.");
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
-                _dc.RestoreHdc();
-                _dc.Dispose();
             }
         }
 
         public void Dispose()
         {
-            if (_dc != null)
+            if (!_hdc.IsNull)
             {
-                // Now properly reset GDI.
-                _dc.RestoreHdc();
-                _dc.Dispose();
-                _dc = null;
+                Gdi32.RestoreDC(_hdc, _savedState);
             }
         }
     }

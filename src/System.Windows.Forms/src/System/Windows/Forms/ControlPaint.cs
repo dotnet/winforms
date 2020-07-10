@@ -10,7 +10,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Internal;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -176,56 +175,49 @@ namespace System.Windows.Forms
             Gdi32.HBITMAP hBitmap;
             Size size = bitmap.Size;
 
-            using (DeviceContext screenDc = DeviceContext.ScreenDC)
+            using var screen = GdiCache.GetScreenDC();
+            using var dc = new Gdi32.CreateDcScope(screen);
+
+            byte[] enoughBits = new byte[bitmap.Width * bitmap.Height];
+            IntPtr bitmapInfo = CreateBitmapInfo(bitmap, dc);
+            hBitmap = Gdi32.CreateDIBSection(
+                screen,
+                bitmapInfo,
+                Gdi32.DIB.RGB_COLORS,
+                enoughBits,
+                IntPtr.Zero,
+                0);
+
+            Marshal.FreeCoTaskMem(bitmapInfo);
+
+            if (hBitmap.IsNull)
             {
-                Gdi32.HDC hdcS = screenDc.Hdc;
+                throw new Win32Exception();
+            }
 
-                using (DeviceContext compatDc = DeviceContext.FromCompatibleDC(hdcS))
+            try
+            {
+                Gdi32.HGDIOBJ previousBitmap = Gdi32.SelectObject(dc, hBitmap);
+                if (previousBitmap.IsNull)
                 {
-                    Gdi32.HDC dc = compatDc.Hdc;
-
-                    byte[] enoughBits = new byte[bitmap.Width * bitmap.Height];
-                    IntPtr bitmapInfo = CreateBitmapInfo(bitmap, hdcS);
-                    hBitmap = Gdi32.CreateDIBSection(
-                        hdcS,
-                        bitmapInfo,
-                        Gdi32.DIB.RGB_COLORS,
-                        enoughBits,
-                        IntPtr.Zero,
-                        0);
-
-                    Marshal.FreeCoTaskMem(bitmapInfo);
-
-                    if (hBitmap.IsNull)
-                    {
-                        throw new Win32Exception();
-                    }
-
-                    try
-                    {
-                        Gdi32.HGDIOBJ previousBitmap = Gdi32.SelectObject(dc, hBitmap);
-                        if (previousBitmap.IsNull)
-                        {
-                            throw new Win32Exception();
-                        }
-
-                        Gdi32.DeleteObject(previousBitmap);
-
-                        using (Graphics graphics = dc.CreateGraphics())
-                        {
-                            using (Brush brush = new SolidBrush(background))
-                            {
-                                graphics.FillRectangle(brush, 0, 0, size.Width, size.Height);
-                            }
-                            graphics.DrawImage(bitmap, 0, 0, size.Width, size.Height);
-                        }
-                    }
-                    catch
-                    {
-                        Gdi32.DeleteObject(hBitmap);
-                        throw;
-                    }
+                    throw new Win32Exception();
                 }
+
+                Gdi32.DeleteObject(previousBitmap);
+
+                using (Graphics graphics = dc.CreateGraphics())
+                {
+                    using (Brush brush = new SolidBrush(background))
+                    {
+                        graphics.FillRectangle(brush, 0, 0, size.Width, size.Height);
+                    }
+                    graphics.DrawImage(bitmap, 0, 0, size.Width, size.Height);
+                }
+            }
+            catch
+            {
+                Gdi32.DeleteObject(hBitmap);
+                throw;
             }
 
             return (IntPtr)hBitmap;
@@ -407,9 +399,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Used by PrintToMetaFileRecursive overrides (Label, Panel) to manually
-        ///  paint borders for UserPaint controls that were relying on
-        ///  their window style to provide their borders.
+        ///  Used by PrintToMetaFileRecursive overrides (Label, Panel) to manually paint borders for UserPaint controls
+        ///  that were relying on their window style to provide their borders.
         /// </summary>
         internal static void PrintBorder(Graphics graphics, Rectangle bounds, BorderStyle style, Border3DStyle b3dStyle)
         {
@@ -420,10 +411,10 @@ namespace System.Windows.Forms
             switch (style)
             {
                 case BorderStyle.FixedSingle:
-                    ControlPaint.DrawBorder(graphics, bounds, Color.FromKnownColor(KnownColor.WindowFrame), ButtonBorderStyle.Solid);
+                    DrawBorder(graphics, bounds, Color.FromKnownColor(KnownColor.WindowFrame), ButtonBorderStyle.Solid);
                     break;
                 case BorderStyle.Fixed3D:
-                    ControlPaint.DrawBorder3D(graphics, bounds, b3dStyle);
+                    DrawBorder3D(graphics, bounds, b3dStyle);
                     break;
                 case BorderStyle.None:
                     break;
@@ -432,48 +423,45 @@ namespace System.Windows.Forms
                     break;
             }
         }
-        internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect)
-        {
-            DrawBackgroundImage(g, backgroundImage, backColor, backgroundImageLayout, bounds, clipRect, Point.Empty, RightToLeft.No);
-        }
-        internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect, Point scrollOffset)
-        {
-            DrawBackgroundImage(g, backgroundImage, backColor, backgroundImageLayout, bounds, clipRect, scrollOffset, RightToLeft.No);
-        }
 
-        internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect, Point scrollOffset, RightToLeft rightToLeft)
+        internal static void DrawBackgroundImage(
+            Graphics g,
+            Image backgroundImage,
+            Color backColor,
+            ImageLayout backgroundImageLayout,
+            Rectangle bounds,
+            Rectangle clipRect,
+            Point scrollOffset = default,
+            RightToLeft rightToLeft = RightToLeft.No)
         {
-            if (g == null)
+            if (g is null)
             {
                 throw new ArgumentNullException(nameof(g));
             }
 
             if (backgroundImageLayout == ImageLayout.Tile)
             {
-                // tile
+                using TextureBrush textureBrush = new TextureBrush(backgroundImage, WrapMode.Tile);
 
-                using (TextureBrush textureBrush = new TextureBrush(backgroundImage, WrapMode.Tile))
+                // Make sure the brush origin matches the display rectangle, not the client rectangle,
+                // so the background image scrolls on AutoScroll forms.
+                if (scrollOffset != Point.Empty)
                 {
-                    // Make sure the brush origin matches the display rectangle, not the client rectangle,
-                    // so the background image scrolls on AutoScroll forms.
-                    if (scrollOffset != Point.Empty)
-                    {
-                        Matrix transform = textureBrush.Transform;
-                        transform.Translate(scrollOffset.X, scrollOffset.Y);
-                        textureBrush.Transform = transform;
-                    }
-                    g.FillRectangle(textureBrush, clipRect);
+                    Matrix transform = textureBrush.Transform;
+                    transform.Translate(scrollOffset.X, scrollOffset.Y);
+                    textureBrush.Transform = transform;
                 }
-            }
 
+                g.FillRectangle(textureBrush, clipRect);
+            }
             else
             {
                 // Center, Stretch, Zoom
 
                 Rectangle imageRectangle = CalculateBackgroundImageRectangle(bounds, backgroundImage, backgroundImageLayout);
 
-                //flip the coordinates only if we don't do any layout, since otherwise the image should be at the center of the
-                //displayRectangle anyway.
+                // Flip the coordinates only if we don't do any layout, since otherwise the image should be at the
+                // center of the displayRectangle anyway.
 
                 if (rightToLeft == RightToLeft.Yes && backgroundImageLayout == ImageLayout.None)
                 {
@@ -502,25 +490,47 @@ namespace System.Windows.Forms
                         Rectangle imageRect = imageRectangle;
                         imageRect.Intersect(clipRect);
                         Rectangle partOfImageToDraw = new Rectangle(Point.Empty, imageRect.Size);
-                        g.DrawImage(backgroundImage, imageRect, partOfImageToDraw.X, partOfImageToDraw.Y, partOfImageToDraw.Width,
-                            partOfImageToDraw.Height, GraphicsUnit.Pixel);
+                        g.DrawImage(
+                            backgroundImage,
+                            imageRect,
+                            partOfImageToDraw.X,
+                            partOfImageToDraw.Y,
+                            partOfImageToDraw.Width,
+                            partOfImageToDraw.Height,
+                            GraphicsUnit.Pixel);
                     }
                     else
                     {
                         Rectangle imageRect = imageRectangle;
                         imageRect.Intersect(clipRect);
-                        Rectangle partOfImageToDraw = new Rectangle(new Point(imageRect.X - imageRectangle.X, imageRect.Y - imageRectangle.Y)
-                                    , imageRect.Size);
+                        Rectangle partOfImageToDraw = new Rectangle(
+                            new Point(imageRect.X - imageRectangle.X, imageRect.Y - imageRectangle.Y),
+                            imageRect.Size);
 
-                        g.DrawImage(backgroundImage, imageRect, partOfImageToDraw.X, partOfImageToDraw.Y, partOfImageToDraw.Width,
-                            partOfImageToDraw.Height, GraphicsUnit.Pixel);
+                        g.DrawImage(
+                            backgroundImage,
+                            imageRect,
+                            partOfImageToDraw.X,
+                            partOfImageToDraw.Y,
+                            partOfImageToDraw.Width,
+                            partOfImageToDraw.Height,
+                            GraphicsUnit.Pixel);
                     }
                 }
                 else
                 {
                     ImageAttributes imageAttrib = new ImageAttributes();
                     imageAttrib.SetWrapMode(WrapMode.TileFlipXY);
-                    g.DrawImage(backgroundImage, imageRectangle, 0, 0, backgroundImage.Width, backgroundImage.Height, GraphicsUnit.Pixel, imageAttrib);
+                    g.DrawImage(
+                        backgroundImage,
+                        imageRectangle,
+                        0,
+                        0,
+                        backgroundImage.Width,
+                        backgroundImage.Height,
+                        GraphicsUnit.Pixel,
+                        imageAttrib);
+
                     imageAttrib.Dispose();
                 }
             }
@@ -549,6 +559,23 @@ namespace System.Windows.Forms
                 default:
                     break;
             }
+        }
+
+        internal static void DrawBorderSolid(IDeviceContext deviceContext, Rectangle bounds, Color color)
+        {
+            if (color.HasTransparency())
+            {
+                Graphics g = deviceContext.TryGetGraphics(create: true);
+                if (g != null)
+                {
+                    DrawBorderSimple(g, bounds, color, ButtonBorderStyle.Solid);
+                    return;
+                }
+            }
+
+            using var hdc = new DeviceContextHdcScope(deviceContext);
+            using var hpen = new Gdi32.CreatePenScope(color);
+            hdc.DrawRectangle(bounds.Left, bounds.Top, bounds.Right - 1, bounds.Bottom - 1, hpen);
         }
 
         /// <summary>
@@ -1080,8 +1107,10 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
+
             if (style == ButtonBorderStyle.Inset)
-            { // button being pushed
+            {
+                // button being pushed
                 HLSColor hls = new HLSColor(color);
 
                 // top + left
@@ -1197,6 +1226,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
+
             bool stockBorder = (style == ButtonBorderStyle.Solid && color.IsSystemColor);
             Pen pen;
             if (stockBorder)
@@ -1446,14 +1476,13 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
+
             rectangle.Width--;
             rectangle.Height--;
-            graphics.DrawRectangle(GetFocusPen(color,
-                // we want the corner to be penned
-                // see GetFocusPen for more explanation
-                (rectangle.X + rectangle.Y) % 2 == 1,
-                highContrast),
-                    rectangle);
+            graphics.DrawRectangle(
+                // we want the corner to be penned see GetFocusPen for more explanation
+                GetFocusPen(color, (rectangle.X + rectangle.Y) % 2 == 1, highContrast),
+                rectangle);
         }
 
         /// <summary>
@@ -1513,7 +1542,17 @@ namespace System.Windows.Forms
                     NewColor = backColor
                 };
                 attrs.SetRemapTable(new ColorMap[2] { cm1, cm2 }, ColorAdjustType.Bitmap);
-                graphics.DrawImage(bitmap, new Rectangle(x, y, width, height), 0, 0, width, height, GraphicsUnit.Pixel, attrs, null, IntPtr.Zero);
+                graphics.DrawImage(
+                    bitmap,
+                    new Rectangle(x, y, width, height),
+                    0,
+                    0,
+                    width,
+                    height,
+                    GraphicsUnit.Pixel,
+                    attrs,
+                    null,
+                    IntPtr.Zero);
             }
         }
 
@@ -1863,7 +1902,16 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawRadioButton(Graphics graphics, int x, int y, int width, int height, ButtonState state)
         {
-            DrawFrameControl(graphics, x, y, width, height, User32.DFC.BUTTON, User32.DFCS.BUTTONRADIO | (User32.DFCS)state, Color.Empty, Color.Empty);
+            DrawFrameControl(
+                graphics,
+                x,
+                y,
+                width,
+                height,
+                User32.DFC.BUTTON,
+                User32.DFCS.BUTTONRADIO | (User32.DFCS)state,
+                Color.Empty,
+                Color.Empty);
         }
 
         /// <summary>
@@ -1991,7 +2039,7 @@ namespace System.Windows.Forms
         public static void DrawSizeGrip(Graphics graphics, Color backColor, int x, int y, int width, int height)
         {
             // Note: We don't paint any background to facilitate transparency, background images, etc...
-            //
+
             if (graphics == null)
             {
                 throw new ArgumentNullException(nameof(graphics));
@@ -2018,9 +2066,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws a string in the style appropriate for disabled items.
         /// </summary>
-        public static void DrawStringDisabled(Graphics graphics, string s, Font font,
-                                              Color color, RectangleF layoutRectangle,
-                                              StringFormat format)
+        public static void DrawStringDisabled(
+            Graphics graphics,
+            string s,
+            Font font,
+            Color color,
+            RectangleF layoutRectangle,
+            StringFormat format)
         {
             if (graphics == null)
             {
@@ -2051,28 +2103,48 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws a string in the style appropriate for disabled items, using GDI-based TextRenderer.
         /// </summary>
-        public static void DrawStringDisabled(IDeviceContext dc, string s, Font font,
-                                              Color color, Rectangle layoutRectangle,
-                                              TextFormatFlags format)
+        public static void DrawStringDisabled(
+            IDeviceContext dc,
+            string s,
+            Font font,
+            Color color,
+            Rectangle layoutRectangle,
+            TextFormatFlags format)
         {
             if (dc == null)
             {
                 throw new ArgumentNullException(nameof(dc));
             }
 
+            // This must come before creating the scope.
+            Gdi32.QUALITY quality = TextRenderer.FontQualityFromTextRenderingHint(dc);
+
+            using var hdc = new DeviceContextHdcScope(dc);
+            DrawStringDisabled(hdc, s, font, color, layoutRectangle, format, quality);
+        }
+
+        internal static void DrawStringDisabled(
+            Gdi32.HDC dc,
+            string s,
+            Font font,
+            Color color,
+            Rectangle layoutRectangle,
+            TextFormatFlags format,
+            Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)
+        {
             if (SystemInformation.HighContrast)
             {
-                TextRenderer.DrawText(dc, s, font, layoutRectangle, SystemColors.GrayText, format);
+                TextRenderer.DrawTextInternal(dc, s, font, layoutRectangle, SystemColors.GrayText, quality, format);
             }
             else
             {
                 layoutRectangle.Offset(1, 1);
                 Color paintcolor = LightLight(color);
 
-                TextRenderer.DrawText(dc, s, font, layoutRectangle, paintcolor, format);
+                TextRenderer.DrawTextInternal(dc, s, font, layoutRectangle, paintcolor, quality, format);
                 layoutRectangle.Offset(-1, -1);
                 paintcolor = Dark(color);
-                TextRenderer.DrawText(dc, s, font, layoutRectangle, paintcolor, format);
+                TextRenderer.DrawTextInternal(dc, s, font, layoutRectangle, paintcolor, quality, format);
             }
         }
 

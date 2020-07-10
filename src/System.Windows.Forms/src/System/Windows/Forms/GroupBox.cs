@@ -465,7 +465,13 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    GroupBoxRenderer.DrawGroupBox(e.Graphics, new Rectangle(0, 0, Width, Height), Text, Font, textFlags, gbState);
+                    GroupBoxRenderer.DrawGroupBox(
+                        e,
+                        new Rectangle(0, 0, Width, Height),
+                        Text,
+                        Font,
+                        textFlags,
+                        gbState);
                 }
             }
             else
@@ -523,32 +529,37 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    using (WindowsGraphics wg = WindowsGraphics.FromDeviceContext(graphics))
+                    using var hdc = new DeviceContextHdcScope(graphics);
+
+                    User32.DT flags = User32.DT.WORDBREAK | User32.DT.EDITCONTROL;
+
+                    if (!ShowKeyboardCues)
                     {
-                        User32.DT flags = User32.DT.WORDBREAK | User32.DT.EDITCONTROL;
+                        flags |= User32.DT.HIDEPREFIX;
+                    }
 
-                        if (!ShowKeyboardCues)
-                        {
-                            flags |= User32.DT.HIDEPREFIX;
-                        }
+                    if (RightToLeft == RightToLeft.Yes)
+                    {
+                        flags |= User32.DT.RTLREADING;
+                        flags |= User32.DT.RIGHT;
+                    }
 
-                        if (RightToLeft == RightToLeft.Yes)
-                        {
-                            flags |= User32.DT.RTLREADING;
-                            flags |= User32.DT.RIGHT;
-                        }
+                    using var hfont = GdiCache.GetHFONT(Font);
+                    textSize = hdc.MeasureText(Text, hfont, new Size(textRectangle.Width, int.MaxValue), flags);
 
-                        using WindowsFont wfont = WindowsGraphicsCacheManager.GetWindowsFont(Font);
-                        textSize = wg.MeasureText(Text, wfont, new Size(textRectangle.Width, int.MaxValue), flags);
-
-                        if (Enabled)
-                        {
-                            wg.DrawText(Text, wfont, textRectangle, ForeColor, flags);
-                        }
-                        else
-                        {
-                            ControlPaint.DrawStringDisabled(wg, Text, Font, backColor, textRectangle, (TextFormatFlags)flags);
-                        }
+                    if (Enabled)
+                    {
+                        hdc.DrawText(Text, hfont, textRectangle, ForeColor, flags);
+                    }
+                    else
+                    {
+                        ControlPaint.DrawStringDisabled(
+                            hdc,
+                            Text,
+                            Font,
+                            backColor,
+                            textRectangle,
+                            (TextFormatFlags)flags);
                     }
                 }
 

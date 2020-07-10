@@ -21,7 +21,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                ColorData colors = PaintRender(e.Graphics).Calculate();
+                ColorData colors = PaintRender(e).Calculate();
                 LayoutData layout = Layout(e).Layout();
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
@@ -91,15 +91,14 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                using (Graphics measurementGraphics = WindowsFormsUtils.CreateMeasurementGraphics())
+                LayoutOptions options = default;
+                using (var screen = GdiCache.GetScreenDC())
+                using (PaintEventArgs pe = new PaintEventArgs(screen, new Rectangle()))
                 {
-                    using (PaintEventArgs pe = new PaintEventArgs(measurementGraphics, new Rectangle()))
-                    {
-                        LayoutOptions options = Layout(pe);
-
-                        return options.GetPreferredSizeCore(proposedSize);
-                    }
+                    options = Layout(pe);
                 }
+
+                return options.GetPreferredSizeCore(proposedSize);
             }
         }
 
@@ -126,8 +125,9 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (Application.RenderWithVisualStyles)
             {
+                using var screen = GdiCache.GetScreenDC();
                 layout.checkSize = CheckBoxRenderer.GetGlyphSize(
-                    WindowsFormsUtils.GetMeasurementDeviceContext(),
+                    screen,
                     CheckBoxRenderer.ConvertFromButtonState(
                         GetState(),
                         true,

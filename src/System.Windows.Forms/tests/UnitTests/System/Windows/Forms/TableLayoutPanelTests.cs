@@ -1536,10 +1536,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TableLayoutPanel_OnPaintBackground_NullEventArgs_ThrowsNullReferenceException()
+        public void TableLayoutPanel_OnPaintBackground_NullEventArgs_ThrowsArgumentNullException()
         {
             using var control = new SubTableLayoutPanel();
-            Assert.Throws<NullReferenceException>(() => control.OnPaintBackground(null));
+            Assert.Throws<ArgumentNullException>(() => control.OnPaintBackground(null));
         }
 
         public static IEnumerable<object[]> SetCellPosition_TestData()

@@ -828,11 +828,6 @@ namespace System.Windows.Forms
             private Timer _timer;
             private NativeWindow _tipWindow;
 
-            private DeviceContext _mirrordc;
-            private Size _mirrordcExtent;
-            private Point _mirrordcOrigin;
-            private Gdi32.MM _mirrordcMode = Gdi32.MM.TEXT;
-
             /// <summary>
             ///  Construct an error window for this provider and control parent.
             /// </summary>
@@ -975,79 +970,34 @@ namespace System.Windows.Forms
                     User32.SWP.HIDEWINDOW | User32.SWP.NOSIZE | User32.SWP.NOMOVE);
                 _parent?.Invalidate(true);
                 DestroyHandle();
-
-                Debug.Assert(_mirrordc == null, "Why is mirrordc non-null?");
-                _mirrordc?.Dispose();
-            }
-
-            /// <summary>
-            ///  Since we added mirroring to certain controls, we need to make sure the
-            ///  error icons show up in the correct place. We cannot mirror the errorwindow
-            ///  in EnsureCreated (although that would have been really easy), since we use
-            ///  GDI+ for some of this code, and as we all know, GDI+ does not handle mirroring
-            ///  at all.
-            ///  To work around that we create our own mirrored dc when we need to.
-            /// </summary>
-            private void CreateMirrorDC(Gdi32.HDC hdc, int originOffset)
-            {
-                Debug.Assert(_mirrordc == null, "Why is mirrordc non-null? Did you not call RestoreMirrorDC?");
-
-                _mirrordc = DeviceContext.FromHdc(hdc);
-                if (_parent.IsMirrored && _mirrordc != null)
-                {
-                    _mirrordc.SaveHdc();
-                    _mirrordcExtent = _mirrordc.ViewportExtent;
-                    _mirrordcOrigin = _mirrordc.ViewportOrigin;
-
-                    _mirrordcMode = _mirrordc.SetMapMode(Gdi32.MM.ANISOTROPIC);
-                    _mirrordc.ViewportExtent = new Size(-(_mirrordcExtent.Width), _mirrordcExtent.Height);
-                    _mirrordc.ViewportOrigin = new Point(_mirrordcOrigin.X + originOffset, _mirrordcOrigin.Y);
-                }
-            }
-
-            private void RestoreMirrorDC()
-            {
-                if (_parent.IsMirrored && _mirrordc != null)
-                {
-                    _mirrordc.ViewportExtent = _mirrordcExtent;
-                    _mirrordc.ViewportOrigin = _mirrordcOrigin;
-                    _mirrordc.SetMapMode(_mirrordcMode);
-                    _mirrordc.RestoreHdc();
-                    _mirrordc.Dispose();
-                }
-
-                _mirrordc = null;
-                _mirrordcExtent = Size.Empty;
-                _mirrordcOrigin = Point.Empty;
-                _mirrordcMode = Gdi32.MM.TEXT;
             }
 
             /// <summary>
             ///  This is called when the error window needs to paint. We paint each icon at its
             ///  correct location.
             /// </summary>
-            private void OnPaint(ref Message m)
+            private unsafe void OnPaint(ref Message m)
             {
                 using var hdc = new User32.BeginPaintScope(Handle);
-                CreateMirrorDC(hdc, _windowBounds.Width - 1);
+                using var save = new Gdi32.SaveDcScope(hdc);
 
-                try
+                // Mirror the DC
+                Gdi32.SetMapMode(hdc, Gdi32.MM.ANISOTROPIC);
+                Gdi32.GetViewportExtEx(hdc, out Size originalExtents);
+                Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, null);
+                Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
+                Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, null);
+
+                for (int i = 0; i < _items.Count; i++)
                 {
-                    for (int i = 0; i < _items.Count; i++)
-                    {
-                        ControlItem item = _items[i];
-                        Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
-                        User32.DrawIconEx(
-                            _mirrordc,
-                            bounds.X - _windowBounds.X,
-                            bounds.Y - _windowBounds.Y,
-                            _provider.Region,
-                            bounds.Width, bounds.Height);
-                    }
-                }
-                finally
-                {
-                    RestoreMirrorDC();
+                    ControlItem item = _items[i];
+                    Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
+                    User32.DrawIconEx(
+                        hdc,
+                        bounds.X - _windowBounds.X,
+                        bounds.Y - _windowBounds.Y,
+                        _provider.Region,
+                        bounds.Width, bounds.Height);
                 }
             }
 
@@ -1226,39 +1176,28 @@ namespace System.Windows.Forms
                             item.BlinkPhase--;
                         }
                     }
+
                     if (timerCaused)
                     {
                         _provider._showIcon = !_provider._showIcon;
                     }
 
-                    DeviceContext dc = null;
-                    dc = DeviceContext.FromHwnd(Handle);
-                    try
-                    {
-                        CreateMirrorDC(dc.Hdc, _windowBounds.Width);
+                    using var hdc = new User32.GetDcScope(Handle);
+                    using var save = new Gdi32.SaveDcScope(hdc);
 
-                        using Graphics graphics = _mirrordc.Hdc.CreateGraphics();
-                        try
-                        {
-                            using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, graphics);
+                    // Mirror the DC
+                    Gdi32.SetMapMode(hdc, Gdi32.MM.ANISOTROPIC);
+                    Gdi32.GetViewportExtEx(hdc, out Size originalExtents);
+                    Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, null);
+                    Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
+                    Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width, originalOrigin.Y, null);
 
-                            if (User32.SetWindowRgn(this, windowRegionHandle, BOOL.TRUE) != 0)
-                            {
-                                // The HWnd owns the region.
-                                windowRegionHandle.RelinquishOwnership();
-                            }
-                        }
-                        finally
-                        {
-                            RestoreMirrorDC();
-                        }
-                    }
-                    finally
+                    using Graphics g = hdc.CreateGraphics();
+                    using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, g);
+                    if (User32.SetWindowRgn(this, windowRegionHandle, BOOL.TRUE) != 0)
                     {
-                        if (dc != null)
-                        {
-                            dc.Dispose();
-                        }
+                        // The HWnd owns the region.
+                        windowRegionHandle.RelinquishOwnership();
                     }
                 }
                 finally

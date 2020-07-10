@@ -57,10 +57,10 @@ namespace System.Windows.Forms.ButtonInternal
                 bounds.Height--;
             }
 
-            using (var scope = new PaintEventHdcScope(e))
+            using (var hdc = new DeviceContextHdcScope(e))
             {
                 using var hpen = new Gdi32.CreatePenScope(checkBorder);
-                scope.HDC.DrawRectangle(bounds, hpen);
+                hdc.DrawRectangle(bounds, hpen);
 
                 // Now subtract, since the rest of the code is like Everett.
                 if (layout.options.everettButtonCompat)
@@ -79,13 +79,13 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                using var scope = new PaintEventHdcScope(e);
+                using var hdc = new DeviceContextHdcScope(e);
                 using var hbrush = new Gdi32.CreateBrushScope(checkBackground);
 
                 // Even though we are using GDI here as opposed to GDI+ in Everett, we still need to add 1.
                 bounds.Width++;
                 bounds.Height++;
-                scope.HDC.FillRectangle(bounds, hbrush);
+                hdc.FillRectangle(bounds, hbrush);
             }
 
             DrawCheckOnly(e, layout, colors, checkColor, checkBackground);
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static Rectangle DrawPopupBorder(PaintEventArgs e, Rectangle r, ColorData colors)
         {
-            using var hdc = new PaintEventHdcScope(e);
+            using var hdc = new DeviceContextHdcScope(e);
             return DrawPopupBorder(hdc, r, colors);
         }
 
@@ -284,7 +284,7 @@ namespace System.Windows.Forms.ButtonInternal
                 if (Application.RenderWithVisualStyles)
                 {
                     CheckBoxRenderer.DrawCheckBox(
-                        e.Graphics,
+                        e.GraphicsInternal,
                         new Point(layout.checkBounds.Left, layout.checkBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver),
                         Control.HandleInternal);

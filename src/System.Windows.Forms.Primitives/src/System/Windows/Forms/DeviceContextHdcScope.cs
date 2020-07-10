@@ -62,14 +62,41 @@ namespace System.Windows.Forms
             DeviceContext = deviceContext ?? throw new ArgumentNullException(nameof(deviceContext));
             _savedHdcState = 0;
 
-            if (applyGraphicsState == ApplyGraphicsProperties.None || !(DeviceContext is Graphics graphics))
+            HDC = default;
+
+            IGraphicsHdcProvider? provider = deviceContext as IGraphicsHdcProvider;
+            Graphics? graphics = deviceContext as Graphics;
+
+            // If we can't get a Graphics we can't save state, so it is effectively the same as apply none
+            if (applyGraphicsState == ApplyGraphicsProperties.None || graphics is null || provider?.IsStateClean == true)
             {
-                // GetHdc() locks the Graphics object, it cannot be used until ReleaseHdc() is called
-                HDC = (Gdi32.HDC)DeviceContext.GetHdc();
+                if (provider is null)
+                {
+                    // We have an IDeviceContext
+                    HDC = (Gdi32.HDC)deviceContext.GetHdc();
+                }
+                else
+                {
+                    // We have a provider
+                    HDC = provider.GetHDC();
+
+                    if (HDC.IsNull)
+                    {
+                        graphics = provider.GetGraphics(create: true);
+                        if (graphics is null)
+                        {
+                            throw new InvalidOperationException();
+                        }
+                        HDC = (Gdi32.HDC)graphics.GetHdc();
+                        DeviceContext = graphics;
+                    }
+                }
+
                 _savedHdcState = saveHdcState ? Gdi32.SaveDC(HDC) : 0;
                 return;
             }
 
+            _savedHdcState = saveHdcState ? Gdi32.SaveDC(HDC) : 0;
             bool applyTransform = applyGraphicsState.HasFlag(ApplyGraphicsProperties.TranslateTransform);
             bool applyClipping = applyGraphicsState.HasFlag(ApplyGraphicsProperties.Clipping);
 
@@ -137,7 +164,10 @@ namespace System.Windows.Forms
             }
 
             // Note that Graphics keeps track of the HDC it passes back, so we don't need to pass it back in
-            DeviceContext?.ReleaseHdc();
+            if (!(DeviceContext is IGraphicsHdcProvider))
+            {
+                DeviceContext?.ReleaseHdc();
+            }
         }
     }
 }

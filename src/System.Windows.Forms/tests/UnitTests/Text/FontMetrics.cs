@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Windows.Forms.Internal;
 using Xunit;
 using static Interop;
 
@@ -26,47 +25,8 @@ namespace System.Windows.Forms.Tests.Text
                 return;
             }
 
-            using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            Assert.Equal(height, windowsFont.Height);
-        }
-
-        [Theory]
-        [InlineData("Arial", 9.0f, 1 /* DEFAULT_CHARSET */)]
-        [InlineData("Arial", 12.0f, 1)]
-        [InlineData("Microsoft Sans Serif", 16.0f, 1)]
-        [InlineData("Times New Roman", 11.0f, 1)]
-        [InlineData("MS Gothic", 11.0f, 1)]
-        public void Font_GetCharSet(string family, float size, byte charset)
-        {
-            using Font font = new Font(family, size);
-            if (font.Name != family)
-            {
-                // Not installed on this machine
-                return;
-            }
-
-            using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            Assert.Equal(charset, windowsFont.CharSet);
-        }
-
-        [Theory]
-        [InlineData("Arial", 9.0f, 2.5f)]
-        [InlineData("Arial", 12.0f, 3.0f)]
-        [InlineData("Microsoft Sans Serif", 16.0f, 4.3333335f)]
-        [InlineData("Times New Roman", 11.0f, 2.8333333f)]
-        [InlineData("MS Gothic", 10.0f, 2.3333333f)]
-        public void Font_GetOverhangPadding(string family, float size, float expected)
-        {
-            using Font font = new Font(family, size);
-            if (font.Name != family)
-            {
-                // Not installed on this machine
-                return;
-            }
-
-            using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            WindowsGraphics graphics = WindowsGraphicsCacheManager.MeasurementGraphics;
-            Assert.Equal(expected, graphics.GetOverhangPadding(windowsFont));
+            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
+            Assert.Equal(height, hfont.FontHeight);
         }
 
         [Theory]
@@ -84,9 +44,8 @@ namespace System.Windows.Forms.Tests.Text
                 return;
             }
 
-            using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            WindowsGraphics graphics = WindowsGraphicsCacheManager.MeasurementGraphics;
-            User32.DRAWTEXTPARAMS margins = graphics.GetTextMargins(windowsFont);
+            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
+            User32.DRAWTEXTPARAMS margins = hfont.GetTextMargins();
             Assert.Equal(left, margins.iLeftMargin);
             Assert.Equal(right, margins.iRightMargin);
         }
@@ -106,9 +65,9 @@ namespace System.Windows.Forms.Tests.Text
                 return;
             }
 
-            using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            WindowsGraphics graphics = WindowsGraphicsCacheManager.MeasurementGraphics;
-            Size extent = graphics.GetTextExtent("Whizzo Butter", windowsFont);
+            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
+            using var screen = GdiCache.GetScreenDC();
+            Size extent = screen.HDC.GetTextExtent("Whizzo Butter", hfont);
             Assert.Equal(width, extent.Width);
             Assert.Equal(height, extent.Height);
         }
@@ -124,9 +83,9 @@ namespace System.Windows.Forms.Tests.Text
                 return;
             }
 
-            using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            WindowsGraphics graphics = WindowsGraphicsCacheManager.MeasurementGraphics;
-            Size measure = graphics.MeasureText("Windows Foundation Classes", windowsFont, proposedSize, (User32.DT)dt);
+            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
+            using var screen = GdiCache.GetScreenDC();
+            Size measure = screen.HDC.MeasureText("Windows Foundation Classes", hfont, proposedSize, (User32.DT)dt);
             Assert.Equal(expected, measure);
         }
 
@@ -181,12 +140,12 @@ namespace System.Windows.Forms.Tests.Text
                 return;
             }
 
-            using WindowsFont windowsFont = WindowsFont.FromFont(font, Gdi32.QUALITY.CLEARTYPE);
-            WindowsGraphics graphics = WindowsGraphicsCacheManager.MeasurementGraphics;
-            graphics.DeviceContext.SelectFont(windowsFont);
+            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
+            using var screen = GdiCache.GetScreenDC();
+            using var fontSelection = new Gdi32.SelectObjectScope(screen, hfont);
+
             User32.DRAWTEXTPARAMS param = default;
-            Rectangle result = WindowsGraphics.AdjustForVerticalAlignment(
-                graphics,
+            Rectangle result = screen.HDC.AdjustForVerticalAlignment(
                 "Windows Foundation Classes",
                 bounds,
                 (User32.DT)dt,

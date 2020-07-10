@@ -808,13 +808,13 @@ namespace System.Windows.Forms
         ///  Processes all Windows messages currently in the message queue.
         /// </summary>
         public static void DoEvents()
-            => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.DoEvents, null);
+            => ThreadContext.FromCurrent().RunMessageLoop(Mso.msoloop.DoEvents, null);
 
         internal static void DoEventsModal()
-            => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.DoEventsModal, null);
+            => ThreadContext.FromCurrent().RunMessageLoop(Mso.msoloop.DoEventsModal, null);
 
         /// <summary>
-        ///  Enables visual styles for all subsequent <see cref="Application.Run()"/> and <see cref="Control.CreateHandle"/> calls.
+        ///  Enables visual styles for all subsequent <see cref="Run()"/> and <see cref="Control.CreateHandle"/> calls.
         ///  Uses the default theming manifest file shipped with the redist.
         /// </summary>
         public static void EnableVisualStyles()

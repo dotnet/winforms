@@ -11,7 +11,6 @@ using System.Globalization;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms.Internal;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -37,15 +36,6 @@ namespace System.Windows.Forms
                 return new Point(PARAM.SignedLOWORD(lastXY), PARAM.SignedHIWORD(lastXY));
             }
         }
-
-        /// <remarks>
-        ///  This <see cref="Graphics"/> requires disposal.
-        /// </remarks>
-        public static Graphics CreateMeasurementGraphics()
-            => GetMeasurementDeviceContext().CreateGraphics();
-
-        public static Gdi32.HDC GetMeasurementDeviceContext()
-            => WindowsGraphicsCacheManager.MeasurementGraphics.DeviceContext.Hdc;
 
         /// <summary>
         ///  If you want to know if a piece of text contains one and only one &amp;

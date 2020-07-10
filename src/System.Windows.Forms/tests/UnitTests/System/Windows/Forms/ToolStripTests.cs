@@ -5981,10 +5981,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStrip_OnPaintBackground_NullEventArgs_ThrowsNullReferenceException()
+        public void ToolStrip_OnPaintBackground_NullEventArgs_ThrowsArgumentNullException()
         {
             using var control = new SubToolStrip();
-            Assert.Throws<NullReferenceException>(() => control.OnPaintBackground(null));
+            Assert.Throws<ArgumentNullException>(() => control.OnPaintBackground(null));
         }
 
         [WinFormsFact]
