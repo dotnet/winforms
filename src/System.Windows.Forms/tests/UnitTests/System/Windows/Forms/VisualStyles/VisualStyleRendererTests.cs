@@ -294,8 +294,9 @@ namespace System.Windows.Forms.VisualStyles.Tests
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
             using var image = new Bitmap(10, 10);
+            using var imageList = new ImageList();
             Assert.Throws<ArgumentNullException>("g", () => renderer.DrawImage(null, new Rectangle(1, 2, 3, 4), image));
-            Assert.Throws<ArgumentNullException>("g", () => renderer.DrawImage(null, new Rectangle(1, 2, 3, 4), new ImageList(), 0));
+            Assert.Throws<ArgumentNullException>("g", () => renderer.DrawImage(null, new Rectangle(1, 2, 3, 4), imageList, 0));
         }
 
         [Fact]

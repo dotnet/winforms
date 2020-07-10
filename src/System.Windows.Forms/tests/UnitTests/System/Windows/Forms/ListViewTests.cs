@@ -801,14 +801,14 @@ namespace System.Windows.Forms.Tests
             {
                 foreach (ListViewAlignment alignment in Enum.GetValues(typeof(ListViewAlignment)))
                 {
-                    foreach (ImageList imageList in new ImageList[] { new ImageList(), null })
+                    foreach (Func<ImageList> imageListFactory in new Func<ImageList>[] { () => new ImageList(), () => null })
                     {
                         foreach (bool value in new bool[] { true, false })
                         {
-                            yield return new object[] { useCompatibleStateImageBehavior, View.Details, alignment, imageList, value };
-                            yield return new object[] { useCompatibleStateImageBehavior, View.LargeIcon, alignment, imageList, value };
-                            yield return new object[] { useCompatibleStateImageBehavior, View.List, alignment, imageList, value };
-                            yield return new object[] { useCompatibleStateImageBehavior, View.SmallIcon, alignment, imageList, value };
+                            yield return new object[] { useCompatibleStateImageBehavior, View.Details, alignment, imageListFactory(), value };
+                            yield return new object[] { useCompatibleStateImageBehavior, View.LargeIcon, alignment, imageListFactory(), value };
+                            yield return new object[] { useCompatibleStateImageBehavior, View.List, alignment, imageListFactory(), value };
+                            yield return new object[] { useCompatibleStateImageBehavior, View.SmallIcon, alignment, imageListFactory(), value };
                         }
                     }
                 }
@@ -907,16 +907,16 @@ namespace System.Windows.Forms.Tests
         {
             foreach (ListViewAlignment alignment in Enum.GetValues(typeof(ListViewAlignment)))
             {
-                foreach (ImageList imageList in new ImageList[] { new ImageList(), null })
+                foreach (Func<ImageList> imageListFactory in new Func<ImageList>[] { () => new ImageList(), () => null })
                 {
-                    yield return new object[] { true, View.Details, alignment, imageList, true, 1, 0, 2, 0 };
-                    yield return new object[] { true, View.LargeIcon, alignment, imageList, true, 1, 0, 2, 0 };
-                    yield return new object[] { true, View.List, alignment, imageList, true, 1, 0, 2, 0 };
-                    yield return new object[] { true, View.SmallIcon, alignment, imageList, true, 1, 0, 2, 0 };
-                    yield return new object[] { true, View.Details, alignment, imageList, false, 0, 0, 1, 0 };
-                    yield return new object[] { true, View.LargeIcon, alignment, imageList, false, 0, 0, 1, 0 };
-                    yield return new object[] { true, View.List, alignment, imageList, false, 0, 0, 1, 0 };
-                    yield return new object[] { true, View.SmallIcon, alignment, imageList, false, 0, 0, 1, 0 };
+                    yield return new object[] { true, View.Details, alignment, imageListFactory(), true, 1, 0, 2, 0 };
+                    yield return new object[] { true, View.LargeIcon, alignment, imageListFactory(), true, 1, 0, 2, 0 };
+                    yield return new object[] { true, View.List, alignment, imageListFactory(), true, 1, 0, 2, 0 };
+                    yield return new object[] { true, View.SmallIcon, alignment, imageListFactory(), true, 1, 0, 2, 0 };
+                    yield return new object[] { true, View.Details, alignment, imageListFactory(), false, 0, 0, 1, 0 };
+                    yield return new object[] { true, View.LargeIcon, alignment, imageListFactory(), false, 0, 0, 1, 0 };
+                    yield return new object[] { true, View.List, alignment, imageListFactory(), false, 0, 0, 1, 0 };
+                    yield return new object[] { true, View.SmallIcon, alignment, imageListFactory(), false, 0, 0, 1, 0 };
                 }
 
                 if (alignment != ListViewAlignment.Left)
@@ -941,16 +941,16 @@ namespace System.Windows.Forms.Tests
                 }
             }
 
-            foreach (ImageList imageList in new ImageList[] { new ImageList(), null })
+            foreach (Func<ImageList> imageListFactory in new Func<ImageList>[] { () => new ImageList(), () => null })
             {
-                yield return new object[] { false, View.Details, ListViewAlignment.Left, imageList, true, 1, 0, 2, 1 };
-                yield return new object[] { false, View.LargeIcon, ListViewAlignment.Left, imageList, true, 2, 1, 4, 2 };
-                yield return new object[] { false, View.List, ListViewAlignment.Left, imageList, true, 1, 1, 2, 2 };
-                yield return new object[] { false, View.SmallIcon, ListViewAlignment.Left, imageList, true, 2, 1, 4, 2 };
-                yield return new object[] { false, View.Details, ListViewAlignment.Left, imageList, false, 0, 0, 1, 0 };
-                yield return new object[] { false, View.LargeIcon, ListViewAlignment.Left, imageList, false, 0, 0, 2, 1 };
-                yield return new object[] { false, View.List, ListViewAlignment.Left, imageList, false, 0, 0, 1, 1 };
-                yield return new object[] { false, View.SmallIcon, ListViewAlignment.Left, imageList, false, 0, 0, 2, 1 };
+                yield return new object[] { false, View.Details, ListViewAlignment.Left, imageListFactory(), true, 1, 0, 2, 1 };
+                yield return new object[] { false, View.LargeIcon, ListViewAlignment.Left, imageListFactory(), true, 2, 1, 4, 2 };
+                yield return new object[] { false, View.List, ListViewAlignment.Left, imageListFactory(), true, 1, 1, 2, 2 };
+                yield return new object[] { false, View.SmallIcon, ListViewAlignment.Left, imageListFactory(), true, 2, 1, 4, 2 };
+                yield return new object[] { false, View.Details, ListViewAlignment.Left, imageListFactory(), false, 0, 0, 1, 0 };
+                yield return new object[] { false, View.LargeIcon, ListViewAlignment.Left, imageListFactory(), false, 0, 0, 2, 1 };
+                yield return new object[] { false, View.List, ListViewAlignment.Left, imageListFactory(), false, 0, 0, 1, 1 };
+                yield return new object[] { false, View.SmallIcon, ListViewAlignment.Left, imageListFactory(), false, 0, 0, 2, 1 };
             }
         }
 
