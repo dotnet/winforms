@@ -101,36 +101,36 @@ namespace System.Windows.Forms.Design
 
         public DockStyle Dock
         {
-            get => (DockStyle)GetProperty("Dock");
+            get => (DockStyle)GetProperty(nameof(Dock));
             set
             {
                 if (value != Dock)
                 {
-                    ChangeProperty("Dock", (object)value);
+                    ChangeProperty(nameof(Dock), (object)value);
                 }
             }
         }
 
         public ToolStripRenderMode RenderMode
         {
-            get => (ToolStripRenderMode)GetProperty("RenderMode");
+            get => (ToolStripRenderMode)GetProperty(nameof(RenderMode));
             set
             {
                 if (value != RenderMode)
                 {
-                    ChangeProperty("RenderMode", (object)value);
+                    ChangeProperty(nameof(RenderMode), (object)value);
                 }
             }
         }
 
         public ToolStripGripStyle GripStyle
         {
-            get => (ToolStripGripStyle)GetProperty("GripStyle");
+            get => (ToolStripGripStyle)GetProperty(nameof(GripStyle));
             set
             {
                 if (value != GripStyle)
                 {
-                    ChangeProperty("GripStyle", (object)value);
+                    ChangeProperty(nameof(GripStyle), (object)value);
                 }
             }
         }

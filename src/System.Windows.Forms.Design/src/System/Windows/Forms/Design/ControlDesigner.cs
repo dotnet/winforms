@@ -547,12 +547,12 @@ namespace System.Windows.Forms.Design
         {
             if (child == null)
             {
-                throw new ArgumentNullException("child");
+                throw new ArgumentNullException(nameof(child));
             }
 
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
             if (!(GetService(typeof(INestedContainer)) is INestedContainer nc))
@@ -1053,20 +1053,20 @@ namespace System.Windows.Forms.Design
 
         private bool AllowDrop
         {
-            get => (bool)ShadowProperties["AllowDrop"];
-            set => ShadowProperties["AllowDrop"] = value;
+            get => (bool)ShadowProperties[nameof(AllowDrop)];
+            set => ShadowProperties[nameof(AllowDrop)] = value;
         }
 
         private bool Enabled
         {
-            get => (bool)ShadowProperties["Enabled"];
-            set => ShadowProperties["Enabled"] = value;
+            get => (bool)ShadowProperties[nameof(Enabled)];
+            set => ShadowProperties[nameof(Enabled)] = value;
         }
 
         private bool Visible
         {
-            get => (bool)ShadowProperties["Visible"];
-            set => ShadowProperties["Visible"] = value;
+            get => (bool)ShadowProperties[nameof(Visible)];
+            set => ShadowProperties[nameof(Visible)] = value;
         }
 
         /// <summary>

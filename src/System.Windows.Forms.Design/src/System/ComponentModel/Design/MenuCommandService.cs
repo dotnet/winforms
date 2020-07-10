@@ -90,7 +90,7 @@ namespace System.ComponentModel.Design
         {
             if (command == null)
             {
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
             }
 
             // If the command already exists, it is an error to add
@@ -133,7 +133,7 @@ namespace System.ComponentModel.Design
         {
             if (verb == null)
             {
-                throw new ArgumentNullException("verb");
+                throw new ArgumentNullException(nameof(verb));
             }
 
             if (_globalVerbs == null)
@@ -432,7 +432,7 @@ namespace System.ComponentModel.Design
         {
             if (serviceType == null)
             {
-                throw new ArgumentNullException("serviceType");
+                throw new ArgumentNullException(nameof(serviceType));
             }
             if (_serviceProvider != null)
             {
@@ -529,7 +529,7 @@ namespace System.ComponentModel.Design
         {
             if (command == null)
             {
-                throw new ArgumentNullException("command");
+                throw new ArgumentNullException(nameof(command));
             }
             ArrayList commands;
             lock (_commandGroupsLock)
@@ -566,7 +566,7 @@ namespace System.ComponentModel.Design
         {
             if (verb == null)
             {
-                throw new ArgumentNullException("verb");
+                throw new ArgumentNullException(nameof(verb));
             }
 
             if (_globalVerbs != null)

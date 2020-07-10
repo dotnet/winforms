@@ -40,12 +40,12 @@ namespace System.Windows.Forms.Design
 
         internal bool AutoSize
         {
-            get => (bool)ShadowProperties["AutoSize"];
+            get => (bool)ShadowProperties[nameof(AutoSize)];
             set
             {
-                bool autoSize = (bool)ShadowProperties["AutoSize"];
+                bool autoSize = (bool)ShadowProperties[nameof(AutoSize)];
                 // always set this in regardless of whether the property changed. it can come back to bite later after in-situ editing if we dont.
-                ShadowProperties["AutoSize"] = value;
+                ShadowProperties[nameof(AutoSize)] = value;
                 if (value != autoSize)
                 {
                     ToolStripItem.AutoSize = value;
@@ -57,11 +57,11 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                return (string)ShadowProperties["AccessibleName"];
+                return (string)ShadowProperties[nameof(AccessibleName)];
             }
             set
             {
-                ShadowProperties["AccessibleName"] = value;
+                ShadowProperties[nameof(AccessibleName)] = value;
             }
         }
 
@@ -167,7 +167,7 @@ namespace System.Windows.Forms.Design
 
         private ToolStripItemOverflow Overflow
         {
-            get => (ToolStripItemOverflow)ShadowProperties["Overflow"];
+            get => (ToolStripItemOverflow)ShadowProperties[nameof(Overflow)];
             set
             {
                 // first Hide the Overflow..
@@ -188,7 +188,7 @@ namespace System.Windows.Forms.Design
                 if (value != ToolStripItem.Overflow)
                 {
                     ToolStripItem.Overflow = value;
-                    ShadowProperties["Overflow"] = value;
+                    ShadowProperties[nameof(Overflow)] = value;
                 }
 
                 // Since this cause the whole Layout to Change ... Call SyncSelection to reset the glyphs...
@@ -236,10 +236,10 @@ namespace System.Windows.Forms.Design
 
         protected bool Visible
         {
-            get => (bool)ShadowProperties["Visible"];
+            get => (bool)ShadowProperties[nameof(Visible)];
             set
             {
-                ShadowProperties["Visible"] = value;
+                ShadowProperties[nameof(Visible)] = value;
                 currentVisible = value;
             }
         }
@@ -1105,12 +1105,12 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Resets the ToolStripItemAutoSize to be the default autosize
         /// </summary>
-        private void ResetAutoSize() => ShadowProperties["AutoSize"] = false;
+        private void ResetAutoSize() => ShadowProperties[nameof(AutoSize)] = false;
 
         /// <summary>
         ///      Restores the AutoSize to be the value set in the property grid.
         /// </summary>
-        private void RestoreAutoSize() => ToolStripItem.AutoSize = (bool)ShadowProperties["AutoSize"];
+        private void RestoreAutoSize() => ToolStripItem.AutoSize = (bool)ShadowProperties[nameof(AutoSize)];
 
         /// <summary>
         /// Resets the ToolStrip Visible to be the default value
@@ -1120,7 +1120,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Restore Overflow
         /// </summary>
-        private void RestoreOverflow() => ToolStripItem.Overflow = (ToolStripItemOverflow)ShadowProperties["Overflow"];
+        private void RestoreOverflow() => ToolStripItem.Overflow = (ToolStripItemOverflow)ShadowProperties[nameof(Overflow)];
 
         /// <summary>
         ///  Resets Overflow
@@ -1130,12 +1130,12 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Resets the ToolStripItem AccessibleName to the default
         /// </summary>
-        private void ResetAccessibleName() => ShadowProperties["AccessibleName"] = null;
+        private void ResetAccessibleName() => ShadowProperties[nameof(AccessibleName)] = null;
 
         /// <summary>
         ///      Restores the AutoSize to be the value set in the property grid.
         /// </summary>
-        private void RestoreAccessibleName() => ToolStripItem.AccessibleName = (string)ShadowProperties["AccessibleName"];
+        private void RestoreAccessibleName() => ToolStripItem.AccessibleName = (string)ShadowProperties[nameof(AccessibleName)];
 
         // internal method called to select the next item from the current item.
         internal void SelectNextItem(ISelectionService service, bool enterKeyPressed, ToolStripDesigner designer)
@@ -1218,17 +1218,17 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Since we're shadowing autosize, we get called here to determine whether or not to serialize
         /// </summary>
-        private bool ShouldSerializeAutoSize() => (ShadowProperties.Contains("AutoSize"));
+        private bool ShouldSerializeAutoSize() => (ShadowProperties.Contains(nameof(AutoSize)));
 
         /// <summary>
         /// Since we're shadowing autosize, we get called here to determine whether or not to serialize
         /// </summary>
-        private bool ShouldSerializeAccessibleName() => (ShadowProperties["AccessibleName"] != null);
+        private bool ShouldSerializeAccessibleName() => (ShadowProperties[nameof(AccessibleName)] != null);
 
         /// <summary>
         /// Since we're Overflow Size, we get called here to determine whether or not to serialize
         /// </summary>
-        private bool ShouldSerializeOverflow() => (ShadowProperties["Overflow"] != null);
+        private bool ShouldSerializeOverflow() => (ShadowProperties[nameof(Overflow)] != null);
 
         /// <summary>
         ///  This Function is called thru the ToolStripEditorManager which is listening for the  F2 command.

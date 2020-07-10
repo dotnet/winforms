@@ -29,11 +29,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private IButtonControl AcceptButton
         {
-            get => ShadowProperties["AcceptButton"] as IButtonControl;
+            get => ShadowProperties[nameof(AcceptButton)] as IButtonControl;
             set
             {
                 ((Form)Component).AcceptButton = value;
-                ShadowProperties["AcceptButton"] = value;
+                ShadowProperties[nameof(AcceptButton)] = value;
             }
         }
 
@@ -42,11 +42,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private IButtonControl CancelButton
         {
-            get => ShadowProperties["CancelButton"] as IButtonControl;
+            get => ShadowProperties[nameof(CancelButton)] as IButtonControl;
             set
             {
                 ((Form)Component).CancelButton = value;
-                ShadowProperties["CancelButton"] = value;
+                ShadowProperties[nameof(CancelButton)] = value;
             }
         }
 
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design
             {
                 // We do nothing at design time for this property; we always want to use the calculated value from the component.
                 _autoScaleBaseSize = value;
-                ShadowProperties["AutoScaleBaseSize"] = value;
+                ShadowProperties[nameof(AutoScaleBaseSize)] = value;
             }
         }
 
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Design
             // Never serialize this unless AutoScale is turned on
 #pragma warning disable 618
             return _initializing ? false
-                : ((Form)Component).AutoScale && ShadowProperties.Contains("AutoScaleBaseSize");
+                : ((Form)Component).AutoScale && ShadowProperties.Contains(nameof(AutoScaleBaseSize));
 #pragma warning restore 618
         }
 
@@ -151,15 +151,15 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private double Opacity
         {
-            get => (double)ShadowProperties["Opacity"];
+            get => (double)ShadowProperties[nameof(Opacity)];
             set
             {
                 if (value < 0.0f || value > 1.0f)
                 {
                     throw new ArgumentException(string.Format(SR.InvalidBoundArgument, "value", value.ToString(CultureInfo.CurrentCulture),
-                                                                    (0.0f).ToString(CultureInfo.CurrentCulture), (1.0f).ToString(CultureInfo.CurrentCulture)), "value");
+                                                                    (0.0f).ToString(CultureInfo.CurrentCulture), (1.0f).ToString(CultureInfo.CurrentCulture)), nameof(value));
                 }
-                ShadowProperties["Opacity"] = value;
+                ShadowProperties[nameof(Opacity)] = value;
             }
         }
 
@@ -235,8 +235,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private bool ShowInTaskbar
         {
-            get => (bool)ShadowProperties["ShowInTaskbar"];
-            set => ShadowProperties["ShowInTaskbar"] = value;
+            get => (bool)ShadowProperties[nameof(ShowInTaskbar)];
+            set => ShadowProperties[nameof(ShowInTaskbar)] = value;
         }
 
         /// <summary>
@@ -244,8 +244,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private FormWindowState WindowState
         {
-            get => (FormWindowState)ShadowProperties["WindowState"];
-            set => ShadowProperties["WindowState"] = value;
+            get => (FormWindowState)ShadowProperties[nameof(WindowState)];
+            set => ShadowProperties[nameof(WindowState)] = value;
         }
 
         private void ApplyAutoScaling(SizeF baseVar, Form form)
@@ -320,8 +320,8 @@ namespace System.Windows.Forms.Design
 
             Form form = (Form)Control;
             form.WindowState = FormWindowState.Normal;
-            ShadowProperties["AcceptButton"] = form.AcceptButton;
-            ShadowProperties["CancelButton"] = form.CancelButton;
+            ShadowProperties[nameof(AcceptButton)] = form.AcceptButton;
+            ShadowProperties[nameof(CancelButton)] = form.CancelButton;
         }
 
         /// <summary>
@@ -350,11 +350,11 @@ namespace System.Windows.Forms.Design
             }
             if (ce.Component is IButtonControl)
             {
-                if (ce.Component == ShadowProperties["AcceptButton"])
+                if (ce.Component == ShadowProperties[nameof(AcceptButton)])
                 {
                     AcceptButton = null;
                 }
-                if (ce.Component == ShadowProperties["CancelButton"])
+                if (ce.Component == ShadowProperties[nameof(CancelButton)])
                 {
                     CancelButton = null;
                 }
