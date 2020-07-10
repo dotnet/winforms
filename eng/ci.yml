@@ -140,14 +140,13 @@ stages:
 - ${{ if eq(parameters.runAsPublic, 'false') }}:
   - template: /eng/common/templates/post-build/post-build.yml
     parameters:
-      # Symbol validation isn't being very reliable lately. This should be enabled back
-      # once this issue is resolved: https://github.com/dotnet/arcade/issues/2871
       enableSymbolValidation: false
-      enableSourceLinkValidation: true
-
+      enableSigningValidation: false
+      enableNugetValidation: false
+      enableSourceLinkValidation: false
       # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
       SDLValidationParameters:
-        enable: true
+        enable: false
         params: ' -SourceToolsList $(_TsaSourceToolsList)
         -TsaInstanceURL $(_TsaInstanceURL)
         -TsaProjectName $(_TsaProjectName)
