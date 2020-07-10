@@ -16,6 +16,7 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests
 {
+    [Trait(TestTraits.Category.Synchronous, TestTraits.Type.Clipboard)]
     public class ClipboardTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]

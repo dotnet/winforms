@@ -104,7 +104,17 @@ stages:
             /p:Coverage=$(_Coverage)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
             /m:1
-          displayName: Run Unit Tests
+            -notrait category=Synchronous
+          displayName: Run Unit Tests (except category=Synchronous)
+        - script: eng\cibuild.cmd
+            -test
+            -configuration $(_BuildConfig)
+            $(_OfficialBuildIdArgs)
+            /p:Coverage=$(_Coverage)
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
+            /m:1
+            -trait category=Synchronous
+          displayName: Run Unit Tests (category=Synchronous)
 
         # Run Integration Tests
         # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
