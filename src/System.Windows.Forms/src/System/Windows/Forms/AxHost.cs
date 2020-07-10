@@ -4201,7 +4201,7 @@ namespace System.Windows.Forms
 
             if (font.Unit != GraphicsUnit.Point)
             {
-                throw new ArgumentException(SR.AXFontUnitNotPoint, "font");
+                throw new ArgumentException(SR.AXFontUnitNotPoint, nameof(font));
             }
 
             Oleaut32.FONTDESC fontdesc = GetFONTDESCFromFont(font);

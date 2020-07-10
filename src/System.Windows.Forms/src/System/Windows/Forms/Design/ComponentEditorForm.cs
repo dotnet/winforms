@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Design
         {
             if (!(component is IComponent))
             {
-                throw new ArgumentException(SR.ComponentEditorFormBadComponent, "component");
+                throw new ArgumentException(SR.ComponentEditorFormBadComponent, nameof(component));
             }
             this.component = (IComponent)component;
             this.pageTypes = pageTypes;

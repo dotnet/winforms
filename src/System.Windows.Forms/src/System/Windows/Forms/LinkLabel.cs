@@ -2089,7 +2089,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        throw new ArgumentException(SR.LinkLabelBadLink, "value");
+                        throw new ArgumentException(SR.LinkLabelBadLink, nameof(value));
                     }
                 }
             }
@@ -2267,7 +2267,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new ArgumentException(SR.LinkLabelBadLink, "value");
+                    throw new ArgumentException(SR.LinkLabelBadLink, nameof(value));
                 }
             }
 
@@ -2279,7 +2279,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new ArgumentException(SR.LinkLabelBadLink, "value");
+                    throw new ArgumentException(SR.LinkLabelBadLink, nameof(value));
                 }
             }
 

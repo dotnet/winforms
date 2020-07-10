@@ -486,7 +486,7 @@ namespace System.Windows.Forms
             }
             if (dataGridViewRow.Cells.Count > DataGridView.Columns.Count)
             {
-                throw new ArgumentException(SR.DataGridViewRowCollection_TooManyCells, "dataGridViewRow");
+                throw new ArgumentException(SR.DataGridViewRowCollection_TooManyCells, nameof(dataGridViewRow));
             }
 
             if (dataGridViewRow.Selected)
@@ -1506,7 +1506,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewRow.Cells.Count > DataGridView.Columns.Count)
             {
-                throw new ArgumentException(SR.DataGridViewRowCollection_TooManyCells, "dataGridViewRow");
+                throw new ArgumentException(SR.DataGridViewRowCollection_TooManyCells, nameof(dataGridViewRow));
             }
 
             if (dataGridViewRow.Selected)
@@ -1537,7 +1537,7 @@ namespace System.Windows.Forms
                 }
                 if (dataGridViewRow.Cells.Count > DataGridView.Columns.Count)
                 {
-                    throw new ArgumentException(SR.DataGridViewRowCollection_TooManyCells, "dataGridViewRow");
+                    throw new ArgumentException(SR.DataGridViewRowCollection_TooManyCells, nameof(dataGridViewRow));
                 }
             }
             DataGridView.CompleteCellsCollection(dataGridViewRow);
@@ -2157,12 +2157,12 @@ namespace System.Windows.Forms
 
             if (dataGridViewRow.DataGridView != DataGridView)
             {
-                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "dataGridViewRow");
+                throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, nameof(dataGridViewRow));
             }
 
             if (dataGridViewRow.Index == -1)
             {
-                throw new ArgumentException(SR.DataGridView_RowMustBeUnshared, "dataGridViewRow");
+                throw new ArgumentException(SR.DataGridView_RowMustBeUnshared, nameof(dataGridViewRow));
             }
             else
             {

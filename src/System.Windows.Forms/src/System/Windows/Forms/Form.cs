@@ -1785,7 +1785,7 @@ namespace System.Windows.Forms
 
                 if (value != null && !TopLevel)
                 {
-                    throw new ArgumentException(SR.NonTopLevelCantHaveOwner, "value");
+                    throw new ArgumentException(SR.NonTopLevelCantHaveOwner, nameof(value));
                 }
 
                 CheckParentingCycle(this, value);
@@ -2125,7 +2125,7 @@ namespace System.Windows.Forms
             {
                 if (!value && ((Form)this).IsMdiContainer && !DesignMode)
                 {
-                    throw new ArgumentException(SR.MDIContainerMustBeTopLevel, "value");
+                    throw new ArgumentException(SR.MDIContainerMustBeTopLevel, nameof(value));
                 }
                 SetTopLevel(value);
             }
@@ -5096,8 +5096,7 @@ namespace System.Windows.Forms
                 // Catch the case of a window trying to own its owner
                 if (User32.GetWindowLong(new HandleRef(owner, hWndOwner), User32.GWL.HWNDPARENT) == Handle)
                 {
-                    throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner,
-                                                      "show"), "owner");
+                    throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, "show"), nameof(owner));
                 }
 
                 // Set the new owner.
@@ -5202,8 +5201,7 @@ namespace System.Windows.Forms
                     // Catch the case of a window trying to own its owner
                     if (User32.GetWindowLong(new HandleRef(owner, hWndOwner), User32.GWL.HWNDPARENT) == Handle)
                     {
-                        throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner,
-                                                          "showDialog"), "owner");
+                        throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, "showDialog"), nameof(owner));
                     }
 
                     // In a multi DPI environment and applications in PMV2 mode, DPI changed events triggered
@@ -6568,12 +6566,12 @@ namespace System.Windows.Forms
                 {
                     if (!owner.TopLevel && !owner.DesignMode)
                     {
-                        throw new ArgumentException(SR.MDIContainerMustBeTopLevel, "value");
+                        throw new ArgumentException(SR.MDIContainerMustBeTopLevel, nameof(value));
                     }
                     owner.AutoScroll = false;
                     if (owner.IsMdiChild)
                     {
-                        throw new ArgumentException(SR.FormMDIParentAndChild, "value");
+                        throw new ArgumentException(SR.FormMDIParentAndChild, nameof(value));
                     }
                     owner.ctlClient = (MdiClient)value;
                 }
@@ -6582,7 +6580,7 @@ namespace System.Windows.Forms
                 //
                 if (value is Form && ((Form)value).MdiParentInternal != null)
                 {
-                    throw new ArgumentException(SR.FormMDIParentCannotAdd, "value");
+                    throw new ArgumentException(SR.FormMDIParentCannotAdd, nameof(value));
                 }
 
                 base.Add(value);

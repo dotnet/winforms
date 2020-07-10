@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new ArgumentException(SR.TreeNodeCollectionBadTreeNode, "value");
+                    throw new ArgumentException(SR.TreeNodeCollectionBadTreeNode, nameof(value));
                 }
             }
         }
@@ -342,7 +342,7 @@ namespace System.Windows.Forms
             }
             if (node.handle != IntPtr.Zero)
             {
-                throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), "node");
+                throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), nameof(node));
             }
 
             // Check for ParentingCycle
@@ -491,7 +491,7 @@ namespace System.Windows.Forms
         {
             if (node.handle != IntPtr.Zero)
             {
-                throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), "node");
+                throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), nameof(node));
             }
 
             // Check for ParentingCycle
@@ -526,7 +526,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                throw new ArgumentException(SR.TreeNodeCollectionBadTreeNode, "node");
+                throw new ArgumentException(SR.TreeNodeCollectionBadTreeNode, nameof(node));
             }
         }
 

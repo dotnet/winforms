@@ -150,7 +150,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new ArgumentException(SR.ControlBadControl, "control");
+                    throw new ArgumentException(SR.ControlBadControl, nameof(control));
                 }
             }
 

@@ -429,7 +429,7 @@ namespace System.Windows.Forms
                 {
                     if (MultiColumn && value == DrawMode.OwnerDrawVariable)
                     {
-                        throw new ArgumentException(SR.ListBoxVarHeightMultiCol, "value");
+                        throw new ArgumentException(SR.ListBoxVarHeightMultiCol, nameof(value));
                     }
                     drawMode = value;
                     RecreateHandle();
@@ -734,7 +734,7 @@ namespace System.Windows.Forms
                 {
                     if (value && drawMode == DrawMode.OwnerDrawVariable)
                     {
-                        throw new ArgumentException(SR.ListBoxVarHeightMultiCol, "value");
+                        throw new ArgumentException(SR.ListBoxVarHeightMultiCol, nameof(value));
                     }
                     multiColumn = value;
                     RecreateHandle();

@@ -27477,7 +27477,7 @@ namespace System.Windows.Forms
 
             if (!dataGridViewColumn.IsDataBound)
             {
-                throw new ArgumentException(SR.DataGridView_ColumnNeedsToBeDataBoundWhenSortingDataBoundDataGridView, "dataGridViewColumn");
+                throw new ArgumentException(SR.DataGridView_ColumnNeedsToBeDataBoundWhenSortingDataBoundDataGridView, nameof(dataGridViewColumn));
             }
         }
 

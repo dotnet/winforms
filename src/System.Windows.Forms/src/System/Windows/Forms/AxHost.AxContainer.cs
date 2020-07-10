@@ -168,7 +168,7 @@ namespace System.Windows.Forms
                 {
                     if (containerCache.Contains(ctl))
                     {
-                        throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), "ctl");
+                        throw new ArgumentException(string.Format(SR.AXDuplicateControl, GetNameForControl(ctl)), nameof(ctl));
                     }
 
                     containerCache.Add(ctl, ctl);

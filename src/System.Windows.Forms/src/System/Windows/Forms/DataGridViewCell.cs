@@ -3882,7 +3882,7 @@ namespace System.Windows.Forms
             if (formattedValue == null ||
                 !FormattedValueType.IsAssignableFrom(formattedValue.GetType()))
             {
-                throw new ArgumentException(SR.DataGridViewCell_FormattedValueHasWrongType, "formattedValue");
+                throw new ArgumentException(SR.DataGridViewCell_FormattedValueHasWrongType, nameof(formattedValue));
             }
             return Formatter.ParseObject(formattedValue,
                                          valueType,
