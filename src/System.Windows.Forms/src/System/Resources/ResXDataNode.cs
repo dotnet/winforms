@@ -37,7 +37,7 @@ namespace System.Resources
         private object _value;
         private ResXFileRef _fileRef;
 
-        private IFormatter _binaryFormatter = null;
+        private IFormatter _binaryFormatter;
 
         // this is going to be used to check if a ResXDataNode is of type ResXFileRef
         private static readonly ITypeResolutionService s_internalTypeResolver = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new AssemblyName("System.Windows.Forms") });

@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
         protected UITypeEditor imageEditor;
         protected string parentImageListProperty = "Parent";
         // disable csharp compiler warning #0414: field assigned unused value
-        protected string imageListPropertyName = null;
+        protected string imageListPropertyName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.Design.ImageIndexEditor'/> class.

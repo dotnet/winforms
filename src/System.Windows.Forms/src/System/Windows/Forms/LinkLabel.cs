@@ -44,14 +44,14 @@ namespace System.Windows.Forms
         Font linkFont;
         Font hoverLinkFont;
 
-        bool textLayoutValid = false;
-        bool receivedDoubleClick = false;
+        bool textLayoutValid;
+        bool receivedDoubleClick;
         readonly ArrayList links = new ArrayList(2);
 
-        Link focusLink = null;
-        LinkCollection linkCollection = null;
-        Region textRegion = null;
-        Cursor overrideCursor = null;
+        Link focusLink;
+        LinkCollection linkCollection;
+        Region textRegion;
+        Cursor overrideCursor;
 
         bool processingOnGotFocus;  // used to avoid raising the OnGotFocus event twice after selecting a focus link.
 
@@ -2045,7 +2045,7 @@ namespace System.Windows.Forms
         public class LinkCollection : IList
         {
             private readonly LinkLabel owner;
-            private bool linksAdded = false;   //whether we should serialize the linkCollection
+            private bool linksAdded;   //whether we should serialize the linkCollection
 
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
@@ -2463,10 +2463,10 @@ namespace System.Windows.Forms
         [TypeConverter(typeof(LinkConverter))]
         public class Link
         {
-            private int _start = 0;
+            private int _start;
             private bool _enabled = true;
-            internal int _length = 0;
-            private string _name = null;
+            internal int _length;
+            private string _name;
 
             public Link()
             {

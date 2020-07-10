@@ -75,7 +75,10 @@ namespace System.ComponentModel.Design
 
         // should CodeMarker events be fired to the test or product CodeMarker DLL
         private readonly RegistryView _registryView = RegistryView.Default;
-        private readonly string _regroot = null;
+#pragma warning disable CS0649
+        private readonly string _regroot;
+#pragma warning restore CS0649
+
         private bool? _shouldUseTestDll;
 
         // This guid should match vscommon\testtools\PerfWatson2\Responsiveness\Listener\Microsoft.Performance.ResponseTime\ContextProviders\ScenarioContextProvider\ScenarioContextProvider.cs

@@ -15,10 +15,10 @@ namespace System.ComponentModel.Design
 {
     public abstract class ObjectSelectorEditor : UITypeEditor
     {
-        public bool SubObjectSelector = false;
-        protected object prevValue = null;
-        protected object currValue = null;
-        private Selector _selector = null;
+        public bool SubObjectSelector;
+        protected object prevValue;
+        protected object currValue;
+        private Selector _selector;
 
         /// <summary>
         ///  Default constructor for ObjectSelectorEditor
@@ -113,9 +113,9 @@ namespace System.ComponentModel.Design
 
         public class Selector : TreeView
         {
-            private readonly ObjectSelectorEditor _editor = null;
-            private IWindowsFormsEditorService _edSvc = null;
-            public bool clickSeen = false;
+            private readonly ObjectSelectorEditor _editor;
+            private IWindowsFormsEditorService _edSvc;
+            public bool clickSeen;
 
             /// <summary>
             ///  Constructor for Selector, takes ObjectSelectorEditor
@@ -324,7 +324,7 @@ namespace System.ComponentModel.Design
         ///  Serializable unless explicitly required.
         public class SelectorNode : TreeNode
         {
-            public object value = null;
+            public object value;
 
             /// <summary>
             ///  Sets label and value to given.

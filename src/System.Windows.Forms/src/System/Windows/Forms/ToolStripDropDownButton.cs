@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     public class ToolStripDropDownButton : ToolStripDropDownItem
     {
         private bool showDropDownArrow = true;
-        private byte openMouseId = 0;
+        private byte openMouseId;
 
         /// <summary>
         ///  Constructs a ToolStripButton that can display a popup.
@@ -216,7 +216,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal class ToolStripDropDownButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
         {
-            private readonly ToolStripDropDownButton ownerItem = null;
+            private readonly ToolStripDropDownButton ownerItem;
 
             public ToolStripDropDownButtonAccessibleObject(ToolStripDropDownButton ownerItem)
                 : base(ownerItem)

@@ -49,13 +49,13 @@ namespace System.Windows.Forms
         private TreeNodeMouseHoverEventHandler onNodeMouseHover;
         private EventHandler onRightToLeftLayoutChanged;
 
-        internal TreeNode selectedNode = null;
+        internal TreeNode selectedNode;
         private ImageList.Indexer imageIndexer;
         private ImageList.Indexer selectedImageIndexer;
-        private bool setOddHeight = false;
-        private TreeNode prevHoveredNode = null;
-        private bool hoveredAlready = false;
-        private bool rightToLeftLayout = false;
+        private bool setOddHeight;
+        private TreeNode prevHoveredNode;
+        private bool hoveredAlready;
+        private bool rightToLeftLayout;
 
         private IntPtr hNodeMouseDown = IntPtr.Zero;//ensures we fire nodeclick on the correct node
 
@@ -80,8 +80,8 @@ namespace System.Windows.Forms
         // PERF: take all the bools and put them into a state variable
         private Collections.Specialized.BitVector32 treeViewState; // see TREEVIEWSTATE_ consts above
 
-        private static bool isScalingInitialized = false;
-        private static Size? scaledStateImageSize = null;
+        private static bool isScalingInitialized;
+        private static Size? scaledStateImageSize;
         private static Size? ScaledStateImageSize
         {
             get
@@ -131,11 +131,11 @@ namespace System.Windows.Forms
         private string pathSeparator = backSlash;
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 
-        internal TreeNodeCollection nodes = null;
+        internal TreeNodeCollection nodes;
         internal TreeNode editNode;
         internal TreeNode root;
         internal Hashtable nodeTable = new Hashtable();
-        internal bool nodesCollectionClear = false; //this is set when the treeNodeCollection is getting cleared and used by TreeView
+        internal bool nodesCollectionClear; //this is set when the treeNodeCollection is getting cleared and used by TreeView
         private MouseButtons downButton;
         private TreeViewDrawMode drawMode = TreeViewDrawMode.Normal;
 
@@ -144,10 +144,10 @@ namespace System.Windows.Forms
         private TreeNode topNode;
         private ImageList stateImageList;
         private Color lineColor;
-        private string controlToolTipText = null;
+        private string controlToolTipText;
 
         // Sorting
-        private IComparer treeViewNodeSorter = null;
+        private IComparer treeViewNodeSorter;
 
         //Events
         private TreeNodeMouseClickEventHandler onNodeMouseClick;

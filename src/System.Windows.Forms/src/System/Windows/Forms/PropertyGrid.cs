@@ -43,7 +43,7 @@ namespace System.Windows.Forms
 
         // our array of viewTabs
         private bool viewTabsDirty = true;
-        private bool drawFlatToolBar = false;
+        private bool drawFlatToolBar;
         private PropertyTab[] viewTabs = Array.Empty<PropertyTab>();
         private PropertyTabScope[] viewTabScopes = Array.Empty<PropertyTabScope>();
         private Hashtable viewTabProps;
@@ -79,19 +79,19 @@ namespace System.Windows.Forms
 
         private int paintFrozen;
         private Color lineColor = SystemInformation.HighContrast ? SystemColors.ControlDarkDark : SystemColors.InactiveBorder;
-        internal bool developerOverride = false;
-        internal Brush lineBrush = null;
+        internal bool developerOverride;
+        internal Brush lineBrush;
         private Color categoryForeColor = SystemColors.ControlText;
         private Color categorySplitterColor = SystemColors.Control;
         private Color viewBorderColor = SystemColors.ControlDark;
         private Color selectedItemWithFocusForeColor = SystemColors.HighlightText;
         private Color selectedItemWithFocusBackColor = SystemColors.Highlight;
-        internal Brush selectedItemWithFocusBackBrush = null;
+        internal Brush selectedItemWithFocusBackBrush;
         private bool canShowVisualStyleGlyphs = true;
 
         private AttributeCollection browsableAttributes;
 
-        private SnappableControl targetMove = null;
+        private SnappableControl targetMove;
         private int dividerMoveY = -1;
         private const int CYDIVIDER = 3;
         private static int cyDivider = CYDIVIDER;
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
         private static readonly Size DEFAULT_NORMAL_BUTTON_SIZE = new Size(16, 16);
         private static Size largeButtonSize = DEFAULT_LARGE_BUTTON_SIZE;
         private static Size normalButtonSize = DEFAULT_NORMAL_BUTTON_SIZE;
-        private static bool isScalingInitialized = false;
+        private static bool isScalingInitialized;
 
         private const ushort PropertiesChanged = 0x0001;
         private const ushort GotDesignerEventService = 0x0002;
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
 
         // the cookies for our connection points on objects that support IPropertyNotifySink
         //
-        private AxHost.ConnectionPointCookie[] connectionPointCookies = null;
+        private AxHost.ConnectionPointCookie[] connectionPointCookies;
 
         private static readonly object EventPropertyValueChanged = new object();
         private static readonly object EventComComponentNameChanged = new object();
@@ -1941,7 +1941,7 @@ namespace System.Windows.Forms
         }
 
 #if DEBUG
-        internal bool inGridViewCreate = false;
+        internal bool inGridViewCreate;
 #endif
 
         /// <summary>
@@ -5108,7 +5108,7 @@ namespace System.Windows.Forms
         {
             private Color borderColor = SystemColors.ControlDark;
             protected PropertyGrid ownerGrid;
-            internal bool userSized = false;
+            internal bool userSized;
 
             public abstract int GetOptimalHeight(int width);
             public abstract int SnapHeightRequest(int request);

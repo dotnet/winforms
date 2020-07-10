@@ -26,16 +26,16 @@ namespace System.Windows.Forms.Design
         private ISelectionUIHandler _dragHandler; // the current drag handler
         private object[] _dragComponents; // the controls being dragged
         private SelectionRules _dragRules; // movement constraints for the drag
-        private bool _dragMoved = false;
+        private bool _dragMoved;
         private object _containerDrag; // object being dragged during a container drag
         // These are used during a drag of a selection grab handle
-        private bool _ignoreCaptureChanged = false;
+        private bool _ignoreCaptureChanged;
         private int _mouseDragHitTest; // where the hit occurred that caused the drag
         private Point _mouseDragAnchor = s_invalidPoint; // anchor point of the drag
         private Rectangle _mouseDragOffset = Rectangle.Empty; // current drag offset
         private Point _lastMoveScreenCoord = Point.Empty;
-        private bool _ctrlSelect = false; // was the CTRL key down when the drag began
-        private bool _mouseDragging = false; // Are we actually doing a drag?
+        private bool _ctrlSelect; // was the CTRL key down when the drag began
+        private bool _mouseDragging; // Are we actually doing a drag?
         private ContainerSelectorActiveEventHandler _containerSelectorActive; // the event we fire when user interacts with container selector
         private Hashtable _selectionItems;
         private readonly Hashtable _selectionHandlers; // Component UI handlers

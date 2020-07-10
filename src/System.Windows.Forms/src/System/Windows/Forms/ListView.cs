@@ -106,9 +106,9 @@ namespace System.Windows.Forms
 
         private Color odCacheForeColor = SystemColors.WindowText;
         private Color odCacheBackColor = SystemColors.Window;
-        private Font odCacheFont = null;
-        private Gdi32.HFONT odCacheFontHandle = default;
-        private FontHandleWrapper odCacheFontHandleWrapper = null;
+        private Font odCacheFont;
+        private Gdi32.HFONT odCacheFontHandle;
+        private FontHandleWrapper odCacheFontHandleWrapper;
 
         private ImageList _imageListLarge;
         private ImageList _imageListSmall;
@@ -117,16 +117,16 @@ namespace System.Windows.Forms
 
         private MouseButtons downButton;
         private int itemCount;
-        private int columnIndex = 0;
+        private int columnIndex;
         private int topIndex;
-        private bool hoveredAlready = false;
+        private bool hoveredAlready;
 
-        private bool rightToLeftLayout = false;
+        private bool rightToLeftLayout;
 
         // member variables which are used for VirtualMode
-        private int virtualListSize = 0;
+        private int virtualListSize;
 
-        private ListViewGroup defaultGroup = null;
+        private ListViewGroup defaultGroup;
 
         // Invariant: the table always contains all Items in the ListView, and maps IDs -> Items.
         // listItemsArray is null if the handle is created; otherwise, it contains all Items.
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
         //
         private static readonly int PropDelayedUpdateItems = PropertyStore.CreateKey();
 
-        private int updateCounter = 0; // the counter we use to track how many BeginUpdate/EndUpdate calls there have been.
+        private int updateCounter; // the counter we use to track how many BeginUpdate/EndUpdate calls there have been.
 
         private ColumnHeader[] columnHeaders;
         private readonly ListViewItemCollection listItemCollection;
@@ -164,16 +164,16 @@ namespace System.Windows.Forms
         private ListViewItemMouseHoverEventHandler onItemMouseHover;
 
         // IDs for identifying ListViewItem's
-        private int nextID = 0;
+        private int nextID;
 
         // We save selected and checked items between handle creates.
         private List<ListViewItem> savedSelectedItems;
         private List<ListViewItem> savedCheckedItems;
 
         // Sorting
-        private IComparer listItemSorter = null;
+        private IComparer listItemSorter;
 
-        private ListViewItem prevHoveredItem = null;
+        private ListViewItem prevHoveredItem;
 
         // Background image stuff
         // Because we have to create a temporary file and the OS does not clean up the temporary files from the machine
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
         // so our wrapper has to hang on to the previousBackgroundImageFileNames and destroy them after it gets the first WM_PAINT message
 
         int bkImgFileNamesCount = -1;
-        string[] bkImgFileNames = null;
+        string[] bkImgFileNames;
         private const int BKIMGARRAYSIZE = 8;
 
         // If the user clicked on the column divider, the native ListView fires HDN_ITEMCHANGED on each mouse up event.

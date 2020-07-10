@@ -14,11 +14,11 @@ namespace System.Windows.Forms
     {
         protected class DataGridViewAccessibleObject : ControlAccessibleObject
         {
-            private int[] runtimeId = null; // Used by UIAutomation
+            private int[] runtimeId; // Used by UIAutomation
 
             readonly DataGridView owner;
-            DataGridViewTopRowAccessibleObject topRowAccessibilityObject = null;
-            DataGridViewSelectedCellsAccessibleObject selectedCellsAccessibilityObject = null;
+            DataGridViewTopRowAccessibleObject topRowAccessibilityObject;
+            DataGridViewSelectedCellsAccessibleObject selectedCellsAccessibilityObject;
 
             public DataGridViewAccessibleObject(DataGridView owner)
                 : base(owner)

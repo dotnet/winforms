@@ -143,22 +143,22 @@ namespace System.Windows.Forms
         private static readonly int assignUniqueID = BitVector32.CreateMask(processingKeyUp);
         private static readonly int renameEventHooked = BitVector32.CreateMask(assignUniqueID);
 
-        private BitVector32 axState = new BitVector32();
+        private BitVector32 axState;
 
         private int storageType = STG_UNKNOWN;
         private int ocState = OC_PASSIVE;
         private Ole32.OLEMISC _miscStatusBits;
-        private int freezeCount = 0;
-        private readonly int flags = 0;
-        private int selectionStyle = 0;
+        private int freezeCount;
+        private readonly int flags;
+        private int selectionStyle;
         private int editMode = EDITM_NONE;
-        private int noComponentChange = 0;
+        private int noComponentChange;
 
         private IntPtr wndprocAddr = IntPtr.Zero;
 
         private Guid clsid;
         private string text = string.Empty;
-        private string licenseKey = null;
+        private string licenseKey;
 
         private readonly OleInterfaces oleSite;
         private AxComponentEditor editor;
@@ -171,10 +171,10 @@ namespace System.Windows.Forms
 
         // CustomTypeDescriptor related state
         //
-        private Hashtable properties = null;
-        private Hashtable propertyInfos = null;
-        private PropertyDescriptorCollection propsStash = null;
-        private Attribute[] attribsStash = null;
+        private Hashtable properties;
+        private Hashtable propertyInfos;
+        private PropertyDescriptorCollection propsStash;
+        private Attribute[] attribsStash;
 
         // interface pointers to the ocx
         //
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
         private Ole32.IPersistStreamInit iPersistStreamInit;
         private Ole32.IPersistStorage iPersistStorage;
 
-        private AboutBoxDelegate aboutBoxDelegate = null;
+        private AboutBoxDelegate aboutBoxDelegate;
         private readonly EventHandler selectionChangeHandler;
 
         private readonly bool isMaskEdit;
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
             new WinCategoryAttribute("DDE")
         };
 
-        private Hashtable objectDefinedCategoryNames = null; // Integer -> String
+        private Hashtable objectDefinedCategoryNames; // Integer -> String
 
 #if DEBUG
         static AxHost()

@@ -26,7 +26,6 @@ namespace System.Windows.Forms
     public class DomainUpDown : UpDownBase
     {
         private readonly static string DefaultValue = string.Empty;
-        private readonly static bool DefaultWrap = false;
 
         //////////////////////////////////////////////////////////////
         // Member variables
@@ -35,17 +34,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Allowable strings for the domain updown.
         /// </summary>
-        private DomainUpDownItemCollection domainItems = null;
+        private DomainUpDownItemCollection domainItems;
 
         private string stringValue = DefaultValue;      // Current string value
         private int domainIndex = -1;                    // Index in the domain list
-        private bool sorted = false;                 // Sort the domain values
+        private bool sorted;                 // Sort the domain values
 
-        private bool wrap = DefaultWrap;             // Wrap around domain items
+        private bool wrap;             // Wrap around domain items
 
-        private EventHandler onSelectedItemChanged = null;
+        private EventHandler onSelectedItemChanged;
 
-        private bool inSort = false;
+        private bool inSort;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='DomainUpDown'/> class.

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -26,7 +26,7 @@ namespace System.Windows.Forms
             private TypeConverter converter;
             private UITypeEditor editor;
             private readonly ArrayList updateAttrs = new ArrayList();
-            private int flags = 0;
+            private int flags;
 
             private const int FlagUpdatedEditorAndConverter = 0x00000001;
             private const int FlagCheckGetter = 0x00000002;

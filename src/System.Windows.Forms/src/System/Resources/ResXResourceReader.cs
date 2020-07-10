@@ -22,23 +22,23 @@ namespace System.Resources
     /// </summary>
     public partial class ResXResourceReader : IResourceReader
     {
-        private readonly string _fileName = null;
-        private TextReader _reader = null;
-        private Stream _stream = null;
-        private string _fileContents = null;
+        private readonly string _fileName;
+        private TextReader _reader;
+        private Stream _stream;
+        private string _fileContents;
         private readonly AssemblyName[] _assemblyNames;
         private string _basePath;
-        private bool _isReaderDirty = false;
+        private bool _isReaderDirty;
         private readonly ITypeResolutionService _typeResolver;
-        private readonly IAliasResolver _aliasResolver = null;
+        private readonly IAliasResolver _aliasResolver;
 
-        private ListDictionary _resData = null;
-        private ListDictionary _resMetadata = null;
-        private string _resHeaderVersion = null;
-        private string _resHeaderMimeType = null;
-        private string _resHeaderReaderType = null;
-        private string _resHeaderWriterType = null;
-        private bool _useResXDataNodes = false;
+        private ListDictionary _resData;
+        private ListDictionary _resMetadata;
+        private string _resHeaderVersion;
+        private string _resHeaderMimeType;
+        private string _resHeaderReaderType;
+        private string _resHeaderWriterType;
+        private bool _useResXDataNodes;
 
         private ResXResourceReader(ITypeResolutionService typeResolver)
         {

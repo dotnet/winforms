@@ -18,10 +18,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected string objValueClassName;
         protected GridEntry propDefault;
         protected IDesignerHost host;
-        protected IServiceProvider baseProvider = null;
-        protected PropertyTab tab = null;
-        protected PropertyGridView gridEntryHost = null;
-        protected AttributeCollection browsableAttributes = null;
+        protected IServiceProvider baseProvider;
+        protected PropertyTab tab;
+        protected PropertyGridView gridEntryHost;
+        protected AttributeCollection browsableAttributes;
         private IComponentChangeService changeService;
         protected bool forceReadOnlyChecked;
 

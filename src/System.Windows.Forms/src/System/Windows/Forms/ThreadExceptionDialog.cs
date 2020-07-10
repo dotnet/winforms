@@ -70,9 +70,9 @@ namespace System.Windows.Forms
         private readonly Button detailsButton = new Button();
         private readonly Button helpButton = new Button();
         private readonly TextBox details = new TextBox();
-        private Bitmap expandImage = null;
-        private Bitmap collapseImage = null;
-        private bool detailsVisible = false;
+        private Bitmap expandImage;
+        private Bitmap collapseImage;
+        private bool detailsVisible;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ThreadExceptionDialog'/> class.

@@ -23,8 +23,8 @@ namespace System.Windows.Forms
         private Orientation orientation = Orientation.Horizontal;
         private static readonly Padding rowMargin = new Padding(3, 0, 0, 0);
         private Padding scaledRowMargin = rowMargin;
-        private ToolStripRendererSwitcher rendererSwitcher = null;
-        private BitVector32 state = new BitVector32();
+        private ToolStripRendererSwitcher rendererSwitcher;
+        private BitVector32 state;
         private readonly ToolStripContainer owner;
 
 #if DEBUG
@@ -795,7 +795,7 @@ namespace System.Windows.Forms
             private class FeedbackDropDown : ToolStripDropDown
             {
                 private const int MAX_PAINTS_TO_SERVICE = 20;
-                private int _numPaintsServiced = 0; // member variable to protect against re-entrancy
+                private int _numPaintsServiced; // member variable to protect against re-entrancy
 
                 public FeedbackDropDown(Rectangle bounds) : base()
                 {

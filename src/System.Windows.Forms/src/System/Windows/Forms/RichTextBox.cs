@@ -84,7 +84,7 @@ namespace System.Windows.Forms
         //
         static int logPixelsX;
         static int logPixelsY;
-        Stream editStream = null;
+        Stream editStream;
         float zoomMultiplier = 1.0f;
 
         // used to decide when to fire the selectionChange event.
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
         private static int[] shortcutsToDisable;
         private static int richEditMajorVersion = 3;
 
-        private BitVector32 richTextBoxFlags = new BitVector32();
+        private BitVector32 richTextBoxFlags;
         private static readonly BitVector32.Section autoWordSelectionSection = BitVector32.CreateSection(1);
         private static readonly BitVector32.Section showSelBarSection = BitVector32.CreateSection(1, autoWordSelectionSection);
         private static readonly BitVector32.Section autoUrlDetectSection = BitVector32.CreateSection(1, showSelBarSection);

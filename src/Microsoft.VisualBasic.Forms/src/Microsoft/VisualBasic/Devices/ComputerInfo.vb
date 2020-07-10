@@ -192,7 +192,7 @@ Namespace Microsoft.VisualBasic.Devices
             End Get
         End Property
 
-        Private _internalMemoryStatus As InternalMemoryStatus = Nothing ' Cache our InternalMemoryStatus
+        Private _internalMemoryStatus As InternalMemoryStatus ' Cache our InternalMemoryStatus
 
         ''' <summary>
         ''' Calls GlobalMemoryStatusEx and returns the correct value.

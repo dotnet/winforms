@@ -52,8 +52,8 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly Hashtable _dragEnterReplies; // we keep track of whether glyph has already responded to a DragEnter this D&D.
         private static readonly TraceSwitch s_dragDropSwitch = new TraceSwitch("BSDRAGDROP", "Behavior service drag & drop messages");
 
-        private bool _dragging = false; // are we in a drag
-        private bool _cancelDrag = false; // should we cancel the drag on the next QueryContinueDrag
+        private bool _dragging; // are we in a drag
+        private bool _cancelDrag; // should we cancel the drag on the next QueryContinueDrag
 
         private readonly int _adornerWindowIndex = -1;
 
@@ -1024,12 +1024,12 @@ namespace System.Windows.Forms.Design.Behavior
             private class MouseHook
             {
                 private AdornerWindow _currentAdornerWindow;
-                private uint _thisProcessID = 0;
+                private uint _thisProcessID;
                 private GCHandle _mouseHookRoot;
                 private IntPtr _mouseHookHandle = IntPtr.Zero;
                 private bool _processingMessage;
 
-                private bool _isHooked = false; //VSWHIDBEY # 474112
+                private bool _isHooked; //VSWHIDBEY # 474112
                 private int _lastLButtonDownTimeStamp;
 
                 public MouseHook()

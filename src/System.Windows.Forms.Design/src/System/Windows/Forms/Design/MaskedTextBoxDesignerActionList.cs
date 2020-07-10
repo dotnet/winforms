@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Design
         private readonly MaskedTextBox _maskedTextBox;
         private readonly ITypeDiscoveryService _discoverySvc;
         private readonly IUIService _uiSvc;
-        private readonly IHelpService _helpService = null;
+        private readonly IHelpService _helpService;
 
         /// <summary>
         /// Constructor receiving a MaskedTextBox control the action list applies to.  The ITypeDiscoveryService

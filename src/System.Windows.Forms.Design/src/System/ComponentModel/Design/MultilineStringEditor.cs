@@ -69,7 +69,7 @@ namespace System.ComponentModel.Design
         private class MultilineStringEditorUI : RichTextBox
         {
             private IWindowsFormsEditorService _editorService;
-            private bool _editing = false;
+            private bool _editing;
             private bool _escapePressed; // Initialized in BeginEdit
             private bool _ctrlEnterPressed;
             SolidBrush _watermarkBrush;
@@ -236,7 +236,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            private bool _contentsResizedRaised = false;
+            private bool _contentsResizedRaised;
 
             protected override void OnContentsResized(ContentsResizedEventArgs e)
             {
@@ -444,7 +444,6 @@ namespace System.ComponentModel.Design
         private class OleCallback : Richedit.IRichEditOleCallback
         {
             private readonly RichTextBox _owner;
-            readonly bool _unrestricted = false;
             static TraceSwitch _richTextDbg;
 
             static TraceSwitch RichTextDbg
@@ -492,36 +491,30 @@ namespace System.ComponentModel.Design
             public HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::QueryInsertObject(" + lpclsid.ToString() + ")");
-                if (_unrestricted)
+
+                HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
+                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "real clsid:" + realClsid.ToString() + " (hr=" + hr.ToString("X") + ")");
+
+                if (!hr.Succeeded())
                 {
-                    return HRESULT.S_OK;
+                    return HRESULT.S_FALSE;
                 }
-                else
+
+                if (realClsid == Guid.Empty)
                 {
-                    HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
-                    Debug.WriteLineIf(RichTextDbg.TraceVerbose, "real clsid:" + realClsid.ToString() + " (hr=" + hr.ToString("X") + ")");
+                    realClsid = lpclsid;
+                }
 
-                    if (!hr.Succeeded())
-                    {
+                switch (realClsid.ToString().ToUpper(CultureInfo.InvariantCulture))
+                {
+                    case "00000315-0000-0000-C000-000000000046": // Metafile
+                    case "00000316-0000-0000-C000-000000000046": // DIB
+                    case "00000319-0000-0000-C000-000000000046": // EMF
+                    case "0003000A-0000-0000-C000-000000000046": //BMP
+                        return HRESULT.S_OK;
+                    default:
+                        Debug.WriteLineIf(RichTextDbg.TraceVerbose, "   denying '" + lpclsid.ToString() + "' from being inserted due to security restrictions");
                         return HRESULT.S_FALSE;
-                    }
-
-                    if (realClsid == Guid.Empty)
-                    {
-                        realClsid = lpclsid;
-                    }
-
-                    switch (realClsid.ToString().ToUpper(CultureInfo.InvariantCulture))
-                    {
-                        case "00000315-0000-0000-C000-000000000046": // Metafile
-                        case "00000316-0000-0000-C000-000000000046": // DIB
-                        case "00000319-0000-0000-C000-000000000046": // EMF
-                        case "0003000A-0000-0000-C000-000000000046": //BMP
-                            return HRESULT.S_OK;
-                        default:
-                            Debug.WriteLineIf(RichTextDbg.TraceVerbose, "   denying '" + lpclsid.ToString() + "' from being inserted due to security restrictions");
-                            return HRESULT.S_FALSE;
-                    }
                 }
             }
 

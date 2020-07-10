@@ -58,7 +58,7 @@ namespace System.Windows.Forms
             private CultureInfo _culture;
             private List<IMessageFilter> _messageFilters;
             private List<IMessageFilter> _messageFilterSnapshot;
-            private int _inProcessFilters = 0;
+            private int _inProcessFilters;
             private IntPtr _handle;
             private readonly uint _id;
             private int _messageLoopCount;
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
             private bool _ourModalLoop;
 
             // A private field on Application that stores the callback delegate
-            private MessageLoopCallback _messageLoopCallback = null;
+            private MessageLoopCallback _messageLoopCallback;
 
             /// <summary>
             ///  Creates a new thread context object.

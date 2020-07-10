@@ -15,8 +15,8 @@ namespace System.Windows.Forms
 {
     public class ListBindingConverter : TypeConverter
     {
-        private static Type[] ctorTypes = null;  // the list of type of our ctor parameters.
-        private static string[] ctorParamProps = null; // the name of each property to check to see if we need to init with a ctor.
+        private static Type[] ctorTypes;  // the list of type of our ctor parameters.
+        private static string[] ctorParamProps; // the name of each property to check to see if we need to init with a ctor.
 
         /// <summary>
         ///  Creates our array of types on demand.

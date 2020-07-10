@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         private const int DefaultSimpleStyleHeight = 150;
         private const int DefaultDropDownHeight = 106;
         private const int AutoCompleteTimeout = 10000000; // 1 second timeout for resetting the MatchingText
-        private bool autoCompleteDroppedDown = false;
+        private bool autoCompleteDroppedDown;
 
         private FlatStyle flatStyle = FlatStyle.Standard;
         private int updateCount;
@@ -125,7 +125,7 @@ namespace System.Windows.Forms
         /// </summary>
         private AutoCompleteStringCollection autoCompleteCustomSource;
         private StringSource stringSource;
-        private bool fromHandleCreate = false;
+        private bool fromHandleCreate;
 
         private ComboBoxChildListUiaProvider childListAccessibleObject;
         private ComboBoxChildEditUiaProvider childEditAccessibleObject;
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
         // Indicates whether the dropdown list will be closed  after
         // selection (on getting CBN_SELENDOK notification) to prevent
         // focusing on the list item after hiding the list.
-        private bool dropDownWillBeClosed = false;
+        private bool dropDownWillBeClosed;
 
         /// <summary>
         ///  Creates a new ComboBox control.  The default style for the combo is
@@ -6088,7 +6088,7 @@ namespace System.Windows.Forms
         {
             private const int MaxClassName = 256;
             private const string AutoCompleteClassName = "Auto-Suggest Dropdown";
-            bool shouldSubClass = false; //nonstatic
+            bool shouldSubClass; //nonstatic
 
             internal void FindDropDowns()
             {

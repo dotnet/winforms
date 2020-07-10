@@ -16,16 +16,16 @@ namespace System.Windows.Forms.VisualStyles
     /// </summary>
     public sealed class VisualStyleRenderer : IHandle
     {
-        private HRESULT _lastHResult = 0;
+        private HRESULT _lastHResult;
         private static readonly int s_numberOfPossibleClasses = VisualStyleElement.Count; //used as size for themeHandles
 
         [ThreadStatic]
         private static Hashtable? t_themeHandles; // per-thread cache of ThemeHandle objects.
 
         [ThreadStatic]
-        private static long t_threadCacheVersion = 0;
+        private static long t_threadCacheVersion;
 
-        private static long s_globalCacheVersion = 0;
+        private static long s_globalCacheVersion;
 
         static VisualStyleRenderer()
         {

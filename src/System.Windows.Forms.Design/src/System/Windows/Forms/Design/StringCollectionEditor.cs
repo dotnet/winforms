@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
             private Button _cancelButton;
             private TableLayoutPanel _overarchingLayoutPanel;
 
-            private StringCollectionEditor _editor = null;
+            private StringCollectionEditor _editor;
 
             /// <summary>
             ///  Constructs a StringCollectionForm.

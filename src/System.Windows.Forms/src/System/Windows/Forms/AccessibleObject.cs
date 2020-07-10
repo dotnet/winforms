@@ -47,20 +47,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the <see cref='IAccessible'/> interface used by this <see cref='AccessibleObject'/>.
         /// </summary>
-        private IAccessible? systemIAccessible = null;
+        private IAccessible? systemIAccessible;
 
         /// <summary>
         ///  Specifies the <see cref='Oleaut32.IEnumVariant'/> used by this
         /// <see cref='AccessibleObject'/> .
         /// </summary>
-        private Oleaut32.IEnumVariant? systemIEnumVariant = null;
-        private Oleaut32.IEnumVariant? enumVariant = null;
+        private Oleaut32.IEnumVariant? systemIEnumVariant;
+        private Oleaut32.IEnumVariant? enumVariant;
 
         // IOleWindow interface of the 'inner' system IAccessible object that we are wrapping
-        private Ole32.IOleWindow? systemIOleWindow = null;
+        private Ole32.IOleWindow? systemIOleWindow;
 
         // Indicates this object is being used ONLY to wrap a system IAccessible
-        private readonly bool systemWrapper = false;
+        private readonly bool systemWrapper;
 
         // The support for the UIA Notification event begins in RS3.
         // Assume the UIA Notification event is available until we learn otherwise.

@@ -45,7 +45,7 @@ namespace System.Windows.Forms
 
         private AutoScaleMode _autoScaleMode = AutoScaleMode.Inherit;
 
-        private BitVector32 _state = new BitVector32();
+        private BitVector32 _state;
 
         /// <summary>
         ///  True if we need to perform scaling when layout resumes

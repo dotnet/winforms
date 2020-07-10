@@ -504,7 +504,7 @@ namespace System.Windows.Forms
         #endregion
         private class ToolStripTextBoxControl : TextBox
         {
-            private bool mouseIsOver = false;
+            private bool mouseIsOver;
             private bool isFontSet = true;
             private bool alreadyHooked;
 

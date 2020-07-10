@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly DesignerActionUI _parentUI; //ptr to the parenting UI, used for showing menus and setting selection
         private DesignerActionListCollection _actionLists; //all the shortcuts!
         private readonly IServiceProvider _serviceProvider; // we need to cache the service provider here to be able to create the panel with the proper arguments
-        private bool _ignoreNextMouseUp = false;
+        private bool _ignoreNextMouseUp;
 
         /// <summary>
         ///  Constructor that calls base and caches off the action lists.

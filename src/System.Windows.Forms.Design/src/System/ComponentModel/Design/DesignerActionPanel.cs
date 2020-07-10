@@ -1907,7 +1907,7 @@ namespace System.ComponentModel.Design
             private bool _hasSwatch;
             private Image _swatch;
             private FlyoutDialog _dropDownHolder;
-            private bool _ignoreNextSelectChange = false;
+            private bool _ignoreNextSelectChange;
             private bool _ignoreDropDownValue;
 
             public EditorPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)

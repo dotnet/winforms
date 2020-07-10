@@ -20,23 +20,23 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         internal PropertyDescriptor propertyInfo;
 
-        private TypeConverter exceptionConverter = null;
-        private UITypeEditor exceptionEditor = null;
-        private bool isSerializeContentsProp = false;
+        private TypeConverter exceptionConverter;
+        private UITypeEditor exceptionEditor;
+        private bool isSerializeContentsProp;
         private byte parensAroundName = ParensAroundNameUnknown;
         private IPropertyValueUIService pvSvc;
-        protected IEventBindingService eventBindings = null;
+        protected IEventBindingService eventBindings;
         private bool pvSvcChecked;
-        private PropertyValueUIItem[] pvUIItems = null;
+        private PropertyValueUIItem[] pvUIItems;
         private Rectangle[] uiItemRects;
-        private bool readOnlyVerified = false;
-        private bool forceRenderReadOnly = false;
+        private bool readOnlyVerified;
+        private bool forceRenderReadOnly;
         private string helpKeyword;
-        private string toolTipText = null;
-        private readonly bool activeXHide = false;
+        private string toolTipText;
+        private readonly bool activeXHide;
         private static int scaledImageSizeX = IMAGE_SIZE;
         private static int scaledImageSizeY = IMAGE_SIZE;
-        private static bool isScalingInitialized = false;
+        private static bool isScalingInitialized;
 
         private const int IMAGE_SIZE = 8;
         private const byte ParensAroundNameUnknown = (byte)0xFF;

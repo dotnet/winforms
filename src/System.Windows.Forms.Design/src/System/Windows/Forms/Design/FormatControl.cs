@@ -21,14 +21,14 @@ namespace System.Windows.Forms.Design
         // static because we want this value to be the same across a
         // VS session
         private static DateTime s_dateTimeFormatValue = DateTime.Now;
-        private bool _loaded = false;
+        private bool _loaded;
 
         public FormatControl()
         {
             InitializeComponent();
         }
 
-        public bool Dirty { get; set; } = false;
+        public bool Dirty { get; set; }
 
         public string FormatType
         {

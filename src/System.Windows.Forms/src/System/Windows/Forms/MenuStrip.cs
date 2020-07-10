@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionMenuStrip))]
     public class MenuStrip : ToolStrip
     {
-        private ToolStripMenuItem mdiWindowListItem = null;
+        private ToolStripMenuItem mdiWindowListItem;
 
         private static readonly object EventMenuActivate = new object();
         private static readonly object EventMenuDeactivate = new object();

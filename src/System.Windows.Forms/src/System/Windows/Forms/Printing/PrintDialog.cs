@@ -25,8 +25,8 @@ namespace System.Windows.Forms
         private const PD printRangeMask = PD.ALLPAGES | PD.PAGENUMS | PD.SELECTION | PD.CURRENTPAGE;
 
         // If PrintDocument != null, settings == printDocument.PrinterSettings
-        private PrinterSettings settings = null;
-        private PrintDocument printDocument = null;
+        private PrinterSettings settings;
+        private PrintDocument printDocument;
 
         // Implementing "current page" would require switching to PrintDlgEx, which is windows 2000 and later only
         private bool allowCurrentPage;

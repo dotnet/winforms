@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Design
     {
         private StringCollection _groupOrdering;
         private ContextMenuStripGroupCollection _groups;
-        private bool _populated = false;
+        private bool _populated;
 
         public bool Populated
         {

@@ -37,7 +37,7 @@ namespace System.ComponentModel.Design
         internal DesignerActionToolStripDropDown designerActionHost;
 
         private readonly MenuCommand _cmdShowDesignerActions; //used to respond to the Alt+Shft+F10 command
-        private bool _inTransaction = false;
+        private bool _inTransaction;
         private IComponent _relatedComponentTransaction;
         private DesignerActionGlyph _relatedGlyphTransaction;
         private readonly bool _disposeActionService;
@@ -682,7 +682,7 @@ namespace System.ComponentModel.Design
             return glyphLocationScreenCoord;
         }
 
-        bool _cancelClose = false;
+        bool _cancelClose;
         /// <summary>
         ///  This shows the actual chrome paenl that is created by the DesignerActionBehavior object.
         /// </summary>
@@ -748,7 +748,7 @@ namespace System.ComponentModel.Design
         private readonly IWin32Window _mainParentWindow;
         private ToolStripControlHost _panel;
         private readonly DesignerActionUI _designerActionUI;
-        private bool _cancelClose = false;
+        private bool _cancelClose;
         private Glyph _relatedGlyph;
 
         public DesignerActionToolStripDropDown(DesignerActionUI designerActionUI, IWin32Window mainParentWindow)

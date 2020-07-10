@@ -19,7 +19,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class ComNativeDescriptor : TypeDescriptionProvider
     {
-        private static ComNativeDescriptor handler = null;
+        private static ComNativeDescriptor handler;
 
         private readonly AttributeCollection staticAttrs = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No });
 
@@ -38,7 +38,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  intervals, we run through the properies list to see if we should
         ///  delete any.
         /// </summary>
-        private int clearCount = 0;
+        private int clearCount;
         private const int CLEAR_INTERVAL = 25;
 
         internal static ComNativeDescriptor Instance

@@ -13,8 +13,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class StandardCommandToolStripMenuItem : ToolStripMenuItem
     {
-        private bool _cachedImage = false;
-        private Image _image = null;
+        private bool _cachedImage;
+        private Image _image;
         private readonly CommandID _menuID;
         private IMenuCommandService _menuCommandService;
         private readonly IServiceProvider _serviceProvider;

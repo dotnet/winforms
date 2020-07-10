@@ -12,11 +12,11 @@ namespace System.Windows.Forms.Design
     internal class ToolStripActionList : DesignerActionList
     {
         private readonly ToolStrip _toolStrip;
-        private bool _autoShow = false;
+        private bool _autoShow;
         private readonly ToolStripDesigner _designer;
 
-        private readonly ChangeToolStripParentVerb _changeParentVerb = null;
-        private readonly StandardMenuStripVerb _standardItemsVerb = null;
+        private readonly ChangeToolStripParentVerb _changeParentVerb;
+        private readonly StandardMenuStripVerb _standardItemsVerb;
 
         public ToolStripActionList(ToolStripDesigner designer) : base(designer.Component)
         {

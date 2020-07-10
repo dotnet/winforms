@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         {
             private IDataObject _parent;
             private readonly List<FORMATETC> _formats = new List<FORMATETC>();
-            private int _current = 0;
+            private int _current;
 
             public FormatEnumerator(IDataObject parent) : this(parent, parent.GetFormats())
             {

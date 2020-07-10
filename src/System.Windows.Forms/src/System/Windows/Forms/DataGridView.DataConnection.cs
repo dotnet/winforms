@@ -17,11 +17,11 @@ namespace System.Windows.Forms
     {
         internal class DataGridViewDataConnection
         {
-            readonly DataGridView owner = null;
-            CurrencyManager currencyManager = null;
-            object dataSource = null;
+            readonly DataGridView owner;
+            CurrencyManager currencyManager;
+            object dataSource;
             string dataMember = string.Empty;
-            PropertyDescriptorCollection props = null;
+            PropertyDescriptorCollection props;
             int lastListCount = -1;
 
             //

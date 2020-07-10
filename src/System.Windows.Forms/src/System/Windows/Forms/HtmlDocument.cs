@@ -611,7 +611,7 @@ namespace System.Windows.Forms
         {
             private AxHost.ConnectionPointCookie cookie;
             private HtmlDocument htmlDocument;
-            private readonly IHTMLWindow2 associatedWindow = null;
+            private readonly IHTMLWindow2 associatedWindow;
 
             internal HtmlDocumentShim(HtmlDocument htmlDocument)
             {

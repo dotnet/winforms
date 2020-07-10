@@ -109,7 +109,7 @@ Namespace Microsoft.VisualBasic.Logging
             builder.Append(ex.Message)
 
             If Not String.IsNullOrEmpty(additionalInfo) Then
-                builder.Append(" ")
+                builder.Append(" "c)
                 builder.Append(additionalInfo)
             End If
 

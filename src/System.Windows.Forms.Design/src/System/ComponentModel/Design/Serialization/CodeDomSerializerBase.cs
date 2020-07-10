@@ -21,8 +21,9 @@ namespace System.ComponentModel.Design.Serialization
     {
         private static readonly Attribute[] runTimeProperties = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly TraceSwitch traceSerialization = new TraceSwitch("DesignerSerialization", "Trace design time serialization");
-        private static Stack traceScope = null;
-
+#pragma warning disable CS0649
+        private static Stack traceScope;
+#pragma warning restore CS0649
         /// <summary>
         ///  Internal constructor so only we can derive from this class.
         /// </summary>

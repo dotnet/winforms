@@ -19,9 +19,9 @@ namespace System.Windows.Forms
     {
         private readonly ListView listView;
 
-        private int index = 0;
+        private int index;
         private Color color = Color.Empty;
-        private bool appearsAfterItem = false;
+        private bool appearsAfterItem;
 
         internal ListViewInsertionMark(ListView listView)
         {

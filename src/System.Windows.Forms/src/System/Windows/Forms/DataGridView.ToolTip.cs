@@ -10,9 +10,9 @@ namespace System.Windows.Forms
     {
         private class DataGridViewToolTip
         {
-            readonly DataGridView dataGridView = null;
-            ToolTip toolTip = null;
-            private bool toolTipActivated = false;
+            readonly DataGridView dataGridView;
+            ToolTip toolTip;
+            private bool toolTipActivated;
 
             public DataGridViewToolTip(DataGridView dataGridView)
             {

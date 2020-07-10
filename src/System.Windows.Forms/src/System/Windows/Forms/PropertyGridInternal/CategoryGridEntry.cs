@@ -16,8 +16,8 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal class CategoryGridEntry : GridEntry
     {
         internal string name;
-        private Brush backBrush = null;
-        private static Hashtable categoryStates = null;
+        private Brush backBrush;
+        private static Hashtable categoryStates;
 
         public CategoryGridEntry(PropertyGrid ownerGrid, GridEntry peParent, string name, GridEntry[] childGridEntries)
         : base(ownerGrid, peParent)

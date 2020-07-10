@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         private string dataPropertyName = string.Empty;
 
         // needed for IComponent
-        private EventHandler disposed = null;
+        private EventHandler disposed;
 
         private static readonly int PropDataGridViewColumnValueType = PropertyStore.CreateKey();
 

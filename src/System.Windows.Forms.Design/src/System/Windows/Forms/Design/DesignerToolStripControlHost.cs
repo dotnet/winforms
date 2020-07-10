@@ -14,10 +14,6 @@ namespace System.Windows.Forms.Design
     internal class DesignerToolStripControlHost : ToolStripControlHost, IComponent
     {
         private BehaviorService _behaviorService;
-        // disable csharp compiler warning #0414: field assigned unused value
-#pragma warning disable 0414
-        internal ToolStrip _parent = null;
-#pragma warning restore 0414
 
         public DesignerToolStripControlHost(Control c) : base(c)
         {

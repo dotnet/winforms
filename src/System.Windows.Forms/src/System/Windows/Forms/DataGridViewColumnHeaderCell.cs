@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWCOLUMNHEADERCELL_horizontalTextMarginRight = 2;
         private const byte DATAGRIDVIEWCOLUMNHEADERCELL_verticalMargin = 1;  // 1 pixel on top & bottom of glyph and text
 
-        private static bool isScalingInitialized = false;
+        private static bool isScalingInitialized;
         private static byte sortGlyphSeparatorWidth = DATAGRIDVIEWCOLUMNHEADERCELL_sortGlyphSeparatorWidth;
         private static byte sortGlyphHorizontalMargin = DATAGRIDVIEWCOLUMNHEADERCELL_sortGlyphHorizontalMargin;
         private static byte sortGlyphWidth = DATAGRIDVIEWCOLUMNHEADERCELL_sortGlyphWidth;

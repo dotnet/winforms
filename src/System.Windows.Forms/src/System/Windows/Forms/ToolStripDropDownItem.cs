@@ -19,9 +19,9 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(DropDownItems))]
     public abstract class ToolStripDropDownItem : ToolStripItem
     {
-        private ToolStripDropDown dropDown = null;
+        private ToolStripDropDown dropDown;
         private ToolStripDropDownDirection toolStripDropDownDirection = ToolStripDropDownDirection.Default;
-        private ToolTip hookedKeyboardTooltip = null;
+        private ToolTip hookedKeyboardTooltip;
         private static readonly object EventDropDownShow = new object();
         private static readonly object EventDropDownHide = new object();
         private static readonly object EventDropDownOpened = new object();

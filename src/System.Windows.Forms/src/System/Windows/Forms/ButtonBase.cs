@@ -39,14 +39,14 @@ namespace System.Windows.Forms
         private const int FlagIsDefault = 0x0040;
         private const int FlagUseMnemonic = 0x0080;
         private const int FlagShowToolTip = 0x0100;
-        private int state = 0;
+        private int state;
 
         private ToolTip textToolTip;
 
         //this allows the user to disable visual styles for the button so that it inherits its background color
         private bool enableVisualStyleBackground = true;
 
-        private bool isEnableVisualStyleBackgroundSet = false;
+        private bool isEnableVisualStyleBackgroundSet;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ButtonBase'/> class.
@@ -968,7 +968,7 @@ namespace System.Windows.Forms
             return LayoutUtils.UnionSizes(prefSize + Padding.Size, MinimumSize);
         }
 
-        private ButtonBaseAdapter _adapter = null;
+        private ButtonBaseAdapter _adapter;
         private FlatStyle _cachedAdapterType;
 
         internal ButtonBaseAdapter Adapter

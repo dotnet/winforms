@@ -15,9 +15,9 @@ namespace System.Windows.Forms.Design
         private Button _cancelButton;
         private Button _okButton;
         private FormatControl _formatControl1;
-        private bool _dirty = false;
-        private DataGridViewCellStyle _dgvCellStyle = null;
-        private ListControl _listControl = null;
+        private bool _dirty;
+        private DataGridViewCellStyle _dgvCellStyle;
+        private ListControl _listControl;
 
         public FormatStringDialog(ITypeDescriptorContext context)
         {

@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
     {
         private IntPtr _handle = IntPtr.Zero;       // handle to loaded image
         private bool _ownHandle = true;
-        private readonly int _resourceId = 0;
+        private readonly int _resourceId;
 
         public MockCursor(int nResourceId)
         {

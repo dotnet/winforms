@@ -471,8 +471,8 @@ namespace System.ComponentModel.Design.Serialization
             private Hashtable _mergedMetadata;
             private object _rootComponent;
             private Hashtable _propertyFillAdded;
-            private bool _invariantCultureResourcesDirty = false;
-            private bool _metadataResourcesDirty = false;
+            private bool _invariantCultureResourcesDirty;
+            private bool _metadataResourcesDirty;
 
             public SerializationResourceManager(IDesignerSerializationManager manager)
             {
@@ -485,12 +485,12 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  State the serializers use to determine if the declaration of this resource manager has been performed.  This is just per-document state we keep; we do not actually care about this value.
             /// </summary>
-            public bool DeclarationAdded { get; set; } = false;
+            public bool DeclarationAdded { get; set; }
 
             /// <summary>
             ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource declaration.  This bit tracks if we have setup this expression yet.  Note that the expression and declaration may be added at diffrerent times, if the declaration was added by a cached component.
             /// </summary>
-            public bool ExpressionAdded { get; set; } = false;
+            public bool ExpressionAdded { get; set; }
 
             /// <summary>
             ///  The language we should be localizing into.

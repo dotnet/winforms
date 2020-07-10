@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Size parentGridSize; //used to snap around to grid dots if layoutmode == SnapToGrid
         private Point parentLocation;//location of parent on AdornerWindow - used for grid snap calculations
         private bool shareParent = true;//do dragged components share the parent
-        private bool cleanedUpDrag = false;
+        private bool cleanedUpDrag;
         private StatusCommandUI statusCommandUITarget;// UI for setting the StatusBar Information in the drop target
 
         private readonly IDesignerHost srcHost;

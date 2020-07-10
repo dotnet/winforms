@@ -32,8 +32,8 @@ namespace System.Windows.Forms
             private MemoryStream ms;
             private Ole32.IStorage storage;
             private Ole32.ILockBytes iLockBytes;
-            private bool manualUpdate = false;
-            private string licenseKey = null;
+            private bool manualUpdate;
+            private string licenseKey;
 #pragma warning disable IDE1006
             private readonly PropertyBagStream PropertyBagBinary; // Do NOT rename (binary serialization).
 #pragma warning restore IDE1006

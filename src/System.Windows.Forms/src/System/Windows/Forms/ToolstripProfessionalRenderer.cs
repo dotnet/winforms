@@ -23,7 +23,7 @@ namespace System.Windows.Forms
 
         private static readonly Size onePix = new Size(1, 1);
 
-        private bool isScalingInitialized = false;
+        private bool isScalingInitialized;
         private const int OVERFLOW_BUTTON_WIDTH = 12;
         private const int OVERFLOW_ARROW_WIDTH = 9;
         private const int OVERFLOW_ARROW_HEIGHT = 5;

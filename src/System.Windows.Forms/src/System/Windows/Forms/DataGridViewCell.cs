@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWCELL_iconsWidth = 12;          // all icons are 12 pixels wide - make sure that it stays that way
         private const byte DATAGRIDVIEWCELL_iconsHeight = 11;         // all icons are 11 pixels tall - make sure that it stays that way
 
-        private static bool isScalingInitialized = false;
+        private static bool isScalingInitialized;
         internal static byte iconsWidth = DATAGRIDVIEWCELL_iconsWidth;
         internal static byte iconsHeight = DATAGRIDVIEWCELL_iconsHeight;
 
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         private static readonly int PropCellToolTipText = PropertyStore.CreateKey();
         private static readonly int PropCellAccessibilityObject = PropertyStore.CreateKey();
 
-        private static Bitmap errorBmp = null;
+        private static Bitmap errorBmp;
 
         private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
 

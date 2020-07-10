@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         private static readonly int PropFalseValue = PropertyStore.CreateKey();
         private static readonly int PropFlatStyle = PropertyStore.CreateKey();
         private static readonly int PropIndeterminateValue = PropertyStore.CreateKey();
-        private static Bitmap checkImage = null;
+        private static Bitmap checkImage;
 
         private const byte DATAGRIDVIEWCHECKBOXCELL_threeState = 0x01;
         private const byte DATAGRIDVIEWCHECKBOXCELL_valueChanged = 0x02;
@@ -42,7 +42,7 @@ namespace System.Windows.Forms
         private const byte DATAGRIDVIEWCHECKBOXCELL_margin = 2;  // horizontal and vertical margins for preferred sizes
 
         private byte flags;  // see DATAGRIDVIEWCHECKBOXCELL_ consts above
-        private static bool mouseInContentBounds = false;
+        private static bool mouseInContentBounds;
         private static readonly Type defaultCheckStateType = typeof(CheckState);
         private static readonly Type defaultBooleanType = typeof(bool);
         private static readonly Type cellType = typeof(DataGridViewCheckBoxCell);

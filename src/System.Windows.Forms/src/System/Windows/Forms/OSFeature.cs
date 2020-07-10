@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static readonly object Themes = new object();
 
-        private static OSFeature _feature = null;
+        private static OSFeature _feature;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='OSFeature'/> class.

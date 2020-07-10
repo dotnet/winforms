@@ -142,8 +142,8 @@ namespace System.Windows.Forms
             private readonly PrintControllerWithStatusDialog parent;
             private StatusDialog dialog;
             private readonly Thread thread;
-            internal bool canceled = false;
-            private bool alreadyStopped = false;
+            internal bool canceled;
+            private bool alreadyStopped;
 
             // Called from any thread
             internal BackgroundThread(PrintControllerWithStatusDialog parent)

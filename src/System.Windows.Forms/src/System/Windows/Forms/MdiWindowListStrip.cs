@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     /// </summary>
     internal class MdiWindowListStrip : MenuStrip
     {
-        private Form mdiParent = null;
+        private Form mdiParent;
         private ToolStripMenuItem mergeItem;
         private MenuStrip mergedMenu;
 

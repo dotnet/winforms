@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         private readonly byte[]? _cursorData;
         private IntPtr _handle = IntPtr.Zero;       // handle to loaded image
         private bool _ownHandle = true;
-        private readonly int _resourceId = 0;
+        private readonly int _resourceId;
 
         /// <summary>
         ///  Private constructor. If you want a standard system cursor, use one of the

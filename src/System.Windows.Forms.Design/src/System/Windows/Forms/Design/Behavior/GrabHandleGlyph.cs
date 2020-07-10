@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     internal class GrabHandleGlyph : SelectionGlyphBase
     {
-        private readonly bool _isPrimary = false;
+        private readonly bool _isPrimary;
 
         /// <summary>
         ///  GrabHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'.

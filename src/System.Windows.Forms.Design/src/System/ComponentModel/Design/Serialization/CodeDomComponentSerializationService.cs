@@ -244,7 +244,7 @@ namespace System.ComponentModel.Design.Serialization
             private const int StateEvents = 4;
             private const int StateModifier = 5;
 
-            private MemoryStream _resourceStream = null;
+            private MemoryStream _resourceStream;
 
             // Transient fields only used during creation of the store
             private Hashtable _objects;
@@ -1641,7 +1641,7 @@ namespace System.ComponentModel.Design.Serialization
             private class LocalDesignerSerializationManager : DesignerSerializationManager
             {
                 private readonly CodeDomSerializationStore _store;
-                private Nullable<bool> _typeSvcAvailable = new Nullable<bool>();
+                private bool? _typeSvcAvailable;
 
                 /// <summary>
                 ///  Creates a new serilalization manager.

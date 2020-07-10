@@ -38,10 +38,9 @@ namespace System.Windows.Forms
         private WebBrowserHelper.AXState axState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXState axReloadingState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXEditMode axEditMode = WebBrowserHelper.AXEditMode.None;
-        private readonly bool inRtlRecreate = false;
-        private BitVector32 axHostState = new BitVector32();
+        private BitVector32 axHostState;
         private WebBrowserHelper.SelectionStyle selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
-        private int noComponentChange = 0;
+        private int noComponentChange;
         private WebBrowserSiteBase axSite;
         private ContainerControl containingControl;
         private IntPtr hwndFocus = IntPtr.Zero;
@@ -58,7 +57,7 @@ namespace System.Windows.Forms
         //is changed) for better visual effect. We use this field to know what size
         //the WebBrowserBase control is changing to.
         private Size webBrowserBaseChangingSize = Size.Empty;
-        private WebBrowserContainer wbContainer = null;
+        private WebBrowserContainer wbContainer;
 
         // This flags the WebBrowser not to process dialog keys when the ActiveX control is doing it
         // and calls back into the WebBrowser for some reason.
@@ -573,14 +572,6 @@ namespace System.Windows.Forms
         {
             base.OnBackColorChanged(e);
             AmbientChanged(Ole32.DispatchID.AMBIENT_BACKCOLOR);
-        }
-
-        internal override void RecreateHandleCore()
-        {
-            if (!inRtlRecreate)
-            {
-                base.RecreateHandleCore();
-            }
         }
 
         //

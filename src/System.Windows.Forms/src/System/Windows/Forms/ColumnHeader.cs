@@ -26,14 +26,14 @@ namespace System.Windows.Forms
 #pragma warning disable 0414
         internal int index = -1;
 #pragma warning restore 0414
-        internal string text = null;
-        internal string name = null;
+        internal string text;
+        internal string name;
         internal int width = 60;
         // Use TextAlign property instead of this member variable, always
         private HorizontalAlignment textAlign = HorizontalAlignment.Left;
-        private bool textAlignInitialized = false;
+        private bool textAlignInitialized;
         private int displayIndexInternal = -1;
-        private readonly ColumnHeaderImageListIndexer imageIndexer = null;
+        private readonly ColumnHeaderImageListIndexer imageIndexer;
 
         object userData;
 
@@ -533,7 +533,7 @@ namespace System.Windows.Forms
 
         internal class ColumnHeaderImageListIndexer : ImageList.Indexer
         {
-            private readonly ColumnHeader owner = null;
+            private readonly ColumnHeader owner;
             public ColumnHeaderImageListIndexer(ColumnHeader ch)
             {
                 owner = ch;

@@ -25,7 +25,7 @@ namespace System.Windows.Forms
 
         private Border3DStyle borderStyle = Border3DStyle.Flat;
         private ToolStripStatusLabelBorderSides borderSides = ToolStripStatusLabelBorderSides.None;
-        private bool spring = false;
+        private bool spring;
         private AutomationLiveSetting liveSetting;
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace System.ComponentModel.Design.Serialization
 {
     internal class ComponentCodeDomSerializer : CodeDomSerializer
     {
-        private Type[] _containerConstructor = null;
+        private Type[] _containerConstructor;
         private static readonly Attribute[] _runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly Attribute[] _designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
         private static WeakReference s_defaultSerializerRef;

@@ -3120,7 +3120,7 @@ namespace System.ComponentModel.Design.Tests
         [DefaultEvent(nameof(DefaultEventComponent.Event))]
         private class DefaultEventComponent : Component
         {
-            private string _stringProperty = null;
+            private string _stringProperty;
 
             public event EventHandler Event
             {
@@ -3144,7 +3144,7 @@ namespace System.ComponentModel.Design.Tests
                 }
             }
 
-            public int StringPropertySetCount { get; set; } = 0;
+            public int StringPropertySetCount { get; set; }
 
             public int IntProperty { get; set; }
 

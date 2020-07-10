@@ -33,7 +33,7 @@ namespace System.ComponentModel.Design.Serialization
         private static readonly int s_stateEnableComponentEvents = BitVector32.CreateMask(s_stateModifyIfErrors);   // True if we are currently listening to OnComponent* events
 
         // State for the designer loader.
-        private BitVector32 _state = new BitVector32();
+        private BitVector32 _state;
         private IDesignerLoaderHost _host;
         private int _loadDependencyCount;
         private string _baseComponentClassName;

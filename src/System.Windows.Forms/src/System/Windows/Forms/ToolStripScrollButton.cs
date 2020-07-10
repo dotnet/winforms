@@ -182,11 +182,10 @@ namespace System.Windows.Forms
             public StickyLabel()
             {
             }
-            private readonly bool freezeLocationChange = false;
 
             public bool FreezeLocationChange
             {
-                get { return freezeLocationChange; }
+                get => false;
             }
 
             protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)

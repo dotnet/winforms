@@ -13,8 +13,8 @@ namespace System.ComponentModel.Design
     /// </summary>
     internal class StatusCommandUI
     {
-        MenuCommand _statusRectCommand = null;
-        IMenuCommandService _menuService = null;
+        MenuCommand _statusRectCommand;
+        IMenuCommandService _menuService;
         readonly IServiceProvider _serviceProvider;
 
         public StatusCommandUI(IServiceProvider provider)

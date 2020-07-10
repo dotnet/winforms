@@ -61,19 +61,19 @@ namespace System.Windows.Forms
         private byte[] _readBuffer;
         private ImageInstallationType _imageInstallationType;
         private SendOrPostCallback _loadCompletedDelegate;
-        private SendOrPostCallback _loadProgressDelegate = null;
+        private SendOrPostCallback _loadProgressDelegate;
         private bool _handleValid;
         private readonly object _internalSyncObject = new object();
 
         // These default images will be demand loaded.
-        private Image _defaultInitialImage = null;
-        private Image _defaultErrorImage = null;
+        private Image _defaultInitialImage;
+        private Image _defaultErrorImage;
 
         [ThreadStatic]
-        private static Image t_defaultInitialImageForThread = null;
+        private static Image t_defaultInitialImageForThread;
 
         [ThreadStatic]
-        private static Image t_defaultErrorImageForThread = null;
+        private static Image t_defaultErrorImageForThread;
 
         private static readonly object s_loadCompletedKey = new object();
         private static readonly object s_loadProgressChangedKey = new object();
@@ -93,8 +93,8 @@ namespace System.Windows.Forms
         ///  http://msdn.microsoft.com/en-us/library/93z9ee4x(v=VS.100).aspx
         ///  if we load an image from a stream, we must keep the stream open for the lifetime of the Image
         /// </summary>
-        private StreamReader _localImageStreamReader = null;
-        private Stream _uriImageStream = null;
+        private StreamReader _localImageStreamReader;
+        private Stream _uriImageStream;
 
         /// <summary>
         ///  Creates a new picture with all default properties and no Image. The default PictureBox.SizeMode

@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         private TaskDialogProgressBarState _state;
         private TaskDialogProgressBarState _stateWhenBound;
 
-        private int _minimum = 0;
+        private int _minimum;
         private int _maximum = 100;
         private int _value;
         private int _marqueeSpeed;

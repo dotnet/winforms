@@ -557,8 +557,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             private readonly MergePropertyDescriptor owner;
 
-            private AttributeCollection[] attributeCollections = null;
-            private IDictionary foundAttributes = null;
+            private AttributeCollection[] attributeCollections;
+            private IDictionary foundAttributes;
 
             public MergedAttributeCollection(MergePropertyDescriptor owner) : base((Attribute[])null)
             {

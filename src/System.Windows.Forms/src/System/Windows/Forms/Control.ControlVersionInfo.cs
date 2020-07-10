@@ -13,10 +13,10 @@ namespace System.Windows.Forms
     {
         private class ControlVersionInfo
         {
-            private string _companyName = null;
-            private string _productName = null;
-            private string _productVersion = null;
-            private FileVersionInfo _versionInfo = null;
+            private string _companyName;
+            private string _productName;
+            private string _productVersion;
+            private FileVersionInfo _versionInfo;
             private readonly Control _owner;
 
             internal ControlVersionInfo(Control owner)

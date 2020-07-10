@@ -279,6 +279,6 @@ Namespace Microsoft.VisualBasic.MyServices
         Friend Sub New()
         End Sub
 
-        Private _specialDirectoriesProxy As SpecialDirectoriesProxy = Nothing
+        Private _specialDirectoriesProxy As SpecialDirectoriesProxy
     End Class
 End Namespace

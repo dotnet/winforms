@@ -43,7 +43,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class DpiAwarenessScope : IDisposable
         {
-            private bool dpiAwarenessScopeIsSet = false;
+            private bool dpiAwarenessScopeIsSet;
             private readonly IntPtr originalAwareness = UNSPECIFIED_DPI_AWARENESS_CONTEXT;
 
             /// <summary>

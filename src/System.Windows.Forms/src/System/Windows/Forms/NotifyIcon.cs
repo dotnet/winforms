@@ -40,23 +40,23 @@ namespace System.Windows.Forms
 
         private readonly object syncObj = new object();
 
-        private Icon icon = null;
+        private Icon icon;
         private string text = string.Empty;
-        private readonly uint id = 0;
-        private bool added = false;
-        private NotifyIconNativeWindow window = null;
-        private ContextMenuStrip contextMenuStrip = null;
+        private readonly uint id;
+        private bool added;
+        private NotifyIconNativeWindow window;
+        private ContextMenuStrip contextMenuStrip;
         private ToolTipIcon balloonTipIcon;
         private string balloonTipText = string.Empty;
         private string balloonTipTitle = string.Empty;
-        private static uint s_nextId = 0;
+        private static uint s_nextId;
         private object userData;
-        private bool doubleClick = false; // checks if doubleclick is fired
+        private bool doubleClick; // checks if doubleclick is fired
 
         // Visible defaults to false, but the NotifyIconDesigner makes it seem like the default is
         // true.  We do this because while visible is the more common case, if it was a true default,
         // there would be no way to create a hidden NotifyIcon without being visible for a moment.
-        private bool visible = false;
+        private bool visible;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='NotifyIcon'/> class.

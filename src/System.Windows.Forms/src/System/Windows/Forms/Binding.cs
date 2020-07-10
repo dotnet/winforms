@@ -20,35 +20,35 @@ namespace System.Windows.Forms
         private IBindableComponent _control;
         private BindingManagerBase _bindingManagerBase;
 
-        private readonly BindToObject _bindToObject = null;
+        private readonly BindToObject _bindToObject;
 
         private PropertyDescriptor _propInfo;
         private PropertyDescriptor _propIsNullInfo;
         private EventDescriptor _validateInfo;
         private TypeConverter _propInfoConverter;
 
-        private bool _formattingEnabled = false;
+        private bool _formattingEnabled;
 
-        private bool _bound = false;
-        private bool _modified = false;
+        private bool _bound;
+        private bool _modified;
 
         // Recursion guards
-        private bool _inSetPropValue = false;
-        private bool _inPushOrPull = false;
-        private bool _inOnBindingComplete = false;
+        private bool _inSetPropValue;
+        private bool _inPushOrPull;
+        private bool _inOnBindingComplete;
 
         // formatting stuff
         private string _formatString = string.Empty;
-        private IFormatProvider _formatInfo = null;
-        private object _nullValue = null;
+        private IFormatProvider _formatInfo;
+        private object _nullValue;
         private object _dsNullValue = Formatter.GetDefaultDataSourceNullValue(null);
         private bool _dsNullValueSet;
-        private ConvertEventHandler _onParse = null;
-        private ConvertEventHandler _onFormat = null;
+        private ConvertEventHandler _onParse;
+        private ConvertEventHandler _onFormat;
 
         // binding stuff
         private ControlUpdateMode _controlUpdateMode = ControlUpdateMode.OnPropertyChanged;
-        private BindingCompleteEventHandler _onComplete = null;
+        private BindingCompleteEventHandler _onComplete;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='Binding'/> class
@@ -1092,8 +1092,8 @@ namespace System.Windows.Forms
             private readonly Binding _owner;
             private string _errorText = string.Empty;
 
-            private bool _dataSourceInitialized = false;
-            private bool _waitingOnDataSource = false;
+            private bool _dataSourceInitialized;
+            private bool _waitingOnDataSource;
 
             private void PropValueChanged(object sender, EventArgs e)
             {

@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         private static readonly BitVector32.Section s_avedStateImageIndexSection = BitVector32.CreateSection(15, s_stateWholeRowOneStyleSection);
         private static readonly BitVector32.Section s_subItemCountSection = BitVector32.CreateSection(MaxSubItems, s_avedStateImageIndexSection);
 
-        private int indentCount = 0;
+        private int indentCount;
         private Point position = new Point(-1, -1);
 
         internal ListView listView;
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         internal ListViewGroup group;
         private string groupName;
 
-        private ListViewSubItemCollection listViewSubItemCollection = null;
+        private ListViewSubItemCollection listViewSubItemCollection;
         private ListViewSubItem[] subItems;
 
         // we stash the last index we got as a seed to GetDisplayIndex.
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         // An ID unique relative to a given list view that comctl uses to identify items.
         internal int ID = -1;
 
-        private BitVector32 state = new BitVector32();
+        private BitVector32 state;
         private ListViewItemImageIndexer imageIndexer;
         private string toolTipText = string.Empty;
         private object userData;
@@ -1531,7 +1531,7 @@ namespace System.Windows.Forms
 #pragma warning disable IDE1006
                 public Color backColor = Color.Empty; // Do NOT rename (binary serialization).
                 public Color foreColor = Color.Empty; // Do NOT rename (binary serialization).
-                public Font font = null; // Do NOT rename (binary serialization).
+                public Font font; // Do NOT rename (binary serialization).
 #pragma warning restore IDE1006
             }
         }

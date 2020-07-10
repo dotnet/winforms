@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design
     [Editor(typeof(ImageListImageEditor), typeof(UITypeEditor))]
     internal class ImageListImage
     {
-        private string _name = null;
+        private string _name;
 
         public ImageListImage(Image image)
         {

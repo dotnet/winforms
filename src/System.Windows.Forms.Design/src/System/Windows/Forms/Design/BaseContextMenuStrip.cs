@@ -242,9 +242,9 @@ namespace System.Windows.Forms.Design
             private readonly Component _comp;
             private readonly IServiceProvider _serviceProvider;
             private readonly Type _itemType;
-            private bool _cachedImage = false;
-            private Image _image = null;
-            private static readonly string s_systemWindowsFormsNamespace = typeof(System.Windows.Forms.ToolStripItem).Namespace;
+            private bool _cachedImage;
+            private Image _image;
+            private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
 
             public SelectToolStripMenuItem(Component c, IServiceProvider provider)
             {

@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     {
         CollectionChangeEventHandler onCollectionChanged;
         readonly ArrayList items = new ArrayList();
-        readonly DataGridViewRow owner = null;
+        readonly DataGridViewRow owner;
 
         int IList.Add(object value)
         {

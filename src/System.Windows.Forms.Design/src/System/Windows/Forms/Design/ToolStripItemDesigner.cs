@@ -21,17 +21,17 @@ namespace System.Windows.Forms.Design
         // Cached in value of the TemplateNode (which is the InSitu Editor)
         private ToolStripTemplateNode _editorNode;
         // Used by the ParentDesigner (ToolStripDesigner) to know whether there is any active Editor.
-        private bool isEditorActive = false;
+        private bool isEditorActive;
         // this property is used in the InitializeNewComponent not to set the text for the ToolstripItem
-        private bool internalCreate = false;
+        private bool internalCreate;
         //hook to SelectionService to listen to SelectionChanged
-        private ISelectionService selSvc = null;
+        private ISelectionService selSvc;
         //ToolStripItems Visibility needs to be WYSIWYG.
-        private bool currentVisible = false;
-        // Required to remove Body Glyphs ....
-        internal ControlBodyGlyph bodyGlyph = null;
+        private bool currentVisible;
+        // Required to remove Body Glyphs...
+        internal ControlBodyGlyph bodyGlyph;
         //bool which is set if we Add Dummy Item
-        internal bool dummyItemAdded = false;
+        internal bool dummyItemAdded;
         //Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
         internal Rectangle dragBoxFromMouseDown = Rectangle.Empty;
         //defaulted to invalid index. this will be set by the behaviour.

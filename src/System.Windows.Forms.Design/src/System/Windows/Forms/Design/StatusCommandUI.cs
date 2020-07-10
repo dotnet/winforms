@@ -13,8 +13,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class StatusCommandUI
     {
-        private MenuCommand _statusRectCommand = null;
-        private IMenuCommandService _menuService = null;
+        private MenuCommand _statusRectCommand;
+        private IMenuCommandService _menuService;
         private readonly IServiceProvider _serviceProvider;
 
         public StatusCommandUI(IServiceProvider provider)

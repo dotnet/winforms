@@ -17,15 +17,15 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(ButtonClick))]
     public class ToolStripSplitButton : ToolStripDropDownItem
     {
-        private ToolStripItem defaultItem = null;
-        private ToolStripSplitButtonButton splitButtonButton = null;
+        private ToolStripItem defaultItem;
+        private ToolStripSplitButtonButton splitButtonButton;
         private Rectangle dropDownButtonBounds = Rectangle.Empty;
-        private ToolStripSplitButtonButtonLayout splitButtonButtonLayout = null;
-        private int dropDownButtonWidth = 0;
+        private ToolStripSplitButtonButtonLayout splitButtonButtonLayout;
+        private int dropDownButtonWidth;
         private int splitterWidth = 1;
         private Rectangle splitterBounds = Rectangle.Empty;
-        private byte openMouseId = 0;
-        private long lastClickTime = 0;
+        private byte openMouseId;
+        private long lastClickTime;
 
         private const int DEFAULT_DROPDOWN_WIDTH = 11;
 
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
         private static readonly object EventButtonClick = new object();
         private static readonly object EventButtonDoubleClick = new object();
 
-        private static bool isScalingInitialized = false;
+        private static bool isScalingInitialized;
         private static int scaledDropDownButtonWidth = DEFAULT_DROPDOWN_WIDTH;
 
         public ToolStripSplitButton()
@@ -606,7 +606,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class ToolStripSplitButtonButton : ToolStripButton
         {
-            private readonly ToolStripSplitButton owner = null;
+            private readonly ToolStripSplitButton owner;
 
             public ToolStripSplitButtonButton(ToolStripSplitButton owner)
             {

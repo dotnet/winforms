@@ -32,7 +32,7 @@ namespace System.Windows.Forms
 
         private bool autoCheck;
         private bool threeState;
-        private bool accObjDoDefaultAction = false;
+        private bool accObjDoDefaultAction;
 
         private ContentAlignment checkAlign = ContentAlignment.MiddleLeft;
         private CheckState checkState;

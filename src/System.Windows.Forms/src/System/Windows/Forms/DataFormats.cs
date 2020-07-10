@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         public static readonly string Serializable = Application.WindowsFormsVersion + "PersistentObject";
 
         private static Format[] s_formatList;
-        private static int s_formatCount = 0;
+        private static int s_formatCount;
 
         private static readonly object s_internalSyncObject = new object();
 

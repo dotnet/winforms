@@ -24,11 +24,11 @@ namespace System.Windows.Forms.Design
         private ToolStripDropDown dropDown;
         private bool selected;
         private ControlBodyGlyph dummyToolStripGlyph;
-        private uint _editingCollection = 0; // non-zero if the collection editor is up for this ToolStrip or a child of it.
-        FormDocumentDesigner parentFormDesigner = null;
-        internal ToolStripMenuItem currentParent = null;
-        private INestedContainer nestedContainer = null; //NestedContainer for our DesignTime MenuItem.
-        private UndoEngine undoEngine = null;
+        private uint _editingCollection; // non-zero if the collection editor is up for this ToolStrip or a child of it.
+        FormDocumentDesigner parentFormDesigner;
+        internal ToolStripMenuItem currentParent;
+        private INestedContainer nestedContainer; //NestedContainer for our DesignTime MenuItem.
+        private UndoEngine undoEngine;
 
         /// <summary>
         ///  ShadowProperty.

@@ -101,7 +101,7 @@ namespace System.Windows.Forms
 
         private const int SizeGripSize = 16;
 
-        private static Icon defaultIcon = null;
+        private static Icon defaultIcon;
         private static readonly object internalSyncObject = new object();
 
         // Property store keys for properties.  The property store allocates most efficiently
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
         // Note: Do not add anything to this list unless absolutely necessary.
 
         private BitVector32 formState = new BitVector32(0x21338);   // magic value... all the defaults... see the ctor for details...
-        private BitVector32 formStateEx = new BitVector32();
+        private BitVector32 formStateEx;
 
         private Icon icon;
         private Icon smallIcon;
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
         private DialogResult dialogResult;
         private MdiClient ctlClient;
         private NativeWindow ownerWindow;
-        private bool rightToLeftLayout = false;
+        private bool rightToLeftLayout;
 
         private Rectangle restoreBounds = new Rectangle(-1, -1, -1, -1);
         private CloseReason closeReason = CloseReason.None;

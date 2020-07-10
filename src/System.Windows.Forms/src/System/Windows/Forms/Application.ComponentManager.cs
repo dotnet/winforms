@@ -37,9 +37,9 @@ namespace System.Windows.Forms
 
             private Dictionary<UIntPtr, ComponentHashtableEntry> _oleComponents;
             private UIntPtr _cookieCounter = UIntPtr.Zero;
-            private IMsoComponent _activeComponent = null;
-            private IMsoComponent _trackingComponent = null;
-            private msocstate _currentState = 0;
+            private IMsoComponent _activeComponent;
+            private IMsoComponent _trackingComponent;
+            private msocstate _currentState;
 
             private Dictionary<UIntPtr, ComponentHashtableEntry> OleComponents
             {

@@ -55,17 +55,17 @@ namespace System.Windows.Forms
         // Label.
         //
 
-        BitVector32 labelState = new BitVector32();
+        BitVector32 labelState;
         int requestedHeight;
         int requestedWidth;
         LayoutUtils.MeasureTextCache textMeasurementCache;
 
         //Tooltip is shown only if the Text in the Label is cut.
-        internal bool showToolTip = false;
+        internal bool showToolTip;
         ToolTip textToolTip;
         // This bool suggests that the User has added a toolTip to this label
         // In such a case we should not show the AutoEllipsis tooltip.
-        bool controlToolTip = false;
+        bool controlToolTip;
         AutomationLiveSetting liveSetting;
 
         // } End Members

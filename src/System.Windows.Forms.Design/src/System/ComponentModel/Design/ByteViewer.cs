@@ -237,10 +237,10 @@ namespace System.ComponentModel.Design
             for (int i = 0; i < lineBuffer.Length; i++)
             {
                 result.Append(lineBuffer[i].ToString("X2", CultureInfo.InvariantCulture));
-                result.Append(" ");
+                result.Append(' ');
                 if (i == _columnCount / 2 - 1)
                 {
-                    result.Append(" ");  //add one extra in the middle
+                    result.Append(' ');  // Add one extra in the middle.
                 }
             }
 

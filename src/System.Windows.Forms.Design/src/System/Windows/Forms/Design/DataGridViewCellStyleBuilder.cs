@@ -25,15 +25,14 @@ namespace System.Windows.Forms.Design
         private TableLayoutPanel _okCancelTableLayoutPanel;
         private TableLayoutPanel _overarchingTableLayoutPanel;
         private TableLayoutPanel _sampleViewGridsTableLayoutPanel;
-        private Container _components = null;
-        private Label _normalLabel = null;
-        private Label _selectedLabel = null;
-        private IHelpService _helpService = null;
-        private IComponent _comp = null;
-        private IServiceProvider _serviceProvider = null;
+        private Label _normalLabel;
+        private Label _selectedLabel;
+        private IHelpService _helpService;
+        private IComponent _comp;
+        private IServiceProvider _serviceProvider;
 
         private DataGridViewCellStyle _cellStyle;
-        private ITypeDescriptorContext _context = null;
+        private ITypeDescriptorContext _context;
 
         public DataGridViewCellStyleBuilder(IServiceProvider serviceProvider, IComponent comp)
         {
@@ -101,21 +100,6 @@ namespace System.Windows.Forms.Design
             DataGridViewCellStyle cellStyleTmp = new DataGridViewCellStyle(_cellStyle);
             _sampleDataGridView.DefaultCellStyle = cellStyleTmp;
             _sampleDataGridViewSelected.DefaultCellStyle = cellStyleTmp;
-        }
-
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_components != null)
-                {
-                    _components.Dispose();
-                }
-            }
-            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -346,7 +330,7 @@ namespace System.Windows.Forms.Design
 
         private class DialogDataGridViewCell : DataGridViewTextBoxCell
         {
-            DialogDataGridViewCellAccessibleObject _accObj = null;
+            DialogDataGridViewCellAccessibleObject _accObj;
             protected override AccessibleObject CreateAccessibilityInstance()
             {
                 if (_accObj == null)

@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
         private MaskDescriptor _customMaskDescriptor;
         private SortOrder _listViewSortOrder = SortOrder.Ascending;
         private IContainer _components;
-        private readonly IHelpService _helpService = null;
+        private readonly IHelpService _helpService;
 
         /// <summary>
         /// Constructor receiving a clone of the MaskedTextBox control under design.

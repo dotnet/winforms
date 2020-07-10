@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     [Serializable] // This class is participating in resx serialization scenarios for listview/treeview items.
     public class OwnerDrawPropertyBag : MarshalByRefObject, ISerializable
     {
-        private Control.FontHandleWrapper _fontWrapper = null;
+        private Control.FontHandleWrapper _fontWrapper;
         private static readonly object s_internalSyncObject = new object();
 
         protected OwnerDrawPropertyBag(SerializationInfo info, StreamingContext context)

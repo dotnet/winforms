@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     internal class LockedHandleGlyph : SelectionGlyphBase
     {
-        private readonly bool _isPrimary = false;
+        private readonly bool _isPrimary;
 
         /// <summary>
         ///  LockedHandleGlyph's constructor takes additional parameters: 'type' and 'primary selection'.
