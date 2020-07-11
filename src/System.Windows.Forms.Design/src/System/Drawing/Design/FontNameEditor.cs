@@ -3,12 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Drawing.Design
 {
     /// <summary>
-    ///  Provides a <see cref="T:System.Drawing.Design.UITypeEditor" /> that paints a glyph for the font name.
+    ///  Provides a <see cref="UITypeEditor" /> that paints a glyph for the font name.
     /// </summary>
     public class FontNameEditor : UITypeEditor
     {
