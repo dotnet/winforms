@@ -648,8 +648,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for
-        ///  the list.
+        ///  Gets the <see cref='PropertyDescriptorCollection'/> for the list.
         /// </summary>
         public override PropertyDescriptorCollection GetItemProperties()
         {
@@ -657,7 +656,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the <see cref='T:System.ComponentModel.PropertyDescriptorCollection'/> for the specified list.
+        ///  Gets the <see cref='PropertyDescriptorCollection'/> for the specified list.
         /// </summary>
         private void List_ListChanged(object sender, ListChangedEventArgs e)
         {
