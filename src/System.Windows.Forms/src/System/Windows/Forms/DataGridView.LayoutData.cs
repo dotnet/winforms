@@ -83,10 +83,10 @@ namespace System.Windows.Forms
                 sb.Append(ResizeBoxRect.ToString());
                 sb.Append('\n');
                 sb.Append("ColumnHeadersVisible = ");
-                sb.Append(ColumnHeadersVisible.ToString());
+                sb.Append(ColumnHeadersVisible);
                 sb.Append('\n');
                 sb.Append("RowHeadersVisible = ");
-                sb.Append(RowHeadersVisible.ToString());
+                sb.Append(RowHeadersVisible);
                 sb.Append(" }");
                 return sb.ToString();
             }
