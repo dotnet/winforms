@@ -68,14 +68,8 @@ namespace System.Windows.Forms
         private CheckedItemCollection checkedItemCollection;
         private CheckedIndexCollection checkedIndexCollection;
 
-        private static readonly WM LBC_GETCHECKSTATE;
-        private static readonly WM LBC_SETCHECKSTATE;
-
-        static CheckedListBox()
-        {
-            LBC_GETCHECKSTATE = RegisterWindowMessageW("LBC_GETCHECKSTATE");
-            LBC_SETCHECKSTATE = RegisterWindowMessageW("LBC_SETCHECKSTATE");
-        }
+        private static readonly WM LBC_GETCHECKSTATE = RegisterWindowMessageW("LBC_GETCHECKSTATE");
+        private static readonly WM LBC_SETCHECKSTATE = RegisterWindowMessageW("LBC_SETCHECKSTATE");
 
         /// <summary>
         ///  Creates a new CheckedListBox for the user.

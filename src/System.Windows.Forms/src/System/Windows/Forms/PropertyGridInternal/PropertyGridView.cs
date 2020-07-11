@@ -6144,10 +6144,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             private Rectangle dragBaseRect = Rectangle.Empty; // the original bounds of our control.
             private int currentMoveType = MoveTypeNone;    // what type of move are we processing? left, bottom, or both?
 
-            private readonly static int ResizeBarSize;    // the thickness of the resize bar
-            private readonly static int ResizeBorderSize; // the thickness of the 2-way resize area along the outer edge of the resize bar
-            private readonly static int ResizeGripSize;   // the size of the 4-way resize grip at outermost corner of the resize bar
-            private readonly static Size MinDropDownSize;  // the minimum size for the control.
+            private readonly static int ResizeGripSize = SystemInformation.HorizontalScrollBarHeight;   // The size of the 4-way resize grip at outermost corner of the resize bar.
+            private readonly static int ResizeBarSize = ResizeGripSize + 1;     // The thickness of the resize bar.
+            private readonly static int ResizeBorderSize = ResizeBarSize / 2;   // The thickness of the 2-way resize area along the outer edge of the resize bar.
+            private readonly static Size MinDropDownSize = new Size(SystemInformation.VerticalScrollBarWidth * 4, SystemInformation.HorizontalScrollBarHeight * 4); // The minimum size for the control.
             private Bitmap sizeGripGlyph;    // our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.  See GetSizeGripGlyph
 
             private const int DropDownHolderBorder = 1;
@@ -6155,14 +6155,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             private const int MoveTypeBottom = 0x1;
             private const int MoveTypeLeft = 0x2;
             private const int MoveTypeTop = 0x4;
-
-            static DropDownHolder()
-            {
-                MinDropDownSize = new Size(SystemInformation.VerticalScrollBarWidth * 4, SystemInformation.HorizontalScrollBarHeight * 4);
-                ResizeGripSize = SystemInformation.HorizontalScrollBarHeight;
-                ResizeBarSize = ResizeGripSize + 1;
-                ResizeBorderSize = ResizeBarSize / 2;
-            }
 
             internal DropDownHolder(PropertyGridView psheet)
             : base()
