@@ -8984,6 +8984,11 @@ namespace System.Windows.Forms
             /// </summary>
             public ListViewItem[] Find(string key, bool searchAllSubItems)
             {
+                if (string.IsNullOrEmpty(key))
+                {
+                    throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
+                }
+
                 ArrayList foundItems = FindInternal(key, searchAllSubItems, this, new ArrayList());
 
                 ListViewItem[] stronglyTypedFoundItems = new ListViewItem[foundItems.Count];
