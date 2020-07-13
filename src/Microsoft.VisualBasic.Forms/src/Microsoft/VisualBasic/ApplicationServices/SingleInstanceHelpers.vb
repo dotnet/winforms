@@ -63,7 +63,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Dim buffer = New Byte(bufferLength - 1) {}
             Using stream As New MemoryStream
                 While True
-                    Dim bytesRead = Await pipeServer.ReadAsync(buffer, 0, bufferLength, cancellationToken).ConfigureAwait(False)
+                    Dim bytesRead = Await pipeServer.ReadAsync(buffer.AsMemory(0, bufferLength), cancellationToken).ConfigureAwait(False)
                     If bytesRead = 0 Then
                         Exit While
                     End If
@@ -86,7 +86,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 serializer.WriteObject(stream, args)
                 content = stream.ToArray()
             End Using
-            Await pipeClient.WriteAsync(content, 0, content.Length, cancellationToken).ConfigureAwait(False)
+            Await pipeClient.WriteAsync(content.AsMemory(0, content.Length), cancellationToken).ConfigureAwait(False)
         End Function
 
     End Module
