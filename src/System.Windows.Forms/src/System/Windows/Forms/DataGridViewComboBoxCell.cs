@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         //private object valueUsedDuringAutoSize  = null;
 
         private static bool isScalingInitialized;
-        private static readonly int OFFSET_2PIXELS = 2;
+        private const int OFFSET_2PIXELS = 2;
         private static int offset2X = OFFSET_2PIXELS;
         private static int offset2Y = OFFSET_2PIXELS;
         private static byte nonXPTriangleHeight = DATAGRIDVIEWCOMBOBOXCELL_nonXPTriangleHeight;

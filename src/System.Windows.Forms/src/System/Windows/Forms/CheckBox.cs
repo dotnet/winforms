@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_CHECKEDCHANGED = new object();
         private static readonly object EVENT_CHECKSTATECHANGED = new object();
         private static readonly object EVENT_APPEARANCECHANGED = new object();
-        static readonly ContentAlignment anyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
+        private const ContentAlignment anyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
 
         private bool autoCheck;
         private bool threeState;

@@ -25,10 +25,10 @@ namespace System.Windows.Forms
         // This is totally a UI Fudge - if we have an image or check margin with
         // no image or checks in it use this - which is consistent with office
         // and an image margin with a 16x16 icon in it.
-        private static readonly int DefaultImageMarginWidth = 24; // 24+1px border - with scaling we add this 1px to new, scaled, field value
-        private static readonly int DefaultImageAndCheckMarginWidth = 46;  // 46+1px border - with scaling we add this 1px to new, scaled, field value
+        private const int DefaultImageMarginWidth = 24; // 24+1px border - with scaling we add this 1px to new, scaled, field value
+        private const int DefaultImageAndCheckMarginWidth = 46;  // 46+1px border - with scaling we add this 1px to new, scaled, field value
 
-        private static readonly int ArrowSize = 10;
+        private const int ArrowSize = 10;
 
         private Size maxItemSize = Size.Empty;
         private Rectangle checkRectangle = Rectangle.Empty;

@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class TableLayoutPanelCodeDomSerializer : CodeDomSerializer
     {
-        private static readonly string s_layoutSettingsPropName = "LayoutSettings";
+        private const string s_layoutSettingsPropName = "LayoutSettings";
 
         public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {

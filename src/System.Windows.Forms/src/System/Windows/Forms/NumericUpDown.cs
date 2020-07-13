@@ -22,11 +22,11 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionNumericUpDown))]
     public class NumericUpDown : UpDownBase, ISupportInitialize
     {
-        private static readonly decimal DefaultValue = decimal.Zero;
-        private static readonly decimal DefaultMinimum = decimal.Zero;
-        private static readonly decimal DefaultMaximum = (decimal)100.0;
+        private const decimal DefaultValue = decimal.Zero;
+        private const decimal DefaultMinimum = decimal.Zero;
+        private const decimal DefaultMaximum = (decimal)100.0;
         private const int DefaultDecimalPlaces = 0;
-        private static readonly decimal DefaultIncrement = decimal.One;
+        private const decimal DefaultIncrement = decimal.One;
         private const bool DefaultThousandsSeparator = false;
         private const bool DefaultHexadecimal = false;
         private const int InvalidValue = -1;

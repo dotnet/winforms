@@ -27,7 +27,7 @@ namespace System.Windows.Forms
     public partial class RadioButton : ButtonBase
     {
         private static readonly object EVENT_CHECKEDCHANGED = new object();
-        private static readonly ContentAlignment anyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
+        private const ContentAlignment anyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
 
         // Used to see if we need to iterate through the autochecked items and modify their tabstops.
         private bool firstfocus = true;

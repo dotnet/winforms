@@ -151,7 +151,7 @@ namespace System.Windows.Forms
         private TreeNodeCollection nodes;
         object userData;
 
-        private readonly static TVIF insertMask =
+        private const TVIF insertMask =
             TVIF.TEXT
             | TVIF.IMAGE
             | TVIF.SELECTEDIMAGE;

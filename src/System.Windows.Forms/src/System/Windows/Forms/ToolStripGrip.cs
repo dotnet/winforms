@@ -20,8 +20,8 @@ namespace System.Windows.Forms
         private static Size DragSize = LayoutUtils.MaxSize;
 
         private static readonly Padding defaultPadding = new Padding(2);
-        private static readonly int gripThicknessDefault = 3;
-        private static readonly int gripThicknessVisualStylesEnabled = 5;
+        private const int gripThicknessDefault = 3;
+        private const int gripThicknessVisualStylesEnabled = 5;
         private Padding scaledDefaultPadding = defaultPadding;
         private int scaledGripThickness = gripThicknessDefault;
         private int scaledGripThicknessVisualStylesEnabled = gripThicknessVisualStylesEnabled;

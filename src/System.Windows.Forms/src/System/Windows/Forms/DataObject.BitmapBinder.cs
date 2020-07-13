@@ -24,8 +24,8 @@ namespace System.Windows.Forms
             // deserialized on desktop. To support this roundtrip,
             // Bitmap type identity is unified to the desktop type during serialization
             // and we use the desktop type name when filtering as well.
-            private static readonly string s_allowedTypeName = "System.Drawing.Bitmap";
-            private static readonly string s_allowedAssemblyName = "System.Drawing";
+            private const string s_allowedTypeName = "System.Drawing.Bitmap";
+            private const string s_allowedAssemblyName = "System.Drawing";
             // PublicKeyToken=b03f5f7f11d50a3a
             private static readonly byte[] s_allowedToken = new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
 
