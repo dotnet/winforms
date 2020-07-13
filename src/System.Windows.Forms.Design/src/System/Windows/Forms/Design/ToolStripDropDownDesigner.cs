@@ -35,14 +35,14 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private bool AutoClose
         {
-            get => (bool)ShadowProperties["AutoClose"];
-            set => ShadowProperties["AutoClose"] = value;
+            get => (bool)ShadowProperties[nameof(AutoClose)];
+            set => ShadowProperties[nameof(AutoClose)] = value;
         }
 
         private bool AllowDrop
         {
-            get => (bool)ShadowProperties["AllowDrop"];
-            set => ShadowProperties["AllowDrop"] = value;
+            get => (bool)ShadowProperties[nameof(AllowDrop)];
+            set => ShadowProperties[nameof(AllowDrop)] = value;
         }
 
         /// <summary>
@@ -582,7 +582,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void ResetAutoClose()
         {
-            ShadowProperties["AutoClose"] = true;
+            ShadowProperties[nameof(AutoClose)] = true;
         }
 
         /// <summary>
@@ -590,7 +590,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void RestoreAutoClose()
         {
-            dropDown.AutoClose = (bool)ShadowProperties["AutoClose"];
+            dropDown.AutoClose = (bool)ShadowProperties[nameof(AutoClose)];
         }
 
         /// <summary>
@@ -598,7 +598,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void ResetAllowDrop()
         {
-            ShadowProperties["AllowDrop"] = false;
+            ShadowProperties[nameof(AllowDrop)] = false;
         }
 
         /// <summary>
@@ -606,7 +606,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void RestoreAllowDrop()
         {
-            dropDown.AutoClose = (bool)ShadowProperties["AllowDrop"];
+            dropDown.AutoClose = (bool)ShadowProperties[nameof(AllowDrop)];
         }
 
         /// <summary>
@@ -724,7 +724,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Since we're shadowing ToolStripDropDown AutoClose, we get called here to determine whether or not to serialize
         /// </summary>
-        private bool ShouldSerializeAutoClose() => (!(bool)ShadowProperties["AutoClose"]);
+        private bool ShouldSerializeAutoClose() => (!(bool)ShadowProperties[nameof(AutoClose)]);
 
         /// <summary>
         /// Since we're shadowing ToolStripDropDown AllowDrop, we get called here to determine whether or not to serialize

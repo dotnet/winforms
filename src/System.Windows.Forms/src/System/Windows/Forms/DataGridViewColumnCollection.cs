@@ -1033,7 +1033,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewColumn.DataGridView != DataGridView)
             {
-                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView, "dataGridViewColumn");
+                throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView, nameof(dataGridViewColumn));
             }
 
             int itemsCount = items.Count;
@@ -1071,7 +1071,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            throw new ArgumentException(string.Format(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), "columnName");
+            throw new ArgumentException(string.Format(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), nameof(columnName));
         }
 
         public virtual void RemoveAt(int index)

@@ -251,7 +251,7 @@ namespace System.Windows.Forms
 
                 if (HotTracking && value != ItemActivation.OneClick)
                 {
-                    throw new ArgumentException(SR.ListViewActivationMustBeOnWhenHotTrackingIsOn, "value");
+                    throw new ArgumentException(SR.ListViewActivationMustBeOnWhenHotTrackingIsOn, nameof(value));
                 }
 
                 if (activation != value)
@@ -1107,7 +1107,7 @@ namespace System.Windows.Forms
                 {
                     if (HotTracking && !value)
                     {
-                        throw new ArgumentException(SR.ListViewHoverMustBeOnWhenHotTrackingIsOn, "value");
+                        throw new ArgumentException(SR.ListViewHoverMustBeOnWhenHotTrackingIsOn, nameof(value));
                     }
 
                     listViewState[LISTVIEWSTATE_hoverSelection] = value;
@@ -3760,7 +3760,7 @@ namespace System.Windows.Forms
 
             if (ch.OwnerListview != null)
             {
-                throw new ArgumentException(string.Format(SR.OnlyOneControl, ch.Text), "ch");
+                throw new ArgumentException(string.Format(SR.OnlyOneControl, ch.Text), nameof(ch));
             }
 
             int idx;

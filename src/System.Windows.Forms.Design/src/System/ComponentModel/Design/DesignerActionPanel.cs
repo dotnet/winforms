@@ -1077,7 +1077,7 @@ namespace System.ComponentModel.Design
             public Line(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             {
                 _serviceProvider = serviceProvider;
-                _actionPanel = actionPanel ?? throw new ArgumentNullException("actionPanel");
+                _actionPanel = actionPanel ?? throw new ArgumentNullException(nameof(actionPanel));
             }
 
             protected DesignerActionPanel ActionPanel

@@ -96,14 +96,14 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private bool CheckOnClick
         {
-            get => (bool)ShadowProperties["CheckOnClick"];
-            set => ShadowProperties["CheckOnClick"] = value;
+            get => (bool)ShadowProperties[nameof(CheckOnClick)];
+            set => ShadowProperties[nameof(CheckOnClick)] = value;
         }
 
         private bool DoubleClickEnabled
         {
-            get => (bool)ShadowProperties["DoubleClickEnabled"];
-            set => ShadowProperties["DoubleClickEnabled"] = value;
+            get => (bool)ShadowProperties[nameof(DoubleClickEnabled)];
+            set => ShadowProperties[nameof(DoubleClickEnabled)] = value;
         }
 
         private ToolStripDropDown DropDown
@@ -2411,12 +2411,12 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Returns true if the visible property should be persisted in code gen.
         /// </summary>
-        private bool ShouldSerializeDoubleClickEnabled() => (bool)ShadowProperties["DoubleClickEnabled"];
+        private bool ShouldSerializeDoubleClickEnabled() => (bool)ShadowProperties[nameof(DoubleClickEnabled)];
 
         /// <summary>
         ///  Returns true if the CheckOnClick property should be persisted in code gen.
         /// </summary>
-        private bool ShouldSerializeCheckOnClick() => (bool)ShadowProperties["CheckOnClick"];
+        private bool ShouldSerializeCheckOnClick() => (bool)ShadowProperties[nameof(CheckOnClick)];
 
         /// <summary>
         ///  Returns true if the CheckOnClick property should be persisted in code gen.

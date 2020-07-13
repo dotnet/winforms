@@ -341,12 +341,12 @@ namespace System.Windows.Forms
                 // strip width must be a positive multiple of image list width
                 if (size.Width == 0 || (size.Width % _imageSize.Width) != 0)
                 {
-                    throw new ArgumentException(SR.ImageListStripBadWidth, "original");
+                    throw new ArgumentException(SR.ImageListStripBadWidth, nameof(original));
                 }
 
                 if (size.Height != _imageSize.Height)
                 {
-                    throw new ArgumentException(SR.ImageListImageTooShort, "original");
+                    throw new ArgumentException(SR.ImageListImageTooShort, nameof(original));
                 }
             }
             else if (!size.Equals(ImageSize))

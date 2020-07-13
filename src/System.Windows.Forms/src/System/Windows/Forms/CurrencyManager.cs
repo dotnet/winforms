@@ -220,7 +220,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentNullException(nameof(dataSource));
                     }
-                    throw new ArgumentException(string.Format(SR.ListManagerSetDataSource, tempList.GetType().FullName), "dataSource");
+                    throw new ArgumentException(string.Format(SR.ListManagerSetDataSource, tempList.GetType().FullName), nameof(dataSource));
                 }
             }
         }

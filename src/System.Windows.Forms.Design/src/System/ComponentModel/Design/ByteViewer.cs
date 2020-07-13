@@ -651,7 +651,7 @@ namespace System.ComponentModel.Design
         {
             if (bytes == null)
             {
-                throw new ArgumentNullException("bytes");
+                throw new ArgumentNullException(nameof(bytes));
             }
 
             if (_dataBuf != null)

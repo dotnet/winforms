@@ -364,11 +364,11 @@ namespace System.Windows.Forms
             }
             if (owner != null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
             {
-                throw new ArgumentException(SR.CantShowMBServiceWithOwner, "options");
+                throw new ArgumentException(SR.CantShowMBServiceWithOwner, nameof(options));
             }
             if (showHelp && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
             {
-                throw new ArgumentException(SR.CantShowMBServiceWithHelp, "options");
+                throw new ArgumentException(SR.CantShowMBServiceWithHelp, nameof(options));
             }
 
             MB style = (showHelp) ? MB.HELP : 0;

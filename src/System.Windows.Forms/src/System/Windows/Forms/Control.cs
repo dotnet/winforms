@@ -5318,7 +5318,7 @@ namespace System.Windows.Forms
 
                 if (!(asyncResult is ThreadMethodEntry entry))
                 {
-                    throw new ArgumentException(SR.ControlBadAsyncResult, "asyncResult");
+                    throw new ArgumentException(SR.ControlBadAsyncResult, nameof(asyncResult));
                 }
                 Debug.Assert(this == entry._caller, "Called BeginInvoke on one control, and the corresponding EndInvoke on a different control");
 
@@ -10751,7 +10751,7 @@ namespace System.Windows.Forms
             {
                 if (_parent != null)
                 {
-                    throw new ArgumentException(SR.TopLevelParentedControl, "value");
+                    throw new ArgumentException(SR.TopLevelParentedControl, nameof(value));
                 }
                 SetState(States.TopLevel, value);
                 // make sure the handle is created before hooking, otherwise a toplevel control that never

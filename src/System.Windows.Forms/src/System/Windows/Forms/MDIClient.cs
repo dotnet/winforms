@@ -433,11 +433,11 @@ namespace System.Windows.Forms
                 }
                 if (!(value is Form) || !((Form)value).IsMdiChild)
                 {
-                    throw new ArgumentException(SR.MDIChildAddToNonMDIParent, "value");
+                    throw new ArgumentException(SR.MDIChildAddToNonMDIParent, nameof(value));
                 }
                 if (owner.CreateThreadId != value.CreateThreadId)
                 {
-                    throw new ArgumentException(SR.AddDifferentThreads, "value");
+                    throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
                 }
                 owner.children.Add((Form)value);
                 base.Add(value);

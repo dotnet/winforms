@@ -108,14 +108,14 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private bool AllowDrop
         {
-            get => (bool)ShadowProperties["AllowDrop"];
+            get => (bool)ShadowProperties[nameof(AllowDrop)];
             set
             {
                 if (value && AllowItemReorder)
                 {
                     throw new ArgumentException(SR.ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue);
                 }
-                ShadowProperties["AllowDrop"] = value;
+                ShadowProperties[nameof(AllowDrop)] = value;
             }
         }
 
@@ -124,14 +124,14 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private bool AllowItemReorder
         {
-            get => (bool)ShadowProperties["AllowItemReorder"];
+            get => (bool)ShadowProperties[nameof(AllowItemReorder)];
             set
             {
                 if (value && AllowDrop)
                 {
                     throw new ArgumentException(SR.ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue);
                 }
-                ShadowProperties["AllowItemReorder"] = value;
+                ShadowProperties[nameof(AllowItemReorder)] = value;
             }
         }
 
@@ -2379,12 +2379,12 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Determines when should the AllowDrop property be serialized.
         /// </summary>
-        private bool ShouldSerializeAllowDrop() => (bool)ShadowProperties["AllowDrop"];
+        private bool ShouldSerializeAllowDrop() => (bool)ShadowProperties[nameof(AllowDrop)];
 
         /// <summary>
         ///  Determines when should the AllowItemReorder property be serialized.
         /// </summary>
-        private bool ShouldSerializeAllowItemReorder() => (bool)ShadowProperties["AllowItemReorder"];
+        private bool ShouldSerializeAllowItemReorder() => (bool)ShadowProperties[nameof(AllowItemReorder)];
 
         /// <summary>
         ///  This is the method that gets called when the Designer has to show thwe InSitu Edit Node,

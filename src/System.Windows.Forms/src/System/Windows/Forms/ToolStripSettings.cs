@@ -27,11 +27,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (bool)this["IsDefault"];
+                return (bool)this[nameof(IsDefault)];
             }
             set
             {
-                this["IsDefault"] = value;
+                this[nameof(IsDefault)] = value;
             }
         }
 
@@ -40,11 +40,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this["ItemOrder"] as string;
+                return this[nameof(ItemOrder)] as string;
             }
             set
             {
-                this["ItemOrder"] = value;
+                this[nameof(ItemOrder)] = value;
             }
         }
 
@@ -53,11 +53,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this["Name"] as string;
+                return this[nameof(Name)] as string;
             }
             set
             {
-                this["Name"] = value;
+                this[nameof(Name)] = value;
             }
         }
 
@@ -67,11 +67,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Point)this["Location"];
+                return (Point)this[nameof(Location)];
             }
             set
             {
-                this["Location"] = value;
+                this[nameof(Location)] = value;
             }
         }
 
@@ -81,11 +81,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (Size)this["Size"];
+                return (Size)this[nameof(Size)];
             }
             set
             {
-                this["Size"] = value;
+                this[nameof(Size)] = value;
             }
         }
 
@@ -94,11 +94,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return this["ToolStripPanelName"] as string;
+                return this[nameof(ToolStripPanelName)] as string;
             }
             set
             {
-                this["ToolStripPanelName"] = value;
+                this[nameof(ToolStripPanelName)] = value;
             }
         }
 
@@ -108,11 +108,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (bool)this["Visible"];
+                return (bool)this[nameof(Visible)];
             }
             set
             {
-                this["Visible"] = value;
+                this[nameof(Visible)] = value;
             }
         }
 

@@ -58,36 +58,36 @@ namespace System.Windows.Forms.Design
 
         public bool ShowImageMargin
         {
-            get => (bool)GetProperty("ShowImageMargin");
+            get => (bool)GetProperty(nameof(ShowImageMargin));
             set
             {
                 if (value != ShowImageMargin)
                 {
-                    ChangeProperty("ShowImageMargin", (object)value);
+                    ChangeProperty(nameof(ShowImageMargin), (object)value);
                 }
             }
         }
 
         public bool ShowCheckMargin
         {
-            get => (bool)GetProperty("ShowCheckMargin");
+            get => (bool)GetProperty(nameof(ShowCheckMargin));
             set
             {
                 if (value != ShowCheckMargin)
                 {
-                    ChangeProperty("ShowCheckMargin", (object)value);
+                    ChangeProperty(nameof(ShowCheckMargin), (object)value);
                 }
             }
         }
 
         public ToolStripRenderMode RenderMode
         {
-            get => (ToolStripRenderMode)GetProperty("RenderMode");
+            get => (ToolStripRenderMode)GetProperty(nameof(RenderMode));
             set
             {
                 if (value != RenderMode)
                 {
-                    ChangeProperty("RenderMode", (object)value);
+                    ChangeProperty(nameof(RenderMode), (object)value);
                 }
             }
         }
