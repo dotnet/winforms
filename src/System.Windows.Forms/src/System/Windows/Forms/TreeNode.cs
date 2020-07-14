@@ -151,7 +151,7 @@ namespace System.Windows.Forms
         private TreeNodeCollection nodes;
         object userData;
 
-        private const TVIF insertMask =
+        private const TVIF InsertMask =
             TVIF.TEXT
             | TVIF.IMAGE
             | TVIF.SELECTEDIMAGE;
@@ -1905,7 +1905,7 @@ namespace System.Windows.Forms
                 {
                     hParent = parent.handle
                 };
-                tvis.item.mask = insertMask;
+                tvis.item.mask = InsertMask;
 
                 TreeNode prev = PrevNode;
                 if (insertFirst || prev == null)

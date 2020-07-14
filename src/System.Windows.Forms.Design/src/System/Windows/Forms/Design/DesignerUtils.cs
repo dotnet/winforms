@@ -100,8 +100,8 @@ namespace System.Windows.Forms.Design
         public static int DEFAULTFORMPADDING = 9;
 
         //use these value to signify ANY of the right, top, left, center, or bottom alignments with the ContentAlignment enum.
-        public const ContentAlignment anyTopAlignment = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
-        public const ContentAlignment anyMiddleAlignment = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
+        public const ContentAlignment AnyTopAlignment = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
+        public const ContentAlignment AnyMiddleAlignment = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
 
         /// <summary>
         ///  Scale all hardcoded sizes if needed
@@ -592,11 +592,11 @@ namespace System.Windows.Forms.Design
             fontHeight = metrics.tmHeight;
 
             // Now add it all up
-            if ((alignment & anyTopAlignment) != 0)
+            if ((alignment & AnyTopAlignment) != 0)
             {
                 return face.Top + fontAscent;
             }
-            else if ((alignment & anyMiddleAlignment) != 0)
+            else if ((alignment & AnyMiddleAlignment) != 0)
             {
                 return face.Top + (face.Height / 2) - (fontHeight / 2) + fontAscent;
             }

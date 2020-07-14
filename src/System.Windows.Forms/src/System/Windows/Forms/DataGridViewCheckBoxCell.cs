@@ -20,11 +20,11 @@ namespace System.Windows.Forms
     /// </summary>
     public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewEditingCell
     {
-        private const DataGridViewContentAlignment anyLeft = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.MiddleLeft | DataGridViewContentAlignment.BottomLeft;
-        private const DataGridViewContentAlignment anyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
-        private const DataGridViewContentAlignment anyCenter = DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.BottomCenter;
-        private const DataGridViewContentAlignment anyBottom = DataGridViewContentAlignment.BottomRight | DataGridViewContentAlignment.BottomCenter | DataGridViewContentAlignment.BottomLeft;
-        private const DataGridViewContentAlignment anyMiddle = DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.MiddleLeft;
+        private const DataGridViewContentAlignment AnyLeft = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.MiddleLeft | DataGridViewContentAlignment.BottomLeft;
+        private const DataGridViewContentAlignment AnyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
+        private const DataGridViewContentAlignment AnyCenter = DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.BottomCenter;
+        private const DataGridViewContentAlignment AnyBottom = DataGridViewContentAlignment.BottomRight | DataGridViewContentAlignment.BottomCenter | DataGridViewContentAlignment.BottomLeft;
+        private const DataGridViewContentAlignment AnyMiddle = DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.MiddleLeft;
 
         private static readonly VisualStyleElement CheckBoxElement = VisualStyleElement.Button.CheckBox.UncheckedNormal;
         private static readonly int PropButtonCellState = PropertyStore.CreateKey();
@@ -1220,12 +1220,12 @@ namespace System.Windows.Forms
             if (valBounds.Width >= checkBoxSize.Width && valBounds.Height >= checkBoxSize.Height && (paint || computeContentBounds))
             {
                 int checkBoxX = 0, checkBoxY = 0;
-                if ((!DataGridView.RightToLeftInternal && (cellStyle.Alignment & anyRight) != 0) ||
-                    (DataGridView.RightToLeftInternal && (cellStyle.Alignment & anyLeft) != 0))
+                if ((!DataGridView.RightToLeftInternal && (cellStyle.Alignment & AnyRight) != 0) ||
+                    (DataGridView.RightToLeftInternal && (cellStyle.Alignment & AnyLeft) != 0))
                 {
                     checkBoxX = valBounds.Right - checkBoxSize.Width;
                 }
-                else if ((cellStyle.Alignment & anyCenter) != 0)
+                else if ((cellStyle.Alignment & AnyCenter) != 0)
                 {
                     checkBoxX = valBounds.Left + (valBounds.Width - checkBoxSize.Width) / 2;
                 }
@@ -1234,11 +1234,11 @@ namespace System.Windows.Forms
                     checkBoxX = valBounds.Left;
                 }
 
-                if ((cellStyle.Alignment & anyBottom) != 0)
+                if ((cellStyle.Alignment & AnyBottom) != 0)
                 {
                     checkBoxY = valBounds.Bottom - checkBoxSize.Height;
                 }
-                else if ((cellStyle.Alignment & anyMiddle) != 0)
+                else if ((cellStyle.Alignment & AnyMiddle) != 0)
                 {
                     checkBoxY = valBounds.Top + (valBounds.Height - checkBoxSize.Height) / 2;
                 }

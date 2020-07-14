@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class TableLayoutPanelCodeDomSerializer : CodeDomSerializer
     {
-        private const string s_layoutSettingsPropName = "LayoutSettings";
+        private const string LayoutSettingsPropName = "LayoutSettings";
 
         public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
@@ -53,12 +53,12 @@ namespace System.Windows.Forms.Design
 
                     if (IsLocalizable(host))
                     {
-                        PropertyDescriptor lsProp = TypeDescriptor.GetProperties(tlp)[s_layoutSettingsPropName];
+                        PropertyDescriptor lsProp = TypeDescriptor.GetProperties(tlp)[LayoutSettingsPropName];
                         object val = (lsProp != null) ? lsProp.GetValue(tlp) : null;
 
                         if (val != null)
                         {
-                            string key = manager.GetName(tlp) + "." + s_layoutSettingsPropName;
+                            string key = manager.GetName(tlp) + "." + LayoutSettingsPropName;
                             SerializeResourceInvariant(manager, key, val);
                         }
                     }
