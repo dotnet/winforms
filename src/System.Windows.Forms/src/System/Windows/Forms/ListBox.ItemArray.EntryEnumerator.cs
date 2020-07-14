@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms
@@ -18,22 +16,22 @@ namespace System.Windows.Forms
             /// </summary>
             private class EntryEnumerator : IEnumerator
             {
-                private readonly ItemArray items;
-                private readonly bool anyBit;
-                private readonly int state;
-                private int current;
-                private readonly int version;
+                private readonly ItemArray _items;
+                private readonly bool _anyBit;
+                private readonly int _state;
+                private int _current;
+                private readonly int _version;
 
                 /// <summary>
                 ///  Creates a new enumerator that will enumerate over the given state.
                 /// </summary>
                 public EntryEnumerator(ItemArray items, int state, bool anyBit)
                 {
-                    this.items = items;
-                    this.state = state;
-                    this.anyBit = anyBit;
-                    version = items.version;
-                    current = -1;
+                    _items = items;
+                    _state = state;
+                    _anyBit = anyBit;
+                    _version = items.Version;
+                    _current = -1;
                 }
 
                 /// <summary>
@@ -41,26 +39,26 @@ namespace System.Windows.Forms
                 /// </summary>
                 bool IEnumerator.MoveNext()
                 {
-                    if (version != items.version)
+                    if (_version != _items.Version)
                     {
                         throw new InvalidOperationException(SR.ListEnumVersionMismatch);
                     }
 
                     while (true)
                     {
-                        if (current < items.count - 1)
+                        if (_current < _items._count - 1)
                         {
-                            current++;
-                            if (anyBit)
+                            _current++;
+                            if (_anyBit)
                             {
-                                if ((items.entries[current].state & state) != 0)
+                                if ((_items._entries[_current].state & _state) != 0)
                                 {
                                     return true;
                                 }
                             }
                             else
                             {
-                                if ((items.entries[current].state & state) == state)
+                                if ((_items._entries[_current].state & _state) == _state)
                                 {
                                     return true;
                                 }
@@ -68,7 +66,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            current = items.count;
+                            _current = _items._count;
                             return false;
                         }
                     }
@@ -79,12 +77,12 @@ namespace System.Windows.Forms
                 /// </summary>
                 void IEnumerator.Reset()
                 {
-                    if (version != items.version)
+                    if (_version != _items.Version)
                     {
                         throw new InvalidOperationException(SR.ListEnumVersionMismatch);
                     }
 
-                    current = -1;
+                    _current = -1;
                 }
 
                 /// <summary>
@@ -94,12 +92,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        if (current == -1 || current == items.count)
+                        if (_current == -1 || _current == _items._count)
                         {
                             throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
                         }
 
-                        return items.entries[current].item;
+                        return _items._entries[_current].item;
                     }
                 }
             }

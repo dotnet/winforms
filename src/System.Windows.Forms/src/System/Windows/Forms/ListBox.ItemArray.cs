@@ -27,31 +27,24 @@ namespace System.Windows.Forms
         /// </summary>
         internal partial class ItemArray : IComparer
         {
-            private static int lastMask = 1;
+            private static int s_lastMask = 1;
 
-            private readonly ListControl listControl;
-            private Entry[] entries;
-            private int count;
-            private int version;
+            private readonly ListControl _listControl;
+            private Entry[] _entries;
+            private int _count;
 
             public ItemArray(ListControl listControl)
             {
-                this.listControl = listControl;
+                _listControl = listControl;
             }
 
-            internal IReadOnlyList<Entry> Entries => entries;
+            internal IReadOnlyList<Entry> Entries => _entries;
 
             /// <summary>
             ///  The version of this array.  This number changes with each
             ///  change to the item list.
             /// </summary>
-            public int Version
-            {
-                get
-                {
-                    return version;
-                }
-            }
+            public int Version { get; private set; }
 
             /// <summary>
             ///  Adds the given item to the array.  The state is initially
@@ -60,9 +53,9 @@ namespace System.Windows.Forms
             public object Add(object item)
             {
                 EnsureSpace(1);
-                version++;
-                entries[count] = new Entry(item);
-                return entries[count++];
+                Version++;
+                _entries[_count] = new Entry(item);
+                return _entries[_count++];
             }
 
             /// <summary>
@@ -77,9 +70,9 @@ namespace System.Windows.Forms
                 EnsureSpace(items.Count);
                 foreach (object i in items)
                 {
-                    entries[count++] = new Entry(i);
+                    _entries[_count++] = new Entry(i);
                 }
-                version++;
+                Version++;
             }
 
             /// <summary>
@@ -87,13 +80,13 @@ namespace System.Windows.Forms
             /// </summary>
             public void Clear()
             {
-                if (count > 0)
+                if (_count > 0)
                 {
-                    Array.Clear(entries, 0, count);
+                    Array.Clear(_entries, 0, _count);
                 }
 
-                count = 0;
-                version++;
+                _count = 0;
+                Version++;
             }
 
             /// <summary>
@@ -101,9 +94,9 @@ namespace System.Windows.Forms
             /// </summary>
             public static int CreateMask()
             {
-                int mask = lastMask;
-                lastMask <<= 1;
-                Debug.Assert(lastMask > mask, "We have overflowed our state mask.");
+                int mask = s_lastMask;
+                s_lastMask <<= 1;
+                Debug.Assert(s_lastMask > mask, "We have overflowed our state mask.");
                 return mask;
             }
 
@@ -113,16 +106,16 @@ namespace System.Windows.Forms
             /// </summary>
             private void EnsureSpace(int elements)
             {
-                if (entries == null)
+                if (_entries == null)
                 {
-                    entries = new Entry[Math.Max(elements, 4)];
+                    _entries = new Entry[Math.Max(elements, 4)];
                 }
-                else if (count + elements >= entries.Length)
+                else if (_count + elements >= _entries.Length)
                 {
-                    int newLength = Math.Max(entries.Length * 2, entries.Length + elements);
+                    int newLength = Math.Max(_entries.Length * 2, _entries.Length + elements);
                     Entry[] newEntries = new Entry[newLength];
-                    entries.CopyTo(newEntries, 0);
-                    entries = newEntries;
+                    _entries.CopyTo(newEntries, 0);
+                    _entries = newEntries;
                 }
             }
 
@@ -138,9 +131,9 @@ namespace System.Windows.Forms
 
                 // More complex; we must compute this index.
                 int calcIndex = -1;
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < _count; i++)
                 {
-                    if ((entries[i].state & stateMask) != 0)
+                    if ((_entries[i].state & stateMask) != 0)
                     {
                         calcIndex++;
                         if (calcIndex == virtualIndex)
@@ -161,7 +154,7 @@ namespace System.Windows.Forms
                 // If mask is zero, then just give the main count
                 if (stateMask == 0)
                 {
-                    return count;
+                    return _count;
                 }
 
                 // more complex:  must provide a count of items
@@ -169,9 +162,9 @@ namespace System.Windows.Forms
 
                 int filteredCount = 0;
 
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < _count; i++)
                 {
-                    if ((entries[i].state & stateMask) != 0)
+                    if ((_entries[i].state & stateMask) != 0)
                     {
                         filteredCount++;
                     }
@@ -211,7 +204,7 @@ namespace System.Windows.Forms
                     throw new IndexOutOfRangeException();
                 }
 
-                return entries[actualIndex].item;
+                return _entries[actualIndex].item;
             }
             /// <summary>
             ///  Gets the item at the given index.  The index is
@@ -226,7 +219,7 @@ namespace System.Windows.Forms
                     throw new IndexOutOfRangeException();
                 }
 
-                return entries[actualIndex];
+                return _entries[actualIndex];
             }
             /// <summary>
             ///  Returns true if the requested state mask is set.
@@ -234,7 +227,7 @@ namespace System.Windows.Forms
             /// </summary>
             public bool GetState(int index, int stateMask)
             {
-                return ((entries[index].state & stateMask) == stateMask);
+                return ((_entries[index].state & stateMask) == stateMask);
             }
 
             /// <summary>
@@ -245,12 +238,12 @@ namespace System.Windows.Forms
             {
                 int virtualIndex = -1;
 
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < _count; i++)
                 {
-                    if (stateMask == 0 || (entries[i].state & stateMask) != 0)
+                    if (stateMask == 0 || (_entries[i].state & stateMask) != 0)
                     {
                         virtualIndex++;
-                        if (entries[i].item.Equals(item))
+                        if (_entries[i].item.Equals(item))
                         {
                             return virtualIndex;
                         }
@@ -269,12 +262,12 @@ namespace System.Windows.Forms
             {
                 int virtualIndex = -1;
 
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < _count; i++)
                 {
-                    if (stateMask == 0 || (entries[i].state & stateMask) != 0)
+                    if (stateMask == 0 || (_entries[i].state & stateMask) != 0)
                     {
                         virtualIndex++;
-                        if (entries[i] == identifier)
+                        if (_entries[i] == identifier)
                         {
                             return virtualIndex;
                         }
@@ -292,14 +285,14 @@ namespace System.Windows.Forms
             {
                 EnsureSpace(1);
 
-                if (index < count)
+                if (index < _count)
                 {
-                    System.Array.Copy(entries, index, entries, index + 1, count - index);
+                    System.Array.Copy(_entries, index, _entries, index + 1, _count - index);
                 }
 
-                entries[index] = new Entry(item);
-                count++;
-                version++;
+                _entries[index] = new Entry(item);
+                _count++;
+                Version++;
             }
 
             /// <summary>
@@ -321,13 +314,13 @@ namespace System.Windows.Forms
             /// </summary>
             public void RemoveAt(int index)
             {
-                count--;
-                for (int i = index; i < count; i++)
+                _count--;
+                for (int i = index; i < _count; i++)
                 {
-                    entries[i] = entries[i + 1];
+                    _entries[i] = _entries[i + 1];
                 }
-                entries[count] = null;
-                version++;
+                _entries[_count] = null;
+                Version++;
             }
 
             /// <summary>
@@ -335,7 +328,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void SetItem(int index, object item)
             {
-                entries[index].item = item;
+                _entries[index].item = item;
             }
 
             /// <summary>
@@ -345,13 +338,13 @@ namespace System.Windows.Forms
             {
                 if (value)
                 {
-                    entries[index].state |= stateMask;
+                    _entries[index].state |= stateMask;
                 }
                 else
                 {
-                    entries[index].state &= ~stateMask;
+                    _entries[index].state &= ~stateMask;
                 }
-                version++;
+                Version++;
             }
 
             /// <summary>
@@ -359,7 +352,7 @@ namespace System.Windows.Forms
             /// </summary>
             public int BinarySearch(object element)
             {
-                return Array.BinarySearch(entries, 0, count, element, this);
+                return Array.BinarySearch(_entries, 0, _count, element, this);
             }
 
             /// <summary>
@@ -367,7 +360,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Sort()
             {
-                Array.Sort(entries, 0, count, this);
+                Array.Sort(_entries, 0, _count, this);
             }
 
             public void Sort(Array externalArray)
@@ -391,20 +384,20 @@ namespace System.Windows.Forms
                     return 1; //item2 is null, so item 1 is greater
                 }
 
-                if (item1 is Entry)
+                if (item1 is Entry entry1)
                 {
-                    item1 = ((Entry)item1).item;
+                    item1 = entry1.item;
                 }
 
-                if (item2 is Entry)
+                if (item2 is Entry entry2)
                 {
-                    item2 = ((Entry)item2).item;
+                    item2 = entry2.item;
                 }
 
-                string itemName1 = listControl.GetItemText(item1);
-                string itemName2 = listControl.GetItemText(item2);
+                string itemName1 = _listControl.GetItemText(item1);
+                string itemName2 = _listControl.GetItemText(item2);
 
-                CompareInfo compInfo = (Application.CurrentCulture).CompareInfo;
+                CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
                 return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
             }
         }
