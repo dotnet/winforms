@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -20,7 +18,7 @@ namespace System.Windows.Forms
         public class ObjectCollection : IList
         {
             private readonly ListBox _owner;
-            private ItemArray _items;
+            private ItemArray _items = null!;
 
             public ObjectCollection(ListBox owner)
             {
@@ -171,7 +169,7 @@ namespace System.Windows.Forms
                 return index;
             }
 
-            int IList.Add(object item) => Add(item);
+            int IList.Add(object? item) => Add(item!);
 
             public void AddRange(ObjectCollection value)
             {
@@ -240,6 +238,12 @@ namespace System.Windows.Forms
                 }
             }
 
+            object? IList.this[int index]
+            {
+                get => this[index];
+                set => this[index] = value!;
+            }
+
             /// <summary>
             ///  Removes all items from the ListBox.
             /// </summary>
@@ -276,6 +280,8 @@ namespace System.Windows.Forms
             {
                 return IndexOf(value) != -1;
             }
+
+            bool IList.Contains(object? value) => Contains(value!);
 
             /// <summary>
             ///  Copies the ListBox Items collection to a destination array.
@@ -322,6 +328,8 @@ namespace System.Windows.Forms
 
                 return InnerArray.IndexOf(value, 0);
             }
+
+            int IList.IndexOf(object? value) => IndexOf(value!);
 
             internal int IndexOfIdentifier(object value)
             {
@@ -389,6 +397,8 @@ namespace System.Windows.Forms
                 _owner.UpdateHorizontalExtent();
             }
 
+            void IList.Insert(int index, object? item) => Insert(index, item!);
+
             /// <summary>
             ///  Removes the given item from the ListBox, provided that it is
             ///  actually in the list.
@@ -403,6 +413,8 @@ namespace System.Windows.Forms
                     RemoveAt(index);
                 }
             }
+
+            void IList.Remove(object? value) => Remove(value!);
 
             /// <summary>
             ///  Removes an item from the ListBox at the given index.

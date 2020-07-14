@@ -10137,18 +10137,18 @@ System.Windows.Forms.InputLanguageCollection.this[int index].get -> System.Windo
 ~System.Windows.Forms.ListBox.IntegerCollection.CopyTo(System.Array destination, int index) -> void
 ~System.Windows.Forms.ListBox.IntegerCollection.IntegerCollection(System.Windows.Forms.ListBox owner) -> void
 ~System.Windows.Forms.ListBox.Items.get -> System.Windows.Forms.ListBox.ObjectCollection
-~System.Windows.Forms.ListBox.ObjectCollection.Add(object item) -> int
-~System.Windows.Forms.ListBox.ObjectCollection.AddRange(System.Windows.Forms.ListBox.ObjectCollection value) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.AddRange(object[] items) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.Contains(object value) -> bool
-~System.Windows.Forms.ListBox.ObjectCollection.CopyTo(object[] destination, int arrayIndex) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListBox.ObjectCollection.IndexOf(object value) -> int
-~System.Windows.Forms.ListBox.ObjectCollection.Insert(int index, object item) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox owner) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox owner, System.Windows.Forms.ListBox.ObjectCollection value) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox owner, object[] value) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.Remove(object value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.Add(object! item) -> int
+System.Windows.Forms.ListBox.ObjectCollection.AddRange(System.Windows.Forms.ListBox.ObjectCollection! value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.AddRange(object![]! items) -> void
+System.Windows.Forms.ListBox.ObjectCollection.Contains(object! value) -> bool
+System.Windows.Forms.ListBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
+System.Windows.Forms.ListBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListBox.ObjectCollection.IndexOf(object! value) -> int
+System.Windows.Forms.ListBox.ObjectCollection.Insert(int index, object! item) -> void
+System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner) -> void
+System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner, System.Windows.Forms.ListBox.ObjectCollection! value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner, object![]! value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.Remove(object! value) -> void
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.CopyTo(System.Array destination, int index) -> void
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.SelectedIndexCollection(System.Windows.Forms.ListBox owner) -> void
@@ -12998,8 +12998,8 @@ static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.
 ~virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs e) -> void
 ~virtual System.Windows.Forms.ListBox.AddItemsCore(object[] value) -> void
 ~virtual System.Windows.Forms.ListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection
-~virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].get -> object
-~virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].set -> void
+virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].get -> object!
+virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.ListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ListControl.OnDataSourceChanged(System.EventArgs e) -> void
