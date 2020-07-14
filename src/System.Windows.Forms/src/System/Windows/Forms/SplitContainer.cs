@@ -1380,6 +1380,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel2MinSize), value, 0));
             }
+
             if (Orientation == Orientation.Vertical)
             {
                 if (DesignMode && Width != DefaultSize.Width && value + Panel1MinSize + SplitterWidth > Width)
@@ -1394,10 +1395,23 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel2MinSize), value));
                 }
             }
+
             panel2MinSize = value;
-            if (value > Panel2.Width)
+            if (Orientation == Orientation.Vertical)
             {
-                SplitterDistanceInternal = Panel2.Width + SplitterWidthInternal;  //Set the Splitter Distance to the start of Panel2
+                if (Panel2.Width < value)
+                {
+                    // Set the Splitter Distance to the start of Panel2
+                    SplitterDistanceInternal = Math.Max(Width - value - SplitterWidthInternal, 0);
+                }
+            }
+            else
+            {
+                if (Panel2.Height < value)
+                {
+                    // Set the Splitter Distance to the start of Panel2
+                    SplitterDistanceInternal = Math.Max(Height - value - SplitterWidthInternal, 0);
+                }
             }
         }
 
