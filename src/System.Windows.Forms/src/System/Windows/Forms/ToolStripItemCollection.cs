@@ -241,7 +241,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Searches for Items by their Name property, builds up an array
         ///  of all the controls that match.
-            /// </summary>
+        /// </summary>
         public ToolStripItem[] Find(string key, bool searchAllChildren)
         {
             if ((key == null) || (key.Length == 0))
