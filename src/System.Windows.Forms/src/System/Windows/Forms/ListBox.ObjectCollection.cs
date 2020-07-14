@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -19,20 +19,21 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class ObjectCollection : IList
         {
-            private readonly ListBox owner;
-            private ItemArray items;
+            private readonly ListBox _owner;
+            private ItemArray _items;
 
             public ObjectCollection(ListBox owner)
             {
-                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
             /// <summary>
             ///  Initializes a new instance of ListBox.ObjectCollection based on another ListBox.ObjectCollection.
             /// </summary>
-            public ObjectCollection(ListBox owner, ObjectCollection value) : this(owner)
+            public ObjectCollection(ListBox owner, ObjectCollection value)
+                : this(owner)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -43,9 +44,10 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Initializes a new instance of ListBox.ObjectCollection containing any array of objects.
             /// </summary>
-            public ObjectCollection(ListBox owner, object[] value) : this(owner)
+            public ObjectCollection(ListBox owner, object[] value)
+                : this(owner)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -56,13 +58,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the number of items.
             /// </summary>
-            public int Count
-            {
-                get
-                {
-                    return InnerArray.GetCount(0);
-                }
-            }
+            public int Count => InnerArray.GetCount(0);
 
             /// <summary>
             ///  Internal access to the actual data store.
@@ -71,45 +67,21 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (items == null)
+                    if (_items is null)
                     {
-                        items = new ItemArray(owner);
+                        _items = new ItemArray(_owner);
                     }
-                    return items;
+                    return _items;
                 }
             }
 
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            object ICollection.SyncRoot => this;
 
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool ICollection.IsSynchronized => false;
 
-            bool IList.IsFixedSize
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool IList.IsFixedSize => false;
 
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            public bool IsReadOnly => false;
 
             /// <summary>
             ///  Adds an item to the List box. For an unsorted List box, the item is
@@ -122,20 +94,21 @@ namespace System.Windows.Forms
             /// </summary>
             public int Add(object item)
             {
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
                 int index = AddInternal(item);
-                owner.UpdateHorizontalExtent();
+                _owner.UpdateHorizontalExtent();
                 return index;
             }
 
             private int AddInternal(object item)
             {
-                if (item == null)
+                if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
+
                 int index = -1;
-                if (!owner.sorted)
+                if (!_owner.sorted)
                 {
                     InnerArray.Add(item);
                 }
@@ -146,8 +119,9 @@ namespace System.Windows.Forms
                         index = InnerArray.BinarySearch(item);
                         if (index < 0)
                         {
-                            index = ~index; // getting the index of the first element that is larger than the search value
-                                            //this index will be used for insert
+                            // getting the index of the first element that is larger than the search value
+                            //this index will be used for insert
+                            index = ~index;
                         }
                     }
                     else
@@ -162,26 +136,26 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (owner.sorted)
+                    if (_owner.sorted)
                     {
-                        if (owner.IsHandleCreated)
+                        if (_owner.IsHandleCreated)
                         {
-                            owner.NativeInsert(index, item);
-                            owner.UpdateMaxItemWidth(item, false);
-                            if (owner.selectedItems != null)
+                            _owner.NativeInsert(index, item);
+                            _owner.UpdateMaxItemWidth(item, false);
+                            if (_owner.selectedItems != null)
                             {
                                 // Sorting may throw the LB contents and the selectedItem array out of synch.
-                                owner.selectedItems.Dirty();
+                                _owner.selectedItems.Dirty();
                             }
                         }
                     }
                     else
                     {
                         index = Count - 1;
-                        if (owner.IsHandleCreated)
+                        if (_owner.IsHandleCreated)
                         {
-                            owner.NativeAdd(item);
-                            owner.UpdateMaxItemWidth(item, false);
+                            _owner.NativeAdd(item);
+                            _owner.UpdateMaxItemWidth(item, false);
                         }
                     }
                     successful = true;
@@ -197,38 +171,35 @@ namespace System.Windows.Forms
                 return index;
             }
 
-            int IList.Add(object item)
-            {
-                return Add(item);
-            }
+            int IList.Add(object item) => Add(item);
 
             public void AddRange(ObjectCollection value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                owner.CheckNoDataSource();
-                AddRangeInternal((ICollection)value);
+                _owner.CheckNoDataSource();
+                AddRangeInternal(value);
             }
 
             public void AddRange(object[] items)
             {
-                if (items == null)
+                if (items is null)
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
 
-                owner.CheckNoDataSource();
-                AddRangeInternal((ICollection)items);
+                _owner.CheckNoDataSource();
+                AddRangeInternal(items);
             }
 
             internal void AddRangeInternal(ICollection items)
             {
                 Debug.Assert(items != null);
 
-                owner.BeginUpdate();
+                _owner.BeginUpdate();
                 try
                 {
                     foreach (object item in items)
@@ -241,8 +212,8 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    owner.UpdateHorizontalExtent();
-                    owner.EndUpdate();
+                    _owner.UpdateHorizontalExtent();
+                    _owner.EndUpdate();
                 }
             }
 
@@ -264,7 +235,7 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    owner.CheckNoDataSource();
+                    _owner.CheckNoDataSource();
                     SetItemInternal(index, value);
                 }
             }
@@ -274,7 +245,7 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual void Clear()
             {
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
                 ClearInternal();
             }
 
@@ -286,19 +257,19 @@ namespace System.Windows.Forms
                 //update the width.. to reset Scrollbars..
                 // Clear the selection state.
                 //
-                int cnt = owner.Items.Count;
+                int cnt = _owner.Items.Count;
                 for (int i = 0; i < cnt; i++)
                 {
-                    owner.UpdateMaxItemWidth(InnerArray.GetItem(i, 0), true);
+                    _owner.UpdateMaxItemWidth(InnerArray.GetItem(i, 0), true);
                 }
 
-                if (owner.IsHandleCreated)
+                if (_owner.IsHandleCreated)
                 {
-                    owner.NativeClear();
+                    _owner.NativeClear();
                 }
                 InnerArray.Clear();
-                owner.maxWidth = -1;
-                owner.UpdateHorizontalExtent();
+                _owner.maxWidth = -1;
+                _owner.UpdateHorizontalExtent();
             }
 
             public bool Contains(object value)
@@ -311,7 +282,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
-                if (destination == null)
+                if (destination is null)
                 {
                     throw new ArgumentNullException(nameof(destination));
                 }
@@ -325,7 +296,7 @@ namespace System.Windows.Forms
 
             void ICollection.CopyTo(Array destination, int index)
             {
-                if (destination == null)
+                if (destination is null)
                 {
                     throw new ArgumentNullException(nameof(destination));
                 }
@@ -340,14 +311,11 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Returns an enumerator for the ListBox Items collection.
             /// </summary>
-            public IEnumerator GetEnumerator()
-            {
-                return InnerArray.GetEnumerator(0);
-            }
+            public IEnumerator GetEnumerator() => InnerArray.GetEnumerator(0);
 
             public int IndexOf(object value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -357,7 +325,7 @@ namespace System.Windows.Forms
 
             internal int IndexOfIdentifier(object value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -376,14 +344,14 @@ namespace System.Windows.Forms
             /// </summary>
             public void Insert(int index, object item)
             {
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
 
                 if (index < 0 || index > InnerArray.GetCount(0))
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                if (item == null)
+                if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
@@ -391,21 +359,21 @@ namespace System.Windows.Forms
                 // If the List box is sorted, then nust treat this like an add
                 // because we are going to twiddle the index anyway.
                 //
-                if (owner.sorted)
+                if (_owner.sorted)
                 {
                     Add(item);
                 }
                 else
                 {
                     InnerArray.Insert(index, item);
-                    if (owner.IsHandleCreated)
+                    if (_owner.IsHandleCreated)
                     {
                         bool successful = false;
 
                         try
                         {
-                            owner.NativeInsert(index, item);
-                            owner.UpdateMaxItemWidth(item, false);
+                            _owner.NativeInsert(index, item);
+                            _owner.UpdateMaxItemWidth(item, false);
                             successful = true;
                         }
                         finally
@@ -417,7 +385,8 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                owner.UpdateHorizontalExtent();
+
+                _owner.UpdateHorizontalExtent();
             }
 
             /// <summary>
@@ -426,7 +395,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Remove(object value)
             {
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
 
                 int index = InnerArray.IndexOf(value, 0);
                 if (index != -1)
@@ -440,30 +409,30 @@ namespace System.Windows.Forms
             /// </summary>
             public void RemoveAt(int index)
             {
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerArray.GetCount(0))
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
+                _owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
 
                 // Update InnerArray before calling NativeRemoveAt to ensure that when
                 // SelectedIndexChanged is raised (by NativeRemoveAt), InnerArray's state matches wrapped LB state.
                 InnerArray.RemoveAt(index);
 
-                if (owner.IsHandleCreated)
+                if (_owner.IsHandleCreated)
                 {
-                    owner.NativeRemoveAt(index);
+                    _owner.NativeRemoveAt(index);
                 }
 
-                owner.UpdateHorizontalExtent();
+                _owner.UpdateHorizontalExtent();
             }
 
             internal void SetItemInternal(int index, object value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -473,23 +442,23 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
+                _owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
                 InnerArray.SetItem(index, value);
 
                 // If the native control has been created, and the display text of the new list item object
                 // is different to the current text in the native list item, recreate the native list item...
-                if (owner.IsHandleCreated)
+                if (_owner.IsHandleCreated)
                 {
-                    bool selected = (owner.SelectedIndex == index);
-                    if (string.Compare(owner.GetItemText(value), owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0)
+                    bool selected = (_owner.SelectedIndex == index);
+                    if (string.Compare(_owner.GetItemText(value), _owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0)
                     {
-                        owner.NativeRemoveAt(index);
-                        owner.SelectedItems.SetSelected(index, false);
-                        owner.NativeInsert(index, value);
-                        owner.UpdateMaxItemWidth(value, false);
+                        _owner.NativeRemoveAt(index);
+                        _owner.SelectedItems.SetSelected(index, false);
+                        _owner.NativeInsert(index, value);
+                        _owner.UpdateMaxItemWidth(value, false);
                         if (selected)
                         {
-                            owner.SelectedIndex = index;
+                            _owner.SelectedIndex = index;
                         }
                     }
                     else
@@ -497,12 +466,12 @@ namespace System.Windows.Forms
                         // FOR COMPATIBILITY REASONS
                         if (selected)
                         {
-                            owner.OnSelectedIndexChanged(EventArgs.Empty); //will fire selectedvaluechanged
+                            _owner.OnSelectedIndexChanged(EventArgs.Empty); // will fire selectedvaluechanged
                         }
                     }
                 }
-                owner.UpdateHorizontalExtent();
+                _owner.UpdateHorizontalExtent();
             }
-        } // end ObjectCollection
+        }
     }
 }
