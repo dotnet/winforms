@@ -4,14 +4,13 @@
 
 #nullable disable
 
-using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using static Interop;
-using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
@@ -223,7 +222,7 @@ namespace System.Windows.Forms
             get
             {
                 string filter = _filter;
-                ArrayList extensions = new ArrayList();
+                List<string> extensions = new List<string>();
 
                 // First extension is the default one. It's not expected that DefaultExt
                 // is not in the filters list, but this is legal.
@@ -255,9 +254,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                string[] temp = new string[extensions.Count];
-                extensions.CopyTo(temp, 0);
-                return temp;
+                return extensions.ToArray();
             }
         }
 
@@ -467,7 +464,7 @@ namespace System.Windows.Forms
             {
                 directory += "\\";
             }
-            ArrayList names = new ArrayList();
+            List<string> names = new List<string>();
             do
             {
                 if (fileName[0] != '\\' && (fileName.Length <= 3 ||
@@ -480,9 +477,7 @@ namespace System.Windows.Forms
                 fileName = charBuffer.GetString();
             } while (fileName.Length > 0);
 
-            string[] temp = new string[names.Count];
-            names.CopyTo(temp, 0);
-            return temp;
+            return names.ToArray();
         }
 
         /// <summary>
