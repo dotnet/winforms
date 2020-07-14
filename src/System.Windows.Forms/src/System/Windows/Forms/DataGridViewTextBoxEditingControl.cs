@@ -12,9 +12,9 @@ namespace System.Windows.Forms
 {
     public class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewEditingControl
     {
-        private static readonly DataGridViewContentAlignment anyTop = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.TopRight;
-        private static readonly DataGridViewContentAlignment anyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
-        private static readonly DataGridViewContentAlignment anyCenter = DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.BottomCenter;
+        private const DataGridViewContentAlignment AnyTop = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.TopRight;
+        private const DataGridViewContentAlignment AnyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
+        private const DataGridViewContentAlignment AnyCenter = DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.BottomCenter;
 
         private DataGridView dataGridView;
         private bool valueChanged;
@@ -126,7 +126,7 @@ namespace System.Windows.Forms
                 WordWrap = true;
             }
             TextAlign = TranslateAlignment(dataGridViewCellStyle.Alignment);
-            repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & anyTop) == 0);
+            repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & AnyTop) == 0);
         }
 
         public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
@@ -288,11 +288,11 @@ namespace System.Windows.Forms
 
         private static HorizontalAlignment TranslateAlignment(DataGridViewContentAlignment align)
         {
-            if ((align & anyRight) != 0)
+            if ((align & AnyRight) != 0)
             {
                 return HorizontalAlignment.Right;
             }
-            else if ((align & anyCenter) != 0)
+            else if ((align & AnyCenter) != 0)
             {
                 return HorizontalAlignment.Center;
             }

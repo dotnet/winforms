@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Layout
         };
 
         // A good, short test string for measuring control height.
-        public readonly static string TestString = "j^";
+        public const string TestString = "j^";
 
         // Returns the size of the largest string in the given collection. Non-string objects are converted
         // with ToString(). Uses OldMeasureString, not GDI+. Does not support multiline.

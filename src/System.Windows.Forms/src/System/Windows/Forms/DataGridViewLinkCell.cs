@@ -15,9 +15,9 @@ namespace System.Windows.Forms
 {
     public partial class DataGridViewLinkCell : DataGridViewCell
     {
-        private static readonly DataGridViewContentAlignment anyLeft = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.MiddleLeft | DataGridViewContentAlignment.BottomLeft;
-        private static readonly DataGridViewContentAlignment anyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
-        private static readonly DataGridViewContentAlignment anyBottom = DataGridViewContentAlignment.BottomRight | DataGridViewContentAlignment.BottomCenter | DataGridViewContentAlignment.BottomLeft;
+        private const DataGridViewContentAlignment AnyLeft = DataGridViewContentAlignment.TopLeft | DataGridViewContentAlignment.MiddleLeft | DataGridViewContentAlignment.BottomLeft;
+        private const DataGridViewContentAlignment AnyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
+        private const DataGridViewContentAlignment AnyBottom = DataGridViewContentAlignment.BottomRight | DataGridViewContentAlignment.BottomCenter | DataGridViewContentAlignment.BottomLeft;
 
         private static readonly Type defaultFormattedValueType = typeof(string);
         private static readonly Type defaultValueType = typeof(object);
@@ -645,7 +645,7 @@ namespace System.Windows.Forms
                     case DataGridViewFreeDimension.Width:
                         {
                             int maxHeight = constraintSize.Height - borderAndPaddingHeights - DATAGRIDVIEWLINKCELL_verticalTextMarginTop - DATAGRIDVIEWLINKCELL_verticalTextMarginBottom;
-                            if ((cellStyle.Alignment & anyBottom) != 0)
+                            if ((cellStyle.Alignment & AnyBottom) != 0)
                             {
                                 maxHeight--;
                             }
@@ -714,7 +714,7 @@ namespace System.Windows.Forms
             if (freeDimension != DataGridViewFreeDimension.Width)
             {
                 preferredSize.Height += DATAGRIDVIEWLINKCELL_verticalTextMarginTop + DATAGRIDVIEWLINKCELL_verticalTextMarginBottom + borderAndPaddingHeights;
-                if ((cellStyle.Alignment & anyBottom) != 0)
+                if ((cellStyle.Alignment & AnyBottom) != 0)
                 {
                     preferredSize.Height += DATAGRIDVIEWLINKCELL_verticalTextMarginBottom;
                 }
@@ -1000,7 +1000,7 @@ namespace System.Windows.Forms
                 valBounds.Offset(DATAGRIDVIEWLINKCELL_horizontalTextMarginLeft, DATAGRIDVIEWLINKCELL_verticalTextMarginTop);
                 valBounds.Width -= DATAGRIDVIEWLINKCELL_horizontalTextMarginLeft + DATAGRIDVIEWLINKCELL_horizontalTextMarginRight;
                 valBounds.Height -= DATAGRIDVIEWLINKCELL_verticalTextMarginTop + DATAGRIDVIEWLINKCELL_verticalTextMarginBottom;
-                if ((cellStyle.Alignment & anyBottom) != 0)
+                if ((cellStyle.Alignment & AnyBottom) != 0)
                 {
                     valBounds.Height -= DATAGRIDVIEWLINKCELL_verticalTextMarginBottom;
                 }
@@ -1024,12 +1024,12 @@ namespace System.Windows.Forms
                                                                                         flags,
                                                                                         cellStyle,
                                                                                         LinkState == LinkState.Hover ? hoverFont : linkFont);
-                            if ((cellStyle.Alignment & anyLeft) != 0)
+                            if ((cellStyle.Alignment & AnyLeft) != 0)
                             {
                                 focusBounds.X--;
                                 focusBounds.Width++;
                             }
-                            else if ((cellStyle.Alignment & anyRight) != 0)
+                            else if ((cellStyle.Alignment & AnyRight) != 0)
                             {
                                 focusBounds.X++;
                                 focusBounds.Width++;

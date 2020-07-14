@@ -12,8 +12,8 @@ namespace Microsoft.VisualBasic.MyServices.Tests
     // File tests cloned from Microsoft.VisualBasic.FileIO.Tests.FileSystemTests.
     public class FileSystemProxyTests : Microsoft.VisualBasic.Tests.FileCleanupTestBase
     {
-        private static readonly string DestData = "xXy";
-        private static readonly string SourceData = "aAb";
+        private const string DestData = "xXy";
+        private const string SourceData = "aAb";
 
         private readonly FileSystemProxy _fileSystem = new Microsoft.VisualBasic.Devices.ServerComputer().FileSystem;
 

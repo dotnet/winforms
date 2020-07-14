@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_CHECKEDCHANGED = new object();
         private static readonly object EVENT_CHECKSTATECHANGED = new object();
         private static readonly object EVENT_APPEARANCECHANGED = new object();
-        static readonly ContentAlignment anyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
+        private const ContentAlignment AnyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
 
         private bool autoCheck;
         private bool threeState;
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
                     // Determine the alignment of the check box
                     //
                     ContentAlignment align = RtlTranslateContent(CheckAlign);
-                    if ((int)(align & anyRight) != 0)
+                    if ((int)(align & AnyRight) != 0)
                     {
                         cp.Style |= (int)User32.BS.RIGHTBUTTON;
                     }

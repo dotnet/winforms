@@ -47,8 +47,8 @@ namespace System.Windows.Forms
         // arrows are rendered as isosceles triangles, whose heights are half the base in order to have 45 degree angles
         // Offset2X is half of the base
         // Offset2Y is height of the isosceles triangle
-        private static readonly int OFFSET_2PIXELS = 2;
-        private static readonly int OFFSET_4PIXELS = 4;
+        private const int OFFSET_2PIXELS = 2;
+        private const int OFFSET_4PIXELS = 4;
         protected static int Offset2X = OFFSET_2PIXELS;
         protected static int Offset2Y = OFFSET_2PIXELS;
         private static int offset4X = OFFSET_4PIXELS;

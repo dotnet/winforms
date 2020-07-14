@@ -50,10 +50,10 @@ namespace System.Windows.Forms
         private static ImageAttributes disabledImageAttr; // ImageAttributes used to render disabled images
 
         //use these value to signify ANY of the right, top, left, center, or bottom alignments with the ContentAlignment enum.
-        private static readonly ContentAlignment anyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
-        private static readonly ContentAlignment anyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;
-        private static readonly ContentAlignment anyCenter = ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter;
-        private static readonly ContentAlignment anyMiddle = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
+        private const ContentAlignment AnyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
+        private const ContentAlignment AnyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;
+        private const ContentAlignment AnyCenter = ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter;
+        private const ContentAlignment AnyMiddle = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
 
         internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Image backgroundImage, ImageLayout imageLayout)
         {
@@ -2670,11 +2670,11 @@ namespace System.Windows.Forms
         internal static StringAlignment TranslateAlignment(ContentAlignment align)
         {
             StringAlignment result;
-            if ((align & anyRight) != 0)
+            if ((align & AnyRight) != 0)
             {
                 result = StringAlignment.Far;
             }
-            else if ((align & anyCenter) != 0)
+            else if ((align & AnyCenter) != 0)
             {
                 result = StringAlignment.Center;
             }
@@ -2689,11 +2689,11 @@ namespace System.Windows.Forms
         internal static TextFormatFlags TranslateAlignmentForGDI(ContentAlignment align)
         {
             TextFormatFlags result;
-            if ((align & anyBottom) != 0)
+            if ((align & AnyBottom) != 0)
             {
                 result = TextFormatFlags.Bottom;
             }
-            else if ((align & anyMiddle) != 0)
+            else if ((align & AnyMiddle) != 0)
             {
                 result = TextFormatFlags.VerticalCenter;
             }
@@ -2708,11 +2708,11 @@ namespace System.Windows.Forms
         internal static StringAlignment TranslateLineAlignment(ContentAlignment align)
         {
             StringAlignment result;
-            if ((align & anyBottom) != 0)
+            if ((align & AnyBottom) != 0)
             {
                 result = StringAlignment.Far;
             }
-            else if ((align & anyMiddle) != 0)
+            else if ((align & AnyMiddle) != 0)
             {
                 result = StringAlignment.Center;
             }
@@ -2726,11 +2726,11 @@ namespace System.Windows.Forms
         internal static TextFormatFlags TranslateLineAlignmentForGDI(ContentAlignment align)
         {
             TextFormatFlags result;
-            if ((align & anyRight) != 0)
+            if ((align & AnyRight) != 0)
             {
                 result = TextFormatFlags.Right;
             }
-            else if ((align & anyCenter) != 0)
+            else if ((align & AnyCenter) != 0)
             {
                 result = TextFormatFlags.HorizontalCenter;
             }

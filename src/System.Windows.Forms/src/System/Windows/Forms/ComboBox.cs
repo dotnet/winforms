@@ -6160,7 +6160,7 @@ namespace System.Windows.Forms
 
             private const int WhiteFillRectWidth = 5; // used for making the button look smaller than it is
 
-            private static readonly int OFFSET_2PIXELS = 2;
+            private const int OFFSET_2PIXELS = 2;
             protected static int Offset2Pixels = OFFSET_2PIXELS;
 
             public FlatComboAdapter(ComboBox comboBox, bool smallButton)

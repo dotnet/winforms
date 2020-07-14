@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         // This is where we store the reched library.
         private static IntPtr moduleHandle;
 
-        private static readonly string SZ_RTF_TAG = "{\\rtf";
+        private const string SZ_RTF_TAG = "{\\rtf";
         private const int CHAR_BUFFER_LEN = 512;
 
         // Event objects

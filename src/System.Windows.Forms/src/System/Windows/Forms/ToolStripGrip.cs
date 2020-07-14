@@ -20,19 +20,19 @@ namespace System.Windows.Forms
         private static Size DragSize = LayoutUtils.MaxSize;
 
         private static readonly Padding defaultPadding = new Padding(2);
-        private static readonly int gripThicknessDefault = 3;
-        private static readonly int gripThicknessVisualStylesEnabled = 5;
+        private const int GripThicknessDefault = 3;
+        private const int GripThicknessVisualStylesEnabled = 5;
         private Padding scaledDefaultPadding = defaultPadding;
-        private int scaledGripThickness = gripThicknessDefault;
-        private int scaledGripThicknessVisualStylesEnabled = gripThicknessVisualStylesEnabled;
+        private int scaledGripThickness = GripThicknessDefault;
+        private int scaledGripThicknessVisualStylesEnabled = GripThicknessVisualStylesEnabled;
 
         internal ToolStripGrip()
         {
             if (DpiHelper.IsScalingRequirementMet)
             {
                 scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding);
-                scaledGripThickness = DpiHelper.LogicalToDeviceUnitsX(gripThicknessDefault);
-                scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnitsX(gripThicknessVisualStylesEnabled);
+                scaledGripThickness = DpiHelper.LogicalToDeviceUnitsX(GripThicknessDefault);
+                scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnitsX(GripThicknessVisualStylesEnabled);
             }
 
             // if we're using Visual Styles we've got to be a bit thicker.
@@ -271,8 +271,8 @@ namespace System.Windows.Forms
         internal override void ToolStrip_RescaleConstants(int oldDpi, int newDpi) {
             base.RescaleConstantsInternal(newDpi);
             scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
-            scaledGripThickness = DpiHelper.LogicalToDeviceUnits(gripThicknessDefault, newDpi);
-            scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnits(gripThicknessVisualStylesEnabled, newDpi);
+            scaledGripThickness = DpiHelper.LogicalToDeviceUnits(GripThicknessDefault, newDpi);
+            scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnits(GripThicknessVisualStylesEnabled, newDpi);
             this.Margin = DefaultMargin;
 
             gripThickness = ToolStripManager.VisualStylesEnabled ? scaledGripThicknessVisualStylesEnabled : scaledGripThickness;

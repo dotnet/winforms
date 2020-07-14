@@ -17,7 +17,7 @@ namespace System.Windows.Forms.VisualStyles
     public sealed class VisualStyleRenderer : IHandle
     {
         private HRESULT _lastHResult;
-        private static readonly int s_numberOfPossibleClasses = VisualStyleElement.Count; //used as size for themeHandles
+        private const int NumberOfPossibleClasses = VisualStyleElement.Count; //used as size for themeHandles
 
         [ThreadStatic]
         private static Hashtable? t_themeHandles; // per-thread cache of ThemeHandle objects.
@@ -809,7 +809,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         private static void CreateThemeHandleHashtable()
         {
-            t_themeHandles = new Hashtable(s_numberOfPossibleClasses);
+            t_themeHandles = new Hashtable(NumberOfPossibleClasses);
         }
 
         /// <summary>

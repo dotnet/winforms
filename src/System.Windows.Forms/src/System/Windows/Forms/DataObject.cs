@@ -27,8 +27,8 @@ namespace System.Windows.Forms
     [ClassInterface(ClassInterfaceType.None)]
     public partial class DataObject : IDataObject, IComDataObject
     {
-        private static readonly string CF_DEPRECATED_FILENAME = "FileName";
-        private static readonly string CF_DEPRECATED_FILENAMEW = "FileNameW";
+        private const string CF_DEPRECATED_FILENAME = "FileName";
+        private const string CF_DEPRECATED_FILENAMEW = "FileNameW";
 
         private const int DATA_S_SAMEFORMATETC = 0x00040130;
 

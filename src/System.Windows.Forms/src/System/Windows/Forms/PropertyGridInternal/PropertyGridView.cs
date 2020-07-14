@@ -66,7 +66,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private const int DOWNARROW_ICONWIDTH = 16;
         private const int DOWNARROW_ICONHEIGHT = 16;
 
-        private static readonly int OFFSET_2PIXELS = 2;
+        private const int OFFSET_2PIXELS = 2;
         private int offset_2Units = OFFSET_2PIXELS;
 
         protected static readonly Point InvalidPosition = new Point(int.MinValue, int.MinValue);
