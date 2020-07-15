@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     ///  hopefully handling the majority of application use cases. There is a limit of 65K GDI handles system wide and
     ///  10K (default) per process.
     /// </remarks>
-    internal sealed class FontCache : IDisposable
+    internal sealed partial class FontCache : IDisposable
     {
         private readonly LinkedList<Data> _list = new LinkedList<Data>();
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
@@ -300,72 +300,6 @@ namespace System.Windows.Forms
             {
                 _lock.ExitWriteLock();
             }
-        }
-
-        internal readonly ref struct FontScope
-        {
-            // We create default font scopes when we want to draw text using the default font, so this can end up null.
-            private readonly Data _data;
-
-            internal FontScope(Data data)
-            {
-                Debug.Assert(data != null);
-                _data = data;
-                _data.AddRef();
-            }
-
-            public Gdi32.HFONT HFONT => _data?.HFONT ?? default;
-            public int FontHeight => _data?.Height ?? default;
-
-            public static implicit operator Gdi32.HFONT(in FontScope scope) => scope.HFONT;
-            public static implicit operator Gdi32.HGDIOBJ(in FontScope scope) => scope.HFONT;
-
-            public void Dispose()
-            {
-                _data?.RemoveRef();
-            }
-        }
-
-        internal class Data
-        {
-            public WeakReference<Font> Font { get; }
-            public Gdi32.HFONT HFONT { get; }
-            public Gdi32.QUALITY Quality { get; }
-
-            private int _refCount;
-            private int? _tmHeight;
-
-            public Data(Font font, Gdi32.QUALITY quality)
-            {
-                Font = new WeakReference<Font>(font);
-                Quality = quality;
-                HFONT = FromFont(font, quality);
-            }
-
-            public int RefCount => _refCount;
-
-            public int Height
-            {
-                get
-                {
-                    if (!_tmHeight.HasValue)
-                    {
-                        using var screenDC = GdiCache.GetScreenDC();
-                        Gdi32.HDC hdc = screenDC.HDC;
-                        using var fontSelection = new Gdi32.SelectObjectScope(hdc, HFONT);
-                        Debug.Assert(Gdi32.GetMapMode(hdc) == Gdi32.MM.TEXT);
-
-                        Gdi32.TEXTMETRICW tm = default;
-                        Gdi32.GetTextMetricsW(hdc, ref tm);
-                        _tmHeight = tm.tmHeight;
-                    }
-
-                    return _tmHeight.Value;
-                }
-            }
-
-            public void AddRef() => Interlocked.Increment(ref _refCount);
-            public void RemoveRef() => Interlocked.Decrement(ref _refCount);
         }
     }
 }

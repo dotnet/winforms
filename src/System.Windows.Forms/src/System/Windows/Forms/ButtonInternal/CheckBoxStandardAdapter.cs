@@ -92,7 +92,7 @@ namespace System.Windows.Forms.ButtonInternal
             else
             {
                 LayoutOptions options = default;
-                using (var screen = GdiCache.GetScreenDC())
+                using (var screen = GdiCache.GetScreenHdc())
                 using (PaintEventArgs pe = new PaintEventArgs(screen, new Rectangle()))
                 {
                     options = Layout(pe);
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (Application.RenderWithVisualStyles)
             {
-                using var screen = GdiCache.GetScreenDC();
+                using var screen = GdiCache.GetScreenHdc();
                 layout.checkSize = CheckBoxRenderer.GetGlyphSize(
                     screen,
                     CheckBoxRenderer.ConvertFromButtonState(

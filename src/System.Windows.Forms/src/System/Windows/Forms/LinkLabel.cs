@@ -1188,8 +1188,8 @@ namespace System.Windows.Forms
                 {
                     // Control.Enabled not to be confused with Link.Enabled
                     bool optimizeBackgroundRendering = !GetStyle(ControlStyles.OptimizedDoubleBuffer);
-                    SolidBrush foreBrush = new SolidBrush(ForeColor);
-                    SolidBrush linkBrush = new SolidBrush(LinkColor);
+                    var foreBrush = new FormsSolidBrush(ForeColor);
+                    var linkBrush = new FormsSolidBrush(LinkColor);
 
                     try
                     {
@@ -1258,12 +1258,12 @@ namespace System.Windows.Forms
 
                             if (!IsOneLink())
                             {
-                                PaintLink(g, null, foreBrush, linkBrush, optimizeBackgroundRendering, finalrect);
+                                PaintLink(e, null, foreBrush, linkBrush, optimizeBackgroundRendering, finalrect);
                             }
 
                             foreach (Link link in links)
                             {
-                                PaintLink(g, link, foreBrush, linkBrush, optimizeBackgroundRendering, finalrect);
+                                PaintLink(e, link, foreBrush, linkBrush, optimizeBackgroundRendering, finalrect);
                             }
 
                             if (optimizeBackgroundRendering)
@@ -1293,11 +1293,9 @@ namespace System.Windows.Forms
                     {
                         // We need to paint the background first before clipping to textRegion because it is calculated using
                         // ClientRectWithPadding which in some cases is smaller that ClientRectangle.
-                        //
+
                         PaintLinkBackground(g);
                         g.IntersectClip(textRegion);
-
-                        Color foreColor;
 
                         if (UseCompatibleTextRendering)
                         {
@@ -1308,7 +1306,8 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            using (var scope = new DeviceContextHdcScope(e))
+                            Color foreColor;
+                            using (var scope = new DeviceContextHdcScope(e, applyGraphicsState: false))
                             {
                                 foreColor = ColorTranslator.FromWin32(
                                 Gdi32.GetNearestColor(scope.HDC, ColorTranslator.ToWin32(DisabledColor)));
@@ -1426,9 +1425,16 @@ namespace System.Windows.Forms
             UpdateSelectability();
         }
 
-        private void PaintLink(Graphics g, Link link, SolidBrush foreBrush, SolidBrush linkBrush, bool optimizeBackgroundRendering, RectangleF finalrect)
+        private void PaintLink(
+            PaintEventArgs e,
+            Link link,
+            FormsSolidBrush foreBrush,
+            FormsSolidBrush linkBrush,
+            bool optimizeBackgroundRendering,
+            RectangleF finalrect)
         {
             // link = null means paint the whole text
+            Graphics g = e.GraphicsInternal;
 
             Debug.Assert(g != null, "Must pass valid graphics");
             Debug.Assert(foreBrush != null, "Must pass valid foreBrush");
@@ -1453,7 +1459,8 @@ namespace System.Windows.Forms
                     }
 
                     if (link.Enabled)
-                    { // Not to be confused with Control.Enabled.
+                    {
+                        // Not to be confused with Control.Enabled.
                         if ((linkState & LinkState.Active) == LinkState.Active)
                         {
                             brushColor = ActiveLinkColor;
@@ -1462,7 +1469,6 @@ namespace System.Windows.Forms
                         {
                             brushColor = VisitedLinkColor;
                         }
-                        // else use linkBrush
                     }
                     else
                     {
@@ -1485,7 +1491,7 @@ namespace System.Windows.Forms
 
                     if (UseCompatibleTextRendering)
                     {
-                        SolidBrush useBrush = brushColor == Color.Empty ? linkBrush : new SolidBrush(brushColor);
+                        Brush useBrush = brushColor == Color.Empty ? linkBrush : new FormsSolidBrush(brushColor);
                         StringFormat stringFormat = CreateStringFormat();
 
                         g.DrawString(Text, font, useBrush, ClientRectWithPadding, stringFormat);
@@ -1502,7 +1508,7 @@ namespace System.Windows.Forms
                             brushColor = linkBrush.Color;
                         }
 
-                        using (var hdc = new DeviceContextHdcScope(g))
+                        using (var hdc = new DeviceContextHdcScope(g, applyGraphicsState: false))
                         {
                             brushColor = ColorTranslator.FromWin32(
                                 Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(brushColor)));
@@ -1520,8 +1526,7 @@ namespace System.Windows.Forms
 
                     if (Focused && ShowFocusCues && FocusLink == link)
                     {
-                        // Get the rectangles making up the visual region, and draw
-                        // each one.
+                        // Get the rectangles making up the visual region, and draw each one.
                         RectangleF[] rects = link.VisualRegion.GetRegionScans(g.Transform);
                         if (rects != null && rects.Length > 0)
                         {
@@ -1529,7 +1534,7 @@ namespace System.Windows.Forms
 
                             if (IsOneLink())
                             {
-                                //draw one merged focus rectangle
+                                // Draw one merged focus rectangle
                                 focusRect = Rectangle.Ceiling(finalrect);
                                 Debug.Assert(finalrect != RectangleF.Empty, "finalrect should be initialized");
 
@@ -1547,10 +1552,10 @@ namespace System.Windows.Forms
                 }
 
                 // no else clause... we don't paint anything if we are given a link with no visual region.
-                //
             }
             else
-            { // Painting with no link.
+            {
+                // Painting with no link.
                 g.IntersectClip(textRegion);
 
                 if (optimizeBackgroundRendering)

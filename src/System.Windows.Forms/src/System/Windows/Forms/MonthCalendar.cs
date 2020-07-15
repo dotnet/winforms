@@ -1229,7 +1229,7 @@ namespace System.Windows.Forms
             Size textExtent;
 
             using (var hfont = GdiCache.GetHFONT(Font))
-            using (var screen = GdiCache.GetScreenDC())
+            using (var screen = GdiCache.GetScreenHdc())
             {
                 // this is the string that Windows uses to determine the extent of the today string
                 textExtent = screen.HDC.GetTextExtent(DateTime.Now.ToShortDateString(), hfont);

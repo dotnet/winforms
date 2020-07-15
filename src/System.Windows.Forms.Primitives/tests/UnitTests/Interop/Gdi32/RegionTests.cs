@@ -7,7 +7,7 @@ using static Interop.Gdi32;
 using System.Drawing;
 using static Interop;
 
-namespace System.Windows.Forms.Tests.InteropTests
+namespace System.Windows.Forms.Tests.Interop.Gdi32
 {
     public class RegionTests
     {

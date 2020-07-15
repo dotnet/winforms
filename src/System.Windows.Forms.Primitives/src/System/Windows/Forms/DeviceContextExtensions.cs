@@ -114,5 +114,28 @@ namespace System.Windows.Forms
                 ref rect,
                 brush);
         }
+
+        /// <summary>
+        ///  Convert the <paramref name="deviceContext"/> into a <see cref="Graphics"/> object if possible.
+        /// </summary>
+        /// <param name="create">
+        ///  Will create the <see cref="Graphics"/> if possible and it is not already created.
+        /// </param>
+        /// <remarks>
+        ///  Do NOT dispose of the <see cref="Graphics"/> object. If it was created, the object creating it owns it.
+        /// </remarks>
+        internal static Graphics? TryGetGraphics(this IDeviceContext deviceContext, bool create = false)
+            => deviceContext switch
+            {
+                Graphics graphics => graphics,
+                IGraphicsHdcProvider provider => provider.GetGraphics(create),
+                _ => AssertNoGraphics(create)
+            };
+
+        private static Graphics? AssertNoGraphics(bool create)
+        {
+            Debug.Assert(!create, "Couldn't get Graphics");
+            return null;
+        }
     }
 }

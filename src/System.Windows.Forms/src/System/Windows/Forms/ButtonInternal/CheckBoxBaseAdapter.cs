@@ -268,8 +268,8 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    CheckBoxRenderer.DrawCheckBox(
-                        e.Graphics,
+                    CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
+                        e,
                         new Point(layout.checkBounds.Left, layout.checkBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver),
                         Control.HandleInternal);
@@ -283,8 +283,8 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    CheckBoxRenderer.DrawCheckBox(
-                        e.GraphicsInternal,
+                    CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
+                        e,
                         new Point(layout.checkBounds.Left, layout.checkBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver),
                         Control.HandleInternal);

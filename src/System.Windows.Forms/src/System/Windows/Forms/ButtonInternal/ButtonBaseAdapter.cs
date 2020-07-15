@@ -15,28 +15,18 @@ using static Interop;
 namespace System.Windows.Forms.ButtonInternal
 {
     /// <summary>
-    ///        PLEASE READ
-    ///        -----------
-    ///  This class is used for more than just Button:
-    ///  it's used for things that derive from ButtonBase,
-    ///  parts of ToolStripItem, and parts of the DataGridView.
+    ///  This class is used for more than just <see cref="Button"/>. It is used for things that derive from
+    ///  <see cref="ButtonBase"/>, parts of <see cref="ToolStripItem"/>, and parts of <see cref="DataGridView"/>.
     /// </summary>
     internal abstract class ButtonBaseAdapter
     {
-        private readonly ButtonBase control;
-
         // SystemInformation.Border3DSize + 2 pixels for focus rect
-        protected static int buttonBorderSize = 4;
+        protected const int ButtonBorderSize = 4;
 
         internal ButtonBaseAdapter(ButtonBase control)
-        {
-            this.control = control;
-        }
+            => Control = control;
 
-        protected ButtonBase Control
-        {
-            get { return control; }
-        }
+        protected ButtonBase Control { get; }
 
         internal void Paint(PaintEventArgs pevent)
         {
@@ -57,7 +47,7 @@ namespace System.Windows.Forms.ButtonInternal
         internal virtual Size GetPreferredSizeCore(Size proposedSize)
         {
             LayoutOptions options = default;
-            using (var screen = GdiCache.GetScreenDC())
+            using (var screen = GdiCache.GetScreenHdc())
             using (PaintEventArgs pe = new PaintEventArgs(screen, new Rectangle()))
             {
                 options = Layout(pe);
@@ -74,38 +64,12 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal abstract void PaintOver(PaintEventArgs e, CheckState state);
 
-        #region Accessibility Helpers
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected bool IsHighContrastHighlighted()
-        {
-            return SystemInformation.HighContrast && Application.RenderWithVisualStyles &&
+            => SystemInformation.HighContrast && Application.RenderWithVisualStyles &&
                 (Control.Focused || Control.MouseIsOver || (Control.IsDefault && Control.Enabled));
-        }
-
-        #endregion
 
         #region Drawing Helpers
-
-        internal static Color MixedColor(Color color1, Color color2)
-        {
-            byte a1 = color1.A;
-            byte r1 = color1.R;
-            byte g1 = color1.G;
-            byte b1 = color1.B;
-
-            byte a2 = color2.A;
-            byte r2 = color2.R;
-            byte g2 = color2.G;
-            byte b2 = color2.B;
-
-            int a3 = (a1 + a2) / 2;
-            int r3 = (r1 + r2) / 2;
-            int g3 = (g1 + g2) / 2;
-            int b3 = (b1 + b2) / 2;
-
-            return Color.FromArgb(a3, r3, g3, b3);
-        }
 
         internal static Brush CreateDitherBrush(Color color1, Color color2)
         {
@@ -147,38 +111,38 @@ namespace System.Windows.Forms.ButtonInternal
             }
         }
 
-        protected void Draw3DBorder(Graphics g, Rectangle bounds, ColorData colors, bool raised)
+        protected void Draw3DBorder(IDeviceContext deviceContext, Rectangle bounds, ColorData colors, bool raised)
         {
             if (Control.BackColor != SystemColors.Control && SystemInformation.HighContrast)
             {
                 if (raised)
                 {
-                    Draw3DBorderHighContrastRaised(g, ref bounds, colors);
+                    Draw3DBorderHighContrastRaised(deviceContext, ref bounds, colors);
                 }
                 else
                 {
-                    ControlPaint.DrawBorder(g, bounds, ControlPaint.Dark(Control.BackColor), ButtonBorderStyle.Solid);
+                    ControlPaint.DrawBorderSolid(deviceContext, bounds, ControlPaint.Dark(Control.BackColor));
                 }
             }
             else
             {
                 if (raised)
                 {
-                    Draw3DBorderRaised(g, ref bounds, colors);
+                    Draw3DBorderRaised(deviceContext, ref bounds, colors);
                 }
                 else
                 {
-                    Draw3DBorderNormal(g, ref bounds, colors);
+                    Draw3DBorderNormal(deviceContext, ref bounds, colors);
                 }
             }
         }
 
-        private void Draw3DBorderHighContrastRaised(Graphics g, ref Rectangle bounds, ColorData colors)
+        private void Draw3DBorderHighContrastRaised(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
         {
             bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
             bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
-            using var hdc = new DeviceContextHdcScope(g);
+            using var hdc = new DeviceContextHdcScope(deviceContext);
 
             // Draw counter-clock-wise.
             Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
@@ -225,9 +189,9 @@ namespace System.Windows.Forms.ButtonInternal
             hdc.DrawLine(bottomRightInsetPen, p4, p1); // right  (bottom-up)
         }
 
-        private void Draw3DBorderNormal(Graphics g, ref Rectangle bounds, ColorData colors)
+        private void Draw3DBorderNormal(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
         {
-            using var hdc = new DeviceContextHdcScope(g);
+            using var hdc = new DeviceContextHdcScope(deviceContext);
 
             // Draw counter-clock-wise.
             Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
@@ -270,12 +234,12 @@ namespace System.Windows.Forms.ButtonInternal
             hdc.DrawLine(insetPen, p4, p1); // right (bottom-up)
         }
 
-        private void Draw3DBorderRaised(Graphics g, ref Rectangle bounds, ColorData colors)
+        private void Draw3DBorderRaised(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
         {
             bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
             bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
-            using var hdc = new DeviceContextHdcScope(g);
+            using var hdc = new DeviceContextHdcScope(deviceContext);
 
             // Draw counter-clock-wise.
             Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
@@ -355,7 +319,7 @@ namespace System.Windows.Forms.ButtonInternal
         ///  This function gets called only for Flatstyle == Flatstyle.Flat.
         /// </summary>
         internal static void DrawFlatBorderWithSize(
-            IDeviceContext deviceContext,
+            PaintEventArgs e,
             Rectangle bounds,
             Color color,
             int size)
@@ -369,19 +333,16 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (color.HasTransparency())
             {
-                Graphics g = deviceContext.TryGetGraphics(create: true);
-                if (g != null)
-                {
-                    using var brush = new SolidBrush(color);
-                    g.FillRectangle(brush, left);
-                    g.FillRectangle(brush, right);
-                    g.FillRectangle(brush, top);
-                    g.FillRectangle(brush, bottom);
-                    return;
-                }
+                Graphics g = e.GraphicsInternal;
+                using var brush = new SolidBrush(color);
+                g.FillRectangle(brush, left);
+                g.FillRectangle(brush, right);
+                g.FillRectangle(brush, top);
+                g.FillRectangle(brush, bottom);
+                return;
             }
 
-            using var hdc = new DeviceContextHdcScope(deviceContext);
+            using var hdc = new DeviceContextHdcScope(e);
             using var hbrush = new Gdi32.CreateBrushScope(color);
             hdc.FillRectangle(left, hbrush);
             hdc.FillRectangle(right, hbrush);
@@ -415,7 +376,7 @@ namespace System.Windows.Forms.ButtonInternal
             if (!layout.options.everettButtonCompat)
             {
                 // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
-                Rectangle bounds = new Rectangle(buttonBorderSize, buttonBorderSize, Control.Width - (2 * buttonBorderSize), Control.Height - (2 * buttonBorderSize));
+                Rectangle bounds = new Rectangle(ButtonBorderSize, ButtonBorderSize, Control.Width - (2 * ButtonBorderSize), Control.Height - (2 * ButtonBorderSize));
 
                 Region newClip = oldClip.Clone();
                 newClip.Intersect(bounds);
@@ -528,7 +489,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                // Draw text using GDI (Whidbey+ feature).
+                // Draw text using GDI (.NET 2.0+ feature).
                 TextFormatFlags formatFlags = CreateTextFormatFlags();
                 if (disabledText3D && !Control.Enabled && !colors.options.HighContrast)
                 {

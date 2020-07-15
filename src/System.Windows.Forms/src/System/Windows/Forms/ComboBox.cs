@@ -964,7 +964,7 @@ namespace System.Windows.Forms
             Size textExtent = Size.Empty;
 
             using (var hfont = GdiCache.GetHFONT(Font))
-            using (var screen = GdiCache.GetScreenDC())
+            using (var screen = GdiCache.GetScreenHdc())
             {
                 // this is the character that Windows uses to determine the extent
                 textExtent = screen.HDC.GetTextExtent("0", hfont);

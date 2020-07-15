@@ -212,7 +212,7 @@ namespace System.Windows.Forms
                 return Size.Empty;
 
             using var hfont = GdiCache.GetHFONT(font);
-            using var screen = GdiCache.GetScreenDC();
+            using var screen = GdiCache.GetScreenHdc();
 
             return screen.HDC.MeasureText(text, hfont, proposedSize, GetTextFormatFlags(flags));
         }

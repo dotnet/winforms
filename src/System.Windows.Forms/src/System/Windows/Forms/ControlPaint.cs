@@ -175,7 +175,7 @@ namespace System.Windows.Forms
             Gdi32.HBITMAP hBitmap;
             Size size = bitmap.Size;
 
-            using var screen = GdiCache.GetScreenDC();
+            using var screen = GdiCache.GetScreenHdc();
             using var dc = new Gdi32.CreateDcScope(screen);
 
             byte[] enoughBits = new byte[bitmap.Width * bitmap.Height];
@@ -1462,12 +1462,12 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color foreColor, Color backColor)
         {
-            DrawFocusRectangle(graphics, rectangle, backColor, false);
+            DrawFocusRectangle(graphics, rectangle, backColor, highContrast: false);
         }
 
         internal static void DrawHighContrastFocusRectangle(Graphics graphics, Rectangle rectangle, Color color)
         {
-            DrawFocusRectangle(graphics, rectangle, color, true);
+            DrawFocusRectangle(graphics, rectangle, color, highContrast: true);
         }
 
         private static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color color, bool highContrast)
@@ -1499,18 +1499,12 @@ namespace System.Windows.Forms
             Color foreColor,
             Color backColor)
         {
-            if (graphics == null)
-            {
+            if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
-            }
             if (width < 0)
-            {
                 throw new ArgumentOutOfRangeException(nameof(width));
-            }
             if (height < 0)
-            {
                 throw new ArgumentOutOfRangeException(nameof(height));
-            }
 
             RECT rcFrame = new RECT(0, 0, width, height);
             using Bitmap bitmap = new Bitmap(width, height);
@@ -2365,10 +2359,10 @@ namespace System.Windows.Forms
         /// </summary>
         private static Pen GetFocusPen(Color baseColor, bool odds, bool highContrast)
         {
-            if (focusPen == null ||
-                (!highContrast && focusPenColor.GetBrightness() <= .5 && baseColor.GetBrightness() <= .5) ||
-                focusPenColor.ToArgb() != baseColor.ToArgb() ||
-                hcFocusPen != highContrast)
+            if (focusPen == null
+                || hcFocusPen != highContrast
+                || (!highContrast && focusPenColor.GetBrightness() <= .5 && baseColor.GetBrightness() <= .5)
+                || focusPenColor.ToArgb() != baseColor.ToArgb())
             {
                 if (focusPen != null)
                 {
@@ -2405,6 +2399,11 @@ namespace System.Windows.Forms
                         color1 = Color.White;
                     }
                 }
+
+                //  High contrast        Normal (dark)       Normal (light)     Normal (light, base transparent)
+                //
+                // | trnsp | black |    | black | invrt |   | base  | black |   | white | black |
+                // | black | trnsp |    | invrt | black |   | black | base  |   | black | white |
 
                 b.SetPixel(1, 0, color2);
                 b.SetPixel(0, 1, color2);

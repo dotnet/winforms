@@ -7,6 +7,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Printing;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -15,11 +16,11 @@ namespace System.Windows.Forms
     ///  Provides data for the <see cref='Control.Paint'/> event.
     /// </summary>
     /// <remarks>
-    ///  Please keep this class consistent with PrintPageEventArgs.
+    ///  Please keep this class consistent with <see cref="PrintPageEventArgs"/>.
     /// </remarks>
     public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphicsHdcProvider
     {
-        private DrawingEventArgs _event;
+        private readonly DrawingEventArgs _event;
 
         /// <remarks>
         ///  This is only needed for <see cref="ResetGraphics"/> callers and applies in the following places:
@@ -36,17 +37,17 @@ namespace System.Windows.Forms
             graphics,
             clipRect,
             // If Graphics comes in on the public constructor we don't know that it has no transform or clip
-            flags: PaintEventFlags.GraphicsStateUnclean)
+            flags: DrawingEventFlags.GraphicsStateUnclean)
         {
         }
 
         internal PaintEventArgs(
             Graphics graphics,
             Rectangle clipRect,
-            PaintEventFlags flags)
+            DrawingEventFlags flags)
         {
             _event = new DrawingEventArgs(graphics, clipRect, flags);
-            _savedGraphicsState = flags.HasFlag(PaintEventFlags.SaveState) ? graphics.Save() : default;
+            SaveStateIfNeeded(graphics);
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace System.Windows.Forms
         internal PaintEventArgs(
             Gdi32.HDC hdc,
             Rectangle clipRect,
-            PaintEventFlags flags = PaintEventFlags.CheckState)
+            DrawingEventFlags flags = DrawingEventFlags.CheckState)
         {
             _event = new DrawingEventArgs(hdc, clipRect, flags);
         }
@@ -93,7 +94,7 @@ namespace System.Windows.Forms
         internal void ResetGraphics()
         {
             Graphics graphics = _event.GetGraphics(create: false);
-            if (_event.Flags.HasFlag(PaintEventFlags.SaveState) && graphics != null)
+            if (_event.Flags.HasFlag(DrawingEventFlags.SaveState) && graphics != null)
             {
                 if (_savedGraphicsState != null)
                 {
@@ -107,15 +108,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private void SaveState(Graphics graphics)
-        {
-            _savedGraphicsState = _event.Flags.HasFlag(PaintEventFlags.SaveState) ? graphics.Save() : default;
-        }
+        private void SaveStateIfNeeded(Graphics graphics)
+            => _savedGraphicsState = _event.Flags.HasFlag(DrawingEventFlags.SaveState) ? graphics.Save() : default;
 
         /// <summary>
         ///  For internal use to improve performance. DO NOT use this method if you modify the Graphics Clip or Transform.
         /// </summary>
-        internal Graphics GraphicsInternal => _event.GetOrCreateGraphicsInternal(SaveState);
+        internal Graphics GraphicsInternal => _event.GetOrCreateGraphicsInternal(SaveStateIfNeeded);
 
         /// <summary>
         ///  Returns the <see cref="Gdi32.HDC"/> the event was created off of, if any.
@@ -126,6 +125,6 @@ namespace System.Windows.Forms
         void IDeviceContext.ReleaseHdc() => Graphics?.ReleaseHdc();
         Gdi32.HDC IGraphicsHdcProvider.GetHDC() => _event.GetHDC();
         Graphics IGraphicsHdcProvider.GetGraphics(bool create) => _event.GetGraphics(create);
-        bool IGraphicsHdcProvider.IsStateClean => _event.IsStateClean;
+        bool IGraphicsHdcProvider.IsGraphicsStateClean => _event.IsStateClean;
     }
 }

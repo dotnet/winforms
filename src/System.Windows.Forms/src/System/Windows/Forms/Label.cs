@@ -1230,7 +1230,7 @@ namespace System.Windows.Forms
             {
                 // empty labels return the font height + borders
                 using (var hfont = GdiCache.GetHFONT(Font))
-                using (var screen = GdiCache.GetScreenDC())
+                using (var screen = GdiCache.GetScreenHdc())
                 {
                     // this is the character that Windows uses to determine the extent
                     requiredSize = screen.HDC.GetTextExtent("0", hfont);

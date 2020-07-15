@@ -9,6 +9,14 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
+    /// <summary>
+    ///  Struct that helps ensure we build our <see cref="EventArgs"/> that wrap <see cref="DrawingEventArgs"/>
+    ///  the same way.
+    /// </summary>
+    /// <remarks>
+    ///  We should consider making this a base class that derives from <see cref="EventArgs"/>. The class itself
+    ///  would have to be public, but the functionality (methods) can still be internal.
+    /// </remarks>
     internal partial struct DrawingEventArgs
     {
         private Graphics? _graphics;
@@ -19,14 +27,14 @@ namespace System.Windows.Forms
         /// </summary>
         private readonly Gdi32.HDC _hdc;
         private Gdi32.HPALETTE _oldPalette;
-        internal PaintEventFlags Flags { get; private set; }
+        internal DrawingEventFlags Flags { get; private set; }
 
         public Rectangle ClipRectangle { get; }
 
         public DrawingEventArgs(
             Graphics graphics,
             Rectangle clipRect,
-            PaintEventFlags flags)
+            DrawingEventFlags flags)
         {
             _graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             _hdc = default;
@@ -42,7 +50,7 @@ namespace System.Windows.Forms
         public DrawingEventArgs(
             Gdi32.HDC dc,
             Rectangle clipRect,
-            PaintEventFlags flags)
+            DrawingEventFlags flags)
         {
             _hdc = dc;
             _graphics = null;
@@ -65,7 +73,7 @@ namespace System.Windows.Forms
             get
             {
                 // If we're giving this out on the public API expect it to get a clip or transform applied.
-                Flags |= PaintEventFlags.GraphicsStateUnclean;
+                Flags |= DrawingEventFlags.GraphicsStateUnclean;
                 return GetOrCreateGraphicsInternal();
             }
         }
@@ -97,10 +105,7 @@ namespace System.Windows.Forms
             return _graphics;
         }
 
-        internal Gdi32.HDC GetHDC()
-        {
-            return _hdc;
-        }
+        internal Gdi32.HDC GetHDC() => _hdc;
 
         internal Graphics? GetGraphics(bool create)
         {
@@ -126,12 +131,13 @@ namespace System.Windows.Forms
             }
         }
 
-        internal bool IsStateClean => !Flags.HasFlag(PaintEventFlags.GraphicsStateUnclean);
+        internal bool IsStateClean => !Flags.HasFlag(DrawingEventFlags.GraphicsStateUnclean);
 
         [Conditional("DEBUG")]
-        internal static void CheckGraphicsForState(Graphics? graphics, PaintEventFlags flags)
+        internal static void CheckGraphicsForState(Graphics? graphics, DrawingEventFlags flags)
         {
-            if (graphics is null || !flags.HasFlag(PaintEventFlags.CheckState))
+            if (graphics is null || !flags.HasFlag(DrawingEventFlags.CheckState)
+                || flags.HasFlag(DrawingEventFlags.GraphicsStateUnclean))
             {
                 return;
             }

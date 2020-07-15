@@ -14,7 +14,7 @@ namespace System.Windows.Forms
             internal Message Message { get; }
 
             internal PrintPaintEventArgs(Message m, Gdi32.HDC dc, Rectangle clipRect)
-                : base(dc, clipRect, PaintEventFlags.SaveState)
+                : base(dc, clipRect, DrawingEventFlags.SaveState)
             {
                 Message = m;
             }

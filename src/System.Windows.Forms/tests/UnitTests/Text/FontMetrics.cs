@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Tests.Text
             }
 
             using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
-            using var screen = GdiCache.GetScreenDC();
+            using var screen = GdiCache.GetScreenHdc();
             Size extent = screen.HDC.GetTextExtent("Whizzo Butter", hfont);
             Assert.Equal(width, extent.Width);
             Assert.Equal(height, extent.Height);
@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Tests.Text
             }
 
             using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
-            using var screen = GdiCache.GetScreenDC();
+            using var screen = GdiCache.GetScreenHdc();
             Size measure = screen.HDC.MeasureText("Windows Foundation Classes", hfont, proposedSize, (User32.DT)dt);
             Assert.Equal(expected, measure);
         }
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.Tests.Text
             }
 
             using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.CLEARTYPE);
-            using var screen = GdiCache.GetScreenDC();
+            using var screen = GdiCache.GetScreenHdc();
             using var fontSelection = new Gdi32.SelectObjectScope(screen, hfont);
 
             User32.DRAWTEXTPARAMS param = default;

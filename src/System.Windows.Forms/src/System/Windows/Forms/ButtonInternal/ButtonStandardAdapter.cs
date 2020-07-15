@@ -69,7 +69,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             ButtonRenderer.DrawButtonForHandle(
-                e.GraphicsInternal,
+                e,
                 Control.ClientRectangle,
                 false,
                 pbState,
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.ButtonInternal
             // We hardcode this margin for now since GetThemeMargins returns 0 all the time.
             //
             // Changing this because GetThemeMargins simply does not work in some cases.
-            bounds.Inflate(-buttonBorderSize, -buttonBorderSize);
+            bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
 
             //only paint if the user said not to use the themed backcolor.
             if (!Control.UseVisualStyleBackColor)
@@ -118,7 +118,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
         }
 
-        void PaintWorker(PaintEventArgs e, bool up, CheckState state)
+        private void PaintWorker(PaintEventArgs e, bool up, CheckState state)
         {
             up = up && state == CheckState.Unchecked;
 
@@ -126,8 +126,7 @@ namespace System.Windows.Forms.ButtonInternal
             LayoutData layout;
             if (Application.RenderWithVisualStyles)
             {
-                //don't have the text-pressed-down effect when we use themed painting
-                //this is for consistency with win32 app.
+                // Don't have the text-pressed-down effect when we use themed painting to be consistent with Win32.
                 layout = PaintLayout(e, true).Layout();
             }
             else
@@ -135,7 +134,7 @@ namespace System.Windows.Forms.ButtonInternal
                 layout = PaintLayout(e, up).Layout();
             }
 
-            Button thisbutton = Control as Button;
+            _ = Control as Button;
             if (Application.RenderWithVisualStyles)
             {
                 PaintThemedButtonBackground(e, Control.ClientRectangle, up);
@@ -166,17 +165,13 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 finally
                 {
-                    if (backbrush != null)
-                    {
-                        backbrush.Dispose();
-                        backbrush = null;
-                    }
+                    backbrush?.Dispose();
                 }
             }
 
             PaintImage(e, layout);
 
-            //inflate the focus rectangle to be consistent with the behavior of Win32 app
+            // Inflate the focus rectangle to be consistent with the behavior of Win32 app
             if (Application.RenderWithVisualStyles)
             {
                 layout.focus.Inflate(1, 1);
@@ -189,7 +184,7 @@ namespace System.Windows.Forms.ButtonInternal
 
                 if (Control.Focused && Control.ShowFocusCues)
                 {
-                    // drawing focus rectangle of HighlightText color
+                    // Drawing focus rectangle of HighlightText color
                     ControlPaint.DrawHighContrastFocusRectangle(e.GraphicsInternal, layout.focus, highlightTextColor);
                 }
             }
@@ -210,19 +205,16 @@ namespace System.Windows.Forms.ButtonInternal
                     r.Inflate(-1, -1);
                 }
 
-                Graphics g = e.Graphics;
-
-                DrawDefaultBorder(g, r, colors.windowFrame, Control.IsDefault);
+                DrawDefaultBorder(e, r, colors.windowFrame, Control.IsDefault);
 
                 if (up)
                 {
-                    Draw3DBorder(g, r, colors, up);
+                    Draw3DBorder(e, r, colors, raised: up);
                 }
                 else
                 {
-                    // contrary to popular belief, not Draw3DBorder(..., false);
-                    //
-                    ControlPaint.DrawBorder(g, r, colors.buttonShadow, ButtonBorderStyle.Solid);
+                    // Not Draw3DBorder(..., raised: false);
+                    ControlPaint.DrawBorderSolid(e, r, colors.buttonShadow);
                 }
             }
         }
@@ -231,7 +223,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         protected override LayoutOptions Layout(PaintEventArgs e)
         {
-            LayoutOptions layout = PaintLayout(e, /* up = */ false);
+            LayoutOptions layout = PaintLayout(e, up: false);
             Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.MaxSize) == PaintLayout(e, /* up = */ true).GetPreferredSizeCore(LayoutUtils.MaxSize),
                 "The state of up should not effect PreferredSize");
             return layout;

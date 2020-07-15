@@ -83,31 +83,13 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawCheckBox(Graphics g, Point glyphLocation, CheckBoxState state)
         {
-            DrawCheckBox(g, glyphLocation, state, IntPtr.Zero);
-        }
-
-        internal static void DrawCheckBoxWithVisualStyles(
-            IDeviceContext deviceContext,
-            Point glyphLocation,
-            CheckBoxState state,
-            IntPtr hwnd)
-        {
-            InitializeRenderer((int)state);
-
-            using var hdc = new DeviceContextHdcScope(deviceContext);
-            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
-            visualStyleRenderer.DrawBackground(hdc, glyphBounds, hwnd);
-        }
-
-        internal static void DrawCheckBox(Graphics g, Point glyphLocation, CheckBoxState state, IntPtr hwnd)
-        {
             if (RenderWithVisualStyles)
             {
-                DrawCheckBoxWithVisualStyles(g, glyphLocation, state, hwnd);
+                DrawCheckBoxWithVisualStyles(g, glyphLocation, state);
             }
             else
             {
-                Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state, hwnd));
+                Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state));
                 if (IsMixed(state))
                 {
                     ControlPaint.DrawMixedCheckBox(g, glyphBounds, ConvertToButtonState(state));
@@ -119,27 +101,70 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Renders a CheckBox control.
-        /// </summary>
-        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, bool focused, CheckBoxState state)
+        internal static void DrawCheckBoxWithVisualStyles(
+            IDeviceContext deviceContext,
+            Point glyphLocation,
+            CheckBoxState state,
+            IntPtr hwnd = default)
         {
-            DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font,
-                       TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
-                       focused, state);
+            InitializeRenderer((int)state);
+
+            using var hdc = new DeviceContextHdcScope(deviceContext);
+            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
+            visualStyleRenderer.DrawBackground(hdc, glyphBounds, hwnd);
         }
 
         /// <summary>
         ///  Renders a CheckBox control.
         /// </summary>
-        public static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, TextFormatFlags flags, bool focused, CheckBoxState state)
+        public static void DrawCheckBox(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string checkBoxText,
+            Font font,
+            bool focused,
+            CheckBoxState state)
+        {
+            DrawCheckBox(
+                g,
+                glyphLocation,
+                textBounds,
+                checkBoxText,
+                font,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
+                focused,
+                state);
+        }
+
+        /// <summary>
+        ///  Renders a CheckBox control.
+        /// </summary>
+        public static void DrawCheckBox(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string checkBoxText,
+            Font font,
+            TextFormatFlags flags,
+            bool focused,
+            CheckBoxState state)
         {
             DrawCheckBox(g, glyphLocation, textBounds, checkBoxText, font, flags, focused, state, IntPtr.Zero);
         }
 
-        internal static void DrawCheckBox(Graphics g, Point glyphLocation, Rectangle textBounds, string checkBoxText, Font font, TextFormatFlags flags, bool focused, CheckBoxState state, IntPtr hWnd)
+        internal static void DrawCheckBox(
+            Graphics g,
+            Point glyphLocation,
+            Rectangle textBounds,
+            string checkBoxText,
+            Font font,
+            TextFormatFlags flags,
+            bool focused,
+            CheckBoxState state,
+            IntPtr hwnd)
         {
-            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state, hWnd));
+            Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(g, state, hwnd));
             Color textColor;
 
             if (RenderWithVisualStyles)
@@ -237,7 +262,7 @@ namespace System.Windows.Forms
         public static Size GetGlyphSize(Graphics g, CheckBoxState state)
             => GetGlyphSize((IDeviceContext)g, state);
 
-        internal static Size GetGlyphSize(IDeviceContext deviceContext, CheckBoxState state, IntPtr hWnd = default)
+        internal static Size GetGlyphSize(IDeviceContext deviceContext, CheckBoxState state, IntPtr hwnd = default)
         {
             if (!RenderWithVisualStyles)
             {
@@ -245,16 +270,16 @@ namespace System.Windows.Forms
             }
 
             using var hdc = new DeviceContextHdcScope(deviceContext);
-            return GetGlyphSize(hdc, state, IntPtr.Zero);
+            return GetGlyphSize(hdc, state, hwnd);
         }
 
-        internal static Size GetGlyphSize(Gdi32.HDC hdc, CheckBoxState state, IntPtr hWnd)
+        internal static Size GetGlyphSize(Gdi32.HDC hdc, CheckBoxState state, IntPtr hwnd)
         {
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
 
-                return visualStyleRenderer.GetPartSize(hdc, ThemeSizeType.Draw, hWnd);
+                return visualStyleRenderer.GetPartSize(hdc, ThemeSizeType.Draw, hwnd);
             }
 
             return new Size(13, 13);

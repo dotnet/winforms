@@ -92,7 +92,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Release an item back to the cache, disposing if no room is available.
+        ///  Release an item back to the cache, disposing if no room is available.
         /// </summary>
         private void Release(Gdi32.HDC hdc)
         {

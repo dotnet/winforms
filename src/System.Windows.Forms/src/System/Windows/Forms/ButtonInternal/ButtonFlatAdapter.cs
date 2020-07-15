@@ -50,7 +50,7 @@ namespace System.Windows.Forms.ButtonInternal
                         backColor = Control.FlatAppearance.CheckedBackColor;
                         break;
                     case CheckState.Indeterminate:
-                        backColor = MixedColor(Control.FlatAppearance.CheckedBackColor, colors.buttonFace);
+                        backColor = Control.FlatAppearance.CheckedBackColor.MixColor(colors.buttonFace);
                         break;
                 }
             }
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.ButtonInternal
                         backColor = colors.highlight;
                         break;
                     case CheckState.Indeterminate:
-                        backColor = MixedColor(colors.highlight, colors.buttonFace);
+                        backColor = colors.highlight.MixColor(colors.buttonFace);
                         break;
                 }
             }
@@ -148,7 +148,9 @@ namespace System.Windows.Forms.ButtonInternal
                         backColor = colors.options.HighContrast ? colors.buttonShadow : colors.lowHighlight;
                         break;
                     case CheckState.Indeterminate:
-                        backColor = MixedColor(colors.options.HighContrast ? colors.buttonShadow : colors.lowHighlight, colors.buttonFace);
+                        backColor = colors.buttonFace.MixColor(colors.options.HighContrast
+                            ? colors.buttonShadow
+                            : colors.lowHighlight);
                         break;
                 }
             }
@@ -232,13 +234,13 @@ namespace System.Windows.Forms.ButtonInternal
                 else if (!Control.FlatAppearance.CheckedBackColor.IsEmpty)
                 {
                     backColor = state == CheckState.Checked || state == CheckState.Indeterminate
-                        ? MixedColor(Control.FlatAppearance.CheckedBackColor, colors.lowButtonFace)
+                        ? Control.FlatAppearance.CheckedBackColor.MixColor(colors.lowButtonFace)
                         : colors.lowButtonFace;
                 }
                 else
                 {
                     backColor = state == CheckState.Indeterminate
-                        ? MixedColor(colors.buttonFace, colors.lowButtonFace)
+                        ? colors.buttonFace.MixColor(colors.lowButtonFace)
                         : colors.lowButtonFace;
                 }
 

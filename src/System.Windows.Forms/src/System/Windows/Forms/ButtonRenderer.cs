@@ -17,32 +17,21 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer visualStyleRenderer = null;
-        private static readonly VisualStyleElement ButtonElement = VisualStyleElement.Button.PushButton.Normal;
-        private static bool renderMatchingApplicationState = true;
+        private static VisualStyleRenderer s_visualStyleRenderer = null;
+        private static readonly VisualStyleElement s_buttonElement = VisualStyleElement.Button.PushButton.Normal;
 
         /// <summary>
         ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
         ///  determine how to render.
         ///  If this property is false, the renderer will always render with visualstyles.
         /// </summary>
-        public static bool RenderMatchingApplicationState
-        {
-            get
-            {
-                return renderMatchingApplicationState;
-            }
-            set
-            {
-                renderMatchingApplicationState = value;
-            }
-        }
+        public static bool RenderMatchingApplicationState { get; set; } = true;
 
         private static bool RenderWithVisualStyles
         {
             get
             {
-                return (!renderMatchingApplicationState || Application.RenderWithVisualStyles);
+                return (!RenderMatchingApplicationState || Application.RenderWithVisualStyles);
             }
         }
 
@@ -55,7 +44,7 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                return visualStyleRenderer.IsBackgroundPartiallyTransparent();
+                return s_visualStyleRenderer.IsBackgroundPartiallyTransparent();
             }
             else
             {
@@ -75,7 +64,7 @@ namespace System.Windows.Forms
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer(0);
-                visualStyleRenderer.DrawParentBackground(dc, bounds, childControl);
+                s_visualStyleRenderer.DrawParentBackground(dc, bounds, childControl);
             }
         }
 
@@ -88,7 +77,7 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                visualStyleRenderer.DrawBackground(g, bounds);
+                s_visualStyleRenderer.DrawBackground(g, bounds);
             }
             else
             {
@@ -99,22 +88,25 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Method to draw visualstyle themes in case of per-monitor scenarios where Hwnd is necessary
         /// </summary>
-        /// <param name="g"> graphics object</param>
-        /// <param name="bounds"> button bounds</param>
-        /// <param name="focused"> is focused?</param>
-        /// <param name="state"> state</param>
-        /// <param name="handle"> handle to the control</param>
-        internal static void DrawButtonForHandle(Graphics g, Rectangle bounds, bool focused, PushButtonState state, IntPtr handle)
+        /// <param name="hwnd"> handle to the control</param>
+        internal static void DrawButtonForHandle(
+            IDeviceContext deviceContext,
+            Rectangle bounds,
+            bool focused,
+            PushButtonState state,
+            IntPtr hwnd)
         {
             Rectangle contentBounds;
+
+            Graphics g = deviceContext.TryGetGraphics(create: true);
 
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
 
-                using var hdc = new DeviceContextHdcScope(g);
-                visualStyleRenderer.DrawBackground(hdc, bounds, handle);
-                contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(hdc, bounds);
+                using var hdc = new DeviceContextHdcScope(deviceContext);
+                s_visualStyleRenderer.DrawBackground(hdc, bounds, hwnd);
+                contentBounds = s_visualStyleRenderer.GetBackgroundContentRectangle(hdc, bounds);
             }
             else
             {
@@ -163,9 +155,9 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                visualStyleRenderer.DrawBackground(g, bounds);
-                contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
-                textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+                s_visualStyleRenderer.DrawBackground(g, bounds);
+                contentBounds = s_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
+                textColor = s_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             }
             else
             {
@@ -193,9 +185,9 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                visualStyleRenderer.DrawBackground(g, bounds);
-                visualStyleRenderer.DrawImage(g, imageBounds, image);
-                contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
+                s_visualStyleRenderer.DrawBackground(g, bounds);
+                s_visualStyleRenderer.DrawImage(g, imageBounds, image);
+                contentBounds = s_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
             }
             else
             {
@@ -232,10 +224,10 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                visualStyleRenderer.DrawBackground(g, bounds);
-                visualStyleRenderer.DrawImage(g, imageBounds, image);
-                contentBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
-                textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+                s_visualStyleRenderer.DrawBackground(g, bounds);
+                s_visualStyleRenderer.DrawImage(g, imageBounds, image);
+                contentBounds = s_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
+                textColor = s_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             }
             else
             {
@@ -269,13 +261,13 @@ namespace System.Windows.Forms
 
         private static void InitializeRenderer(int state)
         {
-            if (visualStyleRenderer == null)
+            if (s_visualStyleRenderer == null)
             {
-                visualStyleRenderer = new VisualStyleRenderer(ButtonElement.ClassName, ButtonElement.Part, state);
+                s_visualStyleRenderer = new VisualStyleRenderer(s_buttonElement.ClassName, s_buttonElement.Part, state);
             }
             else
             {
-                visualStyleRenderer.SetParameters(ButtonElement.ClassName, ButtonElement.Part, state);
+                s_visualStyleRenderer.SetParameters(s_buttonElement.ClassName, s_buttonElement.Part, state);
             }
         }
     }

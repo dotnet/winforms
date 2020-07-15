@@ -232,16 +232,20 @@ namespace System.Windows.Forms.VisualStyles
             DrawBackground(hdc, bounds, IntPtr.Zero);
         }
 
-        internal unsafe void DrawBackground(Gdi32.HDC dc, Rectangle bounds, IntPtr hWnd = default)
+        internal unsafe void DrawBackground(Gdi32.HDC dc, Rectangle bounds, IntPtr hwnd = default)
         {
             if (bounds.Width < 0 || bounds.Height < 0)
                 return;
 
-            if (IntPtr.Zero != hWnd)
+            if (IntPtr.Zero != hwnd)
             {
-                using ThemeHandle hTheme = ThemeHandle.Create(Class, true, hWnd)!;
+                using var htheme = new UxTheme.OpenThemeDataScope(hwnd, Class);
+                if (htheme.IsNull)
+                {
+                    throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
+                }
                 RECT rect = bounds;
-                _lastHResult = DrawThemeBackground(hTheme, dc, Part, State, ref rect, null);
+                _lastHResult = DrawThemeBackground(htheme, dc, Part, State, ref rect, null);
             }
             else
             {
@@ -262,17 +266,21 @@ namespace System.Windows.Forms.VisualStyles
             DrawBackground(hdc, bounds, clipRectangle, IntPtr.Zero);
         }
 
-        internal unsafe void DrawBackground(Gdi32.HDC dc, Rectangle bounds, Rectangle clipRectangle, IntPtr hWnd)
+        internal unsafe void DrawBackground(Gdi32.HDC dc, Rectangle bounds, Rectangle clipRectangle, IntPtr hwnd)
         {
             if (bounds.Width < 0 || bounds.Height < 0 || clipRectangle.Width < 0 || clipRectangle.Height < 0)
                 return;
 
-            if (IntPtr.Zero != hWnd)
+            if (IntPtr.Zero != hwnd)
             {
-                using ThemeHandle hTheme = ThemeHandle.Create(Class, true, hWnd)!;
+                using var htheme = new UxTheme.OpenThemeDataScope(hwnd, Class);
+                if (htheme.IsNull)
+                {
+                    throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
+                }
                 RECT rect = bounds;
                 RECT clipRect = clipRectangle;
-                _lastHResult = DrawThemeBackground(hTheme, dc, Part, State, ref rect, &clipRect);
+                _lastHResult = DrawThemeBackground(htheme, dc, Part, State, ref rect, &clipRect);
             }
             else
             {
@@ -618,16 +626,20 @@ namespace System.Windows.Forms.VisualStyles
             return GetPartSize(hdc, type, IntPtr.Zero);
         }
 
-        internal unsafe Size GetPartSize(Gdi32.HDC dc, ThemeSizeType type, IntPtr hWnd = default)
+        internal unsafe Size GetPartSize(Gdi32.HDC dc, ThemeSizeType type, IntPtr hwnd = default)
         {
             // Valid values are 0x0 to 0x2
             if (!ClientUtils.IsEnumValid(type, (int)type, (int)ThemeSizeType.Minimum, (int)ThemeSizeType.Draw))
                 throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
 
-            if (DpiHelper.IsPerMonitorV2Awareness && hWnd != IntPtr.Zero)
+            if (DpiHelper.IsPerMonitorV2Awareness && hwnd != IntPtr.Zero)
             {
-                using ThemeHandle hTheme = ThemeHandle.Create(Class, true, hWnd)!;
-                _lastHResult = GetThemePartSize(hTheme, dc, Part, State, null, type, out Size dpiSize);
+                using var htheme = new UxTheme.OpenThemeDataScope(hwnd, Class);
+                if (htheme.IsNull)
+                {
+                    throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
+                }
+                _lastHResult = GetThemePartSize(htheme, dc, Part, State, null, type, out Size dpiSize);
                 return dpiSize;
             }
 
@@ -920,20 +932,7 @@ namespace System.Windows.Forms.VisualStyles
             internal static ThemeHandle? Create(string className, bool throwExceptionOnFail, IntPtr hWndRef)
             {
                 // HThemes require an HWND when display scaling is different between monitors.
-                IntPtr hTheme = IntPtr.Zero;
-                try
-                {
-                    hTheme = OpenThemeData(hWndRef, className);
-                }
-                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
-                {
-                    if (throwExceptionOnFail)
-                    {
-                        throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed, e);
-                    }
-
-                    return null;
-                }
+                IntPtr hTheme = OpenThemeData(hWndRef, className);
 
                 if (hTheme == IntPtr.Zero)
                 {

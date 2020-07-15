@@ -54,6 +54,12 @@ namespace System.Windows.Forms
         {
         }
 
+        /// <summary>
+        ///  Prefer to use <see cref="DeviceContextHdcScope.DeviceContextHdcScope(IDeviceContext, bool, bool)"/>.
+        /// </summary>
+        /// <remarks>
+        ///  Ideally we'd not bifurcate what properties we apply unless we're absolutely sure we only want one.
+        /// </remarks>
         public unsafe DeviceContextHdcScope(
             IDeviceContext deviceContext,
             ApplyGraphicsProperties applyGraphicsState,
@@ -67,8 +73,9 @@ namespace System.Windows.Forms
             IGraphicsHdcProvider? provider = deviceContext as IGraphicsHdcProvider;
             Graphics? graphics = deviceContext as Graphics;
 
-            // If we can't get a Graphics we can't save state, so it is effectively the same as apply none
-            if (applyGraphicsState == ApplyGraphicsProperties.None || graphics is null || provider?.IsStateClean == true)
+            // If we weren't passed a Graphics object we can't save state, so it is effectively the same as apply none.
+            // If we were passed an IGraphicsHdcProvider and it tells us we're clean, we also don't need to save state.
+            if (applyGraphicsState == ApplyGraphicsProperties.None || graphics is null || provider?.IsGraphicsStateClean == true)
             {
                 if (provider is null)
                 {
@@ -82,7 +89,7 @@ namespace System.Windows.Forms
 
                     if (HDC.IsNull)
                     {
-                        graphics = provider.GetGraphics(create: true);
+                        graphics = provider.GetGraphics(createIfNeeded: true);
                         if (graphics is null)
                         {
                             throw new InvalidOperationException();

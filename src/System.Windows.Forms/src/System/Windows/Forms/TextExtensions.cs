@@ -59,8 +59,8 @@ namespace System.Windows.Forms
             // DrawText requires default text alignment.
             using var alignment = new Gdi32.SetTextAlignmentScope(hdc, default);
 
-            // color empty means use the one currently selected in the dc.
-            using var textColor = foreColor.IsEmpty ? default : new Gdi32.SetTextColorScope(hdc, default);
+            // Color empty means use the one currently selected in the dc.
+            using var textColor = foreColor.IsEmpty ? default : new Gdi32.SetTextColorScope(hdc, foreColor);
             using var fontSelection = new Gdi32.SelectObjectScope(hdc, font);
 
             Gdi32.BKMODE newBackGroundMode = (backColor.IsEmpty || backColor == Color.Transparent) ?

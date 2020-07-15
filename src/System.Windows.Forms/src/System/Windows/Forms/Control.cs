@@ -8414,7 +8414,7 @@ namespace System.Windows.Forms
                 }
 
                 ControlPaint.DrawBackgroundImage(
-                    e.Graphics,
+                    e.GraphicsInternal,
                     BackgroundImage,
                     backColor,
                     BackgroundImageLayout,
@@ -12300,14 +12300,15 @@ namespace System.Windows.Forms
                 pevent = new PaintEventArgs(
                     bufferedGraphics.Graphics,
                     clip,
-                    paintBackground ? PaintEventFlags.SaveState : default);
+                    // We've applied a Clip, so we need to apply it when we draw
+                    (paintBackground ? DrawingEventFlags.SaveState : default) | DrawingEventFlags.GraphicsStateUnclean);
             }
             else
             {
                 pevent = new PaintEventArgs(
                     dc,
                     clip,
-                    paintBackground ? PaintEventFlags.SaveState : default);
+                    paintBackground ? DrawingEventFlags.SaveState : default);
             }
 
             using (pevent)
