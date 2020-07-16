@@ -20,6 +20,16 @@
     <Platforms Condition="'$(Platform)' == 'x86'">AnyCPU;x86</Platforms>
     <TestArchitectures Condition="'$(Platform)' == 'x86'">x86</TestArchitectures>
     <TestArchitectures Condition="'$(Platform)' != 'x86'">x64;x86</TestArchitectures>
+
+    <_IncludeTraits Condition="'$(IncludeTraits)' != ''"> $(IncludeTraits.Replace("'", "").Trim())</_IncludeTraits>
+    <_ExcludeTraits Condition="'$(ExcludeTraits)' != ''"> $(ExcludeTraits.Replace("'", "").Trim())</_ExcludeTraits>
+    <_IncludeTraitsArguments Condition="'$(_IncludeTraits)' != ''">$(_IncludeTraits.Replace(' ', ' -trait category='))</_IncludeTraitsArguments>
+    <_ExcludeTraitsArguments Condition="'$(_ExcludeTraits)' != ''">$(_ExcludeTraits.Replace(' ', ' -notrait category='))</_ExcludeTraitsArguments>
+    <TestRunnerAdditionalArguments>$(_IncludeTraitsArguments) $(_ExcludeTraitsArguments)</TestRunnerAdditionalArguments>
+
+    <!-- <_IncludeTraitsCombined Condition="'$(IncludeTraits)' != ''">_trait_$(_IncludeTraits.Replace(' ', '_'))</_IncludeTraitsCombined>
+    <_ExcludeTraitsCombined Condition="'$(ExcludeTraits)' != ''">_notrait_$(_ExcludeTraits.Replace(' ', '_'))</_ExcludeTraitsCombined>
+    <_ResultFileNameNoExt1>$(_ResultFileNameNoExt)$(_IncludeTraitsCombined)$(_ExcludeTraitsCombined)</_ResultFileNameNoExt1> -->
   </PropertyGroup>
 
   <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">

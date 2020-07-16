@@ -104,17 +104,17 @@ stages:
             /p:Coverage=$(_Coverage)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
             /m:1
-            -notrait category=Synchronous
-          displayName: Run Unit Tests (except category=Synchronous)
+            "/p:ExcludeTraits='''Clipboard'''"
+          displayName: Run Unit Tests (except Clipboard)
         - script: eng\cibuild.cmd
             -test
             -configuration $(_BuildConfig)
             $(_OfficialBuildIdArgs)
             /p:Coverage=$(_Coverage)
-            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test-Clipboard.binlog
             /m:1
-            -trait category=Synchronous
-          displayName: Run Unit Tests (category=Synchronous)
+            "/p:IncludeTraits='''Clipboard'''"
+          displayName: Run Unit Tests (Clipboard)
 
         # Run Integration Tests
         # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
