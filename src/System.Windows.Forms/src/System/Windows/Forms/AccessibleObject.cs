@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the <see cref='IAccessible'/> interface used by this <see cref='AccessibleObject'/>.
         /// </summary>
-        private IAccessible systemIAccessible = new SystemIAccessibleWrapper(
+        private SystemIAccessibleWrapper systemIAccessible = new SystemIAccessibleWrapper(
             null /* Prevents throwing exception when call to null-value system IAccessible */);
 
         /// <summary>
@@ -165,7 +165,15 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual string? Value
         {
-            get => systemIAccessible.get_accValue(NativeMethods.CHILDID_SELF);
+            get
+            {
+                if (systemIAccessible.IsIAccessibleCreated)
+                {
+                    return systemIAccessible.get_accValue(NativeMethods.CHILDID_SELF);
+                }
+
+                return string.Empty;
+            }
             set => systemIAccessible.set_accValue(NativeMethods.CHILDID_SELF, value);
         }
 
@@ -242,12 +250,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            if (systemIAccessible != null)
-            {
-                return WrapIAccessible(systemIAccessible.accFocus);
-            }
-
-            return null;
+            return WrapIAccessible(systemIAccessible.accFocus);
         }
 
         /// <summary>
@@ -284,12 +287,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            if (systemIAccessible != null)
-            {
-                return WrapIAccessible(systemIAccessible.accSelection);
-            }
-
-            return null;
+            return WrapIAccessible(systemIAccessible.accSelection);
         }
 
         /// <summary>
@@ -314,7 +312,7 @@ namespace System.Windows.Forms
                 return this;
             }
 
-            if (systemIAccessible != null)
+            if (systemIAccessible.IsIAccessibleCreated)
             {
                 return WrapIAccessible(systemIAccessible.accHitTest(x, y));
             }
@@ -748,12 +746,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
-            {
-                return systemIAccessible.accHitTest(xLeft, yTop);
-            }
-
-            return null;
+            return systemIAccessible.accHitTest(xLeft, yTop);
         }
 
         /// <summary>
@@ -810,10 +803,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
-            {
-                systemIAccessible.accLocation(out pxLeft, out pyTop, out pcxWidth, out pcyHeight, childID);
-            }
+            systemIAccessible.accLocation(out pxLeft, out pyTop, out pcxWidth, out pcyHeight, childID);
         }
 
         /// <summary>
@@ -846,17 +836,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
+            if (!SysNavigate(navDir, childID, out object? retObject))
             {
-                if (!SysNavigate(navDir, childID, out object? retObject))
-                {
-                    return systemIAccessible.accNavigate(navDir, childID);
-                }
-
-                return retObject;
+                return systemIAccessible.accNavigate(navDir, childID);
             }
 
-            return null;
+            return retObject;
         }
 
         /// <summary>
@@ -887,10 +872,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
-            {
-                systemIAccessible.accSelect(flagsSelect, childID);
-            }
+            systemIAccessible.accSelect(flagsSelect, childID);
         }
 
         /// <summary>
@@ -899,10 +881,7 @@ namespace System.Windows.Forms
         public virtual void DoDefaultAction()
         {
             // By default, just does the system default action if available
-            if (systemIAccessible != null)
-            {
-                systemIAccessible.accDoDefaultAction(0);
-            }
+            systemIAccessible.accDoDefaultAction(0);
         }
 
         /// <summary>
@@ -963,14 +942,7 @@ namespace System.Windows.Forms
 
                 if (childCount == -1)
                 {
-                    if (systemIAccessible != null)
-                    {
-                        childCount = systemIAccessible.accChildCount;
-                    }
-                    else
-                    {
-                        childCount = 0;
-                    }
+                    childCount = systemIAccessible.accChildCount;
                 }
 
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.accHildCount: this = " + ToString() + ", returning " + childCount.ToString(CultureInfo.InvariantCulture));
@@ -1002,12 +974,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
-            {
-                return systemIAccessible.get_accDefaultAction(childID);
-            }
-
-            return null;
+            return systemIAccessible.get_accDefaultAction(childID);
         }
 
         /// <summary>
@@ -1033,12 +1000,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
-            {
-                return systemIAccessible.get_accDescription(childID);
-            }
-
-            return null;
+            return systemIAccessible.get_accDescription(childID);
         }
 
         /// <summary>
@@ -1078,12 +1040,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (systemIAccessible != null)
-                {
-                    return systemIAccessible.accFocus;
-                }
-
-                return null;
+                return systemIAccessible.accFocus;
             }
         }
 
@@ -1109,12 +1066,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
-            {
-                return systemIAccessible.get_accHelp(childID);
-            }
-
-            return null;
+            return systemIAccessible.get_accHelp(childID);
         }
 
         /// <summary>
@@ -1139,13 +1091,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
-            {
-                return systemIAccessible.get_accHelpTopic(out pszHelpFile, childID);
-            }
-
-            pszHelpFile = null;
-            return -1;
+            return systemIAccessible.get_accHelpTopic(out pszHelpFile, childID);
         }
 
         /// <summary>
@@ -1175,12 +1121,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
-            {
-                return systemIAccessible.get_accKeyboardShortcut(childID);
-            }
-
-            return null;
+            return systemIAccessible.get_accKeyboardShortcut(childID);
         }
 
         /// <summary>
@@ -1214,24 +1155,18 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Otherwise, use the system provided name
-            if (systemIAccessible != null)
+            string? retval = systemIAccessible.get_accName(childID);
+
+            if (IsClientObject)
             {
-                string retval = systemIAccessible.get_accName(childID) ?? string.Empty;
-
-                if (IsClientObject)
+                if (string.IsNullOrEmpty(retval))
                 {
-                    if (string.IsNullOrEmpty(retval))
-                    {
-                        // Name the child after its parent
-                        retval = Name ?? string.Empty;
-                    }
+                    // Name the child after its parent
+                    retval = Name;
                 }
-
-                return retval;
             }
 
-            return null;
+            return retval;
         }
 
         /// <summary>
@@ -1309,12 +1244,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (systemIAccessible != null)
-                {
-                    return systemIAccessible.accSelection;
-                }
-
-                return null;
+                return systemIAccessible.accSelection;
             }
         }
 
@@ -1370,12 +1300,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
-            {
-                return systemIAccessible.get_accValue(childID);
-            }
-
-            return null;
+            return systemIAccessible.get_accValue(childID);
         }
 
         /// <summary>
@@ -1554,7 +1479,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible != null)
+            if (systemIAccessible.IsIAccessibleCreated)
             {
                 if (!SysNavigate((int)navdir, NativeMethods.CHILDID_SELF, out object? retObject))
                 {
@@ -1655,7 +1580,7 @@ namespace System.Windows.Forms
             {
                 systemIAccessible = new SystemIAccessibleWrapper((IAccessible?)acc);
                 systemIEnumVariant = (Oleaut32.IEnumVariant?)en;
-                systemIOleWindow = acc as Ole32.IOleWindow;
+                systemIOleWindow = (Ole32.IOleWindow?)acc;
             }
         }
 

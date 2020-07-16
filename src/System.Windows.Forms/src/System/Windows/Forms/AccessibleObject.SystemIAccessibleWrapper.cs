@@ -23,7 +23,12 @@ namespace System.Windows.Forms
             private IAccessible? _systemIAccessible;
 
             public SystemIAccessibleWrapper(IAccessible? systemIAccessible)
-                => _systemIAccessible = systemIAccessible;
+            {
+                _systemIAccessible = systemIAccessible;
+                IsIAccessibleCreated = systemIAccessible != null;
+            }
+
+            public bool IsIAccessibleCreated { get; }
 
             public void accSelect(int flagsSelect, object varChild)
                 => Execute(systemIAccessible => systemIAccessible.accSelect(flagsSelect, varChild));
@@ -68,7 +73,7 @@ namespace System.Windows.Forms
             public string? get_accName(object childID)
                 => GetValue(systemIAccessible => systemIAccessible.get_accName(childID));
 
-            public void set_accName(object childID, string newName)
+            public void set_accName(object childID, string? newName)
                 => Execute(systemIAccessible => systemIAccessible.set_accName(childID, newName));
 
             public string? accName
@@ -86,7 +91,7 @@ namespace System.Windows.Forms
             public string? get_accValue(object childID)
                 => GetValue(systemIAccessible => systemIAccessible.get_accValue(childID));
 
-            public void set_accValue(object childID, string newValue)
+            public void set_accValue(object childID, string? newValue)
                 => Execute(systemIAccessible => systemIAccessible.set_accValue(childID, newValue));
 
             public string? accDescription

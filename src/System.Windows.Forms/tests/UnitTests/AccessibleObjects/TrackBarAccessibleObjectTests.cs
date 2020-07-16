@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -64,21 +64,6 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             };
             Control.ControlAccessibleObject accessibilityObject = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(ownerControl.AccessibilityObject);
             Assert.Throws<COMException>(() => accessibilityObject.Value = value);
-            Assert.Equal("50", accessibilityObject.Value);
-            Assert.Equal(5, ownerControl.Value);
-        }
-
-        [WinFormsTheory]
-        [InlineData("101")]
-        [InlineData("-1")]
-        public void TrackBarAccessibilityObject_Value_SetOutOfRange_ThrowsArgumentException(string value)
-        {
-            using var ownerControl = new TrackBar
-            {
-                Value = 5
-            };
-            Control.ControlAccessibleObject accessibilityObject = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(ownerControl.AccessibilityObject);
-            Assert.Throws<ArgumentException>(null, () => accessibilityObject.Value = value);
             Assert.Equal("50", accessibilityObject.Value);
             Assert.Equal(5, ownerControl.Value);
         }

@@ -63,12 +63,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    return _owningPropertyGridView.AccessibilityObject;
-                }
-            }
+                => _owningPropertyGridView.AccessibilityObject;
         }
     }
 }

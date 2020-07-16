@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.ListBox;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -16,22 +17,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         private class GridViewListBoxItemAccessibleObject : ListBox.ListBoxItemAccessibleObject
         {
             private readonly GridViewListBox _owningGridViewListBox;
-            private readonly object _owningItem;
+            private readonly ItemArray.Entry _owningItem;
 
-            public GridViewListBoxItemAccessibleObject(GridViewListBox owningGridViewListBox, object owningItem)
-                : base(owningGridViewListBox, owningItem, owningGridViewListBox.AccessibilityObject as ListBox.ListBoxAccessibleObject)
+            public GridViewListBoxItemAccessibleObject(GridViewListBox owningGridViewListBox, ItemArray.Entry owningItem)
+                : base(owningGridViewListBox, owningItem, owningGridViewListBox.AccessibilityObject as ListBoxAccessibleObject)
             {
                 _owningGridViewListBox = owningGridViewListBox;
                 _owningItem = owningItem;
             }
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    return _owningGridViewListBox.AccessibilityObject;
-                }
-            }
+                => _owningGridViewListBox.AccessibilityObject;
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {

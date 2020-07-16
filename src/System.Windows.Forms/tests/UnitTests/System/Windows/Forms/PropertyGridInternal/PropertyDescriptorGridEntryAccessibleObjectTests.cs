@@ -122,12 +122,12 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
 
         private class TestDropDownHolder : PropertyGridView.DropDownHolder
         {
-            private Control _component;
+            private readonly Control _component;
 
-            public TestDropDownHolder(PropertyGridView psheet, Control component)
-                : base(psheet)
+            public TestDropDownHolder(PropertyGridView propertyGridView, Control control)
+                : base(propertyGridView)
             {
-                _component = component;
+                _component = control;
             }
 
             public override Control Component => _component;

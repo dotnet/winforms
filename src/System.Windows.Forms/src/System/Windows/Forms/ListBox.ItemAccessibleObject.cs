@@ -25,10 +25,10 @@ namespace System.Windows.Forms
             private readonly ListBox _owningListBox;
             private readonly IAccessible _systemIAccessible;
 
-            public ListBoxItemAccessibleObject(ListBox owningListBox, object itemEntry, ListBoxAccessibleObject owningAccessibleObject)
+            public ListBoxItemAccessibleObject(ListBox owningListBox, ItemArray.Entry itemEntry, ListBoxAccessibleObject owningAccessibleObject)
             {
-                _owningListBox = owningListBox;
-                _itemEntry = (ItemArray.Entry)itemEntry;
+                _owningListBox = owningListBox ?? throw new ArgumentNullException(nameof(owningListBox));
+                _itemEntry = itemEntry;
                 _owningAccessibleObject = owningAccessibleObject;
                 _systemIAccessible = owningAccessibleObject.GetSystemIAccessibleInternal();
             }

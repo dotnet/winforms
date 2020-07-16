@@ -35,7 +35,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
                 ConstructorInfo constructorInfo = gridViewListBoxAccessibleObjectType.GetConstructors()[0];
 
                 PropertyGridView.GridViewListBox owningGridViewListBox = new PropertyGridView.GridViewListBox(null);
-                constructorInfo.Invoke(new Object[] { owningGridViewListBox });
+                constructorInfo.Invoke(new object[] { owningGridViewListBox });
             });
         }
     }
