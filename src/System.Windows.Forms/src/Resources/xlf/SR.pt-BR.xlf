@@ -687,16 +687,6 @@
         <target state="translated">Não é possível alterar o documento ou adicioná-lo após imprimi-lo.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Não é possível converter duplo em data.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Não é possível converter inteiro em flutuante.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">Iniciar um segundo loop de mensagens em um único thread não é uma operação válida. Use Form.ShowDialog.</target>
@@ -5437,6 +5427,11 @@ Deseja substituí-lo?</target>
         <target state="translated">O número de linhas na tabela.</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="translated">Horizontal</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">O identificador de janela já existe.</target>
@@ -5558,7 +5553,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="ImageListDuplicateFailed">
         <source>Duplication of the ImageList handle did not succeed.</source>
-        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <target state="translated">A duplicação do identificador de ImageList não foi bem-sucedida.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -10799,6 +10794,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">Ocorre sempre que o controle de usuário é carregado.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="translated">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">

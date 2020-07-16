@@ -406,16 +406,6 @@
         <target state="translated">İşlenmemiş VT: {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Double tarihe dönüştürülemez.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Tam sayı kayan noktalıya dönüştürülemez.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ContentAlignmentEditorAccName">
         <source>Alignment Picker</source>
         <target state="translated">Hizalama Seçici</target>

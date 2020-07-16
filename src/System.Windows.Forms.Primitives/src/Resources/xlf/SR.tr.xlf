@@ -7,16 +7,6 @@
         <target state="translated">İşlenmemiş VT: {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Double tarihe dönüştürülemez.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Tam sayı kayan noktalıya dönüştürülemez.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">IDictionary parametresindeki bir veya daha fazla girdi geçerli değil. Tüm değerlerin nesnenin özellikleriyle eşleştiğini doğrulayın.</target>

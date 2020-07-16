@@ -687,16 +687,6 @@
         <target state="translated">Po wydrukowaniu dokumentu nie można już go zmieniać ani dodawać do niego.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Nie można przekonwertować typu double na typ date.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Nie można przekonwertować typu integer na typ float.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">Rozpoczynanie drugiej pętli komunikatów w pojedynczym wątku nie jest prawidłową operacją. Użyj zamiast tego elementu Form.ShowDialog.</target>
@@ -5437,6 +5427,11 @@ Czy chcesz go zamienić?</target>
         <target state="translated">Liczba wierszy w tabeli.</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="translated">Poziomo</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">Uchwyt okna już istnieje.</target>
@@ -5558,7 +5553,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="ImageListDuplicateFailed">
         <source>Duplication of the ImageList handle did not succeed.</source>
-        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <target state="translated">Duplikowanie uchwytu elementu ImageList nie powiodło się.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -10799,6 +10794,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">Występuje za każdym razem, gdy jest ładowany formant użytkownika.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="translated">Pionowo</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">
