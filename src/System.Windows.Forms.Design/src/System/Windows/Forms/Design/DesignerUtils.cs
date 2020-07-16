@@ -34,50 +34,50 @@ namespace System.Windows.Forms.Design
 
         //The box-like image used as the user is dragging comps from the toolbox
         private static Bitmap s_boxImage;
-        public static int BOXIMAGESIZE = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(16) : 16;
+        public static int BOXIMAGESIZE = ScaleLogicalToDeviceUnitsX(16);
 
         // selection border size
-        public static int SELECTIONBORDERSIZE = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(1) : 1;
+        public static int SELECTIONBORDERSIZE = ScaleLogicalToDeviceUnitsX(1);
         // Although the selection border is only 1, we actually want a 3 pixel hittestarea
-        public static int SELECTIONBORDERHITAREA = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(3) : 3;
+        public static int SELECTIONBORDERHITAREA = ScaleLogicalToDeviceUnitsX(3);
 
         // We want to make sure that the 1 pixel selectionborder is centered on the handles. The fact that the border is actually 3 pixels wide works like magic. If you draw a picture, then you will see why.
         //grabhandle size (diameter)
-        public static int HANDLESIZE = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(7) : 7;
+        public static int HANDLESIZE = ScaleLogicalToDeviceUnitsX(7);
         //how much should the grabhandle overlap the control
-        public static int HANDLEOVERLAP = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(2) : 2;
+        public static int HANDLEOVERLAP = ScaleLogicalToDeviceUnitsX(2);
         //we want the selection border to be centered on a grabhandle, so how much do. we need to offset the border from the control to make that happen
         public static int SELECTIONBORDEROFFSET = ((HANDLESIZE - SELECTIONBORDERSIZE) / 2) - HANDLEOVERLAP;
 
         //no-resize handle size (diameter)
-        public static int NORESIZEHANDLESIZE = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(5) : 5;
+        public static int NORESIZEHANDLESIZE = ScaleLogicalToDeviceUnitsX(5);
         //we want the selection border to be centered on a grabhandle, so how much do
         //we need to offset the border from the control to make that happen
         public static int NORESIZEBORDEROFFSET = ((NORESIZEHANDLESIZE - SELECTIONBORDERSIZE) / 2);
 
         //lock handle height
-        public static int LOCKHANDLEHEIGHT = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(9) : 9;
+        public static int LOCKHANDLEHEIGHT = ScaleLogicalToDeviceUnitsX(9);
         //total lock handle width
-        public static int LOCKHANDLEWIDTH = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(7) : 7;
+        public static int LOCKHANDLEWIDTH = ScaleLogicalToDeviceUnitsX(7);
         //how much should the lockhandle overlap the control
-        public static int LOCKHANDLEOVERLAP = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(2) : 2;
+        public static int LOCKHANDLEOVERLAP = ScaleLogicalToDeviceUnitsX(2);
         //we want the selection border to be centered on the no-resize handle, so calculate how many pixels we need
         //to offset the selection border from the control -- since the handle is not square, we need one in each direction
         public static int LOCKEDSELECTIONBORDEROFFSET_Y = ((LOCKHANDLEHEIGHT - SELECTIONBORDERSIZE) / 2) - LOCKHANDLEOVERLAP;
         public static int LOCKEDSELECTIONBORDEROFFSET_X = ((LOCKHANDLEWIDTH - SELECTIONBORDERSIZE) / 2) - LOCKHANDLEOVERLAP;
 
         // upper rectangle size (diameter)
-        public static int LOCKHANDLESIZE_UPPER = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(5) : 5;
+        public static int LOCKHANDLESIZE_UPPER = ScaleLogicalToDeviceUnitsX(5);
         // lower rectangle size
-        public static int LOCKHANDLEHEIGHT_LOWER = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(6) : 6;
-        public static int LOCKHANDLEWIDTH_LOWER = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(7) : 7;
+        public static int LOCKHANDLEHEIGHT_LOWER = ScaleLogicalToDeviceUnitsX(6);
+        public static int LOCKHANDLEWIDTH_LOWER = ScaleLogicalToDeviceUnitsX(7);
 
         //Offset used when drawing the upper rect of a lock handle
         public static int LOCKHANDLEUPPER_OFFSET = (LOCKHANDLEWIDTH_LOWER - LOCKHANDLESIZE_UPPER) / 2;
         //Offset used when drawing the lower rect of a lock handle
         public static int LOCKHANDLELOWER_OFFSET = (LOCKHANDLEHEIGHT - LOCKHANDLEHEIGHT_LOWER);
 
-        public static int CONTAINERGRABHANDLESIZE = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(15) : 15;
+        public static int CONTAINERGRABHANDLESIZE = ScaleLogicalToDeviceUnitsX(15);
         //delay for showing snaplines on keyboard movements
         public static int SNAPELINEDELAY = 1000;
 
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Design
         public static int DEFAULTCOLUMNCOUNT = 2;
 
         //size of the col/row grab handle glyphs for teh table layout panel
-        public static int RESIZEGLYPHSIZE = DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(4) : 4;
+        public static int RESIZEGLYPHSIZE = ScaleLogicalToDeviceUnitsX(4);
 
         //default value for Form padding if it has not been set in the designer (usability study request)
         public static int DEFAULTFORMPADDING = 9;
@@ -845,6 +845,9 @@ namespace System.Windows.Forms.Design
                 }
             }
         }
+
+        private static int ScaleLogicalToDeviceUnitsX(int unit)
+            => DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(unit) : unit;
 
         private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
         {
