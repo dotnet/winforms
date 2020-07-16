@@ -119,7 +119,7 @@ Tests are built and executed by file name convention
 
 #### Dispose created objects
 
-* All tests creating disposable objects (e.g. UI controls) must dispose them. Otherwise it could lead to memory leaks (bad but not terminal) and race conditions that could lead to hung tests (terminal).
+* All tests creating disposable objects (e.g. UI controls) must dispose them. Otherwise it could lead to memory leaks (bad but not terminal) and race conditions that could lead to deadlocked tests (terminal).
   ```cs
     [WinFormsFact]
     public void ButtonBase_GetAutoSizeMode_Invoke_ReturnsExpected()
@@ -193,7 +193,7 @@ Also be beware and be mindful of VS-specific behaviours: https://xunit.net/faq/t
   
 ### Throw unhandled exceptions
 
-We have been observed unexplainable hanging tests. To get better handle on the situation we have started trapping `ThreadException`s.
+We have been observing unexplainable deadlocked tests. To get better handle on the situation we have started trapping `ThreadException`s.
 Each test class must implement the `IClassFixture<ThreadExceptionFixture>` interface similar to the one below:
   ```cs
     public class ButtonBaseTests : IClassFixture<ThreadExceptionFixture>
