@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -19,7 +20,7 @@ namespace System.Windows.Forms
     ///  paint common Windows UI pieces. Many windows forms controls use this class to paint
     ///  their UI elements.
     /// </summary>
-    public static class ControlPaint
+    public static partial class ControlPaint
     {
         [ThreadStatic]
         private static Bitmap checkImage;         // image used to render checkmarks
@@ -86,8 +87,8 @@ namespace System.Windows.Forms
 
                     case ImageLayout.Zoom:
                         Size imageSize = backgroundImage.Size;
-                        float xRatio = (float)bounds.Width / (float)imageSize.Width;
-                        float yRatio = (float)bounds.Height / (float)imageSize.Height;
+                        float xRatio = bounds.Width / (float)imageSize.Width;
+                        float yRatio = bounds.Height / (float)imageSize.Height;
                         if (xRatio < yRatio)
                         {
                             //width should fill the entire bounds.
@@ -581,11 +582,21 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws a border of the specified style and color to the given graphics.
         /// </summary>
-        public static void DrawBorder(Graphics graphics, Rectangle bounds,
-                                      Color leftColor, int leftWidth, ButtonBorderStyle leftStyle,
-                                      Color topColor, int topWidth, ButtonBorderStyle topStyle,
-                                      Color rightColor, int rightWidth, ButtonBorderStyle rightStyle,
-                                      Color bottomColor, int bottomWidth, ButtonBorderStyle bottomStyle)
+        public static unsafe void DrawBorder(
+            Graphics graphics,
+            Rectangle bounds,
+            Color leftColor,
+            int leftWidth,
+            ButtonBorderStyle leftStyle,
+            Color topColor,
+            int topWidth,
+            ButtonBorderStyle topStyle,
+            Color rightColor,
+            int rightWidth,
+            ButtonBorderStyle rightStyle,
+            Color bottomColor,
+            int bottomWidth,
+            ButtonBorderStyle bottomStyle)
         {
             // Very general, and very slow
             if (graphics == null)
@@ -593,65 +604,112 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(graphics));
             }
 
-            int[] topLineLefts = new int[topWidth];
-            int[] topLineRights = new int[topWidth];
-            int[] leftLineTops = new int[leftWidth];
-            int[] leftLineBottoms = new int[leftWidth];
-            int[] bottomLineLefts = new int[bottomWidth];
-            int[] bottomLineRights = new int[bottomWidth];
-            int[] rightLineTops = new int[rightWidth];
-            int[] rightLineBottoms = new int[rightWidth];
+            DrawBorder(
+                (IDeviceContext)graphics,
+                bounds,
+                leftColor,
+                leftWidth,
+                leftStyle,
+                topColor,
+                topWidth,
+                topStyle,
+                rightColor,
+                rightWidth,
+                rightStyle,
+                bottomColor,
+                bottomWidth,
+                bottomStyle);
+        }
+
+        internal static unsafe void DrawBorder(
+            IDeviceContext deviceContext,
+            Rectangle bounds,
+            Color leftColor,
+            int leftWidth,
+            ButtonBorderStyle leftStyle,
+            Color topColor,
+            int topWidth,
+            ButtonBorderStyle topStyle,
+            Color rightColor,
+            int rightWidth,
+            ButtonBorderStyle rightStyle,
+            Color bottomColor,
+            int bottomWidth,
+            ButtonBorderStyle bottomStyle)
+        {
+            int totalData = (topWidth + leftWidth + bottomWidth + rightWidth) * 2;
+            Span<int> allData;
+
+            if (totalData <= 40)
+            {
+                // Reasonable to put on the stack (40 * 8 bytes)
+                int* data = stackalloc int[totalData];
+                allData = new Span<int>(data, totalData);
+            }
+            else
+            {
+                allData = new int[totalData];
+            }
+
+            Span<int> topLineLefts = allData.Slice(0, topWidth);
+            allData = allData.Slice(topWidth);
+            Span<int> topLineRights = allData.Slice(0, topWidth);
+            allData = allData.Slice(topWidth);
+            Span<int> leftLineTops = allData.Slice(0, leftWidth);
+            allData = allData.Slice(leftWidth);
+            Span<int> leftLineBottoms = allData.Slice(0, leftWidth);
+            allData = allData.Slice(leftWidth);
+            Span<int> bottomLineLefts = allData.Slice(0, bottomWidth);
+            allData = allData.Slice(bottomWidth);
+            Span<int> bottomLineRights = allData.Slice(0, bottomWidth);
+            allData = allData.Slice(bottomWidth);
+            Span<int> rightLineTops = allData.Slice(0, rightWidth);
+            allData = allData.Slice(rightWidth);
+            Span<int> rightLineBottoms = allData.Slice(0, rightWidth);
 
             float topToLeft = 0.0f;
             float bottomToLeft = 0.0f;
             if (leftWidth > 0)
             {
-                topToLeft = ((float)topWidth) / ((float)leftWidth);
-                bottomToLeft = ((float)bottomWidth) / ((float)leftWidth);
+                topToLeft = topWidth / ((float)leftWidth);
+                bottomToLeft = bottomWidth / ((float)leftWidth);
             }
+
             float topToRight = 0.0f;
             float bottomToRight = 0.0f;
             if (rightWidth > 0)
             {
-                topToRight = ((float)topWidth) / ((float)rightWidth);
-                bottomToRight = ((float)bottomWidth) / ((float)rightWidth);
+                topToRight = topWidth / ((float)rightWidth);
+                bottomToRight = bottomWidth / ((float)rightWidth);
             }
-
-            HLSColor topHLSColor = new HLSColor(topColor);
-            HLSColor leftHLSColor = new HLSColor(leftColor);
-            HLSColor bottomHLSColor = new HLSColor(bottomColor);
-            HLSColor rightHLSColor = new HLSColor(rightColor);
 
             if (topWidth > 0)
             {
                 int i = 0;
                 for (; i < topWidth; i++)
                 {
-                    int leftOffset = 0;
-                    if (topToLeft > 0)
-                    {
-                        leftOffset = (int)(((float)i) / topToLeft);
-                    }
-                    int rightOffset = 0;
-                    if (topToRight > 0)
-                    {
-                        rightOffset = (int)(((float)i) / topToRight);
-                    }
+                    int leftOffset = topToLeft > 0 ? (int)(i / topToLeft) : 0;
+                    int rightOffset = topToRight > 0 ? (int)(i / topToRight) : 0;
+
                     topLineLefts[i] = bounds.X + leftOffset;
                     topLineRights[i] = bounds.X + bounds.Width - rightOffset - 1;
+
                     if (leftWidth > 0)
                     {
                         leftLineTops[leftOffset] = bounds.Y + i + 1;
                     }
+
                     if (rightWidth > 0)
                     {
                         rightLineTops[rightOffset] = bounds.Y + i;
                     }
                 }
+
                 for (int j = i; j < leftWidth; j++)
                 {
                     leftLineTops[j] = bounds.Y + i + 1;
                 }
+
                 for (int j = i; j < rightWidth; j++)
                 {
                     rightLineTops[j] = bounds.Y + i;
@@ -663,6 +721,7 @@ namespace System.Windows.Forms
                 {
                     leftLineTops[i] = bounds.Y;
                 }
+
                 for (int i = 0; i < rightWidth; i++)
                 {
                     rightLineTops[i] = bounds.Y;
@@ -674,31 +733,28 @@ namespace System.Windows.Forms
                 int i = 0;
                 for (; i < bottomWidth; i++)
                 {
-                    int leftOffset = 0;
-                    if (bottomToLeft > 0)
-                    {
-                        leftOffset = (int)(((float)i) / bottomToLeft);
-                    }
-                    int rightOffset = 0;
-                    if (bottomToRight > 0)
-                    {
-                        rightOffset = (int)(((float)i) / bottomToRight);
-                    }
+                    int leftOffset = bottomToLeft > 0 ? (int)(i / bottomToLeft) : 0;
+                    int rightOffset = bottomToRight > 0 ? (int)(i / bottomToRight) : 0;
+
                     bottomLineLefts[i] = bounds.X + leftOffset;
                     bottomLineRights[i] = bounds.X + bounds.Width - rightOffset - 1;
+
                     if (leftWidth > 0)
                     {
                         leftLineBottoms[leftOffset] = bounds.Y + bounds.Height - i - 1;
                     }
+
                     if (rightWidth > 0)
                     {
                         rightLineBottoms[rightOffset] = bounds.Y + bounds.Height - i - 1;
                     }
                 }
+
                 for (int j = i; j < leftWidth; j++)
                 {
                     leftLineBottoms[j] = bounds.Y + bounds.Height - i - 1;
                 }
+
                 for (int j = i; j < rightWidth; j++)
                 {
                     rightLineBottoms[j] = bounds.Y + bounds.Height - i - 1;
@@ -710,299 +766,260 @@ namespace System.Windows.Forms
                 {
                     leftLineBottoms[i] = bounds.Y + bounds.Height - 1;
                 }
+
                 for (int i = 0; i < rightWidth; i++)
                 {
                     rightLineBottoms[i] = bounds.Y + bounds.Height - 1;
                 }
             }
 
-            Pen pen;
-
-            // draw top line
+            // Draw top border
             switch (topStyle)
             {
                 case ButtonBorderStyle.None:
-                    // nothing
                     break;
                 case ButtonBorderStyle.Dotted:
-                    pen = new Pen(topColor)
-                    {
-                        DashStyle = DashStyle.Dot
-                    };
-                    for (int i = 0; i < topWidth; i++)
-                    {
-                        graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
-                    }
-                    pen.Dispose();
-                    break;
                 case ButtonBorderStyle.Dashed:
-                    pen = new Pen(topColor)
-                    {
-                        DashStyle = DashStyle.Dash
-                    };
-                    for (int i = 0; i < topWidth; i++)
-                    {
-                        graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
-                    }
-                    pen.Dispose();
-                    break;
                 case ButtonBorderStyle.Solid:
-                    pen = new Pen(topColor)
                     {
-                        DashStyle = DashStyle.Solid
-                    };
-                    for (int i = 0; i < topWidth; i++)
-                    {
-                        graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
-                    }
-                    pen.Dispose();
-                    break;
-                case ButtonBorderStyle.Inset:
-                    {
-                        float inc = InfinityToOne(1.0f / (float)(topWidth - 1));
-                        for (int i = 0; i < topWidth; i++)
+                        if (!topColor.HasTransparency() && topStyle == ButtonBorderStyle.Solid)
                         {
-                            pen = new Pen(topHLSColor.Darker(1.0f - ((float)i) * inc))
+                            using var hdc = new DeviceContextHdcScope(deviceContext);
+                            using var hpen = new Gdi32.CreatePenScope(topColor);
+                            for (int i = 0; i < topWidth; i++)
                             {
-                                DashStyle = DashStyle.Solid
-                            };
-                            graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
-                            pen.Dispose();
+                                hdc.DrawLine(hpen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
+                            }
                         }
+                        else
+                        {
+                            Graphics graphics = deviceContext.TryGetGraphics(create: true);
+                            using var pen = new Pen(topColor)
+                            {
+                                DashStyle = topStyle switch
+                                {
+                                    ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                    ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                    _ => DashStyle.Solid,
+                                }
+                            };
+
+                            for (int i = 0; i < topWidth; i++)
+                            {
+                                graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
+                            }
+                        }
+
                         break;
                     }
+                case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
-                        float inc = InfinityToOne(1.0f / (float)(topWidth - 1));
-
+                        HLSColor hlsColor = new HLSColor(topColor);
+                        float inc = InfinityToOne(1.0f / (topWidth - 1));
+                        using var hdc = new DeviceContextHdcScope(deviceContext);
                         for (int i = 0; i < topWidth; i++)
                         {
-                            pen = new Pen(topHLSColor.Lighter(1.0f - ((float)i) * inc))
-                            {
-                                DashStyle = DashStyle.Solid
-                            };
-                            graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
-                            pen.Dispose();
+                            using var hpen = new Gdi32.CreatePenScope(topStyle == ButtonBorderStyle.Inset
+                                ? hlsColor.Darker(1.0f - i * inc)
+                                : hlsColor.Lighter(1.0f - i * inc));
+                            hdc.DrawLine(hpen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
                         }
                         break;
                     }
             }
 
-            // Assertion: pen has been disposed
-            pen = null;
-
-            // draw left line
+            // Draw left border
             switch (leftStyle)
             {
                 case ButtonBorderStyle.None:
-                    // nothing
                     break;
                 case ButtonBorderStyle.Dotted:
-                    pen = new Pen(leftColor)
-                    {
-                        DashStyle = DashStyle.Dot
-                    };
-                    for (int i = 0; i < leftWidth; i++)
-                    {
-                        graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
-                    }
-                    pen.Dispose();
-                    break;
                 case ButtonBorderStyle.Dashed:
-                    pen = new Pen(leftColor)
-                    {
-                        DashStyle = DashStyle.Dash
-                    };
-                    for (int i = 0; i < leftWidth; i++)
-                    {
-                        graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
-                    }
-                    pen.Dispose();
-                    break;
                 case ButtonBorderStyle.Solid:
-                    pen = new Pen(leftColor)
                     {
-                        DashStyle = DashStyle.Solid
-                    };
-                    for (int i = 0; i < leftWidth; i++)
-                    {
-                        graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
-                    }
-                    pen.Dispose();
-                    break;
-                case ButtonBorderStyle.Inset:
-                    {
-                        float inc = InfinityToOne(1.0f / (float)(leftWidth - 1));
-                        for (int i = 0; i < leftWidth; i++)
+                        if (!leftColor.HasTransparency() && leftStyle == ButtonBorderStyle.Solid)
                         {
-                            pen = new Pen(leftHLSColor.Darker(1.0f - ((float)i) * inc))
+                            using var hdc = new DeviceContextHdcScope(deviceContext);
+                            using var hpen = new Gdi32.CreatePenScope(leftColor);
+                            for (int i = 0; i < leftWidth; i++)
                             {
-                                DashStyle = DashStyle.Solid
+                                hdc.DrawLine(hpen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
+                            }
+                        }
+                        else
+                        {
+                            Graphics graphics = deviceContext.TryGetGraphics(create: true);
+                            using var pen = new Pen(leftColor)
+                            {
+                                DashStyle = leftStyle switch
+                                {
+                                    ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                    ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                    _ => DashStyle.Solid,
+                                }
                             };
-                            graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
-                            pen.Dispose();
+
+                            for (int i = 0; i < leftWidth; i++)
+                            {
+                                graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
+                            }
                         }
                         break;
                     }
+                case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
-                        float inc = InfinityToOne(1.0f / (float)(leftWidth - 1));
+                        HLSColor hlsColor = new HLSColor(leftColor);
+                        float inc = InfinityToOne(1.0f / (leftWidth - 1));
+                        using var hdc = new DeviceContextHdcScope(deviceContext);
                         for (int i = 0; i < leftWidth; i++)
                         {
-                            pen = new Pen(leftHLSColor.Lighter(1.0f - ((float)i) * inc))
-                            {
-                                DashStyle = DashStyle.Solid
-                            };
-                            graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
-                            pen.Dispose();
+                            using var hpen = new Gdi32.CreatePenScope(leftStyle == ButtonBorderStyle.Inset
+                                ? hlsColor.Darker(1.0f - i * inc)
+                                : hlsColor.Lighter(1.0f - i * inc));
+                            hdc.DrawLine(hpen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
                         }
                         break;
                     }
             }
 
-            // Assertion: pen has been disposed
-            pen = null;
-
-            // draw bottom line
+            // Draw bottom border
             switch (bottomStyle)
             {
                 case ButtonBorderStyle.None:
-                    // nothing
                     break;
                 case ButtonBorderStyle.Dotted:
-                    pen = new Pen(bottomColor)
-                    {
-                        DashStyle = DashStyle.Dot
-                    };
-                    for (int i = 0; i < bottomWidth; i++)
-                    {
-                        graphics.DrawLine(pen, bottomLineLefts[i], bounds.Y + bounds.Height - 1 - i, bottomLineRights[i], bounds.Y + bounds.Height - 1 - i);
-                    }
-                    pen.Dispose();
-                    break;
                 case ButtonBorderStyle.Dashed:
-                    pen = new Pen(bottomColor)
-                    {
-                        DashStyle = DashStyle.Dash
-                    };
-                    for (int i = 0; i < bottomWidth; i++)
-                    {
-                        graphics.DrawLine(pen, bottomLineLefts[i], bounds.Y + bounds.Height - 1 - i, bottomLineRights[i], bounds.Y + bounds.Height - 1 - i);
-                    }
-                    pen.Dispose();
-                    break;
                 case ButtonBorderStyle.Solid:
-                    pen = new Pen(bottomColor)
                     {
-                        DashStyle = DashStyle.Solid
-                    };
-                    for (int i = 0; i < bottomWidth; i++)
-                    {
-                        graphics.DrawLine(pen, bottomLineLefts[i], bounds.Y + bounds.Height - 1 - i, bottomLineRights[i], bounds.Y + bounds.Height - 1 - i);
-                    }
-                    pen.Dispose();
-                    break;
-                case ButtonBorderStyle.Inset:
-                    {
-                        float inc = InfinityToOne(1.0f / (float)(bottomWidth - 1));
-                        for (int i = 0; i < bottomWidth; i++)
+                        if (!bottomColor.HasTransparency() && bottomStyle == ButtonBorderStyle.Solid)
                         {
-                            pen = new Pen(bottomHLSColor.Lighter(1.0f - ((float)i) * inc))
+                            using var hdc = new DeviceContextHdcScope(deviceContext);
+                            using var hpen = new Gdi32.CreatePenScope(bottomColor);
+                            for (int i = 0; i < bottomWidth; i++)
                             {
-                                DashStyle = DashStyle.Solid
+                                hdc.DrawLine(
+                                    hpen,
+                                    bottomLineLefts[i],
+                                    bounds.Y + bounds.Height - 1 - i,
+                                    bottomLineRights[i],
+                                    bounds.Y + bounds.Height - 1 - i);
+                            }
+                        }
+                        else
+                        {
+                            Graphics graphics = deviceContext.TryGetGraphics(create: true);
+                            using var pen = new Pen(bottomColor)
+                            {
+                                DashStyle = bottomStyle switch
+                                {
+                                    ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                    ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                    _ => DashStyle.Solid,
+                                }
                             };
-                            graphics.DrawLine(pen, bottomLineLefts[i], bounds.Y + bounds.Height - 1 - i, bottomLineRights[i], bounds.Y + bounds.Height - 1 - i);
-                            pen.Dispose();
+
+                            for (int i = 0; i < bottomWidth; i++)
+                            {
+                                graphics.DrawLine(
+                                    pen,
+                                    bottomLineLefts[i],
+                                    bounds.Y + bounds.Height - 1 - i,
+                                    bottomLineRights[i],
+                                    bounds.Y + bounds.Height - 1 - i);
+                            }
                         }
                         break;
                     }
+                case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
-                        float inc = InfinityToOne(1.0f / (float)(bottomWidth - 1));
-
+                        HLSColor hlsColor = new HLSColor(bottomColor);
+                        float inc = InfinityToOne(1.0f / (bottomWidth - 1));
+                        using var hdc = new DeviceContextHdcScope(deviceContext);
                         for (int i = 0; i < bottomWidth; i++)
                         {
-                            pen = new Pen(bottomHLSColor.Darker(1.0f - ((float)i) * inc))
-                            {
-                                DashStyle = DashStyle.Solid
-                            };
-                            graphics.DrawLine(pen, bottomLineLefts[i], bounds.Y + bounds.Height - 1 - i, bottomLineRights[i], bounds.Y + bounds.Height - 1 - i);
-                            pen.Dispose();
+                            using var hpen = new Gdi32.CreatePenScope(bottomStyle != ButtonBorderStyle.Inset
+                                ? hlsColor.Darker(1.0f - i * inc)
+                                : hlsColor.Lighter(1.0f - i * inc));
+                            hdc.DrawLine(
+                                hpen,
+                                bottomLineLefts[i],
+                                bounds.Y + bounds.Height - 1 - i,
+                                bottomLineRights[i],
+                                bounds.Y + bounds.Height - 1 - i);
                         }
                         break;
                     }
             }
 
-            // Assertion: pen has been disposed
-            pen = null;
-
-            // draw right line
+            // Draw right border
             switch (rightStyle)
             {
                 case ButtonBorderStyle.None:
-                    // nothing
                     break;
                 case ButtonBorderStyle.Dotted:
-                    pen = new Pen(rightColor)
-                    {
-                        DashStyle = DashStyle.Dot
-                    };
-                    for (int i = 0; i < rightWidth; i++)
-                    {
-                        graphics.DrawLine(pen, bounds.X + bounds.Width - 1 - i, rightLineTops[i], bounds.X + bounds.Width - 1 - i, rightLineBottoms[i]);
-                    }
-                    pen.Dispose();
-                    break;
                 case ButtonBorderStyle.Dashed:
-                    pen = new Pen(rightColor)
-                    {
-                        DashStyle = DashStyle.Dash
-                    };
-                    for (int i = 0; i < rightWidth; i++)
-                    {
-                        graphics.DrawLine(pen, bounds.X + bounds.Width - 1 - i, rightLineTops[i], bounds.X + bounds.Width - 1 - i, rightLineBottoms[i]);
-                    }
-                    pen.Dispose();
-                    break;
                 case ButtonBorderStyle.Solid:
-                    pen = new Pen(rightColor)
                     {
-                        DashStyle = DashStyle.Solid
-                    };
-                    for (int i = 0; i < rightWidth; i++)
-                    {
-                        graphics.DrawLine(pen, bounds.X + bounds.Width - 1 - i, rightLineTops[i], bounds.X + bounds.Width - 1 - i, rightLineBottoms[i]);
-                    }
-                    pen.Dispose();
-                    break;
-                case ButtonBorderStyle.Inset:
-                    {
-                        float inc = InfinityToOne(1.0f / (float)(rightWidth - 1));
-                        for (int i = 0; i < rightWidth; i++)
+                        if (!rightColor.HasTransparency() && rightStyle == ButtonBorderStyle.Solid)
                         {
-                            pen = new Pen(rightHLSColor.Lighter(1.0f - ((float)i) * inc))
+                            using var hdc = new DeviceContextHdcScope(deviceContext);
+                            using var hpen = new Gdi32.CreatePenScope(rightColor);
+                            for (int i = 0; i < rightWidth; i++)
                             {
-                                DashStyle = DashStyle.Solid
+                                hdc.DrawLine(
+                                    hpen,
+                                    bounds.X + bounds.Width - 1 - i,
+                                    rightLineTops[i],
+                                    bounds.X + bounds.Width - 1 - i,
+                                    rightLineBottoms[i]);
+                            }
+                        }
+                        else
+                        {
+                            Graphics graphics = deviceContext.TryGetGraphics(create: true);
+                            using var pen = new Pen(rightColor)
+                            {
+                                DashStyle = rightStyle switch
+                                {
+                                    ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                    ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                    _ => DashStyle.Solid,
+                                }
                             };
-                            graphics.DrawLine(pen, bounds.X + bounds.Width - 1 - i, rightLineTops[i], bounds.X + bounds.Width - 1 - i, rightLineBottoms[i]);
-                            pen.Dispose();
+
+                            for (int i = 0; i < rightWidth; i++)
+                            {
+                                graphics.DrawLine(
+                                    pen,
+                                    bounds.X + bounds.Width - 1 - i,
+                                    rightLineTops[i],
+                                    bounds.X + bounds.Width - 1 - i,
+                                    rightLineBottoms[i]);
+                            }
                         }
                         break;
                     }
+                case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
-                        float inc = InfinityToOne(1.0f / (float)(rightWidth - 1));
-
+                        HLSColor hlsColor = new HLSColor(rightColor);
+                        float inc = InfinityToOne(1.0f / (rightWidth - 1));
+                        using var hdc = new DeviceContextHdcScope(deviceContext);
                         for (int i = 0; i < rightWidth; i++)
                         {
-                            pen = new Pen(rightHLSColor.Darker(1.0f - ((float)i) * inc))
-                            {
-                                DashStyle = DashStyle.Solid
-                            };
-                            graphics.DrawLine(pen, bounds.X + bounds.Width - 1 - i, rightLineTops[i], bounds.X + bounds.Width - 1 - i, rightLineBottoms[i]);
-                            pen.Dispose();
-                        }
+                            using var hpen = new Gdi32.CreatePenScope(rightStyle != ButtonBorderStyle.Inset
+                                ? hlsColor.Darker(1.0f - i * inc)
+                                : hlsColor.Lighter(1.0f - i * inc));
 
+                            hdc.DrawLine(hpen,
+                                bounds.X + bounds.Width - 1 - i,
+                                rightLineTops[i],
+                                bounds.X + bounds.Width - 1 - i,
+                                rightLineBottoms[i]);
+                        }
                         break;
                     }
             }
@@ -1263,7 +1280,16 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawButton(Graphics graphics, int x, int y, int width, int height, ButtonState state)
         {
-            DrawFrameControl(graphics, x, y, width, height, User32.DFC.BUTTON, User32.DFCS.BUTTONPUSH | (User32.DFCS)state, Color.Empty, Color.Empty);
+            DrawFrameControl(
+                graphics,
+                x,
+                y,
+                width,
+                height,
+                User32.DFC.BUTTON,
+                User32.DFCS.BUTTONPUSH | (User32.DFCS)state,
+                Color.Empty,
+                Color.Empty);
         }
 
         /// <summary>
@@ -1302,7 +1328,16 @@ namespace System.Windows.Forms
             }
             else
             {
-                DrawFrameControl(graphics, x, y, width, height, User32.DFC.BUTTON, User32.DFCS.BUTTONCHECK | (User32.DFCS)state, Color.Empty, Color.Empty);
+                DrawFrameControl(
+                    graphics,
+                    x,
+                    y,
+                    width,
+                    height,
+                    User32.DFC.BUTTON,
+                    User32.DFCS.BUTTONCHECK | (User32.DFCS)state,
+                    Color.Empty,
+                    Color.Empty);
             }
         }
 
@@ -1373,18 +1408,17 @@ namespace System.Windows.Forms
         /// </summary>
         private static void DrawFlatCheckBox(Graphics graphics, Rectangle rectangle, ButtonState state)
         {
-            // Background color of checkbox
-            //
             if (graphics == null)
-            {
                 throw new ArgumentNullException(nameof(graphics));
-            }
-            Brush background = ((state & ButtonState.Inactive) == ButtonState.Inactive) ?
-                               SystemBrushes.Control :
-                               SystemBrushes.Window;
-            Color foreground = ((state & ButtonState.Inactive) == ButtonState.Inactive) ?
-                               (SystemInformation.HighContrast ? SystemColors.GrayText : SystemColors.ControlDark) :
-                               SystemColors.ControlText;
+
+            // Background color of checkbox
+
+            Brush background = ((state & ButtonState.Inactive) == ButtonState.Inactive)
+                ? SystemBrushes.Control
+                : SystemBrushes.Window;
+            Color foreground = ((state & ButtonState.Inactive) == ButtonState.Inactive)
+                ? (SystemInformation.HighContrast ? SystemColors.GrayText : SystemColors.ControlDark)
+                : SystemColors.ControlText;
             DrawFlatCheckBox(graphics, rectangle, foreground, background, state);
         }
 
@@ -1396,20 +1430,20 @@ namespace System.Windows.Forms
         private static void DrawFlatCheckBox(Graphics graphics, Rectangle rectangle, Color foreground, Brush background, ButtonState state)
         {
             if (graphics == null)
-            {
                 throw new ArgumentNullException(nameof(graphics));
-            }
             if (rectangle.Width < 0 || rectangle.Height < 0)
-            {
                 throw new ArgumentOutOfRangeException(nameof(rectangle));
-            }
 
-            Rectangle offsetRectangle = new Rectangle(rectangle.X + 1, rectangle.Y + 1,
-                                                      rectangle.Width - 2, rectangle.Height - 2);
+            Rectangle offsetRectangle = new Rectangle(
+                rectangle.X + 1,
+                rectangle.Y + 1,
+                rectangle.Width - 2,
+                rectangle.Height - 2);
+
             graphics.FillRectangle(background, offsetRectangle);
 
             // Checkmark
-            //
+
             if ((state & ButtonState.Checked) == ButtonState.Checked)
             {
                 if (checkImage == null || checkImage.Width != rectangle.Width || checkImage.Height != rectangle.Height)
@@ -1440,9 +1474,8 @@ namespace System.Windows.Forms
                 rectangle.X -= 1;
             }
 
-            // Surrounding border. We inset this by one pixel so we match how
-            // the 3D checkbox is drawn.
-            //
+            // Surrounding border. We inset this by one pixel so we match how the 3D checkbox is drawn.
+
             Pen pen = SystemPens.ControlDark;
             graphics.DrawRectangle(pen, offsetRectangle.X, offsetRectangle.Y, offsetRectangle.Width - 1, offsetRectangle.Height - 1);
         }
@@ -1669,11 +1702,17 @@ namespace System.Windows.Forms
         }
 
         // Takes a black and transparent image, turns black pixels into some other color, and leaves transparent pixels alone
-        internal static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination,
-                                                Color replaceBlack)
+        internal static void DrawImageColorized(
+            Graphics graphics,
+            Image image,
+            Rectangle destination,
+            Color replaceBlack)
         {
-            DrawImageColorized(graphics, image, destination,
-                               RemapBlackAndWhitePreserveTransparentMatrix(replaceBlack, Color.White));
+            DrawImageColorized(
+                graphics,
+                image,
+                destination,
+                RemapBlackAndWhitePreserveTransparentMatrix(replaceBlack, Color.White));
         }
 
         internal static bool IsImageTransparent(Image backgroundImage)
@@ -1704,18 +1743,28 @@ namespace System.Windows.Forms
         }
 
         // Takes a black and white image, and paints it in color
-        private static void DrawImageColorized(Graphics graphics, Image image, Rectangle destination,
-                                               ColorMatrix matrix)
+        private static void DrawImageColorized(
+            Graphics graphics,
+            Image image,
+            Rectangle destination,
+            ColorMatrix matrix)
         {
             if (graphics == null)
-            {
                 throw new ArgumentNullException(nameof(graphics));
-            }
-            ImageAttributes attributes = new ImageAttributes();
+
+            using var attributes = new ImageAttributes();
             attributes.SetColorMatrix(matrix);
-            graphics.DrawImage(image, destination, 0, 0, image.Width, image.Height,
-                               GraphicsUnit.Pixel, attributes, null, IntPtr.Zero);
-            attributes.Dispose();
+            graphics.DrawImage(
+                image,
+                destination,
+                0,
+                0,
+                image.Width,
+                image.Height,
+                GraphicsUnit.Pixel,
+                attributes,
+                null,
+                IntPtr.Zero);
         }
 
         /// <summary>
@@ -1865,7 +1914,15 @@ namespace System.Windows.Forms
         ///  Draws a menu glyph for a Win32 menu in the given rectangle with the given state.
         ///  White color is replaced with backColor, Black is replaced with foreColor.
         /// </summary>
-        public static void DrawMenuGlyph(Graphics graphics, int x, int y, int width, int height, MenuGlyph glyph, Color foreColor, Color backColor)
+        public static void DrawMenuGlyph(
+            Graphics graphics,
+            int x,
+            int y,
+            int width,
+            int height,
+            MenuGlyph glyph,
+            Color foreColor,
+            Color backColor)
         {
             DrawFrameControl(graphics, x, y, width, height, User32.DFC.MENU, (User32.DFCS)glyph, foreColor, backColor);
         }
@@ -1880,7 +1937,16 @@ namespace System.Windows.Forms
 
         public static void DrawMixedCheckBox(Graphics graphics, int x, int y, int width, int height, ButtonState state)
         {
-            DrawFrameControl(graphics, x, y, width, height, User32.DFC.BUTTON, User32.DFCS.BUTTON3STATE | (User32.DFCS)state, Color.Empty, Color.Empty);
+            DrawFrameControl(
+                graphics,
+                x,
+                y,
+                width,
+                height,
+                User32.DFC.BUTTON,
+                User32.DFCS.BUTTON3STATE | (User32.DFCS)state,
+                Color.Empty,
+                Color.Empty);
         }
 
         /// <summary>
@@ -2027,33 +2093,45 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Draws a size grip at the given location. The color of the size grip is based
-        ///  on the given background color.
+        ///  Draws a size grip at the given location. The color of the size grip is based on the given background color.
         /// </summary>
         public static void DrawSizeGrip(Graphics graphics, Color backColor, int x, int y, int width, int height)
         {
+            if (graphics == null)
+                throw new ArgumentNullException(nameof(graphics));
+
+            DrawSizeGrip((IDeviceContext)graphics, backColor, x, y, width, height);
+        }
+
+        internal static void DrawSizeGrip(
+            IDeviceContext deviceContext,
+            Color backColor,
+            int x,
+            int y,
+            int width,
+            int height)
+        {
             // Note: We don't paint any background to facilitate transparency, background images, etc...
 
-            if (graphics == null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
+            // We only draw rectangular grips.
+            int size = Math.Min(width, height);
 
-            using (Pen bright = new Pen(LightLight(backColor)))
-            {
-                using (Pen dark = new Pen(Dark(backColor)))
-                {
-                    int minDim = Math.Min(width, height);
-                    int right = x + width - 1;
-                    int bottom = y + height - 2;
+            // Start one pixel in from the right and two up from the bottom
+            int right = x + width - 1;
+            int bottom = y + height - 2;
 
-                    for (int i = 0; i < minDim - 4; i += 4)
-                    {
-                        graphics.DrawLine(dark, right - (i + 1) - 2, bottom, right, bottom - (i + 1) - 2);
-                        graphics.DrawLine(dark, right - (i + 2) - 2, bottom, right, bottom - (i + 2) - 2);
-                        graphics.DrawLine(bright, right - (i + 3) - 2, bottom, right, bottom - (i + 3) - 2);
-                    }
-                }
+            using var hdc = new DeviceContextHdcScope(deviceContext);
+            using var hpenBright = new Gdi32.CreatePenScope(LightLight(backColor));
+            using var hpenDark = new Gdi32.CreatePenScope(Dark(backColor));
+
+            // Moving from the lower right corner, draw as many groups of 4 diagonal lines as will fit
+            // (skip a line, dark, dark, light)
+
+            for (int i = 0; i < size - 4; i += 4)
+            {
+                hdc.DrawLine(hpenDark, right - (i + 1) - 2, bottom, right, bottom - (i + 1) - 2);
+                hdc.DrawLine(hpenDark, right - (i + 2) - 2, bottom, right, bottom - (i + 2) - 2);
+                hdc.DrawLine(hpenBright, right - (i + 3) - 2, bottom, right, bottom - (i + 3) - 2);
             }
         }
 
@@ -2392,7 +2470,7 @@ namespace System.Windows.Forms
                     if (baseColor.GetBrightness() <= .5)
                     {
                         color1 = color2;
-                        color2 = InvertColor(baseColor);
+                        color2 = baseColor.InvertColor();
                     }
                     else if (baseColor == Color.Transparent)
                     {
@@ -2501,28 +2579,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inverts the given color.
-        /// </summary>
-        private static Color InvertColor(Color color)
-        {
-            return Color.FromArgb(color.A, (byte)~color.R, (byte)~color.G, (byte)~color.B);
-        }
-
-        /// <summary>
         ///  Creates a new color that is a object of the given color.
         /// </summary>
         public static Color Light(Color baseColor, float percOfLightLight)
-        {
-            return new HLSColor(baseColor).Lighter(percOfLightLight);
-        }
+            => new HLSColor(baseColor).Lighter(percOfLightLight);
 
         /// <summary>
         ///  Creates a new color that is a object of the given color.
         /// </summary>
         public static Color Light(Color baseColor)
-        {
-            return new HLSColor(baseColor).Lighter(0.5f);
-        }
+            => new HLSColor(baseColor).Lighter(0.5f);
 
         /// <summary>
         ///  Creates a new color that is a object of the given color.
@@ -2681,15 +2747,15 @@ namespace System.Windows.Forms
 
             // Normalize the colors to 1.0.
 
-            float normBlackRed = ((float)replaceBlack.R) / (float)255.0;
-            float normBlackGreen = ((float)replaceBlack.G) / (float)255.0;
-            float normBlackBlue = ((float)replaceBlack.B) / (float)255.0;
-            float normBlackAlpha = ((float)replaceBlack.A) / (float)255.0;
+            float normBlackRed = replaceBlack.R / (float)255.0;
+            float normBlackGreen = replaceBlack.G / (float)255.0;
+            float normBlackBlue = replaceBlack.B / (float)255.0;
+            float normBlackAlpha = replaceBlack.A / (float)255.0;
 
-            float normWhiteRed = ((float)replaceWhite.R) / (float)255.0;
-            float normWhiteGreen = ((float)replaceWhite.G) / (float)255.0;
-            float normWhiteBlue = ((float)replaceWhite.B) / (float)255.0;
-            float normWhiteAlpha = ((float)replaceWhite.A) / (float)255.0;
+            float normWhiteRed = replaceWhite.R / (float)255.0;
+            float normWhiteGreen = replaceWhite.G / (float)255.0;
+            float normWhiteBlue = replaceWhite.B / (float)255.0;
+            float normWhiteAlpha = replaceWhite.A / (float)255.0;
 
             // Set up a matrix that will map white to replaceWhite and
             // black to replaceBlack, using the source bitmap's alpha value for the output
@@ -2902,323 +2968,6 @@ namespace System.Windows.Forms
             }
 
             return flags;
-        }
-
-        /// <summary>
-        ///  Logic copied from Windows sources to copy the lightening and darkening of colors.
-        /// </summary>
-        private struct HLSColor
-        {
-            private const int ShadowAdj = -333;
-            private const int HilightAdj = 500;
-
-            private const int Range = 240;
-            private const int HLSMax = Range;
-            private const int RGBMax = 255;
-            private const int Undefined = HLSMax * 2 / 3;
-
-            private readonly int hue;
-            private readonly int saturation;
-            private readonly int luminosity;
-
-            private readonly bool isSystemColors_Control;
-
-            /// <summary>
-            /// </summary>
-            public HLSColor(Color color)
-            {
-                isSystemColors_Control = (color.ToKnownColor() == SystemColors.Control.ToKnownColor());
-                int r = color.R;
-                int g = color.G;
-                int b = color.B;
-                int max, min;        /* max and min RGB values */
-                int sum, dif;
-                int Rdelta, Gdelta, Bdelta;  /* intermediate value: % of spread from max */
-
-                /* calculate lightness */
-                max = Math.Max(Math.Max(r, g), b);
-                min = Math.Min(Math.Min(r, g), b);
-                sum = max + min;
-
-                luminosity = (((sum * HLSMax) + RGBMax) / (2 * RGBMax));
-
-                dif = max - min;
-                if (dif == 0)
-                {       /* r=g=b --> achromatic case */
-                    saturation = 0;                         /* saturation */
-                    hue = Undefined;                 /* hue */
-                }
-                else
-                {                           /* chromatic case */
-                    /* saturation */
-                    if (luminosity <= (HLSMax / 2))
-                    {
-                        saturation = (int)(((dif * (int)HLSMax) + (sum / 2)) / sum);
-                    }
-                    else
-                    {
-                        saturation = (int)((int)((dif * (int)HLSMax) + (int)((2 * RGBMax - sum) / 2))
-                                            / (2 * RGBMax - sum));
-                    }
-                    /* hue */
-                    Rdelta = (int)((((max - r) * (int)(HLSMax / 6)) + (dif / 2)) / dif);
-                    Gdelta = (int)((((max - g) * (int)(HLSMax / 6)) + (dif / 2)) / dif);
-                    Bdelta = (int)((((max - b) * (int)(HLSMax / 6)) + (dif / 2)) / dif);
-
-                    if ((int)r == max)
-                    {
-                        hue = Bdelta - Gdelta;
-                    }
-                    else if ((int)g == max)
-                    {
-                        hue = (HLSMax / 3) + Rdelta - Bdelta;
-                    }
-                    else /* B == cMax */
-                    {
-                        hue = ((2 * HLSMax) / 3) + Gdelta - Rdelta;
-                    }
-
-                    if (hue < 0)
-                    {
-                        hue += HLSMax;
-                    }
-
-                    if (hue > HLSMax)
-                    {
-                        hue -= HLSMax;
-                    }
-                }
-            }
-
-            /// <summary>
-            /// </summary>
-            public int Luminosity
-            {
-                get
-                {
-                    return luminosity;
-                }
-            }
-
-            /// <summary>
-            /// </summary>
-            public Color Darker(float percDarker)
-            {
-                if (isSystemColors_Control)
-                {
-                    // With the usual color scheme, ControlDark/DarkDark is not exactly
-                    // what we would otherwise calculate
-                    if (percDarker == 0.0f)
-                    {
-                        return SystemColors.ControlDark;
-                    }
-                    else if (percDarker == 1.0f)
-                    {
-                        return SystemColors.ControlDarkDark;
-                    }
-                    else
-                    {
-                        Color dark = SystemColors.ControlDark;
-                        Color darkDark = SystemColors.ControlDarkDark;
-
-                        int dr = dark.R - darkDark.R;
-                        int dg = dark.G - darkDark.G;
-                        int db = dark.B - darkDark.B;
-
-                        return Color.FromArgb((byte)(dark.R - (byte)(dr * percDarker)),
-                                              (byte)(dark.G - (byte)(dg * percDarker)),
-                                              (byte)(dark.B - (byte)(db * percDarker)));
-                    }
-                }
-                else
-                {
-                    int zeroLum = NewLuma(ShadowAdj, true);
-                    return ColorFromHLS(hue, zeroLum - (int)(zeroLum * percDarker), saturation);
-                }
-            }
-
-            public override bool Equals(object o)
-            {
-                if (!(o is HLSColor))
-                {
-                    return false;
-                }
-
-                HLSColor c = (HLSColor)o;
-                return hue == c.hue &&
-                       saturation == c.saturation &&
-                       luminosity == c.luminosity &&
-                       isSystemColors_Control == c.isSystemColors_Control;
-            }
-
-            public static bool operator ==(HLSColor a, HLSColor b)
-            {
-                return a.Equals(b);
-            }
-
-            public static bool operator !=(HLSColor a, HLSColor b)
-            {
-                return !a.Equals(b);
-            }
-
-            public override int GetHashCode() => HashCode.Combine(hue, saturation, luminosity);
-
-            /// <summary>
-            /// </summary>
-            public Color Lighter(float percLighter)
-            {
-                if (isSystemColors_Control)
-                {
-                    // With the usual color scheme, ControlLight/LightLight is not exactly
-                    // what we would otherwise calculate
-                    if (percLighter == 0.0f)
-                    {
-                        return SystemColors.ControlLight;
-                    }
-                    else if (percLighter == 1.0f)
-                    {
-                        return SystemColors.ControlLightLight;
-                    }
-                    else
-                    {
-                        Color light = SystemColors.ControlLight;
-                        Color lightLight = SystemColors.ControlLightLight;
-
-                        int dr = light.R - lightLight.R;
-                        int dg = light.G - lightLight.G;
-                        int db = light.B - lightLight.B;
-
-                        return Color.FromArgb((byte)(light.R - (byte)(dr * percLighter)),
-                                              (byte)(light.G - (byte)(dg * percLighter)),
-                                              (byte)(light.B - (byte)(db * percLighter)));
-                    }
-                }
-                else
-                {
-                    int zeroLum = luminosity;
-                    int oneLum = NewLuma(HilightAdj, true);
-                    return ColorFromHLS(hue, zeroLum + (int)((oneLum - zeroLum) * percLighter), saturation);
-                }
-            }
-
-            /// <summary>
-            /// </summary>
-            private int NewLuma(int n, bool scale)
-            {
-                return NewLuma(luminosity, n, scale);
-            }
-
-            /// <summary>
-            /// </summary>
-            private int NewLuma(int luminosity, int n, bool scale)
-            {
-                if (n == 0)
-                {
-                    return luminosity;
-                }
-
-                if (scale)
-                {
-                    if (n > 0)
-                    {
-                        return (int)(((int)luminosity * (1000 - n) + (Range + 1L) * n) / 1000);
-                    }
-                    else
-                    {
-                        return (int)(((int)luminosity * (n + 1000)) / 1000);
-                    }
-                }
-
-                int newLum = luminosity;
-                newLum += (int)((long)n * Range / 1000);
-
-                if (newLum < 0)
-                {
-                    newLum = 0;
-                }
-
-                if (newLum > HLSMax)
-                {
-                    newLum = HLSMax;
-                }
-
-                return newLum;
-            }
-
-            /// <summary>
-            /// </summary>
-            private Color ColorFromHLS(int hue, int luminosity, int saturation)
-            {
-                byte r, g, b;                      /* RGB component values */
-                int magic1, magic2;       /* calculated magic numbers (really!) */
-
-                if (saturation == 0)
-                {                /* achromatic case */
-                    r = g = b = (byte)((luminosity * RGBMax) / HLSMax);
-                    if (hue != Undefined)
-                    {
-                        /* ERROR */
-                    }
-                }
-                else
-                {                         /* chromatic case */
-                    /* set up magic numbers */
-                    if (luminosity <= (HLSMax / 2))
-                    {
-                        magic2 = (int)((luminosity * ((int)HLSMax + saturation) + (HLSMax / 2)) / HLSMax);
-                    }
-                    else
-                    {
-                        magic2 = luminosity + saturation - (int)(((luminosity * saturation) + (int)(HLSMax / 2)) / HLSMax);
-                    }
-
-                    magic1 = 2 * luminosity - magic2;
-
-                    /* get RGB, change units from HLSMax to RGBMax */
-                    r = (byte)(((HueToRGB(magic1, magic2, (int)(hue + (int)(HLSMax / 3))) * (int)RGBMax + (HLSMax / 2))) / (int)HLSMax);
-                    g = (byte)(((HueToRGB(magic1, magic2, hue) * (int)RGBMax + (HLSMax / 2))) / HLSMax);
-                    b = (byte)(((HueToRGB(magic1, magic2, (int)(hue - (int)(HLSMax / 3))) * (int)RGBMax + (HLSMax / 2))) / (int)HLSMax);
-                }
-                return Color.FromArgb(r, g, b);
-            }
-
-            /// <summary>
-            /// </summary>
-            private int HueToRGB(int n1, int n2, int hue)
-            {
-                /* range check: note values passed add/subtract thirds of range */
-
-                /* The following is redundant for WORD (unsigned int) */
-                if (hue < 0)
-                {
-                    hue += HLSMax;
-                }
-
-                if (hue > HLSMax)
-                {
-                    hue -= HLSMax;
-                }
-
-                /* return r,g, or b value from this tridrant */
-                if (hue < (HLSMax / 6))
-                {
-                    return (n1 + (((n2 - n1) * hue + (HLSMax / 12)) / (HLSMax / 6)));
-                }
-
-                if (hue < (HLSMax / 2))
-                {
-                    return (n2);
-                }
-
-                if (hue < ((HLSMax * 2) / 3))
-                {
-                    return (n1 + (((n2 - n1) * (((HLSMax * 2) / 3) - hue) + (HLSMax / 12)) / (HLSMax / 6)));
-                }
-                else
-                {
-                    return (n1);
-                }
-            }
         }
     }
 }

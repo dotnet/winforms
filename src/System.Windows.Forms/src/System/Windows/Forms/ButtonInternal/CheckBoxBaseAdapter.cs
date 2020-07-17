@@ -276,7 +276,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else
                 {
-                    ControlPaint.DrawMixedCheckBox(e.Graphics, layout.checkBounds, style);
+                    ControlPaint.DrawMixedCheckBox(e.GraphicsInternal, layout.checkBounds, style);
                 }
             }
             else
@@ -291,7 +291,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else
                 {
-                    ControlPaint.DrawCheckBox(e.Graphics, layout.checkBounds, style);
+                    ControlPaint.DrawCheckBox(e.GraphicsInternal, layout.checkBounds, style);
                 }
             }
         }
@@ -308,30 +308,21 @@ namespace System.Windows.Forms.ButtonInternal
                 return cacheCheckImage;
             }
 
-            if (cacheCheckImage != null)
-            {
-                cacheCheckImage.Dispose();
-            }
+            cacheCheckImage?.Dispose();
 
-            // We draw the checkmark slightly off center to eliminate 3-D border artifacts,
-            // and compensate below
+            // We draw the checkmark slightly off center to eliminate 3-D border artifacts and compensate below
             RECT rcCheck = new Rectangle(0, 0, fullSize.Width, fullSize.Height);
             Bitmap bitmap = new Bitmap(fullSize.Width, fullSize.Height);
-            Graphics offscreen = Graphics.FromImage(bitmap);
-            offscreen.Clear(Color.Transparent);
-            IntPtr dc = offscreen.GetHdc();
-            try
+
+            using (Graphics offscreen = Graphics.FromImage(bitmap))
             {
+                offscreen.Clear(Color.Transparent);
+                using var hdc = new DeviceContextHdcScope(offscreen, applyGraphicsState: false);
                 User32.DrawFrameControl(
-                    new HandleRef(offscreen, dc),
+                    hdc,
                     ref rcCheck,
                     User32.DFC.MENU,
                     User32.DFCS.MENUCHECK);
-            }
-            finally
-            {
-                offscreen.ReleaseHdcInternal(dc);
-                offscreen.Dispose();
             }
 
             bitmap.MakeTransparent();

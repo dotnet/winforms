@@ -624,6 +624,7 @@ namespace System.ComponentModel.Design
 
                 ButtonRenderer.DrawButton(g, bounds, State);
 
+                Color color = SystemColors.ButtonHighlight;
                 _dropDownRectangle = new Rectangle(bounds.Right - PushButtonWidth - 1, 4, PushButtonWidth, bounds.Height - 8);
 
                 if (RightToLeft == RightToLeft.Yes)
@@ -656,7 +657,7 @@ namespace System.ComponentModel.Design
 
                 if (!string.IsNullOrEmpty(Text))
                 {
-                    TextRenderer.DrawText(g, Text, Font, bounds, SystemColors.ControlText, formatFlags);
+                    TextRenderer.DrawText(pevent, Text, Font, bounds, SystemColors.ControlText, formatFlags);
                 }
 
                 if (Focused)
@@ -665,9 +666,11 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            private void PaintArrow(Graphics g, Rectangle dropDownRect)
+            private void PaintArrow(IDeviceContext deviceContext, Rectangle dropDownRect)
             {
-                Point middle = new Point(Convert.ToInt32(dropDownRect.Left + dropDownRect.Width / 2), Convert.ToInt32(dropDownRect.Top + dropDownRect.Height / 2));
+                Point middle = new Point(
+                    Convert.ToInt32(dropDownRect.Left + dropDownRect.Width / 2),
+                    Convert.ToInt32(dropDownRect.Top + dropDownRect.Height / 2));
 
                 // If the width is odd - favor pushing it over one pixel right.
                 middle.X += (dropDownRect.Width % 2);
@@ -678,7 +681,7 @@ namespace System.ComponentModel.Design
                     new Point(middle.X, middle.Y + s_offset2Y)
                 };
 
-                g.FillPolygon(SystemBrushes.ControlText, arrow);
+                deviceContext.TryGetGraphics(create: true).FillPolygon(SystemBrushes.ControlText, arrow);
             }
 
             private void ShowContextMenuStrip()

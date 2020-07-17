@@ -72,16 +72,19 @@ namespace System.Windows.Forms
         ///  Renders a Button control.
         /// </summary>
         public static void DrawButton(Graphics g, Rectangle bounds, PushButtonState state)
+            => DrawButton((IDeviceContext)g, bounds, state);
+
+        internal static void DrawButton(IDeviceContext deviceContext, Rectangle bounds, PushButtonState state)
         {
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
-
-                s_visualStyleRenderer.DrawBackground(g, bounds);
+                s_visualStyleRenderer.DrawBackground(deviceContext, bounds);
             }
             else
             {
-                ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
+                Graphics graphics = deviceContext.TryGetGraphics(create: true);
+                ControlPaint.DrawButton(graphics, bounds, ConvertToButtonState(state));
             }
         }
 
@@ -110,13 +113,15 @@ namespace System.Windows.Forms
             }
             else
             {
-                ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
+                Graphics graphics = deviceContext.TryGetGraphics(create: true);
+                ControlPaint.DrawButton(graphics, bounds, ConvertToButtonState(state));
                 contentBounds = Rectangle.Inflate(bounds, -3, -3);
             }
 
             if (focused)
             {
-                ControlPaint.DrawFocusRectangle(g, contentBounds);
+                Graphics graphics = deviceContext.TryGetGraphics(create: true);
+                ControlPaint.DrawFocusRectangle(graphics, contentBounds);
             }
         }
 
@@ -124,9 +129,7 @@ namespace System.Windows.Forms
         ///  Renders a Button control.
         /// </summary>
         public static void DrawButton(Graphics g, Rectangle bounds, bool focused, PushButtonState state)
-        {
-            DrawButtonForHandle(g, bounds, focused, state, IntPtr.Zero);
-        }
+            => DrawButtonForHandle(g, bounds, focused, state, IntPtr.Zero);
 
         /// <summary>
         ///  Renders a Button control.
@@ -205,59 +208,90 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a Button control.
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, Image image, Rectangle imageBounds, bool focused, PushButtonState state)
+        public static void DrawButton(
+            Graphics g,
+            Rectangle bounds,
+            string buttonText,
+            Font font,
+            Image image,
+            Rectangle imageBounds,
+            bool focused,
+            PushButtonState state)
         {
-            DrawButton(g, bounds, buttonText, font,
-                       TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
-                       image, imageBounds, focused, state);
+            DrawButton(
+                g,
+                bounds,
+                buttonText,
+                font,
+                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
+                image,
+                imageBounds,
+                focused,
+                state);
         }
 
         /// <summary>
         ///  Renders a Button control.
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, TextFormatFlags flags, Image image, Rectangle imageBounds, bool focused, PushButtonState state)
+        public static void DrawButton(
+            Graphics g,
+            Rectangle bounds,
+            string buttonText,
+            Font font,
+            TextFormatFlags flags,
+            Image image,
+            Rectangle imageBounds,
+            bool focused,
+            PushButtonState state)
+            => DrawButton((IDeviceContext)g, bounds, buttonText, font, flags, image, imageBounds, focused, state);
+
+        internal static void DrawButton(
+            IDeviceContext deviceContext,
+            Rectangle bounds,
+            string buttonText,
+            Font font,
+            TextFormatFlags flags,
+            Image image,
+            Rectangle imageBounds,
+            bool focused,
+            PushButtonState state)
         {
             Rectangle contentBounds;
             Color textColor;
+
+            Graphics graphics = deviceContext.TryGetGraphics(create: true);
 
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
 
-                s_visualStyleRenderer.DrawBackground(g, bounds);
-                s_visualStyleRenderer.DrawImage(g, imageBounds, image);
-                contentBounds = s_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
+                s_visualStyleRenderer.DrawBackground(deviceContext, bounds);
+                s_visualStyleRenderer.DrawImage(graphics, imageBounds, image);
+                contentBounds = s_visualStyleRenderer.GetBackgroundContentRectangle(deviceContext, bounds);
                 textColor = s_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             }
             else
             {
-                ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
-                g.DrawImage(image, imageBounds);
+                ControlPaint.DrawButton(graphics, bounds, ConvertToButtonState(state));
+                graphics.DrawImage(image, imageBounds);
                 contentBounds = Rectangle.Inflate(bounds, -3, -3);
                 textColor = SystemColors.ControlText;
             }
 
-            TextRenderer.DrawText(g, buttonText, font, contentBounds, textColor, flags);
+            TextRenderer.DrawText(deviceContext, buttonText, font, contentBounds, textColor, flags);
 
             if (focused)
             {
-                ControlPaint.DrawFocusRectangle(g, contentBounds);
+                ControlPaint.DrawFocusRectangle(graphics, contentBounds);
             }
         }
 
-        internal static ButtonState ConvertToButtonState(PushButtonState state)
+        internal static ButtonState ConvertToButtonState(PushButtonState state) => state switch
         {
-            switch (state)
-            {
-                case PushButtonState.Pressed:
-                    return ButtonState.Pushed;
-                case PushButtonState.Disabled:
-                    return ButtonState.Inactive;
-
-                default:
-                    return ButtonState.Normal;
-            }
-        }
+            PushButtonState.Pressed => ButtonState.Pushed,
+            PushButtonState.Disabled => ButtonState.Inactive,
+            _ => ButtonState.Normal,
+        };
 
         private static void InitializeRenderer(int state)
         {

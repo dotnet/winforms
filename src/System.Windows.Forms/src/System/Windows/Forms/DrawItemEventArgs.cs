@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     ///  including the item index, the <see cref="Rectangle"/> in which the drawing should be done, and the
     ///  <see cref="Graphics"/> object with which the drawing should be done.
     /// </summary>
-    public class DrawItemEventArgs : EventArgs, IDeviceContext, IGraphicsHdcProvider
+    public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphicsHdcProvider
     {
         private readonly DrawingEventArgs _event;
 
@@ -142,7 +142,9 @@ namespace System.Windows.Forms
             }
         }
 
-        void IDisposable.Dispose()
+        public void Dispose() => Dispose(disposing: true);
+
+        protected virtual void Dispose(bool disposing)
         {
             // We need this because of IDeviceContext, but we historically didn't take ownership of the Graphics
             // object, so there is nothing to do here unless we specifically created the Graphics object.

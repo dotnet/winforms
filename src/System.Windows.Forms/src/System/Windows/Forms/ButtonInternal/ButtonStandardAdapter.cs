@@ -14,7 +14,7 @@ namespace System.Windows.Forms.ButtonInternal
 {
     internal class ButtonStandardAdapter : ButtonBaseAdapter
     {
-        private const int borderWidth = 2;
+        private const int BorderWidth = 2;
 
         internal ButtonStandardAdapter(ButtonBase control) : base(control) { }
 
@@ -153,7 +153,7 @@ namespace System.Windows.Forms.ButtonInternal
                     if (up)
                     {
                         // We are going to draw a 2 pixel border
-                        bounds.Inflate(-borderWidth, -borderWidth);
+                        bounds.Inflate(-BorderWidth, -BorderWidth);
                     }
                     else
                     {

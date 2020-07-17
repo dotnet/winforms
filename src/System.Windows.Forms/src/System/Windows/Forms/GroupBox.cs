@@ -6,8 +6,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Windows.Forms.Internal;
+using System.Drawing.Text;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -15,9 +14,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Encapsulates
-    ///  a standard Windows(r) group
-    ///  box.
+    ///  Encapsulates a standard Windows group box.
     /// </summary>
     [DefaultEvent(nameof(Enter))]
     [DefaultProperty(nameof(Text))]
@@ -25,22 +22,21 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionGroupBox))]
     public partial class GroupBox : Control
     {
-        int fontHeight = -1;
-        Font cachedFont;
-        FlatStyle flatStyle = FlatStyle.Standard;
+        private int _fontHeight = -1;
+        private Font _cachedFont;
+        private FlatStyle _flatStyle = FlatStyle.Standard;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='GroupBox'/> class.
         /// </summary>
         public GroupBox() : base()
         {
-            // this class overrides GetPreferredSizeCore, let Control automatically cache the result
+            // This class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
             SetStyle(ControlStyles.ContainerControl, true);
-            SetStyle(ControlStyles.SupportsTransparentBackColor |
-                     ControlStyles.UserPaint |
-                     ControlStyles.ResizeRedraw, OwnerDraw);
+            SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.UserPaint |
+                ControlStyles.ResizeRedraw, OwnerDraw);
 
             SetStyle(ControlStyles.Selectable, false);
             TabStop = false;
@@ -90,10 +86,7 @@ namespace System.Windows.Forms
         [Localizable(true)]
         public AutoSizeMode AutoSizeMode
         {
-            get
-            {
-                return GetAutoSizeMode();
-            }
+            get => GetAutoSizeMode();
             set
             {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
@@ -136,6 +129,7 @@ namespace System.Windows.Forms
                     cp.ClassName = null;
                     cp.Style &= ~(int)User32.BS.GROUPBOX;
                 }
+
                 cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
 
                 return cp;
@@ -145,30 +139,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Set the default Padding to 3 so that it is consistent with Everett
         /// </summary>
-        protected override Padding DefaultPadding
-        {
-            get
-            {
-                return new Padding(3);
-            }
-        }
+        protected override Padding DefaultPadding => new Padding(3);
 
         /// <summary>
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize
-        {
-            get
-            {
-                return new Size(200, 100);
-            }
-        }
+        protected override Size DefaultSize => new Size(200, 100);
 
         /// <summary>
-        ///  Gets a rectangle that represents the
-        ///  dimensions of the <see cref='GroupBox'/>
-        ///  .
+        ///  Gets a rectangle that represents the dimensions of the <see cref='GroupBox'/>
         /// </summary>
         public override Rectangle DisplayRectangle
         {
@@ -176,24 +156,26 @@ namespace System.Windows.Forms
             {
                 Size size = ClientSize;
 
-                if (fontHeight == -1)
+                if (_fontHeight == -1)
                 {
-                    fontHeight = (int)Font.Height;
-                    cachedFont = Font;
+                    _fontHeight = Font.Height;
+                    _cachedFont = Font;
                 }
-                else if (!object.ReferenceEquals(cachedFont, Font))
+                else if (!ReferenceEquals(_cachedFont, Font))
                 {
-                    // Must also cache font identity here because
-                    // we need to provide an accurate DisplayRectangle
-                    // picture even before the OnFontChanged event bubbles
-                    // through.
-                    fontHeight = (int)Font.Height;
-                    cachedFont = Font;
+                    // Must also cache font identity here because we need to provide an accurate DisplayRectangle
+                    // picture even before the OnFontChanged event bubbles through.
+                    _fontHeight = Font.Height;
+                    _cachedFont = Font;
                 }
 
-                //for efficiency, so that we don't need to read property store four times
+                // For efficiency, so that we don't need to read property store four times
                 Padding padding = Padding;
-                return new Rectangle(padding.Left, fontHeight + padding.Top, Math.Max(size.Width - padding.Horizontal, 0), Math.Max(size.Height - fontHeight - padding.Vertical, 0));
+                return new Rectangle(
+                    padding.Left,
+                    _fontHeight + padding.Top,
+                    Math.Max(size.Width - padding.Horizontal, 0),
+                    Math.Max(size.Height - _fontHeight - padding.Vertical, 0));
             }
         }
 
@@ -204,7 +186,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return flatStyle;
+                return _flatStyle;
             }
             set
             {
@@ -214,10 +196,10 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
 
-                if (flatStyle != value)
+                if (_flatStyle != value)
                 {
                     bool originalOwnerDraw = OwnerDraw;
-                    flatStyle = value;
+                    _flatStyle = value;
 
                     // In CreateParams, we pick our class style based on OwnerDraw
                     // if this has changed we need to recreate
@@ -242,18 +224,11 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool OwnerDraw
-        {
-            get
-            {
-                return FlatStyle != FlatStyle.System;
-            }
-        }
+        private bool OwnerDraw => FlatStyle != FlatStyle.System;
 
         /// <summary>
-        ///  Gets or sets a value indicating whether the user may
-        ///  press the TAB key to give the focus to the <see cref='GroupBox'/>
-        ///  .
+        ///  Gets or sets a value indicating whether the user may press the TAB key to give the focus to the
+        ///  <see cref='GroupBox'/>.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -313,17 +288,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines whether the control supports rendering text using GDI+ and GDI.
-        ///  This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
-        ///  value if the child control supports it.
+        ///  Determines whether the control supports rendering text using GDI+ and GDI. This is provided for container
+        ///  controls to iterate through its children to set UseCompatibleTextRendering to the same value if the child
+        ///  control supports it.
         /// </summary>
-        internal override bool SupportsUseCompatibleTextRendering
-        {
-            get
-            {
-                return true;
-            }
-        }
+        internal override bool SupportsUseCompatibleTextRendering => true;
 
         /// <hideinheritance/>
         [Browsable(false)]
@@ -436,14 +405,20 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             // BACKCOMPAT requirement:
-            // Why the Height/Width >= 10 check? This is because uxtheme doesn't seem to handle those cases
-            // similar to what we do for the non-themed case, so if someone is using the groupbox as a
-            // separator, their app will look weird in Whidbey. We render the old way in these cases.
+            //
+            // Why the Height/Width < 10 check? This is because uxtheme doesn't seem to handle those cases similar to
+            // what we do for the non-themed case, so if someone is using the groupbox as a separator, their app will
+            // look weird in .NET Framework 2.0. We render the old way in these cases.
 
-            if (Application.RenderWithVisualStyles && Width >= 10 && Height >= 10)
+            if (!Application.RenderWithVisualStyles || Width < 10 || Height < 10)
+            {
+                DrawGroupBox(e);
+            }
+            else
             {
                 GroupBoxState gbState = Enabled ? GroupBoxState.Normal : GroupBoxState.Disabled;
-                TextFormatFlags textFlags = TextFormatFlags.Default | TextFormatFlags.TextBoxControl | TextFormatFlags.WordBreak | TextFormatFlags.PreserveGraphicsTranslateTransform | TextFormatFlags.PreserveGraphicsClipping;
+                TextFormatFlags textFlags = TextFormatFlags.TextBoxControl | TextFormatFlags.WordBreak
+                    | TextFormatFlags.PreserveGraphicsTranslateTransform | TextFormatFlags.PreserveGraphicsClipping;
 
                 if (!ShowKeyboardCues)
                 {
@@ -455,13 +430,20 @@ namespace System.Windows.Forms
                     textFlags |= (TextFormatFlags.Right | TextFormatFlags.RightToLeft);
                 }
 
-                // We only pass in the text color if it is explicitly set, else we let the renderer use the
-                // color specified by the theme. This is a temporary workaround till we find a good
-                // solution for the "default theme color" issue.
+                // We only pass in the text color if it is explicitly set, else we let the renderer use the color
+                // specified by the theme. This is a temporary workaround till we find a good solution for the
+                // "default theme color" issue.
                 if (ShouldSerializeForeColor() || Enabled == false)
                 {
                     Color textcolor = Enabled ? ForeColor : TextRenderer.DisabledTextColor(BackColor);
-                    GroupBoxRenderer.DrawGroupBox(e.Graphics, new Rectangle(0, 0, Width, Height), Text, Font, textcolor, textFlags, gbState);
+                    GroupBoxRenderer.DrawGroupBox(
+                        e,
+                        new Rectangle(0, 0, Width, Height),
+                        Text,
+                        Font,
+                        textcolor,
+                        textFlags,
+                        gbState);
                 }
                 else
                 {
@@ -474,187 +456,157 @@ namespace System.Windows.Forms
                         gbState);
                 }
             }
-            else
-            {
-                DrawGroupBox(e);
-            }
+
             base.OnPaint(e); // raise paint event
         }
 
         private void DrawGroupBox(PaintEventArgs e)
         {
-            Graphics graphics = e.Graphics;
-            Rectangle textRectangle = ClientRectangle;  // Max text bounding box passed to drawing methods to support RTL.
+            // Offset from the left bound.
+            const int TextOffset = 8;
 
-            int textOffset = 8;      // Offset from the left bound.
+            // Max text bounding box passed to drawing methods to support RTL.
+            Rectangle textRectangle = ClientRectangle;
+            textRectangle.X += TextOffset;
+            textRectangle.Width -= 2 * TextOffset;
 
             Color backColor = DisabledColor;
-
-            Pen light = new Pen(ControlPaint.Light(backColor, 1.0f));
-            Pen dark = new Pen(ControlPaint.Dark(backColor, 0f));
             Size textSize;
 
-            textRectangle.X += textOffset;
-            textRectangle.Width -= 2 * textOffset;
-
-            try
+            if (UseCompatibleTextRendering)
             {
-                if (UseCompatibleTextRendering)
+                Graphics graphics = e.GraphicsInternal;
+                using Brush textBrush = new SolidBrush(ForeColor);
+                using StringFormat format = new StringFormat
                 {
-                    using (Brush textBrush = new SolidBrush(ForeColor))
-                    {
-                        using (StringFormat format = new StringFormat())
-                        {
-                            format.HotkeyPrefix = ShowKeyboardCues ? System.Drawing.Text.HotkeyPrefix.Show : System.Drawing.Text.HotkeyPrefix.Hide;
+                    HotkeyPrefix = ShowKeyboardCues ? HotkeyPrefix.Show : HotkeyPrefix.Hide
+                };
 
-                            // Adjust string format for Rtl controls
-
-                            if (RightToLeft == RightToLeft.Yes)
-                            {
-                                format.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
-                            }
-
-                            textSize = Size.Ceiling(graphics.MeasureString(Text, Font, textRectangle.Width, format));
-
-                            if (Enabled)
-                            {
-                                graphics.DrawString(Text, Font, textBrush, textRectangle, format);
-                            }
-                            else
-                            {
-                                ControlPaint.DrawStringDisabled(graphics, Text, Font, backColor, textRectangle, format);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    using var hdc = new DeviceContextHdcScope(graphics);
-
-                    User32.DT flags = User32.DT.WORDBREAK | User32.DT.EDITCONTROL;
-
-                    if (!ShowKeyboardCues)
-                    {
-                        flags |= User32.DT.HIDEPREFIX;
-                    }
-
-                    if (RightToLeft == RightToLeft.Yes)
-                    {
-                        flags |= User32.DT.RTLREADING;
-                        flags |= User32.DT.RIGHT;
-                    }
-
-                    using var hfont = GdiCache.GetHFONT(Font);
-                    textSize = hdc.MeasureText(Text, hfont, new Size(textRectangle.Width, int.MaxValue), flags);
-
-                    if (Enabled)
-                    {
-                        hdc.DrawText(Text, hfont, textRectangle, ForeColor, flags);
-                    }
-                    else
-                    {
-                        ControlPaint.DrawStringDisabled(
-                            hdc,
-                            Text,
-                            Font,
-                            backColor,
-                            textRectangle,
-                            (TextFormatFlags)flags);
-                    }
-                }
-
-                int textLeft = textOffset;    // Left side of binding box (independent on RTL).
+                // Adjust string format for Rtl controls
 
                 if (RightToLeft == RightToLeft.Yes)
                 {
-                    textLeft += textRectangle.Width - textSize.Width;
+                    format.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
                 }
 
-                // Math.Min to assure we paint at least a small line.
-                int textRight = Math.Min(textLeft + textSize.Width, Width - 6);
+                textSize = Size.Ceiling(graphics.MeasureString(Text, Font, textRectangle.Width, format));
 
-                int boxTop = FontHeight / 2;
-
-                if (SystemInformation.HighContrast)
+                if (Enabled)
                 {
-                    Color boxColor;
-                    if (Enabled)
-                    {
-                        boxColor = ForeColor;
-                    }
-                    else
-                    {
-                        boxColor = SystemColors.GrayText;
-                    }
-                    bool needToDispose = !boxColor.IsSystemColor;
-                    Pen boxPen = null;
-                    try
-                    {
-                        if (needToDispose)
-                        {
-                            boxPen = new Pen(boxColor);
-                        }
-                        else
-                        {
-                            boxPen = SystemPens.FromSystemColor(boxColor);
-                        }
-
-                        // left
-                        graphics.DrawLine(boxPen, 0, boxTop, 0, Height);
-                        //bottom
-                        graphics.DrawLine(boxPen, 0, Height - 1, Width, Height - 1);
-                        //top-left
-                        graphics.DrawLine(boxPen, 0, boxTop, textLeft, boxTop);
-                        //top-right
-                        graphics.DrawLine(boxPen, textRight, boxTop, Width - 1, boxTop);
-                        //right
-                        graphics.DrawLine(boxPen, Width - 1, boxTop, Width - 1, Height - 1);
-                    }
-                    finally
-                    {
-                        if (needToDispose && boxPen != null)
-                        {
-                            boxPen.Dispose();
-                        }
-                    }
+                    graphics.DrawString(Text, Font, textBrush, textRectangle, format);
                 }
                 else
                 {
-                    // left
-                    graphics.DrawLine(light, 1, boxTop, 1, Height - 1);
-                    graphics.DrawLine(dark, 0, boxTop, 0, Height - 2);
-
-                    // bottom
-                    graphics.DrawLine(light, 0, Height - 1, Width, Height - 1);
-                    graphics.DrawLine(dark, 0, Height - 2, Width - 1, Height - 2);
-
-                    // top-left
-
-                    graphics.DrawLine(dark, 0, boxTop - 1, textLeft, boxTop - 1);
-                    graphics.DrawLine(light, 1, boxTop, textLeft, boxTop);
-
-                    // top-right
-                    graphics.DrawLine(dark, textRight, boxTop - 1, Width - 2, boxTop - 1);
-                    graphics.DrawLine(light, textRight, boxTop, Width - 1, boxTop);
-
-                    // right
-                    graphics.DrawLine(light, Width - 1, boxTop - 1, Width - 1, Height - 1);
-                    graphics.DrawLine(dark, Width - 2, boxTop, Width - 2, Height - 2);
+                    ControlPaint.DrawStringDisabled(graphics, Text, Font, backColor, textRectangle, format);
                 }
             }
-            finally
+            else
             {
-                light.Dispose();
-                dark.Dispose();
+                using var hdc = new DeviceContextHdcScope(e);
+
+                User32.DT flags = User32.DT.WORDBREAK | User32.DT.EDITCONTROL;
+
+                if (!ShowKeyboardCues)
+                {
+                    flags |= User32.DT.HIDEPREFIX;
+                }
+
+                if (RightToLeft == RightToLeft.Yes)
+                {
+                    flags |= User32.DT.RTLREADING;
+                    flags |= User32.DT.RIGHT;
+                }
+
+                using var hfont = GdiCache.GetHFONT(Font);
+                textSize = hdc.MeasureText(Text, hfont, new Size(textRectangle.Width, int.MaxValue), flags);
+
+                if (Enabled)
+                {
+                    hdc.DrawText(Text, hfont, textRectangle, ForeColor, flags);
+                }
+                else
+                {
+                    ControlPaint.DrawStringDisabled(
+                        hdc,
+                        Text,
+                        Font,
+                        backColor,
+                        textRectangle,
+                        (TextFormatFlags)flags);
+                }
+            }
+
+            int textLeft = TextOffset;    // Left side of binding box (independent on RTL).
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                textLeft += textRectangle.Width - textSize.Width;
+            }
+
+            // Math.Min to assure we paint at least a small line.
+            int textRight = Math.Min(textLeft + textSize.Width, Width - 6);
+
+            int boxTop = FontHeight / 2;
+
+            if (SystemInformation.HighContrast)
+            {
+                Color boxColor = Enabled ? ForeColor : SystemColors.GrayText;
+
+                ReadOnlySpan<int> lines = stackalloc int[]
+                {
+                    0, boxTop, 0, Height,                       // Left
+                    0, Height - 1, Width, Height - 1,           // Bottom
+                    0, boxTop, textLeft, boxTop,                // Top-left
+                    textRight, boxTop, Width - 1, boxTop,       // Top-right
+                    Width - 1, boxTop, Width - 1, Height - 1    // Right
+                };
+
+                if (boxColor.HasTransparency())
+                {
+                    Graphics graphics = e.GraphicsInternal;
+                    using Pen boxPen = new Pen(boxColor);
+                    graphics.DrawLines(boxPen, lines);
+                }
+                else
+                {
+                    using var hdc = new DeviceContextHdcScope(e);
+                    using var hpen = new Gdi32.CreatePenScope(boxColor);
+                    hdc.DrawLines(hpen, lines);
+                }
+            }
+            else
+            {
+                ReadOnlySpan<int> lightLines = stackalloc int[]
+                {
+                    1, boxTop, 1, Height - 1,                       // Left
+                    0, Height - 1, Width, Height - 1,               // Bottom
+                    1, boxTop, textLeft, boxTop,                    // Top-left
+                    textRight, boxTop, Width - 1, boxTop,           // Top-right
+                    Width - 1, boxTop - 1, Width - 1, Height - 1    // Right
+                };
+
+                ReadOnlySpan<int> darkLines = stackalloc int[]
+                {
+                    0, boxTop, 0, Height - 2,                       // Left
+                    0, Height - 2, Width - 1, Height - 2,           // Bottom
+                    0, boxTop - 1, textLeft, boxTop - 1,            // Top-left
+                    textRight, boxTop - 1, Width - 2, boxTop - 1,   // Top-right
+                    Width - 2, boxTop - 1, Width - 2, Height - 2    // Right
+                };
+
+                using var hdc = new DeviceContextHdcScope(e);
+                using var hpenLight = new Gdi32.CreatePenScope(ControlPaint.Light(backColor, 1.0f));
+                hdc.DrawLines(hpenLight, lightLines);
+                using var hpenDark = new Gdi32.CreatePenScope(ControlPaint.Dark(backColor, 0f));
+                hdc.DrawLines(hpenDark, darkLines);
             }
         }
 
         internal override Size GetPreferredSizeCore(Size proposedSize)
         {
-            // Translating 0,0 from ClientSize to actual Size tells us how much space
-            // is required for the borders.
+            // Translating 0,0 from ClientSize to actual Size tells us how much space is required for the borders.
             Size borderSize = SizeFromClientSize(Size.Empty);
-            Size totalPadding = borderSize + new Size(0, fontHeight) + Padding.Size;
+            Size totalPadding = borderSize + new Size(0, _fontHeight) + Padding.Size;
 
             Size prefSize = LayoutEngine.GetPreferredSize(this, proposedSize - totalPadding);
             return prefSize + totalPadding;
@@ -662,8 +614,8 @@ namespace System.Windows.Forms
 
         protected override void OnFontChanged(EventArgs e)
         {
-            fontHeight = -1;
-            cachedFont = null;
+            _fontHeight = -1;
+            _cachedFont = null;
             Invalidate();
             base.OnFontChanged(e);
         }
@@ -688,8 +640,8 @@ namespace System.Windows.Forms
                 // Make sure when we're scaling by non-unity to clear the font cache
                 // as the font has likely changed, but we dont know it yet as OnFontChanged has yet to
                 // be called on us by our parent.
-                fontHeight = -1;
-                cachedFont = null;
+                _fontHeight = -1;
+                _cachedFont = null;
             }
             base.ScaleControl(factor, specified);
         }
@@ -699,28 +651,32 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a string representation for this control.
         /// </summary>
-        public override string ToString()
-        {
-            string s = base.ToString();
-            return s + ", Text: " + Text;
-        }
+        public override string ToString() => $"{base.ToString()}, Text: {Text}";
 
         /// <summary>
-        ///  The Windows group box doesn't erase the background so we do it
-        ///  ourselves here.
+        ///  The Windows group box doesn't erase the background so we do it ourselves here.
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
             RECT rect = new RECT();
-            User32.GetClientRect(new HandleRef(this, Handle), ref rect);
-            using (Graphics graphics = Graphics.FromHdcInternal(m.WParam))
+            User32.GetClientRect(this, ref rect);
+
+            Color backColor = BackColor;
+
+            if (backColor.HasTransparency())
             {
-                using (Brush b = new SolidBrush(BackColor))
-                {
-                    graphics.FillRectangle(b, rect.left, rect.top,
-                                           rect.right - rect.left, rect.bottom - rect.top);
-                }
+                using Graphics graphics = Graphics.FromHdcInternal(m.WParam);
+                using Brush brush = new SolidBrush(backColor);
+                graphics.FillRectangle(brush, rect);
             }
+            else
+            {
+                var hdc = (Gdi32.HDC)m.WParam;
+                using var hbrush = new Gdi32.CreateBrushScope(backColor);
+                using var selection = new Gdi32.SelectObjectScope(hdc, hbrush);
+                Gdi32.Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
+            }
+
             m.Result = (IntPtr)1;
         }
 
@@ -756,9 +712,6 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new GroupBoxAccessibleObject(this);
-        }
+        protected override AccessibleObject CreateAccessibilityInstance() => new GroupBoxAccessibleObject(this);
     }
 }

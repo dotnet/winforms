@@ -1,3 +1,5 @@
+System.Windows.Forms.DrawItemEventArgs.Dispose() -> void
+virtual System.Windows.Forms.DrawItemEventArgs.Dispose(bool disposing) -> void
 ~override System.Windows.Forms.Splitter.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.Button.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 System.Windows.Forms.ListViewGroup.TitleImageIndex.get -> int

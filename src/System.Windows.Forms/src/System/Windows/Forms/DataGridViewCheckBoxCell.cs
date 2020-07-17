@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -1382,19 +1381,12 @@ namespace System.Windows.Forms
                                     using (Graphics offscreen = Graphics.FromImage(bitmap))
                                     {
                                         offscreen.Clear(Color.Transparent);
-                                        IntPtr dc = offscreen.GetHdc();
-                                        try
-                                        {
-                                            User32.DrawFrameControl(
-                                                new HandleRef(offscreen, dc),
-                                                ref rcCheck,
-                                                User32.DFC.MENU,
-                                                User32.DFCS.MENUCHECK);
-                                        }
-                                        finally
-                                        {
-                                            offscreen.ReleaseHdcInternal(dc);
-                                        }
+                                        using var hdc = new DeviceContextHdcScope(offscreen);
+                                        User32.DrawFrameControl(
+                                            hdc,
+                                            ref rcCheck,
+                                            User32.DFC.MENU,
+                                            User32.DFCS.MENUCHECK);
                                     }
                                     bitmap.MakeTransparent();
                                     checkImage = bitmap;

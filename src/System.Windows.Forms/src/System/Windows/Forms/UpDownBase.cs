@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         private BorderStyle _borderStyle = DefaultBorderStyle;
 
         // Mouse wheel movement
-        private int wheelDelta;
+        private int _wheelDelta;
         private bool _doubleClickFired;
         internal int _defaultButtonsWidth = DefaultButtonsWidth;
 
@@ -376,19 +376,17 @@ namespace System.Windows.Forms
             get => _upDownEdit.Text;
             set
             {
+                // The text changed event will at this point be triggered. After returning, the value of UserEdit will
+                // reflect whether or not the current upDownEditbox text is in sync with any internally stored values.
+                // If UserEdit is true, we must validate the text the user typed or set.
+
                 _upDownEdit.Text = value;
-                // The text changed event will at this point be triggered.
-                // After returning, the value of UserEdit will reflect
-                // whether or not the current upDownEditbox text is in sync
-                // with any internally stored values. If UserEdit is true,
-                // we must validate the text the user typed or set.
+
+                // Usually, the code in the Text changed event handler sets ChangingText back to false. If the text
+                // hasn't actually changed though, the event handler never fires. ChangingText should always be false
+                // on exit from this property.
 
                 ChangingText = false;
-                // Details: Usually, the code in the Text changed event handler
-                // sets ChangingText back to false.
-                // If the text hasn't actually changed though, the event handler
-                // never fires. ChangingText should always be false on exit from
-                // this property.
 
                 if (UserEdit)
                 {
@@ -527,6 +525,8 @@ namespace System.Windows.Forms
             base.OnPaint(e);
 
             Rectangle editBounds = _upDownEdit.Bounds;
+            Color backColor = BackColor;
+
             if (Application.RenderWithVisualStyles)
             {
                 if (_borderStyle != BorderStyle.None)
@@ -552,7 +552,7 @@ namespace System.Windows.Forms
                     backRect.Width++;
                     backRect.Height++;
 
-                    bool transparent = BackColor.A != byte.MaxValue;
+                    bool transparent = backColor.HasTransparency();
 
                     using (var hdc = new DeviceContextHdcScope(e))
                     {
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
                         if (!transparent)
                         {
                             // Draw rectangle around edit control with background color
-                            using var hpen = new Gdi32.CreatePenScope(BackColor);
+                            using var hpen = new Gdi32.CreatePenScope(backColor);
                             hdc.DrawRectangle(backRect, hpen);
                         }
                     }
@@ -572,7 +572,7 @@ namespace System.Windows.Forms
                     if (transparent)
                     {
                         // Need to use GDI+
-                        using (Pen pen = new Pen(BackColor))
+                        using Pen pen = new Pen(backColor);
                         e.GraphicsInternal.DrawRectangle(pen, backRect);
                     }
                 }
@@ -580,20 +580,31 @@ namespace System.Windows.Forms
             else
             {
                 // Draw rectangle around edit control with background color
-                using (Pen pen = new Pen(BackColor, Enabled ? 2 : 1))
+                Rectangle backRect = editBounds;
+                backRect.Inflate(1, 1);
+                if (!Enabled)
                 {
-                    Rectangle backRect = editBounds;
-                    backRect.Inflate(1, 1);
-                    if (!Enabled)
-                    {
-                        backRect.X--;
-                        backRect.Y--;
-                        backRect.Width++;
-                        backRect.Height++;
-                    }
-                    e.Graphics.DrawRectangle(pen, backRect);
+                    backRect.X--;
+                    backRect.Y--;
+                    backRect.Width++;
+                    backRect.Height++;
+                }
+
+                int width = Enabled ? 2 : 1;
+
+                if (!backColor.HasTransparency())
+                {
+                    using var hdc = new DeviceContextHdcScope(e);
+                    using var hpen = new Gdi32.CreatePenScope(backColor, width);
+                    hdc.DrawRectangle(backRect, hpen);
+                }
+                else
+                {
+                    using Pen pen = new Pen(backColor, width);
+                    e.GraphicsInternal.DrawRectangle(pen, backRect);
                 }
             }
+
             if (!Enabled && BorderStyle != BorderStyle.None && !_upDownEdit.ShouldSerializeBackColor())
             {
                 // Draws a grayed rectangled around the upDownEdit, since otherwise we will have a white
@@ -601,7 +612,7 @@ namespace System.Windows.Forms
                 // we only want to do this when BackColor is not serialized, since otherwise
                 // we should display the backcolor instead of the usual grayed textbox.
                 editBounds.Inflate(1, 1);
-                ControlPaint.DrawBorder(e.Graphics, editBounds, SystemColors.Control, ButtonBorderStyle.Solid);
+                ControlPaint.DrawBorderSolid(e, editBounds, SystemColors.Control);
             }
         }
 
@@ -763,12 +774,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Debug.Assert(wheelDelta > -NativeMethods.WHEEL_DELTA, "wheelDelta is too smal");
-            Debug.Assert(wheelDelta < NativeMethods.WHEEL_DELTA, "wheelDelta is too big");
-            wheelDelta += e.Delta;
+            Debug.Assert(_wheelDelta > -NativeMethods.WHEEL_DELTA, "wheelDelta is too smal");
+            Debug.Assert(_wheelDelta < NativeMethods.WHEEL_DELTA, "wheelDelta is too big");
+            _wheelDelta += e.Delta;
 
             float partialNotches;
-            partialNotches = (float)wheelDelta / (float)NativeMethods.WHEEL_DELTA;
+            partialNotches = _wheelDelta / (float)NativeMethods.WHEEL_DELTA;
 
             if (wheelScrollLines == -1)
             {
@@ -776,7 +787,7 @@ namespace System.Windows.Forms
             }
 
             // Evaluate number of bands to scroll
-            int scrollBands = (int)((float)wheelScrollLines * partialNotches);
+            int scrollBands = (int)(wheelScrollLines * partialNotches);
             if (scrollBands != 0)
             {
                 int absScrollBands;
@@ -789,7 +800,7 @@ namespace System.Windows.Forms
                         absScrollBands--;
                     }
 
-                    wheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                    _wheelDelta -= (int)(scrollBands * (NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                 }
                 else
                 {
@@ -800,7 +811,7 @@ namespace System.Windows.Forms
                         absScrollBands--;
                     }
 
-                    wheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                    _wheelDelta -= (int)(scrollBands * (NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                 }
             }
         }
