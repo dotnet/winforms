@@ -119,26 +119,17 @@ namespace System.Windows.Forms
 
         public void Dispose()
         {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
+            for (int i = 0; i < _itemsCache.Length; i++)
             {
-                for (int i = 0; i < _itemsCache.Length; i++)
+                IntPtr hdc = _itemsCache[i];
+                if (hdc != IntPtr.Zero)
                 {
-                    IntPtr hdc = _itemsCache[i];
-                    if (hdc != IntPtr.Zero)
-                    {
-                        Gdi32.DeleteDC((Gdi32.HDC)hdc);
-                    }
+                    Gdi32.DeleteDC((Gdi32.HDC)hdc);
                 }
-
-                _tokenSource.Cancel();
-                _tokenSource.Dispose();
             }
+
+            _tokenSource.Cancel();
+            _tokenSource.Dispose();
         }
 
         [Conditional("DEBUG")]

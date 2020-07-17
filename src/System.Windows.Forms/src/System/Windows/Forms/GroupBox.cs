@@ -283,8 +283,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
         public bool UseCompatibleTextRendering
         {
-            get => base.UseCompatibleTextRenderingInt;
-            set => base.UseCompatibleTextRenderingInt = value;
+            get => UseCompatibleTextRenderingInt;
+            set => UseCompatibleTextRenderingInt = value;
         }
 
         /// <summary>
@@ -476,7 +476,7 @@ namespace System.Windows.Forms
             if (UseCompatibleTextRendering)
             {
                 Graphics graphics = e.GraphicsInternal;
-                using Brush textBrush = new SolidBrush(ForeColor);
+                using Brush textBrush = ForeColor.CreateStaticBrush();
                 using StringFormat format = new StringFormat
                 {
                     HotkeyPrefix = ShowKeyboardCues ? HotkeyPrefix.Show : HotkeyPrefix.Hide
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
                 if (boxColor.HasTransparency())
                 {
                     Graphics graphics = e.GraphicsInternal;
-                    using Pen boxPen = new Pen(boxColor);
+                    using Pen boxPen = boxColor.CreateStaticPen();
                     graphics.DrawLines(boxPen, lines);
                 }
                 else
@@ -671,7 +671,7 @@ namespace System.Windows.Forms
             if (backColor.HasTransparency())
             {
                 using Graphics graphics = Graphics.FromHdcInternal(m.WParam);
-                using Brush brush = new SolidBrush(backColor);
+                using Brush brush = backColor.CreateStaticBrush();
                 graphics.FillRectangle(brush, rect);
             }
             else

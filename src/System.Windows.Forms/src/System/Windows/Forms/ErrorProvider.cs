@@ -972,21 +972,28 @@ namespace System.Windows.Forms
                 DestroyHandle();
             }
 
+            private unsafe void MirrorDcIfNeeded(Gdi32.HDC hdc)
+            {
+                if (_parent.IsMirrored)
+                {
+                    // Mirror the DC
+                    Gdi32.SetMapMode(hdc, Gdi32.MM.ANISOTROPIC);
+                    Gdi32.GetViewportExtEx(hdc, out Size originalExtents);
+                    Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, null);
+                    Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
+                    Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, null);
+                }
+            }
+
             /// <summary>
-            ///  This is called when the error window needs to paint. We paint each icon at its
-            ///  correct location.
+            ///  This is called when the error window needs to paint. We paint each icon at its correct location.
             /// </summary>
-            private unsafe void OnPaint(ref Message m)
+            private unsafe void OnPaint()
             {
                 using var hdc = new User32.BeginPaintScope(Handle);
                 using var save = new Gdi32.SaveDcScope(hdc);
 
-                // Mirror the DC
-                Gdi32.SetMapMode(hdc, Gdi32.MM.ANISOTROPIC);
-                Gdi32.GetViewportExtEx(hdc, out Size originalExtents);
-                Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, null);
-                Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
-                Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, null);
+                MirrorDcIfNeeded(hdc);
 
                 for (int i = 0; i < _items.Count; i++)
                 {
@@ -1123,86 +1130,72 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Region windowRegion = new Region(new Rectangle(0, 0, 0, 0));
-                try
+                using var windowRegion = new Region(new Rectangle(0, 0, 0, 0));
+
+                for (int i = 0; i < _items.Count; i++)
                 {
-                    for (int i = 0; i < _items.Count; i++)
+                    ControlItem item = _items[i];
+                    Rectangle iconBounds = item.GetIconBounds(size);
+                    iconBounds.X -= _windowBounds.X;
+                    iconBounds.Y -= _windowBounds.Y;
+
+                    bool showIcon = true;
+                    if (!item.ToolTipShown)
                     {
-                        ControlItem item = _items[i];
-                        Rectangle iconBounds = item.GetIconBounds(size);
-                        iconBounds.X -= _windowBounds.X;
-                        iconBounds.Y -= _windowBounds.Y;
-
-                        bool showIcon = true;
-                        if (!item.ToolTipShown)
+                        switch (_provider.BlinkStyle)
                         {
-                            switch (_provider.BlinkStyle)
-                            {
-                                case ErrorBlinkStyle.NeverBlink:
-                                    // always show icon
-                                    break;
-
-                                case ErrorBlinkStyle.BlinkIfDifferentError:
-                                    showIcon = (item.BlinkPhase == 0) || (item.BlinkPhase > 0 && (item.BlinkPhase & 1) == (i & 1));
-                                    break;
-
-                                case ErrorBlinkStyle.AlwaysBlink:
-                                    showIcon = ((i & 1) == 0) == _provider._showIcon;
-                                    break;
-                            }
-                        }
-
-                        if (showIcon)
-                        {
-                            iconRegion.Region.Translate(iconBounds.X, iconBounds.Y);
-                            windowRegion.Union(iconRegion.Region);
-                            iconRegion.Region.Translate(-iconBounds.X, -iconBounds.Y);
-                        }
-
-                        if (_tipWindow != null)
-                        {
-                            ComCtl32.TTF flags = ComCtl32.TTF.SUBCLASS;
-                            if (_provider.RightToLeft)
-                            {
-                                flags |= ComCtl32.TTF.RTLREADING;
-                            }
-
-                            var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
-                            toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETTOOLINFOW);
-                        }
-
-                        if (timerCaused && item.BlinkPhase > 0)
-                        {
-                            item.BlinkPhase--;
+                            case ErrorBlinkStyle.NeverBlink:
+                                // always show icon
+                                break;
+                            case ErrorBlinkStyle.BlinkIfDifferentError:
+                                showIcon = (item.BlinkPhase == 0) || (item.BlinkPhase > 0 && (item.BlinkPhase & 1) == (i & 1));
+                                break;
+                            case ErrorBlinkStyle.AlwaysBlink:
+                                showIcon = ((i & 1) == 0) == _provider._showIcon;
+                                break;
                         }
                     }
 
-                    if (timerCaused)
+                    if (showIcon)
                     {
-                        _provider._showIcon = !_provider._showIcon;
+                        iconRegion.Region.Translate(iconBounds.X, iconBounds.Y);
+                        windowRegion.Union(iconRegion.Region);
+                        iconRegion.Region.Translate(-iconBounds.X, -iconBounds.Y);
                     }
 
-                    using var hdc = new User32.GetDcScope(Handle);
-                    using var save = new Gdi32.SaveDcScope(hdc);
-
-                    // Mirror the DC
-                    Gdi32.SetMapMode(hdc, Gdi32.MM.ANISOTROPIC);
-                    Gdi32.GetViewportExtEx(hdc, out Size originalExtents);
-                    Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, null);
-                    Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
-                    Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width, originalOrigin.Y, null);
-
-                    using Graphics g = hdc.CreateGraphics();
-                    using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, g);
-                    if (User32.SetWindowRgn(this, windowRegionHandle, BOOL.TRUE) != 0)
+                    if (_tipWindow != null)
                     {
-                        // The HWnd owns the region.
-                        windowRegionHandle.RelinquishOwnership();
+                        ComCtl32.TTF flags = ComCtl32.TTF.SUBCLASS;
+                        if (_provider.RightToLeft)
+                        {
+                            flags |= ComCtl32.TTF.RTLREADING;
+                        }
+
+                        var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
+                        toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETTOOLINFOW);
+                    }
+
+                    if (timerCaused && item.BlinkPhase > 0)
+                    {
+                        item.BlinkPhase--;
                     }
                 }
-                finally
+
+                if (timerCaused)
                 {
-                    windowRegion.Dispose();
+                    _provider._showIcon = !_provider._showIcon;
+                }
+
+                using var hdc = new User32.GetDcScope(Handle);
+                using var save = new Gdi32.SaveDcScope(hdc);
+                MirrorDcIfNeeded(hdc);
+
+                using Graphics g = hdc.CreateGraphics();
+                using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, g);
+                if (User32.SetWindowRgn(this, windowRegionHandle, BOOL.TRUE) != 0)
+                {
+                    // The HWnd owns the region.
+                    windowRegionHandle.RelinquishOwnership();
                 }
 
                 User32.SetWindowPos(
@@ -1261,7 +1254,7 @@ namespace System.Windows.Forms
                     case User32.WM.ERASEBKGND:
                         break;
                     case User32.WM.PAINT:
-                        OnPaint(ref m);
+                        OnPaint();
                         break;
                     default:
                         base.WndProc(ref m);

@@ -44,14 +44,14 @@ namespace System.Windows.Forms
         {
             ManualResetEventSlim finished = new ManualResetEventSlim();
 
-            void trackAction()
-            {
-                action();
-                finished.Set();
-            }
-
             lock (_lock)
             {
+                void trackAction()
+                {
+                    action();
+                    finished.Set();
+                }
+
                 _workQueue.Enqueue(trackAction);
                 _pending.Set();
             }

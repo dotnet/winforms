@@ -233,25 +233,20 @@ namespace System.Windows.Forms
                 familyName = familyName.Substring(1);
             }
 
-            // Note: Creating the WindowsFont from Font using a LOGFONT structure from GDI+ (Font.ToLogFont(logFont))
-            // may sound like a better choice (more accurate) for doing this but tests show that is not the case (see
-            // WindowsFontTests test suite), the results are the same.  Also, that approach has some issues when the
-            // Font is created in a different application domain since the LOGFONT cannot be marshalled properly.
-
             // Now, creating it using the Font.SizeInPoints makes it GraphicsUnit-independent.
 
             Debug.Assert(font.SizeInPoints > 0.0f, "size has a negative value.");
 
-            // Get the font height from the specified size.  size is in point units and height in logical
-            // units (pixels when using MM_TEXT) so we need to make the conversion using the number of
-            // pixels per logical inch along the screen height. (1 point = 1/72 inch.)
+            // Get the font height from the specified size. The size is in point units and height in logical units
+            // (pixels when using MM_TEXT) so we need to make the conversion using the number of pixels per logical
+            // inch along the screen height. (1 point = 1/72 inch.)
             int pixelsY = (int)Math.Ceiling(DpiHelper.DeviceDpi * font.SizeInPoints / 72);
 
-            // The lfHeight represents the font cell height (line spacing) which includes the internal
-            // leading; we specify a negative size value (in pixels) for the height so the font mapper
-            // provides the closest match for the character height rather than the cell height (MSDN).
+            // The lfHeight represents the font cell height (line spacing) which includes the internal leading; we
+            // specify a negative size value (in pixels) for the height so the font mapper provides the closest match
+            // for the character height rather than the cell height.
 
-            User32.LOGFONTW logFont = new User32.LOGFONTW()
+            User32.LOGFONTW logFont = new User32.LOGFONTW
             {
                 lfHeight = -pixelsY,
                 lfCharSet = font.GdiCharSet,
@@ -264,7 +259,7 @@ namespace System.Windows.Forms
                 FaceName = familyName
             };
 
-            if (logFont.FaceName.Length == 0)
+            if (logFont.FaceName.IsEmpty)
             {
                 logFont.FaceName = DefaultFaceName;
             }
@@ -273,10 +268,12 @@ namespace System.Windows.Forms
 
             if (hfont.IsNull)
             {
+                // Get the default font if we couldn't get what we requested.
                 logFont.FaceName = DefaultFaceName;
-                logFont.lfOutPrecision = Gdi32.OUT_PRECIS.TT_ONLY; // TrueType only.
-
+                logFont.lfOutPrecision = Gdi32.OUT_PRECIS.TT_ONLY;
                 hfont = Gdi32.CreateFontIndirectW(ref logFont);
+
+                Debug.Assert(!hfont.IsNull);
             }
 
             return hfont;

@@ -14,8 +14,9 @@ namespace System.Windows.Forms
     ///  the same way.
     /// </summary>
     /// <remarks>
-    ///  We should consider making this a base class that derives from <see cref="EventArgs"/>. The class itself
-    ///  would have to be public, but the functionality (methods) can still be internal.
+    ///  We should consider making this a base class for the event args that use this rather than a nested struct.
+    ///  That would make things a little more robust, but would require API review as the class itself would have to
+    ///  be public. The internal functionality can obviously still be internal.
     /// </remarks>
     internal partial struct DrawingEventArgs
     {
@@ -27,9 +28,6 @@ namespace System.Windows.Forms
         /// </summary>
         private readonly Gdi32.HDC _hdc;
         private Gdi32.HPALETTE _oldPalette;
-        internal DrawingEventFlags Flags { get; private set; }
-
-        public Rectangle ClipRectangle { get; }
 
         public DrawingEventArgs(
             Graphics graphics,
@@ -58,6 +56,11 @@ namespace System.Windows.Forms
             Flags = flags;
             ClipRectangle = clipRect;
         }
+
+        internal DrawingEventFlags Flags { get; private set; }
+        internal Rectangle ClipRectangle { get; }
+
+        internal bool IsStateClean => !Flags.HasFlag(DrawingEventFlags.GraphicsStateUnclean);
 
         /// <summary>
         ///  Gets the HDC this event is connected to.  If there is no associated HDC, or the GDI+ Graphics object has
@@ -130,8 +133,6 @@ namespace System.Windows.Forms
                 _oldPalette = default;
             }
         }
-
-        internal bool IsStateClean => !Flags.HasFlag(DrawingEventFlags.GraphicsStateUnclean);
 
         [Conditional("DEBUG")]
         internal static void CheckGraphicsForState(Graphics? graphics, DrawingEventFlags flags)

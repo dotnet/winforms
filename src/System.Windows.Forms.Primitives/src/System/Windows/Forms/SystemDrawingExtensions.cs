@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.CompilerServices;
 using Microsoft.Win32;
 using static Interop;
@@ -70,16 +71,32 @@ namespace System.Windows.Forms
         ///  Creates a <see cref="Pen"/>. If <paramref name="color"/> is a system color, makes a static copy of the
         ///  current color value to avoid having the pen hook itself against <see cref="SystemEvents"/>.
         /// </summary>
-        internal static Pen StaticPen(this Color color, float size = 1.0f)
-            => color.IsSystemColor
-                ? new Pen(Color.FromArgb(color.ToArgb()))
-                : new Pen(color);
+        internal static Pen CreateStaticPen(this Color color, DashStyle dashStyle = DashStyle.Solid, float size = 1.0f)
+        {
+            if (dashStyle == DashStyle.Solid)
+            {
+                // Solid is the default and faster than setting the property
+                return color.IsSystemColor
+                    ? new Pen((ARGB)color)
+                    : new Pen(color);
+            }
+
+            return color.IsSystemColor
+                ? new Pen(Color.FromArgb(color.ToArgb())) { DashStyle = dashStyle }
+                : new Pen(color) { DashStyle = dashStyle };
+        }
+
+        /// <summary>
+        ///  Not strictly needed (yet), but allows using the same pattern for all pens.
+        /// </summary>
+        internal static Pen CreateStaticPen(this Brush brush, float width = 1.0f)
+            => new Pen(brush, width);
 
         /// <summary>
         ///  Creates a <see cref="SolidBrush"/>. If <paramref name="color"/> is a system color, makes a static copy of
         ///  the current color value to avoid having the pen hook itself against <see cref="SystemEvents"/>.
         /// </summary>
-        internal static SolidBrush StaticBrush(this Color color)
+        internal static SolidBrush CreateStaticBrush(this Color color)
             => color.IsSystemColor
                 ? new SolidBrush(Color.FromArgb(color.ToArgb()))
                 : new SolidBrush(color);

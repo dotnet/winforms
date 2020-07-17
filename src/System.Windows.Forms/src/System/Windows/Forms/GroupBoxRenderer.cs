@@ -6,7 +6,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
 
@@ -73,7 +72,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                DrawUnthemedGroupBoxNoText(g, bounds, state);
+                DrawUnthemedGroupBoxNoText(g, bounds);
             }
         }
 
@@ -245,11 +244,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws an un-themed GroupBox with no text label.
         /// </summary>
-        private static void DrawUnthemedGroupBoxNoText(Graphics g, Rectangle bounds, GroupBoxState state)
+        private static void DrawUnthemedGroupBoxNoText(Graphics g, Rectangle bounds)
         {
             Color backColor = SystemColors.Control;
-            using Pen light = new Pen(ControlPaint.Light(backColor, 1.0f));
-            using Pen dark = new Pen(ControlPaint.Dark(backColor, 0f));
+            using Pen light = ControlPaint.Light(backColor, 1.0f).CreateStaticPen();
+            using Pen dark = ControlPaint.Dark(backColor, 0f).CreateStaticPen();
 
             // left
             g.DrawLine(light, bounds.Left + 1, bounds.Top + 1, bounds.Left + 1, bounds.Height - 1);

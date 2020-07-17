@@ -15,8 +15,8 @@ namespace System.Windows.Forms
         /// </summary>
         private readonly struct HLSColor
         {
-            private const int ShadowAdj = -333;
-            private const int HilightAdj = 500;
+            private const int ShadowAdjustment = -333;
+            private const int HighlightAdjustment = 500;
 
             private const int Range = 240;
             private const int HLSMax = Range;
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
             {
                 if (!_isSystemColors_Control)
                 {
-                    int zeroLum = NewLuma(ShadowAdj, true);
+                    int zeroLum = NewLuma(ShadowAdjustment, true);
                     return ColorFromHLS(_hue, zeroLum - (int)(zeroLum * percDarker), _saturation);
                 }
                 else
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
                 else
                 {
                     int zeroLum = Luminosity;
-                    int oneLum = NewLuma(HilightAdj, true);
+                    int oneLum = NewLuma(HighlightAdjustment, true);
                     return ColorFromHLS(_hue, zeroLum + (int)((oneLum - zeroLum) * percentLighter), _saturation);
                 }
             }

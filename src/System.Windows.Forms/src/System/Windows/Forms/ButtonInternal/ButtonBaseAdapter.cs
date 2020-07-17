@@ -398,8 +398,8 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 if (!Control.Enabled)
                 {
-                    // need to specify width and height
-                    ControlPaint.DrawImageDisabled(graphics, image, imageBounds, Control.BackColor, true /* unscaled image*/);
+                    // Need to specify width and height
+                    ControlPaint.DrawImageDisabled(graphics, image, imageBounds, unscaledImage: true);
                 }
                 else
                 {

@@ -71,7 +71,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the <see cref='Drawing.Graphics'/> object used to paint.
         /// </summary>
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Graphics Graphics => _event.Graphics;
 
         /// <summary>
