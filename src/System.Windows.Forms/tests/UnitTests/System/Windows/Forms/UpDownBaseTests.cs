@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2274,10 +2274,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void UpDownBase_OnPaint_NullE_ThrowsNullReferenceException()
+        public void UpDownBase_OnPaint_NullE_ThrowsArgumentNullException()
         {
             using var control = new SubUpDownBase();
-            Assert.Throws<NullReferenceException>(() => control.OnPaint(null));
+            Assert.Throws<ArgumentNullException>(() => control.OnPaint(null));
         }
 
         public static IEnumerable<object[]> OnTextBoxKeyDown_TestData()
