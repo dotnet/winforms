@@ -70,5 +70,59 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             object editAccessibleName = comboBox.ChildEditAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
             Assert.NotNull(editAccessibleName);
         }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        {
+            using var comboBox = new ComboBox()
+            {
+                Name = "Name1",
+                AccessibleName = "Test Name"
+            };
+
+            AccessibleObject comboBoxAccessibleObject = comboBox.AccessibilityObject;
+            var accessibleName = comboBoxAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
+
+            Assert.Equal("Test Name", accessibleName);
+        }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
+        {
+            using var comboBox = new ComboBox();
+            AccessibleObject comboBoxAccessibleObject = comboBox.AccessibilityObject;
+
+            bool supportsLegacyIAccessiblePatternId = comboBoxAccessibleObject.IsPatternSupported(NativeMethods.UIA_LegacyIAccessiblePatternId);
+
+            Assert.True(supportsLegacyIAccessiblePatternId);
+        }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        {
+            using var comboBox = new ComboBox()
+            {
+                AccessibleRole = AccessibleRole.Link
+            };
+
+            AccessibleObject comboBoxAccessibleObject = comboBox.AccessibilityObject;
+            var accessibleObjectRole = comboBoxAccessibleObject.Role;
+
+            Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
+        }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        {
+            using var comboBox = new ComboBox()
+            {
+                AccessibleDescription = "Test Description"
+            };
+
+            AccessibleObject comboBoxAccessibleObject = comboBox.AccessibilityObject;
+            var accessibleObjectDescription = comboBoxAccessibleObject.Description;
+
+            Assert.Equal("Test Description", accessibleObjectDescription);
+        }
     }
 }

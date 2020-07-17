@@ -17,5 +17,59 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.NotNull(accessibleObject.Owner);
             Assert.Equal(propertyGrid, accessibleObject.Owner);
         }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        {
+            using var propertyGrid = new PropertyGrid()
+            {
+                Name = "Name1",
+                AccessibleName = "Test Name"
+            };
+
+            AccessibleObject propertyGridAccessibleObject = propertyGrid.AccessibilityObject;
+            var accessibleName = propertyGridAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
+
+            Assert.Equal("Test Name", accessibleName);
+        }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
+        {
+            using var propertyGrid = new PropertyGrid();
+            AccessibleObject propertyGridAccessibleObject = propertyGrid.AccessibilityObject;
+
+            bool supportsLegacyIAccessiblePatternId = propertyGridAccessibleObject.IsPatternSupported(NativeMethods.UIA_LegacyIAccessiblePatternId);
+
+            Assert.True(supportsLegacyIAccessiblePatternId);
+        }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        {
+            using var propertyGrid = new PropertyGrid()
+            {
+                AccessibleRole = AccessibleRole.Link
+            };
+
+            AccessibleObject propertyGridAccessibleObject = propertyGrid.AccessibilityObject;
+            var accessibleObjectRole = propertyGridAccessibleObject.Role;
+
+            Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
+        }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        {
+            using var propertyGrid = new PropertyGrid()
+            {
+                AccessibleDescription = "Test Description"
+            };
+
+            AccessibleObject propertyGridAccessibleObject = propertyGrid.AccessibilityObject;
+            var accessibleObjectDescription = propertyGridAccessibleObject.Description;
+
+            Assert.Equal("Test Description", accessibleObjectDescription);
+        }
     }
 }
