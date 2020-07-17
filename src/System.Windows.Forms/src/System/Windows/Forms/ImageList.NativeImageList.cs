@@ -61,6 +61,9 @@ namespace System.Windows.Forms
 
             public void Dispose()
             {
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
                 lock (s_syncLock)
                 {
                     if (Handle == IntPtr.Zero)
@@ -68,13 +71,10 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    ComCtl32.ImageList.Destroy(Handle);
+                    var result = ComCtl32.ImageList.Destroy(Handle);
+                    Debug.Assert(result.IsTrue());
                     Handle = IntPtr.Zero;
                 }
-
-#if DEBUG
-                GC.SuppressFinalize(this);
-#endif
             }
 
 #if DEBUG
@@ -90,6 +90,13 @@ namespace System.Windows.Forms
                 return;
             }
 #endif
+
+            internal IntPtr TransferOwnership()
+            {
+                var handle = Handle;
+                Handle = IntPtr.Zero;
+                return handle;
+            }
 
             internal NativeImageList Duplicate()
             {

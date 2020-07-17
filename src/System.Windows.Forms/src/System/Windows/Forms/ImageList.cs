@@ -142,6 +142,17 @@ namespace System.Windows.Forms
             }
         }
 
+        internal IntPtr CreateUniqueHandle()
+        {
+            if (_nativeImageList == null)
+            {
+                CreateHandle();
+            }
+
+            using var iml = _nativeImageList.Duplicate();
+            return iml.TransferOwnership();
+        }
+
         /// <summary>
         ///  Whether or not the underlying Win32 handle has been created.
         /// </summary>
