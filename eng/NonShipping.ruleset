@@ -4,6 +4,7 @@
 
   <Rules AnalyzerId="Microsoft.CodeAnalysis.FxCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FxCopAnalyzers">
     <Rule Id="CA1507" Action="None" />          <!-- Use nameof to express symbol names -->
+    <Rule Id="CA1810" Action="None" />          <!-- Initialize reference type static fields inline (micro-performance rule is not relevant in test code) -->
   </Rules>
 
   <Rules AnalyzerId="xunit.analyzers" RuleNamespace="xunit.analyzers">

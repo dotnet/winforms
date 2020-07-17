@@ -3292,6 +3292,10 @@ System.Windows.Forms.ListViewGroup.Tag.get -> object?
 System.Windows.Forms.ListViewGroup.Tag.set -> void
 System.Windows.Forms.ListViewGroup.TaskLink.get -> string!
 System.Windows.Forms.ListViewGroup.TaskLink.set -> void
+System.Windows.Forms.ListViewGroup.TitleImageIndex.get -> int
+System.Windows.Forms.ListViewGroup.TitleImageIndex.set -> void
+System.Windows.Forms.ListViewGroup.TitleImageKey.get -> string!
+System.Windows.Forms.ListViewGroup.TitleImageKey.set -> void
 System.Windows.Forms.ListViewGroupCollapsedState
 System.Windows.Forms.ListViewGroupCollapsedState.Collapsed = 2 -> System.Windows.Forms.ListViewGroupCollapsedState
 System.Windows.Forms.ListViewGroupCollapsedState.Default = 0 -> System.Windows.Forms.ListViewGroupCollapsedState
@@ -7242,6 +7246,7 @@ override System.Windows.Forms.GroupBox.DisplayRectangle.get -> System.Drawing.Re
 override System.Windows.Forms.GroupBox.ProcessMnemonic(char charCode) -> bool
 override System.Windows.Forms.GroupBox.ScaleControl(System.Drawing.SizeF factor, System.Windows.Forms.BoundsSpecified specified) -> void
 override System.Windows.Forms.GroupBox.WndProc(ref System.Windows.Forms.Message m) -> void
+override System.Windows.Forms.HScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.HScrollBar.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.HtmlDocument.GetHashCode() -> int
 override System.Windows.Forms.HtmlElement.GetHashCode() -> int
@@ -7469,6 +7474,7 @@ override System.Windows.Forms.ScrollBar.BackColor.get -> System.Drawing.Color
 override System.Windows.Forms.ScrollBar.BackColor.set -> void
 override System.Windows.Forms.ScrollBar.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
 override System.Windows.Forms.ScrollBar.BackgroundImageLayout.set -> void
+override System.Windows.Forms.ScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.ScrollBar.DefaultImeMode.get -> System.Windows.Forms.ImeMode
 override System.Windows.Forms.ScrollBar.DefaultMargin.get -> System.Windows.Forms.Padding
 override System.Windows.Forms.ScrollBar.ForeColor.get -> System.Drawing.Color
@@ -7826,6 +7832,7 @@ override System.Windows.Forms.UserControl.OnCreateControl() -> void
 override System.Windows.Forms.UserControl.ValidateChildren() -> bool
 override System.Windows.Forms.UserControl.ValidateChildren(System.Windows.Forms.ValidationConstraints validationConstraints) -> bool
 override System.Windows.Forms.UserControl.WndProc(ref System.Windows.Forms.Message m) -> void
+override System.Windows.Forms.VScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.VScrollBar.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.VScrollBar.RightToLeft.get -> System.Windows.Forms.RightToLeft
 override System.Windows.Forms.VScrollBar.RightToLeft.set -> void
@@ -10137,18 +10144,18 @@ System.Windows.Forms.InputLanguageCollection.this[int index].get -> System.Windo
 ~System.Windows.Forms.ListBox.IntegerCollection.CopyTo(System.Array destination, int index) -> void
 ~System.Windows.Forms.ListBox.IntegerCollection.IntegerCollection(System.Windows.Forms.ListBox owner) -> void
 ~System.Windows.Forms.ListBox.Items.get -> System.Windows.Forms.ListBox.ObjectCollection
-~System.Windows.Forms.ListBox.ObjectCollection.Add(object item) -> int
-~System.Windows.Forms.ListBox.ObjectCollection.AddRange(System.Windows.Forms.ListBox.ObjectCollection value) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.AddRange(object[] items) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.Contains(object value) -> bool
-~System.Windows.Forms.ListBox.ObjectCollection.CopyTo(object[] destination, int arrayIndex) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.ListBox.ObjectCollection.IndexOf(object value) -> int
-~System.Windows.Forms.ListBox.ObjectCollection.Insert(int index, object item) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox owner) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox owner, System.Windows.Forms.ListBox.ObjectCollection value) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox owner, object[] value) -> void
-~System.Windows.Forms.ListBox.ObjectCollection.Remove(object value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.Add(object! item) -> int
+System.Windows.Forms.ListBox.ObjectCollection.AddRange(System.Windows.Forms.ListBox.ObjectCollection! value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.AddRange(object![]! items) -> void
+System.Windows.Forms.ListBox.ObjectCollection.Contains(object! value) -> bool
+System.Windows.Forms.ListBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
+System.Windows.Forms.ListBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListBox.ObjectCollection.IndexOf(object! value) -> int
+System.Windows.Forms.ListBox.ObjectCollection.Insert(int index, object! item) -> void
+System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner) -> void
+System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner, System.Windows.Forms.ListBox.ObjectCollection! value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner, object![]! value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.Remove(object! value) -> void
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.CopyTo(System.Array destination, int index) -> void
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.SelectedIndexCollection(System.Windows.Forms.ListBox owner) -> void
@@ -10214,6 +10221,8 @@ System.Windows.Forms.InputLanguageCollection.this[int index].get -> System.Windo
 ~System.Windows.Forms.ListView.FocusedItem.get -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ListView.FocusedItem.set -> void
 ~System.Windows.Forms.ListView.GetItemAt(int x, int y) -> System.Windows.Forms.ListViewItem
+~System.Windows.Forms.ListView.GroupImageList.get -> System.Windows.Forms.ImageList
+~System.Windows.Forms.ListView.GroupImageList.set -> void
 ~System.Windows.Forms.ListView.Groups.get -> System.Windows.Forms.ListViewGroupCollection
 ~System.Windows.Forms.ListView.HitTest(System.Drawing.Point point) -> System.Windows.Forms.ListViewHitTestInfo
 ~System.Windows.Forms.ListView.HitTest(int x, int y) -> System.Windows.Forms.ListViewHitTestInfo
@@ -11040,6 +11049,7 @@ System.Windows.Forms.VScrollProperties.VScrollProperties(System.Windows.Forms.Sc
 ~override System.Windows.Forms.AxHost.Text.get -> string
 ~override System.Windows.Forms.AxHost.Text.set -> void
 ~override System.Windows.Forms.BindingMemberInfo.Equals(object otherObject) -> bool
+~override System.Windows.Forms.Button.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.Button.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.Button.OnClick(System.EventArgs e) -> void
 ~override System.Windows.Forms.Button.OnFontChanged(System.EventArgs e) -> void
@@ -11688,6 +11698,7 @@ override System.Windows.Forms.InputLanguage.Equals(object? value) -> bool
 ~override System.Windows.Forms.Panel.Text.get -> string
 ~override System.Windows.Forms.Panel.Text.set -> void
 ~override System.Windows.Forms.Panel.ToString() -> string
+~override System.Windows.Forms.PictureBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.PictureBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.PictureBox.Font.get -> System.Drawing.Font
 ~override System.Windows.Forms.PictureBox.Font.set -> void
@@ -11838,6 +11849,7 @@ override System.Windows.Forms.ScrollBar.ToString() -> string!
 ~override System.Windows.Forms.SplitContainer.Text.set -> void
 ~override System.Windows.Forms.Splitter.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.Splitter.BackgroundImage.set -> void
+~override System.Windows.Forms.Splitter.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.Splitter.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.Splitter.DefaultCursor.get -> System.Windows.Forms.Cursor
 ~override System.Windows.Forms.Splitter.Font.get -> System.Drawing.Font
@@ -12998,8 +13010,8 @@ static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.
 ~virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs e) -> void
 ~virtual System.Windows.Forms.ListBox.AddItemsCore(object[] value) -> void
 ~virtual System.Windows.Forms.ListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection
-~virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].get -> object
-~virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].set -> void
+virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].get -> object!
+virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.ListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ListControl.OnDataSourceChanged(System.EventArgs e) -> void
