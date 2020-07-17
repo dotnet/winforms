@@ -600,9 +600,7 @@ namespace System.Windows.Forms
         {
             // Very general, and very slow
             if (graphics == null)
-            {
                 throw new ArgumentNullException(nameof(graphics));
-            }
 
             DrawBorder(
                 (IDeviceContext)graphics,
@@ -637,6 +635,15 @@ namespace System.Windows.Forms
             int bottomWidth,
             ButtonBorderStyle bottomStyle)
         {
+            if (leftWidth < 0)
+                throw new ArgumentOutOfRangeException(nameof(leftWidth));
+            if (topWidth < 0)
+                throw new ArgumentOutOfRangeException(nameof(topWidth));
+            if (rightWidth < 0)
+                throw new ArgumentOutOfRangeException(nameof(rightWidth));
+            if (bottomWidth < 0)
+                throw new ArgumentOutOfRangeException(nameof(bottomWidth));
+
             int totalData = (topWidth + leftWidth + bottomWidth + rightWidth) * 2;
             Span<int> allData;
 

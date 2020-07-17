@@ -658,6 +658,11 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
+            if (m.WParam == IntPtr.Zero)
+            {
+                return;
+            }
+
             RECT rect = new RECT();
             User32.GetClientRect(this, ref rect);
 

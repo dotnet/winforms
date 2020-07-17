@@ -610,7 +610,7 @@ namespace System.Windows.Forms.Tests
             ControlPaint.DrawBorder(graphics, bounds, leftColor, leftWidth, leftStyle, topColor, topWidth, topStyle, rightColor, rightWidth, rightStyle, bottomColor, bottomWidth, bottomStyle);
         }
 
-        public static IEnumerable<object[]> DrawBorder_Overflow_TestData()
+        public static IEnumerable<object[]> DrawBorder_OutOfRange_TestData()
         {
             foreach (ButtonBorderStyle style in new ButtonBorderStyle[] { ButtonBorderStyle.Dashed, ButtonBorderStyle.Dotted, ButtonBorderStyle.Inset, ButtonBorderStyle.None, ButtonBorderStyle.Outset, ButtonBorderStyle.Solid, ButtonBorderStyle.None - 1, ButtonBorderStyle.Outset + 1 })
             {
@@ -636,8 +636,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(DrawBorder_Overflow_TestData))]
-        public void ControlPaint_DrawBorder_Overflows_ThrowsOverflowException(
+        [MemberData(nameof(DrawBorder_OutOfRange_TestData))]
+        public void ControlPaint_DrawBorder_OutOfRange_ThrowsOutOfRangeException(
             Rectangle bounds,
             Color leftColor, int leftWidth, ButtonBorderStyle leftStyle,
             Color topColor, int topWidth, ButtonBorderStyle topStyle,
