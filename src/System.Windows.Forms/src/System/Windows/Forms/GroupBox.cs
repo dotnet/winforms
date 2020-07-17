@@ -803,6 +803,8 @@ namespace System.Windows.Forms
                         return NativeMethods.UIA_GroupControlTypeId;
                     case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
                         return true;
+                    case NativeMethods.UIA_NamePropertyId:
+                        return Name;
                 }
 
                 return base.GetPropertyValue(propertyID);

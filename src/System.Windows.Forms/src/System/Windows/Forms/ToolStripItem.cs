@@ -4727,6 +4727,16 @@ namespace System.Windows.Forms
                 Owner.Select();
             }
 
+            internal override bool IsPatternSupported(int patternId)
+            {
+                if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
+
             internal void RaiseFocusChanged()
             {
                 ToolStrip root = ownerItem.RootToolStrip;
