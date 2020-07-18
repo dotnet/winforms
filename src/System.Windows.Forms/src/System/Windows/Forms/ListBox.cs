@@ -2416,16 +2416,22 @@ namespace System.Windows.Forms
         {
             DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
 
-            using var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(dis->hDC, forceBackground: false, realizePalette: false);
-
-            using Graphics g = dis->hDC.CreateGraphics();
             Rectangle bounds = dis->rcItem;
             if (HorizontalScrollbar)
             {
                 bounds.Width = MultiColumn ? Math.Max(ColumnWidth, bounds.Width) : Math.Max(MaxItemWidth, bounds.Width);
             }
 
-            OnDrawItem(new DrawItemEventArgs(g, Font, bounds, (int)dis->itemID, (DrawItemState)dis->itemState, ForeColor, BackColor));
+            using var e = new DrawItemEventArgs(
+                dis->hDC,
+                Font,
+                bounds,
+                dis->itemID,
+                dis->itemState,
+                ForeColor,
+                BackColor);
+
+            OnDrawItem(e);
 
             m.Result = (IntPtr)1;
         }

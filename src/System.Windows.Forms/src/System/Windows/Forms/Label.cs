@@ -1068,6 +1068,7 @@ namespace System.Windows.Forms
         {
             return CreateTextFormatFlags(Size - GetBordersAndPadding());
         }
+
         /// <summary>
         ///  Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
         /// </summary>
@@ -1125,10 +1126,26 @@ namespace System.Windows.Forms
             base.Dispose(disposing);
         }
 
+        private void DrawImage(PaintEventArgs e, Image image, Rectangle r, ContentAlignment align)
+        {
+            if (GetType() == typeof(Label))
+            {
+                // We're not overridden, use the internal graphics accessor as we know it won't be modified.
+                DrawImage(e.GraphicsInternal, image, r, align);
+            }
+            else
+            {
+                DrawImage(e.Graphics, image, r, align);
+            }
+        }
+
         /// <summary>
         ///  Draws an <see cref='Drawing.Image'/> within the specified bounds.
         /// </summary>
         protected void DrawImage(Graphics g, Image image, Rectangle r, ContentAlignment align)
+            => DrawImageInternal(g, image, r, align);
+
+        private void DrawImageInternal(Graphics g, Image image, Rectangle r, ContentAlignment align)
         {
             Rectangle loc = CalcImageRenderBounds(image, r, align);
 
@@ -1212,10 +1229,11 @@ namespace System.Windows.Forms
             if (string.IsNullOrEmpty(Text))
             {
                 // empty labels return the font height + borders
-                using (WindowsFont font = WindowsFont.FromFont(Font))
+                using (var hfont = GdiCache.GetHFONT(Font))
+                using (var screen = GdiCache.GetScreenHdc())
                 {
                     // this is the character that Windows uses to determine the extent
-                    requiredSize = WindowsGraphicsCacheManager.MeasurementGraphics.GetTextExtent("0", font);
+                    requiredSize = screen.HDC.GetTextExtent("0", hfont);
                     requiredSize.Width = 0;
                 }
             }
@@ -1227,16 +1245,14 @@ namespace System.Windows.Forms
             else
             {
                 // GDI+ rendering.
-                using (Graphics measurementGraphics = WindowsFormsUtils.CreateMeasurementGraphics())
+                using (var screen = GdiCache.GetScreenDCGraphics())
+                using (StringFormat stringFormat = CreateStringFormat())
                 {
-                    using (StringFormat stringFormat = CreateStringFormat())
-                    {
-                        SizeF bounds = (proposedConstraints.Width == 1) ?
-                            new SizeF(0, proposedConstraints.Height) :
-                            new SizeF(proposedConstraints.Width, proposedConstraints.Height);
+                    SizeF bounds = (proposedConstraints.Width == 1) ?
+                        new SizeF(0, proposedConstraints.Height) :
+                        new SizeF(proposedConstraints.Width, proposedConstraints.Height);
 
-                        requiredSize = Size.Ceiling(measurementGraphics.MeasureString(Text, Font, bounds, stringFormat));
-                    }
+                    requiredSize = Size.Ceiling(screen.Graphics.MeasureString(Text, Font, bounds, stringFormat));
                 }
             }
 
@@ -1262,25 +1278,23 @@ namespace System.Windows.Forms
                 return 0;
             }
 
-            using (WindowsGraphics wg = WindowsGraphics.FromHwnd(Handle))
+            TextFormatFlags flags = CreateTextFormatFlags();
+            TextPaddingOptions padding = default;
+
+            if ((flags & TextFormatFlags.NoPadding) == TextFormatFlags.NoPadding)
             {
-                TextFormatFlags flags = CreateTextFormatFlags();
-
-                if ((flags & TextFormatFlags.NoPadding) == TextFormatFlags.NoPadding)
-                {
-                    wg.TextPadding = TextPaddingOptions.NoPadding;
-                }
-                else if ((flags & TextFormatFlags.LeftAndRightPadding) == TextFormatFlags.LeftAndRightPadding)
-                {
-                    wg.TextPadding = TextPaddingOptions.LeftAndRightPadding;
-                }
-
-                using WindowsFont wf = WindowsGraphicsCacheManager.GetWindowsFont(Font);
-                User32.DRAWTEXTPARAMS dtParams = wg.GetTextMargins(wf);
-
-                // This is actually leading margin.
-                return dtParams.iLeftMargin;
+                padding = TextPaddingOptions.NoPadding;
             }
+            else if ((flags & TextFormatFlags.LeftAndRightPadding) == TextFormatFlags.LeftAndRightPadding)
+            {
+                padding = TextPaddingOptions.LeftAndRightPadding;
+            }
+
+            using var hfont = GdiCache.GetHFONT(Font);
+            User32.DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
+
+            // This is actually leading margin.
+            return dtParams.iLeftMargin;
         }
 
         private void ImageListRecreateHandle(object sender, EventArgs e)
@@ -1416,7 +1430,7 @@ namespace System.Windows.Forms
             Image i = Image;
             if (i != null)
             {
-                DrawImage(e.Graphics, i, face, RtlTranslateAlignment(ImageAlign));
+                DrawImage(e, i, face, RtlTranslateAlignment(ImageAlign));
             }
 
             Color color;
@@ -1426,8 +1440,8 @@ namespace System.Windows.Forms
             }
             else
             {
-                using var scope = new PaintEventHdcScope(e);
-                color = scope.HDC.GetNearestColor(Enabled ? ForeColor : DisabledColor);
+                using var hdc = new DeviceContextHdcScope(e);
+                color = hdc.GetNearestColor(Enabled ? ForeColor : DisabledColor);
             }
 
             // Do actual drawing
@@ -1451,12 +1465,12 @@ namespace System.Windows.Forms
                     {
                         using (Brush brush = new SolidBrush(color))
                         {
-                            e.Graphics.DrawString(Text, Font, brush, face, stringFormat);
+                            e.GraphicsInternal.DrawString(Text, Font, brush, face, stringFormat);
                         }
                     }
                     else
                     {
-                        ControlPaint.DrawStringDisabled(e.Graphics, Text, Font, color, face, stringFormat);
+                        ControlPaint.DrawStringDisabled(e.GraphicsInternal, Text, Font, color, face, stringFormat);
                     }
                 }
             }
@@ -1466,7 +1480,7 @@ namespace System.Windows.Forms
 
                 if (Enabled)
                 {
-                    TextRenderer.DrawText(e.Graphics, Text, Font, face, color, flags);
+                    TextRenderer.DrawTextInternal(e, Text, Font, face, color, flags: flags);
                 }
                 else
                 {
@@ -1474,7 +1488,7 @@ namespace System.Windows.Forms
                     // ControlPaint.Dark(backcolor).  Otherwise we use ControlDark.
 
                     Color disabledTextForeColor = TextRenderer.DisabledTextColor(BackColor);
-                    TextRenderer.DrawText(e.Graphics, Text, Font, face, disabledTextForeColor, flags);
+                    TextRenderer.DrawTextInternal(e, Text, Font, face, disabledTextForeColor, flags: flags);
                 }
             }
 

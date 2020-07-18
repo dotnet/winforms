@@ -20,7 +20,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                ColorData colors = PaintRender(e.Graphics).Calculate();
+                ColorData colors = PaintRender(e).Calculate();
                 LayoutData layout = Layout(e).Layout();
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
@@ -77,8 +77,9 @@ namespace System.Windows.Forms.ButtonInternal
             if (Application.RenderWithVisualStyles)
             {
                 ButtonBase b = Control;
+                using var screen = GdiCache.GetScreenHdc();
                 layout.checkSize = RadioButtonRenderer.GetGlyphSize(
-                    WindowsFormsUtils.GetMeasurementDeviceContext(),
+                    screen,
                     RadioButtonRenderer.ConvertFromButtonState(GetState(), b.MouseIsOver),
                     b.HandleInternal).Width;
             }

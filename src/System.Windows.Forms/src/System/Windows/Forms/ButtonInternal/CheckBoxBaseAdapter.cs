@@ -57,10 +57,10 @@ namespace System.Windows.Forms.ButtonInternal
                 bounds.Height--;
             }
 
-            using (var scope = new PaintEventHdcScope(e))
+            using (var hdc = new DeviceContextHdcScope(e))
             {
                 using var hpen = new Gdi32.CreatePenScope(checkBorder);
-                scope.HDC.DrawRectangle(bounds, hpen);
+                hdc.DrawRectangle(bounds, hpen);
 
                 // Now subtract, since the rest of the code is like Everett.
                 if (layout.options.everettButtonCompat)
@@ -79,13 +79,13 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                using var scope = new PaintEventHdcScope(e);
+                using var hdc = new DeviceContextHdcScope(e);
                 using var hbrush = new Gdi32.CreateBrushScope(checkBackground);
 
                 // Even though we are using GDI here as opposed to GDI+ in Everett, we still need to add 1.
                 bounds.Width++;
                 bounds.Height++;
-                scope.HDC.FillRectangle(bounds, hbrush);
+                hdc.FillRectangle(bounds, hbrush);
             }
 
             DrawCheckOnly(e, layout, colors, checkColor, checkBackground);
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static Rectangle DrawPopupBorder(PaintEventArgs e, Rectangle r, ColorData colors)
         {
-            using var hdc = new PaintEventHdcScope(e);
+            using var hdc = new DeviceContextHdcScope(e);
             return DrawPopupBorder(hdc, r, colors);
         }
 
@@ -268,30 +268,30 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    CheckBoxRenderer.DrawCheckBox(
-                        e.Graphics,
+                    CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
+                        e,
                         new Point(layout.checkBounds.Left, layout.checkBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver),
                         Control.HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawMixedCheckBox(e.Graphics, layout.checkBounds, style);
+                    ControlPaint.DrawMixedCheckBox(e.GraphicsInternal, layout.checkBounds, style);
                 }
             }
             else
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    CheckBoxRenderer.DrawCheckBox(
-                        e.Graphics,
+                    CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
+                        e,
                         new Point(layout.checkBounds.Left, layout.checkBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver),
                         Control.HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawCheckBox(e.Graphics, layout.checkBounds, style);
+                    ControlPaint.DrawCheckBox(e.GraphicsInternal, layout.checkBounds, style);
                 }
             }
         }
@@ -308,30 +308,21 @@ namespace System.Windows.Forms.ButtonInternal
                 return cacheCheckImage;
             }
 
-            if (cacheCheckImage != null)
-            {
-                cacheCheckImage.Dispose();
-            }
+            cacheCheckImage?.Dispose();
 
-            // We draw the checkmark slightly off center to eliminate 3-D border artifacts,
-            // and compensate below
+            // We draw the checkmark slightly off center to eliminate 3-D border artifacts and compensate below
             RECT rcCheck = new Rectangle(0, 0, fullSize.Width, fullSize.Height);
             Bitmap bitmap = new Bitmap(fullSize.Width, fullSize.Height);
-            Graphics offscreen = Graphics.FromImage(bitmap);
-            offscreen.Clear(Color.Transparent);
-            IntPtr dc = offscreen.GetHdc();
-            try
+
+            using (Graphics offscreen = Graphics.FromImage(bitmap))
             {
+                offscreen.Clear(Color.Transparent);
+                using var hdc = new DeviceContextHdcScope(offscreen, applyGraphicsState: false);
                 User32.DrawFrameControl(
-                    new HandleRef(offscreen, dc),
+                    hdc,
                     ref rcCheck,
                     User32.DFC.MENU,
                     User32.DFCS.MENUCHECK);
-            }
-            finally
-            {
-                offscreen.ReleaseHdcInternal(dc);
-                offscreen.Dispose();
             }
 
             bitmap.MakeTransparent();

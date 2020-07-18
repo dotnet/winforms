@@ -1823,10 +1823,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ScrollableControl_OnPaintBackground_NullEventArgs_ThrowsNullReferenceException()
+        public void ScrollableControl_OnPaintBackground_NullEventArgs_ThrowsArgumentNullException()
         {
             using var control = new SubScrollableControl();
-            Assert.Throws<NullReferenceException>(() => control.OnPaintBackground(null));
+            Assert.Throws<ArgumentNullException>(() => control.OnPaintBackground(null));
         }
 
         [WinFormsTheory]

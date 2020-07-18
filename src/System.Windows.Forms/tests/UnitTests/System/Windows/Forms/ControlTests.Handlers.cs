@@ -4120,10 +4120,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Control_OnPaintBackground_NullEventArgs_ThrowsNullReferenceException()
+        public void Control_OnPaintBackground_NullEventArgs_ThrowsArgumentNullException()
         {
             using var control = new SubControl();
-            Assert.Throws<NullReferenceException>(() => control.OnPaintBackground(null));
+            Assert.Throws<ArgumentNullException>(() => control.OnPaintBackground(null));
         }
 
         [WinFormsTheory]

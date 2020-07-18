@@ -1627,11 +1627,11 @@ namespace System.Windows.Forms
             {
                 return Rectangle.Empty;
             }
+
             DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false /*includeColors*/);
-            using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
-            {
-                return GetContentBounds(g, dataGridViewCellStyle, rowIndex);
-            }
+
+            using var screen = GdiCache.GetScreenDCGraphics();
+            return GetContentBounds(screen, dataGridViewCellStyle, rowIndex);
         }
 
         protected virtual Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
@@ -1677,10 +1677,8 @@ namespace System.Windows.Forms
         internal Rectangle GetErrorIconBounds(int rowIndex)
         {
             DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false /*includeColors*/);
-            using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
-            {
-                return GetErrorIconBounds(g, dataGridViewCellStyle, rowIndex);
-            }
+            using var screen = GdiCache.GetScreenDCGraphics();
+            return GetErrorIconBounds(screen, dataGridViewCellStyle, rowIndex);
         }
 
         protected virtual Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
@@ -2412,10 +2410,8 @@ namespace System.Windows.Forms
             }
 
             DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false);
-            using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
-            {
-                return GetPreferredSize(g, dataGridViewCellStyle, rowIndex, new Size(width, 0)).Height;
-            }
+            using var screen = GdiCache.GetScreenDCGraphics();
+            return GetPreferredSize(screen, dataGridViewCellStyle, rowIndex, new Size(width, 0)).Height;
         }
 
         internal Size GetPreferredSize(int rowIndex)
@@ -2424,11 +2420,10 @@ namespace System.Windows.Forms
             {
                 return new Size(-1, -1);
             }
+
             DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false);
-            using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
-            {
-                return GetPreferredSize(g, dataGridViewCellStyle, rowIndex, Size.Empty);
-            }
+            using var screen = GdiCache.GetScreenDCGraphics();
+            return GetPreferredSize(screen, dataGridViewCellStyle, rowIndex, Size.Empty);
         }
 
         protected virtual Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
@@ -2468,10 +2463,8 @@ namespace System.Windows.Forms
             }
 
             DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false);
-            using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
-            {
-                return GetPreferredSize(g, dataGridViewCellStyle, rowIndex, new Size(0, height)).Width;
-            }
+            using var screen = GdiCache.GetScreenDCGraphics();
+            return GetPreferredSize(screen, dataGridViewCellStyle, rowIndex, new Size(0, height)).Width;
         }
 
         protected virtual Size GetSize(int rowIndex)
@@ -2480,6 +2473,7 @@ namespace System.Windows.Forms
             {
                 return new Size(-1, -1);
             }
+
             if (rowIndex == -1)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedCell, "Size"));
@@ -2550,6 +2544,7 @@ namespace System.Windows.Forms
                 }
                 Debug.Assert(ColumnIndex < dataGridView.Columns.Count);
             }
+
             if (dataGridView == null ||
                 (dataGridView.AllowUserToAddRowsInternal && rowIndex > -1 && rowIndex == dataGridView.NewRowIndex && rowIndex != dataGridView.CurrentCellAddress.Y) ||
                 (!dataGridView.VirtualMode && OwningColumn != null && !OwningColumn.IsDataBound) ||
@@ -2595,6 +2590,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException();
             }
+
             // Only add the control to the dataGridView's children if this hasn't been done yet since
             // InitializeEditingControl can be called several times.
             if (dgv.EditingControl.ParentInternal == null)
@@ -2610,6 +2606,7 @@ namespace System.Windows.Forms
                 dgv.EditingPanel.Controls.Add(dgv.EditingControl);
                 Debug.Assert(dgv.IsSharedCellVisible(this, rowIndex));
             }
+
             Debug.Assert(dgv.EditingControl.ParentInternal == dgv.EditingPanel);
             Debug.Assert(dgv.EditingPanel.ParentInternal == dgv);
         }
@@ -2932,25 +2929,27 @@ namespace System.Windows.Forms
                         {
                             DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false);
 
-                            using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
+                            using (var screen = GdiCache.GetScreenDCGraphics())
                             {
-                                Rectangle contentBounds = GetContentBounds(g, dataGridViewCellStyle, rowIndex);
+                                Rectangle contentBounds = GetContentBounds(screen, dataGridViewCellStyle, rowIndex);
 
                                 bool widthTruncated = false;
                                 int preferredHeight = 0;
                                 if (contentBounds.Width > 0)
                                 {
-                                    preferredHeight = DataGridViewCell.GetPreferredTextHeight(g,
-                                                                                              DataGridView.RightToLeftInternal,
-                                                                                              stringValue,
-                                                                                              dataGridViewCellStyle,
-                                                                                              contentBounds.Width,
-                                                                                              out widthTruncated);
+                                    preferredHeight = GetPreferredTextHeight(
+                                        screen,
+                                        DataGridView.RightToLeftInternal,
+                                        stringValue,
+                                        dataGridViewCellStyle,
+                                        contentBounds.Width,
+                                        out widthTruncated);
                                 }
                                 else
                                 {
                                     widthTruncated = true;
                                 }
+
                                 if (preferredHeight > contentBounds.Height || widthTruncated)
                                 {
                                     toolTipText = TruncateToolTipText(stringValue);

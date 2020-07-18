@@ -16,25 +16,15 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal override void PaintUp(PaintEventArgs e, CheckState state)
         {
-            ColorData colors = PaintPopupRender(e.Graphics).Calculate();
+            ColorData colors = PaintPopupRender(e).Calculate();
             LayoutData layout = PaintPopupLayout(e, state == CheckState.Unchecked, 1).Layout();
-
-            Graphics g = e.Graphics;
 
             Rectangle r = Control.ClientRectangle;
 
             if (state == CheckState.Indeterminate)
             {
-                Brush backbrush = CreateDitherBrush(colors.highlight, colors.buttonFace);
-                try
-                {
-                    PaintButtonBackground(e, r, backbrush);
-                }
-                finally
-                {
-                    backbrush.Dispose();
-                    backbrush = null;
-                }
+                using Brush backbrush = CreateDitherBrush(colors.highlight, colors.buttonFace);
+                PaintButtonBackground(e, r, backbrush);
             }
             else
             {
@@ -47,42 +37,36 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             PaintImage(e, layout);
-            PaintField(e, layout, colors, state != CheckState.Indeterminate && IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, true);
+            PaintField(
+                e,
+                layout,
+                colors,
+                state != CheckState.Indeterminate && IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText,
+                drawFocus: true);
 
-            DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, Control.IsDefault);
+            DrawDefaultBorder(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow, Control.IsDefault);
 
             if (state == CheckState.Unchecked)
             {
-                DrawFlatBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow);
+                ControlPaint.DrawBorderSolid(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow);
             }
             else
             {
-                Draw3DLiteBorder(g, r, colors, false);
+                Draw3DLiteBorder(e, r, colors, false);
             }
         }
 
         internal override void PaintOver(PaintEventArgs e, CheckState state)
         {
-            ColorData colors = PaintPopupRender(e.Graphics).Calculate();
+            ColorData colors = PaintPopupRender(e).Calculate();
             LayoutData layout = PaintPopupLayout(e, state == CheckState.Unchecked, SystemInformation.HighContrast ? 2 : 1).Layout();
-
-            Graphics g = e.Graphics;
-            //Region original = g.Clip;
 
             Rectangle r = Control.ClientRectangle;
 
             if (state == CheckState.Indeterminate)
             {
-                Brush backbrush = CreateDitherBrush(colors.highlight, colors.buttonFace);
-                try
-                {
-                    PaintButtonBackground(e, r, backbrush);
-                }
-                finally
-                {
-                    backbrush.Dispose();
-                    backbrush = null;
-                }
+                using Brush backbrush = CreateDitherBrush(colors.highlight, colors.buttonFace);
+                PaintButtonBackground(e, r, backbrush);
             }
             else
             {
@@ -97,10 +81,11 @@ namespace System.Windows.Forms.ButtonInternal
             PaintImage(e, layout);
             PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, true);
 
-            DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, Control.IsDefault);
+            DrawDefaultBorder(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow, Control.IsDefault);
 
             if (SystemInformation.HighContrast)
             {
+                Graphics g = e.GraphicsInternal;
                 using (Pen windowFrame = new Pen(colors.windowFrame),
                        highlight = new Pen(colors.highlight),
                        buttonShadow = new Pen(colors.buttonShadow))
@@ -126,17 +111,14 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                Draw3DLiteBorder(g, r, colors, true);
+                Draw3DLiteBorder(e, r, colors, true);
             }
         }
 
         internal override void PaintDown(PaintEventArgs e, CheckState state)
         {
-            ColorData colors = PaintPopupRender(e.Graphics).Calculate();
+            ColorData colors = PaintPopupRender(e).Calculate();
             LayoutData layout = PaintPopupLayout(e, false, SystemInformation.HighContrast ? 2 : 1).Layout();
-
-            Graphics g = e.Graphics;
-            //Region original = g.Clip;
 
             Rectangle r = Control.ClientRectangle;
             PaintButtonBackground(e, r, null);
@@ -150,24 +132,33 @@ namespace System.Windows.Forms.ButtonInternal
             PaintField(e, layout, colors, colors.windowText, true);
 
             r.Inflate(1, 1);
-            DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.windowFrame, Control.IsDefault);
-            ControlPaint.DrawBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, ButtonBorderStyle.Solid);
+            DrawDefaultBorder(e, r, colors.options.HighContrast ? colors.windowText : colors.windowFrame, Control.IsDefault);
+            ControlPaint.DrawBorderSolid(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow);
         }
 
         #region Layout
 
         protected override LayoutOptions Layout(PaintEventArgs e)
         {
-            LayoutOptions layout = PaintPopupLayout(e, /* up = */ false, 0);
+            LayoutOptions layout = PaintPopupLayout(e, up: false, 0);
             Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.MaxSize)
-                == PaintPopupLayout(e, /* up = */ true, 2).GetPreferredSizeCore(LayoutUtils.MaxSize),
+                == PaintPopupLayout(e, up: true, 2).GetPreferredSizeCore(LayoutUtils.MaxSize),
                 "The state of up should not effect PreferredSize");
             return layout;
         }
 
         // used by the DataGridViewButtonCell
-        internal static LayoutOptions PaintPopupLayout(Graphics g, bool up, int paintedBorder, Rectangle clientRectangle, Padding padding,
-                                                       bool isDefault, Font font, string text, bool enabled, ContentAlignment textAlign, RightToLeft rtl)
+        internal static LayoutOptions PaintPopupLayout(
+            bool up,
+            int paintedBorder,
+            Rectangle clientRectangle,
+            Padding padding,
+            bool isDefault,
+            Font font,
+            string text,
+            bool enabled,
+            ContentAlignment textAlign,
+            RightToLeft rtl)
         {
             LayoutOptions layout = CommonLayout(clientRectangle, padding, isDefault, font, text, enabled, textAlign, rtl);
             layout.borderSize = paintedBorder;

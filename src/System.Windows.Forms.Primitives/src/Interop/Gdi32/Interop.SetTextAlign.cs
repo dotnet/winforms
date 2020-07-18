@@ -11,11 +11,11 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern TA SetTextAlign(IntPtr hdc, TA align);
+        public static extern TA SetTextAlign(Gdi32.HDC hdc, TA align);
 
         public static TA SetTextAlign(IHandle hdc, TA align)
         {
-            TA result = SetTextAlign(hdc.Handle, align);
+            TA result = SetTextAlign((Gdi32.HDC)hdc.Handle, align);
             GC.KeepAlive(hdc);
             return result;
         }

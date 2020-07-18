@@ -721,9 +721,9 @@ namespace System.Windows.Forms
                                          size.Height - borderAndPaddingWidths.Y - borderAndPaddingWidths.Height);
 
             int dropHeight;
-            using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
+            using (var screen = GdiCache.GetScreenDCGraphics())
             {
-                dropHeight = Math.Min(GetDropDownButtonHeight(g, cellStyle), adjustedSize.Height - 2);
+                dropHeight = Math.Min(GetDropDownButtonHeight(screen, cellStyle), adjustedSize.Height - 2);
             }
 
             int dropWidth = Math.Min(SystemInformation.HorizontalScrollBarThumbWidth, adjustedSize.Width - 2 * DATAGRIDVIEWCOMBOBOXCELL_margin - 1);
@@ -1864,9 +1864,9 @@ namespace System.Windows.Forms
                 cellState |= State;
 
                 Rectangle dropDownButtonRect;
-                using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
+                using (var screen = GdiCache.GetScreenDCGraphics())
                 {
-                    PaintPrivate(g,
+                    PaintPrivate(screen,
                         cellBounds,
                         cellBounds,
                         rowIndex,

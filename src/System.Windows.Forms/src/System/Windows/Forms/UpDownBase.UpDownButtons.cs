@@ -15,11 +15,10 @@ namespace System.Windows.Forms
     public abstract partial class UpDownBase
     {
         /// <summary>
-        ///  A control representing the pair of buttons on the end of the upDownEdit control.
-        ///  This class handles drawing the updown buttons, and detecting mouse actions
-        ///  on these buttons. Acceleration on the buttons is handled. The control
-        ///  sends UpDownEventArgss to the parent UpDownBase class when a button is pressed,
-        ///  or when the acceleration determines that another event should be generated.
+        ///  A control representing the pair of buttons on the end of the upDownEdit control. This class handles
+        ///  drawing the updown buttons, and detecting mouse actions on these buttons. Acceleration on the buttons is
+        ///  handled. The control sends UpDownEventArgss to the parent UpDownBase class when a button is pressed, or
+        ///  when the acceleration determines that another event should be generated.
         /// </summary>
         internal class UpDownButtons : Control
         {
@@ -55,8 +54,7 @@ namespace System.Windows.Forms
             }
 
             /// <remarks>
-            ///  Called when the mouse button is pressed - we need to start
-            ///  spinning the value of the updown.
+            ///  Called when the mouse button is pressed - we need to start spinning the value of the updown.
             /// </remarks>
             private void BeginButtonPress(MouseEventArgs e)
             {
@@ -89,8 +87,7 @@ namespace System.Windows.Forms
                 => new UpDownButtonsAccessibleObject(this);
 
             /// <remarks>
-            ///  Called when the mouse button is released - we need to stop
-            ///  spinning the value of the updown.
+            ///  Called when the mouse button is released - we need to stop spinning the value of the updown.
             /// </remarks>
             private void EndButtonPress()
             {
@@ -122,6 +119,7 @@ namespace System.Windows.Forms
                 {
                     BeginButtonPress(e);
                 }
+
                 if (e.Clicks == 2 && e.Button == MouseButtons.Left)
                 {
                     _doubleClickFired = true;
@@ -129,8 +127,9 @@ namespace System.Windows.Forms
 
                 // At no stage should a button be pushed, and the mouse
                 // not captured.
-                Debug.Assert(!(_pushed != ButtonID.None && _captured == ButtonID.None),
-                             "Invalid button pushed/captured combination");
+                Debug.Assert(
+                    !(_pushed != ButtonID.None && _captured == ButtonID.None),
+                    "Invalid button pushed/captured combination");
 
                 _parent.OnMouseDown(_parent.TranslateMouseEvent(this, e));
             }
@@ -156,8 +155,7 @@ namespace System.Windows.Forms
                     // Test if the mouse has moved outside the button area
                     if (rect.Contains(e.X, e.Y))
                     {
-                        // Inside button
-                        // Repush the button if necessary
+                        // Inside button, repush the button if necessary
 
                         if (_pushed != _captured)
                         {
@@ -171,6 +169,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // Outside button
+                        //
                         // Retain the capture, but pop the button up whilst the mouse
                         // remains outside the button and the mouse button remains pressed.
                         if (_pushed != ButtonID.None)
@@ -202,8 +201,9 @@ namespace System.Windows.Forms
                 }
 
                 // At no stage should a button be pushed, and the mouse not captured.
-                Debug.Assert(!(_pushed != ButtonID.None && _captured == ButtonID.None),
-                             "Invalid button pushed/captured combination");
+                Debug.Assert(
+                    !(_pushed != ButtonID.None && _captured == ButtonID.None),
+                    "Invalid button pushed/captured combination");
 
                 _parent.OnMouseMove(_parent.TranslateMouseEvent(this, e));
             }
@@ -219,8 +219,9 @@ namespace System.Windows.Forms
                 }
 
                 // At no stage should a button be pushed, and the mouse not captured.
-                Debug.Assert(!(_pushed != ButtonID.None && _captured == ButtonID.None),
-                             "Invalid button pushed/captured combination");
+                Debug.Assert(
+                    !(_pushed != ButtonID.None && _captured == ButtonID.None),
+                    "Invalid button pushed/captured combination");
 
                 Point pt = new Point(e.X, e.Y);
                 pt = PointToScreen(pt);
@@ -266,7 +267,10 @@ namespace System.Windows.Forms
                 // Draw the up and down buttons
                 if (Application.RenderWithVisualStyles)
                 {
-                    var vsr = new VisualStyleRenderer(_mouseOver == ButtonID.Up ? VisualStyleElement.Spin.Up.Hot : VisualStyleElement.Spin.Up.Normal);
+                    var vsr = new VisualStyleRenderer(_mouseOver == ButtonID.Up
+                        ? VisualStyleElement.Spin.Up.Hot
+                        : VisualStyleElement.Spin.Up.Normal);
+
                     if (!Enabled)
                     {
                         vsr.SetParameters(VisualStyleElement.Spin.Up.Disabled);
@@ -276,9 +280,9 @@ namespace System.Windows.Forms
                         vsr.SetParameters(VisualStyleElement.Spin.Up.Pressed);
                     }
 
-                    using var paintScope = new PaintEventHdcScope(e);
+                    using var hdc = new DeviceContextHdcScope(e);
                     vsr.DrawBackground(
-                        paintScope,
+                        hdc,
                         new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
                         HandleInternal);
 
@@ -292,24 +296,26 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        vsr.SetParameters(_mouseOver == ButtonID.Down ? VisualStyleElement.Spin.Down.Hot : VisualStyleElement.Spin.Down.Normal);
+                        vsr.SetParameters(_mouseOver == ButtonID.Down
+                            ? VisualStyleElement.Spin.Down.Hot
+                            : VisualStyleElement.Spin.Down.Normal);
                     }
 
                     vsr.DrawBackground(
-                        paintScope,
+                        hdc,
                         new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
                         HandleInternal);
                 }
                 else
                 {
                     ControlPaint.DrawScrollButton(
-                        e.Graphics,
+                        e.GraphicsInternal,
                         new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),
                         ScrollButton.Up,
                         _pushed == ButtonID.Up ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
 
                     ControlPaint.DrawScrollButton(
-                        e.Graphics,
+                        e.GraphicsInternal,
                         new Rectangle(0, half_height, _parent._defaultButtonsWidth, half_height),
                         ScrollButton.Down,
                         _pushed == ButtonID.Down ? ButtonState.Pushed : (Enabled ? ButtonState.Normal : ButtonState.Inactive));
@@ -318,10 +324,23 @@ namespace System.Windows.Forms
                 if (half_height != (ClientSize.Height + 1) / 2)
                 {
                     // When control has odd height, a line needs to be drawn below the buttons with the backcolor.
-                    using (Pen pen = new Pen(_parent.BackColor))
+
+                    Color color = _parent.BackColor;
+
+                    Rectangle clientRect = ClientRectangle;
+                    Point pt1 = new Point(clientRect.Left, clientRect.Bottom - 1);
+                    Point pt2 = new Point(clientRect.Right - 1, clientRect.Bottom - 1);
+
+                    if (!color.HasTransparency())
                     {
-                        Rectangle clientRect = ClientRectangle;
-                        e.Graphics.DrawLine(pen, clientRect.Left, clientRect.Bottom - 1, clientRect.Right - 1, clientRect.Bottom - 1);
+                        using var hdc = new DeviceContextHdcScope(e);
+                        using var hpen = new Gdi32.CreatePenScope(color);
+                        hdc.DrawLine(hpen, pt1, pt2);
+                    }
+                    else
+                    {
+                        using Pen pen = new Pen(color);
+                        e.Graphics.DrawLine(pen, pt1, pt2);
                     }
                 }
 
@@ -426,18 +445,13 @@ namespace System.Windows.Forms
                     return base.ElementProviderFromPoint(x, y);
                 }
 
-                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(
+                    UiaCore.NavigateDirection direction) => direction switch
                 {
-                    switch (direction)
-                    {
-                        case UiaCore.NavigateDirection.FirstChild:
-                            return GetChild(0);
-                        case UiaCore.NavigateDirection.LastChild:
-                            return GetChild(1);
-                        default:
-                            return base.FragmentNavigate(direction);
-                    }
-                }
+                    UiaCore.NavigateDirection.FirstChild => GetChild(0),
+                    UiaCore.NavigateDirection.LastChild => GetChild(1),
+                    _ => base.FragmentNavigate(direction),
+                };
 
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
@@ -447,45 +461,25 @@ namespace System.Windows.Forms
                 private DirectionButtonAccessibleObject DownButton
                     => downButton ??= new DirectionButtonAccessibleObject(this, false);
 
-                public override AccessibleObject GetChild(int index)
+                public override AccessibleObject GetChild(int index) => index switch
                 {
-                    // Up button
-                    if (index == 0)
-                    {
-                        return UpButton;
-                    }
-
-                    // Down button
-                    if (index == 1)
-                    {
-                        return DownButton;
-                    }
-
-                    return null;
-                }
+                    0 => UpButton,
+                    1 => DownButton,
+                    _ => null,
+                };
 
                 public override int GetChildCount() => 2;
 
-                internal override object GetPropertyValue(UiaCore.UIA propertyID)
+                internal override object GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                 {
-                    switch (propertyID)
-                    {
-                        case UiaCore.UIA.NamePropertyId:
-                            return Name;
-                        case UiaCore.UIA.RuntimeIdPropertyId:
-                            return RuntimeId;
-                        case UiaCore.UIA.ControlTypePropertyId:
-                            return UiaCore.UIA.SpinnerControlTypeId;
-                        case UiaCore.UIA.BoundingRectanglePropertyId:
-                            return Bounds;
-                        case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                            return State;
-                        case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                            return Role;
-                        default:
-                            return base.GetPropertyValue(propertyID);
-                    }
-                }
+                    UiaCore.UIA.NamePropertyId => Name,
+                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.SpinnerControlTypeId,
+                    UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
+                    UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
+                    UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
+                    _ => base.GetPropertyValue(propertyID),
+                };
 
                 public override AccessibleObject HitTest(int x, int y)
                 {
@@ -554,10 +548,8 @@ namespace System.Windows.Forms
                             return base.RuntimeId;
                         }
 
-                        // we need to provide a unique ID
-                        // others are implementing this in the same manner
-                        // first item is static - 0x2a (RuntimeIDFirstItem)
-                        // second item can be anything, but here it is a hash
+                        // We need to provide a unique ID others are implementing this in the same manner first item
+                        // is static - 0x2a (RuntimeIDFirstItem) second item can be anything, but here it is a hash.
 
                         var runtimeId = new int[3];
                         runtimeId[0] = RuntimeIDFirstItem;
@@ -582,56 +574,33 @@ namespace System.Windows.Forms
                     /// <summary>
                     ///  Gets the runtime ID.
                     /// </summary>
-                    internal override int[] RuntimeId
+                    internal override int[] RuntimeId => new int[]
                     {
-                        get
-                        {
-                            var runtimeId = new int[4];
+                        _parent.RuntimeId[0],
+                        _parent.RuntimeId[1],
+                        _parent.RuntimeId[2],
+                        _up ? 1 : 0
+                    };
 
-                            runtimeId[0] = _parent.RuntimeId[0];
-                            runtimeId[1] = _parent.RuntimeId[1];
-                            runtimeId[2] = _parent.RuntimeId[2];
-                            runtimeId[3] = _up ? 1 : 0;
-
-                            return runtimeId;
-                        }
-                    }
-
-                    internal override object GetPropertyValue(UiaCore.UIA propertyID)
+                    internal override object GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                     {
-                        switch (propertyID)
-                        {
-                            case UiaCore.UIA.NamePropertyId:
-                                return Name;
-                            case UiaCore.UIA.RuntimeIdPropertyId:
-                                return RuntimeId;
-                            case UiaCore.UIA.ControlTypePropertyId:
-                                return UiaCore.UIA.ButtonControlTypeId;
-                            case UiaCore.UIA.BoundingRectanglePropertyId:
-                                return Bounds;
-                            case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                                return State;
-                            case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                                return Role;
-                            default:
-                                return base.GetPropertyValue(propertyID);
-                        }
-                    }
+                        UiaCore.UIA.NamePropertyId => Name,
+                        UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
+                        UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
+                        UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
+                        UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
+                        UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
+                        _ => base.GetPropertyValue(propertyID),
+                    };
 
-                    internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+                    internal override UiaCore.IRawElementProviderFragment FragmentNavigate(
+                        UiaCore.NavigateDirection direction) => direction switch
                     {
-                        switch (direction)
-                        {
-                            case UiaCore.NavigateDirection.Parent:
-                                return Parent;
-                            case UiaCore.NavigateDirection.NextSibling:
-                                return _up ? Parent.GetChild(1) : null;
-                            case UiaCore.NavigateDirection.PreviousSibling:
-                                return _up ? null : Parent.GetChild(0);
-                            default:
-                                return base.FragmentNavigate(direction);
-                        }
-                    }
+                        UiaCore.NavigateDirection.Parent => Parent,
+                        UiaCore.NavigateDirection.NextSibling => _up ? Parent.GetChild(1) : null,
+                        UiaCore.NavigateDirection.PreviousSibling => _up ? null : Parent.GetChild(0),
+                        _ => base.FragmentNavigate(direction),
+                    };
 
                     internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
 
@@ -655,15 +624,7 @@ namespace System.Windows.Forms
 
                     public override string Name
                     {
-                        get
-                        {
-                            if (_up)
-                            {
-                                return SR.UpDownBaseUpButtonAccName;
-                            }
-
-                            return SR.UpDownBaseDownButtonAccName;
-                        }
+                        get => _up ? SR.UpDownBaseUpButtonAccName : SR.UpDownBaseDownButtonAccName;
                         set { }
                     }
 

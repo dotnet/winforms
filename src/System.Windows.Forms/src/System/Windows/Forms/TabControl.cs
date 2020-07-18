@@ -1970,10 +1970,15 @@ namespace System.Windows.Forms
         private unsafe void WmReflectDrawItem(ref Message m)
         {
             User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
-            using var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(dis->hDC, forceBackground: false, realizePalette: false);
-            using Graphics g = dis->hDC.CreateGraphics();
 
-            OnDrawItem(new DrawItemEventArgs(g, Font, dis->rcItem, (int)dis->itemID, (DrawItemState)dis->itemState));
+            using var e = new DrawItemEventArgs(
+                dis->hDC,
+                Font,
+                dis->rcItem,
+                dis->itemID,
+                dis->itemState);
+
+            OnDrawItem(e);
 
             m.Result = (IntPtr)1;
         }

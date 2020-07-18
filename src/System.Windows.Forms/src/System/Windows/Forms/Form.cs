@@ -4146,7 +4146,7 @@ namespace System.Windows.Forms
             base.OnPaint(e);
             if (formState[FormStateRenderSizeGrip] != 0)
             {
-                Size sz = ClientSize;
+                Size size = ClientSize;
                 if (Application.RenderWithVisualStyles)
                 {
                     if (sizeGripRenderer == null)
@@ -4154,17 +4154,26 @@ namespace System.Windows.Forms
                         sizeGripRenderer = new VisualStyleRenderer(VisualStyleElement.Status.Gripper.Normal);
                     }
 
-                    sizeGripRenderer.DrawBackground(e.Graphics, new Rectangle(sz.Width - SizeGripSize, sz.Height - SizeGripSize, SizeGripSize, SizeGripSize));
+                    using var hdc = new DeviceContextHdcScope(e);
+                    sizeGripRenderer.DrawBackground(
+                        hdc,
+                        new Rectangle(size.Width - SizeGripSize, size.Height - SizeGripSize, SizeGripSize, SizeGripSize));
                 }
                 else
                 {
-                    ControlPaint.DrawSizeGrip(e.Graphics, BackColor, sz.Width - SizeGripSize, sz.Height - SizeGripSize, SizeGripSize, SizeGripSize);
+                    ControlPaint.DrawSizeGrip(
+                        e,
+                        BackColor,
+                        size.Width - SizeGripSize,
+                        size.Height - SizeGripSize,
+                        SizeGripSize,
+                        SizeGripSize);
                 }
             }
 
             if (IsMdiContainer)
             {
-                e.Graphics.FillRectangle(SystemBrushes.AppWorkspace, ClientRectangle);
+                e.GraphicsInternal.FillRectangle(SystemBrushes.AppWorkspace, ClientRectangle);
             }
         }
 

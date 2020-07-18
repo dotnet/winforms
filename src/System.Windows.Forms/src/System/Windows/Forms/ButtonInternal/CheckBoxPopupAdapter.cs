@@ -23,18 +23,24 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                Graphics g = e.Graphics;
-                ColorData colors = PaintPopupRender(e.Graphics).Calculate();
+                ColorData colors = PaintPopupRender(e).Calculate();
                 LayoutData layout = PaintPopupLayout(show3D: false).Layout();
 
-                Region original = e.Graphics.Clip;
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
                 PaintImage(e, layout);
 
-                DrawCheckBackground(e, layout.checkBounds, colors.windowText, colors.options.highContrast ? colors.buttonFace : colors.highlight, true, colors);
-                DrawFlatBorder(e.Graphics, layout.checkBounds,
-                    (colors.options.highContrast && !Control.Enabled) ? colors.windowFrame : colors.buttonShadow);
+                DrawCheckBackground(
+                    e,
+                    layout.checkBounds,
+                    colors.windowText,
+                    colors.options.HighContrast ? colors.buttonFace : colors.highlight,
+                    disabledColors: true,
+                    colors);
+                ControlPaint.DrawBorderSolid(
+                    e,
+                    layout.checkBounds,
+                    (colors.options.HighContrast && !Control.Enabled) ? colors.windowFrame : colors.buttonShadow);
                 DrawCheckOnly(e, layout, colors, colors.windowText, colors.highlight);
 
                 AdjustFocusRectangle(layout);
@@ -51,7 +57,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                ColorData colors = PaintPopupRender(e.Graphics).Calculate();
+                ColorData colors = PaintPopupRender(e).Calculate();
                 LayoutData layout = PaintPopupLayout(show3D: true).Layout();
 
                 Region original = e.Graphics.Clip;
@@ -63,7 +69,7 @@ namespace System.Windows.Forms.ButtonInternal
                     e,
                     layout.checkBounds,
                     colors.windowText,
-                    colors.options.highContrast ? colors.buttonFace : colors.highlight,
+                    colors.options.HighContrast ? colors.buttonFace : colors.highlight,
                     disabledColors: true,
                     colors);
 

@@ -25,8 +25,10 @@ internal static partial class Interop
             /// </summary>
             public CreateBrushScope(Color color)
             {
-                HBrush = CreateSolidBrush(ColorTranslator.ToWin32(color));
-            }
+                HBrush = color.IsSystemColor
+                    ? User32.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF)
+                    : CreateSolidBrush(ColorTranslator.ToWin32(color));
+              }
 
             public static implicit operator HBRUSH(in CreateBrushScope scope) => scope.HBrush;
             public static implicit operator HGDIOBJ(in CreateBrushScope scope) => scope.HBrush;
@@ -37,6 +39,7 @@ internal static partial class Interop
             {
                 if (!HBrush.IsNull)
                 {
+                    // Note that this is a no-op if the original brush was a system brush
                     DeleteObject(HBrush);
                 }
             }

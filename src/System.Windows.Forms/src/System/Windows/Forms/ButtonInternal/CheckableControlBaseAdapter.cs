@@ -38,14 +38,14 @@ namespace System.Windows.Forms.ButtonInternal
                 return ButtonAdapter.GetPreferredSizeCore(proposedSize);
             }
 
-            using (Graphics measurementGraphics = WindowsFormsUtils.CreateMeasurementGraphics())
+            LayoutOptions options = default;
+            using (var screen = GdiCache.GetScreenHdc())
+            using (PaintEventArgs pe = new PaintEventArgs(screen, new Rectangle()))
             {
-                using (PaintEventArgs pe = new PaintEventArgs(measurementGraphics, new Rectangle()))
-                {
-                    LayoutOptions options = Layout(pe);
-                    return options.GetPreferredSizeCore(proposedSize);
-                }
+                options = Layout(pe);
             }
+
+            return options.GetPreferredSizeCore(proposedSize);
         }
 
         protected abstract ButtonBaseAdapter CreateButtonAdapter();

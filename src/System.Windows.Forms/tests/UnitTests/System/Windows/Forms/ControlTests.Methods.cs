@@ -4137,11 +4137,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Control_InvokePaintBackground_NullEventArgs_ThrowsNullReferenceException()
+        public void Control_InvokePaintBackground_NullEventArgs_ThrowsArgumentNullException()
         {
             using var otherControl = new Control();
             using var control = new SubControl();
-            Assert.Throws<NullReferenceException>(() => control.InvokePaintBackground(otherControl, null));
+            Assert.Throws<ArgumentNullException>(() => control.InvokePaintBackground(otherControl, null));
         }
 
         [WinFormsTheory]
@@ -12863,7 +12863,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_PrintClientWithoutHandleWithoutWParam_TestData()
         {
-            yield return new object[] { true, true, (IntPtr)250, 1 };
+            yield return new object[] { true, true, (IntPtr)250, 0 };
             yield return new object[] { false, true, IntPtr.Zero, 0 };
             yield return new object[] { false, false, IntPtr.Zero, 0 };
         }
@@ -12911,7 +12911,7 @@ namespace System.Windows.Forms.Tests
                 control.WndProc(ref m);
                 Assert.Equal((IntPtr)250, m.Result);
                 Assert.False(control.IsHandleCreated);
-                Assert.Equal(1, paintCallCount);
+                Assert.Equal(0, paintCallCount);
             }
         }
 
@@ -12960,7 +12960,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_PrintClientWithHandleWithoutWParam_TestData()
         {
-            yield return new object[] { true, true, (IntPtr)250, 1 };
+            yield return new object[] { true, true, (IntPtr)250, 0 };
             yield return new object[] { false, true, IntPtr.Zero, 0 };
             yield return new object[] { false, false, IntPtr.Zero, 0 };
         }
@@ -13024,7 +13024,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-            Assert.Equal(1, paintCallCount);
+            Assert.Equal(0, paintCallCount);
         }
 
         public static IEnumerable<object[]> WndProc_PrintClientWithHandleWithWParam_TestData()

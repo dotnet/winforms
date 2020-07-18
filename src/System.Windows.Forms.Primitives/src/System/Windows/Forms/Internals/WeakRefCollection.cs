@@ -126,54 +126,6 @@ namespace System.Windows.Forms
             return new WeakRefObject(value);
         }
 
-        private static void Copy(WeakRefCollection sourceList, int sourceIndex, WeakRefCollection destinationList, int destinationIndex, int length)
-        {
-            if (sourceIndex < destinationIndex)
-            {
-                // We need to copy from the back forward to prevent overwrite if source and
-                // destination lists are the same, so we need to flip the source/dest indices
-                // to point at the end of the spans to be copied.
-                sourceIndex += length;
-                destinationIndex += length;
-                for (; length > 0; length--)
-                {
-                    destinationList.InnerList[--destinationIndex] = sourceList.InnerList[--sourceIndex];
-                }
-            }
-            else
-            {
-                for (; length > 0; length--)
-                {
-                    destinationList.InnerList[destinationIndex++] = sourceList.InnerList[sourceIndex++];
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Removes the value using its hash code as its identity. This is needed because the
-        ///  underlying item in the collection may have already been collected changing the
-        ///  identity of the WeakRefObject making it impossible for the collection to identify
-        ///  it. See WeakRefObject for more info.
-        /// </summary>
-        public void RemoveByHashCode(object value)
-        {
-            if (value == null)
-            {
-                return;
-            }
-
-            int hash = value.GetHashCode();
-            for (int idx = 0; idx < InnerList.Count; idx++)
-            {
-                WeakRefObject? item = (WeakRefObject?)InnerList[idx];
-                if (item != null && item.GetHashCode() == hash)
-                {
-                    RemoveAt(idx);
-                    return;
-                }
-            }
-        }
-
         public void Clear() => InnerList.Clear();
 
         public bool IsFixedSize => InnerList.IsFixedSize;

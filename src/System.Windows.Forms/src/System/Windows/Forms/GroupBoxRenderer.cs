@@ -7,6 +7,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -15,38 +16,21 @@ namespace System.Windows.Forms
     /// </summary>
     public static class GroupBoxRenderer
     {
-        //Make this per-thread, so that different threads can safely use these methods.
+        // Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer visualStyleRenderer = null;
-        private static readonly VisualStyleElement GroupBoxElement = VisualStyleElement.Button.GroupBox.Normal;
-        private const int textOffset = 8;        //MAGIC NUMBER - WHERE DID IT COME FROM?
-        private const int boxHeaderWidth = 7;    // The groupbox frame shows 7 pixels before the caption.
-        private static bool renderMatchingApplicationState = true;
+        private static VisualStyleRenderer t_visualStyleRenderer = null;
+        private static readonly VisualStyleElement s_groupBoxElement = VisualStyleElement.Button.GroupBox.Normal;
+        private const int TextOffset = 8;
+        private const int BoxHeaderWidth = 7;    // The groupbox frame shows 7 pixels before the caption.
 
         /// <summary>
-        ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
-        ///  determine how to render.
-        ///  If this property is false, the renderer will always render with visualstyles.
+        ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles
+        ///  to determine how to render.If this property is false, the renderer will always render with visualstyles.
         /// </summary>
-        public static bool RenderMatchingApplicationState
-        {
-            get
-            {
-                return renderMatchingApplicationState;
-            }
-            set
-            {
-                renderMatchingApplicationState = value;
-            }
-        }
+        public static bool RenderMatchingApplicationState { get; set; } = true;
 
         private static bool RenderWithVisualStyles
-        {
-            get
-            {
-                return (!renderMatchingApplicationState || Application.RenderWithVisualStyles);
-            }
-        }
+            => (!RenderMatchingApplicationState || Application.RenderWithVisualStyles);
 
         /// <summary>
         ///  Returns true if the background corresponding to the given state is partially transparent, else false.
@@ -56,11 +40,11 @@ namespace System.Windows.Forms
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
-                return visualStyleRenderer.IsBackgroundPartiallyTransparent();
+                return t_visualStyleRenderer.IsBackgroundPartiallyTransparent();
             }
             else
             {
-                return false; //for downlevel, this is false
+                return false;
             }
         }
 
@@ -73,7 +57,7 @@ namespace System.Windows.Forms
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer(0);
-                visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
+                t_visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
             }
         }
 
@@ -88,7 +72,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                DrawUnthemedGroupBoxNoText(g, bounds, state);
+                DrawUnthemedGroupBoxNoText(g, bounds);
             }
         }
 
@@ -96,45 +80,79 @@ namespace System.Windows.Forms
         ///  Renders a GroupBox control. Uses the text color specified by the theme.
         /// </summary>
         public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, GroupBoxState state)
-        {
-            DrawGroupBox(g, bounds, groupBoxText, font, TextFormatFlags.Top | TextFormatFlags.Left, state);
-        }
+            => DrawGroupBox(g, bounds, groupBoxText, font, TextFormatFlags.Top | TextFormatFlags.Left, state);
 
         /// <summary>
         ///  Renders a GroupBox control.
         /// </summary>
-        public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, GroupBoxState state)
-        {
-            DrawGroupBox(g, bounds, groupBoxText, font, textColor, TextFormatFlags.Top | TextFormatFlags.Left, state);
-        }
+        public static void DrawGroupBox(
+            Graphics g,
+            Rectangle bounds,
+            string groupBoxText,
+            Font font,
+            Color textColor,
+            GroupBoxState state)
+            => DrawGroupBox(g, bounds, groupBoxText, font, textColor, TextFormatFlags.Top | TextFormatFlags.Left, state);
 
         /// <summary>
         ///  Renders a GroupBox control. Uses the text color specified by the theme.
         /// </summary>
-        public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, TextFormatFlags flags, GroupBoxState state)
+        public static void DrawGroupBox(
+            Graphics g,
+            Rectangle bounds,
+            string groupBoxText,
+            Font font,
+            TextFormatFlags flags,
+            GroupBoxState state)
+            => DrawGroupBox((IDeviceContext)g, bounds, groupBoxText, font, flags, state);
+
+        internal static void DrawGroupBox(
+            IDeviceContext deviceContext,
+            Rectangle bounds,
+            string groupBoxText,
+            Font font,
+            TextFormatFlags flags,
+            GroupBoxState state)
         {
             if (RenderWithVisualStyles)
             {
-                DrawThemedGroupBoxWithText(g, bounds, groupBoxText, font, DefaultTextColor(state), flags, state);
+                DrawThemedGroupBoxWithText(deviceContext, bounds, groupBoxText, font, DefaultTextColor(state), flags, state);
             }
             else
             {
-                DrawUnthemedGroupBoxWithText(g, bounds, groupBoxText, font, DefaultTextColor(state), flags, state);
+                DrawUnthemedGroupBoxWithText(deviceContext, bounds, groupBoxText, font, DefaultTextColor(state), flags);
             }
         }
 
         /// <summary>
         ///  Renders a GroupBox control.
         /// </summary>
-        public static void DrawGroupBox(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, TextFormatFlags flags, GroupBoxState state)
+        public static void DrawGroupBox(
+            Graphics g,
+            Rectangle bounds,
+            string groupBoxText,
+            Font font,
+            Color textColor,
+            TextFormatFlags flags,
+            GroupBoxState state)
+            => DrawGroupBox((IDeviceContext)g, bounds, groupBoxText, font, textColor, flags, state);
+
+        internal static void DrawGroupBox(
+            IDeviceContext deviceContext,
+            Rectangle bounds,
+            string groupBoxText,
+            Font font,
+            Color textColor,
+            TextFormatFlags flags,
+            GroupBoxState state)
         {
             if (RenderWithVisualStyles)
             {
-                DrawThemedGroupBoxWithText(g, bounds, groupBoxText, font, textColor, flags, state);
+                DrawThemedGroupBoxWithText(deviceContext, bounds, groupBoxText, font, textColor, flags, state);
             }
             else
             {
-                DrawUnthemedGroupBoxWithText(g, bounds, groupBoxText, font, textColor, flags, state);
+                DrawUnthemedGroupBoxWithText(deviceContext, bounds, groupBoxText, font, textColor, flags);
             }
         }
 
@@ -144,34 +162,49 @@ namespace System.Windows.Forms
         private static void DrawThemedGroupBoxNoText(Graphics g, Rectangle bounds, GroupBoxState state)
         {
             InitializeRenderer((int)state);
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
         ///  Draws a themed GroupBox with a text label.
         /// </summary>
-        private static void DrawThemedGroupBoxWithText(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, TextFormatFlags flags, GroupBoxState state)
+        private static void DrawThemedGroupBoxWithText(
+            IDeviceContext deviceContext,
+            Rectangle bounds,
+            string groupBoxText,
+            Font font,
+            Color textColor,
+            TextFormatFlags flags,
+            GroupBoxState state)
         {
             InitializeRenderer((int)state);
 
             // Calculate text area, and render text inside it
             Rectangle textBounds = bounds;
 
-            textBounds.Width -= 2 * boxHeaderWidth;
-            Size measuredBounds = TextRenderer.MeasureText(g, groupBoxText, font, new Size(textBounds.Width, textBounds.Height), flags);
+            textBounds.Width -= 2 * BoxHeaderWidth;
+            Size measuredBounds = TextRenderer.MeasureText(
+                deviceContext,
+                groupBoxText,
+                font,
+                new Size(textBounds.Width, textBounds.Height),
+                flags);
+
             textBounds.Width = measuredBounds.Width;
             textBounds.Height = measuredBounds.Height;
 
             if ((flags & TextFormatFlags.Right) == TextFormatFlags.Right)
             {
-                textBounds.X = bounds.Right - textBounds.Width - boxHeaderWidth + 1;  // +1 to account for the margin built in the MeasureText result
+                // +1 to account for the margin built in the MeasureText result
+                textBounds.X = bounds.Right - textBounds.Width - BoxHeaderWidth + 1;
             }
             else
             {
-                textBounds.X += boxHeaderWidth - 1;                                   // -1 to account for the margin built in the MeasureText result
+                // -1 to account for the margin built in the MeasureText result
+                textBounds.X += BoxHeaderWidth - 1;
             }
 
-            TextRenderer.DrawText(g, groupBoxText, font, textBounds, textColor, flags);
+            TextRenderer.DrawText(deviceContext, groupBoxText, font, textBounds, textColor, flags);
 
             // Calculate area for background box
             Rectangle boxBounds = bounds;
@@ -183,11 +216,11 @@ namespace System.Windows.Forms
             Rectangle clipMiddle = boxBounds;
             Rectangle clipRight = boxBounds;
 
-            clipLeft.Width = boxHeaderWidth;
+            clipLeft.Width = BoxHeaderWidth;
             clipMiddle.Width = Math.Max(0, textBounds.Width - 3);  // -3 to account for the margin built in the MeasureText result
             if ((flags & TextFormatFlags.Right) == TextFormatFlags.Right)
             {
-                clipLeft.X = boxBounds.Right - boxHeaderWidth;
+                clipLeft.X = boxBounds.Right - BoxHeaderWidth;
                 clipMiddle.X = clipLeft.Left - clipMiddle.Width;
                 clipRight.Width = clipMiddle.X - boxBounds.X;
             }
@@ -203,74 +236,72 @@ namespace System.Windows.Forms
             Debug.Assert(textBounds.Y <= boxBounds.Y, "if text below box, need to render area of box above text");
 
             // Render clipped portion of background in each segment
-            visualStyleRenderer.DrawBackground(g, boxBounds, clipLeft);
-            visualStyleRenderer.DrawBackground(g, boxBounds, clipMiddle);
-            visualStyleRenderer.DrawBackground(g, boxBounds, clipRight);
+            t_visualStyleRenderer.DrawBackground(deviceContext, boxBounds, clipLeft);
+            t_visualStyleRenderer.DrawBackground(deviceContext, boxBounds, clipMiddle);
+            t_visualStyleRenderer.DrawBackground(deviceContext, boxBounds, clipRight);
         }
 
         /// <summary>
         ///  Draws an un-themed GroupBox with no text label.
         /// </summary>
-        private static void DrawUnthemedGroupBoxNoText(Graphics g, Rectangle bounds, GroupBoxState state)
+        private static void DrawUnthemedGroupBoxNoText(Graphics g, Rectangle bounds)
         {
             Color backColor = SystemColors.Control;
-            Pen light = new Pen(ControlPaint.Light(backColor, 1.0f));
-            Pen dark = new Pen(ControlPaint.Dark(backColor, 0f));
-            try
-            {
-                // left
-                g.DrawLine(light, bounds.Left + 1, bounds.Top + 1, bounds.Left + 1, bounds.Height - 1);
-                g.DrawLine(dark, bounds.Left, bounds.Top + 1, bounds.Left, bounds.Height - 2);
+            using Pen light = ControlPaint.Light(backColor, 1.0f).CreateStaticPen();
+            using Pen dark = ControlPaint.Dark(backColor, 0f).CreateStaticPen();
 
-                // bottom
-                g.DrawLine(light, bounds.Left, bounds.Height - 1, bounds.Width - 1, bounds.Height - 1);
-                g.DrawLine(dark, bounds.Left, bounds.Height - 2, bounds.Width - 1, bounds.Height - 2);
+            // left
+            g.DrawLine(light, bounds.Left + 1, bounds.Top + 1, bounds.Left + 1, bounds.Height - 1);
+            g.DrawLine(dark, bounds.Left, bounds.Top + 1, bounds.Left, bounds.Height - 2);
 
-                // top
-                g.DrawLine(light, bounds.Left + 1, bounds.Top + 1, bounds.Width - 1, bounds.Top + 1);
-                g.DrawLine(dark, bounds.Left, bounds.Top, bounds.Width - 2, bounds.Top);
+            // bottom
+            g.DrawLine(light, bounds.Left, bounds.Height - 1, bounds.Width - 1, bounds.Height - 1);
+            g.DrawLine(dark, bounds.Left, bounds.Height - 2, bounds.Width - 1, bounds.Height - 2);
 
-                // right
-                g.DrawLine(light, bounds.Width - 1, bounds.Top, bounds.Width - 1, bounds.Height - 1);
-                g.DrawLine(dark, bounds.Width - 2, bounds.Top, bounds.Width - 2, bounds.Height - 2);
-            }
-            finally
-            {
-                if (light != null)
-                {
-                    light.Dispose();
-                }
-                if (dark != null)
-                {
-                    dark.Dispose();
-                }
-            }
+            // top
+            g.DrawLine(light, bounds.Left + 1, bounds.Top + 1, bounds.Width - 1, bounds.Top + 1);
+            g.DrawLine(dark, bounds.Left, bounds.Top, bounds.Width - 2, bounds.Top);
+
+            // right
+            g.DrawLine(light, bounds.Width - 1, bounds.Top, bounds.Width - 1, bounds.Height - 1);
+            g.DrawLine(dark, bounds.Width - 2, bounds.Top, bounds.Width - 2, bounds.Height - 2);
         }
 
         /// <summary>
-        ///  Draws an un-themed GroupBox with a text label.
-        ///  Variation of the logic in GroupBox.DrawGroupBox().
+        ///  Draws an un-themed GroupBox with a text label. Variation of the logic in GroupBox.DrawGroupBox().
         /// </summary>
-        private static void DrawUnthemedGroupBoxWithText(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, TextFormatFlags flags, GroupBoxState state)
+        private static void DrawUnthemedGroupBoxWithText(
+            IDeviceContext deviceContext,
+            Rectangle bounds,
+            string groupBoxText,
+            Font font,
+            Color textColor,
+            TextFormatFlags flags)
         {
             // Calculate text area, and render text inside it
             Rectangle textBounds = bounds;
 
-            textBounds.Width -= textOffset;
-            Size measuredBounds = TextRenderer.MeasureText(g, groupBoxText, font, new Size(textBounds.Width, textBounds.Height), flags);
+            textBounds.Width -= TextOffset;
+            Size measuredBounds = TextRenderer.MeasureText(
+                deviceContext,
+                groupBoxText,
+                font,
+                new Size(textBounds.Width, textBounds.Height),
+                flags);
+
             textBounds.Width = measuredBounds.Width;
             textBounds.Height = measuredBounds.Height;
 
             if ((flags & TextFormatFlags.Right) == TextFormatFlags.Right)
             {
-                textBounds.X = bounds.Right - textBounds.Width - textOffset;
+                textBounds.X = bounds.Right - textBounds.Width - TextOffset;
             }
             else
             {
-                textBounds.X += textOffset;
+                textBounds.X += TextOffset;
             }
 
-            TextRenderer.DrawText(g, groupBoxText, font, textBounds, textColor, flags);
+            TextRenderer.DrawText(deviceContext, groupBoxText, font, textBounds, textColor, flags);
 
             // Pad text area to stop background from touching text
             if (textBounds.Width > 0)
@@ -278,33 +309,33 @@ namespace System.Windows.Forms
                 textBounds.Inflate(2, 0);
             }
 
-            Pen light = new Pen(SystemColors.ControlLight);
-            Pen dark = new Pen(SystemColors.ControlDark);
-
             int boxTop = bounds.Top + font.Height / 2;
 
-            // left
-            g.DrawLine(light, bounds.Left + 1, boxTop, bounds.Left + 1, bounds.Height - 1);
-            g.DrawLine(dark, bounds.Left, boxTop - 1, bounds.Left, bounds.Height - 2);
+            using var hdc = new DeviceContextHdcScope(deviceContext);
 
-            // bottom
-            g.DrawLine(light, bounds.Left, bounds.Height - 1, bounds.Width, bounds.Height - 1);
-            g.DrawLine(dark, bounds.Left, bounds.Height - 2, bounds.Width - 1, bounds.Height - 2);
+            ReadOnlySpan<int> darkLines = stackalloc int[]
+            {
+                bounds.Left, boxTop - 1, bounds.Left, bounds.Height - 2,                            // Left
+                bounds.Left, bounds.Height - 2, bounds.Width - 1, bounds.Height - 2,                // Right
+                bounds.Left, boxTop - 1, textBounds.X - 3, boxTop - 1,                              // Top-left
+                textBounds.X + textBounds.Width + 2, boxTop - 1, bounds.Width - 2, boxTop - 1,      // Top-right
+                bounds.Width - 2, boxTop - 1, bounds.Width - 2, bounds.Height - 2                   // Right
+            };
 
-            // top-left
-            g.DrawLine(light, bounds.Left + 1, boxTop, textBounds.X - 2, boxTop);
-            g.DrawLine(dark, bounds.Left, boxTop - 1, textBounds.X - 3, boxTop - 1);
+            using var hpenDark = new Gdi32.CreatePenScope(SystemColors.ControlDark);
+            hdc.DrawLines(hpenDark, darkLines);
 
-            // top-right
-            g.DrawLine(light, textBounds.X + textBounds.Width + 1, boxTop, bounds.Width - 1, boxTop);
-            g.DrawLine(dark, textBounds.X + textBounds.Width + 2, boxTop - 1, bounds.Width - 2, boxTop - 1);
+            ReadOnlySpan<int> lightLines = stackalloc int[]
+            {
+                bounds.Left + 1, boxTop, bounds.Left + 1, bounds.Height - 1,                        // Left
+                bounds.Left, bounds.Height - 1, bounds.Width, bounds.Height - 1,                    // Right
+                bounds.Left + 1, boxTop, textBounds.X - 2, boxTop,                                  // Top-left
+                textBounds.X + textBounds.Width + 1, boxTop, bounds.Width - 1, boxTop,              // Top-right
+                bounds.Width - 1, boxTop, bounds.Width - 1, bounds.Height - 1                       // Right
+            };
 
-            // right
-            g.DrawLine(light, bounds.Width - 1, boxTop, bounds.Width - 1, bounds.Height - 1);
-            g.DrawLine(dark, bounds.Width - 2, boxTop - 1, bounds.Width - 2, bounds.Height - 2);
-
-            light.Dispose();
-            dark.Dispose();
+            using var hpenLight = new Gdi32.CreatePenScope(SystemColors.ControlLight);
+            hdc.DrawLines(hpenLight, lightLines);
         }
 
         private static Color DefaultTextColor(GroupBoxState state)
@@ -312,7 +343,7 @@ namespace System.Windows.Forms
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
-                return visualStyleRenderer.GetColor(ColorProperty.TextColor);
+                return t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             }
             else
             {
@@ -322,21 +353,23 @@ namespace System.Windows.Forms
 
         private static void InitializeRenderer(int state)
         {
-            int part = GroupBoxElement.Part;
+            int part = s_groupBoxElement.Part;
             if (SystemInformation.HighContrast
                 && ((GroupBoxState)state == GroupBoxState.Disabled)
-                && VisualStyleRenderer.IsCombinationDefined(GroupBoxElement.ClassName, VisualStyleElement.Button.GroupBox.HighContrastDisabledPart))
+                && VisualStyleRenderer.IsCombinationDefined(
+                    s_groupBoxElement.ClassName,
+                    VisualStyleElement.Button.GroupBox.HighContrastDisabledPart))
             {
                 part = VisualStyleElement.Button.GroupBox.HighContrastDisabledPart;
             }
 
-            if (visualStyleRenderer == null)
+            if (t_visualStyleRenderer == null)
             {
-                visualStyleRenderer = new VisualStyleRenderer(GroupBoxElement.ClassName, part, state);
+                t_visualStyleRenderer = new VisualStyleRenderer(s_groupBoxElement.ClassName, part, state);
             }
             else
             {
-                visualStyleRenderer.SetParameters(GroupBoxElement.ClassName, part, state);
+                t_visualStyleRenderer.SetParameters(s_groupBoxElement.ClassName, part, state);
             }
         }
     }

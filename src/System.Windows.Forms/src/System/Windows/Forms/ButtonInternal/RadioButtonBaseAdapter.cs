@@ -78,8 +78,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             double scale = GetDpiScaleRatio();
 
-            using var scope = new PaintEventHdcScope(e);
-            Gdi32.HDC hdc = scope.HDC;
+            using var hdc = new DeviceContextHdcScope(e);
             using var borderPen = new Gdi32.CreatePenScope(border);
             using var fieldBrush = new Gdi32.CreateBrushScope(field);
 
@@ -148,8 +147,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             double scale = GetDpiScaleRatio();
-            using var paintScope = new PaintEventHdcScope(e);
-            Gdi32.HDC hdc = paintScope.HDC;
+            using var hdc = new DeviceContextHdcScope(e);
             using var brush = new Gdi32.CreateBrushScope(checkColor);
 
             // Circle drawing doesn't work at this size
@@ -207,15 +205,16 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (Application.RenderWithVisualStyles)
             {
-                RadioButtonRenderer.DrawRadioButton(
-                    e.Graphics,
+                using var hdc = new DeviceContextHdcScope(e);
+                RadioButtonRenderer.DrawRadioButtonWithVisualStyles(
+                    hdc,
                     new Point(check.Left, check.Top),
                     RadioButtonRenderer.ConvertFromButtonState(style, Control.MouseIsOver),
                     Control.HandleInternal);
             }
             else
             {
-                ControlPaint.DrawRadioButton(e.Graphics, check, style);
+                ControlPaint.DrawRadioButton(e.GraphicsInternal, check, style);
             }
         }
 

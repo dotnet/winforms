@@ -1,0 +1,2 @@
+System.Windows.Forms.DrawItemEventArgs.Dispose() -> void
+virtual System.Windows.Forms.DrawItemEventArgs.Dispose(bool disposing) -> void

@@ -2636,27 +2636,26 @@ namespace System.Windows.Forms
         {
             get
             {
-                using (new MultithreadSafeCallScope())
+                using var scope = MultithreadSafeCallScope.Create();
+
+                Control control;
+                if (IsHandleCreated)
                 {
-                    Control control;
-                    if (IsHandleCreated)
-                    {
-                        control = this;
-                    }
-                    else
-                    {
-                        Control marshalingControl = FindMarshalingControl();
-
-                        if (!marshalingControl.IsHandleCreated)
-                        {
-                            return false;
-                        }
-
-                        control = marshalingControl;
-                    }
-
-                    return User32.GetWindowThreadProcessId(control, out _) != Kernel32.GetCurrentThreadId();
+                    control = this;
                 }
+                else
+                {
+                    Control marshalingControl = FindMarshalingControl();
+
+                    if (!marshalingControl.IsHandleCreated)
+                    {
+                        return false;
+                    }
+
+                    control = marshalingControl;
+                }
+
+                return User32.GetWindowThreadProcessId(control, out _) != Kernel32.GetCurrentThreadId();
             }
         }
 
@@ -3942,10 +3941,8 @@ namespace System.Windows.Forms
                     }
                 }
 
-                using (new MultithreadSafeCallScope())
-                {
-                    return User32.GetWindowText(new HandleRef(_window, Handle));
-                }
+                using var scope = MultithreadSafeCallScope.Create();
+                return User32.GetWindowText(new HandleRef(_window, Handle));
             }
             set
             {
@@ -4668,11 +4665,9 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IAsyncResult BeginInvoke(Delegate method, params object[] args)
         {
-            using (new MultithreadSafeCallScope())
-            {
-                Control marshaler = FindMarshalingControl();
-                return (IAsyncResult)marshaler.MarshaledInvoke(this, method, args, false);
-            }
+            using var scope = MultithreadSafeCallScope.Create();
+            Control marshaler = FindMarshalingControl();
+            return (IAsyncResult)marshaler.MarshaledInvoke(this, method, args, false);
         }
 
         internal void BeginUpdateInternal()
@@ -4852,10 +4847,8 @@ namespace System.Windows.Forms
         /// </summary>
         public Graphics CreateGraphics()
         {
-            using (new MultithreadSafeCallScope())
-            {
-                return CreateGraphicsInternal();
-            }
+            using var scope = MultithreadSafeCallScope.Create();
+            return CreateGraphicsInternal();
         }
 
         internal Graphics CreateGraphicsInternal()
@@ -5309,12 +5302,11 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public object EndInvoke(IAsyncResult asyncResult)
         {
-            using (new MultithreadSafeCallScope())
+            using var scope = MultithreadSafeCallScope.Create();
+            if (asyncResult == null)
             {
-                if (asyncResult == null)
-                {
-                    throw new ArgumentNullException(nameof(asyncResult));
-                }
+                throw new ArgumentNullException(nameof(asyncResult));
+            }
 
                 if (!(asyncResult is ThreadMethodEntry entry))
                 {
@@ -5322,27 +5314,26 @@ namespace System.Windows.Forms
                 }
                 Debug.Assert(this == entry._caller, "Called BeginInvoke on one control, and the corresponding EndInvoke on a different control");
 
-                if (!asyncResult.IsCompleted)
+            if (!asyncResult.IsCompleted)
+            {
+                Control marshaler = FindMarshalingControl();
+                if (User32.GetWindowThreadProcessId(marshaler, out _) == Kernel32.GetCurrentThreadId())
                 {
-                    Control marshaler = FindMarshalingControl();
-                    if (User32.GetWindowThreadProcessId(marshaler, out _) == Kernel32.GetCurrentThreadId())
-                    {
-                        marshaler.InvokeMarshaledCallbacks();
-                    }
-                    else
-                    {
-                        marshaler = entry._marshaler;
-                        marshaler.WaitForWaitHandle(asyncResult.AsyncWaitHandle);
-                    }
+                    marshaler.InvokeMarshaledCallbacks();
                 }
-
-                Debug.Assert(asyncResult.IsCompleted, "Why isn't this asyncResult done yet?");
-                if (entry._exception != null)
+                else
                 {
-                    throw entry._exception;
+                    marshaler = entry._marshaler;
+                    marshaler.WaitForWaitHandle(asyncResult.AsyncWaitHandle);
                 }
-                return entry._retVal;
             }
+
+            Debug.Assert(asyncResult.IsCompleted, "Why isn't this asyncResult done yet?");
+            if (entry._exception != null)
+            {
+                throw entry._exception;
+            }
+            return entry._retVal;
         }
 
         internal bool EndUpdateInternal()
@@ -6176,13 +6167,11 @@ namespace System.Windows.Forms
                 else
                 {
                     // It's safe to invoke InvalidateRgn from a separate thread.
-                    using (new MultithreadSafeCallScope())
-                    {
-                        User32.InvalidateRgn(
-                            this,
-                            regionHandle,
-                            (!GetStyle(ControlStyles.Opaque)).ToBOOL());
-                    }
+                    using var scope = MultithreadSafeCallScope.Create();
+                    User32.InvalidateRgn(
+                        this,
+                        regionHandle,
+                        (!GetStyle(ControlStyles.Opaque)).ToBOOL());
                 }
 
                 OnInvalidated(new InvalidateEventArgs(Rectangle.Ceiling(region.GetBounds(graphics))));
@@ -6219,13 +6208,11 @@ namespace System.Windows.Forms
                 else
                 {
                     // It's safe to invoke InvalidateRect from a separate thread.
-                    using (new MultithreadSafeCallScope())
-                    {
-                        User32.InvalidateRect(
-                            new HandleRef(_window, Handle),
-                            null,
-                            (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque ? BOOL.TRUE : BOOL.FALSE);
-                    }
+                    using var scope = MultithreadSafeCallScope.Create();
+                    User32.InvalidateRect(
+                        new HandleRef(_window, Handle),
+                        null,
+                        (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque ? BOOL.TRUE : BOOL.FALSE);
                 }
 
                 NotifyInvalidate(ClientRectangle);
@@ -6269,13 +6256,11 @@ namespace System.Windows.Forms
                 else
                 {
                     // It's safe to invoke InvalidateRect from a separate thread.
-                    using (new MultithreadSafeCallScope())
-                    {
-                        User32.InvalidateRect(
-                            new HandleRef(_window, Handle),
-                            &rcArea,
-                            (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque ? BOOL.TRUE : BOOL.FALSE);
-                    }
+                    using var scope = MultithreadSafeCallScope.Create();
+                    User32.InvalidateRect(
+                        new HandleRef(_window, Handle),
+                        &rcArea,
+                        (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque ? BOOL.TRUE : BOOL.FALSE);
                 }
                 NotifyInvalidate(rc);
             }
@@ -6315,11 +6300,9 @@ namespace System.Windows.Forms
         /// </summary>
         public object Invoke(Delegate method, params object[] args)
         {
-            using (new MultithreadSafeCallScope())
-            {
-                Control marshaler = FindMarshalingControl();
-                return marshaler.MarshaledInvoke(this, method, args, true);
-            }
+            using var scope = MultithreadSafeCallScope.Create();
+            Control marshaler = FindMarshalingControl();
+            return marshaler.MarshaledInvoke(this, method, args, true);
         }
 
         /// <summary>
@@ -7444,8 +7427,7 @@ namespace System.Windows.Forms
 
             if (GetStyle(ControlStyles.UserPaint))
             {
-                // Theme support requires that we paint the background
-                // and foreground to support semi-transparent children
+                // Theme support requires that we paint the background and foreground to support semi-transparent children
                 PaintWithErrorHandling(e, PaintLayerBackground);
                 e.ResetGraphics();
                 PaintWithErrorHandling(e, PaintLayerForeground);
@@ -7456,8 +7438,8 @@ namespace System.Windows.Forms
                 {
                     IntPtr flags = (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
 
-                    using var scope = new PaintEventHdcScope(e);
-                    Message m = Message.Create(Handle, User32.WM.PRINTCLIENT, (IntPtr)scope.HDC, flags);
+                    using var hdc = new DeviceContextHdcScope(e);
+                    Message m = Message.Create(Handle, User32.WM.PRINTCLIENT, (IntPtr)hdc, flags);
                     DefWndProc(ref m);
                 }
                 else
@@ -8431,7 +8413,15 @@ namespace System.Windows.Forms
                     PaintBackColor(e, rectangle, backColor);
                 }
 
-                ControlPaint.DrawBackgroundImage(e.Graphics, BackgroundImage, backColor, BackgroundImageLayout, ClientRectangle, rectangle, scrollLocation, RightToLeft);
+                ControlPaint.DrawBackgroundImage(
+                    e.GraphicsInternal,
+                    BackgroundImage,
+                    backColor,
+                    BackgroundImageLayout,
+                    ClientRectangle,
+                    rectangle,
+                    scrollLocation,
+                    RightToLeft);
             }
             else
             {
@@ -8452,8 +8442,7 @@ namespace System.Windows.Forms
             // to use it without enough bookkeeping to negate any performance gain of using GDI.
             if (color.A == 255)
             {
-                using var scope = new PaintEventHdcScope(e);
-                Gdi32.HDC hdc = scope.HDC;
+                using var hdc = new DeviceContextHdcScope(e);
                 using var hbrush = new Gdi32.CreateBrushScope(hdc.GetNearestColor(color));
                 hdc.FillRectangle(rectangle, hbrush);
             }
@@ -8469,6 +8458,7 @@ namespace System.Windows.Forms
         private void PaintException(PaintEventArgs e)
         {
             int penThickness = 2;
+
             using (Pen pen = new Pen(Color.Red, penThickness))
             {
                 Rectangle clientRectangle = ClientRectangle;
@@ -8550,8 +8540,8 @@ namespace System.Windows.Forms
                     // moving the clipping rectangle to the parent coordinate system
                     Rectangle newClipRect = new Rectangle(rectangle.Left + Left, rectangle.Top + Top, rectangle.Width, rectangle.Height);
 
-                    using var hdc = new PaintEventHdcScope(e);
-                    using var savedc = new Gdi32.SaveDcScope(e.HDC);
+                    using var hdc = new DeviceContextHdcScope(e);
+                    using var savedc = new Gdi32.SaveDcScope(hdc);
 
                     Gdi32.OffsetViewportOrgEx(hdc, -Left, -Top, null);
 
@@ -11637,10 +11627,8 @@ namespace System.Windows.Forms
 
                     RECT rc = new RECT();
                     User32.GetClientRect(this, ref rc);
-                    using (PaintEventArgs pevent = new PaintEventArgs(dc, Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom)))
-                    {
-                        PaintWithErrorHandling(pevent, PaintLayerBackground);
-                    }
+                    using PaintEventArgs pevent = new PaintEventArgs(dc, Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom));
+                    PaintWithErrorHandling(pevent, PaintLayerBackground);
                 }
                 m.Result = (IntPtr)1;
             }
@@ -12218,8 +12206,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles the WM_PAINT messages.  This should only be called
-        ///  for userpaint controls.
+        ///  Handles the WM_PAINT messages.  This should only be called for userpaint controls.
         /// </summary>
         private void WmPaint(ref Message m)
         {
@@ -12232,7 +12219,9 @@ namespace System.Windows.Forms
 #endif
             Rectangle clip;
             Gdi32.HDC dc = (Gdi32.HDC)m.WParam;
-            using var paintScope = dc.IsNull ? new User32.BeginPaintScope(Handle) : default;
+
+            bool usingBeginPaint = dc.IsNull;
+            using var paintScope = usingBeginPaint ? new User32.BeginPaintScope(Handle) : default;
 
             if (dc.IsNull)
             {
@@ -12253,11 +12242,12 @@ namespace System.Windows.Forms
 
             BufferedGraphics bufferedGraphics = null;
             PaintEventArgs pevent = null;
-            GraphicsState state = null;
 
-            using var paletteScope = (doubleBuffered || m.WParam == IntPtr.Zero)
+            using var paletteScope = doubleBuffered || usingBeginPaint
                 ? Gdi32.SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
                 : default;
+
+            bool paintBackground = (usingBeginPaint && GetStyle(ControlStyles.AllPaintingInWmPaint)) || doubleBuffered;
 
             if (doubleBuffered)
             {
@@ -12307,37 +12297,26 @@ namespace System.Windows.Forms
             if (bufferedGraphics != null)
             {
                 bufferedGraphics.Graphics.SetClip(clip);
-                pevent = new PaintEventArgs(bufferedGraphics.Graphics, clip);
-                state = pevent.Graphics.Save();
+                pevent = new PaintEventArgs(
+                    bufferedGraphics.Graphics,
+                    clip,
+                    // We've applied a Clip, so we need to apply it when we draw
+                    (paintBackground ? DrawingEventFlags.SaveState : default) | DrawingEventFlags.GraphicsStateUnclean);
             }
             else
             {
-                pevent = new PaintEventArgs(dc, clip);
+                pevent = new PaintEventArgs(
+                    dc,
+                    clip,
+                    paintBackground ? DrawingEventFlags.SaveState : default);
             }
 
             using (pevent)
             {
-                try
+                if (paintBackground)
                 {
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                    if ((m.WParam == IntPtr.Zero) && GetStyle(ControlStyles.AllPaintingInWmPaint) || doubleBuffered)
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
-                    {
-                        PaintWithErrorHandling(pevent, PaintLayerBackground);
-                        // Consider: This condition could be elimiated,
-                        //           do we have to save/restore the state of the buffered graphics?
-                    }
-                }
-                finally
-                {
-                    if (state != null)
-                    {
-                        pevent.Graphics.Restore(state);
-                    }
-                    else
-                    {
-                        pevent.ResetGraphics();
-                    }
+                    PaintWithErrorHandling(pevent, PaintLayerBackground);
+                    pevent.ResetGraphics();
                 }
 
                 PaintWithErrorHandling(pevent, PaintLayerForeground);
@@ -12353,7 +12332,13 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmPrintClient(ref Message m)
         {
-            using (PaintEventArgs e = new PrintPaintEventArgs(m, (Gdi32.HDC)m.WParam, ClientRectangle))
+            Gdi32.HDC hdc = (Gdi32.HDC)m.WParam;
+            if (hdc.IsNull)
+            {
+                return;
+            }
+
+            using (PaintEventArgs e = new PrintPaintEventArgs(m, hdc, ClientRectangle))
             {
                 OnPrint(e);
             }
@@ -12362,10 +12347,14 @@ namespace System.Windows.Forms
         private void WmQueryNewPalette(ref Message m)
         {
             Debug.WriteLineIf(s_paletteTracing.TraceVerbose, $"{Handle}: WM_QUERYNEWPALETTE");
+
             using var dc = new User32.GetDcScope(Handle);
 
             // We don't want to unset the palette in this case so we don't do this in a using
-            var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(dc, forceBackground: true, realizePalette: true);
+            var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(
+                dc,
+                forceBackground: true,
+                realizePalette: true);
 
             Invalidate(true);
             m.Result = (IntPtr)1;

@@ -22,17 +22,30 @@ internal static partial class Interop
             public HGDIOBJ PreviousObject { get; }
 
             /// <summary>
-            ///  Selects <paramref name="object"/> into the given <paramref name="hdc"/>.
+            ///  Selects <paramref name="object"/> into the given <paramref name="hdc"/> using
+            ///  <see cref="SelectObject(HDC, HGDIOBJ)"/>.
             /// </summary>
             public SelectObjectScope(HDC hdc, HGDIOBJ @object)
             {
-                _hdc = hdc;
-                PreviousObject = SelectObject(hdc, @object);
+                // Selecting null doesn't mean anything
+
+                if (@object.IsNull)
+                {
+                    this = default;
+                }
+                else
+                {
+                    _hdc = hdc;
+                    PreviousObject = SelectObject(hdc, @object);
+                }
             }
 
             public void Dispose()
             {
-                SelectObject(_hdc, PreviousObject);
+                if (!_hdc.IsNull)
+                {
+                    SelectObject(_hdc, PreviousObject);
+                }
             }
         }
     }

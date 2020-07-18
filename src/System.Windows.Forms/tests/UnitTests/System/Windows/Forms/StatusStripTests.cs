@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1244,10 +1244,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void StatusStrip_OnPaintBackground_NullE_ThrowsNullReferenceException()
+        public void StatusStrip_OnPaintBackground_NullE_ThrowsArgumentNullException()
         {
             using var control = new SubStatusStrip();
-            Assert.Throws<NullReferenceException>(() => control.OnPaintBackground(null));
+            Assert.Throws<ArgumentNullException>(() => control.OnPaintBackground(null));
         }
 
         private class SubToolStripRenderer : ToolStripRenderer

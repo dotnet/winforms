@@ -20,7 +20,7 @@ namespace System.Windows.Forms.ButtonInternal
                 return;
             }
 
-            ColorData colors = PaintFlatRender(e.Graphics).Calculate();
+            ColorData colors = PaintFlatRender(e).Calculate();
             if (Control.Enabled)
             {
                 PaintFlatWorker(e, colors.windowText, colors.highlight, colors.windowFrame, colors);
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.ButtonInternal
                 return;
             }
 
-            ColorData colors = PaintFlatRender(e.Graphics).Calculate();
+            ColorData colors = PaintFlatRender(e).Calculate();
             if (Control.Enabled)
             {
                 PaintFlatWorker(e, colors.windowText, colors.lowHighlight, colors.windowFrame, colors);
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.ButtonInternal
                 return;
             }
 
-            ColorData colors = PaintFlatRender(e.Graphics).Calculate();
+            ColorData colors = PaintFlatRender(e).Calculate();
             if (Control.Enabled)
             {
                 PaintFlatWorker(e, colors.windowText, colors.highlight, colors.windowFrame, colors);
@@ -71,12 +71,18 @@ namespace System.Windows.Forms.ButtonInternal
 
         private void PaintFlatWorker(PaintEventArgs e, Color checkColor, Color checkBackground, Color checkBorder, ColorData colors)
         {
-            Graphics g = e.Graphics;
             LayoutData layout = Layout(e).Layout();
             PaintButtonBackground(e, Control.ClientRectangle, null);
 
             PaintImage(e, layout);
-            DrawCheckFlat(e, layout, checkColor, colors.options.highContrast ? colors.buttonFace : checkBackground, checkBorder, colors);
+            DrawCheckFlat(
+                e,
+                layout,
+                checkColor,
+                colors.options.HighContrast ? colors.buttonFace : checkBackground,
+                checkBorder,
+                colors);
+
             AdjustFocusRectangle(layout);
             PaintField(e, layout, colors, checkColor, true);
         }

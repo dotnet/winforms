@@ -34,6 +34,7 @@ internal static partial class Interop
             }
 
             public static implicit operator HPEN(in CreatePenScope scope) => scope.HPen;
+            public static implicit operator HGDIOBJ(in CreatePenScope scope) => scope.HPen;
 
             public bool IsNull => HPen.IsNull;
 

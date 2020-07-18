@@ -828,11 +828,6 @@ namespace System.Windows.Forms
             private Timer _timer;
             private NativeWindow _tipWindow;
 
-            private DeviceContext _mirrordc;
-            private Size _mirrordcExtent;
-            private Point _mirrordcOrigin;
-            private Gdi32.MM _mirrordcMode = Gdi32.MM.TEXT;
-
             /// <summary>
             ///  Construct an error window for this provider and control parent.
             /// </summary>
@@ -975,79 +970,41 @@ namespace System.Windows.Forms
                     User32.SWP.HIDEWINDOW | User32.SWP.NOSIZE | User32.SWP.NOMOVE);
                 _parent?.Invalidate(true);
                 DestroyHandle();
-
-                Debug.Assert(_mirrordc == null, "Why is mirrordc non-null?");
-                _mirrordc?.Dispose();
             }
 
-            /// <summary>
-            ///  Since we added mirroring to certain controls, we need to make sure the
-            ///  error icons show up in the correct place. We cannot mirror the errorwindow
-            ///  in EnsureCreated (although that would have been really easy), since we use
-            ///  GDI+ for some of this code, and as we all know, GDI+ does not handle mirroring
-            ///  at all.
-            ///  To work around that we create our own mirrored dc when we need to.
-            /// </summary>
-            private void CreateMirrorDC(Gdi32.HDC hdc, int originOffset)
+            private unsafe void MirrorDcIfNeeded(Gdi32.HDC hdc)
             {
-                Debug.Assert(_mirrordc == null, "Why is mirrordc non-null? Did you not call RestoreMirrorDC?");
-
-                _mirrordc = DeviceContext.FromHdc(hdc);
-                if (_parent.IsMirrored && _mirrordc != null)
+                if (_parent.IsMirrored)
                 {
-                    _mirrordc.SaveHdc();
-                    _mirrordcExtent = _mirrordc.ViewportExtent;
-                    _mirrordcOrigin = _mirrordc.ViewportOrigin;
-
-                    _mirrordcMode = _mirrordc.SetMapMode(Gdi32.MM.ANISOTROPIC);
-                    _mirrordc.ViewportExtent = new Size(-(_mirrordcExtent.Width), _mirrordcExtent.Height);
-                    _mirrordc.ViewportOrigin = new Point(_mirrordcOrigin.X + originOffset, _mirrordcOrigin.Y);
+                    // Mirror the DC
+                    Gdi32.SetMapMode(hdc, Gdi32.MM.ANISOTROPIC);
+                    Gdi32.GetViewportExtEx(hdc, out Size originalExtents);
+                    Gdi32.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, null);
+                    Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
+                    Gdi32.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, null);
                 }
             }
 
-            private void RestoreMirrorDC()
-            {
-                if (_parent.IsMirrored && _mirrordc != null)
-                {
-                    _mirrordc.ViewportExtent = _mirrordcExtent;
-                    _mirrordc.ViewportOrigin = _mirrordcOrigin;
-                    _mirrordc.SetMapMode(_mirrordcMode);
-                    _mirrordc.RestoreHdc();
-                    _mirrordc.Dispose();
-                }
-
-                _mirrordc = null;
-                _mirrordcExtent = Size.Empty;
-                _mirrordcOrigin = Point.Empty;
-                _mirrordcMode = Gdi32.MM.TEXT;
-            }
-
             /// <summary>
-            ///  This is called when the error window needs to paint. We paint each icon at its
-            ///  correct location.
+            ///  This is called when the error window needs to paint. We paint each icon at its correct location.
             /// </summary>
-            private void OnPaint(ref Message m)
+            private unsafe void OnPaint()
             {
                 using var hdc = new User32.BeginPaintScope(Handle);
-                CreateMirrorDC(hdc, _windowBounds.Width - 1);
+                using var save = new Gdi32.SaveDcScope(hdc);
 
-                try
+                MirrorDcIfNeeded(hdc);
+
+                for (int i = 0; i < _items.Count; i++)
                 {
-                    for (int i = 0; i < _items.Count; i++)
-                    {
-                        ControlItem item = _items[i];
-                        Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
-                        User32.DrawIconEx(
-                            _mirrordc,
-                            bounds.X - _windowBounds.X,
-                            bounds.Y - _windowBounds.Y,
-                            _provider.Region,
-                            bounds.Width, bounds.Height);
-                    }
-                }
-                finally
-                {
-                    RestoreMirrorDC();
+                    ControlItem item = _items[i];
+                    Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
+                    User32.DrawIconEx(
+                        hdc,
+                        bounds.X - _windowBounds.X,
+                        bounds.Y - _windowBounds.Y,
+                        _provider.Region,
+                        bounds.Width, bounds.Height);
                 }
             }
 
@@ -1173,97 +1130,72 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Region windowRegion = new Region(new Rectangle(0, 0, 0, 0));
-                try
+                using var windowRegion = new Region(new Rectangle(0, 0, 0, 0));
+
+                for (int i = 0; i < _items.Count; i++)
                 {
-                    for (int i = 0; i < _items.Count; i++)
+                    ControlItem item = _items[i];
+                    Rectangle iconBounds = item.GetIconBounds(size);
+                    iconBounds.X -= _windowBounds.X;
+                    iconBounds.Y -= _windowBounds.Y;
+
+                    bool showIcon = true;
+                    if (!item.ToolTipShown)
                     {
-                        ControlItem item = _items[i];
-                        Rectangle iconBounds = item.GetIconBounds(size);
-                        iconBounds.X -= _windowBounds.X;
-                        iconBounds.Y -= _windowBounds.Y;
-
-                        bool showIcon = true;
-                        if (!item.ToolTipShown)
+                        switch (_provider.BlinkStyle)
                         {
-                            switch (_provider.BlinkStyle)
-                            {
-                                case ErrorBlinkStyle.NeverBlink:
-                                    // always show icon
-                                    break;
-
-                                case ErrorBlinkStyle.BlinkIfDifferentError:
-                                    showIcon = (item.BlinkPhase == 0) || (item.BlinkPhase > 0 && (item.BlinkPhase & 1) == (i & 1));
-                                    break;
-
-                                case ErrorBlinkStyle.AlwaysBlink:
-                                    showIcon = ((i & 1) == 0) == _provider._showIcon;
-                                    break;
-                            }
-                        }
-
-                        if (showIcon)
-                        {
-                            iconRegion.Region.Translate(iconBounds.X, iconBounds.Y);
-                            windowRegion.Union(iconRegion.Region);
-                            iconRegion.Region.Translate(-iconBounds.X, -iconBounds.Y);
-                        }
-
-                        if (_tipWindow != null)
-                        {
-                            ComCtl32.TTF flags = ComCtl32.TTF.SUBCLASS;
-                            if (_provider.RightToLeft)
-                            {
-                                flags |= ComCtl32.TTF.RTLREADING;
-                            }
-
-                            var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
-                            toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETTOOLINFOW);
-                        }
-
-                        if (timerCaused && item.BlinkPhase > 0)
-                        {
-                            item.BlinkPhase--;
+                            case ErrorBlinkStyle.NeverBlink:
+                                // always show icon
+                                break;
+                            case ErrorBlinkStyle.BlinkIfDifferentError:
+                                showIcon = (item.BlinkPhase == 0) || (item.BlinkPhase > 0 && (item.BlinkPhase & 1) == (i & 1));
+                                break;
+                            case ErrorBlinkStyle.AlwaysBlink:
+                                showIcon = ((i & 1) == 0) == _provider._showIcon;
+                                break;
                         }
                     }
-                    if (timerCaused)
+
+                    if (showIcon)
                     {
-                        _provider._showIcon = !_provider._showIcon;
+                        iconRegion.Region.Translate(iconBounds.X, iconBounds.Y);
+                        windowRegion.Union(iconRegion.Region);
+                        iconRegion.Region.Translate(-iconBounds.X, -iconBounds.Y);
                     }
 
-                    DeviceContext dc = null;
-                    dc = DeviceContext.FromHwnd(Handle);
-                    try
+                    if (_tipWindow != null)
                     {
-                        CreateMirrorDC(dc.Hdc, _windowBounds.Width);
-
-                        using Graphics graphics = _mirrordc.Hdc.CreateGraphics();
-                        try
+                        ComCtl32.TTF flags = ComCtl32.TTF.SUBCLASS;
+                        if (_provider.RightToLeft)
                         {
-                            using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, graphics);
+                            flags |= ComCtl32.TTF.RTLREADING;
+                        }
 
-                            if (User32.SetWindowRgn(this, windowRegionHandle, BOOL.TRUE) != 0)
-                            {
-                                // The HWnd owns the region.
-                                windowRegionHandle.RelinquishOwnership();
-                            }
-                        }
-                        finally
-                        {
-                            RestoreMirrorDC();
-                        }
+                        var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
+                        toolInfo.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.SETTOOLINFOW);
                     }
-                    finally
+
+                    if (timerCaused && item.BlinkPhase > 0)
                     {
-                        if (dc != null)
-                        {
-                            dc.Dispose();
-                        }
+                        item.BlinkPhase--;
                     }
                 }
-                finally
+
+                if (timerCaused)
                 {
-                    windowRegion.Dispose();
+                    _provider._showIcon = !_provider._showIcon;
+                }
+
+                using var hdc = new User32.GetDcScope(Handle);
+                using var save = new Gdi32.SaveDcScope(hdc);
+                MirrorDcIfNeeded(hdc);
+
+                using Graphics g = hdc.CreateGraphics();
+                using var windowRegionHandle = new Gdi32.RegionScope(windowRegion, g);
+                if (User32.SetWindowRgn(this, windowRegionHandle, BOOL.TRUE) != 0)
+                {
+                    // The HWnd owns the region.
+                    windowRegionHandle.RelinquishOwnership();
                 }
 
                 User32.SetWindowPos(
@@ -1322,7 +1254,7 @@ namespace System.Windows.Forms
                     case User32.WM.ERASEBKGND:
                         break;
                     case User32.WM.PAINT:
-                        OnPaint(ref m);
+                        OnPaint();
                         break;
                     default:
                         base.WndProc(ref m);

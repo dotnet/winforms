@@ -248,9 +248,10 @@ namespace System.Windows.Forms
                         editedFormattedValue = " ";
                     }
                     TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
-                    using (Graphics g = WindowsFormsUtils.CreateMeasurementGraphics())
+
+                    using (var screen = GdiCache.GetScreenDCGraphics())
                     {
-                        preferredHeight = DataGridViewCell.MeasureTextHeight(g, editedFormattedValue, cellStyle.Font, originalWidth, flags);
+                        preferredHeight = MeasureTextHeight(screen, editedFormattedValue, cellStyle.Font, originalWidth, flags);
                     }
                 }
                 if (preferredHeight < editingControlBounds.Height)

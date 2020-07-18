@@ -2118,7 +2118,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData((int)User32.WM.ERASEBKGND)]
         [InlineData((int)User32.WM.PRINTCLIENT)]
-        public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawZeroWParam_ThrowsOutOfMemoryException(int msg)
+        public void GroupBox_WndProc_InvokeEraseBkgndNotOwnerDrawZeroWParam_DoesNotThrow(int msg)
         {
             using var control = new SubGroupBox
             {
@@ -2129,9 +2129,9 @@ namespace System.Windows.Forms.Tests
                 Msg = msg,
                 Result = (IntPtr)250
             };
-            Assert.Throws<OutOfMemoryException>(() => control.WndProc(ref m));
+            control.WndProc(ref m);
             Assert.Equal((IntPtr)250, m.Result);
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
