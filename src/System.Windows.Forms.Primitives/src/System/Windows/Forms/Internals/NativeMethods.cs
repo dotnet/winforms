@@ -137,14 +137,6 @@ namespace System.Windows.Forms
             public Comdlg32.PD_RESULT dwResultAction;
         }
 
-        // x86 requires EXPLICIT packing of 1.
-        [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Auto)]
-        public class PRINTPAGERANGE
-        {
-            public int nFromPage;
-            public int nToPage;
-        }
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public class OPENFILENAME_I
         {
