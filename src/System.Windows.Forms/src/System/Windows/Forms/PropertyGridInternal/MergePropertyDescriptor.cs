@@ -219,9 +219,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 BinaryFormatter f = new BinaryFormatter();
                 MemoryStream ms = new MemoryStream();
+#pragma warning disable CS0618 // Type or member is obsolete
                 f.Serialize(ms, value);
                 ms.Position = 0;
                 clonedValue = f.Deserialize(ms);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
 
             if (clonedValue != null)
