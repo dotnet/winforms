@@ -7,5 +7,5 @@
   <EnableVisualStyles>true</EnableVisualStyles>
   <AuthenticationMode>0</AuthenticationMode>
   <ApplicationType>0</ApplicationType>
-  <SaveMySettingsOnExit>true</SaveMySettingsOnExit>
+  <SaveMySettingsOnExit>false</SaveMySettingsOnExit>
 </MyApplicationData>

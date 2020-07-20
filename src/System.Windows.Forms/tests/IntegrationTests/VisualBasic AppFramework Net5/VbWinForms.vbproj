@@ -6,6 +6,7 @@
 	    <StartupObject>VbWinForms.My.MyApplication</StartupObject>
 	    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <UseWindowsForms>true</UseWindowsForms>
+        <LangVersion>16</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -17,7 +18,7 @@
 
     <PropertyGroup>
         <MyType>WindowsForms</MyType>
-        <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+        <!--<ApplicationManifest>My Project\app.manifest</ApplicationManifest>-->
     </PropertyGroup>
  
     <ItemGroup>
@@ -30,5 +31,20 @@
 	    <None Include="My Project\Application.Designer.vb">
 		    <DependentUpon>Application.myapp</DependentUpon>
 	    </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="My Project\Application.Designer.vb">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Application.myapp</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="My Project\Application.myapp">
+        <Generator>MyApplicationCodeGenerator</Generator>
+        <LastGenOutput>Application.Designer.vb</LastGenOutput>
+      </None>
     </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 ﻿Imports Microsoft.VisualBasic.ApplicationServices
-Imports AppFramework = System.Windows.Forms.Application
+Imports Microsoft.VisualBasic.Devices
 
 Namespace My
     ' The following events are available for MyApplication:
@@ -10,7 +10,7 @@ Namespace My
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
         Private Sub MyApplication_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
-            AppFramework.SetHighDpiMode(HighDpiMode.SystemAware)
+            System.Windows.Forms.Application.SetHighDpiMode(HighDpiMode.SystemAware)
         End Sub
     End Class
 End Namespace
