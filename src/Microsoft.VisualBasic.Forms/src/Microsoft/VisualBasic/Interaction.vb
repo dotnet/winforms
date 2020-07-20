@@ -1,4 +1,4 @@
-' Licensed to the .NET Foundation under one or more agreements.
+﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -45,7 +45,9 @@ Namespace Microsoft.VisualBasic
                 'free the string fields since the API manages it instead.  But its OK here because we are just passing along the memory
                 'that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
 
+#Disable Warning BC40000 ' Type or member is obsolete
                 RuntimeHelpers.PrepareConstrainedRegions()
+#Enable Warning BC40000 ' Type or member is obsolete
                 Try
                 Finally
                     ok = NativeMethods.CreateProcess(Nothing, PathName, Nothing, Nothing, False, NativeTypes.NORMAL_PRIORITY_CLASS, Nothing, Nothing, StartupInfo, ProcessInfo)
