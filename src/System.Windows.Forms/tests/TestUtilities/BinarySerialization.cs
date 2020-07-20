@@ -81,7 +81,9 @@ namespace System
 
             using (var serializedStream = new MemoryStream(raw))
             {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 return binaryFormatter.Deserialize(serializedStream);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
         }
 
@@ -95,7 +97,9 @@ namespace System
 
             using (MemoryStream ms = new MemoryStream())
             {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 binaryFormatter.Serialize(ms, obj);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 return ms.ToArray();
             }
         }
