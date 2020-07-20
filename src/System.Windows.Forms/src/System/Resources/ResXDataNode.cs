@@ -351,7 +351,9 @@ namespace System.Resources
 
                     using (MemoryStream ms = new MemoryStream())
                     {
+#pragma warning disable CS0618 // Type or member is obsolete
                         _binaryFormatter.Serialize(ms, value);
+#pragma warning restore CS0618 // Type or member is obsolete
                         nodeInfo.ValueData = ToBase64WrappedString(ms.ToArray());
                     }
 
@@ -388,7 +390,9 @@ namespace System.Resources
                     IFormatter formatter = _binaryFormatter;
                     if (serializedData != null && serializedData.Length > 0)
                     {
+#pragma warning disable CS0618 // Type or member is obsolete
                         result = formatter.Deserialize(new MemoryStream(serializedData));
+#pragma warning restore CS0618 // Type or member is obsolete
                         if (result is ResXNullRef)
                         {
                             result = null;

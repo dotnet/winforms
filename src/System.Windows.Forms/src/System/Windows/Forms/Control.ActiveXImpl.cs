@@ -1123,7 +1123,9 @@ namespace System.Windows.Forms
                                     byte[] bytes = Convert.FromBase64String(obj.ToString());
                                     MemoryStream stream = new MemoryStream(bytes);
                                     BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning disable CS0618 // Type or member is obsolete
                                     props[i].SetValue(_control, formatter.Deserialize(stream));
+#pragma warning restore CS0618 // Type or member is obsolete
                                 }
                                 else
                                 {
@@ -1526,7 +1528,9 @@ namespace System.Windows.Forms
                     public SafeIUnknown(object obj, bool addRefIntPtr, Guid iid)
                         : base(IntPtr.Zero, true)
                     {
+#pragma warning disable SYSLIB0004 // Type or member is obsolete
                         RuntimeHelpers.PrepareConstrainedRegions();
+#pragma warning restore SYSLIB0004 // Type or member is obsolete
                         try
                         {
                             // Set this.handle in a finally block to ensure the com ptr is set in the SafeHandle
@@ -1799,7 +1803,9 @@ namespace System.Windows.Forms
                             // Resource property.  Save this to the bag as a 64bit encoded string.
                             MemoryStream stream = new MemoryStream();
                             BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning disable CS0618 // Type or member is obsolete
                             formatter.Serialize(stream, props[i].GetValue(_control));
+#pragma warning restore CS0618 // Type or member is obsolete
                             byte[] bytes = new byte[(int)stream.Length];
                             stream.Position = 0;
                             stream.Read(bytes, 0, bytes.Length);
@@ -2473,7 +2479,9 @@ namespace System.Windows.Forms
                     BinaryFormatter formatter = new BinaryFormatter();
                     try
                     {
+#pragma warning disable CS0618 // Type or member is obsolete
                         _bag = (Hashtable)formatter.Deserialize(stream);
+#pragma warning restore CS0618 // Type or member is obsolete
                     }
                     catch (Exception e)
                     {
@@ -2508,7 +2516,9 @@ namespace System.Windows.Forms
                 {
                     Stream stream = new DataStreamFromComStream(istream);
                     BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning disable CS0618 // Type or member is obsolete
                     formatter.Serialize(stream, _bag);
+#pragma warning restore CS0618 // Type or member is obsolete
                 }
             }
         }
