@@ -596,7 +596,9 @@ namespace System.Windows.Forms
         ///  (because the classes are in use by the windows we can't destroy).  Instead,
         ///  we move the class and window procs to DefWndProc
         /// </summary>
+#pragma warning disable SYSLIB0004 // Type or member is obsolete
         [PrePrepareMethod]
+#pragma warning restore SYSLIB0004 // Type or member is obsolete
         private static void OnShutdown(object sender, EventArgs e)
         {
             // If we still have windows allocated, we must sling them to userDefWindowProc
