@@ -687,16 +687,6 @@
         <target state="translated">No se puede modificar el documento ni agregarle información una vez impreso.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">No se puede convertir double en date.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">No se puede convertir integer en float.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">No se permite empezar un bucle de segundo mensaje en un subproceso sencillo. Utilice en su lugar Form.ShowDialog.</target>
@@ -5437,6 +5427,11 @@ Do you want to replace it?</source>
         <target state="translated">Número de filas de la tabla.</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="translated">Horizontal</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">Ya existe el identificador de ventana.</target>
@@ -5558,7 +5553,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="ImageListDuplicateFailed">
         <source>Duplication of the ImageList handle did not succeed.</source>
-        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <target state="translated">Error al duplicar el identificador de ImageList.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -10799,6 +10794,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">Tiene lugar siempre que se carga el control de usuario.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="translated">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">
