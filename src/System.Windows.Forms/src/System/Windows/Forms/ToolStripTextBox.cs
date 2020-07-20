@@ -787,10 +787,13 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
+                switch (propertyID)
                 {
-                    return UiaCore.UIA.EditControlTypeId;
-                }
+                    case UiaCore.UIA.ControlTypePropertyId:
+                       return UiaCore.UIA.EditControlTypeId;
+                    case UiaCore.UIA.NamePropertyId:
+                       return Name;
+            }
 
                 return base.GetPropertyValue(propertyID);
             }
