@@ -44,8 +44,10 @@ namespace WinformsControlsTest
             this.comboBox10 = new System.Windows.Forms.ComboBox();
             this.comboBox11 = new System.Windows.Forms.ComboBox();
             this.comboBox12 = new System.Windows.Forms.ComboBox();
+            this.dataBoundComboBox = new System.Windows.Forms.ComboBox();
             this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
             this.label1 = new System.Windows.Forms.Label();
+            this.dataBoundLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             //
             // comboBox1
@@ -211,6 +213,15 @@ namespace WinformsControlsTest
             this.comboBox12.Size = new System.Drawing.Size(121, 150);
             this.comboBox12.TabIndex = 11;
             //
+            // dataBoundComboBox
+            //
+            this.dataBoundComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
+            this.dataBoundComboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.dataBoundComboBox.Location = new System.Drawing.Point(836, 22);
+            this.dataBoundComboBox.Name = "DataBoundComboBox";
+            this.dataBoundComboBox.Size = new System.Drawing.Size(121, 150);
+            this.dataBoundComboBox.TabIndex = 13;
+            //
             // currentDPILabel1
             //
             this.currentDPILabel1.AutoSize = true;
@@ -229,14 +240,25 @@ namespace WinformsControlsTest
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 15;
             this.label1.Text = "label1";
+            //
+            // dataBoundLabel
+            // 
+            this.dataBoundLabel.AutoSize = true;
+            this.dataBoundLabel.Location = new System.Drawing.Point(836, 6);
+            this.dataBoundLabel.Name = "dataBoundLabel";
+            this.dataBoundLabel.Size = new System.Drawing.Size(65, 13);
+            this.dataBoundLabel.TabIndex = 16; 
+            this.dataBoundLabel.Text = "data-bound";
             // 
             // ComboBoxes
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(831, 198);
+            this.ClientSize = new System.Drawing.Size(975, 198);
             this.Controls.Add(this.currentDPILabel1);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.dataBoundLabel);
+            this.Controls.Add(this.dataBoundComboBox);
             this.Controls.Add(this.comboBox9);
             this.Controls.Add(this.comboBox10);
             this.Controls.Add(this.comboBox11);
@@ -270,7 +292,9 @@ namespace WinformsControlsTest
         private System.Windows.Forms.ComboBox comboBox10;
         private System.Windows.Forms.ComboBox comboBox11;
         private System.Windows.Forms.ComboBox comboBox12;
+        private System.Windows.Forms.ComboBox dataBoundComboBox;
         private CurrentDPILabel currentDPILabel1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label dataBoundLabel;
     }
 }

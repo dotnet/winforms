@@ -3,12 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
+using System.Windows.Forms.IntegrationTests.Common;
 
 namespace WinformsControlsTest
 {
@@ -17,7 +13,11 @@ namespace WinformsControlsTest
         public ComboBoxes()
         {
             InitializeComponent();
+
             comboBox1.SelectedIndex = 0;
+
+            dataBoundComboBox.DataSource = TestDataSources.GetPersons();
+            dataBoundComboBox.DisplayMember = TestDataSources.PersonDisplayMember;
         }
 
         private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
