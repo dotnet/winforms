@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -448,9 +448,11 @@ namespace System.Windows.Forms.Tests
         {
             using var stream = new MemoryStream();
             var formatter = new BinaryFormatter();
+#pragma warning disable CS0618 // Type or member is obsolete
             formatter.Serialize(stream, source);
             stream.Position = 0;
             return (T)formatter.Deserialize(stream);
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         [WinFormsTheory]
