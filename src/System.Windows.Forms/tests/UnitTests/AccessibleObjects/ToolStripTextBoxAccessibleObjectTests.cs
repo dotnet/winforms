@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
     public class ToolStripTextBoxAccessibleObjectTests
     {
         [WinFormsFact]
-        public void ToolStripTextBoxAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        public void ToolStripTextBoxAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
         {
             using var toolStripTextBox = new ToolStripTextBox()
             {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ToolStripTextBoxAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        public void ToolStripTextBoxAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
         {
             using var toolStripTextBox = new ToolStripTextBox()
             {
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ToolStripTextBoxAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        public void ToolStripTextBoxAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
         {
             using var toolStripTextBox = new ToolStripTextBox()
             {

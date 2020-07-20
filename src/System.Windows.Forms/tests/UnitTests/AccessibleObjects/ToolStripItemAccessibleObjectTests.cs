@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Moq;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -39,6 +38,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ToolStripItemAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
+        {
+            using var toolStripItem = new SubToolStripItem()
+            {
+                Name = "Name1",
+                AccessibleName = "Test Name"
+            };
+
+            AccessibleObject toolStripItemAccessibleObject = toolStripItem.AccessibilityObject;
+            var accessibleName = toolStripItemAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
+
+            Assert.Equal("Test Name", accessibleName);
+        }
+
+        [WinFormsFact]
         public void ToolStripItemAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
         {
             using var toolStripItem = new SubToolStripItem();
@@ -47,6 +61,34 @@ namespace System.Windows.Forms.Tests
             bool supportsLegacyIAccessiblePatternId = toolStripItemAccessibleObject.IsPatternSupported(NativeMethods.UIA_LegacyIAccessiblePatternId);
 
             Assert.True(supportsLegacyIAccessiblePatternId);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
+        {
+            using var toolStripItem = new SubToolStripItem()
+            {
+                AccessibleRole = AccessibleRole.Link
+            };
+
+            AccessibleObject toolStripItemAccessibleObject = toolStripItem.AccessibilityObject;
+            var accessibleObjectRole = toolStripItemAccessibleObject.Role;
+
+            Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
+        }
+
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
+        {
+            using var toolStripItem = new SubToolStripItem()
+            {
+                AccessibleDescription = "Test Description"
+            };
+
+            AccessibleObject toolStripItemAccessibleObject = toolStripItem.AccessibilityObject;
+            var accessibleObjectDescription = toolStripItemAccessibleObject.Description;
+
+            Assert.Equal("Test Description", accessibleObjectDescription);
         }
 
         private class SubToolStripItem : ToolStripItem

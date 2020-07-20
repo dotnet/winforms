@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ToolStripAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        public void ToolStripAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
         {
             using var toolStrip = new ToolStrip()
             {
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ToolStripAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        public void ToolStripAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
         {
             using var toolStrip = new ToolStrip()
             {
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ToolStripAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        public void ToolStripAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
         {
             using var toolStrip = new ToolStrip()
             {

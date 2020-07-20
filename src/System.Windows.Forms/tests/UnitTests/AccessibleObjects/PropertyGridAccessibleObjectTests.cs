@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void PropertyGridAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        public void PropertyGridAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
         {
             using var propertyGrid = new PropertyGrid()
             {
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void PropertyGridAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        public void PropertyGridAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
         {
             using var propertyGrid = new PropertyGrid()
             {
@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void PropertyGridAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        public void PropertyGridAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
         {
             using var propertyGrid = new PropertyGrid()
             {

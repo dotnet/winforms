@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
     public class StatusStripAccessibleObjectTests
     {
         [WinFormsFact]
-        public void StatusStripAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        public void StatusStripAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
         {
             using var statusStrip = new StatusStrip()
             {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void StatusStripAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        public void StatusStripAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
         {
             using var statusStrip = new StatusStrip()
             {
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void StatusStripAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        public void StatusStripAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
         {
             using var statusStrip = new StatusStrip()
             {

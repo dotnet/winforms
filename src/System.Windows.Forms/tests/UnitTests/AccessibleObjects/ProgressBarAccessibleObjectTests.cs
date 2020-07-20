@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
     public class ProgressBarAccessibleObjectTests
     {
         [WinFormsFact]
-        public void ProgressBarAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        public void ProgressBarAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
         {
             using var progressBar = new ProgressBar()
             {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ProgressBarAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        public void ProgressBarAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
         {
             using var progressBar = new ProgressBar()
             {
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ProgressBarAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        public void ProgressBarAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
         {
             using var progressBar = new ProgressBar()
             {

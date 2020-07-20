@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void DataGridViewAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        public void DataGridViewAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
         {
             using var dataGridView = new DataGridView()
             {
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void DataGridViewAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        public void DataGridViewAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
         {
             using var dataGridView = new DataGridView()
             {
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void DataGridViewAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        public void DataGridViewAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
         {
             using var dataGridView = new DataGridView()
             {

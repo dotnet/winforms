@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ComboBoxAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        public void ComboBoxAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
         {
             using var comboBox = new ComboBox()
             {
@@ -98,8 +98,9 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ComboBoxAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        public void ComboBoxAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
         {
+
             using var comboBox = new ComboBox()
             {
                 AccessibleRole = AccessibleRole.Link
@@ -112,7 +113,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ComboBoxAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        public void ComboBoxAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
         {
             using var comboBox = new ComboBox()
             {

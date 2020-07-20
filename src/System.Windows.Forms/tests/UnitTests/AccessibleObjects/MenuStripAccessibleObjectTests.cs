@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
     public class MenuStripAccessibleObjectTests
     {
         [WinFormsFact]
-        public void MenuStripAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        public void MenuStripAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
         {
             using var menuStrip = new MenuStrip()
             {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void MenuStripAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        public void MenuStripAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
         {
             using var menuStrip = new MenuStrip()
             {
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void MenuStripAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        public void MenuStripAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
         {
             using var menuStrip = new MenuStrip()
             {

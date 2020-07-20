@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
     public class LabelAccessibleObjectTests
     {
         [WinFormsFact]
-        public void LabelAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        public void LabelAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
         {
             using var label = new Label()
             {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void LabelAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        public void LabelAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
         {
             using var label = new Label()
             {
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void LabelAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        public void LabelAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
         {
             using var label = new Label()
             {

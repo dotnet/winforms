@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
     public class GroupBoxAccessibleObjectTests
     {
         [WinFormsFact]
-        public void GroupBoxAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        public void GroupBoxAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
         {
             using var groupBox = new GroupBox()
             {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void GroupBoxAccessibleObject_LegacyIAccessible_Role_ReturnsExpected()
+        public void GroupBoxAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
         {
             using var groupBox = new GroupBox()
             {
@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void GroupBoxAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
+        public void GroupBoxAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
         {
             using var groupBox = new GroupBox()
             {
