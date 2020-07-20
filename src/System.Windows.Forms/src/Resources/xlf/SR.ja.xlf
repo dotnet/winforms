@@ -687,6 +687,16 @@
         <target state="translated">ドキュメントが印刷された後にドキュメントの変更やドキュメントへの追加はできません。</target>
         <note />
       </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">double を date に変換できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">integer を float に変換できません。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">単一スレッド上で 2 回目のメッセージ ループを開始することは有効な操作ではありません。Form.ShowDialog を使用してください。</target>
@@ -5427,11 +5437,6 @@ Do you want to replace it?</source>
         <target state="translated">テーブルの行数です。</target>
         <note />
       </trans-unit>
-      <trans-unit id="HScrollBarDefaultAccessibleName">
-        <source>Horizontal</source>
-        <target state="translated">横</target>
-        <note />
-      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">ウィンドウ ハンドルは既に存在します。</target>
@@ -5553,7 +5558,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ImageListDuplicateFailed">
         <source>Duplication of the ImageList handle did not succeed.</source>
-        <target state="translated">ImageList ハンドルを複製できませんでした。</target>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -10794,11 +10799,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">ユーザー コントロールを読み込むときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="VScrollBarDefaultAccessibleName">
-        <source>Vertical</source>
-        <target state="translated">縦</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">

@@ -7,6 +7,16 @@
         <target state="translated">未處理的 VT: {0}。</target>
         <note />
       </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">Double 無法轉換為 Date。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">Integer 無法轉換為 Float。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">IDictionary 參數中有一或多個無效的項目。請確認所有值都符合物件的屬性。</target>

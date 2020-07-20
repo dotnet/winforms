@@ -687,6 +687,16 @@
         <target state="translated">Vous ne pouvez modifier ni ajouter le document une fois que vous l'avez imprimé.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">Impossible de convertir une valeur double en date.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">Impossible de convertir une valeur integer en float.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">Le démarrage d'une deuxième boucle de messages sur un seul thread n'est pas une opération valide. Utilisez Form.ShowDialog à la place.</target>
@@ -5427,11 +5437,6 @@ Voulez-vous le remplacer ?</target>
         <target state="translated">Nombre de ligne de la table.</target>
         <note />
       </trans-unit>
-      <trans-unit id="HScrollBarDefaultAccessibleName">
-        <source>Horizontal</source>
-        <target state="translated">Horizontal</target>
-        <note />
-      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">Le handle de fenêtre existe déjà.</target>
@@ -5553,7 +5558,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="ImageListDuplicateFailed">
         <source>Duplication of the ImageList handle did not succeed.</source>
-        <target state="translated">Échec de la duplication du descripteur de ImageList.</target>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -10794,11 +10799,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">Se produit lors du chargement du contrôle utilisateur.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="VScrollBarDefaultAccessibleName">
-        <source>Vertical</source>
-        <target state="translated">Vertical</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">

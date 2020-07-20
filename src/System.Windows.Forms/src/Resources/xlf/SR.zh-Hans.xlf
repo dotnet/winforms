@@ -687,6 +687,16 @@
         <target state="translated">打印文档后将无法更改文档或向其中添加内容。</target>
         <note />
       </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">无法将 double 转换为 date。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">无法将 integer 转换为 float。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">在单个线程上开始另一个消息循环是无效操作。请改用 Form.ShowDialog。</target>
@@ -5427,11 +5437,6 @@ Do you want to replace it?</source>
         <target state="translated">表中的行数。</target>
         <note />
       </trans-unit>
-      <trans-unit id="HScrollBarDefaultAccessibleName">
-        <source>Horizontal</source>
-        <target state="translated">水平</target>
-        <note />
-      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">窗口句柄已存在。</target>
@@ -5553,7 +5558,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ImageListDuplicateFailed">
         <source>Duplication of the ImageList handle did not succeed.</source>
-        <target state="translated">ImageList 图柄复制失败。</target>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -10794,11 +10799,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">每当用户控件加载时发生。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="VScrollBarDefaultAccessibleName">
-        <source>Vertical</source>
-        <target state="translated">垂直</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">

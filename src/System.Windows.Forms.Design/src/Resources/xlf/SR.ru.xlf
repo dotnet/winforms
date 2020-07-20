@@ -406,6 +406,16 @@
         <target state="translated">Необработанный VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">Тип double нельзя привести к типу date.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">Тип integer нельзя привести к типу float.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContentAlignmentEditorAccName">
         <source>Alignment Picker</source>
         <target state="translated">Выбор выравнивания</target>

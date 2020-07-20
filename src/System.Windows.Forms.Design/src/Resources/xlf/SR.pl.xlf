@@ -406,6 +406,16 @@
         <target state="translated">Nieobsługiwany VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">Nie można przekonwertować typu double na typ date.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">Nie można przekonwertować typu integer na typ float.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContentAlignmentEditorAccName">
         <source>Alignment Picker</source>
         <target state="translated">Selektor wyrównania</target>

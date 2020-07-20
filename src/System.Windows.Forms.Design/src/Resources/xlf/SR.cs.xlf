@@ -406,6 +406,16 @@
         <target state="translated">Nezpracovaná hodnota VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">Nelze převést typ Double na typ Date.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">Nelze převést typ Integer na typ Float.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContentAlignmentEditorAccName">
         <source>Alignment Picker</source>
         <target state="translated">Výběr přiřazení</target>

@@ -406,6 +406,16 @@
         <target state="translated">Unbehandelter VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">"Double" kann nicht in "Date" konvertiert werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">"Integer" kann nicht in "Float" konvertiert werden.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContentAlignmentEditorAccName">
         <source>Alignment Picker</source>
         <target state="translated">Ausrichtungsauswahl</target>

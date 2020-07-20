@@ -7,6 +7,16 @@
         <target state="translated">VT non gestito: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">Impossibile convertire un tipo double in un tipo date.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">Impossibile convertire un numero intero in un valore float.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">Una o più voci non valide nel parametro IDictionary. Verificare che tutti i valori corrispondano alle proprietà dell'oggetto.</target>

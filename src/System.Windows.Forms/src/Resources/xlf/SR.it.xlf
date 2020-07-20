@@ -687,6 +687,16 @@
         <target state="translated">Impossibile eseguire modifiche o aggiunte al documento dopo la stampa.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">Impossibile convertire un tipo double in un tipo date.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">Impossibile convertire un numero intero in un valore float.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">Non è possibile avviare un secondo ciclo di messaggi su un thread singolo. Usare Form.ShowDialog.</target>
@@ -5427,11 +5437,6 @@ Sostituirlo?</target>
         <target state="translated">Il numero di righe nella tabella.</target>
         <note />
       </trans-unit>
-      <trans-unit id="HScrollBarDefaultAccessibleName">
-        <source>Horizontal</source>
-        <target state="translated">Orizzontale</target>
-        <note />
-      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">Handle di finestra già esistente.</target>
@@ -5553,7 +5558,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ImageListDuplicateFailed">
         <source>Duplication of the ImageList handle did not succeed.</source>
-        <target state="translated">La duplicazione dell'handle di ImageList non è riuscita.</target>
+        <target state="new">Duplication of the ImageList handle did not succeed.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -10794,11 +10799,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="UserControlOnLoadDescr">
         <source>Occurs whenever the user control loads.</source>
         <target state="translated">Generato quando viene caricato il controllo utente.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="VScrollBarDefaultAccessibleName">
-        <source>Vertical</source>
-        <target state="translated">Verticale</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">
