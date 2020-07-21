@@ -22,6 +22,7 @@ variables:
 trigger:
 - master
 - release/*
+- internal/release/*
 
 # trigger ci builds on pull requests into master and any release branches
 pr:
