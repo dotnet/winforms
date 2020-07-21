@@ -18,7 +18,6 @@
 
     <PropertyGroup>
         <MyType>WindowsForms</MyType>
-        <!--<ApplicationManifest>My Project\app.manifest</ApplicationManifest>-->
     </PropertyGroup>
  
     <ItemGroup>
