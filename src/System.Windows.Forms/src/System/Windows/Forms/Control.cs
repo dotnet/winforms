@@ -202,8 +202,6 @@ namespace System.Windows.Forms
         [ThreadStatic]
         internal static HelpInfo t_currentHelpInfo = null;
 
-        [ThreadStatic]
-        private static byte[] t_tempKeyboardStateArray;
 #pragma warning restore IDE1006
 
         private static FontHandleWrapper s_defaultFontHandleWrapper;
@@ -14045,30 +14043,30 @@ namespace System.Windows.Forms
             return true;
         }
 
-        private static bool IsKeyDown(Keys key)
+        internal unsafe static bool AreCommonNavigationalKeysDown()
         {
-            return (t_tempKeyboardStateArray[(int)key] & HighOrderBitMask) != 0;
-        }
+            static bool IsKeyDown(Keys key, ReadOnlySpan<byte> stateArray)
+                => (stateArray[(int)key] & HighOrderBitMask) != 0;
 
-        internal static bool AreCommonNavigationalKeysDown()
-        {
-            if (t_tempKeyboardStateArray == null)
+            ReadOnlySpan<byte> stateArray = stackalloc byte[256];
+
+            fixed (byte* b = stateArray)
             {
-                t_tempKeyboardStateArray = new byte[256];
+                User32.GetKeyboardState(b);
+                return IsKeyDown(Keys.Tab, stateArray)
+                    || IsKeyDown(Keys.Up, stateArray)
+                    || IsKeyDown(Keys.Down, stateArray)
+                    || IsKeyDown(Keys.Left, stateArray)
+                    || IsKeyDown(Keys.Right, stateArray)
+                    // receiving focus from the ToolStrip
+                    || IsKeyDown(Keys.Menu, stateArray)
+                    || IsKeyDown(Keys.F10, stateArray)
+                    || IsKeyDown(Keys.Escape, stateArray);
             }
-            User32.GetKeyboardState(t_tempKeyboardStateArray);
-            return IsKeyDown(Keys.Tab)
-                || IsKeyDown(Keys.Up)
-                || IsKeyDown(Keys.Down)
-                || IsKeyDown(Keys.Left)
-                || IsKeyDown(Keys.Right)
-                // receiving focus from the ToolStrip
-                || IsKeyDown(Keys.Menu)
-                || IsKeyDown(Keys.F10)
-                || IsKeyDown(Keys.Escape);
         }
 
-        private readonly WeakReference<ToolStripControlHost> toolStripControlHostReference = new WeakReference<ToolStripControlHost>(null);
+        private readonly WeakReference<ToolStripControlHost> toolStripControlHostReference
+            = new WeakReference<ToolStripControlHost>(null);
 
         internal ToolStripControlHost ToolStripControlHost
         {

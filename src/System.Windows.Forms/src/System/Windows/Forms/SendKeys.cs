@@ -4,7 +4,7 @@
 
 #nullable disable
 
-using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -20,65 +20,62 @@ namespace System.Windows.Forms
     /// </summary>
     public class SendKeys
     {
-        private const int HaveShift = 0;
-        private const int HaveCtrl = 1;
-        private const int HaveAlt = 2;
-
         // It is unclear what significance the value 10 has, but it seems to make sense to make this a constant rather
         // than have 10 sprinkled throughout the code. It appears to be a sentinel value of some sort - indicating an
         // unknown grouping level.
         private const int UnknownGrouping = 10;
 
-        private static readonly KeywordVk[] s_keywords = new KeywordVk[] {
-            new KeywordVk("ENTER",      (int)Keys.Return),
-            new KeywordVk("TAB",        (int)Keys.Tab),
-            new KeywordVk("ESC",        (int)Keys.Escape),
-            new KeywordVk("ESCAPE",     (int)Keys.Escape),
-            new KeywordVk("HOME",       (int)Keys.Home),
-            new KeywordVk("END",        (int)Keys.End),
-            new KeywordVk("LEFT",       (int)Keys.Left),
-            new KeywordVk("RIGHT",      (int)Keys.Right),
-            new KeywordVk("UP",         (int)Keys.Up),
-            new KeywordVk("DOWN",       (int)Keys.Down),
-            new KeywordVk("PGUP",       (int)Keys.Prior),
-            new KeywordVk("PGDN",       (int)Keys.Next),
-            new KeywordVk("NUMLOCK",    (int)Keys.NumLock),
-            new KeywordVk("SCROLLLOCK", (int)Keys.Scroll),
-            new KeywordVk("PRTSC",      (int)Keys.PrintScreen),
-            new KeywordVk("BREAK",      (int)Keys.Cancel),
-            new KeywordVk("BACKSPACE",  (int)Keys.Back),
-            new KeywordVk("BKSP",       (int)Keys.Back),
-            new KeywordVk("BS",         (int)Keys.Back),
-            new KeywordVk("CLEAR",      (int)Keys.Clear),
-            new KeywordVk("CAPSLOCK",   (int)Keys.Capital),
-            new KeywordVk("INS",        (int)Keys.Insert),
-            new KeywordVk("INSERT",     (int)Keys.Insert),
-            new KeywordVk("DEL",        (int)Keys.Delete),
-            new KeywordVk("DELETE",     (int)Keys.Delete),
-            new KeywordVk("HELP",       (int)Keys.Help),
-            new KeywordVk("F1",         (int)Keys.F1),
-            new KeywordVk("F2",         (int)Keys.F2),
-            new KeywordVk("F3",         (int)Keys.F3),
-            new KeywordVk("F4",         (int)Keys.F4),
-            new KeywordVk("F5",         (int)Keys.F5),
-            new KeywordVk("F6",         (int)Keys.F6),
-            new KeywordVk("F7",         (int)Keys.F7),
-            new KeywordVk("F8",         (int)Keys.F8),
-            new KeywordVk("F9",         (int)Keys.F9),
-            new KeywordVk("F10",        (int)Keys.F10),
-            new KeywordVk("F11",        (int)Keys.F11),
-            new KeywordVk("F12",        (int)Keys.F12),
-            new KeywordVk("F13",        (int)Keys.F13),
-            new KeywordVk("F14",        (int)Keys.F14),
-            new KeywordVk("F15",        (int)Keys.F15),
-            new KeywordVk("F16",        (int)Keys.F16),
-            new KeywordVk("MULTIPLY",   (int)Keys.Multiply),
-            new KeywordVk("ADD",        (int)Keys.Add),
-            new KeywordVk("SUBTRACT",   (int)Keys.Subtract),
-            new KeywordVk("DIVIDE",     (int)Keys.Divide),
-            new KeywordVk("+",          (int)Keys.Add),
-            new KeywordVk("%",          (int)(Keys.D5 | Keys.Shift)),
-            new KeywordVk("^",          (int)(Keys.D6 | Keys.Shift)),
+        private static readonly KeywordVk[] s_keywords = new KeywordVk[]
+        {
+            new KeywordVk("ENTER",      Keys.Return),
+            new KeywordVk("TAB",        Keys.Tab),
+            new KeywordVk("ESC",        Keys.Escape),
+            new KeywordVk("ESCAPE",     Keys.Escape),
+            new KeywordVk("HOME",       Keys.Home),
+            new KeywordVk("END",        Keys.End),
+            new KeywordVk("LEFT",       Keys.Left),
+            new KeywordVk("RIGHT",      Keys.Right),
+            new KeywordVk("UP",         Keys.Up),
+            new KeywordVk("DOWN",       Keys.Down),
+            new KeywordVk("PGUP",       Keys.Prior),
+            new KeywordVk("PGDN",       Keys.Next),
+            new KeywordVk("NUMLOCK",    Keys.NumLock),
+            new KeywordVk("SCROLLLOCK", Keys.Scroll),
+            new KeywordVk("PRTSC",      Keys.PrintScreen),
+            new KeywordVk("BREAK",      Keys.Cancel),
+            new KeywordVk("BACKSPACE",  Keys.Back),
+            new KeywordVk("BKSP",       Keys.Back),
+            new KeywordVk("BS",         Keys.Back),
+            new KeywordVk("CLEAR",      Keys.Clear),
+            new KeywordVk("CAPSLOCK",   Keys.Capital),
+            new KeywordVk("INS",        Keys.Insert),
+            new KeywordVk("INSERT",     Keys.Insert),
+            new KeywordVk("DEL",        Keys.Delete),
+            new KeywordVk("DELETE",     Keys.Delete),
+            new KeywordVk("HELP",       Keys.Help),
+            new KeywordVk("F1",         Keys.F1),
+            new KeywordVk("F2",         Keys.F2),
+            new KeywordVk("F3",         Keys.F3),
+            new KeywordVk("F4",         Keys.F4),
+            new KeywordVk("F5",         Keys.F5),
+            new KeywordVk("F6",         Keys.F6),
+            new KeywordVk("F7",         Keys.F7),
+            new KeywordVk("F8",         Keys.F8),
+            new KeywordVk("F9",         Keys.F9),
+            new KeywordVk("F10",        Keys.F10),
+            new KeywordVk("F11",        Keys.F11),
+            new KeywordVk("F12",        Keys.F12),
+            new KeywordVk("F13",        Keys.F13),
+            new KeywordVk("F14",        Keys.F14),
+            new KeywordVk("F15",        Keys.F15),
+            new KeywordVk("F16",        Keys.F16),
+            new KeywordVk("MULTIPLY",   Keys.Multiply),
+            new KeywordVk("ADD",        Keys.Add),
+            new KeywordVk("SUBTRACT",   Keys.Subtract),
+            new KeywordVk("DIVIDE",     Keys.Divide),
+            new KeywordVk("+",          Keys.Add),
+            new KeywordVk("%",          (Keys.D5 | Keys.Shift)),
+            new KeywordVk("^",          (Keys.D6 | Keys.Shift)),
         };
 
         // For use with VkKeyScanW()
@@ -101,8 +98,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Vector of events that we have yet to post to the journaling hook.
         /// </summary>
-        private static Queue s_events;
+        private static Queue<SKEvent> s_events;
 
+        private static object s_lock = new object();
         private static bool s_startNewChar;
         private static readonly SKWindow s_messageWindow;
 
@@ -143,44 +141,47 @@ namespace System.Windows.Forms
         /// </summary>
         private static void AddEvent(SKEvent skevent)
         {
-            if (s_events == null)
-            {
-                s_events = new Queue();
-            }
+            s_events ??= new Queue<SKEvent>();
             s_events.Enqueue(skevent);
         }
 
         /// <summary>
         ///  Helper function for ParseKeys for doing simple, self-describing characters.
         /// </summary>
-        private static bool AddSimpleKey(char character, int repeat, IntPtr hwnd, int[] haveKeys, bool fStartNewChar, int cGrp)
+        private static bool AddSimpleKey(
+            char character,
+            int repeat,
+            IntPtr hwnd,
+            (int HaveShift, int HaveCtrl, int HaveAlt) haveKeys,
+            bool startNewChar,
+            int cGrp)
         {
             int vk = User32.VkKeyScanW(character);
 
             if (vk != -1)
             {
-                if (haveKeys[HaveShift] == 0 && (vk & ShiftKeyPressed) != 0)
+                if (haveKeys.HaveShift == 0 && (vk & ShiftKeyPressed) != 0)
                 {
-                    AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.ShiftKey, fStartNewChar, hwnd));
-                    fStartNewChar = false;
-                    haveKeys[HaveShift] = UnknownGrouping;
+                    AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.ShiftKey, startNewChar, hwnd));
+                    startNewChar = false;
+                    haveKeys.HaveShift = UnknownGrouping;
                 }
 
-                if (haveKeys[HaveCtrl] == 0 && (vk & CtrlKeyPressed) != 0)
+                if (haveKeys.HaveCtrl == 0 && (vk & CtrlKeyPressed) != 0)
                 {
-                    AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.ControlKey, fStartNewChar, hwnd));
-                    fStartNewChar = false;
-                    haveKeys[HaveCtrl] = UnknownGrouping;
+                    AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.ControlKey, startNewChar, hwnd));
+                    startNewChar = false;
+                    haveKeys.HaveCtrl = UnknownGrouping;
                 }
 
-                if (haveKeys[HaveAlt] == 0 && (vk & AltKeyPressed) != 0)
+                if (haveKeys.HaveAlt == 0 && (vk & AltKeyPressed) != 0)
                 {
-                    AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.Menu, fStartNewChar, hwnd));
-                    fStartNewChar = false;
-                    haveKeys[HaveAlt] = UnknownGrouping;
+                    AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.Menu, startNewChar, hwnd));
+                    startNewChar = false;
+                    haveKeys.HaveAlt = UnknownGrouping;
                 }
 
-                AddMsgsForVK(vk & 0xff, repeat, haveKeys[HaveAlt] > 0 && haveKeys[HaveCtrl] == 0, hwnd);
+                AddMsgsForVK(vk & 0xff, repeat, haveKeys.HaveAlt > 0 && haveKeys.HaveCtrl == 0, hwnd);
                 CancelMods(haveKeys, UnknownGrouping, hwnd);
             }
             else
@@ -194,10 +195,10 @@ namespace System.Windows.Forms
 
             if (cGrp != 0)
             {
-                fStartNewChar = true;
+                startNewChar = true;
             }
 
-            return fStartNewChar;
+            return startNewChar;
         }
 
         /// <summary>
@@ -216,24 +217,24 @@ namespace System.Windows.Forms
         ///  Called whenever there is a closing parenthesis, or the end of a character. This generates events for the
         ///  end of a modifier.
         /// </summary>
-        private static void CancelMods(int[] haveKeys, int level, IntPtr hwnd)
+        private static void CancelMods((int HaveShift, int HaveCtrl, int HaveAlt) haveKeys, int level, IntPtr hwnd)
         {
-            if (haveKeys[HaveShift] == level)
+            if (haveKeys.HaveShift == level)
             {
                 AddEvent(new SKEvent(User32.WM.KEYUP, (int)Keys.ShiftKey, false, hwnd));
-                haveKeys[HaveShift] = 0;
+                haveKeys.HaveShift = 0;
             }
 
-            if (haveKeys[HaveCtrl] == level)
+            if (haveKeys.HaveCtrl == level)
             {
                 AddEvent(new SKEvent(User32.WM.KEYUP, (int)Keys.ControlKey, false, hwnd));
-                haveKeys[HaveCtrl] = 0;
+                haveKeys.HaveCtrl = 0;
             }
 
-            if (haveKeys[HaveAlt] == level)
+            if (haveKeys.HaveAlt == level)
             {
                 AddEvent(new SKEvent(User32.WM.SYSKEYUP, (int)Keys.Menu, false, hwnd));
-                haveKeys[HaveAlt] = 0;
+                haveKeys.HaveAlt = 0;
             }
         }
 
@@ -251,6 +252,7 @@ namespace System.Windows.Forms
                     s_hook,
                     Kernel32.GetModuleHandleW(null),
                     0);
+
                 if (s_hhook == IntPtr.Zero)
                 {
                     throw new SecurityException(SR.SendKeysHookFailed);
@@ -329,15 +331,26 @@ namespace System.Windows.Forms
             }
         }
 
-        private static byte[] KeyboardState
+        private unsafe static void GetKeyboardState(Span<byte> keystate)
         {
-            get
+            if (keystate.Length < 256)
+                throw new InvalidOperationException();
+
+            fixed (byte* b = keystate)
             {
-                var keystate = new byte[256];
-                User32.GetKeyboardState(keystate);
-                return keystate;
+                User32.GetKeyboardState(b);
             }
-            set => User32.SetKeyboardState(value);
+        }
+
+        private unsafe static void SetKeyboardState(ReadOnlySpan<byte> keystate)
+        {
+            if (keystate.Length < 256)
+                throw new InvalidOperationException();
+
+            fixed (byte* b = keystate)
+            {
+                User32.SetKeyboardState(b);
+            }
         }
 
         /// <summary>
@@ -346,13 +359,12 @@ namespace System.Windows.Forms
         /// </summary>
         private static void ClearKeyboardState()
         {
-            byte[] keystate = KeyboardState;
-
+            Span<byte> keystate = stackalloc byte[256];
+            GetKeyboardState(keystate);
             keystate[(int)Keys.Capital] = 0;
             keystate[(int)Keys.NumLock] = 0;
             keystate[(int)Keys.Scroll] = 0;
-
-            KeyboardState = keystate;
+            SetKeyboardState(keystate);
         }
 
         /// <summary>
@@ -394,7 +406,7 @@ namespace System.Windows.Forms
             int i = 0;
 
             // These four variables are used for grouping
-            int[] haveKeys = new int[] { 0, 0, 0 };  // shift, ctrl, alt
+            (int HaveShift, int HaveCtrl, int HaveAlt) haveKeys = default;
             int cGrp = 0;
 
             // startNewChar indicates that the next msg will be the first of a char or char group. This is needed for
@@ -493,27 +505,28 @@ namespace System.Windows.Forms
                         if (vk != -1)
                         {
                             // Unlike AddSimpleKey, the bit mask uses Keys, rather than scan keys
-                            if (haveKeys[HaveShift] == 0 && (vk & (int)Keys.Shift) != 0)
+                            if (haveKeys.HaveShift == 0 && (vk & (int)Keys.Shift) != 0)
                             {
                                 AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.ShiftKey, s_startNewChar, hwnd));
                                 s_startNewChar = false;
-                                haveKeys[HaveShift] = UnknownGrouping;
+                                haveKeys.HaveShift = UnknownGrouping;
                             }
 
-                            if (haveKeys[HaveCtrl] == 0 && (vk & (int)Keys.Control) != 0)
+                            if (haveKeys.HaveCtrl == 0 && (vk & (int)Keys.Control) != 0)
                             {
                                 AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.ControlKey, s_startNewChar, hwnd));
                                 s_startNewChar = false;
-                                haveKeys[HaveCtrl] = UnknownGrouping;
+                                haveKeys.HaveCtrl = UnknownGrouping;
                             }
 
-                            if (haveKeys[HaveAlt] == 0 && (vk & (int)Keys.Alt) != 0)
+                            if (haveKeys.HaveAlt == 0 && (vk & (int)Keys.Alt) != 0)
                             {
                                 AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.Menu, s_startNewChar, hwnd));
                                 s_startNewChar = false;
-                                haveKeys[HaveAlt] = UnknownGrouping;
+                                haveKeys.HaveAlt = UnknownGrouping;
                             }
-                            AddMsgsForVK(vk, repeat, haveKeys[HaveAlt] > 0 && haveKeys[HaveCtrl] == 0, hwnd);
+
+                            AddMsgsForVK(vk, repeat, haveKeys.HaveAlt > 0 && haveKeys.HaveCtrl == 0, hwnd);
                             CancelMods(haveKeys, UnknownGrouping, hwnd);
                         }
                         else if (keyName.Length == 1)
@@ -530,41 +543,41 @@ namespace System.Windows.Forms
                         break;
 
                     case '+':
-                        if (haveKeys[HaveShift] != 0)
+                        if (haveKeys.HaveShift != 0)
                         {
                             throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
                         }
 
                         AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.ShiftKey, s_startNewChar, hwnd));
                         s_startNewChar = false;
-                        haveKeys[HaveShift] = UnknownGrouping;
+                        haveKeys.HaveShift = UnknownGrouping;
                         break;
 
                     case '^':
-                        if (haveKeys[HaveCtrl] != 0)
+                        if (haveKeys.HaveCtrl != 0)
                         {
                             throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
                         }
 
                         AddEvent(new SKEvent(User32.WM.KEYDOWN, (uint)Keys.ControlKey, s_startNewChar, hwnd));
                         s_startNewChar = false;
-                        haveKeys[HaveCtrl] = UnknownGrouping;
+                        haveKeys.HaveCtrl = UnknownGrouping;
                         break;
 
                     case '%':
-                        if (haveKeys[HaveAlt] != 0)
+                        if (haveKeys.HaveAlt != 0)
                         {
                             throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
                         }
 
                         AddEvent(new SKEvent(
-                            (haveKeys[HaveCtrl] != 0) ? User32.WM.KEYDOWN : User32.WM.SYSKEYDOWN,
+                            haveKeys.HaveCtrl != 0 ? User32.WM.KEYDOWN : User32.WM.SYSKEYDOWN,
                             (int)Keys.Menu,
                             s_startNewChar,
                             hwnd));
 
                         s_startNewChar = false;
-                        haveKeys[HaveAlt] = UnknownGrouping;
+                        haveKeys.HaveAlt = UnknownGrouping;
                         break;
 
                     case '(':
@@ -576,19 +589,19 @@ namespace System.Windows.Forms
                             throw new ArgumentException(SR.SendKeysNestingError);
                         }
 
-                        if (haveKeys[HaveShift] == UnknownGrouping)
+                        if (haveKeys.HaveShift == UnknownGrouping)
                         {
-                            haveKeys[HaveShift] = cGrp;
+                            haveKeys.HaveShift = cGrp;
                         }
 
-                        if (haveKeys[HaveCtrl] == UnknownGrouping)
+                        if (haveKeys.HaveCtrl == UnknownGrouping)
                         {
-                            haveKeys[HaveCtrl] = cGrp;
+                            haveKeys.HaveCtrl = cGrp;
                         }
 
-                        if (haveKeys[HaveAlt] == UnknownGrouping)
+                        if (haveKeys.HaveAlt == UnknownGrouping)
                         {
-                            haveKeys[HaveAlt] = cGrp;
+                            haveKeys.HaveAlt = cGrp;
                         }
 
                         break;
@@ -610,7 +623,7 @@ namespace System.Windows.Forms
 
                     case '~':
                         vk = (int)Keys.Return;
-                        AddMsgsForVK(vk, repeat, haveKeys[HaveAlt] > 0 && haveKeys[HaveCtrl] == 0, hwnd);
+                        AddMsgsForVK(vk, repeat, haveKeys.HaveAlt > 0 && haveKeys.HaveCtrl == 0, hwnd);
                         break;
 
                     default:
@@ -633,7 +646,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Uses User32 SendInput to send keystrokes.
         /// </summary>
-        private static void SendInput(byte[] oldKeyboardState, Queue previousEvents)
+        private static void SendInput(ReadOnlySpan<byte> oldKeyboardState, SKEvent[] previousEvents)
         {
             // Should be a no-op most of the time
             AddCancelModifiersForPreviousEvents(previousEvents);
@@ -669,7 +682,7 @@ namespace System.Windows.Forms
             // method of using the message loop to mitigate threading issues. There is still a theoretical thread
             // issue with adding to the events Queue (both JournalHook and SendInput), but we do not want to alter
             // the timings of the existing shipped behavior. Tested with 2 threads on a multiproc machine.
-            lock (s_events.SyncRoot)
+            lock (s_lock)
             {
                 // Block keyboard and mouse input events from reaching applications.
                 BOOL blockInputSuccess = User32.BlockInput(BOOL.TRUE);
@@ -734,7 +747,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    KeyboardState = oldKeyboardState;
+                    SetKeyboardState(oldKeyboardState);
 
                     // Unblock input if it was previously blocked.
                     if (blockInputSuccess.IsTrue())
@@ -757,7 +770,7 @@ namespace System.Windows.Forms
         ///  of the keyboard modifiers (alt, ctrl, shift). We must send a KeyUp for those, JournalHook doesn't
         ///  permanently set the state so it's ok.
         /// </summary>
-        private static void AddCancelModifiersForPreviousEvents(Queue previousEvents)
+        private static void AddCancelModifiersForPreviousEvents(SKEvent[] previousEvents)
         {
             if (previousEvents == null)
             {
@@ -767,10 +780,9 @@ namespace System.Windows.Forms
             bool shift = false;
             bool ctrl = false;
             bool alt = false;
-            while (previousEvents.Count > 0)
-            {
-                SKEvent skEvent = (SKEvent)previousEvents.Dequeue();
 
+            foreach (SKEvent skEvent in previousEvents)
+            {
                 bool isOn;
                 if ((skEvent.WM == User32.WM.KEYUP) || (skEvent.WM == User32.WM.SYSKEYUP))
                 {
@@ -923,10 +935,10 @@ namespace System.Windows.Forms
             }
 
             // For SendInput only, see AddCancelModifiersForPreviousEvents for details.
-            Queue previousEvents = null;
+            SKEvent[] previousEvents = null;
             if ((s_events != null) && (s_events.Count != 0))
             {
-                previousEvents = (Queue)s_events.Clone();
+                previousEvents = s_events.ToArray();
             }
 
             // Generate the list of events that we're going to fire off with the hook.
@@ -940,7 +952,8 @@ namespace System.Windows.Forms
 
             LoadSendMethodFromConfig();
 
-            byte[] oldstate = KeyboardState;
+            Span<byte> oldState = stackalloc byte[256];
+            GetKeyboardState(oldState);
 
             if (s_sendMethod.Value != SendMethodTypes.SendInput)
             {
@@ -956,7 +969,7 @@ namespace System.Windows.Forms
                 {
                     ClearKeyboardState();
                     InstallHook();
-                    KeyboardState = oldstate;
+                    SetKeyboardState(oldState);
                 }
             }
 
@@ -964,7 +977,7 @@ namespace System.Windows.Forms
                 (s_sendMethod.Value == SendMethodTypes.Default && !s_hookSupported.Value))
             {
                 // Either SendInput is configured or JournalHooks failed by default, call SendInput
-                SendInput(oldstate, previousEvents);
+                SendInput(oldState, previousEvents);
             }
 
             if (wait)
@@ -1046,14 +1059,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  helps us hold information about the various events we're going to journal
+        ///  Helps us hold information about the various events we're going to journal.
         /// </summary>
-        private class SKEvent
+        private readonly struct SKEvent
         {
-            public User32.WM WM;
-            public uint ParamL;
-            public uint ParamH;
-            public IntPtr HWND;
+            public readonly User32.WM WM;
+            public readonly uint ParamL;
+            public readonly uint ParamH;
+            public readonly IntPtr HWND;
 
             public SKEvent(User32.WM wm, uint paramL, bool paramH, IntPtr hwnd)
             {
@@ -1075,15 +1088,15 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Holds a keyword and the associated VK_ for it.
         /// </summary>
-        private class KeywordVk
+        private readonly struct KeywordVk
         {
             public readonly string Keyword;
             public readonly int VK;
 
-            public KeywordVk(string key, int v)
+            public KeywordVk(string keyword, Keys key)
             {
-                Keyword = key;
-                VK = v;
+                Keyword = keyword;
+                VK = (int)key;
             }
         }
 
