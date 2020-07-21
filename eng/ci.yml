@@ -3,7 +3,6 @@ parameters:
   # be read from a user-defined variable (Azure DevOps limitation)
   agentPoolName: NetCorePublic-Pool
   agentPool: 'BuildPool.Windows.10.Amd64.VS2019.Pre.Open'
-  runAsPublic: true
   repoName: dotnet/winforms
 
 stages:
@@ -12,20 +11,23 @@ stages:
   jobs:
   - template: /eng/common/templates/jobs/jobs.yml
     parameters:
-      runAsPublic: ${{ parameters.runAsPublic }}
       enableMicrobuild: true
       enablePublishBuildArtifacts: true
       enablePublishTestResults: true
       enablePublishBuildAssets: true
-      enablePublishUsingPipelines: $(_PublishUsingPipelines)
+      enablePublishUsingPipelines: true
       enableTelemetry: true
       helixRepo: ${{ parameters.repoName }}
 
       jobs:
       - job: Windows
-        pool: 
-          name: ${{ parameters.agentPoolName }}
-          queue: ${{ parameters.agentPool }}
+        pool:
+          ${{ if eq(variables['System.TeamProject'], 'public') }}:
+            name: NetCorePublic-Pool
+            queue: BuildPool.Windows.10.Amd64.VS2019.Pre.Open
+          ${{ if ne(variables['System.TeamProject'], 'public') }}:
+            name: NetCoreInternal-Pool
+            queue: BuildPool.Windows.10.Amd64.VS2019.Pre
 
         variables:
 
@@ -40,9 +42,10 @@ stages:
           - _DotNetPublishToBlobFeed: false
           - _PublishArgs: ''
           - _OfficialBuildIdArgs: ''
+          - _InternalRuntimeDownloadArgs: ''
 
           # Override some values if we're building internally (not public)
-          - ${{ if eq(parameters.runAsPublic, 'false') }}:
+          - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
 
             - _PublishType: blob
             - _SignType: real
@@ -58,15 +61,18 @@ stages:
             - _PublishArgs: /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
                 /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
                 /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
-                /p:DotNetPublishUsingPipelines=$(_PublishUsingPipelines)
-                /p:DotNetArtifactsCategory=$(_DotNetArtifactsCategory)
+                /p:DotNetPublishUsingPipelines=true
                 /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
                 /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
             - _OfficialBuildIdArgs: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
+          - ${{ if ne(variables['System.TeamProject'], 'public') }}:
+            - _InternalRuntimeDownloadArgs: /p:DotNetRuntimeSourceFeed=https://dotnetclimsrc.blob.core.windows.net/dotnet
+                /p:DotNetRuntimeSourceFeedKey=$(dotnetclimsrc-read-sas-token-base64)
+
         strategy:
           matrix:
-            ${{ if ne(parameters.runAsPublic, 'false') }}:
+            ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
               Debug:
                 _BuildConfig: Debug
                 # override some variables for debug
@@ -82,6 +88,15 @@ stages:
         - checkout: self
           clean: true
 
+        - ${{ if ne(variables['System.TeamProject'], 'public') }}:
+          - task: PowerShell@2
+            displayName: Setup Private Feeds Credentials
+            inputs:
+              filePath: $(Build.SourcesDirectory)/eng/common/SetupNugetSources.ps1
+              arguments: -ConfigFile $(Build.SourcesDirectory)/NuGet.config -Password $Env:Token
+            env:
+              Token: $(dn-bot-dnceng-artifact-feeds-rw)
+
         # Build and rename binlog
         # The /p:Coverage argument is passed here since some build properties change to accommodate running with
         # coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
@@ -91,6 +106,7 @@ stages:
             -build
             -configuration $(_BuildConfig)
             $(_OfficialBuildIdArgs)
+            $(_InternalRuntimeDownloadArgs)
             /p:Coverage=$(_Coverage)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc.binlog
           displayName: Build
@@ -101,6 +117,7 @@ stages:
             -test
             -configuration $(_BuildConfig)
             $(_OfficialBuildIdArgs)
+            $(_InternalRuntimeDownloadArgs)
             /p:Coverage=$(_Coverage)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
             /m:1
@@ -113,6 +130,7 @@ stages:
             -integrationTest
             -configuration $(_BuildConfig)
             $(_OfficialBuildIdArgs)
+            $(_InternalRuntimeDownloadArgs)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
             /m:1
           displayName: Run Integration Tests
@@ -125,6 +143,7 @@ stages:
             -publish $(_PublishArgs)
             -configuration $(_BuildConfig)
             $(_OfficialBuildIdArgs)
+            $(_InternalRuntimeDownloadArgs)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
           displayName: Pack, Sign, and Publish
 
@@ -132,12 +151,13 @@ stages:
         - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild -restore
             eng/CodeCoverage.proj
             /p:Configuration=$(_BuildConfig)
+            $(_InternalRuntimeDownloadArgs)
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
           displayName: Upload coverage to codecov.io (Debug)
           condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
 # Copied from the arcade repo and modified for winforms
-- ${{ if eq(parameters.runAsPublic, 'false') }}:
+- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
   - template: /eng/common/templates/post-build/post-build.yml
     parameters:
       enableSymbolValidation: false
