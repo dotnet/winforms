@@ -662,7 +662,7 @@ namespace System.Windows.Forms
                                     value == null ? IntPtr.Zero : value.Handle);
                         if (StateImageList != null && StateImageList.Images.Count > 0 && internalStateImageList != null)
                         {
-                            SetStateImageList(internalStateImageList.Handle);
+                            SetStateImageList(internalStateImageList.CreateUniqueHandle());
                         }
                     }
                     UpdateCheckedState(root, true);
@@ -1819,7 +1819,7 @@ namespace System.Windows.Forms
                 IntPtr handle = IntPtr.Zero;
                 if (internalStateImageList != null)
                 {
-                    handle = internalStateImageList.Handle;
+                    handle = internalStateImageList.CreateUniqueHandle();
                 }
                 SetStateImageList(handle);
             }
@@ -1859,7 +1859,7 @@ namespace System.Windows.Forms
                             internalStateImageList.ImageSize = (Size)ScaledStateImageSize;
                         }
 
-                        SetStateImageList(internalStateImageList.Handle);
+                        SetStateImageList(internalStateImageList.CreateUniqueHandle());
                     }
                 }
                 else //stateImageList == null || stateImageList.Images.Count = 0;
@@ -2050,7 +2050,7 @@ namespace System.Windows.Forms
                     images[i] = stateImageList.Images[i - 1];
                 }
                 newImageList.Images.AddRange(images);
-                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, newImageList.Handle);
+                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, newImageList.CreateUniqueHandle());
 
                 if (internalStateImageList != null)
                 {
@@ -2067,7 +2067,8 @@ namespace System.Windows.Forms
             IntPtr handleOld = User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, handle);
             if ((handleOld != IntPtr.Zero) && (handleOld != handle))
             {
-                ComCtl32.ImageList.Destroy(new HandleRef(this, handleOld));
+                var result = ComCtl32.ImageList.Destroy(new HandleRef(this, handleOld));
+                Debug.Assert(result.IsTrue());
             }
         }
 
@@ -2078,7 +2079,8 @@ namespace System.Windows.Forms
             IntPtr handle = User32.SendMessageW(this, (User32.WM)TVM.GETIMAGELIST, (IntPtr)TVSIL.STATE);
             if (handle != IntPtr.Zero)
             {
-                ComCtl32.ImageList.Destroy(new HandleRef(this, handle));
+                var result = ComCtl32.ImageList.Destroy(new HandleRef(this, handle));
+                Debug.Assert(result.IsTrue());
                 if (reset)
                 {
                     User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE);
@@ -2619,7 +2621,7 @@ namespace System.Windows.Forms
                     // user's images.
                     if (internalStateImageList != null)
                     {
-                        SetStateImageList(internalStateImageList.Handle);
+                        SetStateImageList(internalStateImageList.CreateUniqueHandle());
                     }
                 }
             }
