@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -46,6 +45,7 @@ namespace System.Windows.Forms
 
         internal static void FillRectangle(this Gdi32.HDC hdc, Rectangle rectangle, Gdi32.HBRUSH hbrush)
         {
+            Debug.Assert(!hbrush.IsNull);
             RECT rect = rectangle;
             User32.FillRect(
                 hdc,
