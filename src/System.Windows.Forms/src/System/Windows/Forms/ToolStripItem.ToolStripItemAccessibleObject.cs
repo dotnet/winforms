@@ -470,6 +470,16 @@ namespace System.Windows.Forms
                 return -1;
             }
 
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            {
+                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
+
             internal override void SetFocus() => Owner.Select();
 
             internal void RaiseFocusChanged()
