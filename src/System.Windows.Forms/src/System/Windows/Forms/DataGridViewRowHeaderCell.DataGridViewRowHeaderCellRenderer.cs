@@ -25,7 +25,7 @@ namespace System.Windows.Forms
                 {
                     if (visualStyleRenderer == null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(HeaderElement);
+                        visualStyleRenderer = new VisualStyleRenderer(s_headerElement);
                     }
 
                     return visualStyleRenderer;
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
 
             public static void DrawHeader(Graphics g, Rectangle bounds, int headerState)
             {
-                VisualStyleRenderer.SetParameters(HeaderElement.ClassName, HeaderElement.Part, headerState);
+                VisualStyleRenderer.SetParameters(s_headerElement.ClassName, s_headerElement.Part, headerState);
                 VisualStyleRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
             }
         }

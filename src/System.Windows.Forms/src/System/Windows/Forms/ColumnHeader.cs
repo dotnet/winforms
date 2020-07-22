@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -24,32 +23,29 @@ namespace System.Windows.Forms
     {
         // disable csharp compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
-        internal int index = -1;
+        internal int _index = -1;
 #pragma warning restore 0414
-        internal string text;
-        internal string name;
-        internal int width = 60;
+        internal string _text;
+        internal string _name;
+        internal int _width = 60;
+
         // Use TextAlign property instead of this member variable, always
-        private HorizontalAlignment textAlign = HorizontalAlignment.Left;
-        private bool textAlignInitialized;
-        private int displayIndexInternal = -1;
-        private readonly ColumnHeaderImageListIndexer imageIndexer;
+        private HorizontalAlignment _textAlign = HorizontalAlignment.Left;
+        private bool _textAlignInitialized;
+        private readonly ColumnHeaderImageListIndexer _imageIndexer;
 
-        object userData;
-
-        private ListView listview;
         // We need to send some messages to ListView when it gets initialized.
         internal ListView OwnerListview
         {
             get
             {
-                return listview;
+                return ListView;
             }
             set
             {
                 int width = Width;
 
-                listview = value;
+                ListView = value;
 
                 // The below properties are set into the listview.
                 Width = width;
@@ -61,7 +57,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ColumnHeader()
         {
-            imageIndexer = new ColumnHeaderImageListIndexer(this);
+            _imageIndexer = new ColumnHeaderImageListIndexer(this);
         }
 
         /// <summary>
@@ -84,7 +80,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int imgIndex = imageIndexer.ActualIndex;
+                int imgIndex = _imageIndexer.ActualIndex;
                 if (ImageList == null || ImageList.Images == null || imgIndex >= ImageList.Images.Count)
                 {
                     // the ImageIndex equivalent of a ImageKey that does not exist in the ImageList
@@ -113,28 +109,28 @@ namespace System.Windows.Forms
                 // When the list is being deserialized we need
                 // to take the display index as is. ListView
                 // does correctly synchronize the indices.
-                if (listview == null)
+                if (ListView == null)
                 {
                     DisplayIndexInternal = value;
                     return;
                 }
 
-                if (value < 0 || value > (listview.Columns.Count - 1))
+                if (value < 0 || value > (ListView.Columns.Count - 1))
                 {
                     throw new ArgumentOutOfRangeException(nameof(DisplayIndex), SR.ColumnHeaderBadDisplayIndex);
                 }
 
                 int lowDI = Math.Min(DisplayIndexInternal, value);
                 int hiDI = Math.Max(DisplayIndexInternal, value);
-                int[] colsOrder = new int[listview.Columns.Count];
+                int[] colsOrder = new int[ListView.Columns.Count];
 
                 // set the display indices. This is not an expensive operation because
                 // we only set an integer in the column header class
                 bool hdrMovedForward = value > DisplayIndexInternal;
                 ColumnHeader movedHdr = null;
-                for (int i = 0; i < listview.Columns.Count; i++)
+                for (int i = 0; i < ListView.Columns.Count; i++)
                 {
-                    ColumnHeader hdr = listview.Columns[i];
+                    ColumnHeader hdr = ListView.Columns[i];
                     if (hdr.DisplayIndex == DisplayIndexInternal)
                     {
                         movedHdr = hdr;
@@ -155,17 +151,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal int DisplayIndexInternal
-        {
-            get
-            {
-                return displayIndexInternal;
-            }
-            set
-            {
-                displayIndexInternal = value;
-            }
-        }
+        internal int DisplayIndexInternal { get; set; } = -1;
 
         /// <summary>
         ///  The index of this column.  This index does not necessarily correspond
@@ -177,9 +163,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listview != null)
+                if (ListView != null)
                 {
-                    return listview.GetColumnIndex(this);
+                    return ListView.GetColumnIndex(this);
                 }
 
                 return -1;
@@ -195,11 +181,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndexer.Index != ImageList.Indexer.DefaultIndex && ImageList != null && imageIndexer.Index >= ImageList.Images.Count)
+                if (_imageIndexer.Index != ImageList.Indexer.DefaultIndex && ImageList != null && _imageIndexer.Index >= ImageList.Images.Count)
                 {
                     return ImageList.Images.Count - 1;
                 }
-                return imageIndexer.Index;
+                return _imageIndexer.Index;
             }
             set
             {
@@ -208,12 +194,12 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
                 }
 
-                if (imageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
+                if (_imageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
                 {
                     return;
                 }
 
-                imageIndexer.Index = value;
+                _imageIndexer.Index = value;
 
                 if (ListView != null && ListView.IsHandleCreated)
                 {
@@ -228,7 +214,7 @@ namespace System.Windows.Forms
             // we added the ImageList property so that the ImageIndexConverter can find our image list
             get
             {
-                return imageIndexer.ImageList;
+                return _imageIndexer.ImageList;
             }
         }
 
@@ -241,16 +227,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                return imageIndexer.Key;
+                return _imageIndexer.Key;
             }
             set
             {
-                if (value == imageIndexer.Key && !string.Equals(value, ImageList.Indexer.DefaultKey))
+                if (value == _imageIndexer.Key && !string.Equals(value, ImageList.Indexer.DefaultKey))
                 {
                     return;
                 }
 
-                imageIndexer.Key = value;
+                _imageIndexer.Key = value;
 
                 if (ListView != null && ListView.IsHandleCreated)
                 {
@@ -263,13 +249,7 @@ namespace System.Windows.Forms
         ///  Returns the ListView control that this column is displayed in.  May be null
         /// </summary>
         [Browsable(false)]
-        public ListView ListView
-        {
-            get
-            {
-                return listview;
-            }
-        }
+        public ListView ListView { get; private set; }
 
         /// <summary>
         ///  The Name of the column header
@@ -280,17 +260,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return WindowsFormsUtils.GetComponentName(this, name);
+                return WindowsFormsUtils.GetComponentName(this, _name);
             }
             set
             {
                 if (value == null)
                 {
-                    name = string.Empty;
+                    _name = string.Empty;
                 }
                 else
                 {
-                    name = value;
+                    _name = value;
                 }
                 if (Site != null)
                 {
@@ -308,21 +288,21 @@ namespace System.Windows.Forms
         {
             get
             {
-                return text ?? nameof(ColumnHeader);
+                return _text ?? nameof(ColumnHeader);
             }
             set
             {
                 if (value == null)
                 {
-                    text = string.Empty;
+                    _text = string.Empty;
                 }
                 else
                 {
-                    text = value;
+                    _text = value;
                 }
-                if (listview != null)
+                if (ListView != null)
                 {
-                    listview.SetColumnInfo(LVCF.TEXT, this);
+                    ListView.SetColumnInfo(LVCF.TEXT, this);
                 }
             }
         }
@@ -337,17 +317,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!textAlignInitialized && (listview != null))
+                if (!_textAlignInitialized && (ListView != null))
                 {
-                    textAlignInitialized = true;
+                    _textAlignInitialized = true;
                     // See below for an explanation of (Index != 0)
                     // Added !IsMirrored
-                    if ((Index != 0) && (listview.RightToLeft == RightToLeft.Yes) && !listview.IsMirrored)
+                    if ((Index != 0) && (ListView.RightToLeft == RightToLeft.Yes) && !ListView.IsMirrored)
                     {
-                        textAlign = HorizontalAlignment.Right;
+                        _textAlign = HorizontalAlignment.Right;
                     }
                 }
-                return textAlign;
+                return _textAlign;
             }
             set
             {
@@ -357,18 +337,18 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
 
-                textAlign = value;
+                _textAlign = value;
 
                 // The first column must be left-aligned
-                if (Index == 0 && textAlign != HorizontalAlignment.Left)
+                if (Index == 0 && _textAlign != HorizontalAlignment.Left)
                 {
-                    textAlign = HorizontalAlignment.Left;
+                    _textAlign = HorizontalAlignment.Left;
                 }
 
-                if (listview != null)
+                if (ListView != null)
                 {
-                    listview.SetColumnInfo(LVCF.FMT, this);
-                    listview.Invalidate();
+                    ListView.SetColumnInfo(LVCF.FMT, this);
+                    ListView.Invalidate();
                 }
             }
         }
@@ -379,23 +359,13 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag
-        {
-            get
-            {
-                return userData;
-            }
-            set
-            {
-                userData = value;
-            }
-        }
+        public object Tag { get; set; }
 
         internal int WidthInternal
         {
             get
             {
-                return width;
+                return _width;
             }
         }
 
@@ -413,28 +383,28 @@ namespace System.Windows.Forms
                 // we don't get notified when the user changes it, we need to get this info
                 // from the underlying control every time we're asked.
                 // The underlying control will only report the correct width if it's in Report view
-                if (listview != null && listview.IsHandleCreated && !listview.Disposing && listview.View == View.Details)
+                if (ListView != null && ListView.IsHandleCreated && !ListView.Disposing && ListView.View == View.Details)
                 {
                     // Make sure this column has already been added to the ListView, else just return width
-                    IntPtr hwndHdr = User32.SendMessageW(listview, (User32.WM)LVM.GETHEADER);
+                    IntPtr hwndHdr = User32.SendMessageW(ListView, (User32.WM)LVM.GETHEADER);
                     if (hwndHdr != IntPtr.Zero)
                     {
                         int nativeColumnCount = (int)User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT);
                         if (Index < nativeColumnCount)
                         {
-                            width = (int)User32.SendMessageW(listview, (User32.WM)LVM.GETCOLUMNWIDTH, (IntPtr)Index);
+                            _width = (int)User32.SendMessageW(ListView, (User32.WM)LVM.GETCOLUMNWIDTH, (IntPtr)Index);
                         }
                     }
                 }
 
-                return width;
+                return _width;
             }
             set
             {
-                width = value;
-                if (listview != null)
+                _width = value;
+                if (ListView != null)
                 {
-                    listview.SetColumnWidth(Index, ColumnHeaderAutoResizeStyle.None);
+                    ListView.SetColumnWidth(Index, ColumnHeaderAutoResizeStyle.None);
                 }
             }
         }
@@ -446,9 +416,9 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
             }
 
-            if (listview != null)
+            if (ListView != null)
             {
-                listview.AutoResizeColumn(Index, headerAutoResize);
+                ListView.AutoResizeColumn(Index, headerAutoResize);
             }
         }
 
@@ -469,9 +439,9 @@ namespace System.Windows.Forms
                 columnHeader = (ColumnHeader)Activator.CreateInstance(clonedType);
             }
 
-            columnHeader.text = text;
-            columnHeader.Width = width;
-            columnHeader.textAlign = TextAlign;
+            columnHeader._text = _text;
+            columnHeader.Width = _width;
+            columnHeader._textAlign = TextAlign;
             return columnHeader;
         }
 
@@ -479,12 +449,12 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (listview != null)
+                if (ListView != null)
                 {
                     int index = Index;
                     if (index != -1)
                     {
-                        listview.Columns.RemoveAt(index);
+                        ListView.Columns.RemoveAt(index);
                     }
                 }
             }
@@ -499,11 +469,11 @@ namespace System.Windows.Forms
         // Set the display indices of the listview columns
         private unsafe void SetDisplayIndices(int[] cols)
         {
-            if (listview.IsHandleCreated && !listview.Disposing)
+            if (ListView.IsHandleCreated && !ListView.Disposing)
             {
                 fixed (int* pCols = cols)
                 {
-                    User32.SendMessageW(listview, (User32.WM)LVM.SETCOLUMNORDERARRAY, (IntPtr)cols.Length, (IntPtr)pCols);
+                    User32.SendMessageW(ListView, (User32.WM)LVM.SETCOLUMNORDERARRAY, (IntPtr)cols.Length, (IntPtr)pCols);
                 }
             }
         }
@@ -520,7 +490,7 @@ namespace System.Windows.Forms
 
         internal bool ShouldSerializeText()
         {
-            return text != null;
+            return _text != null;
         }
 
         /// <summary>
@@ -533,17 +503,18 @@ namespace System.Windows.Forms
 
         internal class ColumnHeaderImageListIndexer : ImageList.Indexer
         {
-            private readonly ColumnHeader owner;
+            private readonly ColumnHeader _owner;
+
             public ColumnHeaderImageListIndexer(ColumnHeader ch)
             {
-                owner = ch;
+                _owner = ch;
             }
 
             public override ImageList ImageList
             {
                 get
                 {
-                    return owner.ListView?.SmallImageList;
+                    return _owner.ListView?.SmallImageList;
                 }
                 set
                 {

@@ -12,31 +12,30 @@ namespace System.Windows.Forms
 {
     internal class ToolStripGrip : ToolStripButton
     {
-        private Cursor oldCursor;
-        private int gripThickness;
-        Point startLocation = Point.Empty;
-        private bool movingToolStrip;
-        private Point lastEndLocation = ToolStrip.InvalidMouseEnter;
-        private static Size DragSize = LayoutUtils.MaxSize;
+        private Cursor _oldCursor;
+        private Point _startLocation = Point.Empty;
+        private bool _movingToolStrip;
+        private Point _lastEndLocation = ToolStrip.s_invalidMouseEnter;
+        private static Size s_dragSize = LayoutUtils.MaxSize;
 
-        private static readonly Padding defaultPadding = new Padding(2);
+        private static readonly Padding _defaultPadding = new Padding(2);
         private const int GripThicknessDefault = 3;
         private const int GripThicknessVisualStylesEnabled = 5;
-        private Padding scaledDefaultPadding = defaultPadding;
-        private int scaledGripThickness = GripThicknessDefault;
-        private int scaledGripThicknessVisualStylesEnabled = GripThicknessVisualStylesEnabled;
+        private Padding _scaledDefaultPadding = _defaultPadding;
+        private int _scaledGripThickness = GripThicknessDefault;
+        private int _scaledGripThicknessVisualStylesEnabled = GripThicknessVisualStylesEnabled;
 
         internal ToolStripGrip()
         {
             if (DpiHelper.IsScalingRequirementMet)
             {
-                scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding);
-                scaledGripThickness = DpiHelper.LogicalToDeviceUnitsX(GripThicknessDefault);
-                scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnitsX(GripThicknessVisualStylesEnabled);
+                _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(_defaultPadding);
+                _scaledGripThickness = DpiHelper.LogicalToDeviceUnitsX(GripThicknessDefault);
+                _scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnitsX(GripThicknessVisualStylesEnabled);
             }
 
             // if we're using Visual Styles we've got to be a bit thicker.
-            gripThickness = ToolStripManager.VisualStylesEnabled ? scaledGripThicknessVisualStylesEnabled : scaledGripThickness;
+            GripThickness = ToolStripManager.VisualStylesEnabled ? _scaledGripThicknessVisualStylesEnabled : _scaledGripThickness;
             SupportsItemClick = false;
         }
 
@@ -48,7 +47,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return scaledDefaultPadding;
+                return _scaledDefaultPadding;
             }
         }
 
@@ -60,23 +59,17 @@ namespace System.Windows.Forms
             }
         }
 
-        internal int GripThickness
-        {
-            get
-            {
-                return gripThickness;
-            }
-        }
+        internal int GripThickness { get; private set; }
 
         internal bool MovingToolStrip
         {
             get
             {
-                return ((ToolStripPanelRow != null) && movingToolStrip);
+                return ((ToolStripPanelRow != null) && _movingToolStrip);
             }
             set
             {
-                if ((movingToolStrip != value) && ParentInternal != null)
+                if ((_movingToolStrip != value) && ParentInternal != null)
                 {
                     if (value)
                     {
@@ -86,9 +79,9 @@ namespace System.Windows.Forms
                             return;
                         }
                     }
-                    movingToolStrip = value;
-                    lastEndLocation = ToolStrip.InvalidMouseEnter;
-                    if (movingToolStrip)
+                    _movingToolStrip = value;
+                    _lastEndLocation = ToolStrip.s_invalidMouseEnter;
+                    if (_movingToolStrip)
                     {
                         ((ISupportToolStripPanel)ParentInternal).BeginDrag();
                     }
@@ -120,11 +113,11 @@ namespace System.Windows.Forms
             {
                 if (ParentInternal.LayoutStyle == ToolStripLayoutStyle.VerticalStackWithOverflow)
                 {
-                    preferredSize = new Size(ParentInternal.Width, gripThickness);
+                    preferredSize = new Size(ParentInternal.Width, GripThickness);
                 }
                 else
                 {
-                    preferredSize = new Size(gripThickness, ParentInternal.Height);
+                    preferredSize = new Size(GripThickness, ParentInternal.Height);
                 }
             }
             // Constrain ourselves
@@ -160,7 +153,7 @@ namespace System.Windows.Forms
         /// <param name="mea"></param>
         protected override void OnMouseDown(MouseEventArgs mea)
         {
-            startLocation = TranslatePoint(new Point(mea.X, mea.Y), ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
+            _startLocation = TranslatePoint(new Point(mea.X, mea.Y), ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
             base.OnMouseDown(mea);
         }
 
@@ -172,24 +165,24 @@ namespace System.Windows.Forms
                 // determine if we've moved far enough such that the toolstrip
                 // can be considered as moving.
                 Point currentLocation = TranslatePoint(mea.Location, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
-                int deltaX = currentLocation.X - startLocation.X;
+                int deltaX = currentLocation.X - _startLocation.X;
                 deltaX = (deltaX < 0) ? deltaX * -1 : deltaX;
 
-                if (DragSize == LayoutUtils.MaxSize)
+                if (s_dragSize == LayoutUtils.MaxSize)
                 {
-                    DragSize = SystemInformation.DragSize;
+                    s_dragSize = SystemInformation.DragSize;
                 }
 
-                if (deltaX >= DragSize.Width)
+                if (deltaX >= s_dragSize.Width)
                 {
                     MovingToolStrip = true;
                 }
                 else
                 {
-                    int deltaY = currentLocation.Y - startLocation.Y;
+                    int deltaY = currentLocation.Y - _startLocation.Y;
                     deltaY = (deltaY < 0) ? deltaY * -1 : deltaY;
 
-                    if (deltaY >= DragSize.Height)
+                    if (deltaY >= s_dragSize.Height)
                     {
                         MovingToolStrip = true;
                     }
@@ -203,12 +196,12 @@ namespace System.Windows.Forms
                     // protect against calling when the mouse hasnt really moved.  moving the toolstrip/creating the feedback rect
                     // can cause extra mousemove events, we want to make sure we're not doing all this work
                     // for nothing.
-                    if (endLocation != lastEndLocation)
+                    if (endLocation != _lastEndLocation)
                     {
                         ToolStripPanelRow.ToolStripPanel.MoveControl(ParentInternal, /*startLocation,*/endLocation);
-                        lastEndLocation = endLocation;
+                        _lastEndLocation = endLocation;
                     }
-                    startLocation = endLocation;
+                    _startLocation = endLocation;
                 }
                 else
                 {
@@ -225,12 +218,12 @@ namespace System.Windows.Forms
             // only switch the cursor if we've got a rafting row.
             if ((ParentInternal != null) && (ToolStripPanelRow != null) && (!ParentInternal.IsInDesignMode))
             {
-                oldCursor = ParentInternal.Cursor;
+                _oldCursor = ParentInternal.Cursor;
                 ParentInternal.Cursor = Cursors.SizeAll;
             }
             else
             {
-                oldCursor = null;
+                _oldCursor = null;
             }
             base.OnMouseEnter(e);
         }
@@ -240,9 +233,9 @@ namespace System.Windows.Forms
         /// <param name="e"></param>
         protected override void OnMouseLeave(EventArgs e)
         {
-            if (oldCursor != null && !ParentInternal.IsInDesignMode)
+            if (_oldCursor != null && !ParentInternal.IsInDesignMode)
             {
-                ParentInternal.Cursor = oldCursor;
+                ParentInternal.Cursor = _oldCursor;
             }
             if (!MovingToolStrip && LeftMouseButtonIsDown())
             {
@@ -261,7 +254,7 @@ namespace System.Windows.Forms
 
             if (!ParentInternal.IsInDesignMode)
             {
-                ParentInternal.Cursor = oldCursor;
+                ParentInternal.Cursor = _oldCursor;
             }
             ToolStripPanel.ClearDragFeedback();
             MovingToolStrip = false;
@@ -270,12 +263,12 @@ namespace System.Windows.Forms
 
         internal override void ToolStrip_RescaleConstants(int oldDpi, int newDpi) {
             base.RescaleConstantsInternal(newDpi);
-            scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(defaultPadding, newDpi);
-            scaledGripThickness = DpiHelper.LogicalToDeviceUnits(GripThicknessDefault, newDpi);
-            scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnits(GripThicknessVisualStylesEnabled, newDpi);
+            _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(_defaultPadding, newDpi);
+            _scaledGripThickness = DpiHelper.LogicalToDeviceUnits(GripThicknessDefault, newDpi);
+            _scaledGripThicknessVisualStylesEnabled = DpiHelper.LogicalToDeviceUnits(GripThicknessVisualStylesEnabled, newDpi);
             this.Margin = DefaultMargin;
 
-            gripThickness = ToolStripManager.VisualStylesEnabled ? scaledGripThicknessVisualStylesEnabled : scaledGripThickness;
+            GripThickness = ToolStripManager.VisualStylesEnabled ? _scaledGripThicknessVisualStylesEnabled : _scaledGripThickness;
 
             OnFontChanged(EventArgs.Empty);
         }

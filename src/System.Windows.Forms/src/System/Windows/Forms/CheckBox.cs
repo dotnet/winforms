@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -30,30 +29,25 @@ namespace System.Windows.Forms
         private static readonly object EVENT_APPEARANCECHANGED = new object();
         private const ContentAlignment AnyRight = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
 
-        private bool autoCheck;
-        private bool threeState;
-        private bool accObjDoDefaultAction;
-
-        private ContentAlignment checkAlign = ContentAlignment.MiddleLeft;
-        private CheckState checkState;
-        private Appearance appearance;
+        private ContentAlignment _checkAlign = ContentAlignment.MiddleLeft;
+        private CheckState _checkState;
+        private Appearance _appearance;
 
         private const int FlatSystemStylePaddingWidth = 25;
         private const int FlatSystemStyleMinimumHeight = 13;
 
-        internal int flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
-        internal int flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
+        internal int _flatSystemStylePaddingWidth = FlatSystemStylePaddingWidth;
+        internal int _flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='CheckBox'/> class.
         /// </summary>
-        public CheckBox()
-        : base()
+        public CheckBox() : base()
         {
             if (DpiHelper.IsScalingRequirementMet)
             {
-                flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
-                flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
+                _flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
+                _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
             }
 
             // Checkboxes shouldn't respond to right clicks, so we need to do all our own click logic
@@ -62,21 +56,11 @@ namespace System.Windows.Forms
 
             SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
 
-            autoCheck = true;
+            AutoCheck = true;
             TextAlign = ContentAlignment.MiddleLeft;
         }
 
-        private bool AccObjDoDefaultAction
-        {
-            get
-            {
-                return accObjDoDefaultAction;
-            }
-            set
-            {
-                accObjDoDefaultAction = value;
-            }
-        }
+        private bool AccObjDoDefaultAction { get; set; }
 
         /// <summary>
         ///  Gets
@@ -91,7 +75,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return appearance;
+                return _appearance;
             }
 
             set
@@ -102,11 +86,11 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
                 }
 
-                if (appearance != value)
+                if (_appearance != value)
                 {
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
                     {
-                        appearance = value;
+                        _appearance = value;
                         if (OwnerDraw)
                         {
                             Refresh();
@@ -137,18 +121,7 @@ namespace System.Windows.Forms
         [DefaultValue(true)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.CheckBoxAutoCheckDescr))]
-        public bool AutoCheck
-        {
-            get
-            {
-                return autoCheck;
-            }
-
-            set
-            {
-                autoCheck = value;
-            }
-        }
+        public bool AutoCheck { get; set; }
 
         /// <summary>
         ///  Gets or sets
@@ -164,7 +137,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return checkAlign;
+                return _checkAlign;
             }
             set
             {
@@ -173,9 +146,9 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
 
-                if (checkAlign != value)
+                if (_checkAlign != value)
                 {
-                    checkAlign = value;
+                    _checkAlign = value;
                     LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.CheckAlign);
                     if (OwnerDraw)
                     {
@@ -205,7 +178,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return checkState != CheckState.Unchecked;
+                return _checkState != CheckState.Unchecked;
             }
 
             set
@@ -230,7 +203,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return checkState;
+                return _checkState;
             }
 
             set
@@ -241,15 +214,15 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
                 }
 
-                if (checkState != value)
+                if (_checkState != value)
                 {
                     bool oldChecked = Checked;
 
-                    checkState = value;
+                    _checkState = value;
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)checkState);
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)_checkState);
                     }
 
                     if (oldChecked != Checked)
@@ -340,8 +313,8 @@ namespace System.Windows.Forms
         {
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-            flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
-            flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
+            _flatSystemStylePaddingWidth = LogicalToDeviceUnits(FlatSystemStylePaddingWidth);
+            _flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
         }
 
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
@@ -359,8 +332,8 @@ namespace System.Windows.Forms
 
             Size textSize = TextRenderer.MeasureText(Text, Font);
             Size size = SizeFromClientSize(textSize);
-            size.Width += flatSystemStylePaddingWidth;
-            size.Height = Math.Max(size.Height + 5, flatSystemStyleMinimumHeight); // ensure minimum height to avoid truncation of check-box or text
+            size.Width += _flatSystemStylePaddingWidth;
+            size.Height = Math.Max(size.Height + 5, _flatSystemStyleMinimumHeight); // ensure minimum height to avoid truncation of check-box or text
             return size + Padding.Size;
         }
 
@@ -426,17 +399,7 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.CheckBoxThreeStateDescr))]
-        public bool ThreeState
-        {
-            get
-            {
-                return threeState;
-            }
-            set
-            {
-                threeState = value;
-            }
-        }
+        public bool ThreeState { get; set; }
 
         /// <summary>
         ///  Occurs when the
@@ -528,7 +491,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnClick(EventArgs e)
         {
-            if (autoCheck)
+            if (AutoCheck)
             {
                 switch (CheckState)
                 {
@@ -536,7 +499,7 @@ namespace System.Windows.Forms
                         CheckState = CheckState.Checked;
                         break;
                     case CheckState.Checked:
-                        if (threeState)
+                        if (ThreeState)
                         {
                             CheckState = CheckState.Indeterminate;
 
@@ -571,7 +534,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)checkState);
+                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)_checkState);
             }
         }
 

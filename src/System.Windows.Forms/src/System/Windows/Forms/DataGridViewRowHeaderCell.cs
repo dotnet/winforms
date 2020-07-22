@@ -16,28 +16,28 @@ namespace System.Windows.Forms
 {
     public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     {
-        private static readonly VisualStyleElement HeaderElement = VisualStyleElement.Header.Item.Normal;
+        private static readonly VisualStyleElement s_headerElement = VisualStyleElement.Header.Item.Normal;
 
         // ColorMap used to map the black color of the resource bitmaps to the fore color in use in the row header cell
-        private static readonly ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
+        private static readonly ColorMap[] s_colorMap = new ColorMap[] { new ColorMap() };
 
-        private static Bitmap rightArrowBmp;
-        private static Bitmap leftArrowBmp;
-        private static Bitmap rightArrowStarBmp;
-        private static Bitmap leftArrowStarBmp;
+        private static Bitmap s_rightArrowBmp;
+        private static Bitmap s_leftArrowBmp;
+        private static Bitmap s_rightArrowStarBmp;
+        private static Bitmap s_leftArrowStarBmp;
         //private static Bitmap errorBmp = null;
-        private static Bitmap pencilLTRBmp;
-        private static Bitmap pencilRTLBmp;
-        private static Bitmap starBmp;
+        private static Bitmap s_pencilLTRBmp;
+        private static Bitmap s_pencilRTLBmp;
+        private static Bitmap s_starBmp;
 
-        private static readonly Type cellType = typeof(DataGridViewRowHeaderCell);
+        private static readonly Type s_cellType = typeof(DataGridViewRowHeaderCell);
 
-        private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginWidth = 3;      // 3 pixels of margin on the left and right of icons
-        private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginHeight = 2;     // 2 pixels of margin on the top and bottom of icons
-        private const byte DATAGRIDVIEWROWHEADERCELL_contentMarginWidth = 3;   // 3 pixels of margin on the left and right of content
-        private const byte DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft = 1;
-        private const byte DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight = 2;
-        private const byte DATAGRIDVIEWROWHEADERCELL_verticalTextMargin = 1;
+        private const byte RowHeaderIconMarginWidth = 3;    // 3 pixels of margin on the left and right of icons
+        private const byte RowHeaderIconMarginHeight = 2;   // 2 pixels of margin on the top and bottom of icons
+        private const byte ContentMarginWidth = 3;          // 3 pixels of margin on the left and right of content
+        private const byte HorizontalTextMarginLeft = 1;
+        private const byte HorizontalTextMarginRight = 2;
+        private const byte VerticalTextMargin = 1;
 
         public DataGridViewRowHeaderCell()
         {
@@ -47,11 +47,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (leftArrowBmp == null)
+                if (s_leftArrowBmp == null)
                 {
-                    leftArrowBmp = GetBitmapFromIcon("DataGridViewRow.left");
+                    s_leftArrowBmp = GetBitmapFromIcon("DataGridViewRow.left");
                 }
-                return leftArrowBmp;
+                return s_leftArrowBmp;
             }
         }
 
@@ -59,11 +59,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (leftArrowStarBmp == null)
+                if (s_leftArrowStarBmp == null)
                 {
-                    leftArrowStarBmp = GetBitmapFromIcon("DataGridViewRow.leftstar");
+                    s_leftArrowStarBmp = GetBitmapFromIcon("DataGridViewRow.leftstar");
                 }
-                return leftArrowStarBmp;
+                return s_leftArrowStarBmp;
             }
         }
 
@@ -71,11 +71,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (pencilLTRBmp == null)
+                if (s_pencilLTRBmp == null)
                 {
-                    pencilLTRBmp = GetBitmapFromIcon("DataGridViewRow.pencil_ltr");
+                    s_pencilLTRBmp = GetBitmapFromIcon("DataGridViewRow.pencil_ltr");
                 }
-                return pencilLTRBmp;
+                return s_pencilLTRBmp;
             }
         }
 
@@ -83,11 +83,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (pencilRTLBmp == null)
+                if (s_pencilRTLBmp == null)
                 {
-                    pencilRTLBmp = GetBitmapFromIcon("DataGridViewRow.pencil_rtl");
+                    s_pencilRTLBmp = GetBitmapFromIcon("DataGridViewRow.pencil_rtl");
                 }
-                return pencilRTLBmp;
+                return s_pencilRTLBmp;
             }
         }
 
@@ -95,11 +95,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (rightArrowBmp == null)
+                if (s_rightArrowBmp == null)
                 {
-                    rightArrowBmp = GetBitmapFromIcon("DataGridViewRow.right");
+                    s_rightArrowBmp = GetBitmapFromIcon("DataGridViewRow.right");
                 }
-                return rightArrowBmp;
+                return s_rightArrowBmp;
             }
         }
 
@@ -107,11 +107,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (rightArrowStarBmp == null)
+                if (s_rightArrowStarBmp == null)
                 {
-                    rightArrowStarBmp = GetBitmapFromIcon("DataGridViewRow.rightstar");
+                    s_rightArrowStarBmp = GetBitmapFromIcon("DataGridViewRow.rightstar");
                 }
-                return rightArrowStarBmp;
+                return s_rightArrowStarBmp;
             }
         }
 
@@ -119,11 +119,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (starBmp == null)
+                if (s_starBmp == null)
                 {
-                    starBmp = GetBitmapFromIcon("DataGridViewRow.star");
+                    s_starBmp = GetBitmapFromIcon("DataGridViewRow.star");
                 }
-                return starBmp;
+                return s_starBmp;
             }
         }
 
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
             DataGridViewRowHeaderCell dataGridViewCell;
             Type thisType = GetType();
 
-            if (thisType == cellType) //performance improvement
+            if (thisType == s_cellType) //performance improvement
             {
                 dataGridViewCell = new DataGridViewRowHeaderCell();
             }
@@ -164,12 +164,12 @@ namespace System.Windows.Forms
 
         private static Bitmap GetBitmapFromIcon(string iconName)
         {
-            Size desiredSize = new Size(iconsWidth, iconsHeight);
+            Size desiredSize = new Size(s_iconsWidth, s_iconsHeight);
             Icon icon = new Icon(new Icon(typeof(DataGridViewHeaderCell), iconName), desiredSize);
             Bitmap b = icon.ToBitmap();
             icon.Dispose();
 
-            if (DpiHelper.IsScalingRequired && (b.Size.Width != iconsWidth || b.Size.Height != iconsHeight))
+            if (DpiHelper.IsScalingRequired && (b.Size.Width != s_iconsWidth || b.Size.Height != s_iconsHeight))
             {
                 Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredSize);
                 if (scaledBitmap != null)
@@ -662,7 +662,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
-            return Properties.GetObject(PropCellValue);
+            return Properties.GetObject(s_propCellValue);
         }
 
         protected override void Paint(Graphics graphics,
@@ -854,10 +854,10 @@ namespace System.Windows.Forms
                 if (!string.IsNullOrEmpty(formattedString))
                 {
                     // There is text to display
-                    if (valBounds.Width >= iconsWidth +
-                                           2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth &&
-                        valBounds.Height >= iconsHeight +
-                                            2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight)
+                    if (valBounds.Width >= s_iconsWidth +
+                                           2 * RowHeaderIconMarginWidth &&
+                        valBounds.Height >= s_iconsHeight +
+                                            2 * RowHeaderIconMarginHeight)
                     {
                         if (paint && DataGridViewCell.PaintContentBackground(paintParts))
                         {
@@ -918,24 +918,24 @@ namespace System.Windows.Forms
                         }
                         if (!DataGridView.RightToLeftInternal)
                         {
-                            valBounds.X += iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                            valBounds.X += s_iconsWidth + 2 * RowHeaderIconMarginWidth;
                         }
-                        valBounds.Width -= iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                        valBounds.Width -= s_iconsWidth + 2 * RowHeaderIconMarginWidth;
                         Debug.Assert(valBounds.Width >= 0);
                         Debug.Assert(valBounds.Height >= 0);
                     }
                     // Second priority is text
                     // Font independent margins
-                    valBounds.Offset(DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + DATAGRIDVIEWROWHEADERCELL_contentMarginWidth, DATAGRIDVIEWROWHEADERCELL_verticalTextMargin);
-                    valBounds.Width -= DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth + DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
-                    valBounds.Height -= 2 * DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
+                    valBounds.Offset(HorizontalTextMarginLeft + ContentMarginWidth, VerticalTextMargin);
+                    valBounds.Width -= HorizontalTextMarginLeft + 2 * ContentMarginWidth + HorizontalTextMarginRight;
+                    valBounds.Height -= 2 * VerticalTextMargin;
                     if (valBounds.Width > 0 && valBounds.Height > 0)
                     {
                         TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
-                        if (DataGridView.ShowRowErrors && valBounds.Width > iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth)
+                        if (DataGridView.ShowRowErrors && valBounds.Width > s_iconsWidth + 2 * RowHeaderIconMarginWidth)
                         {
                             // Check if the text fits if we remove the room required for the row error icon
-                            Size maxBounds = new Size(valBounds.Width - iconsWidth - 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth, valBounds.Height);
+                            Size maxBounds = new Size(valBounds.Width - s_iconsWidth - 2 * RowHeaderIconMarginWidth, valBounds.Height);
                             if (DataGridViewCell.TextFitsInBounds(graphics,
                                                                   formattedString,
                                                                   cellStyle.Font,
@@ -945,9 +945,9 @@ namespace System.Windows.Forms
                                 // There is enough room for both the text and the row error icon, so use it all.
                                 if (DataGridView.RightToLeftInternal)
                                 {
-                                    valBounds.X += iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                                    valBounds.X += s_iconsWidth + 2 * RowHeaderIconMarginWidth;
                                 }
-                                valBounds.Width -= iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                                valBounds.Width -= s_iconsWidth + 2 * RowHeaderIconMarginWidth;
                             }
                         }
 
@@ -982,8 +982,8 @@ namespace System.Windows.Forms
                         }
                     }
                     // Third priority is the row error icon, which may be painted on top of text
-                    if (errorBounds.Width >= 3 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth +
-                                             2 * iconsWidth)
+                    if (errorBounds.Width >= 3 * RowHeaderIconMarginWidth +
+                                             2 * s_iconsWidth)
                     {
                         // There is enough horizontal room for the error icon and the glyph
                         if (paint && DataGridView.ShowRowErrors && DataGridViewCell.PaintErrorIcon(paintParts))
@@ -1002,8 +1002,8 @@ namespace System.Windows.Forms
                 else
                 {
                     // There is no text to display
-                    if (valBounds.Width >= iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth &&
-                        valBounds.Height >= iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight)
+                    if (valBounds.Width >= s_iconsWidth + 2 * RowHeaderIconMarginWidth &&
+                        valBounds.Height >= s_iconsHeight + 2 * RowHeaderIconMarginHeight)
                     {
                         if (paint && DataGridViewCell.PaintContentBackground(paintParts))
                         {
@@ -1064,8 +1064,8 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (errorBounds.Width >= 3 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth +
-                                             2 * iconsWidth)
+                    if (errorBounds.Width >= 3 * RowHeaderIconMarginWidth +
+                                             2 * s_iconsWidth)
                     {
                         // There is enough horizontal room for the error icon
                         if (paint && DataGridView.ShowRowErrors && DataGridViewCell.PaintErrorIcon(paintParts))
@@ -1090,26 +1090,26 @@ namespace System.Windows.Forms
         private void PaintIcon(Graphics g, Bitmap bmp, Rectangle bounds, Color foreColor)
         {
             Rectangle bmpRect = new Rectangle(DataGridView.RightToLeftInternal ?
-                                              bounds.Right - DATAGRIDVIEWROWHEADERCELL_iconMarginWidth - iconsWidth :
-                                              bounds.Left + DATAGRIDVIEWROWHEADERCELL_iconMarginWidth,
-                                              bounds.Y + (bounds.Height - iconsHeight) / 2,
-                                              iconsWidth,
-                                              iconsHeight);
-            colorMap[0].NewColor = foreColor;
-            colorMap[0].OldColor = Color.Black;
+                                              bounds.Right - RowHeaderIconMarginWidth - s_iconsWidth :
+                                              bounds.Left + RowHeaderIconMarginWidth,
+                                              bounds.Y + (bounds.Height - s_iconsHeight) / 2,
+                                              s_iconsWidth,
+                                              s_iconsHeight);
+            s_colorMap[0].NewColor = foreColor;
+            s_colorMap[0].OldColor = Color.Black;
 
             ImageAttributes attr = new ImageAttributes();
-            attr.SetRemapTable(colorMap, ColorAdjustType.Bitmap);
-            g.DrawImage(bmp, bmpRect, 0, 0, iconsWidth, iconsHeight, GraphicsUnit.Pixel, attr);
+            attr.SetRemapTable(s_colorMap, ColorAdjustType.Bitmap);
+            g.DrawImage(bmp, bmpRect, 0, 0, s_iconsWidth, s_iconsHeight, GraphicsUnit.Pixel, attr);
             attr.Dispose();
         }
 
         protected override bool SetValue(int rowIndex, object value)
         {
             object originalValue = GetValue(rowIndex);
-            if (value != null || Properties.ContainsObject(PropCellValue))
+            if (value != null || Properties.ContainsObject(s_propCellValue))
             {
-                Properties.SetObject(PropCellValue, value);
+                Properties.SetObject(s_propCellValue, value);
             }
             if (DataGridView != null && originalValue != value)
             {

@@ -20,10 +20,10 @@ namespace System.Windows.Forms
     // The only event this dialog has is HelpRequest, which isn't very useful
     public class ColorDialog : CommonDialog
     {
-        private int options;
-        private readonly int[] customColors;
+        private int _options;
+        private readonly int[] _customColors;
 
-        private Color color;
+        private Color _color;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ColorDialog'/>
@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ColorDialog()
         {
-            customColors = new int[16];
+            _customColors = new int[16];
             Reset();
         }
 
@@ -84,17 +84,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                return color;
+                return _color;
             }
             set
             {
                 if (!value.IsEmpty)
                 {
-                    color = value;
+                    _color = value;
                 }
                 else
                 {
-                    color = Color.Black;
+                    _color = Color.Black;
                 }
             }
         }
@@ -108,18 +108,18 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.CDcustomColorsDescr))]
         public int[] CustomColors
         {
-            get { return (int[])customColors.Clone(); }
+            get { return (int[])_customColors.Clone(); }
             set
             {
                 int length = value == null ? 0 : Math.Min(value.Length, 16);
                 if (length > 0)
                 {
-                    Array.Copy(value, 0, customColors, 0, length);
+                    Array.Copy(value, 0, _customColors, 0, length);
                 }
 
                 for (int i = length; i < 16; i++)
                 {
-                    customColors[i] = 0x00FFFFFF;
+                    _customColors[i] = 0x00FFFFFF;
                 }
             }
         }
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return options;
+                return _options;
             }
         }
 
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool GetOption(int option)
         {
-            return (options & option) != 0;
+            return (_options & option) != 0;
         }
 
         /// <summary>
@@ -216,8 +216,8 @@ namespace System.Windows.Forms
         /// </summary>
         public override void Reset()
         {
-            options = 0;
-            color = Color.Black;
+            _options = 0;
+            _color = Color.Black;
             CustomColors = null;
         }
 
@@ -236,10 +236,10 @@ namespace System.Windows.Forms
             IntPtr custColorPtr = Marshal.AllocCoTaskMem(64);
             try
             {
-                Marshal.Copy(customColors, 0, custColorPtr, 16);
+                Marshal.Copy(_customColors, 0, custColorPtr, 16);
                 cc.hwndOwner = hwndOwner;
                 cc.hInstance = Instance;
-                cc.rgbResult = ColorTranslator.ToWin32(color);
+                cc.rgbResult = ColorTranslator.ToWin32(_color);
                 cc.lpCustColors = custColorPtr;
 
                 Comdlg32.CC flags = (Comdlg32.CC)Options | Comdlg32.CC.RGBINIT | Comdlg32.CC.ENABLEHOOK;
@@ -257,12 +257,12 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                if (cc.rgbResult != ColorTranslator.ToWin32(color))
+                if (cc.rgbResult != ColorTranslator.ToWin32(_color))
                 {
-                    color = ColorTranslator.FromOle(cc.rgbResult);
+                    _color = ColorTranslator.FromOle(cc.rgbResult);
                 }
 
-                Marshal.Copy(custColorPtr, customColors, 0, 16);
+                Marshal.Copy(custColorPtr, _customColors, 0, 16);
                 return true;
             }
             finally
@@ -278,11 +278,11 @@ namespace System.Windows.Forms
         {
             if (value)
             {
-                options |= option;
+                _options |= option;
             }
             else
             {
-                options &= ~option;
+                _options &= ~option;
             }
         }
 

@@ -45,7 +45,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    DataGridViewComboBoxEditingControl comboBox = Owner.Properties.GetObject(PropComboBoxCellEditingComboBox) as DataGridViewComboBoxEditingControl;
+                    DataGridViewComboBoxEditingControl comboBox = Owner.Properties.GetObject(s_propComboBoxCellEditingComboBox) as DataGridViewComboBoxEditingControl;
                     if (comboBox != null)
                     {
                         return comboBox.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;

@@ -19,18 +19,18 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Items))]
     public class ToolStripComboBox : ToolStripControlHost
     {
-        internal static readonly object EventDropDown = new object();
-        internal static readonly object EventDropDownClosed = new object();
-        internal static readonly object EventDropDownStyleChanged = new object();
-        internal static readonly object EventSelectedIndexChanged = new object();
-        internal static readonly object EventSelectionChangeCommitted = new object();
-        internal static readonly object EventTextUpdate = new object();
+        internal static readonly object s_eventDropDown = new object();
+        internal static readonly object s_eventDropDownClosed = new object();
+        internal static readonly object s_eventDropDownStyleChanged = new object();
+        internal static readonly object s_eventSelectedIndexChanged = new object();
+        internal static readonly object s_eventSelectionChangeCommitted = new object();
+        internal static readonly object s_eventTextUpdate = new object();
 
-        private static readonly Padding dropDownPadding = new Padding(2);
-        private static readonly Padding padding = new Padding(1, 0, 1, 0);
+        private static readonly Padding s_dropDownPadding = new Padding(2);
+        private static readonly Padding s_padding = new Padding(1, 0, 1, 0);
 
-        private Padding scaledDropDownPadding = dropDownPadding;
-        private Padding scaledPadding = padding;
+        private Padding _scaledDropDownPadding = s_dropDownPadding;
+        private Padding _scaledPadding = s_padding;
 
         public ToolStripComboBox() : base(CreateControlInstance())
         {
@@ -39,8 +39,8 @@ namespace System.Windows.Forms
 
             if (DpiHelper.IsScalingRequirementMet)
             {
-                scaledPadding = DpiHelper.LogicalToDeviceUnits(padding);
-                scaledDropDownPadding = DpiHelper.LogicalToDeviceUnits(dropDownPadding);
+                _scaledPadding = DpiHelper.LogicalToDeviceUnits(s_padding);
+                _scaledDropDownPadding = DpiHelper.LogicalToDeviceUnits(s_dropDownPadding);
             }
         }
 
@@ -143,11 +143,11 @@ namespace System.Windows.Forms
             {
                 if (IsOnDropDown)
                 {
-                    return scaledDropDownPadding;
+                    return _scaledDropDownPadding;
                 }
                 else
                 {
-                    return scaledPadding;
+                    return _scaledPadding;
                 }
             }
         }
@@ -164,24 +164,24 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
         public event EventHandler DropDown
         {
-            add => Events.AddHandler(EventDropDown, value);
-            remove => Events.RemoveHandler(EventDropDown, value);
+            add => Events.AddHandler(s_eventDropDown, value);
+            remove => Events.RemoveHandler(s_eventDropDown, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
         public event EventHandler DropDownClosed
         {
-            add => Events.AddHandler(EventDropDownClosed, value);
-            remove => Events.RemoveHandler(EventDropDownClosed, value);
+            add => Events.AddHandler(s_eventDropDownClosed, value);
+            remove => Events.RemoveHandler(s_eventDropDownClosed, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
         public event EventHandler DropDownStyleChanged
         {
-            add => Events.AddHandler(EventDropDownStyleChanged, value);
-            remove => Events.RemoveHandler(EventDropDownStyleChanged, value);
+            add => Events.AddHandler(s_eventDropDownStyleChanged, value);
+            remove => Events.RemoveHandler(s_eventDropDownStyleChanged, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior))]
@@ -290,8 +290,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged
         {
-            add => Events.AddHandler(EventSelectedIndexChanged, value);
-            remove => Events.RemoveHandler(EventSelectedIndexChanged, value);
+            add => Events.AddHandler(s_eventSelectedIndexChanged, value);
+            remove => Events.RemoveHandler(s_eventSelectedIndexChanged, value);
         }
 
         [Browsable(false)]
@@ -344,8 +344,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
         public event EventHandler TextUpdate
         {
-            add => Events.AddHandler(EventTextUpdate, value);
-            remove => Events.RemoveHandler(EventTextUpdate, value);
+            add => Events.AddHandler(s_eventTextUpdate, value);
+            remove => Events.RemoveHandler(s_eventTextUpdate, value);
         }
 
         #region WrappedMethods
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.SuspendMenuMode();
             }
-            RaiseEvent(EventDropDown, e);
+            RaiseEvent(s_eventDropDown, e);
         }
         protected virtual void OnDropDownClosed(EventArgs e)
         {
@@ -414,23 +414,23 @@ namespace System.Windows.Forms
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.ResumeMenuMode();
             }
-            RaiseEvent(EventDropDownClosed, e);
+            RaiseEvent(s_eventDropDownClosed, e);
         }
         protected virtual void OnDropDownStyleChanged(EventArgs e)
         {
-            RaiseEvent(EventDropDownStyleChanged, e);
+            RaiseEvent(s_eventDropDownStyleChanged, e);
         }
         protected virtual void OnSelectedIndexChanged(EventArgs e)
         {
-            RaiseEvent(EventSelectedIndexChanged, e);
+            RaiseEvent(s_eventSelectedIndexChanged, e);
         }
         protected virtual void OnSelectionChangeCommitted(EventArgs e)
         {
-            RaiseEvent(EventSelectionChangeCommitted, e);
+            RaiseEvent(s_eventSelectionChangeCommitted, e);
         }
         protected virtual void OnTextUpdate(EventArgs e)
         {
-            RaiseEvent(EventTextUpdate, e);
+            RaiseEvent(s_eventTextUpdate, e);
         }
 
         protected override void OnSubscribeControlEvents(Control control)
@@ -483,19 +483,13 @@ namespace System.Windows.Forms
 
         internal class ToolStripComboBoxControl : ComboBox
         {
-            private ToolStripComboBox owner;
-
             public ToolStripComboBoxControl()
             {
                 FlatStyle = FlatStyle.Popup;
                 SetStyle(ControlStyles.ResizeRedraw | ControlStyles.OptimizedDoubleBuffer, true);
             }
 
-            public ToolStripComboBox Owner
-            {
-                get { return owner; }
-                set { owner = value; }
-            }
+            public ToolStripComboBox Owner { get; set; }
 
             private ProfessionalColorTable ColorTable
             {
@@ -648,9 +642,9 @@ namespace System.Windows.Forms
                     // if the width is odd - favor pushing it over one pixel right.
                     middle.X += (dropDownRect.Width % 2);
                     g.FillPolygon(brush, new Point[] {
-                        new Point(middle.X - FlatComboAdapter.Offset2Pixels, middle.Y - 1),
-                        new Point(middle.X + FlatComboAdapter.Offset2Pixels + 1, middle.Y - 1),
-                        new Point(middle.X, middle.Y + FlatComboAdapter.Offset2Pixels)
+                        new Point(middle.X - FlatComboAdapter.s_offsetPixels, middle.Y - 1),
+                        new Point(middle.X + FlatComboAdapter.s_offsetPixels + 1, middle.Y - 1),
+                        new Point(middle.X, middle.Y + FlatComboAdapter.s_offsetPixels)
                     });
                 }
             }
@@ -678,11 +672,12 @@ namespace System.Windows.Forms
 
             internal class ToolStripComboBoxControlAccessibleObject : ComboBoxAccessibleObject
             {
-                private readonly ChildAccessibleObject childAccessibleObject;
+                private readonly ChildAccessibleObject _childAccessibleObject;
 
-                public ToolStripComboBoxControlAccessibleObject(ToolStripComboBoxControl toolStripComboBoxControl) : base(toolStripComboBoxControl)
+                public ToolStripComboBoxControlAccessibleObject(ToolStripComboBoxControl toolStripComboBoxControl)
+                    : base(toolStripComboBoxControl)
                 {
-                    childAccessibleObject = new ChildAccessibleObject(toolStripComboBoxControl, toolStripComboBoxControl.Handle);
+                    _childAccessibleObject = new ChildAccessibleObject(toolStripComboBoxControl, toolStripComboBoxControl.Handle);
                 }
 
                 internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)

@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     [ToolboxBitmap(typeof(DataGridViewTextBoxColumn), "DataGridViewTextBoxColumn")]
     public class DataGridViewTextBoxColumn : DataGridViewColumn
     {
-        private const int DATAGRIDVIEWTEXTBOXCOLUMN_maxInputLength = 32767;
+        private const int ColumnMaxInputLength = 32767;
 
         public DataGridViewTextBoxColumn() : base(new DataGridViewTextBoxCell())
         {
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [DefaultValue(DATAGRIDVIEWTEXTBOXCOLUMN_maxInputLength)]
+        [DefaultValue(ColumnMaxInputLength)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.DataGridView_TextBoxColumnMaxInputLengthDescr))]
         public int MaxInputLength

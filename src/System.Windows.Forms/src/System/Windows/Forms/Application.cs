@@ -51,8 +51,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Events the user can hook into
         /// </summary>
-        private static readonly object EVENT_APPLICATIONEXIT = new object();
-        private static readonly object EVENT_THREADEXIT = new object();
+        private static readonly object s_eventApplicationExit = new object();
+        private static readonly object s_eventThreadExit = new object();
 
         // Constant string used in Application.Restart()
         private const string IEEXEC = "ieexec.exe";
@@ -632,8 +632,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static event EventHandler ApplicationExit
         {
-            add => AddEventHandler(EVENT_APPLICATIONEXIT, value);
-            remove => RemoveEventHandler(EVENT_APPLICATIONEXIT, value);
+            add => AddEventHandler(s_eventApplicationExit, value);
+            remove => RemoveEventHandler(s_eventApplicationExit, value);
         }
 
         private static void AddEventHandler(object key, Delegate value)
@@ -793,8 +793,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static event EventHandler ThreadExit
         {
-            add => AddEventHandler(EVENT_THREADEXIT, value);
-            remove => RemoveEventHandler(EVENT_THREADEXIT, value);
+            add => AddEventHandler(s_eventThreadExit, value);
+            remove => RemoveEventHandler(s_eventThreadExit, value);
         }
 
         /// <summary>
@@ -1017,7 +1017,7 @@ namespace System.Windows.Forms
         {
             if (s_eventHandlers != null)
             {
-                Delegate exit = s_eventHandlers[EVENT_APPLICATIONEXIT];
+                Delegate exit = s_eventHandlers[s_eventApplicationExit];
                 if (exit != null)
                 {
                     ((EventHandler)exit)(null, EventArgs.Empty);
@@ -1032,7 +1032,7 @@ namespace System.Windows.Forms
         {
             if (s_eventHandlers != null)
             {
-                Delegate exit = s_eventHandlers[EVENT_THREADEXIT];
+                Delegate exit = s_eventHandlers[s_eventThreadExit];
                 if (exit != null)
                 {
                     ((EventHandler)exit)(null, EventArgs.Empty);

@@ -17,25 +17,25 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionBindingNavigator))]
     public class BindingNavigator : ToolStrip, ISupportInitialize
     {
-        private BindingSource bindingSource;
+        private BindingSource _bindingSource;
 
-        private ToolStripItem moveFirstItem;
-        private ToolStripItem movePreviousItem;
-        private ToolStripItem moveNextItem;
-        private ToolStripItem moveLastItem;
-        private ToolStripItem addNewItem;
-        private ToolStripItem deleteItem;
-        private ToolStripItem positionItem;
-        private ToolStripItem countItem;
+        private ToolStripItem _moveFirstItem;
+        private ToolStripItem _movePreviousItem;
+        private ToolStripItem _moveNextItem;
+        private ToolStripItem _moveLastItem;
+        private ToolStripItem _addNewItem;
+        private ToolStripItem _deleteItem;
+        private ToolStripItem _positionItem;
+        private ToolStripItem _countItem;
 
-        private string countItemFormat = SR.BindingNavigatorCountItemFormat;
+        private string _countItemFormat = SR.BindingNavigatorCountItemFormat;
 
-        private EventHandler onRefreshItems;
+        private EventHandler _onRefreshItems;
 
-        private bool initializing;
+        private bool _initializing;
 
-        private bool addNewItemUserEnabled = true;
-        private bool deleteItemUserEnabled = true;
+        private bool _addNewItemUserEnabled = true;
+        private bool _deleteItemUserEnabled = true;
 
         /// <summary>
         ///  Creates an empty BindingNavigator tool strip.
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void BeginInit()
         {
-            initializing = true;
+            _initializing = true;
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void EndInit()
         {
-            initializing = false;
+            _initializing = false;
             RefreshItemsInternal();
         }
 
@@ -247,12 +247,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return bindingSource;
+                return _bindingSource;
             }
 
             set
             {
-                WireUpBindingSource(ref bindingSource, value);
+                WireUpBindingSource(ref _bindingSource, value);
             }
         }
 
@@ -266,16 +266,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (moveFirstItem != null && moveFirstItem.IsDisposed)
+                if (_moveFirstItem != null && _moveFirstItem.IsDisposed)
                 {
-                    moveFirstItem = null;
+                    _moveFirstItem = null;
                 }
-                return moveFirstItem;
+                return _moveFirstItem;
             }
 
             set
             {
-                WireUpButton(ref moveFirstItem, value, new EventHandler(OnMoveFirst));
+                WireUpButton(ref _moveFirstItem, value, new EventHandler(OnMoveFirst));
             }
         }
 
@@ -289,17 +289,17 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (movePreviousItem != null && movePreviousItem.IsDisposed)
+                if (_movePreviousItem != null && _movePreviousItem.IsDisposed)
                 {
-                    movePreviousItem = null;
+                    _movePreviousItem = null;
                 }
 
-                return movePreviousItem;
+                return _movePreviousItem;
             }
 
             set
             {
-                WireUpButton(ref movePreviousItem, value, new EventHandler(OnMovePrevious));
+                WireUpButton(ref _movePreviousItem, value, new EventHandler(OnMovePrevious));
             }
         }
 
@@ -313,16 +313,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (moveNextItem != null && moveNextItem.IsDisposed)
+                if (_moveNextItem != null && _moveNextItem.IsDisposed)
                 {
-                    moveNextItem = null;
+                    _moveNextItem = null;
                 }
-                return moveNextItem;
+                return _moveNextItem;
             }
 
             set
             {
-                WireUpButton(ref moveNextItem, value, new EventHandler(OnMoveNext));
+                WireUpButton(ref _moveNextItem, value, new EventHandler(OnMoveNext));
             }
         }
 
@@ -336,16 +336,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (moveLastItem != null && moveLastItem.IsDisposed)
+                if (_moveLastItem != null && _moveLastItem.IsDisposed)
                 {
-                    moveLastItem = null;
+                    _moveLastItem = null;
                 }
-                return moveLastItem;
+                return _moveLastItem;
             }
 
             set
             {
-                WireUpButton(ref moveLastItem, value, new EventHandler(OnMoveLast));
+                WireUpButton(ref _moveLastItem, value, new EventHandler(OnMoveLast));
             }
         }
 
@@ -359,21 +359,21 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (addNewItem != null && addNewItem.IsDisposed)
+                if (_addNewItem != null && _addNewItem.IsDisposed)
                 {
-                    addNewItem = null;
+                    _addNewItem = null;
                 }
-                return addNewItem;
+                return _addNewItem;
             }
 
             set
             {
-                if (addNewItem != value && value != null)
+                if (_addNewItem != value && value != null)
                 {
                     value.InternalEnabledChanged += new EventHandler(OnAddNewItemEnabledChanged);
-                    addNewItemUserEnabled = value.Enabled;
+                    _addNewItemUserEnabled = value.Enabled;
                 }
-                WireUpButton(ref addNewItem, value, new EventHandler(OnAddNew));
+                WireUpButton(ref _addNewItem, value, new EventHandler(OnAddNew));
             }
         }
 
@@ -387,21 +387,21 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (deleteItem != null && deleteItem.IsDisposed)
+                if (_deleteItem != null && _deleteItem.IsDisposed)
                 {
-                    deleteItem = null;
+                    _deleteItem = null;
                 }
-                return deleteItem;
+                return _deleteItem;
             }
 
             set
             {
-                if (deleteItem != value && value != null)
+                if (_deleteItem != value && value != null)
                 {
                     value.InternalEnabledChanged += new EventHandler(OnDeleteItemEnabledChanged);
-                    deleteItemUserEnabled = value.Enabled;
+                    _deleteItemUserEnabled = value.Enabled;
                 }
-                WireUpButton(ref deleteItem, value, new EventHandler(OnDelete));
+                WireUpButton(ref _deleteItem, value, new EventHandler(OnDelete));
             }
         }
 
@@ -415,16 +415,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (positionItem != null && positionItem.IsDisposed)
+                if (_positionItem != null && _positionItem.IsDisposed)
                 {
-                    positionItem = null;
+                    _positionItem = null;
                 }
-                return positionItem;
+                return _positionItem;
             }
 
             set
             {
-                WireUpTextBox(ref positionItem, value, new KeyEventHandler(OnPositionKey), new EventHandler(OnPositionLostFocus));
+                WireUpTextBox(ref _positionItem, value, new KeyEventHandler(OnPositionKey), new EventHandler(OnPositionLostFocus));
             }
         }
 
@@ -438,16 +438,16 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (countItem != null && countItem.IsDisposed)
+                if (_countItem != null && _countItem.IsDisposed)
                 {
-                    countItem = null;
+                    _countItem = null;
                 }
-                return countItem;
+                return _countItem;
             }
 
             set
             {
-                WireUpLabel(ref countItem, value);
+                WireUpLabel(ref _countItem, value);
             }
         }
 
@@ -460,14 +460,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return countItemFormat;
+                return _countItemFormat;
             }
 
             set
             {
-                if (countItemFormat != value)
+                if (_countItemFormat != value)
                 {
-                    countItemFormat = value;
+                    _countItemFormat = value;
                     RefreshItemsInternal();
                 }
             }
@@ -481,8 +481,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingNavigatorRefreshItemsEventDescr))]
         public event EventHandler RefreshItems
         {
-            add => onRefreshItems += value;
-            remove => onRefreshItems -= value;
+            add => _onRefreshItems += value;
+            remove => _onRefreshItems -= value;
         }
 
         /// <summary>
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
             bool allowNew, allowRemove;
 
             // Get state info from the binding source (if any)
-            if (bindingSource == null)
+            if (_bindingSource == null)
             {
                 count = 0;
                 position = 0;
@@ -504,10 +504,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                count = bindingSource.Count;
-                position = bindingSource.Position + 1;
-                allowNew = (bindingSource as IBindingList).AllowNew;
-                allowRemove = (bindingSource as IBindingList).AllowRemove;
+                count = _bindingSource.Count;
+                position = _bindingSource.Position + 1;
+                allowNew = (_bindingSource as IBindingList).AllowNew;
+                allowRemove = (_bindingSource as IBindingList).AllowRemove;
             }
 
             // Enable or disable items (except when in design mode)
@@ -515,61 +515,61 @@ namespace System.Windows.Forms
             {
                 if (MoveFirstItem != null)
                 {
-                    moveFirstItem.Enabled = (position > 1);
+                    _moveFirstItem.Enabled = (position > 1);
                 }
 
                 if (MovePreviousItem != null)
                 {
-                    movePreviousItem.Enabled = (position > 1);
+                    _movePreviousItem.Enabled = (position > 1);
                 }
 
                 if (MoveNextItem != null)
                 {
-                    moveNextItem.Enabled = (position < count);
+                    _moveNextItem.Enabled = (position < count);
                 }
 
                 if (MoveLastItem != null)
                 {
-                    moveLastItem.Enabled = (position < count);
+                    _moveLastItem.Enabled = (position < count);
                 }
 
                 if (AddNewItem != null)
                 {
                     EventHandler handler = new EventHandler(OnAddNewItemEnabledChanged);
-                    addNewItem.InternalEnabledChanged -= handler;
-                    addNewItem.Enabled = (addNewItemUserEnabled && allowNew);
-                    addNewItem.InternalEnabledChanged += handler;
+                    _addNewItem.InternalEnabledChanged -= handler;
+                    _addNewItem.Enabled = (_addNewItemUserEnabled && allowNew);
+                    _addNewItem.InternalEnabledChanged += handler;
                 }
 
                 if (DeleteItem != null)
                 {
                     EventHandler handler = new EventHandler(OnDeleteItemEnabledChanged);
-                    deleteItem.InternalEnabledChanged -= handler;
-                    deleteItem.Enabled = (deleteItemUserEnabled && allowRemove && count > 0);
-                    deleteItem.InternalEnabledChanged += handler;
+                    _deleteItem.InternalEnabledChanged -= handler;
+                    _deleteItem.Enabled = (_deleteItemUserEnabled && allowRemove && count > 0);
+                    _deleteItem.InternalEnabledChanged += handler;
                 }
 
                 if (PositionItem != null)
                 {
-                    positionItem.Enabled = (position > 0 && count > 0);
+                    _positionItem.Enabled = (position > 0 && count > 0);
                 }
 
                 if (CountItem != null)
                 {
-                    countItem.Enabled = (count > 0);
+                    _countItem.Enabled = (count > 0);
                 }
             }
 
             // Update current position indicator
-            if (positionItem != null)
+            if (_positionItem != null)
             {
-                positionItem.Text = position.ToString(CultureInfo.CurrentCulture);
+                _positionItem.Text = position.ToString(CultureInfo.CurrentCulture);
             }
 
             // Update record count indicator
-            if (countItem != null)
+            if (_countItem != null)
             {
-                countItem.Text = DesignMode ? CountItemFormat : string.Format(CultureInfo.CurrentCulture, CountItemFormat, count);
+                _countItem.Text = DesignMode ? CountItemFormat : string.Format(CultureInfo.CurrentCulture, CountItemFormat, count);
             }
         }
 
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
             RefreshItemsCore();
 
             // Raise the public event
-            onRefreshItems?.Invoke(this, EventArgs.Empty);
+            _onRefreshItems?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -602,18 +602,18 @@ namespace System.Windows.Forms
         private void AcceptNewPosition()
         {
             // If no position item or binding source, do nothing
-            if (positionItem == null || bindingSource == null)
+            if (_positionItem == null || _bindingSource == null)
             {
                 return;
             }
 
             // Default to old position, in case new position turns out to be garbage
-            int newPosition = bindingSource.Position;
+            int newPosition = _bindingSource.Position;
 
             try
             {
                 // Read new position from item text (and subtract one!)
-                newPosition = Convert.ToInt32(positionItem.Text, CultureInfo.CurrentCulture) - 1;
+                newPosition = Convert.ToInt32(_positionItem.Text, CultureInfo.CurrentCulture) - 1;
             }
             catch (FormatException)
             {
@@ -626,9 +626,9 @@ namespace System.Windows.Forms
 
             // If user has managed to enter a valid number, that is not the same as the current position, try
             // navigating to that position. Let the BindingSource validate the new position to keep it in range.
-            if (newPosition != bindingSource.Position)
+            if (newPosition != _bindingSource.Position)
             {
-                bindingSource.Position = newPosition;
+                _bindingSource.Position = newPosition;
             }
 
             // Update state of all items to reflect final position. If the user entered a bad position,
@@ -653,9 +653,9 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (_bindingSource != null)
                 {
-                    bindingSource.MoveFirst();
+                    _bindingSource.MoveFirst();
                     RefreshItemsInternal();
                 }
             }
@@ -668,9 +668,9 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (_bindingSource != null)
                 {
-                    bindingSource.MovePrevious();
+                    _bindingSource.MovePrevious();
                     RefreshItemsInternal();
                 }
             }
@@ -683,9 +683,9 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (_bindingSource != null)
                 {
-                    bindingSource.MoveNext();
+                    _bindingSource.MoveNext();
                     RefreshItemsInternal();
                 }
             }
@@ -698,9 +698,9 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (_bindingSource != null)
                 {
-                    bindingSource.MoveLast();
+                    _bindingSource.MoveLast();
                     RefreshItemsInternal();
                 }
             }
@@ -713,9 +713,9 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (_bindingSource != null)
                 {
-                    bindingSource.AddNew();
+                    _bindingSource.AddNew();
                     RefreshItemsInternal();
                 }
             }
@@ -728,9 +728,9 @@ namespace System.Windows.Forms
         {
             if (Validate())
             {
-                if (bindingSource != null)
+                if (_bindingSource != null)
                 {
-                    bindingSource.RemoveCurrent();
+                    _bindingSource.RemoveCurrent();
                     RefreshItemsInternal();
                 }
             }
@@ -782,7 +782,7 @@ namespace System.Windows.Forms
         private void RefreshItemsInternal()
         {
             // Block all updates during initialization
-            if (initializing)
+            if (_initializing)
             {
                 return;
             }
@@ -793,19 +793,19 @@ namespace System.Windows.Forms
 
         private void ResetCountItemFormat()
         {
-            countItemFormat = SR.BindingNavigatorCountItemFormat;
+            _countItemFormat = SR.BindingNavigatorCountItemFormat;
         }
 
         private bool ShouldSerializeCountItemFormat()
         {
-            return countItemFormat != SR.BindingNavigatorCountItemFormat;
+            return _countItemFormat != SR.BindingNavigatorCountItemFormat;
         }
 
         private void OnAddNewItemEnabledChanged(object sender, EventArgs e)
         {
             if (AddNewItem != null)
             {
-                addNewItemUserEnabled = addNewItem.Enabled;
+                _addNewItemUserEnabled = _addNewItem.Enabled;
             }
         }
 
@@ -813,7 +813,7 @@ namespace System.Windows.Forms
         {
             if (DeleteItem != null)
             {
-                deleteItemUserEnabled = deleteItem.Enabled;
+                _deleteItemUserEnabled = _deleteItem.Enabled;
             }
         }
 

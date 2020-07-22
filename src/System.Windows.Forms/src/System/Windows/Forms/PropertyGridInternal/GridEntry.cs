@@ -176,7 +176,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return SystemInformation.HighContrast && !OwnerGrid.developerOverride;
+                return SystemInformation.HighContrast && !OwnerGrid._developerOverride;
             }
         }
 

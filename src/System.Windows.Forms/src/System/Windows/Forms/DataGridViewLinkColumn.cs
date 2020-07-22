@@ -14,9 +14,9 @@ namespace System.Windows.Forms
     [ToolboxBitmap(typeof(DataGridViewLinkColumn), "DataGridViewLinkColumn")]
     public class DataGridViewLinkColumn : DataGridViewColumn
     {
-        private static readonly Type columnType = typeof(DataGridViewLinkColumn);
+        private static readonly Type s_columnType = typeof(DataGridViewLinkColumn);
 
-        private string text;
+        private string _text;
 
         public DataGridViewLinkColumn() : base(new DataGridViewLinkCell())
         {
@@ -170,13 +170,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return text;
+                return _text;
             }
             set
             {
-                if (!string.Equals(value, text, StringComparison.Ordinal))
+                if (!string.Equals(value, _text, StringComparison.Ordinal))
                 {
-                    text = value;
+                    _text = value;
                     if (DataGridView != null)
                     {
                         if (UseColumnTextForLinkValue)
@@ -325,7 +325,7 @@ namespace System.Windows.Forms
             DataGridViewLinkColumn dataGridViewColumn;
             Type thisType = GetType();
 
-            if (thisType == columnType) //performance improvement
+            if (thisType == s_columnType) //performance improvement
             {
                 dataGridViewColumn = new DataGridViewLinkColumn();
             }
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
             if (dataGridViewColumn != null)
             {
                 base.CloneInternal(dataGridViewColumn);
-                dataGridViewColumn.Text = text;
+                dataGridViewColumn.Text = _text;
             }
             return dataGridViewColumn;
         }

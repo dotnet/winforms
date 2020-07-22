@@ -11,12 +11,6 @@ namespace System.Windows.Forms
 {
     public class DataGridViewSortCompareEventArgs : HandledEventArgs
     {
-        private readonly DataGridViewColumn dataGridViewColumn;
-        private readonly object cellValue1, cellValue2;
-        private int sortResult;
-        private readonly int rowIndex1;
-        private readonly int rowIndex2;
-
         public DataGridViewSortCompareEventArgs(DataGridViewColumn dataGridViewColumn,
             object cellValue1,
             object cellValue2,
@@ -25,63 +19,23 @@ namespace System.Windows.Forms
         {
             Debug.Assert(dataGridViewColumn != null);
             Debug.Assert(dataGridViewColumn.Index >= 0);
-            this.dataGridViewColumn = dataGridViewColumn;
-            this.cellValue1 = cellValue1;
-            this.cellValue2 = cellValue2;
-            this.rowIndex1 = rowIndex1;
-            this.rowIndex2 = rowIndex2;
+            Column = dataGridViewColumn;
+            CellValue1 = cellValue1;
+            CellValue2 = cellValue2;
+            RowIndex1 = rowIndex1;
+            RowIndex2 = rowIndex2;
         }
 
-        public object CellValue1
-        {
-            get
-            {
-                return cellValue1;
-            }
-        }
+        public object CellValue1 { get; }
 
-        public object CellValue2
-        {
-            get
-            {
-                return cellValue2;
-            }
-        }
+        public object CellValue2 { get; }
 
-        public DataGridViewColumn Column
-        {
-            get
-            {
-                return dataGridViewColumn;
-            }
-        }
+        public DataGridViewColumn Column { get; }
 
-        public int RowIndex1
-        {
-            get
-            {
-                return rowIndex1;
-            }
-        }
+        public int RowIndex1 { get; }
 
-        public int RowIndex2
-        {
-            get
-            {
-                return rowIndex2;
-            }
-        }
+        public int RowIndex2 { get; }
 
-        public int SortResult
-        {
-            get
-            {
-                return sortResult;
-            }
-            set
-            {
-                sortResult = value;
-            }
-        }
+        public int SortResult { get; set; }
     }
 }

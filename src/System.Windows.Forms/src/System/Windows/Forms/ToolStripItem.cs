@@ -3046,7 +3046,7 @@ namespace System.Windows.Forms
         {
 #if DEBUG
             // let's not snap the stack trace unless we're debugging selection.
-            if (ToolStrip.SelectionDebug.TraceVerbose)
+            if (ToolStrip.s_selectionDebug.TraceVerbose)
             {
                 Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Select: {0} \r\n{1}\r\n", ToString(), new StackTrace().ToString().Substring(0, 200)));
             }
@@ -3063,7 +3063,7 @@ namespace System.Windows.Forms
             }
             if (ParentInternal != null && ParentInternal.IsSelectionSuspended)
             {
-                Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[Selection DBG] BAILING, selection is currently suspended");
+                Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[Selection DBG] BAILING, selection is currently suspended");
                 return;
             }
 
@@ -3101,13 +3101,13 @@ namespace System.Windows.Forms
 
                 if (_owner != null)
                 {
-                    _owner.rescaleConstsCallbackDelegate -= ToolStrip_RescaleConstants;
+                    _owner._rescaleConstsCallbackDelegate -= ToolStrip_RescaleConstants;
                 }
                 _owner = newOwner;
 
                 if (_owner != null)
                 {
-                    _owner.rescaleConstsCallbackDelegate += ToolStrip_RescaleConstants;
+                    _owner._rescaleConstsCallbackDelegate += ToolStrip_RescaleConstants;
                 }
 
                 // clear the parent if the owner is null.
@@ -3446,7 +3446,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void Unselect()
         {
-            Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", ToString()));
+            Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[Selection DBG] WBI.Unselect: {0}", ToString()));
             if (_state[s_stateSelected])
             {
                 _state[s_stateSelected] = false;

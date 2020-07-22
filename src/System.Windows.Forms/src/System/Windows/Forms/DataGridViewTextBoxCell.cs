@@ -485,7 +485,7 @@ namespace System.Windows.Forms
                 if (DataGridView.ShowCellErrors)
                 {
                     // Making sure that there is enough room for the potential error icon
-                    preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + DATAGRIDVIEWCELL_iconMarginWidth * 2 + iconsWidth);
+                    preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + IconMarginWidth * 2 + s_iconsWidth);
                 }
             }
             if (freeDimension != DataGridViewFreeDimension.Width)
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
                 if (DataGridView.ShowCellErrors)
                 {
                     // Making sure that there is enough room for the potential error icon
-                    preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + DATAGRIDVIEWCELL_iconMarginHeight * 2 + iconsHeight);
+                    preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + IconMarginHeight * 2 + s_iconsHeight);
                 }
             }
             return preferredSize;

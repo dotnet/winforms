@@ -50,22 +50,13 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
 
             form.Controls.Add(propertyGrid);
 
-            Type propertyGridType = typeof(PropertyGrid);
-            FieldInfo[] fields = propertyGridType.GetFields(
-                BindingFlags.NonPublic |
-                BindingFlags.Instance);
-            FieldInfo gridViewField = fields.First(f => f.Name == "gridView");
-            PropertyGridView propertyGridView = gridViewField.GetValue(propertyGrid) as PropertyGridView;
-            Type propertyGridViewType = typeof(PropertyGridView);
-            FieldInfo[] propertyGridViewFields = propertyGridViewType.GetFields(
-                BindingFlags.NonPublic |
-                BindingFlags.Instance);
+            var propertyGridView = propertyGrid.TestAccessor().Dynamic._gridView as PropertyGridView;
 
             int firstPropertyIndex = 1; // Index 0 corresponds to the category grid entry.
-            PropertyDescriptorGridEntry gridEntry = (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
+            PropertyDescriptorGridEntry gridEntry =
+                (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
 
-            FieldInfo selectedGridEntryField = propertyGridViewFields.First(f => f.Name == "selectedGridEntry");
-            var selectedGridEntry = selectedGridEntryField.GetValue(propertyGridView) as PropertyDescriptorGridEntry;
+            var selectedGridEntry = propertyGridView.TestAccessor().Dynamic.selectedGridEntry as PropertyDescriptorGridEntry;
             Assert.Equal(gridEntry.PropertyName, selectedGridEntry.PropertyName);
 
             AccessibleObject selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;

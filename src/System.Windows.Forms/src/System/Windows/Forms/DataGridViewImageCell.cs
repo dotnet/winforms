@@ -16,17 +16,17 @@ namespace System.Windows.Forms
 {
     public partial class DataGridViewImageCell : DataGridViewCell
     {
-        private static readonly int PropImageCellDescription = PropertyStore.CreateKey();
-        private static readonly int PropImageCellLayout = PropertyStore.CreateKey();
-        private static readonly Type defaultTypeImage = typeof(Image);
-        private static readonly Type defaultTypeIcon = typeof(Icon);
-        private static readonly Type cellType = typeof(DataGridViewImageCell);
-        private static Bitmap errorBmp;
-        private static Icon errorIco;
+        private static readonly int s_propImageCellDescription = PropertyStore.CreateKey();
+        private static readonly int s_propImageCellLayout = PropertyStore.CreateKey();
+        private static readonly Type s_defaultTypeImage = typeof(Image);
+        private static readonly Type s_defaultTypeIcon = typeof(Icon);
+        private static readonly Type s_cellType = typeof(DataGridViewImageCell);
+        private static Bitmap s_errorBitmap;
+        private static Icon s_errorIcon;
 
-        private const byte DATAGRIDVIEWIMAGECELL_valueIsIcon = 0x01;
+        private const byte CellValueIsIcon = 0x01;
 
-        private byte flags;  // see DATAGRIDVIEWIMAGECELL_ consts above
+        private byte _flags;  // see DATAGRIDVIEWIMAGECELL_ consts above
 
         public DataGridViewImageCell() : this(false /*valueIsIcon*/)
         {
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         {
             if (valueIsIcon)
             {
-                flags = DATAGRIDVIEWIMAGECELL_valueIsIcon;
+                _flags = CellValueIsIcon;
             }
         }
 
@@ -44,11 +44,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (defaultTypeImage.IsAssignableFrom(ValueType))
+                if (s_defaultTypeImage.IsAssignableFrom(ValueType))
                 {
                     return ErrorBitmap;
                 }
-                else if (defaultTypeIcon.IsAssignableFrom(ValueType))
+                else if (s_defaultTypeIcon.IsAssignableFrom(ValueType))
                 {
                     return ErrorIcon;
                 }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                object description = Properties.GetObject(PropImageCellDescription);
+                object description = Properties.GetObject(s_propImageCellDescription);
                 if (description != null)
                 {
                     return (string)description;
@@ -74,9 +74,9 @@ namespace System.Windows.Forms
 
             set
             {
-                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(PropImageCellDescription))
+                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propImageCellDescription))
                 {
-                    Properties.SetObject(PropImageCellDescription, value);
+                    Properties.SetObject(s_propImageCellDescription, value);
                 }
             }
         }
@@ -94,11 +94,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (errorBmp == null)
+                if (s_errorBitmap == null)
                 {
-                    errorBmp = DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
+                    s_errorBitmap = DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
                 }
-                return errorBmp;
+                return s_errorBitmap;
             }
         }
 
@@ -106,11 +106,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (errorIco == null)
+                if (s_errorIcon == null)
                 {
-                    errorIco = new Icon(typeof(DataGridView), "IconInError");
+                    s_errorIcon = new Icon(typeof(DataGridView), "IconInError");
                 }
-                return errorIco;
+                return s_errorIcon;
             }
         }
 
@@ -120,11 +120,11 @@ namespace System.Windows.Forms
             {
                 if (ValueIsIcon)
                 {
-                    return defaultTypeIcon;
+                    return s_defaultTypeIcon;
                 }
                 else
                 {
-                    return defaultTypeImage;
+                    return s_defaultTypeImage;
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int imageLayout = Properties.GetInteger(PropImageCellLayout, out bool found);
+                int imageLayout = Properties.GetInteger(s_propImageCellLayout, out bool found);
                 if (found)
                 {
                     return (DataGridViewImageCellLayout)imageLayout;
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
                 }
                 if (ImageLayout != value)
                 {
-                    Properties.SetInteger(PropImageCellLayout, (int)value);
+                    Properties.SetInteger(s_propImageCellLayout, (int)value);
                     OnCommonChange();
                 }
             }
@@ -163,7 +163,7 @@ namespace System.Windows.Forms
                 Debug.Assert(value >= DataGridViewImageCellLayout.NotSet && value <= DataGridViewImageCellLayout.Zoom);
                 if (ImageLayout != value)
                 {
-                    Properties.SetInteger(PropImageCellLayout, (int)value);
+                    Properties.SetInteger(s_propImageCellLayout, (int)value);
                 }
             }
         }
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((flags & DATAGRIDVIEWIMAGECELL_valueIsIcon) != 0x00);
+                return ((_flags & CellValueIsIcon) != 0x00);
             }
             set
             {
@@ -203,11 +203,11 @@ namespace System.Windows.Forms
                 {
                     if (value)
                     {
-                        flags |= (byte)DATAGRIDVIEWIMAGECELL_valueIsIcon;
+                        _flags |= (byte)CellValueIsIcon;
                     }
                     else
                     {
-                        flags = (byte)(flags & ~DATAGRIDVIEWIMAGECELL_valueIsIcon);
+                        _flags = (byte)(_flags & ~CellValueIsIcon);
                     }
                     if (DataGridView != null &&
                         RowIndex != -1 &&
@@ -238,17 +238,17 @@ namespace System.Windows.Forms
 
                 if (ValueIsIcon)
                 {
-                    return defaultTypeIcon;
+                    return s_defaultTypeIcon;
                 }
                 else
                 {
-                    return defaultTypeImage;
+                    return s_defaultTypeImage;
                 }
             }
             set
             {
                 base.ValueType = value;
-                ValueIsIcon = (value != null && defaultTypeIcon.IsAssignableFrom(value));
+                ValueIsIcon = (value != null && s_defaultTypeIcon.IsAssignableFrom(value));
             }
         }
 
@@ -257,7 +257,7 @@ namespace System.Windows.Forms
             DataGridViewImageCell dataGridViewCell;
             Type thisType = GetType();
 
-            if (thisType == cellType) //performance improvement
+            if (thisType == s_cellType) //performance improvement
             {
                 dataGridViewCell = new DataGridViewImageCell();
             }
@@ -550,7 +550,7 @@ namespace System.Windows.Forms
                 if (DataGridView.ShowCellErrors)
                 {
                     // Making sure that there is enough room for the potential error icon
-                    preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + DATAGRIDVIEWCELL_iconMarginWidth * 2 + iconsWidth);
+                    preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + IconMarginWidth * 2 + s_iconsWidth);
                 }
             }
             if (freeDimension != DataGridViewFreeDimension.Width)
@@ -559,7 +559,7 @@ namespace System.Windows.Forms
                 if (DataGridView.ShowCellErrors)
                 {
                     // Making sure that there is enough room for the potential error icon
-                    preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + DATAGRIDVIEWCELL_iconMarginHeight * 2 + iconsHeight);
+                    preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + IconMarginHeight * 2 + s_iconsHeight);
                 }
             }
             return preferredSize;
@@ -572,7 +572,7 @@ namespace System.Windows.Forms
             {
                 if (OwningColumn is DataGridViewImageColumn owningImageColumn)
                 {
-                    if (defaultTypeImage.IsAssignableFrom(ValueType))
+                    if (s_defaultTypeImage.IsAssignableFrom(ValueType))
                     {
                         Image image = owningImageColumn.Image;
                         if (image != null)
@@ -580,7 +580,7 @@ namespace System.Windows.Forms
                             return image;
                         }
                     }
-                    else if (defaultTypeIcon.IsAssignableFrom(ValueType))
+                    else if (s_defaultTypeIcon.IsAssignableFrom(ValueType))
                     {
                         Icon icon = owningImageColumn.Icon;
                         if (icon != null)

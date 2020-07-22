@@ -1670,12 +1670,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual Brush GetLineBrush(Graphics g)
         {
-            if (ownerGrid.lineBrush == null)
+            if (ownerGrid._lineBrush == null)
             {
                 Color clr = g.GetNearestColor(ownerGrid.LineColor);
-                ownerGrid.lineBrush = new SolidBrush(clr);
+                ownerGrid._lineBrush = new SolidBrush(clr);
             }
-            return ownerGrid.lineBrush;
+            return ownerGrid._lineBrush;
         }
 
         public virtual Color GetSelectedItemWithFocusForeColor()
@@ -1690,12 +1690,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual Brush GetSelectedItemWithFocusBackBrush(Graphics g)
         {
-            if (ownerGrid.selectedItemWithFocusBackBrush == null)
+            if (ownerGrid._selectedItemWithFocusBackBrush == null)
             {
                 Color clr = g.GetNearestColor(ownerGrid.SelectedItemWithFocusBackColor);
-                ownerGrid.selectedItemWithFocusBackBrush = new SolidBrush(clr);
+                ownerGrid._selectedItemWithFocusBackBrush = new SolidBrush(clr);
             }
-            return ownerGrid.selectedItemWithFocusBackBrush;
+            return ownerGrid._selectedItemWithFocusBackBrush;
         }
 
         public virtual IntPtr GetHostHandle()

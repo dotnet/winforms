@@ -6,16 +6,15 @@
 
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
 {
     public class DataGridViewComboBoxEditingControl : ComboBox, IDataGridViewEditingControl
     {
-        private DataGridView dataGridView;
-        private bool valueChanged;
-        private int rowIndex;
+        private DataGridView _dataGridView;
+        private bool _valueChanged;
+        private int _rowIndex;
 
         public DataGridViewComboBoxEditingControl() : base()
         {
@@ -33,11 +32,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return dataGridView;
+                return _dataGridView;
             }
             set
             {
-                dataGridView = value;
+                _dataGridView = value;
             }
         }
 
@@ -64,11 +63,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return rowIndex;
+                return _rowIndex;
             }
             set
             {
-                rowIndex = value;
+                _rowIndex = value;
             }
         }
 
@@ -76,11 +75,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return valueChanged;
+                return _valueChanged;
             }
             set
             {
-                valueChanged = value;
+                _valueChanged = value;
             }
         }
 
@@ -108,7 +107,7 @@ namespace System.Windows.Forms
                 // Our ComboBox does not support transparent back colors
                 Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
                 BackColor = opaqueBackColor;
-                dataGridView.EditingPanel.BackColor = opaqueBackColor;
+                _dataGridView.EditingPanel.BackColor = opaqueBackColor;
             }
             else
             {
@@ -145,8 +144,8 @@ namespace System.Windows.Forms
 
         private void NotifyDataGridViewOfValueChange()
         {
-            valueChanged = true;
-            dataGridView.NotifyCurrentCellDirty(true);
+            _valueChanged = true;
+            _dataGridView.NotifyCurrentCellDirty(true);
         }
 
         protected override void OnSelectedIndexChanged(EventArgs e)
@@ -162,7 +161,7 @@ namespace System.Windows.Forms
         {
             base.OnHandleCreated(e);
 
-            dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
+            _dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
         }
     }
 

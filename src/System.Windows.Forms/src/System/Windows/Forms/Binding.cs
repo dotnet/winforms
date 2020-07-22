@@ -16,8 +16,6 @@ namespace System.Windows.Forms
     [TypeConverter(typeof(ListBindingConverter))]
     public class Binding
     {
-        // the two collection owners that this binding belongs to.
-        private IBindableComponent _control;
         private BindingManagerBase _bindingManagerBase;
 
         private readonly BindToObject _bindToObject;
@@ -28,8 +26,6 @@ namespace System.Windows.Forms
         private TypeConverter _propInfoConverter;
 
         private bool _formattingEnabled;
-
-        private bool _bound;
         private bool _modified;
 
         // Recursion guards
@@ -105,13 +101,13 @@ namespace System.Windows.Forms
         ///  Gets the control to which the binding belongs.
         /// </summary>
         [DefaultValue(null)]
-        public IBindableComponent BindableComponent => _control;
+        public IBindableComponent BindableComponent { get; private set; }
 
         /// <summary>
         ///  Gets the control to which the binding belongs.
         /// </summary>
         [DefaultValue(null)]
-        public Control Control => _control as Control;
+        public Control Control => BindableComponent as Control;
 
         /// <summary>
         ///  Is the binadable component in a 'created' (ready-to-use) state? For controls,
@@ -126,22 +122,22 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Instance-specific property equivalent to the static method above
         /// </summary>
-        internal bool ComponentCreated => IsComponentCreated(_control);
+        internal bool ComponentCreated => IsComponentCreated(BindableComponent);
 
         private void FormLoaded(object sender, EventArgs e)
         {
-            Debug.Assert(sender == _control, "which other control can send us the Load event?");
+            Debug.Assert(sender == BindableComponent, "which other control can send us the Load event?");
             // update the binding
             CheckBinding();
         }
 
         internal void SetBindableComponent(IBindableComponent value)
         {
-            if (_control != value)
+            if (BindableComponent != value)
             {
-                IBindableComponent oldTarget = _control;
+                IBindableComponent oldTarget = BindableComponent;
                 BindTarget(false);
-                _control = value;
+                BindableComponent = value;
                 BindTarget(true);
                 try
                 {
@@ -150,14 +146,14 @@ namespace System.Windows.Forms
                 catch
                 {
                     BindTarget(false);
-                    _control = oldTarget;
+                    BindableComponent = oldTarget;
                     BindTarget(true);
                     throw;
                 }
 
                 // We are essentially doing to the listManager what we were doing to the
                 // BindToObject: bind only when the control is created and it has a BindingContext
-                BindingContext.UpdateBinding((_control != null && IsComponentCreated(_control) ? _control.BindingContext : null), this);
+                BindingContext.UpdateBinding((BindableComponent != null && IsComponentCreated(BindableComponent) ? BindableComponent.BindingContext : null), this);
                 if (value is Form form)
                 {
                     form.Load += new EventHandler(FormLoaded);
@@ -168,7 +164,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets a value indicating whether the binding is active.
         /// </summary>
-        public bool IsBinding => _bound;
+        public bool IsBinding { get; private set; }
 
         /// <summary>
         ///  Gets the <see cref='Forms.BindingManagerBase'/> of this binding that
@@ -371,29 +367,29 @@ namespace System.Windows.Forms
             {
                 if (IsBinding)
                 {
-                    if (_propInfo != null && _control != null)
+                    if (_propInfo != null && BindableComponent != null)
                     {
                         EventHandler handler = new EventHandler(Target_PropertyChanged);
-                        _propInfo.AddValueChanged(_control, handler);
+                        _propInfo.AddValueChanged(BindableComponent, handler);
                     }
                     if (_validateInfo != null)
                     {
                         CancelEventHandler handler = new CancelEventHandler(Target_Validate);
-                        _validateInfo.AddEventHandler(_control, handler);
+                        _validateInfo.AddEventHandler(BindableComponent, handler);
                     }
                 }
             }
             else
             {
-                if (_propInfo != null && _control != null)
+                if (_propInfo != null && BindableComponent != null)
                 {
                     EventHandler handler = new EventHandler(Target_PropertyChanged);
-                    _propInfo.RemoveValueChanged(_control, handler);
+                    _propInfo.RemoveValueChanged(BindableComponent, handler);
                 }
                 if (_validateInfo != null)
                 {
                     CancelEventHandler handler = new CancelEventHandler(Target_Validate);
-                    _validateInfo.RemoveEventHandler(_control, handler);
+                    _validateInfo.RemoveEventHandler(BindableComponent, handler);
                 }
             }
         }
@@ -408,11 +404,11 @@ namespace System.Windows.Forms
         {
             _bindToObject.CheckBinding();
 
-            if (_control != null && !string.IsNullOrEmpty(PropertyName))
+            if (BindableComponent != null && !string.IsNullOrEmpty(PropertyName))
             {
-                _control.DataBindings.CheckDuplicates(this);
+                BindableComponent.DataBindings.CheckDuplicates(this);
 
-                Type controlClass = _control.GetType();
+                Type controlClass = BindableComponent.GetType();
 
                 // Check Properties
                 string propertyNameIsNull = PropertyName + "IsNull";
@@ -427,14 +423,14 @@ namespace System.Windows.Forms
                 // those of its designer.  Normally we want that, but for
                 // inherited controls we don't because an inherited control should
                 // "act" like a runtime control.
-                InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(_control)[typeof(InheritanceAttribute)];
+                InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(BindableComponent)[typeof(InheritanceAttribute)];
                 if (attr != null && attr.InheritanceLevel != InheritanceLevel.NotInherited)
                 {
                     propInfos = TypeDescriptor.GetProperties(controlClass);
                 }
                 else
                 {
-                    propInfos = TypeDescriptor.GetProperties(_control);
+                    propInfos = TypeDescriptor.GetProperties(BindableComponent);
                 }
 
                 for (int i = 0; i < propInfos.Count; i++)
@@ -478,7 +474,7 @@ namespace System.Windows.Forms
                 // Check events
                 EventDescriptor tempValidateInfo = null;
                 string validateName = "Validating";
-                EventDescriptorCollection eventInfos = TypeDescriptor.GetEvents(_control);
+                EventDescriptorCollection eventInfos = TypeDescriptor.GetEvents(BindableComponent);
                 for (int i = 0; i < eventInfos.Count; i++)
                 {
                     if (tempValidateInfo == null && string.Equals(eventInfos[i].Name, validateName, StringComparison.OrdinalIgnoreCase))
@@ -501,7 +497,7 @@ namespace System.Windows.Forms
 
         internal bool ControlAtDesignTime()
         {
-            if (!(_control is IComponent comp))
+            if (!(BindableComponent is IComponent comp))
             {
                 return false;
             }
@@ -516,12 +512,12 @@ namespace System.Windows.Forms
 
         private object GetPropValue()
         {
-            if (_propIsNullInfo != null && (bool)_propIsNullInfo.GetValue(_control))
+            if (_propIsNullInfo != null && (bool)_propIsNullInfo.GetValue(BindableComponent))
             {
                 return DataSourceNullValue;
             }
 
-            return _propInfo.GetValue(_control) ?? DataSourceNullValue;
+            return _propInfo.GetValue(BindableComponent) ?? DataSourceNullValue;
         }
 
         private BindingCompleteEventArgs CreateBindingCompleteEventArgs(BindingCompleteContext context, Exception ex)
@@ -973,23 +969,23 @@ namespace System.Windows.Forms
                 {
                     if (_propIsNullInfo != null)
                     {
-                        _propIsNullInfo.SetValue(_control, true);
+                        _propIsNullInfo.SetValue(BindableComponent, true);
                     }
                     else if (_propInfo != null)
                     {
                         if (_propInfo.PropertyType == typeof(object))
                         {
-                            _propInfo.SetValue(_control, DataSourceNullValue);
+                            _propInfo.SetValue(BindableComponent, DataSourceNullValue);
                         }
                         else
                         {
-                            _propInfo.SetValue(_control, null);
+                            _propInfo.SetValue(BindableComponent, null);
                         }
                     }
                 }
                 else
                 {
-                    _propInfo.SetValue(_control, value);
+                    _propInfo.SetValue(BindableComponent, value);
                 }
             }
             finally
@@ -1059,7 +1055,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (_control != null && !string.IsNullOrEmpty(PropertyName) &&
+                return (BindableComponent != null && !string.IsNullOrEmpty(PropertyName) &&
                                 DataSource != null && _bindingManagerBase != null);
             }
         }
@@ -1067,11 +1063,11 @@ namespace System.Windows.Forms
         internal void UpdateIsBinding()
         {
             bool newBound = IsBindable && ComponentCreated && _bindingManagerBase.IsBinding;
-            if (_bound != newBound)
+            if (IsBinding != newBound)
             {
-                _bound = newBound;
+                IsBinding = newBound;
                 BindTarget(newBound);
-                if (_bound)
+                if (IsBinding)
                 {
                     if (_controlUpdateMode == ControlUpdateMode.Never)
                     {
@@ -1088,10 +1084,7 @@ namespace System.Windows.Forms
         private class BindToObject
         {
             private BindingManagerBase _bindingManager;
-            private PropertyDescriptor _fieldInfo;
             private readonly Binding _owner;
-            private string _errorText = string.Empty;
-
             private bool _dataSourceInitialized;
             private bool _waitingOnDataSource;
 
@@ -1165,17 +1158,17 @@ namespace System.Windows.Forms
                 }
 
                 // remove notification from the backEnd
-                if (_bindingManager != null && _fieldInfo != null && _bindingManager.IsBinding && !(_bindingManager is CurrencyManager))
+                if (_bindingManager != null && FieldInfo != null && _bindingManager.IsBinding && !(_bindingManager is CurrencyManager))
                 {
-                    _fieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
-                    _fieldInfo = null;
+                    FieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
+                    FieldInfo = null;
                 }
 
                 _bindingManager = lManager;
                 CheckBinding();
             }
 
-            internal string DataErrorText => _errorText;
+            internal string DataErrorText { get; private set; } = string.Empty;
 
             /// <summary>
             ///  Returns any data error info on the data source for the bound data field
@@ -1188,7 +1181,7 @@ namespace System.Windows.Forms
                 if (value is IDataErrorInfo errorInfo)
                 {
                     // Get the row error if there is no DataMember
-                    if (_fieldInfo == null)
+                    if (FieldInfo == null)
                     {
                         text = errorInfo.Error;
                     }
@@ -1199,7 +1192,7 @@ namespace System.Windows.Forms
                     // (If there is no fieldInfo, data binding would have failed already )
                     else
                     {
-                        text = errorInfo[_fieldInfo.Name];
+                        text = errorInfo[FieldInfo.Name];
                     }
                 }
 
@@ -1212,11 +1205,11 @@ namespace System.Windows.Forms
 
                 // Update IDataErrorInfo text: it's ok to get this now because we're going to need
                 // this as part of the BindingCompleteEventArgs anyway.
-                _errorText = GetErrorText(obj);
+                DataErrorText = GetErrorText(obj);
 
-                if (_fieldInfo != null)
+                if (FieldInfo != null)
                 {
-                    obj = _fieldInfo.GetValue(obj);
+                    obj = FieldInfo.GetValue(obj);
                 }
 
                 return obj;
@@ -1238,7 +1231,7 @@ namespace System.Windows.Forms
                         return type;
                     }
 
-                    return _fieldInfo?.PropertyType;
+                    return FieldInfo?.PropertyType;
                 }
             }
 
@@ -1246,16 +1239,16 @@ namespace System.Windows.Forms
             {
                 object obj = null;
 
-                if (_fieldInfo != null)
+                if (FieldInfo != null)
                 {
                     obj = _bindingManager.Current;
                     if (obj is IEditableObject editableObject)
                     {
                         editableObject.BeginEdit();
                     }
-                    if (!_fieldInfo.IsReadOnly)
+                    if (!FieldInfo.IsReadOnly)
                     {
-                        _fieldInfo.SetValue(obj, value);
+                        FieldInfo.SetValue(obj, value);
                     }
                 }
                 else
@@ -1268,10 +1261,10 @@ namespace System.Windows.Forms
                 }
 
                 // Update IDataErrorInfo text.
-                _errorText = GetErrorText(obj);
+                DataErrorText = GetErrorText(obj);
             }
 
-            internal PropertyDescriptor FieldInfo => _fieldInfo;
+            internal PropertyDescriptor FieldInfo { get; private set; }
 
             internal void CheckBinding()
             {
@@ -1283,11 +1276,11 @@ namespace System.Windows.Forms
 
                 // Remove propertyChangedNotification when this binding is deleted
                 if (_bindingManager != null &&
-                    _fieldInfo != null &&
+                    FieldInfo != null &&
                     _bindingManager.IsBinding &&
                     !(_bindingManager is CurrencyManager))
                 {
-                    _fieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
+                    FieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                 }
 
                 if (_bindingManager != null &&
@@ -1297,8 +1290,8 @@ namespace System.Windows.Forms
                 {
                     string dataField = _owner.BindingMemberInfo.BindingField;
 
-                    _fieldInfo = _bindingManager.GetItemProperties().Find(dataField, true);
-                    if (_bindingManager.DataSource != null && _fieldInfo == null && dataField.Length > 0)
+                    FieldInfo = _bindingManager.GetItemProperties().Find(dataField, true);
+                    if (_bindingManager.DataSource != null && FieldInfo == null && dataField.Length > 0)
                     {
                         throw new ArgumentException(string.Format(SR.ListBindingBindField, dataField), "dataMember");
                     }
@@ -1309,15 +1302,15 @@ namespace System.Windows.Forms
                     // if the binding is of the form (Control, ControlProperty, DataSource, Property1.Property2.Property3)
                     // then we want to get notification from Current.Property1.Property2 and not from DataSource
                     // when we get the backEnd notification we push the new value into the Control's property
-                    if (_fieldInfo != null && _bindingManager.IsBinding &&
+                    if (FieldInfo != null && _bindingManager.IsBinding &&
                         !(_bindingManager is CurrencyManager))
                     {
-                        _fieldInfo.AddValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
+                        FieldInfo.AddValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                     }
                 }
                 else
                 {
-                    _fieldInfo = null;
+                    FieldInfo = null;
                 }
             }
         }

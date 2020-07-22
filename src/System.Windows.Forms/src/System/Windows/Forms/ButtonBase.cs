@@ -21,14 +21,14 @@ namespace System.Windows.Forms
     [Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)]
     public abstract partial class ButtonBase : Control
     {
-        private FlatStyle flatStyle = System.Windows.Forms.FlatStyle.Standard;
-        private ContentAlignment imageAlign = ContentAlignment.MiddleCenter;
-        private ContentAlignment textAlign = ContentAlignment.MiddleCenter;
-        private TextImageRelation textImageRelation = TextImageRelation.Overlay;
-        private readonly ImageList.Indexer imageIndex = new ImageList.Indexer();
-        private FlatButtonAppearance flatAppearance;
-        private ImageList imageList;
-        private Image image;
+        private FlatStyle _flatStyle = FlatStyle.Standard;
+        private ContentAlignment _imageAlign = ContentAlignment.MiddleCenter;
+        private ContentAlignment _textAlign = ContentAlignment.MiddleCenter;
+        private TextImageRelation _textImageRelation = TextImageRelation.Overlay;
+        private readonly ImageList.Indexer _imageIndex = new ImageList.Indexer();
+        private FlatButtonAppearance _flatAppearance;
+        private ImageList _imageList;
+        private Image _image;
 
         private const int FlagMouseOver = 0x0001;
         private const int FlagMouseDown = 0x0002;
@@ -39,14 +39,14 @@ namespace System.Windows.Forms
         private const int FlagIsDefault = 0x0040;
         private const int FlagUseMnemonic = 0x0080;
         private const int FlagShowToolTip = 0x0100;
-        private int state;
+        private int _state;
 
-        private ToolTip textToolTip;
+        private ToolTip _textToolTip;
 
-        //this allows the user to disable visual styles for the button so that it inherits its background color
-        private bool enableVisualStyleBackground = true;
+        // This allows the user to disable visual styles for the button so that it inherits its background color
+        private bool _enableVisualStyleBackground = true;
 
-        private bool isEnableVisualStyleBackgroundSet;
+        private bool _isEnableVisualStyleBackgroundSet;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='ButtonBase'/> class.
@@ -98,9 +98,9 @@ namespace System.Windows.Forms
                 SetFlag(FlagAutoEllipsis, value);
                 if (value)
                 {
-                    if (textToolTip == null)
+                    if (_textToolTip == null)
                     {
-                        textToolTip = new ToolTip();
+                        _textToolTip = new ToolTip();
                     }
                 }
                 Invalidate();
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return flatStyle;
+                return _flatStyle;
             }
             set
             {
@@ -286,7 +286,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
-                flatStyle = value;
+                _flatStyle = value;
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.FlatStyle);
                 Invalidate();
                 UpdateOwnerDraw();
@@ -301,12 +301,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (flatAppearance == null)
+                if (_flatAppearance == null)
                 {
-                    flatAppearance = new FlatButtonAppearance(this);
+                    _flatAppearance = new FlatButtonAppearance(this);
                 }
 
-                return flatAppearance;
+                return _flatAppearance;
             }
         }
 
@@ -321,27 +321,27 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (image == null && imageList != null)
+                if (_image == null && _imageList != null)
                 {
-                    int actualIndex = imageIndex.ActualIndex;
+                    int actualIndex = _imageIndex.ActualIndex;
 
                     // Pre-whidbey we used to use ImageIndex rather than ImageIndexer.ActualIndex.
                     // ImageIndex clamps to the length of the image list.  We need to replicate
                     // this logic here for backwards compatibility.
                     // We do not bake this into ImageIndexer because different controls
                     // treat this scenario differently.
-                    if (actualIndex >= imageList.Images.Count)
+                    if (actualIndex >= _imageList.Images.Count)
                     {
-                        actualIndex = imageList.Images.Count - 1;
+                        actualIndex = _imageList.Images.Count - 1;
                     }
 
                     if (actualIndex >= 0)
                     {
-                        return imageList.Images[actualIndex];
+                        return _imageList.Images[actualIndex];
                     }
-                    Debug.Assert(image == null, "We expect to be returning null.");
+                    Debug.Assert(_image == null, "We expect to be returning null.");
                 }
-                return image;
+                return _image;
             }
             set
             {
@@ -352,8 +352,8 @@ namespace System.Windows.Forms
 
                 StopAnimate();
 
-                image = value;
-                if (image != null)
+                _image = value;
+                if (_image != null)
                 {
                     ImageIndex = ImageList.Indexer.DefaultIndex;
                     ImageList = null;
@@ -376,7 +376,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return imageAlign;
+                return _imageAlign;
             }
             set
             {
@@ -384,9 +384,9 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
-                if (value != imageAlign)
+                if (value != _imageAlign)
                 {
-                    imageAlign = value;
+                    _imageAlign = value;
                     LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.ImageAlign);
                     Invalidate();
                 }
@@ -408,11 +408,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imageIndex.Index != ImageList.Indexer.DefaultIndex && imageList != null && imageIndex.Index >= imageList.Images.Count)
+                if (_imageIndex.Index != ImageList.Indexer.DefaultIndex && _imageList != null && _imageIndex.Index >= _imageList.Images.Count)
                 {
-                    return imageList.Images.Count - 1;
+                    return _imageList.Images.Count - 1;
                 }
-                return imageIndex.Index;
+                return _imageIndex.Index;
             }
             set
             {
@@ -421,7 +421,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
                 }
 
-                if (value == imageIndex.Index && value != ImageList.Indexer.DefaultIndex)
+                if (value == _imageIndex.Index && value != ImageList.Indexer.DefaultIndex)
                 {
                     return;
                 }
@@ -429,11 +429,11 @@ namespace System.Windows.Forms
                 if (value != ImageList.Indexer.DefaultIndex)
                 {
                     // Image.set calls ImageIndex = -1
-                    image = null;
+                    _image = null;
                 }
 
                 // If they were previously using keys - this should clear out the image key field.
-                imageIndex.Index = value;
+                _imageIndex.Index = value;
                 Invalidate();
             }
         }
@@ -453,11 +453,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return imageIndex.Key;
+                return _imageIndex.Key;
             }
             set
             {
-                if (value == imageIndex.Key && !string.Equals(value, ImageList.Indexer.DefaultKey))
+                if (value == _imageIndex.Key && !string.Equals(value, ImageList.Indexer.DefaultKey))
                 {
                     return;
                 }
@@ -465,11 +465,11 @@ namespace System.Windows.Forms
                 if (value != null)
                 {
                     // Image.set calls ImageIndex = -1
-                    image = null;
+                    _image = null;
                 }
 
                 // If they were previously using indexes - this should clear out the image index field.
-                imageIndex.Key = value;
+                _imageIndex.Key = value;
                 Invalidate();
             }
         }
@@ -485,11 +485,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return imageList;
+                return _imageList;
             }
             set
             {
-                if (value == imageList)
+                if (value == _imageList)
                 {
                     return;
                 }
@@ -499,21 +499,21 @@ namespace System.Windows.Forms
 
                 // Detach old event handlers
                 //
-                if (imageList != null)
+                if (_imageList != null)
                 {
-                    imageList.RecreateHandle -= recreateHandler;
-                    imageList.Disposed -= disposedHandler;
+                    _imageList.RecreateHandle -= recreateHandler;
+                    _imageList.Disposed -= disposedHandler;
                 }
 
                 // Make sure we don't have an Image as well as an ImageList
                 //
                 if (value != null)
                 {
-                    image = null; // Image.set calls ImageList = null
+                    _image = null; // Image.set calls ImageList = null
                 }
 
-                imageList = value;
-                imageIndex.ImageList = value;
+                _imageList = value;
+                _imageIndex.ImageList = value;
 
                 // Wire up new event handlers
                 //
@@ -663,7 +663,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return textAlign;
+                return _textAlign;
             }
             set
             {
@@ -676,7 +676,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                textAlign = value;
+                _textAlign = value;
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.TextAlign);
                 if (OwnerDraw)
                 {
@@ -695,7 +695,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         public TextImageRelation TextImageRelation
         {
-            get => textImageRelation;
+            get => _textImageRelation;
             set
             {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TextImageRelation.Overlay, (int)TextImageRelation.TextBeforeImage, 1))
@@ -708,7 +708,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                textImageRelation = value;
+                _textImageRelation = value;
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.TextImageRelation);
                 Invalidate();
             }
@@ -757,17 +757,17 @@ namespace System.Windows.Forms
             {
                 if (animate)
                 {
-                    if (image != null)
+                    if (_image != null)
                     {
-                        ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
+                        ImageAnimator.Animate(_image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
                     }
                 }
                 else
                 {
-                    if (image != null)
+                    if (_image != null)
                     {
-                        ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
+                        ImageAnimator.StopAnimate(_image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
                     }
                 }
@@ -789,15 +789,15 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 StopAnimate();
-                if (imageList != null)
+                if (_imageList != null)
                 {
-                    imageList.Disposed -= new EventHandler(DetachImageList);
+                    _imageList.Disposed -= new EventHandler(DetachImageList);
                 }
                 //Dipose the tooltip if one present..
-                if (textToolTip != null)
+                if (_textToolTip != null)
                 {
-                    textToolTip.Dispose();
-                    textToolTip = null;
+                    _textToolTip.Dispose();
+                    _textToolTip = null;
                 }
             }
             base.Dispose(disposing);
@@ -805,7 +805,7 @@ namespace System.Windows.Forms
 
         private bool GetFlag(int flag)
         {
-            return ((state & flag) == flag);
+            return ((_state & flag) == flag);
         }
 
         private void ImageListRecreateHandle(object sender, EventArgs e)
@@ -846,9 +846,9 @@ namespace System.Windows.Forms
         {
             SetFlag(FlagMouseOver, true);
             Invalidate();
-            if (!DesignMode && AutoEllipsis && ShowToolTip && textToolTip != null)
+            if (!DesignMode && AutoEllipsis && ShowToolTip && _textToolTip != null)
             {
-                textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
+                _textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
             }
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
@@ -861,9 +861,9 @@ namespace System.Windows.Forms
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             SetFlag(FlagMouseOver, false);
-            if (textToolTip != null)
+            if (_textToolTip != null)
             {
-                textToolTip.Hide(this);
+                _textToolTip.Hide(this);
             }
             Invalidate();
             // call base last, so if it invokes any listeners that disable the button, we
@@ -1175,15 +1175,15 @@ namespace System.Windows.Forms
 
         private void SetFlag(int flag, bool value)
         {
-            bool oldValue = ((state & flag) != 0);
+            bool oldValue = ((_state & flag) != 0);
 
             if (value)
             {
-                state |= flag;
+                _state |= flag;
             }
             else
             {
-                state &= ~flag;
+                _state &= ~flag;
             }
 
             if (OwnerDraw && (flag & FlagMouseDown) != 0 && value != oldValue)
@@ -1194,7 +1194,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeImage()
         {
-            return image != null;
+            return _image != null;
         }
 
         private void UpdateOwnerDraw()
@@ -1237,9 +1237,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (isEnableVisualStyleBackgroundSet || ((RawBackColor.IsEmpty) && (BackColor == SystemColors.Control)))
+                if (_isEnableVisualStyleBackgroundSet || ((RawBackColor.IsEmpty) && (BackColor == SystemColors.Control)))
                 {
-                    return enableVisualStyleBackground;
+                    return _enableVisualStyleBackground;
                 }
                 else
                 {
@@ -1248,27 +1248,27 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (isEnableVisualStyleBackgroundSet && value == enableVisualStyleBackground)
+                if (_isEnableVisualStyleBackgroundSet && value == _enableVisualStyleBackground)
                 {
                     return;
                 }
 
-                isEnableVisualStyleBackgroundSet = true;
-                enableVisualStyleBackground = value;
+                _isEnableVisualStyleBackgroundSet = true;
+                _enableVisualStyleBackground = value;
                 Invalidate();
             }
         }
 
         private void ResetUseVisualStyleBackColor()
         {
-            isEnableVisualStyleBackgroundSet = false;
-            enableVisualStyleBackground = true;
+            _isEnableVisualStyleBackgroundSet = false;
+            _enableVisualStyleBackground = true;
             Invalidate();
         }
 
         private bool ShouldSerializeUseVisualStyleBackColor()
         {
-            return isEnableVisualStyleBackgroundSet;
+            return _isEnableVisualStyleBackgroundSet;
         }
 
         protected override void WndProc(ref Message m)

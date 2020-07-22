@@ -14,9 +14,8 @@ namespace System.Windows.Forms
     [ToolboxBitmap(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
     public class DataGridViewButtonColumn : DataGridViewColumn
     {
-        private static readonly Type columnType = typeof(DataGridViewButtonColumn);
-
-        private string text;
+        private static readonly Type s_columnType = typeof(DataGridViewButtonColumn);
+        private string _text;
 
         public DataGridViewButtonColumn()
             : base(new DataGridViewButtonCell())
@@ -95,13 +94,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return text;
+                return _text;
             }
             set
             {
-                if (!string.Equals(value, text, StringComparison.Ordinal))
+                if (!string.Equals(value, _text, StringComparison.Ordinal))
                 {
-                    text = value;
+                    _text = value;
                     if (DataGridView != null)
                     {
                         if (UseColumnTextForButtonValue)
@@ -169,7 +168,7 @@ namespace System.Windows.Forms
             DataGridViewButtonColumn dataGridViewColumn;
             Type thisType = GetType();
 
-            if (thisType == columnType) //performance improvement
+            if (thisType == s_columnType) //performance improvement
             {
                 dataGridViewColumn = new DataGridViewButtonColumn();
             }
@@ -180,7 +179,7 @@ namespace System.Windows.Forms
             if (dataGridViewColumn != null)
             {
                 base.CloneInternal(dataGridViewColumn);
-                dataGridViewColumn.Text = text;
+                dataGridViewColumn.Text = _text;
             }
             return dataGridViewColumn;
         }

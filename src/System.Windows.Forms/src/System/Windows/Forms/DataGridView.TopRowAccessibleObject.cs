@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                     }
                     if (owner.ColumnHeadersVisible)
                     {
-                        Rectangle rect = Rectangle.Union(owner.layout.ColumnHeaders, owner.layout.TopLeftHeader);
+                        Rectangle rect = Rectangle.Union(owner._layout.ColumnHeaders, owner._layout.TopLeftHeader);
                         return owner.RectangleToScreen(rect);
                     }
                     else

@@ -43,15 +43,15 @@ namespace System.Windows.Forms
         /// </summary>
         protected static readonly Color DefaultTrailingForeColor = SystemColors.GrayText;
 
-        private static readonly object EVENT_FORMATCHANGED = new object();
+        private static readonly object s_formatChangedEvent = new object();
 
-        private static readonly string DateTimePickerLocalizedControlTypeString = SR.DateTimePickerLocalizedControlType;
+        private static readonly string s_dateTimePickerLocalizedControlTypeString = SR.DateTimePickerLocalizedControlType;
 
         private const DTS TIMEFORMAT_NOUPDOWN = DTS.TIMEFORMAT & (~DTS.UPDOWN);
-        private EventHandler onCloseUp;
-        private EventHandler onDropDown;
-        private EventHandler onValueChanged;
-        private EventHandler onRightToLeftLayoutChanged;
+        private EventHandler _onCloseUp;
+        private EventHandler _onDropDown;
+        private EventHandler _onValueChanged;
+        private EventHandler _onRightToLeftLayoutChanged;
 
         // We need to restrict the available dates because of limitations in the comctl
         // DateTime and MonthCalendar controls
@@ -623,8 +623,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
         public event EventHandler FormatChanged
         {
-            add => Events.AddHandler(EVENT_FORMATCHANGED, value);
-            remove => Events.RemoveHandler(EVENT_FORMATCHANGED, value);
+            add => Events.AddHandler(s_formatChangedEvent, value);
+            remove => Events.RemoveHandler(s_formatChangedEvent, value);
         }
 
         /// <summary>
@@ -999,16 +999,16 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DateTimePickerOnCloseUpDescr))]
         public event EventHandler CloseUp
         {
-            add => onCloseUp += value;
-            remove => onCloseUp -= value;
+            add => _onCloseUp += value;
+            remove => _onCloseUp -= value;
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged
         {
-            add => onRightToLeftLayoutChanged += value;
-            remove => onRightToLeftLayoutChanged -= value;
+            add => _onRightToLeftLayoutChanged += value;
+            remove => _onRightToLeftLayoutChanged -= value;
         }
 
         /// <summary>
@@ -1018,8 +1018,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged
         {
-            add => onValueChanged += value;
-            remove => onValueChanged -= value;
+            add => _onValueChanged += value;
+            remove => _onValueChanged -= value;
         }
 
         /// <summary>
@@ -1029,8 +1029,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DateTimePickerOnDropDownDescr))]
         public event EventHandler DropDown
         {
-            add => onDropDown += value;
-            remove => onDropDown -= value;
+            add => _onDropDown += value;
+            remove => _onDropDown -= value;
         }
 
         /// <summary>
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnCloseUp(EventArgs eventargs)
         {
-            onCloseUp?.Invoke(this, eventargs);
+            _onCloseUp?.Invoke(this, eventargs);
         }
 
         /// <summary>
@@ -1158,12 +1158,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDropDown(EventArgs eventargs)
         {
-            onDropDown?.Invoke(this, eventargs);
+            _onDropDown?.Invoke(this, eventargs);
         }
 
         protected virtual void OnFormatChanged(EventArgs e)
         {
-            if (Events[EVENT_FORMATCHANGED] is EventHandler eh)
+            if (Events[s_formatChangedEvent] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnValueChanged(EventArgs eventargs)
         {
-            onValueChanged?.Invoke(this, eventargs);
+            _onValueChanged?.Invoke(this, eventargs);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms
                 RecreateHandle();
             }
 
-            onRightToLeftLayoutChanged?.Invoke(this, e);
+            _onRightToLeftLayoutChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -1776,7 +1776,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsTogglePatternAvailablePropertyId:
                         return IsPatternSupported(UiaCore.UIA.TogglePatternId);
                     case UiaCore.UIA.LocalizedControlTypePropertyId:
-                        return DateTimePickerLocalizedControlTypeString;
+                        return s_dateTimePickerLocalizedControlTypeString;
                     default:
                         return base.GetPropertyValue(propertyID);
                 }

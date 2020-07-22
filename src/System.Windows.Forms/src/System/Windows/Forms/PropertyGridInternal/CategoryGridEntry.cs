@@ -228,7 +228,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 int indent = PropertyLabelIndent - 2;
                 Rectangle focusRect = new Rectangle(indent, rect.Y, labelWidth + 3, rect.Height - 1);
-                if (SystemInformation.HighContrast && !OwnerGrid.developerOverride)
+                if (SystemInformation.HighContrast && !OwnerGrid._developerOverride)
                 {
                     // we changed line color to SystemColors.ControlDarkDark in high contrast mode
                     ControlPaint.DrawFocusRectangle(g, focusRect, SystemColors.ControlText, OwnerGrid.LineColor);
