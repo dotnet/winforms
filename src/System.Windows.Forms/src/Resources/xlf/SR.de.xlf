@@ -5429,7 +5429,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="HScrollBarDefaultAccessibleName">
         <source>Horizontal</source>
-        <target state="new">Horizontal</target>
+        <target state="translated">Horizontal</target>
         <note />
       </trans-unit>
       <trans-unit id="HandleAlreadyExists">
@@ -5553,7 +5553,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ImageListDuplicateFailed">
         <source>Duplication of the ImageList handle did not succeed.</source>
-        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <target state="translated">Fehler beim Duplizieren des ImageList-Handles.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -10798,7 +10798,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="VScrollBarDefaultAccessibleName">
         <source>Vertical</source>
-        <target state="new">Vertical</target>
+        <target state="translated">Vertikal</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">

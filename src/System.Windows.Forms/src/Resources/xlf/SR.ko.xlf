@@ -5429,7 +5429,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="HScrollBarDefaultAccessibleName">
         <source>Horizontal</source>
-        <target state="new">Horizontal</target>
+        <target state="translated">가로</target>
         <note />
       </trans-unit>
       <trans-unit id="HandleAlreadyExists">
@@ -5553,7 +5553,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ImageListDuplicateFailed">
         <source>Duplication of the ImageList handle did not succeed.</source>
-        <target state="new">Duplication of the ImageList handle did not succeed.</target>
+        <target state="translated">ImageList 핸들을 복제하지 못했습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -10798,7 +10798,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="VScrollBarDefaultAccessibleName">
         <source>Vertical</source>
-        <target state="new">Vertical</target>
+        <target state="translated">세로</target>
         <note />
       </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">
