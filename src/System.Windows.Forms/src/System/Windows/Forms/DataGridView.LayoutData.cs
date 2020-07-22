@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     {
         internal class LayoutData
         {
-            internal bool dirty = true;
+            internal bool _dirty = true;
 
             // used for resizing.
             public Rectangle ClientRectangle = Rectangle.Empty;

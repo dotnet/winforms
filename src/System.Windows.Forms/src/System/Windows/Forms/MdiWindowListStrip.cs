@@ -133,7 +133,7 @@ namespace System.Windows.Forms
                                 }
                                 accel++;
                                 formsAddedToMenu++;
-                                Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "\tPopulateItems: Added " + windowListItem.Text);
+                                Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug.TraceVerbose, "\tPopulateItems: Added " + windowListItem.Text);
                                 mergeItem.DropDownItems.Add(windowListItem);
                             }
                         }
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
                         {
                             Text = SR.MDIMenuMoreWindows
                         };
-                        Debug.WriteLineIf(ToolStrip.MDIMergeDebug.TraceVerbose, "\tPopulateItems: Added " + moreWindowsMenuItem.Text);
+                        Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug.TraceVerbose, "\tPopulateItems: Added " + moreWindowsMenuItem.Text);
                         moreWindowsMenuItem.Click += new EventHandler(OnMoreWindowsMenuItemClick);
                         moreWindowsMenuItem.MergeAction = MergeAction.Append;
                         mergeItem.DropDownItems.Add(moreWindowsMenuItem);

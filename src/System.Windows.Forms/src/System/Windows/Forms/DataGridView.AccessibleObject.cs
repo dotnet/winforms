@@ -112,11 +112,11 @@ namespace System.Windows.Forms
 
                 index -= owner.Rows.GetRowCount(DataGridViewElementStates.Visible);
 
-                if (owner.horizScrollBar.Visible)
+                if (owner._horizScrollBar.Visible)
                 {
                     if (index == 0)
                     {
-                        return owner.horizScrollBar.AccessibilityObject;
+                        return owner._horizScrollBar.AccessibilityObject;
                     }
                     else
                     {
@@ -124,11 +124,11 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (owner.vertScrollBar.Visible)
+                if (owner._vertScrollBar.Visible)
                 {
                     if (index == 0)
                     {
-                        return owner.vertScrollBar.AccessibilityObject;
+                        return owner._vertScrollBar.AccessibilityObject;
                     }
                 }
 
@@ -150,12 +150,12 @@ namespace System.Windows.Forms
                     childCount++;
                 }
 
-                if (owner.horizScrollBar.Visible)
+                if (owner._horizScrollBar.Visible)
                 {
                     childCount++;
                 }
 
-                if (owner.vertScrollBar.Visible)
+                if (owner._vertScrollBar.Visible)
                 {
                     childCount++;
                 }

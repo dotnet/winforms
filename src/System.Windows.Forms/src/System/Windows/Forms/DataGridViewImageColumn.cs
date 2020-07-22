@@ -15,9 +15,9 @@ namespace System.Windows.Forms
     [ToolboxBitmap(typeof(DataGridViewImageColumn), "DataGridViewImageColumn")]
     public class DataGridViewImageColumn : DataGridViewColumn
     {
-        private static readonly Type columnType = typeof(DataGridViewImageColumn);
-        private Image image;
-        private Icon icon;
+        private static readonly Type s_columnType = typeof(DataGridViewImageColumn);
+        private Image _image;
+        private Icon _icon;
 
         public DataGridViewImageColumn() : this(false /*valuesAreIcons*/)
         {
@@ -108,11 +108,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return icon;
+                return _icon;
             }
             set
             {
-                icon = value;
+                _icon = value;
                 if (DataGridView != null)
                 {
                     DataGridView.OnColumnCommonChange(Index);
@@ -127,11 +127,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return image;
+                return _image;
             }
             set
             {
-                image = value;
+                _image = value;
                 if (DataGridView != null)
                 {
                     DataGridView.OnColumnCommonChange(Index);
@@ -241,7 +241,7 @@ namespace System.Windows.Forms
             DataGridViewImageColumn dataGridViewColumn;
             Type thisType = GetType();
 
-            if (thisType == columnType) //performance improvement
+            if (thisType == s_columnType) //performance improvement
             {
                 dataGridViewColumn = new DataGridViewImageColumn();
             }
@@ -254,8 +254,8 @@ namespace System.Windows.Forms
             if (dataGridViewColumn != null)
             {
                 base.CloneInternal(dataGridViewColumn);
-                dataGridViewColumn.Icon = icon;
-                dataGridViewColumn.Image = image;
+                dataGridViewColumn.Icon = _icon;
+                dataGridViewColumn.Image = _image;
             }
             return dataGridViewColumn;
         }

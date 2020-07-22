@@ -18,32 +18,21 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer visualStyleRenderer = null;
-        private static readonly VisualStyleElement CheckBoxElement = VisualStyleElement.Button.CheckBox.UncheckedNormal;
-        private static bool renderMatchingApplicationState = true;
+        private static VisualStyleRenderer t_visualStyleRenderer = null;
+        private static readonly VisualStyleElement s_checkBoxElement = VisualStyleElement.Button.CheckBox.UncheckedNormal;
 
         /// <summary>
         ///  If this property is true, then the renderer will use the setting from Application.RenderWithVisualStyles to
         ///  determine how to render.
         ///  If this property is false, the renderer will always render with visualstyles.
         /// </summary>
-        public static bool RenderMatchingApplicationState
-        {
-            get
-            {
-                return renderMatchingApplicationState;
-            }
-            set
-            {
-                renderMatchingApplicationState = value;
-            }
-        }
+        public static bool RenderMatchingApplicationState { get; set; } = true;
 
         private static bool RenderWithVisualStyles
         {
             get
             {
-                return (!renderMatchingApplicationState || Application.RenderWithVisualStyles);
+                return (!RenderMatchingApplicationState || Application.RenderWithVisualStyles);
             }
         }
 
@@ -56,7 +45,7 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                return visualStyleRenderer.IsBackgroundPartiallyTransparent();
+                return t_visualStyleRenderer.IsBackgroundPartiallyTransparent();
             }
             else
             {
@@ -74,7 +63,7 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer(0);
 
-                visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
+                t_visualStyleRenderer.DrawParentBackground(g, bounds, childControl);
             }
         }
 
@@ -111,7 +100,7 @@ namespace System.Windows.Forms
 
             using var hdc = new DeviceContextHdcScope(deviceContext);
             Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
-            visualStyleRenderer.DrawBackground(hdc, glyphBounds, hwnd);
+            t_visualStyleRenderer.DrawBackground(hdc, glyphBounds, hwnd);
         }
 
         /// <summary>
@@ -171,8 +160,8 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                visualStyleRenderer.DrawBackground(g, glyphBounds);
-                textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+                t_visualStyleRenderer.DrawBackground(g, glyphBounds);
+                textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             }
             else
             {
@@ -229,9 +218,9 @@ namespace System.Windows.Forms
                 InitializeRenderer((int)state);
 
                 //Keep this drawing order! It matches default drawing order.
-                visualStyleRenderer.DrawImage(g, imageBounds, image);
-                visualStyleRenderer.DrawBackground(g, glyphBounds);
-                textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+                t_visualStyleRenderer.DrawImage(g, imageBounds, image);
+                t_visualStyleRenderer.DrawBackground(g, glyphBounds);
+                textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             }
             else
             {
@@ -279,7 +268,7 @@ namespace System.Windows.Forms
             {
                 InitializeRenderer((int)state);
 
-                return visualStyleRenderer.GetPartSize(hdc, ThemeSizeType.Draw, hwnd);
+                return t_visualStyleRenderer.GetPartSize(hdc, ThemeSizeType.Draw, hwnd);
             }
 
             return new Size(13, 13);
@@ -402,21 +391,21 @@ namespace System.Windows.Forms
 
         private static void InitializeRenderer(int state)
         {
-            int part = CheckBoxElement.Part;
+            int part = s_checkBoxElement.Part;
             if (SystemInformation.HighContrast
                 && IsDisabled((CheckBoxState)state)
-                && VisualStyleRenderer.IsCombinationDefined(CheckBoxElement.ClassName, VisualStyleElement.Button.CheckBox.HighContrastDisabledPart))
+                && VisualStyleRenderer.IsCombinationDefined(s_checkBoxElement.ClassName, VisualStyleElement.Button.CheckBox.HighContrastDisabledPart))
             {
                 part = VisualStyleElement.Button.CheckBox.HighContrastDisabledPart;
             }
 
-            if (visualStyleRenderer == null)
+            if (t_visualStyleRenderer == null)
             {
-                visualStyleRenderer = new VisualStyleRenderer(CheckBoxElement.ClassName, part, state);
+                t_visualStyleRenderer = new VisualStyleRenderer(s_checkBoxElement.ClassName, part, state);
             }
             else
             {
-                visualStyleRenderer.SetParameters(CheckBoxElement.ClassName, part, state);
+                t_visualStyleRenderer.SetParameters(s_checkBoxElement.ClassName, part, state);
             }
         }
     }

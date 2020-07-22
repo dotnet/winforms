@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,13 +13,13 @@ namespace System.Windows.Forms
     {
         internal class DataGridViewEditingPanelAccessibleObject : ControlAccessibleObject
         {
-            private readonly DataGridView dataGridView;
-            private readonly Panel panel;
+            private readonly DataGridView _dataGridView;
+            private readonly Panel _panel;
 
             public DataGridViewEditingPanelAccessibleObject(DataGridView dataGridView, Panel panel) : base(panel)
             {
-                this.dataGridView = dataGridView;
-                this.panel = panel;
+                _dataGridView = dataGridView;
+                _panel = panel;
             }
 
             #region IRawElementProviderFragment Implementation
@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return panel.AccessibilityObject.Bounds;
+                    return _panel.AccessibilityObject.Bounds;
                 }
             }
 
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return dataGridView.AccessibilityObject;
+                    return _dataGridView.AccessibilityObject;
                 }
             }
 
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return panel.AccessibilityObject.RuntimeId;
+                    return _panel.AccessibilityObject.RuntimeId;
                 }
             }
 
@@ -53,15 +53,15 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        DataGridViewCell currentCell = dataGridView.CurrentCell;
-                        if (currentCell != null && dataGridView.IsCurrentCellInEditMode)
+                        DataGridViewCell currentCell = _dataGridView.CurrentCell;
+                        if (currentCell != null && _dataGridView.IsCurrentCellInEditMode)
                         {
                             return currentCell.AccessibilityObject;
                         }
                         break;
                     case UiaCore.NavigateDirection.FirstChild:
                     case UiaCore.NavigateDirection.LastChild:
-                        return dataGridView.EditingControlAccessibleObject;
+                        return _dataGridView.EditingControlAccessibleObject;
                 }
 
                 return null;
@@ -69,9 +69,9 @@ namespace System.Windows.Forms
 
             internal override void SetFocus()
             {
-                if (panel.CanFocus)
+                if (_panel.CanFocus)
                 {
-                    panel.Focus();
+                    _panel.Focus();
                 }
             }
 
@@ -95,9 +95,9 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return true;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return dataGridView.CurrentCell != null;
+                        return _dataGridView.CurrentCell != null;
                     case UiaCore.UIA.IsEnabledPropertyId:
-                        return dataGridView.Enabled;
+                        return _dataGridView.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
                     case UiaCore.UIA.IsControlElementPropertyId:
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
                     case UiaCore.UIA.AccessKeyPropertyId:
-                        return panel.AccessibilityObject.KeyboardShortcut;
+                        return _panel.AccessibilityObject.KeyboardShortcut;
                     case UiaCore.UIA.HelpTextPropertyId:
                         return string.Empty;
                     case UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId:

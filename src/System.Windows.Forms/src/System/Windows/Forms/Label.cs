@@ -28,53 +28,41 @@ namespace System.Windows.Forms
     // If not for FormatControl, we could inherit from ButtonBase and get foreground images for free.
     public partial class Label : Control, IAutomationLiveRegion
     {
-        private static readonly object EVENT_TEXTALIGNCHANGED = new object();
+        private static readonly object s_eventTextAlignChanged = new object();
 
-        private static readonly BitVector32.Section StateUseMnemonic = BitVector32.CreateSection(1);
-        private static readonly BitVector32.Section StateAutoSize = BitVector32.CreateSection(1, StateUseMnemonic);
-        private static readonly BitVector32.Section StateAnimating = BitVector32.CreateSection(1, StateAutoSize);
-        private static readonly BitVector32.Section StateFlatStyle = BitVector32.CreateSection((int)FlatStyle.System, StateAnimating);
-        private static readonly BitVector32.Section StateBorderStyle = BitVector32.CreateSection((int)BorderStyle.Fixed3D, StateFlatStyle);
-        private static readonly BitVector32.Section StateAutoEllipsis = BitVector32.CreateSection(1, StateBorderStyle);
+        private static readonly BitVector32.Section s_stateUseMnemonic = BitVector32.CreateSection(1);
+        private static readonly BitVector32.Section s_stateAutoSize = BitVector32.CreateSection(1, s_stateUseMnemonic);
+        private static readonly BitVector32.Section s_stateAnimating = BitVector32.CreateSection(1, s_stateAutoSize);
+        private static readonly BitVector32.Section s_stateFlatStyle = BitVector32.CreateSection((int)FlatStyle.System, s_stateAnimating);
+        private static readonly BitVector32.Section s_stateBorderStyle = BitVector32.CreateSection((int)BorderStyle.Fixed3D, s_stateFlatStyle);
+        private static readonly BitVector32.Section s_stateAutoEllipsis = BitVector32.CreateSection(1, s_stateBorderStyle);
 
-        private static readonly int PropImageList = PropertyStore.CreateKey();
-        private static readonly int PropImage = PropertyStore.CreateKey();
+        private static readonly int s_propImageList = PropertyStore.CreateKey();
+        private static readonly int s_propImage = PropertyStore.CreateKey();
 
-        private static readonly int PropTextAlign = PropertyStore.CreateKey();
-        private static readonly int PropImageAlign = PropertyStore.CreateKey();
-        private static readonly int PropImageIndex = PropertyStore.CreateKey();
+        private static readonly int s_propTextAlign = PropertyStore.CreateKey();
+        private static readonly int s_propImageAlign = PropertyStore.CreateKey();
+        private static readonly int s_propImageIndex = PropertyStore.CreateKey();
 
-        ///////////////////////////////////////////////////////////////////////
-        // Label per instance members
-        //
-        // Note: Do not add anything to this list unless absolutely necessary.
-        //
-        // Begin Members {
+        private BitVector32 _labelState;
+        private int _requestedHeight;
+        private int _requestedWidth;
+        private LayoutUtils.MeasureTextCache _textMeasurementCache;
 
-        // List of properties that are generally set, so we keep them directly on
-        // Label.
-        //
+        // Tooltip is shown only if the Text in the Label is cut.
+        internal bool _showToolTip;
+        private ToolTip _textToolTip;
 
-        BitVector32 labelState;
-        int requestedHeight;
-        int requestedWidth;
-        LayoutUtils.MeasureTextCache textMeasurementCache;
+        // This bool suggests that the User has added a toolTip to this label. In such a case we should not show the
+        // AutoEllipsis tooltip.
+        private bool _controlToolTip;
 
-        //Tooltip is shown only if the Text in the Label is cut.
-        internal bool showToolTip;
-        ToolTip textToolTip;
-        // This bool suggests that the User has added a toolTip to this label
-        // In such a case we should not show the AutoEllipsis tooltip.
-        bool controlToolTip;
-        AutomationLiveSetting liveSetting;
+        private AutomationLiveSetting _liveSetting;
 
-        // } End Members
-        ///////////////////////////////////////////////////////////////////////
         /// <summary>
         ///  Initializes a new instance of the <see cref='Label'/> class.
         /// </summary>
-        public Label()
-        : base()
+        public Label() : base()
         {
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
@@ -90,18 +78,17 @@ namespace System.Windows.Forms
 
             CommonProperties.SetSelfAutoSizeInDefaultLayout(this, true);
 
-            labelState[StateFlatStyle] = (int)FlatStyle.Standard;
-            labelState[StateUseMnemonic] = 1;
-            labelState[StateBorderStyle] = (int)BorderStyle.None;
+            _labelState[s_stateFlatStyle] = (int)FlatStyle.Standard;
+            _labelState[s_stateUseMnemonic] = 1;
+            _labelState[s_stateBorderStyle] = (int)BorderStyle.None;
 
             TabStop = false;
-            requestedHeight = Height;
-            requestedWidth = Width;
+            _requestedHeight = Height;
+            _requestedWidth = Width;
         }
 
         /// <summary>
-        ///  Indicates whether the control is automatically resized
-        ///  to fit its contents.
+        ///  Indicates whether the control is automatically resized to fit its contents.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(false)]
@@ -147,23 +134,23 @@ namespace System.Windows.Forms
         {
             get
             {
-                return labelState[StateAutoEllipsis] != 0;
+                return _labelState[s_stateAutoEllipsis] != 0;
             }
 
             set
             {
                 if (AutoEllipsis != value)
                 {
-                    labelState[StateAutoEllipsis] = value ? 1 : 0;
+                    _labelState[s_stateAutoEllipsis] = value ? 1 : 0;
                     MeasureTextCache.InvalidateCache();
 
                     OnAutoEllipsisChanged(/*EventArgs.Empty*/);
 
                     if (value)
                     {
-                        if (textToolTip == null)
+                        if (_textToolTip == null)
                         {
-                            textToolTip = new ToolTip();
+                            _textToolTip = new ToolTip();
                         }
                     }
 
@@ -226,7 +213,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.LabelBorderDescr))]
         public virtual BorderStyle BorderStyle
         {
-            get => (BorderStyle)labelState[StateBorderStyle];
+            get => (BorderStyle)_labelState[s_stateBorderStyle];
             set
             {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
@@ -236,7 +223,7 @@ namespace System.Windows.Forms
 
                 if (BorderStyle != value)
                 {
-                    labelState[StateBorderStyle] = (int)value;
+                    _labelState[s_stateBorderStyle] = (int)value;
                     if (ParentInternal != null)
                     {
                         LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.BorderStyle);
@@ -364,7 +351,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (FlatStyle)labelState[StateFlatStyle];
+                return (FlatStyle)_labelState[s_stateFlatStyle];
             }
             set
             {
@@ -374,11 +361,11 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
 
-                if (labelState[StateFlatStyle] != (int)value)
+                if (_labelState[s_stateFlatStyle] != (int)value)
                 {
-                    bool needRecreate = (labelState[StateFlatStyle] == (int)FlatStyle.System) || (value == FlatStyle.System);
+                    bool needRecreate = (_labelState[s_stateFlatStyle] == (int)FlatStyle.System) || (value == FlatStyle.System);
 
-                    labelState[StateFlatStyle] = (int)value;
+                    _labelState[s_stateFlatStyle] = (int)value;
 
                     SetStyle(ControlStyles.UserPaint
                              | ControlStyles.SupportsTransparentBackColor
@@ -412,7 +399,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Image image = (Image)Properties.GetObject(PropImage);
+                Image image = (Image)Properties.GetObject(s_propImage);
 
                 if (image == null && ImageList != null && ImageIndexer.ActualIndex >= 0)
                 {
@@ -429,7 +416,7 @@ namespace System.Windows.Forms
                 {
                     StopAnimate();
 
-                    Properties.SetObject(PropImage, value);
+                    Properties.SetObject(s_propImage, value);
                     if (value != null)
                     {
                         ImageIndex = -1;
@@ -487,7 +474,7 @@ namespace System.Windows.Forms
                 if (value != ImageList.Indexer.DefaultIndex)
                 {
                     // Image.set calls ImageIndex = -1
-                    Properties.SetObject(PropImage, null);
+                    Properties.SetObject(s_propImage, null);
                 }
 
                 ImageIndexer.Index = value;
@@ -525,7 +512,7 @@ namespace System.Windows.Forms
                 }
 
                 // Image.set calls ImageIndex = -1
-                Properties.SetObject(PropImage, null);
+                Properties.SetObject(s_propImage, null);
 
                 ImageIndexer.Key = value;
                 Invalidate();
@@ -537,7 +524,7 @@ namespace System.Windows.Forms
             get
             {
                 // Demand create the ImageIndexer property
-                if ((!(Properties.GetObject(PropImageIndex, out bool found) is LabelImageIndexer imageIndexer)) || (!found))
+                if ((!(Properties.GetObject(s_propImageIndex, out bool found) is LabelImageIndexer imageIndexer)) || (!found))
                 {
                     imageIndexer = new LabelImageIndexer(this);
                     ImageIndexer = imageIndexer;
@@ -547,7 +534,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Properties.SetObject(PropImageIndex, value);
+                Properties.SetObject(s_propImageIndex, value);
             }
         }
 
@@ -562,7 +549,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (ImageList)Properties.GetObject(PropImageList);
+                return (ImageList)Properties.GetObject(s_propImageList);
             }
             set
             {
@@ -584,10 +571,10 @@ namespace System.Windows.Forms
                     //
                     if (value != null)
                     {
-                        Properties.SetObject(PropImage, null); // Image.set calls ImageList = null
+                        Properties.SetObject(s_propImage, null); // Image.set calls ImageList = null
                     }
 
-                    Properties.SetObject(PropImageList, value);
+                    Properties.SetObject(s_propImageList, value);
 
                     // Add the new imagelist handle recreate handler
                     //
@@ -613,7 +600,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int imageAlign = Properties.GetInteger(PropImageAlign, out bool found);
+                int imageAlign = Properties.GetInteger(s_propImageAlign, out bool found);
                 if (found)
                 {
                     return (ContentAlignment)imageAlign;
@@ -628,7 +615,7 @@ namespace System.Windows.Forms
                 }
                 if (value != ImageAlign)
                 {
-                    Properties.SetInteger(PropImageAlign, (int)value);
+                    Properties.SetInteger(s_propImageAlign, (int)value);
                     LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.ImageAlign);
                     Invalidate();
                 }
@@ -648,7 +635,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return liveSetting;
+                return _liveSetting;
             }
             set
             {
@@ -656,7 +643,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
                 }
-                liveSetting = value;
+                _liveSetting = value;
             }
         }
 
@@ -707,11 +694,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (textMeasurementCache == null)
+                if (_textMeasurementCache == null)
                 {
-                    textMeasurementCache = new LayoutUtils.MeasureTextCache();
+                    _textMeasurementCache = new LayoutUtils.MeasureTextCache();
                 }
-                return textMeasurementCache;
+                return _textMeasurementCache;
             }
         }
 
@@ -808,7 +795,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                int textAlign = Properties.GetInteger(PropTextAlign, out bool found);
+                int textAlign = Properties.GetInteger(s_propTextAlign, out bool found);
                 if (found)
                 {
                     return (ContentAlignment)textAlign;
@@ -825,7 +812,7 @@ namespace System.Windows.Forms
 
                 if (TextAlign != value)
                 {
-                    Properties.SetInteger(PropTextAlign, (int)value);
+                    Properties.SetInteger(s_propTextAlign, (int)value);
                     Invalidate();
                     //Change the TextAlignment for SystemDrawn Labels ....
                     if (!OwnerDraw)
@@ -853,9 +840,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged
         {
-            add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
+            add => Events.AddHandler(s_eventTextAlignChanged, value);
 
-            remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
+            remove => Events.RemoveHandler(s_eventTextAlignChanged, value);
         }
 
         /// <summary>
@@ -910,14 +897,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return labelState[StateUseMnemonic] != 0;
+                return _labelState[s_stateUseMnemonic] != 0;
             }
 
             set
             {
                 if (UseMnemonic != value)
                 {
-                    labelState[StateUseMnemonic] = value ? 1 : 0;
+                    _labelState[s_stateUseMnemonic] = value ? 1 : 0;
                     MeasureTextCache.InvalidateCache();
 
                     // The size of the label need to be adjusted when the Mnemonic
@@ -970,8 +957,8 @@ namespace System.Windows.Forms
 
             // Resize control to fit around current text
             //
-            int saveHeight = requestedHeight;
-            int saveWidth = requestedWidth;
+            int saveHeight = _requestedHeight;
+            int saveWidth = _requestedWidth;
             try
             {
                 Size preferredSize = (AutoSize) ? PreferredSize : new Size(saveWidth, saveHeight);
@@ -979,8 +966,8 @@ namespace System.Windows.Forms
             }
             finally
             {
-                requestedHeight = saveHeight;
-                requestedWidth = saveWidth;
+                _requestedHeight = saveHeight;
+                _requestedWidth = saveWidth;
             }
         }
 
@@ -996,16 +983,16 @@ namespace System.Windows.Forms
 
         private void Animate(bool animate)
         {
-            bool currentlyAnimating = labelState[StateAnimating] != 0;
+            bool currentlyAnimating = _labelState[s_stateAnimating] != 0;
             if (animate != currentlyAnimating)
             {
-                Image image = (Image)Properties.GetObject(PropImage);
+                Image image = (Image)Properties.GetObject(s_propImage);
                 if (animate)
                 {
                     if (image != null)
                     {
                         ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
-                        labelState[StateAnimating] = animate ? 1 : 0;
+                        _labelState[s_stateAnimating] = animate ? 1 : 0;
                     }
                 }
                 else
@@ -1013,7 +1000,7 @@ namespace System.Windows.Forms
                     if (image != null)
                     {
                         ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
-                        labelState[StateAnimating] = animate ? 1 : 0;
+                        _labelState[s_stateAnimating] = animate ? 1 : 0;
                     }
                 }
             }
@@ -1108,20 +1095,20 @@ namespace System.Windows.Forms
                 {
                     ImageList.Disposed -= new EventHandler(DetachImageList);
                     ImageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
-                    Properties.SetObject(PropImageList, null);
+                    Properties.SetObject(s_propImageList, null);
                 }
                 if (Image != null)
                 {
-                    Properties.SetObject(PropImage, null);
+                    Properties.SetObject(s_propImage, null);
                 }
 
                 //Dipose the tooltip if one present..
-                if (textToolTip != null)
+                if (_textToolTip != null)
                 {
-                    textToolTip.Dispose();
-                    textToolTip = null;
+                    _textToolTip.Dispose();
+                    _textToolTip = null;
                 }
-                controlToolTip = false;
+                _controlToolTip = false;
             }
             base.Dispose(disposing);
         }
@@ -1329,16 +1316,16 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseEnter(EventArgs e)
         {
-            if (!controlToolTip && !DesignMode && AutoEllipsis && showToolTip && textToolTip != null)
+            if (!_controlToolTip && !DesignMode && AutoEllipsis && _showToolTip && _textToolTip != null)
             {
                 try
                 {
-                    controlToolTip = true;
-                    textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
+                    _controlToolTip = true;
+                    _textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
                 }
                 finally
                 {
-                    controlToolTip = false;
+                    _controlToolTip = false;
                 }
             }
             base.OnMouseEnter(e);
@@ -1349,11 +1336,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
-            if (!controlToolTip && textToolTip != null && textToolTip.GetHandleCreated())
+            if (!_controlToolTip && _textToolTip != null && _textToolTip.GetHandleCreated())
             {
-                textToolTip.RemoveAll();
+                _textToolTip.RemoveAll();
 
-                textToolTip.Hide(this);
+                _textToolTip.Hide(this);
             }
 
             base.OnMouseLeave(e);
@@ -1385,9 +1372,9 @@ namespace System.Windows.Forms
         protected override void OnHandleDestroyed(EventArgs e)
         {
             base.OnHandleDestroyed(e);
-            if (textToolTip != null && textToolTip.GetHandleCreated())
+            if (_textToolTip != null && _textToolTip.GetHandleCreated())
             {
-                textToolTip.DestroyHandle();
+                _textToolTip.DestroyHandle();
             }
         }
 
@@ -1409,7 +1396,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnTextAlignChanged(EventArgs e)
         {
-            if (Events[EVENT_TEXTALIGNCHANGED] is EventHandler eh)
+            if (Events[s_eventTextAlignChanged] is EventHandler eh)
             {
                 eh(this, e);
             }
@@ -1450,11 +1437,11 @@ namespace System.Windows.Forms
             {
                 Rectangle clientRect = ClientRectangle;
                 Size preferredSize = GetPreferredSize(new Size(clientRect.Width, clientRect.Height));
-                showToolTip = (clientRect.Width < preferredSize.Width || clientRect.Height < preferredSize.Height);
+                _showToolTip = (clientRect.Width < preferredSize.Width || clientRect.Height < preferredSize.Height);
             }
             else
             {
-                showToolTip = false;
+                _showToolTip = false;
             }
 
             if (UseCompatibleTextRendering)
@@ -1573,12 +1560,12 @@ namespace System.Windows.Forms
         {
             if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
             {
-                requestedHeight = height;
+                _requestedHeight = height;
             }
 
             if ((specified & BoundsSpecified.Width) != BoundsSpecified.None)
             {
-                requestedWidth = width;
+                _requestedWidth = width;
             }
 
             if (AutoSize && SelfSizing)
@@ -1601,7 +1588,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeImage()
         {
-            return Properties.GetObject(PropImage) != null;
+            return Properties.GetObject(s_propImage) != null;
         }
 
         /// <summary>
@@ -1609,9 +1596,9 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetToolTip(ToolTip toolTip)
         {
-            if (toolTip != null && !controlToolTip)
+            if (toolTip != null && !_controlToolTip)
             {
-                controlToolTip = true;
+                _controlToolTip = true;
             }
         }
 
@@ -1654,17 +1641,17 @@ namespace System.Windows.Forms
         /// </summary>
         internal class LabelImageIndexer : ImageList.Indexer
         {
-            private readonly Label owner;
-            private bool useIntegerIndex = true;
+            private readonly Label _owner;
+            private bool _useIntegerIndex = true;
 
             public LabelImageIndexer(Label owner)
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             public override ImageList ImageList
             {
-                get { return owner?.ImageList; }
+                get { return _owner?.ImageList; }
                 set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
             }
 
@@ -1674,7 +1661,7 @@ namespace System.Windows.Forms
                 set
                 {
                     base.Key = value;
-                    useIntegerIndex = false;
+                    _useIntegerIndex = false;
                 }
             }
 
@@ -1684,7 +1671,7 @@ namespace System.Windows.Forms
                 set
                 {
                     base.Index = value;
-                    useIntegerIndex = true;
+                    _useIntegerIndex = true;
                 }
             }
 
@@ -1692,7 +1679,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (useIntegerIndex)
+                    if (_useIntegerIndex)
                     {
                         // The behavior of label is to return the last item in the Images collection
                         // if the index is currently set higher than the count.

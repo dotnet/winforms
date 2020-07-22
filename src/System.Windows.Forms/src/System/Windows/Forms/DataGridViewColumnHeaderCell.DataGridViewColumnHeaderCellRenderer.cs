@@ -25,7 +25,7 @@ namespace System.Windows.Forms
                 {
                     if (visualStyleRenderer == null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(HeaderElement);
+                        visualStyleRenderer = new VisualStyleRenderer(s_headerElement);
                     }
                     return visualStyleRenderer;
                 }
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 if ((int)HeaderItemState.Hot == headerState)
                 {
                     // Workaround for a
-                    VisualStyleRenderer.SetParameters(HeaderElement);
+                    VisualStyleRenderer.SetParameters(s_headerElement);
                     Rectangle cornerClip = new Rectangle(bounds.Left, bounds.Bottom - 2, 2, 2);
                     cornerClip.Intersect(rectClip);
                     VisualStyleRenderer.DrawBackground(g, bounds, cornerClip);
@@ -45,7 +45,7 @@ namespace System.Windows.Forms
                     cornerClip.Intersect(rectClip);
                     VisualStyleRenderer.DrawBackground(g, bounds, cornerClip);
                 }
-                VisualStyleRenderer.SetParameters(HeaderElement.ClassName, HeaderElement.Part, headerState);
+                VisualStyleRenderer.SetParameters(s_headerElement.ClassName, s_headerElement.Part, headerState);
                 VisualStyleRenderer.DrawBackground(g, bounds, rectClip);
             }
         }

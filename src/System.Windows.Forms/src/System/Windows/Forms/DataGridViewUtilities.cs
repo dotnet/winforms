@@ -11,15 +11,15 @@ namespace System.Windows.Forms
 {
     internal class DataGridViewUtilities
     {
-        private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginWidth = 3;      // 3 pixels of margin on the left and right of icons
-        private const byte DATAGRIDVIEWROWHEADERCELL_iconMarginHeight = 2;     // 2 pixels of margin on the top and bottom of icons
-        private const byte DATAGRIDVIEWROWHEADERCELL_contentMarginWidth = 3;   // 3 pixels of margin on the left and right of content
-        private const byte DATAGRIDVIEWROWHEADERCELL_iconsWidth = 12;          // all icons are 12 pixels wide - make sure that is stays that way
-        private const byte DATAGRIDVIEWROWHEADERCELL_iconsHeight = 11;         // all icons are 11 pixels tall - make sure that is stays that way
+        private const byte IconMarginWidth = 3;      // 3 pixels of margin on the left and right of icons
+        private const byte IconMarginHeight = 2;     // 2 pixels of margin on the top and bottom of icons
+        private const byte ContentMarginWidth = 3;   // 3 pixels of margin on the left and right of content
+        private const byte IconsWidth = 12;          // all icons are 12 pixels wide - make sure that is stays that way
+        private const byte IconsHeight = 11;         // all icons are 11 pixels tall - make sure that is stays that way
 
-        private const byte DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft = 1;
-        private const byte DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight = 2;
-        private const byte DATAGRIDVIEWROWHEADERCELL_verticalTextMargin = 1;
+        private const byte HorizontalTextMarginLeft = 1;
+        private const byte HorizontalTextMarginRight = 2;
+        private const byte VerticalTextMargin = 1;
 
         internal static ContentAlignment ComputeDrawingContentAlignmentForCellStyleAlignment(DataGridViewContentAlignment alignment)
         {
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
                         int preferredWidth = 0, allowedHeight = constraintSize.Height - borderAndPaddingHeights;
                         if (!string.IsNullOrEmpty(val))
                         {
-                            int maxHeight = allowedHeight - 2 * DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
+                            int maxHeight = allowedHeight - 2 * VerticalTextMargin;
                             if (maxHeight > 0)
                             {
                                 if (cellStyle.WrapMode == DataGridViewTriState.True)
@@ -184,18 +184,18 @@ namespace System.Windows.Forms
                                 {
                                     preferredWidth = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags).Width;
                                 }
-                                preferredWidth += 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth + DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft + DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
+                                preferredWidth += 2 * ContentMarginWidth + HorizontalTextMarginLeft + HorizontalTextMarginRight;
                             }
                         }
-                        if (allowedHeight >= DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight)
+                        if (allowedHeight >= IconsHeight + 2 * IconMarginHeight)
                         {
                             if (showGlyph)
                             {
-                                preferredWidth += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                                preferredWidth += IconsWidth + 2 * IconMarginWidth;
                             }
                             if (showRowErrors)
                             {
-                                preferredWidth += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                                preferredWidth += IconsWidth + 2 * IconMarginWidth;
                             }
                         }
                         preferredWidth = Math.Max(preferredWidth, 1);
@@ -208,28 +208,28 @@ namespace System.Windows.Forms
                         int allowedWidth = constraintSize.Width - borderAndPaddingWidths;
                         if (!string.IsNullOrEmpty(val))
                         {
-                            if (showGlyph && allowedWidth >= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth)
+                            if (showGlyph && allowedWidth >= 2 * IconMarginWidth + IconsWidth)
                             {
                                 // There is enough room for the status icon
-                                minHeightIcon = DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight;
+                                minHeightIcon = IconsHeight + 2 * IconMarginHeight;
                                 // Status icon takes priority
-                                allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth;
+                                allowedWidth -= 2 * IconMarginWidth + IconsWidth;
                             }
-                            if (showRowErrors && allowedWidth >= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth)
+                            if (showRowErrors && allowedWidth >= 2 * IconMarginWidth + IconsWidth)
                             {
                                 // There is enough room for the error icon
-                                minHeightIcon = DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight;
+                                minHeightIcon = IconsHeight + 2 * IconMarginHeight;
                                 // There is enough room for both the status and error icons
-                                allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth;
+                                allowedWidth -= 2 * IconMarginWidth + IconsWidth;
                             }
-                            if (allowedWidth > 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth +
-                                               DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft +
-                                               DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight)
+                            if (allowedWidth > 2 * ContentMarginWidth +
+                                               HorizontalTextMarginLeft +
+                                               HorizontalTextMarginRight)
                             {
                                 // There is enough room for text
-                                allowedWidth -= 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth +
-                                                DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft +
-                                                DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
+                                allowedWidth -= 2 * ContentMarginWidth +
+                                                HorizontalTextMarginLeft +
+                                                HorizontalTextMarginRight;
                                 if (cellStyle.WrapMode == DataGridViewTriState.True)
                                 {
                                     minHeightContent = DataGridViewCell.MeasureTextHeight(graphics, val, cellStyle.Font, allowedWidth, flags);
@@ -238,14 +238,14 @@ namespace System.Windows.Forms
                                 {
                                     minHeightContent = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags).Height;
                                 }
-                                minHeightContent += 2 * DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
+                                minHeightContent += 2 * VerticalTextMargin;
                             }
                         }
                         else
                         {
-                            if ((showGlyph || showRowErrors) && allowedWidth >= 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth + DATAGRIDVIEWROWHEADERCELL_iconsWidth)
+                            if ((showGlyph || showRowErrors) && allowedWidth >= 2 * IconMarginWidth + IconsWidth)
                             {
-                                minHeightIcon = DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight;
+                                minHeightIcon = IconsHeight + 2 * IconMarginHeight;
                             }
                         }
                         return new Size(0, Math.Max(minHeightIcon, minHeightContent) + borderAndPaddingHeights);
@@ -262,10 +262,10 @@ namespace System.Windows.Forms
                             {
                                 preferredSize = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags);
                             }
-                            preferredSize.Width += 2 * DATAGRIDVIEWROWHEADERCELL_contentMarginWidth +
-                                                   DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginLeft +
-                                                   DATAGRIDVIEWROWHEADERCELL_horizontalTextMarginRight;
-                            preferredSize.Height += 2 * DATAGRIDVIEWROWHEADERCELL_verticalTextMargin;
+                            preferredSize.Width += 2 * ContentMarginWidth +
+                                                   HorizontalTextMarginLeft +
+                                                   HorizontalTextMarginRight;
+                            preferredSize.Height += 2 * VerticalTextMargin;
                         }
                         else
                         {
@@ -273,16 +273,16 @@ namespace System.Windows.Forms
                         }
                         if (showGlyph)
                         {
-                            preferredSize.Width += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                            preferredSize.Width += IconsWidth + 2 * IconMarginWidth;
                         }
                         if (showRowErrors)
                         {
-                            preferredSize.Width += DATAGRIDVIEWROWHEADERCELL_iconsWidth + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginWidth;
+                            preferredSize.Width += IconsWidth + 2 * IconMarginWidth;
                         }
                         if (showGlyph || showRowErrors)
                         {
                             preferredSize.Height = Math.Max(preferredSize.Height,
-                                                            DATAGRIDVIEWROWHEADERCELL_iconsHeight + 2 * DATAGRIDVIEWROWHEADERCELL_iconMarginHeight);
+                                                            IconsHeight + 2 * IconMarginHeight);
                         }
                         preferredSize.Width += borderAndPaddingWidths;
                         preferredSize.Height += borderAndPaddingHeights;

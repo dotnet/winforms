@@ -46,7 +46,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 for (int i = 0; i < props.Count; i++)
                 {
-                    if (propertyInfo.Name != null && propertyInfo.Name.Equals(props[i].Name))
+                    if (_propertyInfo.Name != null && _propertyInfo.Name.Equals(props[i].Name))
                     {
                         values[props[i].Name] = value;
                     }

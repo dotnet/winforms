@@ -13,12 +13,12 @@ namespace System.Windows.Forms
     {
         public class DataGridViewControlCollection : ControlCollection
         {
-            readonly DataGridView owner;
+            private readonly DataGridView _owner;
 
             public DataGridViewControlCollection(DataGridView owner)
                 : base(owner)
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             public void CopyTo(Control[] array, int index)
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
 
             public override void Remove(Control value)
             {
-                if (value != owner.horizScrollBar && value != owner.vertScrollBar && value != owner.editingPanel)
+                if (value != _owner._horizScrollBar && value != _owner._vertScrollBar && value != _owner._editingPanel)
                 {
                     base.Remove(value);
                 }
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
             {
                 for (int i = 0; i < Count; i++)
                 {
-                    if (this[i] == owner.horizScrollBar || this[i] == owner.vertScrollBar || this[i] == owner.editingPanel)
+                    if (this[i] == _owner._horizScrollBar || this[i] == _owner._vertScrollBar || this[i] == _owner._editingPanel)
                     {
                         continue;
                     }

@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     [ToolboxBitmap(typeof(DataGridViewComboBoxColumn), "DataGridViewComboBoxColumn")]
     public class DataGridViewComboBoxColumn : DataGridViewColumn
     {
-        private static readonly Type columnType = typeof(DataGridViewComboBoxColumn);
+        private static readonly Type s_columnType = typeof(DataGridViewComboBoxColumn);
 
         public DataGridViewComboBoxColumn() : base(new DataGridViewComboBoxCell())
         {
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
             }
         }
 
-        [DefaultValue(DataGridViewComboBoxCell.DATAGRIDVIEWCOMBOBOXCELL_defaultMaxDropDownItems)]
+        [DefaultValue(DataGridViewComboBoxCell.DefaultMaxDropDownItems)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.DataGridView_ComboBoxColumnMaxDropDownItemsDescr))]
         public int MaxDropDownItems
@@ -442,7 +442,7 @@ namespace System.Windows.Forms
             DataGridViewComboBoxColumn dataGridViewColumn;
             Type thisType = GetType();
 
-            if (thisType == columnType) //performance improvement
+            if (thisType == s_columnType) //performance improvement
             {
                 dataGridViewColumn = new DataGridViewComboBoxColumn();
             }

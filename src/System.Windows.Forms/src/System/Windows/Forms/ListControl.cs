@@ -9,11 +9,10 @@ using System.Drawing.Design;
 using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    [LookupBindingProperties(nameof(ListControl.DataSource), nameof(ListControl.DisplayMember), nameof(ListControl.ValueMember), nameof(ListControl.SelectedValue))]
+    [LookupBindingProperties(nameof(DataSource), nameof(DisplayMember), nameof(ValueMember), nameof(SelectedValue))]
     public abstract class ListControl : Control
     {
         private static readonly object s_dataSourceChangedEvent = new object();

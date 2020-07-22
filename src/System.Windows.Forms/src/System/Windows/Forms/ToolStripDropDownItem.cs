@@ -541,7 +541,7 @@ namespace System.Windows.Forms
 
                 if (isToplevel && (keyCode == Keys.Down || keyCode == Keys.Up || keyCode == Keys.Enter || (SupportsSpaceKey && keyCode == Keys.Space)))
                 {
-                    Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] open submenu from toplevel item");
+                    Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] open submenu from toplevel item");
 
                     if (Enabled || DesignMode)
                     {
@@ -561,7 +561,7 @@ namespace System.Windows.Forms
 
                     if (forward)
                     {
-                        Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] open submenu from NON-toplevel item");
+                        Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] open submenu from NON-toplevel item");
 
                         if (Enabled || DesignMode)
                         {
@@ -581,7 +581,7 @@ namespace System.Windows.Forms
 
                 if (backward)
                 {
-                    Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] close submenu from NON-toplevel item");
+                    Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] close submenu from NON-toplevel item");
 
                     // we're on a drop down but we're heading back up the chain.
                     // remember to select the item that displayed this dropdown.
@@ -600,7 +600,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] ddi calling base");
+            Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] ddi calling base");
             return base.ProcessDialogKey(keyData);
         }
 

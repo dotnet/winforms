@@ -196,7 +196,7 @@ namespace System.Windows.Forms
         {
             if (!(Focused || ContainsFocus))
             {
-                Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ProcessMenuKey] set focus to menustrip");
+                Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] set focus to menustrip");
                 ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this, /*menuKeyPressed=*/true);
 
                 if (DisplayedItems.Count > 0)
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
                     if (Focused || !ContainsFocus)
                     {
                         NotifySelectionChange(null);
-                        Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
+                        Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
                         // send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
                         IntPtr ancestor = User32.GetAncestor(this, User32.GA.ROOT);

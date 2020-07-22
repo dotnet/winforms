@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -16,10 +15,10 @@ namespace System.Windows.Forms
         private const DataGridViewContentAlignment AnyRight = DataGridViewContentAlignment.TopRight | DataGridViewContentAlignment.MiddleRight | DataGridViewContentAlignment.BottomRight;
         private const DataGridViewContentAlignment AnyCenter = DataGridViewContentAlignment.TopCenter | DataGridViewContentAlignment.MiddleCenter | DataGridViewContentAlignment.BottomCenter;
 
-        private DataGridView dataGridView;
-        private bool valueChanged;
-        private bool repositionOnValueChange;
-        private int rowIndex;
+        private DataGridView _dataGridView;
+        private bool _valueChanged;
+        private bool _repositionOnValueChange;
+        private int _rowIndex;
 
         public DataGridViewTextBoxEditingControl() : base()
         {
@@ -35,11 +34,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return dataGridView;
+                return _dataGridView;
             }
             set
             {
-                dataGridView = value;
+                _dataGridView = value;
             }
         }
 
@@ -59,11 +58,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return rowIndex;
+                return _rowIndex;
             }
             set
             {
-                rowIndex = value;
+                _rowIndex = value;
             }
         }
 
@@ -71,11 +70,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return valueChanged;
+                return _valueChanged;
             }
             set
             {
-                valueChanged = value;
+                _valueChanged = value;
             }
         }
 
@@ -91,7 +90,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return repositionOnValueChange;
+                return _repositionOnValueChange;
             }
         }
 
@@ -111,9 +110,9 @@ namespace System.Windows.Forms
                 Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
                 BackColor = opaqueBackColor;
 
-                if (dataGridView != null)
+                if (_dataGridView != null)
                 {
-                    dataGridView.EditingPanel.BackColor = opaqueBackColor;
+                    _dataGridView.EditingPanel.BackColor = opaqueBackColor;
                 }
             }
             else
@@ -126,7 +125,7 @@ namespace System.Windows.Forms
                 WordWrap = true;
             }
             TextAlign = TranslateAlignment(dataGridViewCellStyle.Alignment);
-            repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & AnyTop) == 0);
+            _repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & AnyTop) == 0);
         }
 
         public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
@@ -183,7 +182,7 @@ namespace System.Windows.Forms
 
                 case Keys.Prior:
                 case Keys.Next:
-                    if (valueChanged)
+                    if (_valueChanged)
                     {
                         return true;
                     }
@@ -228,8 +227,8 @@ namespace System.Windows.Forms
 
         private void NotifyDataGridViewOfValueChange()
         {
-            valueChanged = true;
-            dataGridView?.NotifyCurrentCellDirty(true);
+            _valueChanged = true;
+            _dataGridView?.NotifyCurrentCellDirty(true);
         }
 
         protected override void OnGotFocus(EventArgs e)
@@ -241,7 +240,7 @@ namespace System.Windows.Forms
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             // Forwarding to grid control. Can't prevent the TextBox from handling the mouse wheel as expected.
-            dataGridView?.OnMouseWheelInternal(e);
+            _dataGridView?.OnMouseWheelInternal(e);
         }
 
         protected override void OnTextChanged(EventArgs e)
@@ -307,7 +306,7 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
             if (IsHandleCreated)
             {
-                dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
+                _dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
             }
         }
     }

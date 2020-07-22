@@ -15,7 +15,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
-using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Accessibility;
 using static Interop;
@@ -24,9 +23,8 @@ using static Interop.User32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Displays an editing field and a list, allowing the user to select from the
-    ///  list or to enter new text. Displays only the editing field until the user
-    ///  explicitly displays the list.
+    ///  Displays an editing field and a list, allowing the user to select from thelist or to enter new text. Displays
+    ///  only the editing field until the user explicitly displays the list.
     /// </summary>
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [DefaultProperty(nameof(Items))]
@@ -57,84 +55,67 @@ namespace System.Windows.Forms
         private const int DefaultSimpleStyleHeight = 150;
         private const int DefaultDropDownHeight = 106;
         private const int AutoCompleteTimeout = 10000000; // 1 second timeout for resetting the MatchingText
-        private bool autoCompleteDroppedDown;
+        private bool _autoCompleteDroppedDown;
 
-        private FlatStyle flatStyle = FlatStyle.Standard;
-        private int updateCount;
+        private FlatStyle _flatStyle = FlatStyle.Standard;
+        private int _updateCount;
 
-        //Timestamp of the last keystroke. Used for auto-completion
-        // in DropDownList style.
-        private long autoCompleteTimeStamp;
+        // Timestamp of the last keystroke. Used for auto-completion in DropDownList style.
+        private long _autoCompleteTimeStamp;
 
-        private int selectedIndex = -1;  // used when we don't have a handle.
-        private bool allowCommit = true;
+        private int _selectedIndex = -1;  // used when we don't have a handle.
+        private bool _allowCommit = true;
 
-        // When the style is "simple", the requested height is used
-        // for the actual height of the control.
-        // When the style is non-simple, the height of the control
-        // is determined by the OS.
-        private int requestedHeight;
+        // When the style is "simple", the requested height is used for the actual height of the control. When the
+        // style is non-simple, the height of the control is determined by the OS.
+        private int _requestedHeight;
 
-        private ComboBoxChildNativeWindow childDropDown;
-        private ComboBoxChildNativeWindow childEdit;
-        private ComboBoxChildNativeWindow childListBox;
+        private ComboBoxChildNativeWindow _childDropDown;
+        private ComboBoxChildNativeWindow _childEdit;
+        private ComboBoxChildNativeWindow _childListBox;
 
-        private IntPtr dropDownHandle;
-        private ObjectCollection itemsCollection;
-        private short prefHeightCache = -1;
-        private short maxDropDownItems = 8;
-        private bool integralHeight = true;
-        private bool mousePressed;
-        private bool mouseEvents;
-        private bool mouseInEdit;
+        private IntPtr _dropDownHandle;
+        private ObjectCollection _itemsCollection;
+        private short _prefHeightCache = -1;
+        private short _maxDropDownItems = 8;
+        private bool _integralHeight = true;
+        private bool _mousePressed;
+        private bool _mouseEvents;
+        private bool _mouseInEdit;
 
-        private bool sorted;
-        private bool fireSetFocus = true;
-        private bool fireLostFocus = true;
-        private bool mouseOver;
-        private bool suppressNextWindosPos;
-        private bool canFireLostFocus;
+        private bool _sorted;
+        private bool _fireSetFocus = true;
+        private bool _fireLostFocus = true;
+        private bool _mouseOver;
+        private bool _suppressNextWindosPos;
+        private bool _canFireLostFocus;
 
-        // When the user types a letter and drops the dropdown...
-        // the combobox itself auto-searches the matching item...
-        // and selects the item in the edit...
-        // thus changing the windowText...
-        // hence we should Fire the TextChanged event in such a scenario..
-        // The string below is used for checking the window Text before and after the dropdown.
-        private string currentText = string.Empty;
-        private string lastTextChangedValue;
-        private bool dropDown;
-        private readonly AutoCompleteDropDownFinder finder = new AutoCompleteDropDownFinder();
+        // When the user types a letter and drops the dropdown the combobox itself auto-searches the matching item and
+        // selects the item in the edit thus changing the windowText. Hence we should Fire the TextChanged event in
+        // such a scenario. The string below is used for checking the window Text before and after the dropdown.
+        private string _currentText = string.Empty;
+        private string _lastTextChangedValue;
+        private bool _dropDown;
+        private readonly AutoCompleteDropDownFinder _finder = new AutoCompleteDropDownFinder();
 
-        private bool selectedValueChangedFired;
-
-        /// <summary>
-        ///  This stores the value for the autocomplete mode which can be either
-        ///  None, AutoSuggest, AutoAppend or AutoSuggestAppend.
-        /// </summary>
-        private AutoCompleteMode autoCompleteMode = AutoCompleteMode.None;
-
-        /// <summary>
-        ///  This stores the value for the autoCompleteSource mode which can be one of the values
-        ///  from AutoCompleteSource enum.
-        /// </summary>
-        private AutoCompleteSource autoCompleteSource = AutoCompleteSource.None;
+        private bool _selectedValueChangedFired;
+        private AutoCompleteMode _autoCompleteMode = AutoCompleteMode.None;
+        private AutoCompleteSource _autoCompleteSource = AutoCompleteSource.None;
 
         /// <summary>
         ///  This stores the custom StringCollection required for the autoCompleteSource when its set to CustomSource.
         /// </summary>
-        private AutoCompleteStringCollection autoCompleteCustomSource;
-        private StringSource stringSource;
-        private bool fromHandleCreate;
+        private AutoCompleteStringCollection _autoCompleteCustomSource;
+        private StringSource _stringSource;
+        private bool _fromHandleCreate;
 
-        private ComboBoxChildListUiaProvider childListAccessibleObject;
-        private ComboBoxChildEditUiaProvider childEditAccessibleObject;
-        private ComboBoxChildTextUiaProvider childTextAccessibleObject;
+        private ComboBoxChildListUiaProvider _childListAccessibleObject;
+        private ComboBoxChildEditUiaProvider _childEditAccessibleObject;
+        private ComboBoxChildTextUiaProvider _childTextAccessibleObject;
 
-        // Indicates whether the dropdown list will be closed  after
-        // selection (on getting CBN_SELENDOK notification) to prevent
-        // focusing on the list item after hiding the list.
-        private bool dropDownWillBeClosed;
+        // Indicates whether the dropdown list will be closed after selection (on getting CBN_SELENDOK notification)
+        // to prevent focusing on the list item after hiding the list.
+        private bool _dropDownWillBeClosed;
 
         /// <summary>
         ///  Creates a new ComboBox control.  The default style for the combo is
@@ -146,7 +127,7 @@ namespace System.Windows.Forms
                      ControlStyles.UseTextForAccessibility |
                      ControlStyles.StandardClick, false);
 
-            requestedHeight = DefaultSimpleStyleHeight;
+            _requestedHeight = DefaultSimpleStyleHeight;
 
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
@@ -165,7 +146,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return autoCompleteMode;
+                return _autoCompleteMode;
             }
             set
             {
@@ -185,11 +166,11 @@ namespace System.Windows.Forms
                     throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
                 bool resetAutoComplete = false;
-                if (autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None)
+                if (_autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None)
                 {
                     resetAutoComplete = true;
                 }
-                autoCompleteMode = value;
+                _autoCompleteMode = value;
                 SetAutoComplete(resetAutoComplete, true);
             }
         }
@@ -207,7 +188,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return autoCompleteSource;
+                return _autoCompleteSource;
             }
             set
             {
@@ -236,7 +217,7 @@ namespace System.Windows.Forms
                     throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
 
-                autoCompleteSource = value;
+                _autoCompleteSource = value;
                 SetAutoComplete(false, true);
             }
         }
@@ -255,27 +236,27 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (autoCompleteCustomSource == null)
+                if (_autoCompleteCustomSource == null)
                 {
-                    autoCompleteCustomSource = new AutoCompleteStringCollection();
-                    autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                    _autoCompleteCustomSource = new AutoCompleteStringCollection();
+                    _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
-                return autoCompleteCustomSource;
+                return _autoCompleteCustomSource;
             }
             set
             {
-                if (autoCompleteCustomSource != value)
+                if (_autoCompleteCustomSource != value)
                 {
-                    if (autoCompleteCustomSource != null)
+                    if (_autoCompleteCustomSource != null)
                     {
-                        autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                        _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
 
-                    autoCompleteCustomSource = value;
+                    _autoCompleteCustomSource = value;
 
-                    if (autoCompleteCustomSource != null)
+                    if (_autoCompleteCustomSource != null)
                     {
-                        autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                        _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
                     SetAutoComplete(false, true);
                 }
@@ -338,12 +319,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (childEditAccessibleObject == null)
+                if (_childEditAccessibleObject == null)
                 {
-                    childEditAccessibleObject = new ComboBoxChildEditUiaProvider(this, childEdit.Handle);
+                    _childEditAccessibleObject = new ComboBoxChildEditUiaProvider(this, _childEdit.Handle);
                 }
 
-                return childEditAccessibleObject;
+                return _childEditAccessibleObject;
             }
         }
 
@@ -351,13 +332,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (childListAccessibleObject == null)
+                if (_childListAccessibleObject == null)
                 {
-                    childListAccessibleObject =
-                        new ComboBoxChildListUiaProvider(this, DropDownStyle == ComboBoxStyle.Simple ? childListBox.Handle : dropDownHandle);
+                    _childListAccessibleObject =
+                        new ComboBoxChildListUiaProvider(this, DropDownStyle == ComboBoxStyle.Simple ? _childListBox.Handle : _dropDownHandle);
                 }
 
-                return childListAccessibleObject;
+                return _childListAccessibleObject;
             }
         }
 
@@ -365,12 +346,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (childTextAccessibleObject == null)
+                if (_childTextAccessibleObject == null)
                 {
-                    childTextAccessibleObject = new ComboBoxChildTextUiaProvider(this);
+                    _childTextAccessibleObject = new ComboBoxChildTextUiaProvider(this);
                 }
 
-                return childTextAccessibleObject;
+                return _childTextAccessibleObject;
             }
         }
 
@@ -388,7 +369,7 @@ namespace System.Windows.Forms
                 cp.ClassName = ComCtl32.WindowClasses.WC_COMBOBOX;
                 cp.Style |= (int)WS.VSCROLL | (int)CBS.HASSTRINGS | (int)CBS.AUTOHSCROLL;
                 cp.ExStyle |= (int)WS_EX.CLIENTEDGE;
-                if (!integralHeight)
+                if (!_integralHeight)
                 {
                     cp.Style |= (int)CBS.NOINTEGRALHEIGHT;
                 }
@@ -604,7 +585,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return flatStyle;
+                return _flatStyle;
             }
             set
             {
@@ -613,7 +594,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
                 }
-                flatStyle = value;
+                _flatStyle = value;
                 Invalidate();
             }
         }
@@ -631,7 +612,7 @@ namespace System.Windows.Forms
                 }
 
                 IntPtr focus = GetFocus();
-                return focus != IntPtr.Zero && ((childEdit != null && focus == childEdit.Handle) || (childListBox != null && focus == childListBox.Handle));
+                return focus != IntPtr.Zero && ((_childEdit != null && focus == _childEdit.Handle) || (_childListBox != null && focus == _childListBox.Handle));
             }
         }
 
@@ -668,14 +649,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                return integralHeight;
+                return _integralHeight;
             }
 
             set
             {
-                if (integralHeight != value)
+                if (_integralHeight != value)
                 {
-                    integralHeight = value;
+                    _integralHeight = value;
                     RecreateHandle();
                 }
             }
@@ -755,11 +736,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (itemsCollection == null)
+                if (_itemsCollection == null)
                 {
-                    itemsCollection = new ObjectCollection(this);
+                    _itemsCollection = new ObjectCollection(this);
                 }
-                return itemsCollection;
+                return _itemsCollection;
             }
         }
 
@@ -793,7 +774,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return maxDropDownItems;
+                return _maxDropDownItems;
             }
             set
             {
@@ -801,7 +782,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(MaxDropDownItems), value, 1, 100));
                 }
-                maxDropDownItems = (short)value;
+                _maxDropDownItems = (short)value;
             }
         }
 
@@ -854,12 +835,12 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool MouseIsOver
         {
-            get { return mouseOver; }
+            get { return _mouseOver; }
             set
             {
-                if (mouseOver != value)
+                if (_mouseOver != value)
                 {
-                    mouseOver = value;
+                    _mouseOver = value;
                     // Nothing to see here... Just keep on walking...
                     // Turns out that with Theming off, we don't get quite the same messages as with theming on, so
                     // our drawing gets a little messed up. So in case theming is off, force a draw here.
@@ -920,16 +901,16 @@ namespace System.Windows.Forms
                     //  user usually uses nondefault size and will experience whidbey.(2) above
 
                     Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
-                    prefHeightCache = (short)(textSize.Height + SystemInformation.BorderSize.Height * 8 + Padding.Size.Height);
+                    _prefHeightCache = (short)(textSize.Height + SystemInformation.BorderSize.Height * 8 + Padding.Size.Height);
 
-                    return prefHeightCache;
+                    return _prefHeightCache;
                 }
                 else
                 {
                     // Normally we do this sort of calculation in GetPreferredSizeCore which has builtin
                     // caching, but in this case we can not because PreferredHeight is used in ApplySizeConstraints
                     // which is used by GetPreferredSize (infinite loop).
-                    if (prefHeightCache < 0)
+                    if (_prefHeightCache < 0)
                     {
                         Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
 
@@ -938,16 +919,16 @@ namespace System.Windows.Forms
                         if (DropDownStyle == ComboBoxStyle.Simple)
                         {
                             int itemCount = Items.Count + 1;
-                            prefHeightCache = (short)(textSize.Height * itemCount + SystemInformation.BorderSize.Height * 16 + Padding.Size.Height);
+                            _prefHeightCache = (short)(textSize.Height * itemCount + SystemInformation.BorderSize.Height * 16 + Padding.Size.Height);
                         }
                         else
                         {
                             // We do this old school rather than use SizeFromClientSize because CreateParams calls this
                             // method and SizeFromClientSize calls CreateParams (another infinite loop.)
-                            prefHeightCache = (short)GetComboHeight();
+                            _prefHeightCache = (short)GetComboHeight();
                         }
                     }
-                    return prefHeightCache;
+                    return _prefHeightCache;
                 }
             }
         }
@@ -999,10 +980,10 @@ namespace System.Windows.Forms
             }
             else if (collection is ObjectCollection)
             {
-                string[] strings = new string[itemsCollection.Count];
-                for (int i = 0; i < itemsCollection.Count; i++)
+                string[] strings = new string[_itemsCollection.Count];
+                for (int i = 0; i < _itemsCollection.Count; i++)
                 {
-                    strings[i] = GetItemText(itemsCollection[i]);
+                    strings[i] = GetItemText(_itemsCollection[i]);
                 }
                 return strings;
             }
@@ -1026,16 +1007,16 @@ namespace System.Windows.Forms
                     return unchecked((int)(long)SendMessageW(this, (WM)CB.GETCURSEL));
                 }
 
-                return selectedIndex;
+                return _selectedIndex;
             }
             set
             {
                 if (SelectedIndex != value)
                 {
                     int itemCount = 0;
-                    if (itemsCollection != null)
+                    if (_itemsCollection != null)
                     {
-                        itemCount = itemsCollection.Count;
+                        itemCount = _itemsCollection.Count;
                     }
 
                     if (value < -1 || value >= itemCount)
@@ -1049,7 +1030,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        selectedIndex = value;
+                        _selectedIndex = value;
                     }
 
                     UpdateText();
@@ -1084,12 +1065,12 @@ namespace System.Windows.Forms
             {
                 int x = -1;
 
-                if (itemsCollection != null)
+                if (_itemsCollection != null)
                 {
                     //
                     if (value != null)
                     {
-                        x = itemsCollection.IndexOf(value);
+                        x = _itemsCollection.IndexOf(value);
                     }
                     else
                     {
@@ -1131,9 +1112,9 @@ namespace System.Windows.Forms
                     //AccessViolation exception, which is bad
                     string str = (value ?? "");
                     CreateControl();
-                    if (IsHandleCreated && childEdit != null)
+                    if (IsHandleCreated && _childEdit != null)
                     {
-                        SendMessageW(new HandleRef(this, childEdit.Handle), (WM)EM.REPLACESEL, (IntPtr)(-1), str);
+                        SendMessageW(new HandleRef(this, _childEdit.Handle), (WM)EM.REPLACESEL, (IntPtr)(-1), str);
                     }
                 }
             }
@@ -1195,18 +1176,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                return sorted;
+                return _sorted;
             }
             set
             {
-                if (sorted != value)
+                if (_sorted != value)
                 {
                     if (DataSource != null && value)
                     {
                         throw new ArgumentException(SR.ComboBoxSortWithDataSource);
                     }
 
-                    sorted = value;
+                    _sorted = value;
                     RefreshItems();
                     SelectedIndex = -1;
                 }
@@ -1356,7 +1337,7 @@ namespace System.Windows.Forms
         private void NotifyAutoComplete(bool setSelectedIndex)
         {
             string text = Text;
-            bool textChanged = (text != lastTextChangedValue);
+            bool textChanged = (text != _lastTextChangedValue);
             bool selectedIndexSet = false;
 
             if (setSelectedIndex)
@@ -1387,7 +1368,7 @@ namespace System.Windows.Forms
             }
 
             // Save the new value
-            lastTextChangedValue = text;
+            _lastTextChangedValue = text;
         }
 
         internal override bool SupportsUiaProviders => true;
@@ -1397,7 +1378,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((autoCompleteMode != AutoCompleteMode.None) && (DropDownStyle != ComboBoxStyle.DropDownList));
+                return ((_autoCompleteMode != AutoCompleteMode.None) && (DropDownStyle != ComboBoxStyle.DropDownList));
             }
         }
 
@@ -1533,7 +1514,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void BeginUpdate()
         {
-            updateCount++;
+            _updateCount++;
             BeginUpdateInternal();
         }
 
@@ -1552,7 +1533,7 @@ namespace System.Windows.Forms
 
         internal bool UpdateNeeded()
         {
-            return (updateCount == 0);
+            return (_updateCount == 0);
         }
 
         /// <summary>
@@ -1560,7 +1541,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal Point EditToComboboxMapping(Message m)
         {
-            if (childEdit == null)
+            if (_childEdit == null)
             {
                 return new Point(0, 0);
             }
@@ -1571,7 +1552,7 @@ namespace System.Windows.Forms
 
             //Get the Edit Rectangle.
             var editRectMid = new RECT();
-            GetWindowRect(childEdit, ref editRectMid);
+            GetWindowRect(_childEdit, ref editRectMid);
 
             //get the delta
             int comboXMid = PARAM.SignedLOWORD(m.LParam) + (editRectMid.left - comboRectMid.left);
@@ -1589,7 +1570,7 @@ namespace System.Windows.Forms
             switch ((WM)m.Msg)
             {
                 case WM.CHAR:
-                    if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle)
+                    if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox.Handle)
                     {
                         DefChildWndProc(ref m);
                     }
@@ -1606,7 +1587,7 @@ namespace System.Windows.Forms
                     }
                     break;
                 case WM.SYSCHAR:
-                    if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle)
+                    if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox.Handle)
                     {
                         DefChildWndProc(ref m);
                     }
@@ -1626,7 +1607,7 @@ namespace System.Windows.Forms
                 case WM.SYSKEYDOWN:
                     if (SystemAutoCompleteEnabled && !ACNativeWindow.AutoCompleteActive)
                     {
-                        finder.FindDropDowns(false);
+                        _finder.FindDropDowns(false);
                     }
 
                     if (AutoCompleteMode != AutoCompleteMode.None)
@@ -1644,7 +1625,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle)
+                    if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox.Handle)
                     {
                         DefChildWndProc(ref m);
                     }
@@ -1667,7 +1648,7 @@ namespace System.Windows.Forms
 
                 case WM.KEYUP:
                 case WM.SYSKEYUP:
-                    if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle)
+                    if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox.Handle)
                     {
                         DefChildWndProc(ref m);
                     }
@@ -1684,7 +1665,7 @@ namespace System.Windows.Forms
                     }
                     if (SystemAutoCompleteEnabled && !ACNativeWindow.AutoCompleteActive)
                     {
-                        finder.FindDropDowns();
+                        _finder.FindDropDowns();
                     }
 
                     break;
@@ -1699,7 +1680,7 @@ namespace System.Windows.Forms
                     DefChildWndProc(ref m);
                     // We don't want to fire the focus events twice -
                     // once in the combobox and once here.
-                    if (fireLostFocus)
+                    if (_fireLostFocus)
                     {
                         InvokeLostFocus(this, EventArgs.Empty);
                     }
@@ -1738,9 +1719,9 @@ namespace System.Windows.Forms
 
                     // We don't want to fire the focus events twice -
                     // once in the combobox and once here.
-                    if (fireSetFocus)
+                    if (_fireSetFocus)
                     {
-                        if (!DesignMode && childEdit != null && m.HWnd == childEdit.Handle)
+                        if (!DesignMode && _childEdit != null && m.HWnd == _childEdit.Handle)
                         {
                             WmImeSetFocus();
                         }
@@ -1756,9 +1737,9 @@ namespace System.Windows.Forms
 
                 case WM.SETFONT:
                     DefChildWndProc(ref m);
-                    if (childEdit != null && m.HWnd == childEdit.Handle)
+                    if (_childEdit != null && m.HWnd == _childEdit.Handle)
                     {
-                        SendMessageW(new HandleRef(this, childEdit.Handle), (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                        SendMessageW(new HandleRef(this, _childEdit.Handle), (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                     }
                     break;
                 case WM.LBUTTONDBLCLK:
@@ -1766,8 +1747,8 @@ namespace System.Windows.Forms
                     // sequence for doubleclick.
 
                     // Set MouseEvents
-                    mousePressed = true;
-                    mouseEvents = true;
+                    _mousePressed = true;
+                    _mouseEvents = true;
                     Capture = true;
 
                     // Call the DefWndProc() so that mousemove messages get to the windows edit
@@ -1783,8 +1764,8 @@ namespace System.Windows.Forms
                     // sequence for doubleclick
 
                     // Set MouseEvents
-                    mousePressed = true;
-                    mouseEvents = true;
+                    _mousePressed = true;
+                    _mouseEvents = true;
                     Capture = true;
 
                     // Call the DefWndProc() so that mousemove messages get to the windows edit
@@ -1800,8 +1781,8 @@ namespace System.Windows.Forms
                     // sequence for doubleclick
 
                     // Set MouseEvents.
-                    mousePressed = true;
-                    mouseEvents = true;
+                    _mousePressed = true;
+                    _mouseEvents = true;
                     Capture = true;
 
                     // Call the DefWndProc() so that mousemove messages get to the windows edit
@@ -1813,8 +1794,8 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.LBUTTONDOWN:
-                    mousePressed = true;
-                    mouseEvents = true;
+                    _mousePressed = true;
+                    _mouseEvents = true;
 
                     // Set the mouse capture as this is the child Wndproc.
                     Capture = true;
@@ -1837,21 +1818,21 @@ namespace System.Windows.Forms
                     pt = PointToScreen(pt);
 
                     // Combobox gets a WM_LBUTTONUP for focus change- check MouseEvents
-                    if (mouseEvents && !ValidationCancelled)
+                    if (_mouseEvents && !ValidationCancelled)
                     {
-                        mouseEvents = false;
-                        if (mousePressed)
+                        _mouseEvents = false;
+                        if (_mousePressed)
                         {
                             if (clientRect.Contains(pt))
                             {
-                                mousePressed = false;
+                                _mousePressed = false;
                                 OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                                 OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                             }
                             else
                             {
-                                mousePressed = false;
-                                mouseInEdit = false;
+                                _mousePressed = false;
+                                _mouseInEdit = false;
                                 OnMouseLeave(EventArgs.Empty);
                             }
                         }
@@ -1866,8 +1847,8 @@ namespace System.Windows.Forms
                     OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0));
                     break;
                 case WM.MBUTTONDOWN:
-                    mousePressed = true;
-                    mouseEvents = true;
+                    _mousePressed = true;
+                    _mouseEvents = true;
 
                     // Set the mouse capture as this is the child Wndproc.
                     Capture = true;
@@ -1879,8 +1860,8 @@ namespace System.Windows.Forms
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, P.X, P.Y, 0));
                     break;
                 case WM.RBUTTONDOWN:
-                    mousePressed = true;
-                    mouseEvents = true;
+                    _mousePressed = true;
+                    _mouseEvents = true;
 
                     if (ContextMenuStrip != null)
                     {
@@ -1896,8 +1877,8 @@ namespace System.Windows.Forms
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Pt.X, Pt.Y, 0));
                     break;
                 case WM.MBUTTONUP:
-                    mousePressed = false;
-                    mouseEvents = false;
+                    _mousePressed = false;
+                    _mouseEvents = false;
 
                     // Set the mouse capture as this is the child Wndproc.
                     Capture = false;
@@ -1905,8 +1886,8 @@ namespace System.Windows.Forms
                     OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     break;
                 case WM.RBUTTONUP:
-                    mousePressed = false;
-                    mouseEvents = false;
+                    _mousePressed = false;
+                    _mouseEvents = false;
 
                     DefChildWndProc(ref m);
 
@@ -1938,7 +1919,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.SETCURSOR:
-                    if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && PARAM.LOWORD(m.LParam) == (int)HT.CLIENT)
+                    if (Cursor != DefaultCursor && _childEdit != null && m.HWnd == _childEdit.Handle && PARAM.LOWORD(m.LParam) == (int)HT.CLIENT)
                     {
                         Cursor.Current = Cursor;
                     }
@@ -1964,10 +1945,10 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnMouseEnterInternal(EventArgs args)
         {
-            if (!mouseInEdit)
+            if (!_mouseInEdit)
             {
                 OnMouseEnter(args);
-                mouseInEdit = true;
+                _mouseInEdit = true;
             }
         }
 
@@ -1983,26 +1964,26 @@ namespace System.Windows.Forms
             if (!rectangle.Contains(p))
             {
                 OnMouseLeave(args);
-                mouseInEdit = false;
+                _mouseInEdit = false;
             }
         }
 
         private void DefChildWndProc(ref Message m)
         {
-            if (childEdit != null)
+            if (_childEdit != null)
             {
                 NativeWindow childWindow;
-                if (m.HWnd == childEdit.Handle)
+                if (m.HWnd == _childEdit.Handle)
                 {
-                    childWindow = childEdit;
+                    childWindow = _childEdit;
                 }
-                else if (m.HWnd == dropDownHandle)
+                else if (m.HWnd == _dropDownHandle)
                 {
-                    childWindow = childDropDown;
+                    childWindow = _childDropDown;
                 }
                 else
                 {
-                    childWindow = childListBox;
+                    childWindow = _childListBox;
                 }
 
                 //childwindow could be null if the handle was recreated while within a message handler
@@ -2019,14 +2000,14 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (autoCompleteCustomSource != null)
+                if (_autoCompleteCustomSource != null)
                 {
-                    autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                    _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
-                if (stringSource != null)
+                if (_stringSource != null)
                 {
-                    stringSource.ReleaseAutoComplete();
-                    stringSource = null;
+                    _stringSource.ReleaseAutoComplete();
+                    _stringSource = null;
                 }
             }
             base.Dispose(disposing);
@@ -2040,20 +2021,20 @@ namespace System.Windows.Forms
         /// </summary>
         public unsafe void EndUpdate()
         {
-            updateCount--;
-            if (updateCount == 0 && AutoCompleteSource == AutoCompleteSource.ListItems)
+            _updateCount--;
+            if (_updateCount == 0 && AutoCompleteSource == AutoCompleteSource.ListItems)
             {
                 SetAutoComplete(false, false);
             }
             if (EndUpdateInternal())
             {
-                if (childEdit != null && childEdit.Handle != IntPtr.Zero)
+                if (_childEdit != null && _childEdit.Handle != IntPtr.Zero)
                 {
-                    InvalidateRect(new HandleRef(this, childEdit.Handle), null, BOOL.FALSE);
+                    InvalidateRect(new HandleRef(this, _childEdit.Handle), null, BOOL.FALSE);
                 }
-                if (childListBox != null && childListBox.Handle != IntPtr.Zero)
+                if (_childListBox != null && _childListBox.Handle != IntPtr.Zero)
                 {
-                    InvalidateRect(new HandleRef(this, childListBox.Handle), null, BOOL.FALSE);
+                    InvalidateRect(new HandleRef(this, _childListBox.Handle), null, BOOL.FALSE);
                 }
             }
         }
@@ -2070,7 +2051,7 @@ namespace System.Windows.Forms
         /// </summary>
         public int FindString(string s, int startIndex)
         {
-            return FindStringInternal(s, itemsCollection, startIndex, exact: false, ignoreCase: true);
+            return FindStringInternal(s, _itemsCollection, startIndex, exact: false, ignoreCase: true);
         }
 
         /// <summary>
@@ -2097,7 +2078,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal int FindStringExact(string s, int startIndex, bool ignoreCase)
         {
-            return FindStringInternal(s, itemsCollection, startIndex, exact: true, ignoreCase);
+            return FindStringInternal(s, _itemsCollection, startIndex, exact: true, ignoreCase);
         }
 
         // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose
@@ -2137,7 +2118,7 @@ namespace System.Windows.Forms
                 return ItemHeight;
             }
 
-            if (index < 0 || itemsCollection == null || index >= itemsCollection.Count)
+            if (index < 0 || _itemsCollection == null || index >= _itemsCollection.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -2157,12 +2138,12 @@ namespace System.Windows.Forms
 
         internal IntPtr GetListHandle()
         {
-            return DropDownStyle == ComboBoxStyle.Simple ? childListBox.Handle : dropDownHandle;
+            return DropDownStyle == ComboBoxStyle.Simple ? _childListBox.Handle : _dropDownHandle;
         }
 
         internal NativeWindow GetListNativeWindow()
         {
-            return DropDownStyle == ComboBoxStyle.Simple ? childListBox : childDropDown;
+            return DropDownStyle == ComboBoxStyle.Simple ? _childListBox : _childDropDown;
         }
 
         internal int GetListNativeWindowRuntimeIdPart()
@@ -2207,7 +2188,7 @@ namespace System.Windows.Forms
                 {
                     // Reset matching text and remove any selection
                     MatchingText = string.Empty;
-                    autoCompleteTimeStamp = DateTime.Now.Ticks;
+                    _autoCompleteTimeStamp = DateTime.Now.Ticks;
                     if (Items.Count > 0)
                     {
                         SelectedIndex = 0;
@@ -2221,7 +2202,7 @@ namespace System.Windows.Forms
                 char keyChar = unchecked((char)(long)m.WParam);
                 if (keyChar == (char)Keys.Back)
                 {
-                    if (DateTime.Now.Ticks - autoCompleteTimeStamp > AutoCompleteTimeout ||
+                    if (DateTime.Now.Ticks - _autoCompleteTimeStamp > AutoCompleteTimeout ||
                         MatchingText.Length <= 1)
                     {
                         // Reset matching text and remove any selection
@@ -2237,7 +2218,7 @@ namespace System.Windows.Forms
                         MatchingText = MatchingText.Remove(MatchingText.Length - 1);
                         SelectedIndex = FindString(MatchingText);
                     }
-                    autoCompleteTimeStamp = DateTime.Now.Ticks;
+                    _autoCompleteTimeStamp = DateTime.Now.Ticks;
                     return false;
                 }
                 else if (keyChar == (char)Keys.Escape)
@@ -2251,7 +2232,7 @@ namespace System.Windows.Forms
                 {
                     DroppedDown = true;
                 }
-                if (DateTime.Now.Ticks - autoCompleteTimeStamp > AutoCompleteTimeout)
+                if (DateTime.Now.Ticks - _autoCompleteTimeStamp > AutoCompleteTimeout)
                 {
                     newMatchingText = new string(keyChar, 1);
                     if (FindString(newMatchingText) != -1)
@@ -2259,7 +2240,7 @@ namespace System.Windows.Forms
                         MatchingText = newMatchingText;
                         // Select the found item
                     }
-                    autoCompleteTimeStamp = DateTime.Now.Ticks;
+                    _autoCompleteTimeStamp = DateTime.Now.Ticks;
                     return false;
                 }
                 else
@@ -2275,7 +2256,7 @@ namespace System.Windows.Forms
                         }
                     }
                     // Do not change the selection
-                    autoCompleteTimeStamp = DateTime.Now.Ticks;
+                    _autoCompleteTimeStamp = DateTime.Now.Ticks;
                     return true;
                 }
             }
@@ -2303,14 +2284,14 @@ namespace System.Windows.Forms
             Keys keyCode = keyData & (Keys.KeyCode | Keys.Alt);
             if (keyCode == Keys.Return || keyCode == Keys.Escape)
             {
-                if (DroppedDown || autoCompleteDroppedDown)
+                if (DroppedDown || _autoCompleteDroppedDown)
                 {
                     //old behavior
                     return true;
                 }
                 else if (SystemAutoCompleteEnabled && ACNativeWindow.AutoCompleteActive)
                 {
-                    autoCompleteDroppedDown = true;
+                    _autoCompleteDroppedDown = true;
                     return true;
                 }
             }
@@ -2453,10 +2434,10 @@ namespace System.Windows.Forms
 
             // Get the handles and wndprocs of the ComboBox's child windows
             //
-            Debug.Assert(childEdit == null, "Child edit window already attached");
-            Debug.Assert(childListBox == null, "Child listbox window already attached");
+            Debug.Assert(_childEdit == null, "Child edit window already attached");
+            Debug.Assert(_childListBox == null, "Child listbox window already attached");
 
-            bool ok = childEdit == null && childListBox == null;
+            bool ok = _childEdit == null && _childListBox == null;
 
             if (ok && DropDownStyle != ComboBoxStyle.DropDownList)
             {
@@ -2467,19 +2448,19 @@ namespace System.Windows.Forms
                     //
                     if (DropDownStyle == ComboBoxStyle.Simple)
                     {
-                        childListBox = new ComboBoxChildNativeWindow(this, ChildWindowType.ListBox);
-                        childListBox.AssignHandle(hwnd);
+                        _childListBox = new ComboBoxChildNativeWindow(this, ChildWindowType.ListBox);
+                        _childListBox.AssignHandle(hwnd);
 
                         // get the edits hwnd...
                         //
                         hwnd = GetWindow(new HandleRef(this, hwnd), GW.HWNDNEXT);
                     }
 
-                    childEdit = new ComboBoxChildNativeWindow(this, ChildWindowType.Edit);
-                    childEdit.AssignHandle(hwnd);
+                    _childEdit = new ComboBoxChildNativeWindow(this, ChildWindowType.Edit);
+                    _childEdit.AssignHandle(hwnd);
 
                     // set the initial margin for combobox to be zero (this is also done whenever the font is changed).
-                    SendMessageW(new HandleRef(this, childEdit.Handle), (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                    SendMessageW(new HandleRef(this, _childEdit.Handle), (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                 }
             }
 
@@ -2501,35 +2482,35 @@ namespace System.Windows.Forms
             //
             if (DropDownStyle == ComboBoxStyle.Simple)
             {
-                Height = requestedHeight;
+                Height = _requestedHeight;
             }
 
             //If HandleCreated set the AutoComplete...
             //this function checks if the correct properties are set to enable AutoComplete feature on combobox.
             try
             {
-                fromHandleCreate = true;
+                _fromHandleCreate = true;
                 SetAutoComplete(false, false);
             }
             finally
             {
-                fromHandleCreate = false;
+                _fromHandleCreate = false;
             }
 
-            if (itemsCollection != null)
+            if (_itemsCollection != null)
             {
-                foreach (object item in itemsCollection)
+                foreach (object item in _itemsCollection)
                 {
                     NativeAdd(item);
                 }
 
                 // Now udpate the current selection.
                 //
-                if (selectedIndex >= 0)
+                if (_selectedIndex >= 0)
                 {
-                    SendMessageW(this, (WM)CB.SETCURSEL, (IntPtr)selectedIndex);
+                    SendMessageW(this, (WM)CB.SETCURSEL, (IntPtr)_selectedIndex);
                     UpdateText();
-                    selectedIndex = -1;
+                    _selectedIndex = -1;
                 }
             }
             // NOTE: Setting SelectedIndex must be the last thing we do.
@@ -2541,20 +2522,20 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            dropDownHandle = IntPtr.Zero;
+            _dropDownHandle = IntPtr.Zero;
             if (Disposing)
             {
-                itemsCollection = null;
-                selectedIndex = -1;
+                _itemsCollection = null;
+                _selectedIndex = -1;
             }
             else
             {
-                selectedIndex = SelectedIndex;
+                _selectedIndex = SelectedIndex;
             }
-            if (stringSource != null)
+            if (_stringSource != null)
             {
-                stringSource.ReleaseAutoComplete();
-                stringSource = null;
+                _stringSource.ReleaseAutoComplete();
+                _stringSource = null;
             }
             base.OnHandleDestroyed(e);
         }
@@ -2606,12 +2587,12 @@ namespace System.Windows.Forms
                     // Set SelectedIndex
                     NotifyAutoComplete(true);
                 }
-                else if ((e.KeyCode == Keys.Escape) && autoCompleteDroppedDown)
+                else if ((e.KeyCode == Keys.Escape) && _autoCompleteDroppedDown)
                 {
                     // Fire TextChanged Only
                     NotifyAutoComplete(false);
                 }
-                autoCompleteDroppedDown = false;
+                _autoCompleteDroppedDown = false;
             }
 
             // Base Handling
@@ -2630,7 +2611,7 @@ namespace System.Windows.Forms
             if (!e.Handled && (e.KeyChar == (char)(int)Keys.Return || e.KeyChar == (char)(int)Keys.Escape)
                 && DroppedDown)
             {
-                dropDown = false;
+                _dropDown = false;
                 if (FormattingEnabled)
                 {
                     //Set the Text which would Compare the WindowText with the TEXT and change SelectedIndex.
@@ -2680,16 +2661,16 @@ namespace System.Windows.Forms
         {
             // There are cases where if we disable the combo while in this event handler, it sends the message again.
             // This is a recursion guard to ensure we only send one commit per user action.
-            if (allowCommit)
+            if (_allowCommit)
             {
                 try
                 {
-                    allowCommit = false;
+                    _allowCommit = false;
                     OnSelectionChangeCommitted(e);
                 }
                 finally
                 {
-                    allowCommit = true;
+                    _allowCommit = true;
                 }
             }
         }
@@ -2706,9 +2687,9 @@ namespace System.Windows.Forms
             // The user selects a list item or selects an item and then closes the list.
             // It indicates that the user's selection is to be processed but should not
             // be focused after closing the list.
-            if (dropDown)
+            if (_dropDown)
             {
-                dropDownWillBeClosed = true;
+                _dropDownWillBeClosed = true;
             }
         }
 
@@ -2727,11 +2708,11 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (dropDownWillBeClosed)
+            if (_dropDownWillBeClosed)
             {
                 // This is after-closing selection - do not focus on the list item
                 // and reset the state to announce the selections later.
-                dropDownWillBeClosed = false;
+                _dropDownWillBeClosed = false;
                 return;
             }
 
@@ -2741,7 +2722,7 @@ namespace System.Windows.Forms
                 // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
                 // in case when Level 3 is enabled and DropDown is not in expanded state. Simple-styled
                 // ComboBox selection is announced by TextProvider.
-                if (dropDown)
+                if (_dropDown)
                 {
                     accessibleObject.SetComboBoxItemFocus();
                 }
@@ -2769,7 +2750,7 @@ namespace System.Windows.Forms
         protected override void OnSelectedValueChanged(EventArgs e)
         {
             base.OnSelectedValueChanged(e);
-            selectedValueChangedFired = true;
+            _selectedValueChangedFired = true;
         }
 
         /// <summary>
@@ -2863,17 +2844,17 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnGotFocus(EventArgs e)
         {
-            if (!canFireLostFocus)
+            if (!_canFireLostFocus)
             {
                 base.OnGotFocus(e);
-                canFireLostFocus = true;
+                _canFireLostFocus = true;
             }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLostFocus(EventArgs e)
         {
-            if (canFireLostFocus)
+            if (_canFireLostFocus)
             {
                 if (AutoCompleteMode != AutoCompleteMode.None &&
                     AutoCompleteSource == AutoCompleteSource.ListItems &&
@@ -2882,7 +2863,7 @@ namespace System.Windows.Forms
                     MatchingText = string.Empty;
                 }
                 base.OnLostFocus(e);
-                canFireLostFocus = false;
+                _canFireLostFocus = false;
             }
         }
 
@@ -2894,13 +2875,13 @@ namespace System.Windows.Forms
                 string text = Text;
 
                 // Prevent multiple TextChanges...
-                if (text != lastTextChangedValue)
+                if (text != _lastTextChangedValue)
                 {
                     // Need to still fire a TextChanged
                     base.OnTextChanged(e);
 
                     // Save the new value
-                    lastTextChangedValue = text;
+                    _lastTextChangedValue = text;
                 }
             }
             else
@@ -3020,7 +3001,7 @@ namespace System.Windows.Forms
                 UiaCore.ExpandCollapseState.Collapsed);
 
             // Collapsing the DropDown, so reset the flag.
-            dropDownWillBeClosed = false;
+            _dropDownWillBeClosed = false;
         }
 
         /// <summary>
@@ -3076,7 +3057,7 @@ namespace System.Windows.Forms
 
         private void ResetHeightCache()
         {
-            prefHeightCache = -1;
+            _prefHeightCache = -1;
         }
         /// <summary>
         ///  Reparses the objects, getting new text strings for them.
@@ -3086,9 +3067,9 @@ namespace System.Windows.Forms
             // Save off the selection and the current collection.
             //
             int selectedIndex = SelectedIndex;
-            ObjectCollection savedItems = itemsCollection;
+            ObjectCollection savedItems = _itemsCollection;
 
-            itemsCollection = null;
+            _itemsCollection = null;
 
             object[] newItems = null;
 
@@ -3153,29 +3134,29 @@ namespace System.Windows.Forms
         /// </summary>
         private void ReleaseChildWindow()
         {
-            if (childEdit != null)
+            if (_childEdit != null)
             {
                 // We do not use UI Automation provider for child edit, so do not need to release providers.
-                childEdit.ReleaseHandle();
-                childEdit = null;
+                _childEdit.ReleaseHandle();
+                _childEdit = null;
             }
 
-            if (childListBox != null)
+            if (_childListBox != null)
             {
                 // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                ReleaseUiaProvider(childListBox.Handle);
+                ReleaseUiaProvider(_childListBox.Handle);
 
-                childListBox.ReleaseHandle();
-                childListBox = null;
+                _childListBox.ReleaseHandle();
+                _childListBox = null;
             }
 
-            if (childDropDown != null)
+            if (_childDropDown != null)
             {
                 // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                ReleaseUiaProvider(childDropDown.Handle);
+                ReleaseUiaProvider(_childDropDown.Handle);
 
-                childDropDown.ReleaseHandle();
-                childDropDown = null;
+                _childDropDown.ReleaseHandle();
+                _childDropDown = null;
             }
         }
 
@@ -3213,21 +3194,21 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetAutoComplete(bool reset, bool recreate)
         {
-            if (!IsHandleCreated || childEdit == null)
+            if (!IsHandleCreated || _childEdit == null)
             {
                 return;
             }
 
             if (AutoCompleteMode != AutoCompleteMode.None)
             {
-                if (!fromHandleCreate && recreate && IsHandleCreated)
+                if (!_fromHandleCreate && recreate && IsHandleCreated)
                 {
                     //RecreateHandle to avoid Leak.
                     // notice the use of member variable to avoid re-entrancy
                     AutoCompleteMode backUpMode = AutoCompleteMode;
-                    autoCompleteMode = AutoCompleteMode.None;
+                    _autoCompleteMode = AutoCompleteMode.None;
                     RecreateHandle();
-                    autoCompleteMode = backUpMode;
+                    _autoCompleteMode = backUpMode;
                 }
 
                 if (AutoCompleteSource == AutoCompleteSource.CustomSource)
@@ -3236,21 +3217,21 @@ namespace System.Windows.Forms
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {
-                            Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                            Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
                         }
                         else
                         {
-                            if (stringSource == null)
+                            if (_stringSource == null)
                             {
-                                stringSource = new StringSource(GetStringsForAutoComplete(AutoCompleteCustomSource));
-                                if (!stringSource.Bind(new HandleRef(this, childEdit.Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
+                                _stringSource = new StringSource(GetStringsForAutoComplete(AutoCompleteCustomSource));
+                                if (!_stringSource.Bind(new HandleRef(this, _childEdit.Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                 {
                                     throw new ArgumentException(SR.AutoCompleteFailure);
                                 }
                             }
                             else
                             {
-                                stringSource.RefreshList(GetStringsForAutoComplete(AutoCompleteCustomSource));
+                                _stringSource.RefreshList(GetStringsForAutoComplete(AutoCompleteCustomSource));
                             }
                         }
                     }
@@ -3259,25 +3240,25 @@ namespace System.Windows.Forms
                 {
                     if (DropDownStyle != ComboBoxStyle.DropDownList)
                     {
-                        if (itemsCollection != null)
+                        if (_itemsCollection != null)
                         {
-                            if (itemsCollection.Count == 0)
+                            if (_itemsCollection.Count == 0)
                             {
-                                Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                                Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
                             }
                             else
                             {
-                                if (stringSource == null)
+                                if (_stringSource == null)
                                 {
-                                    stringSource = new StringSource(GetStringsForAutoComplete(Items));
-                                    if (!stringSource.Bind(new HandleRef(this, childEdit.Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
+                                    _stringSource = new StringSource(GetStringsForAutoComplete(Items));
+                                    if (!_stringSource.Bind(new HandleRef(this, _childEdit.Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                                     {
                                         throw new ArgumentException(SR.AutoCompleteFailureListItems);
                                     }
                                 }
                                 else
                                 {
-                                    stringSource.RefreshList(GetStringsForAutoComplete(Items));
+                                    _stringSource.RefreshList(GetStringsForAutoComplete(Items));
                                 }
                             }
                         }
@@ -3286,7 +3267,7 @@ namespace System.Windows.Forms
                     {
                         // Drop Down List special handling
                         Debug.Assert(DropDownStyle == ComboBoxStyle.DropDownList);
-                        Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                        Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
                     }
                 }
                 else
@@ -3306,12 +3287,12 @@ namespace System.Windows.Forms
                         mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON;
                     }
 
-                    Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), (Shlwapi.SHACF)AutoCompleteSource | mode);
+                    Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), (Shlwapi.SHACF)AutoCompleteSource | mode);
                 }
             }
             else if (reset)
             {
-                Shlwapi.SHAutoComplete(new HandleRef(this, childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
+                Shlwapi.SHAutoComplete(new HandleRef(this, _childEdit.Handle), Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF);
             }
         }
 
@@ -3352,7 +3333,7 @@ namespace System.Windows.Forms
             // (
             if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
             {
-                requestedHeight = height;
+                _requestedHeight = height;
             }
 
             base.SetBoundsCore(x, y, width, height, specified);
@@ -3374,7 +3355,7 @@ namespace System.Windows.Forms
             {
                 if (DataSource is ICurrencyManagerProvider)
                 {
-                    selectedValueChangedFired = false;
+                    _selectedValueChangedFired = false;
                 }
 
                 if (IsHandleCreated)
@@ -3383,15 +3364,15 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    selectedIndex = DataManager.Position;
+                    _selectedIndex = DataManager.Position;
                 }
 
                 // if set_SelectedIndexChanged did not fire OnSelectedValueChanged
                 // then we have to fire it ourselves, cos the list changed anyway
-                if (!selectedValueChangedFired)
+                if (!_selectedValueChangedFired)
                 {
                     OnSelectedValueChanged(EventArgs.Empty);
-                    selectedValueChangedFired = false;
+                    _selectedValueChangedFired = false;
                 }
             }
 
@@ -3405,7 +3386,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeAutoCompleteCustomSource()
         {
-            return autoCompleteCustomSource != null && autoCompleteCustomSource.Count > 0;
+            return _autoCompleteCustomSource != null && _autoCompleteCustomSource.Count > 0;
         }
 
         internal bool ShouldSerializeDropDownWidth()
@@ -3435,23 +3416,23 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", Items.Count: " + ((itemsCollection == null) ? "0" : itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
+            return s + ", Items.Count: " + ((_itemsCollection == null) ? "0" : _itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
         }
 
         private void UpdateDropDownHeight()
         {
-            if (dropDownHandle != IntPtr.Zero)
+            if (_dropDownHandle != IntPtr.Zero)
             {
                 //Now use the DropDownHeight property instead of calculating the Height...
                 int height = DropDownHeight;
                 if (height == DefaultDropDownHeight)
                 {
-                    int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
-                    int count = Math.Min(Math.Max(itemCount, 1), maxDropDownItems);
+                    int itemCount = (_itemsCollection == null) ? 0 : _itemsCollection.Count;
+                    int count = Math.Min(Math.Max(itemCount, 1), _maxDropDownItems);
                     height = (ItemHeight * count + 2);
                 }
                 SetWindowPos(
-                    new HandleRef(this, dropDownHandle),
+                    new HandleRef(this, _dropDownHandle),
                     HWND_TOP,
                     0,
                     0,
@@ -3529,9 +3510,9 @@ namespace System.Windows.Forms
 
             if (DropDownStyle == ComboBoxStyle.DropDown)
             {
-                if (childEdit != null && childEdit.Handle != IntPtr.Zero)
+                if (_childEdit != null && _childEdit.Handle != IntPtr.Zero)
                 {
-                    SendMessageW(new HandleRef(this, childEdit.Handle), WM.SETTEXT, IntPtr.Zero, s);
+                    SendMessageW(new HandleRef(this, _childEdit.Handle), WM.SETTEXT, IntPtr.Zero, s);
                 }
             }
         }
@@ -3568,24 +3549,24 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if (unchecked((int)(long)m.WParam) == ((int)WM.CREATE | 1000 << 16))
             {
-                dropDownHandle = m.LParam;
+                _dropDownHandle = m.LParam;
 
                 // By some reason WmParentNotify with WM_DESTROY is not called before recreation.
                 // So release the old references here.
-                if (childDropDown != null)
+                if (_childDropDown != null)
                 {
                     // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                    ReleaseUiaProvider(childDropDown.Handle);
+                    ReleaseUiaProvider(_childDropDown.Handle);
 
-                    childDropDown.ReleaseHandle();
+                    _childDropDown.ReleaseHandle();
                 }
 
-                childDropDown = new ComboBoxChildNativeWindow(this, ChildWindowType.DropDownList);
-                childDropDown.AssignHandle(dropDownHandle);
+                _childDropDown = new ComboBoxChildNativeWindow(this, ChildWindowType.DropDownList);
+                _childDropDown.AssignHandle(_dropDownHandle);
 
                 // Reset the child list accessible object in case the the DDL is recreated.
                 // For instance when dialog window containging the ComboBox is reopened.
-                childListAccessibleObject = null;
+                _childListAccessibleObject = null;
             }
         }
 
@@ -3662,15 +3643,15 @@ namespace System.Windows.Forms
                 case CBN.CLOSEUP:
 
                     OnDropDownClosed(EventArgs.Empty);
-                    if (FormattingEnabled && Text != currentText && dropDown)
+                    if (FormattingEnabled && Text != _currentText && _dropDown)
                     {
                         OnTextChanged(EventArgs.Empty);
                     }
-                    dropDown = false;
+                    _dropDown = false;
                     break;
                 case CBN.DROPDOWN:
-                    currentText = Text;
-                    dropDown = true;
+                    _currentText = Text;
+                    _dropDown = true;
                     OnDropDown(EventArgs.Empty);
                     UpdateDropDownHeight();
 
@@ -3742,19 +3723,19 @@ namespace System.Windows.Forms
                 case WM.SETFOCUS:
                     try
                     {
-                        fireSetFocus = false;
+                        _fireSetFocus = false;
                         base.WndProc(ref m);
                     }
 
                     finally
                     {
-                        fireSetFocus = true;
+                        _fireSetFocus = true;
                     }
                     break;
                 case WM.KILLFOCUS:
                     try
                     {
-                        fireLostFocus = false;
+                        _fireLostFocus = false;
                         base.WndProc(ref m);
                         // Nothing to see here... Just keep on walking...
                         // Turns out that with Theming off, we don't get quite the same messages as with theming on.
@@ -3775,7 +3756,7 @@ namespace System.Windows.Forms
 
                     finally
                     {
-                        fireLostFocus = true;
+                        _fireLostFocus = true;
                     }
                     break;
                 case WM.CTLCOLOREDIT:
@@ -3798,7 +3779,7 @@ namespace System.Windows.Forms
                     WmReflectMeasureItem(ref m);
                     break;
                 case WM.LBUTTONDOWN:
-                    mouseEvents = true;
+                    _mouseEvents = true;
                     base.WndProc(ref m);
                     break;
                 case WM.LBUTTONUP:
@@ -3815,9 +3796,9 @@ namespace System.Windows.Forms
                     //WM_LBUTTONDOWN or WM_LBUTTONDBLBCLK
                     // combo box gets a WM_LBUTTONUP for focus change ...
                     //
-                    if (mouseEvents && !ValidationCancelled)
+                    if (_mouseEvents && !ValidationCancelled)
                     {
-                        mouseEvents = false;
+                        _mouseEvents = false;
                         bool captured = Capture;
                         if (captured && clientRect.Contains(pt))
                         {
@@ -3841,7 +3822,7 @@ namespace System.Windows.Forms
                 case WM.PAINT:
                     if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
-                        using var dropDownRegion = new Gdi32.RegionScope(FlatComboBoxAdapter.dropDownRect);
+                        using var dropDownRegion = new Gdi32.RegionScope(FlatComboBoxAdapter._dropDownRect);
                         using var windowRegion = new Gdi32.RegionScope(Bounds);
 
                         // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
@@ -3911,17 +3892,17 @@ namespace System.Windows.Forms
                 case WM.SETFONT:
                     if (Width == 0)
                     {
-                        suppressNextWindosPos = true;
+                        _suppressNextWindosPos = true;
                     }
                     base.WndProc(ref m);
                     break;
 
                 case WM.WINDOWPOSCHANGED:
-                    if (!suppressNextWindosPos)
+                    if (!_suppressNextWindosPos)
                     {
                         base.WndProc(ref m);
                     }
-                    suppressNextWindosPos = false;
+                    _suppressNextWindosPos = false;
                     break;
 
                 case WM.NCDESTROY:
@@ -4082,11 +4063,11 @@ namespace System.Windows.Forms
 
         private sealed class ItemComparer : IComparer
         {
-            private readonly ComboBox comboBox;
+            private readonly ComboBox _comboBox;
 
             public ItemComparer(ComboBox comboBox)
             {
-                this.comboBox = comboBox;
+                _comboBox = comboBox;
             }
 
             public int Compare(object item1, object item2)
@@ -4105,8 +4086,8 @@ namespace System.Windows.Forms
                     return 1; //item2 is null, so item 1 is greater
                 }
 
-                string itemName1 = comboBox.GetItemText(item1);
-                string itemName2 = comboBox.GetItemText(item2);
+                string itemName1 = _comboBox.GetItemText(item1);
+                string itemName2 = _comboBox.GetItemText(item2);
 
                 CompareInfo compInfo = (Application.CurrentCulture).CompareInfo;
                 return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
@@ -4116,24 +4097,24 @@ namespace System.Windows.Forms
         [ListBindable(false)]
         public class ObjectCollection : IList
         {
-            private readonly ComboBox owner;
-            private ArrayList innerList;
-            private IComparer comparer;
+            private readonly ComboBox _owner;
+            private ArrayList _innerList;
+            private IComparer _comparer;
 
             public ObjectCollection(ComboBox owner)
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             private IComparer Comparer
             {
                 get
                 {
-                    if (comparer == null)
+                    if (_comparer == null)
                     {
-                        comparer = new ItemComparer(owner);
+                        _comparer = new ItemComparer(_owner);
                     }
-                    return comparer;
+                    return _comparer;
                 }
             }
 
@@ -4141,11 +4122,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (innerList == null)
+                    if (_innerList == null)
                     {
-                        innerList = new ArrayList();
+                        _innerList = new ArrayList();
                     }
-                    return innerList;
+                    return _innerList;
                 }
             }
 
@@ -4203,11 +4184,11 @@ namespace System.Windows.Forms
             /// </summary>
             public int Add(object item)
             {
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
                 int index = AddInternal(item);
-                if (owner.UpdateNeeded() && owner.AutoCompleteSource == AutoCompleteSource.ListItems)
+                if (_owner.UpdateNeeded() && _owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                 {
-                    owner.SetAutoComplete(false, false);
+                    _owner.SetAutoComplete(false, false);
                 }
                 return index;
             }
@@ -4219,7 +4200,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(item));
                 }
                 int index = -1;
-                if (!owner.sorted)
+                if (!_owner._sorted)
                 {
                     InnerList.Add(item);
                 }
@@ -4238,19 +4219,19 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (owner.sorted)
+                    if (_owner._sorted)
                     {
-                        if (owner.IsHandleCreated)
+                        if (_owner.IsHandleCreated)
                         {
-                            owner.NativeInsert(index, item);
+                            _owner.NativeInsert(index, item);
                         }
                     }
                     else
                     {
                         index = InnerList.Count - 1;
-                        if (owner.IsHandleCreated)
+                        if (_owner.IsHandleCreated)
                         {
-                            owner.NativeAdd(item);
+                            _owner.NativeAdd(item);
                         }
                     }
                     successful = true;
@@ -4273,15 +4254,15 @@ namespace System.Windows.Forms
 
             public void AddRange(object[] items)
             {
-                owner.CheckNoDataSource();
-                owner.BeginUpdate();
+                _owner.CheckNoDataSource();
+                _owner.BeginUpdate();
                 try
                 {
                     AddRangeInternal(items);
                 }
                 finally
                 {
-                    owner.EndUpdate();
+                    _owner.EndUpdate();
                 }
             }
 
@@ -4298,9 +4279,9 @@ namespace System.Windows.Forms
                     // AddInternal is based on BinarySearch and ensures n*log(n) complexity
                     AddInternal(item);
                 }
-                if (owner.AutoCompleteSource == AutoCompleteSource.ListItems)
+                if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                 {
-                    owner.SetAutoComplete(false, false);
+                    _owner.SetAutoComplete(false, false);
                 }
             }
 
@@ -4322,7 +4303,7 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    owner.CheckNoDataSource();
+                    _owner.CheckNoDataSource();
                     SetItemInternal(index, value);
                 }
             }
@@ -4332,22 +4313,22 @@ namespace System.Windows.Forms
             /// </summary>
             public void Clear()
             {
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
                 ClearInternal();
             }
 
             internal void ClearInternal()
             {
-                if (owner.IsHandleCreated)
+                if (_owner.IsHandleCreated)
                 {
-                    owner.NativeClear();
+                    _owner.NativeClear();
                 }
 
                 InnerList.Clear();
-                owner.selectedIndex = -1;
-                if (owner.AutoCompleteSource == AutoCompleteSource.ListItems)
+                _owner._selectedIndex = -1;
+                if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                 {
-                    owner.SetAutoComplete(false, true /*recreateHandle*/);
+                    _owner.SetAutoComplete(false, true /*recreateHandle*/);
                 }
             }
 
@@ -4398,7 +4379,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Insert(int index, object item)
             {
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
 
                 if (item == null)
                 {
@@ -4413,29 +4394,29 @@ namespace System.Windows.Forms
                 // If the combo box is sorted, then nust treat this like an add
                 // because we are going to twiddle the index anyway.
                 //
-                if (owner.sorted)
+                if (_owner._sorted)
                 {
                     Add(item);
                 }
                 else
                 {
                     InnerList.Insert(index, item);
-                    if (owner.IsHandleCreated)
+                    if (_owner.IsHandleCreated)
                     {
                         bool successful = false;
 
                         try
                         {
-                            owner.NativeInsert(index, item);
+                            _owner.NativeInsert(index, item);
                             successful = true;
                         }
                         finally
                         {
                             if (successful)
                             {
-                                if (owner.AutoCompleteSource == AutoCompleteSource.ListItems)
+                                if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                                 {
-                                    owner.SetAutoComplete(false, false);
+                                    _owner.SetAutoComplete(false, false);
                                 }
                             }
                             else
@@ -4452,26 +4433,26 @@ namespace System.Windows.Forms
             /// </summary>
             public void RemoveAt(int index)
             {
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerList.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                if (owner.IsHandleCreated)
+                if (_owner.IsHandleCreated)
                 {
-                    owner.NativeRemoveAt(index);
+                    _owner.NativeRemoveAt(index);
                 }
 
                 InnerList.RemoveAt(index);
-                if (!owner.IsHandleCreated && index < owner.selectedIndex)
+                if (!_owner.IsHandleCreated && index < _owner._selectedIndex)
                 {
-                    owner.selectedIndex--;
+                    _owner._selectedIndex--;
                 }
-                if (owner.AutoCompleteSource == AutoCompleteSource.ListItems)
+                if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                 {
-                    owner.SetAutoComplete(false, false);
+                    _owner.SetAutoComplete(false, false);
                 }
             }
 
@@ -4500,22 +4481,22 @@ namespace System.Windows.Forms
 
                 // If the native control has been created, and the display text of the new list item object
                 // is different to the current text in the native list item, recreate the native list item...
-                if (owner.IsHandleCreated)
+                if (_owner.IsHandleCreated)
                 {
-                    bool selected = (index == owner.SelectedIndex);
+                    bool selected = (index == _owner.SelectedIndex);
 
-                    if (string.Compare(owner.GetItemText(value), owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0)
+                    if (string.Compare(_owner.GetItemText(value), _owner.NativeGetItemText(index), true, CultureInfo.CurrentCulture) != 0)
                     {
-                        owner.NativeRemoveAt(index);
-                        owner.NativeInsert(index, value);
+                        _owner.NativeRemoveAt(index);
+                        _owner.NativeInsert(index, value);
                         if (selected)
                         {
-                            owner.SelectedIndex = index;
-                            owner.UpdateText();
+                            _owner.SelectedIndex = index;
+                            _owner.UpdateText();
                         }
-                        if (owner.AutoCompleteSource == AutoCompleteSource.ListItems)
+                        if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                         {
-                            owner.SetAutoComplete(false, false);
+                            _owner.SetAutoComplete(false, false);
                         }
                     }
                     else
@@ -4524,8 +4505,8 @@ namespace System.Windows.Forms
                         // Minimum compatibility fix
                         if (selected)
                         {
-                            owner.OnSelectedItemChanged(EventArgs.Empty);   //we do this because set_SelectedIndex does this. (for consistency)
-                            owner.OnSelectedIndexChanged(EventArgs.Empty);
+                            _owner.OnSelectedItemChanged(EventArgs.Empty);   //we do this because set_SelectedIndex does this. (for consistency)
+                            _owner.OnSelectedIndexChanged(EventArgs.Empty);
                         }
                     }
                 }
@@ -4534,13 +4515,13 @@ namespace System.Windows.Forms
 
         public class ChildAccessibleObject : AccessibleObject
         {
-            readonly ComboBox owner;
+            private readonly ComboBox _owner;
 
             public ChildAccessibleObject(ComboBox owner, IntPtr handle)
             {
                 Debug.Assert(owner != null && owner.Handle != IntPtr.Zero, "ComboBox's handle hasn't been created");
 
-                this.owner = owner;
+                _owner = owner;
                 UseStdAccessibleObjects(handle);
             }
 
@@ -4548,7 +4529,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return owner.AccessibilityObject.Name;
+                    return _owner.AccessibilityObject.Name;
                 }
             }
         }
@@ -4876,7 +4857,6 @@ namespace System.Windows.Forms
             private const int COMBOBOX_ACC_ITEM_INDEX = 1;
 
             private ComboBoxChildDropDownButtonUiaProvider _dropDownButtonUiaProvider;
-            private readonly ComboBoxItemAccessibleObjectCollection _itemAccessibleObjects;
             private readonly ComboBox _owningComboBox;
 
             /// <summary>
@@ -4886,7 +4866,7 @@ namespace System.Windows.Forms
             public ComboBoxAccessibleObject(ComboBox owningComboBox) : base(owningComboBox)
             {
                 _owningComboBox = owningComboBox;
-                _itemAccessibleObjects = new ComboBoxItemAccessibleObjectCollection(owningComboBox);
+                ItemAccessibleObjects = new ComboBoxItemAccessibleObjectCollection(owningComboBox);
             }
 
             private void ComboBoxDefaultAction(bool expand)
@@ -4994,13 +4974,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the collection of item accessible objects.
             /// </summary>
-            public ComboBoxItemAccessibleObjectCollection ItemAccessibleObjects
-            {
-                get
-                {
-                    return _itemAccessibleObjects;
-                }
-            }
+            public ComboBoxItemAccessibleObjectCollection ItemAccessibleObjects { get; }
 
             /// <summary>
             ///  Gets the DropDown button accessible object. (UI Automation provider)
@@ -5051,13 +5025,13 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
             {
-                if (hwnd == _owningComboBox.childEdit.Handle)
+                if (hwnd == _owningComboBox._childEdit.Handle)
                 {
                     return _owningComboBox.ChildEditAccessibleObject;
                 }
                 else if (
-                    hwnd == _owningComboBox.childListBox.Handle ||
-                    hwnd == _owningComboBox.dropDownHandle)
+                    hwnd == _owningComboBox._childListBox.Handle ||
+                    hwnd == _owningComboBox._dropDownHandle)
                 {
                     return _owningComboBox.ChildListAccessibleObject;
                 }
@@ -5146,7 +5120,7 @@ namespace System.Windows.Forms
 
             internal void ResetListItemAccessibleObjects()
             {
-                _itemAccessibleObjects.Clear();
+                ItemAccessibleObjects.Clear();
             }
 
             internal void SetComboBoxItemFocus()
@@ -5980,22 +5954,23 @@ namespace System.Windows.Forms
         /// </summary>
         private sealed class ACNativeWindow : NativeWindow
         {
-            static internal int inWndProcCnt;
-            //this hashtable can contain null for those ACWindows we find, but are sure are not ours.
-            private static readonly Hashtable ACWindows = new Hashtable();
+            internal static int s_inWndProcCnt;
+
+            // This hashtable can contain null for those ACWindows we find, but are sure are not ours.
+            private static readonly Hashtable s_ACWindows = new Hashtable();
 
             internal ACNativeWindow(IntPtr acHandle)
             {
-                Debug.Assert(!ACWindows.ContainsKey(acHandle));
+                Debug.Assert(!s_ACWindows.ContainsKey(acHandle));
                 AssignHandle(acHandle);
-                ACWindows.Add(acHandle, this);
+                s_ACWindows.Add(acHandle, this);
                 EnumChildWindows(new HandleRef(this, acHandle),
                     ACNativeWindow.RegisterACWindowRecursive);
             }
 
             private static BOOL RegisterACWindowRecursive(IntPtr handle)
             {
-                if (!ACWindows.ContainsKey(handle))
+                if (!s_ACWindows.ContainsKey(handle))
                 {
                     ACNativeWindow newAC = new ACNativeWindow(handle);
                 }
@@ -6008,11 +5983,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (inWndProcCnt > 0)
+                    if (s_inWndProcCnt > 0)
                     {
                         return true;
                     }
-                    foreach (object o in ACWindows.Values)
+                    foreach (object o in s_ACWindows.Values)
                     {
                         if (o is ACNativeWindow window && window.Visible)
                         {
@@ -6025,34 +6000,34 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                inWndProcCnt++;
+                s_inWndProcCnt++;
                 try
                 {
                     base.WndProc(ref m);
                 }
                 finally
                 {
-                    inWndProcCnt--;
+                    s_inWndProcCnt--;
                 }
 
                 if (m.Msg == (int)WM.NCDESTROY)
                 {
-                    Debug.Assert(ACWindows.ContainsKey(Handle));
-                    ACWindows.Remove(Handle);   //so we do not leak ac windows.
+                    Debug.Assert(s_ACWindows.ContainsKey(Handle));
+                    s_ACWindows.Remove(Handle);   //so we do not leak ac windows.
                 }
             }
 
             internal static void RegisterACWindow(IntPtr acHandle, bool subclass)
             {
-                if (subclass && ACWindows.ContainsKey(acHandle))
+                if (subclass && s_ACWindows.ContainsKey(acHandle))
                 {
-                    if (ACWindows[acHandle] == null)
+                    if (s_ACWindows[acHandle] == null)
                     {
-                        ACWindows.Remove(acHandle); //if an external handle got destroyed, dont let it stop us.
+                        s_ACWindows.Remove(acHandle); //if an external handle got destroyed, dont let it stop us.
                     }
                 }
 
-                if (!ACWindows.ContainsKey(acHandle))
+                if (!s_ACWindows.ContainsKey(acHandle))
                 {
                     if (subclass)
                     {
@@ -6060,7 +6035,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        ACWindows.Add(acHandle, null);
+                        s_ACWindows.Add(acHandle, null);
                     }
                 }
             }
@@ -6072,7 +6047,7 @@ namespace System.Windows.Forms
             internal static void ClearNullACWindows()
             {
                 ArrayList nulllist = new ArrayList();
-                foreach (DictionaryEntry e in ACWindows)
+                foreach (DictionaryEntry e in s_ACWindows)
                 {
                     if (e.Value == null)
                     {
@@ -6081,7 +6056,7 @@ namespace System.Windows.Forms
                 }
                 foreach (IntPtr handle in nulllist)
                 {
-                    ACWindows.Remove(handle);
+                    s_ACWindows.Remove(handle);
                 }
             }
         }
@@ -6093,7 +6068,7 @@ namespace System.Windows.Forms
         {
             private const int MaxClassName = 256;
             private const string AutoCompleteClassName = "Auto-Suggest Dropdown";
-            bool shouldSubClass; //nonstatic
+            private bool _shouldSubClass;
 
             internal void FindDropDowns()
             {
@@ -6109,7 +6084,7 @@ namespace System.Windows.Forms
                 }
 
                 // Look for a popped up dropdown
-                shouldSubClass = subclass;
+                _shouldSubClass = subclass;
                 EnumThreadWindows(
                     Kernel32.GetCurrentThreadId(),
                     Callback);
@@ -6122,7 +6097,7 @@ namespace System.Windows.Forms
                 // Check class name and see if it's visible
                 if (GetClassName(hRef) == AutoCompleteClassName)
                 {
-                    ACNativeWindow.RegisterACWindow(hRef.Handle, shouldSubClass);
+                    ACNativeWindow.RegisterACWindow(hRef.Handle, _shouldSubClass);
                 }
 
                 return BOOL.TRUE;
@@ -6155,54 +6130,54 @@ namespace System.Windows.Forms
 
         internal class FlatComboAdapter
         {
-            Rectangle outerBorder;
-            Rectangle innerBorder;
-            Rectangle innerInnerBorder;
-            internal Rectangle dropDownRect;
-            Rectangle whiteFillRect;
-            Rectangle clientRect;
-            readonly RightToLeft origRightToLeft; // The combo box's RTL value when we were created
+            private Rectangle _outerBorder;
+            private Rectangle _innerBorder;
+            private Rectangle _innerInnerBorder;
+            internal Rectangle _dropDownRect;
+            private Rectangle _whiteFillRect;
+            private Rectangle _clientRect;
+            readonly RightToLeft _origRightToLeft; // The combo box's RTL value when we were created
 
             private const int WhiteFillRectWidth = 5; // used for making the button look smaller than it is
 
             private const int OFFSET_2PIXELS = 2;
-            protected static int Offset2Pixels = OFFSET_2PIXELS;
+            protected static int s_offsetPixels = OFFSET_2PIXELS;
 
             public FlatComboAdapter(ComboBox comboBox, bool smallButton)
             {
                 // adapter is re-created when combobox is resized, see IsValid method, thus we don't need to handle DPI changed explicitly
-                Offset2Pixels = comboBox.LogicalToDeviceUnits(OFFSET_2PIXELS);
+                s_offsetPixels = comboBox.LogicalToDeviceUnits(OFFSET_2PIXELS);
 
-                clientRect = comboBox.ClientRectangle;
+                _clientRect = comboBox.ClientRectangle;
                 int dropDownButtonWidth = SystemInformation.GetHorizontalScrollBarArrowWidthForDpi(comboBox._deviceDpi);
-                outerBorder = new Rectangle(clientRect.Location, new Size(clientRect.Width - 1, clientRect.Height - 1));
-                innerBorder = new Rectangle(outerBorder.X + 1, outerBorder.Y + 1, outerBorder.Width - dropDownButtonWidth - 2, outerBorder.Height - 2);
-                innerInnerBorder = new Rectangle(innerBorder.X + 1, innerBorder.Y + 1, innerBorder.Width - 2, innerBorder.Height - 2);
-                dropDownRect = new Rectangle(innerBorder.Right + 1, innerBorder.Y, dropDownButtonWidth, innerBorder.Height + 1);
+                _outerBorder = new Rectangle(_clientRect.Location, new Size(_clientRect.Width - 1, _clientRect.Height - 1));
+                _innerBorder = new Rectangle(_outerBorder.X + 1, _outerBorder.Y + 1, _outerBorder.Width - dropDownButtonWidth - 2, _outerBorder.Height - 2);
+                _innerInnerBorder = new Rectangle(_innerBorder.X + 1, _innerBorder.Y + 1, _innerBorder.Width - 2, _innerBorder.Height - 2);
+                _dropDownRect = new Rectangle(_innerBorder.Right + 1, _innerBorder.Y, dropDownButtonWidth, _innerBorder.Height + 1);
 
                 // fill in several pixels of the dropdown rect with white so that it looks like the combo button is thinner.
                 if (smallButton)
                 {
-                    whiteFillRect = dropDownRect;
-                    whiteFillRect.Width = WhiteFillRectWidth;
-                    dropDownRect.X += WhiteFillRectWidth;
-                    dropDownRect.Width -= WhiteFillRectWidth;
+                    _whiteFillRect = _dropDownRect;
+                    _whiteFillRect.Width = WhiteFillRectWidth;
+                    _dropDownRect.X += WhiteFillRectWidth;
+                    _dropDownRect.Width -= WhiteFillRectWidth;
                 }
 
-                origRightToLeft = comboBox.RightToLeft;
+                _origRightToLeft = comboBox.RightToLeft;
 
-                if (origRightToLeft == RightToLeft.Yes)
+                if (_origRightToLeft == RightToLeft.Yes)
                 {
-                    innerBorder.X = clientRect.Width - innerBorder.Right;
-                    innerInnerBorder.X = clientRect.Width - innerInnerBorder.Right;
-                    dropDownRect.X = clientRect.Width - dropDownRect.Right;
-                    whiteFillRect.X = clientRect.Width - whiteFillRect.Right + 1;  // since we're filling, we need to move over to the next px.
+                    _innerBorder.X = _clientRect.Width - _innerBorder.Right;
+                    _innerInnerBorder.X = _clientRect.Width - _innerInnerBorder.Right;
+                    _dropDownRect.X = _clientRect.Width - _dropDownRect.Right;
+                    _whiteFillRect.X = _clientRect.Width - _whiteFillRect.Right + 1;  // since we're filling, we need to move over to the next px.
                 }
             }
 
             public bool IsValid(ComboBox combo)
             {
-                return (combo.ClientRectangle == clientRect && combo.RightToLeft == origRightToLeft);
+                return (combo.ClientRectangle == _clientRect && combo.RightToLeft == _origRightToLeft);
             }
 
             /// <summary>
@@ -6220,16 +6195,16 @@ namespace System.Windows.Forms
                 bool rightToLeft = comboBox.RightToLeft == RightToLeft.Yes;
 
                 // draw the drop down
-                DrawFlatComboDropDown(comboBox, g, dropDownRect);
+                DrawFlatComboDropDown(comboBox, g, _dropDownRect);
 
                 // when we are disabled there is one line of color that seems to eek through if backcolor is set
                 // so lets erase it.
-                if (!LayoutUtils.IsZeroWidthOrHeight(whiteFillRect))
+                if (!LayoutUtils.IsZeroWidthOrHeight(_whiteFillRect))
                 {
                     // fill in two more pixels with white so it looks smaller.
                     using (Brush b = new SolidBrush(innerBorderColor))
                     {
-                        g.FillRectangle(b, whiteFillRect);
+                        g.FillRectangle(b, _whiteFillRect);
                     }
                 }
 
@@ -6237,28 +6212,28 @@ namespace System.Windows.Forms
                 if (outerBorderColor.IsSystemColor)
                 {
                     Pen outerBorderPen = SystemPens.FromSystemColor(outerBorderColor);
-                    g.DrawRectangle(outerBorderPen, outerBorder);
+                    g.DrawRectangle(outerBorderPen, _outerBorder);
                     if (rightToLeft)
                     {
-                        g.DrawRectangle(outerBorderPen, new Rectangle(outerBorder.X, outerBorder.Y, dropDownRect.Width + 1, outerBorder.Height));
+                        g.DrawRectangle(outerBorderPen, new Rectangle(_outerBorder.X, _outerBorder.Y, _dropDownRect.Width + 1, _outerBorder.Height));
                     }
                     else
                     {
-                        g.DrawRectangle(outerBorderPen, new Rectangle(dropDownRect.X, outerBorder.Y, outerBorder.Right - dropDownRect.X, outerBorder.Height));
+                        g.DrawRectangle(outerBorderPen, new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
                     }
                 }
                 else
                 {
                     using (Pen outerBorderPen = new Pen(outerBorderColor))
                     {
-                        g.DrawRectangle(outerBorderPen, outerBorder);
+                        g.DrawRectangle(outerBorderPen, _outerBorder);
                         if (rightToLeft)
                         {
-                            g.DrawRectangle(outerBorderPen, new Rectangle(outerBorder.X, outerBorder.Y, dropDownRect.Width + 1, outerBorder.Height));
+                            g.DrawRectangle(outerBorderPen, new Rectangle(_outerBorder.X, _outerBorder.Y, _dropDownRect.Width + 1, _outerBorder.Height));
                         }
                         else
                         {
-                            g.DrawRectangle(outerBorderPen, new Rectangle(dropDownRect.X, outerBorder.Y, outerBorder.Right - dropDownRect.X, outerBorder.Height));
+                            g.DrawRectangle(outerBorderPen, new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
                         }
                     }
                 }
@@ -6267,15 +6242,15 @@ namespace System.Windows.Forms
                 if (innerBorderColor.IsSystemColor)
                 {
                     Pen innerBorderPen = SystemPens.FromSystemColor(innerBorderColor);
-                    g.DrawRectangle(innerBorderPen, innerBorder);
-                    g.DrawRectangle(innerBorderPen, innerInnerBorder);
+                    g.DrawRectangle(innerBorderPen, _innerBorder);
+                    g.DrawRectangle(innerBorderPen, _innerInnerBorder);
                 }
                 else
                 {
                     using (Pen innerBorderPen = new Pen(innerBorderColor))
                     {
-                        g.DrawRectangle(innerBorderPen, innerBorder);
-                        g.DrawRectangle(innerBorderPen, innerInnerBorder);
+                        g.DrawRectangle(innerBorderPen, _innerBorder);
+                        g.DrawRectangle(innerBorderPen, _innerInnerBorder);
                     }
                 }
 
@@ -6292,15 +6267,15 @@ namespace System.Windows.Forms
                         // around the dropdown
                         if (rightToLeft)
                         {
-                            g.DrawRectangle(innerPen, new Rectangle(outerBorder.X, outerBorder.Y, dropDownRect.Width + 1, outerBorder.Height));
+                            g.DrawRectangle(innerPen, new Rectangle(_outerBorder.X, _outerBorder.Y, _dropDownRect.Width + 1, _outerBorder.Height));
                         }
                         else
                         {
-                            g.DrawRectangle(innerPen, new Rectangle(dropDownRect.X, outerBorder.Y, outerBorder.Right - dropDownRect.X, outerBorder.Height));
+                            g.DrawRectangle(innerPen, new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
                         }
 
                         // around the whole combobox.
-                        g.DrawRectangle(borderPen, outerBorder);
+                        g.DrawRectangle(borderPen, _outerBorder);
                     }
                 }
             }
@@ -6315,7 +6290,7 @@ namespace System.Windows.Forms
                 Brush brush = (comboBox.Enabled) ? SystemBrushes.ControlText : SystemBrushes.ControlDark;
 
                 Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
-                if (origRightToLeft == RightToLeft.Yes)
+                if (_origRightToLeft == RightToLeft.Yes)
                 {
                     // if the width is odd - favor pushing it over one pixel left.
                     middle.X -= (dropDownRect.Width % 2);
@@ -6327,9 +6302,9 @@ namespace System.Windows.Forms
                 }
 
                 g.FillPolygon(brush, new Point[] {
-                     new Point(middle.X - Offset2Pixels, middle.Y - 1),
-                     new Point(middle.X + Offset2Pixels + 1, middle.Y - 1),
-                     new Point(middle.X, middle.Y + Offset2Pixels)
+                     new Point(middle.X - s_offsetPixels, middle.Y - 1),
+                     new Point(middle.X + s_offsetPixels + 1, middle.Y - 1),
+                     new Point(middle.X, middle.Y + s_offsetPixels)
                  });
             }
 
@@ -6362,10 +6337,10 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                Rectangle topOwnerDrawArea = new Rectangle(0, 0, comboBox.Width, innerBorder.Top);
-                Rectangle bottomOwnerDrawArea = new Rectangle(0, innerBorder.Bottom, comboBox.Width, comboBox.Height - innerBorder.Bottom);
-                Rectangle leftOwnerDrawArea = new Rectangle(0, 0, innerBorder.Left, comboBox.Height);
-                Rectangle rightOwnerDrawArea = new Rectangle(innerBorder.Right, 0, comboBox.Width - innerBorder.Right, comboBox.Height);
+                Rectangle topOwnerDrawArea = new Rectangle(0, 0, comboBox.Width, _innerBorder.Top);
+                Rectangle bottomOwnerDrawArea = new Rectangle(0, _innerBorder.Bottom, comboBox.Width, comboBox.Height - _innerBorder.Bottom);
+                Rectangle leftOwnerDrawArea = new Rectangle(0, 0, _innerBorder.Left, comboBox.Height);
+                Rectangle rightOwnerDrawArea = new Rectangle(_innerBorder.Right, 0, comboBox.Width - _innerBorder.Right, comboBox.Height);
 
                 if (topOwnerDrawArea.IntersectsWith(updateRegionBox))
                 {

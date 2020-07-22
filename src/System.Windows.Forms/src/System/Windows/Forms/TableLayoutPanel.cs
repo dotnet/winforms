@@ -26,7 +26,7 @@ namespace System.Windows.Forms
     public class TableLayoutPanel : Panel, IExtenderProvider
     {
         private readonly TableLayoutSettings _tableLayoutSettings;
-        private static readonly object EventCellPaint = new object();
+        private static readonly object s_eventCellPaint = new object();
 
         public TableLayoutPanel()
         {
@@ -356,8 +356,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.TableLayoutPanelOnPaintCellDescr))]
         public event TableLayoutCellPaintEventHandler CellPaint
         {
-            add => Events.AddHandler(EventCellPaint, value);
-            remove => Events.RemoveHandler(EventCellPaint, value);
+            add => Events.AddHandler(s_eventCellPaint, value);
+            remove => Events.RemoveHandler(s_eventCellPaint, value);
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnCellPaint(TableLayoutCellPaintEventArgs e)
         {
-            ((TableLayoutCellPaintEventHandler)Events[EventCellPaint])?.Invoke(this, e);
+            ((TableLayoutCellPaintEventHandler)Events[s_eventCellPaint])?.Invoke(this, e);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)

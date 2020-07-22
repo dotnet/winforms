@@ -787,12 +787,12 @@ namespace System.Windows.Forms
                 if (freeDimension != DataGridViewFreeDimension.Height)
                 {
                     preferredSize.Width = Math.Max(preferredSize.Width,
-                                                   borderAndPaddingWidths + DATAGRIDVIEWCELL_iconMarginWidth * 2 + iconsWidth);
+                                                   borderAndPaddingWidths + IconMarginWidth * 2 + s_iconsWidth);
                 }
                 if (freeDimension != DataGridViewFreeDimension.Width)
                 {
                     preferredSize.Height = Math.Max(preferredSize.Height,
-                                                    borderAndPaddingHeights + DATAGRIDVIEWCELL_iconMarginHeight * 2 + iconsHeight);
+                                                    borderAndPaddingHeights + IconMarginHeight * 2 + s_iconsHeight);
                 }
             }
             return preferredSize;

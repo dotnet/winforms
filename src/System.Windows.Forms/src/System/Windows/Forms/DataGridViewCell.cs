@@ -21,37 +21,37 @@ namespace System.Windows.Forms
     [TypeConverter(typeof(DataGridViewCellConverter))]
     public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable, IKeyboardToolTip
     {
-        private const TextFormatFlags textFormatSupportedFlags = TextFormatFlags.SingleLine | /*TextFormatFlags.NoFullWidthCharacterBreak |*/ TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix;
-        private const int DATAGRIDVIEWCELL_constrastThreshold = 1000;
-        private const int DATAGRIDVIEWCELL_highConstrastThreshold = 2000;
-        private const int DATAGRIDVIEWCELL_maxToolTipLength = 288;
-        private const int DATAGRIDVIEWCELL_maxToolTipCutOff = 256;
-        private const int DATAGRIDVIEWCELL_toolTipEllipsisLength = 3;
-        private const string DATAGRIDVIEWCELL_toolTipEllipsis = "...";
-        private const byte DATAGRIDVIEWCELL_flagAreaNotSet = 0x00;
-        private const byte DATAGRIDVIEWCELL_flagDataArea = 0x01;
-        private const byte DATAGRIDVIEWCELL_flagErrorArea = 0x02;
-        internal const byte DATAGRIDVIEWCELL_iconMarginWidth = 4;      // 4 pixels of margin on the left and right of icons
-        internal const byte DATAGRIDVIEWCELL_iconMarginHeight = 4;     // 4 pixels of margin on the top and bottom of icons
-        private const byte DATAGRIDVIEWCELL_iconsWidth = 12;          // all icons are 12 pixels wide - make sure that it stays that way
-        private const byte DATAGRIDVIEWCELL_iconsHeight = 11;         // all icons are 11 pixels tall - make sure that it stays that way
+        private const TextFormatFlags TextFormatSupportedFlags = TextFormatFlags.SingleLine
+            | /*TextFormatFlags.NoFullWidthCharacterBreak |*/ TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix;
 
-        private static bool isScalingInitialized;
-        internal static byte iconsWidth = DATAGRIDVIEWCELL_iconsWidth;
-        internal static byte iconsHeight = DATAGRIDVIEWCELL_iconsHeight;
+        private const int ConstantThreshold = 1000;
+        private const int HighConstrastThreshold = 2000;
+        private const int MaxToolTipLength = 288;
+        private const int MaxToolTipCutOff = 256;
+        private const int ToolTipEllipsisLength = 3;
+        private const string ToolTipEllipsis = "...";
+        private const byte FlagAreaNotSet = 0x00;
+        private const byte FlagDataArea = 0x01;
+        private const byte FlagErrorArea = 0x02;
+        internal const byte IconMarginWidth = 4;      // 4 pixels of margin on the left and right of icons
+        internal const byte IconMarginHeight = 4;     // 4 pixels of margin on the top and bottom of icons
+        private const byte IconsWidth = 12;           // all icons are 12 pixels wide - make sure that it stays that way
+        private const byte IconsHeight = 11;          // all icons are 11 pixels tall - make sure that it stays that way
 
-        internal static readonly int PropCellValue = PropertyStore.CreateKey();
-        private static readonly int PropCellContextMenuStrip = PropertyStore.CreateKey();
-        private static readonly int PropCellErrorText = PropertyStore.CreateKey();
-        private static readonly int PropCellStyle = PropertyStore.CreateKey();
-        private static readonly int PropCellValueType = PropertyStore.CreateKey();
-        private static readonly int PropCellTag = PropertyStore.CreateKey();
-        private static readonly int PropCellToolTipText = PropertyStore.CreateKey();
-        private static readonly int PropCellAccessibilityObject = PropertyStore.CreateKey();
+        private static bool s_isScalingInitialized;
+        internal static byte s_iconsWidth = IconsWidth;
+        internal static byte s_iconsHeight = IconsHeight;
 
-        private static Bitmap errorBmp;
+        internal static readonly int s_propCellValue = PropertyStore.CreateKey();
+        private static readonly int s_propCellContextMenuStrip = PropertyStore.CreateKey();
+        private static readonly int s_propCellErrorText = PropertyStore.CreateKey();
+        private static readonly int s_propCellStyle = PropertyStore.CreateKey();
+        private static readonly int s_propCellValueType = PropertyStore.CreateKey();
+        private static readonly int s_propCellTag = PropertyStore.CreateKey();
+        private static readonly int s_propCellToolTipText = PropertyStore.CreateKey();
+        private static readonly int s_propCellAccessibilityObject = PropertyStore.CreateKey();
 
-        private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
+        private static Bitmap s_errorBmp;
 
         /// <summary>
         /// Contains non-empty neighboring cells around the current cell.
@@ -59,10 +59,9 @@ namespace System.Windows.Forms
         /// </summary>
         private readonly List<Rectangle> _nonEmptyNeighbors;
 
-        private static readonly Type stringType = typeof(string);        // cache the string type for performance
+        private static readonly Type s_stringType = typeof(string);        // cache the string type for performance
 
-        private byte flags;  // see DATAGRIDVIEWCELL_flag* consts above
-
+        private byte _flags;
         private bool _useDefaultToolTipText;  //  The tooltip text of this cell has not been set by a customer yet.
 
         /// <summary>
@@ -70,17 +69,17 @@ namespace System.Windows.Forms
         /// </summary>
         protected DataGridViewCell() : base()
         {
-            if (!isScalingInitialized)
+            if (!s_isScalingInitialized)
             {
                 if (DpiHelper.IsScalingRequired)
                 {
-                    iconsWidth = (byte)DpiHelper.LogicalToDeviceUnitsX(DATAGRIDVIEWCELL_iconsWidth);
-                    iconsHeight = (byte)DpiHelper.LogicalToDeviceUnitsY(DATAGRIDVIEWCELL_iconsHeight);
+                    s_iconsWidth = (byte)DpiHelper.LogicalToDeviceUnitsX(IconsWidth);
+                    s_iconsHeight = (byte)DpiHelper.LogicalToDeviceUnitsY(IconsHeight);
                 }
-                isScalingInitialized = true;
+                s_isScalingInitialized = true;
             }
 
-            propertyStore = new PropertyStore();
+            Properties = new PropertyStore();
             State = DataGridViewElementStates.None;
             _nonEmptyNeighbors = new List<Rectangle>();
             _useDefaultToolTipText = true;
@@ -96,11 +95,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                AccessibleObject result = (AccessibleObject)Properties.GetObject(PropCellAccessibilityObject);
+                AccessibleObject result = (AccessibleObject)Properties.GetObject(s_propCellAccessibilityObject);
                 if (result == null)
                 {
                     result = CreateAccessibilityInstance();
-                    Properties.SetObject(PropCellAccessibilityObject, result);
+                    Properties.SetObject(s_propCellAccessibilityObject, result);
                 }
 
                 return result;
@@ -138,11 +137,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (ContextMenuStrip)Properties.GetObject(PropCellContextMenuStrip);
+                return (ContextMenuStrip)Properties.GetObject(s_propCellContextMenuStrip);
             }
             set
             {
-                ContextMenuStrip oldValue = (ContextMenuStrip)Properties.GetObject(PropCellContextMenuStrip);
+                ContextMenuStrip oldValue = (ContextMenuStrip)Properties.GetObject(s_propCellContextMenuStrip);
                 if (oldValue != value)
                 {
                     EventHandler disposedHandler = new EventHandler(DetachContextMenuStrip);
@@ -150,7 +149,7 @@ namespace System.Windows.Forms
                     {
                         oldValue.Disposed -= disposedHandler;
                     }
-                    Properties.SetObject(PropCellContextMenuStrip, value);
+                    Properties.SetObject(s_propCellContextMenuStrip, value);
                     if (value != null)
                     {
                         value.Disposed += disposedHandler;
@@ -167,12 +166,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (byte)(flags & (DATAGRIDVIEWCELL_flagDataArea | DATAGRIDVIEWCELL_flagErrorArea));
+                return (byte)(_flags & (FlagDataArea | FlagErrorArea));
             }
             set
             {
-                flags = (byte)(flags & ~(DATAGRIDVIEWCELL_flagDataArea | DATAGRIDVIEWCELL_flagErrorArea));
-                flags |= value;
+                _flags = (byte)(_flags & ~(FlagDataArea | FlagErrorArea));
+                _flags |= value;
             }
         }
 
@@ -236,11 +235,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (errorBmp == null)
+                if (s_errorBmp == null)
                 {
-                    errorBmp = GetBitmap("DataGridViewRow.error");
+                    s_errorBmp = GetBitmap("DataGridViewRow.error");
                 }
-                return errorBmp;
+                return s_errorBmp;
             }
         }
 
@@ -271,15 +270,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                object errorText = Properties.GetObject(PropCellErrorText);
+                object errorText = Properties.GetObject(s_propCellErrorText);
                 return (errorText == null) ? string.Empty : (string)errorText;
             }
             set
             {
                 string errorText = ErrorTextInternal;
-                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(PropCellErrorText))
+                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propCellErrorText))
                 {
-                    Properties.SetObject(PropCellErrorText, value);
+                    Properties.SetObject(s_propCellErrorText, value);
                 }
                 if (DataGridView != null && !errorText.Equals(ErrorTextInternal))
                 {
@@ -352,7 +351,7 @@ namespace System.Windows.Forms
 
         private bool HasErrorText
         {
-            get => Properties.ContainsObject(PropCellErrorText) && Properties.GetObject(PropCellErrorText) != null;
+            get => Properties.ContainsObject(s_propCellErrorText) && Properties.GetObject(s_propCellErrorText) != null;
         }
 
         [Browsable(false)]
@@ -360,7 +359,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Properties.ContainsObject(PropCellStyle) && Properties.GetObject(PropCellStyle) != null;
+                return Properties.ContainsObject(s_propCellStyle) && Properties.GetObject(s_propCellStyle) != null;
             }
         }
 
@@ -368,7 +367,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Properties.ContainsObject(PropCellToolTipText) && Properties.GetObject(PropCellToolTipText) != null;
+                return Properties.ContainsObject(s_propCellToolTipText) && Properties.GetObject(s_propCellToolTipText) != null;
             }
         }
 
@@ -376,13 +375,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Properties.ContainsObject(PropCellValue) && Properties.GetObject(PropCellValue) != null;
+                return Properties.ContainsObject(s_propCellValue) && Properties.GetObject(s_propCellValue) != null;
             }
         }
 
         private protected virtual bool HasValueType
         {
-            get => Properties.ContainsObject(PropCellValueType) && Properties.GetObject(PropCellValueType) != null;
+            get => Properties.ContainsObject(s_propCellValueType) && Properties.GetObject(s_propCellValueType) != null;
         }
 
         #region IKeyboardToolTip implementation
@@ -524,13 +523,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal PropertyStore Properties
-        {
-            get
-            {
-                return propertyStore;
-            }
-        }
+        internal PropertyStore Properties { get; }
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -730,12 +723,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                DataGridViewCellStyle dgvcs = (DataGridViewCellStyle)Properties.GetObject(PropCellStyle);
+                DataGridViewCellStyle dgvcs = (DataGridViewCellStyle)Properties.GetObject(s_propCellStyle);
                 if (dgvcs == null)
                 {
                     dgvcs = new DataGridViewCellStyle();
                     dgvcs.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
-                    Properties.SetObject(PropCellStyle, dgvcs);
+                    Properties.SetObject(s_propCellStyle, dgvcs);
                 }
                 return dgvcs;
             }
@@ -747,13 +740,13 @@ namespace System.Windows.Forms
                     dgvcs = Style;
                     dgvcs.RemoveScope(DataGridViewCellStyleScopes.Cell);
                 }
-                if (value != null || Properties.ContainsObject(PropCellStyle))
+                if (value != null || Properties.ContainsObject(s_propCellStyle))
                 {
                     if (value != null)
                     {
                         value.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
                     }
-                    Properties.SetObject(PropCellStyle, value);
+                    Properties.SetObject(s_propCellStyle, value);
                 }
                 if (((dgvcs != null && value == null) ||
                     (dgvcs == null && value != null) ||
@@ -774,13 +767,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Properties.GetObject(PropCellTag);
+                return Properties.GetObject(s_propCellTag);
             }
             set
             {
-                if (value != null || Properties.ContainsObject(PropCellTag))
+                if (value != null || Properties.ContainsObject(s_propCellTag))
                 {
-                    Properties.SetObject(PropCellTag, value);
+                    Properties.SetObject(s_propCellTag, value);
                 }
             }
         }
@@ -804,15 +797,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                object toolTipText = Properties.GetObject(PropCellToolTipText);
+                object toolTipText = Properties.GetObject(s_propCellToolTipText);
                 return (toolTipText == null) ? string.Empty : (string)toolTipText;
             }
             set
             {
                 string toolTipText = ToolTipTextInternal;
-                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(PropCellToolTipText))
+                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propCellToolTipText))
                 {
-                    Properties.SetObject(PropCellToolTipText, value);
+                    Properties.SetObject(s_propCellToolTipText, value);
                 }
                 if (DataGridView != null && !toolTipText.Equals(ToolTipTextInternal))
                 {
@@ -841,7 +834,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                Type cellValueType = (Type)Properties.GetObject(PropCellValueType);
+                Type cellValueType = (Type)Properties.GetObject(s_propCellValueType);
                 if (cellValueType == null && OwningColumn != null)
                 {
                     cellValueType = OwningColumn.ValueType;
@@ -851,9 +844,9 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null || Properties.ContainsObject(PropCellValueType))
+                if (value != null || Properties.ContainsObject(s_propCellValueType))
                 {
-                    Properties.SetObject(PropCellValueType, value);
+                    Properties.SetObject(s_propCellValueType, value);
                 }
             }
         }
@@ -1157,15 +1150,15 @@ namespace System.Windows.Forms
 
         internal Rectangle ComputeErrorIconBounds(Rectangle cellValueBounds)
         {
-            if (cellValueBounds.Width >= DATAGRIDVIEWCELL_iconMarginWidth * 2 + iconsWidth &&
-                cellValueBounds.Height >= DATAGRIDVIEWCELL_iconMarginHeight * 2 + iconsHeight)
+            if (cellValueBounds.Width >= IconMarginWidth * 2 + s_iconsWidth &&
+                cellValueBounds.Height >= IconMarginHeight * 2 + s_iconsHeight)
             {
                 Rectangle bmpRect = new Rectangle(DataGridView.RightToLeftInternal ?
-                                      cellValueBounds.Left + DATAGRIDVIEWCELL_iconMarginWidth :
-                                      cellValueBounds.Right - DATAGRIDVIEWCELL_iconMarginWidth - iconsWidth,
-                                      cellValueBounds.Y + (cellValueBounds.Height - iconsHeight) / 2,
-                                      iconsWidth,
-                                      iconsHeight);
+                                      cellValueBounds.Left + IconMarginWidth :
+                                      cellValueBounds.Right - IconMarginWidth - s_iconsWidth,
+                                      cellValueBounds.Y + (cellValueBounds.Height - s_iconsHeight) / 2,
+                                      s_iconsWidth,
+                                      s_iconsHeight);
                 return bmpRect;
             }
             else
@@ -1256,7 +1249,7 @@ namespace System.Windows.Forms
             // Since the tooltip is removed when the editing control is shown,
             // the CurrentMouseLocation is reset to DATAGRIDVIEWCELL_flagAreaNotSet
             // so that the tooltip appears again on mousemove after the editing.
-            CurrentMouseLocation = DATAGRIDVIEWCELL_flagAreaNotSet;
+            CurrentMouseLocation = FlagAreaNotSet;
         }
 
         /// <summary>
@@ -1438,7 +1431,7 @@ namespace System.Windows.Forms
             Bitmap b = DpiHelper.GetBitmapFromIcon(typeof(DataGridViewCell), bitmapName);
             if (DpiHelper.IsScalingRequired)
             {
-                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, new Size(iconsWidth, iconsHeight));
+                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, new Size(s_iconsWidth, s_iconsHeight));
                 if (scaledBitmap != null)
                 {
                     b.Dispose();
@@ -1583,7 +1576,7 @@ namespace System.Windows.Forms
 
             if (SystemInformation.HighContrast)
             {
-                if (darkDistance < DATAGRIDVIEWCELL_highConstrastThreshold)
+                if (darkDistance < HighConstrastThreshold)
                 {
                     darkPen = DataGridView.GetCachedPen(ControlPaint.DarkDark(baseline));
                 }
@@ -1591,7 +1584,7 @@ namespace System.Windows.Forms
                 {
                     darkPen = DataGridView.GetCachedPen(SystemColors.ControlDark);
                 }
-                if (lightDistance < DATAGRIDVIEWCELL_highConstrastThreshold)
+                if (lightDistance < HighConstrastThreshold)
                 {
                     lightPen = DataGridView.GetCachedPen(ControlPaint.LightLight(baseline));
                 }
@@ -1602,7 +1595,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (darkDistance < DATAGRIDVIEWCELL_constrastThreshold)
+                if (darkDistance < ConstantThreshold)
                 {
                     darkPen = DataGridView.GetCachedPen(ControlPaint.Dark(baseline));
                 }
@@ -1610,7 +1603,7 @@ namespace System.Windows.Forms
                 {
                     darkPen = DataGridView.GetCachedPen(SystemColors.ControlDark);
                 }
-                if (lightDistance < DATAGRIDVIEWCELL_constrastThreshold)
+                if (lightDistance < ConstantThreshold)
                 {
                     lightPen = DataGridView.GetCachedPen(ControlPaint.Light(baseline));
                 }
@@ -1689,7 +1682,7 @@ namespace System.Windows.Forms
         protected internal virtual string GetErrorText(int rowIndex)
         {
             string errorText = string.Empty;
-            object objErrorText = Properties.GetObject(PropCellErrorText);
+            object objErrorText = Properties.GetObject(s_propCellErrorText);
             if (objErrorText != null)
             {
                 errorText = (string)objErrorText;
@@ -2551,7 +2544,7 @@ namespace System.Windows.Forms
                 rowIndex == -1 ||
                 ColumnIndex == -1)
             {
-                return Properties.GetObject(PropCellValue);
+                return Properties.GetObject(s_propCellValue);
             }
             else if (OwningColumn != null && OwningColumn.IsDataBound)
             {
@@ -2562,7 +2555,7 @@ namespace System.Windows.Forms
                 }
                 else if (dataConnection.CurrencyManager.Count <= rowIndex)
                 {
-                    return Properties.GetObject(PropCellValue);
+                    return Properties.GetObject(s_propCellValue);
                 }
                 else
                 {
@@ -2685,7 +2678,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(flags), (int)flags, typeof(TextFormatFlags));
             }
 
-            flags &= textFormatSupportedFlags;
+            flags &= TextFormatSupportedFlags;
             // Dont use passed in graphics so we can optimze measurement
             Size requiredSize = TextRenderer.MeasureText(text, font, new Size(maxWidth, int.MaxValue), flags);
             widthTruncated = (requiredSize.Width > maxWidth);
@@ -2726,7 +2719,7 @@ namespace System.Windows.Forms
                 return textOneLineSize;
             }
 
-            flags &= textFormatSupportedFlags;
+            flags &= TextFormatSupportedFlags;
             float maxWidth = (float)(textOneLineSize.Width * textOneLineSize.Width) / (float)textOneLineSize.Height / maxRatio * 1.1F;
             Size textSize;
             do
@@ -2761,7 +2754,7 @@ namespace System.Windows.Forms
                 throw new InvalidEnumArgumentException(nameof(flags), (int)flags, typeof(TextFormatFlags));
             }
 
-            flags &= textFormatSupportedFlags;
+            flags &= TextFormatSupportedFlags;
             // Dont use passed in graphics so we can optimze measurement
             return TextRenderer.MeasureText(text, font, new Size(int.MaxValue, int.MaxValue), flags);
         }
@@ -2781,7 +2774,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                flags &= textFormatSupportedFlags;
+                flags &= TextFormatSupportedFlags;
                 int lastFittingWidth = oneLineSize.Width;
                 float maxWidth = (float)lastFittingWidth * 0.9F;
                 Size textSize;
@@ -2899,7 +2892,7 @@ namespace System.Windows.Forms
 
             if (string.IsNullOrEmpty(toolTipText))
             {
-                if (FormattedValueType == stringType)
+                if (FormattedValueType == s_stringType)
                 {
                     if (rowIndex != -1 && OwningColumn != null)
                     {
@@ -3149,20 +3142,20 @@ namespace System.Windows.Forms
         {
             switch (CurrentMouseLocation)
             {
-                case DATAGRIDVIEWCELL_flagDataArea:
+                case FlagDataArea:
                     OnCellDataAreaMouseLeaveInternal();
                     break;
-                case DATAGRIDVIEWCELL_flagErrorArea:
+                case FlagErrorArea:
                     OnCellErrorAreaMouseLeaveInternal();
                     break;
-                case DATAGRIDVIEWCELL_flagAreaNotSet:
+                case FlagAreaNotSet:
                     break;
                 default:
                     Debug.Assert(false, "there are only three possible choices for the CurrentMouseLocation");
                     break;
             }
 
-            CurrentMouseLocation = DATAGRIDVIEWCELL_flagAreaNotSet;
+            CurrentMouseLocation = FlagAreaNotSet;
             OnMouseLeave(rowIndex);
         }
 
@@ -3174,11 +3167,11 @@ namespace System.Windows.Forms
         {
             byte mouseLocation = CurrentMouseLocation;
             UpdateCurrentMouseLocation(e);
-            Debug.Assert(CurrentMouseLocation != DATAGRIDVIEWCELL_flagAreaNotSet);
+            Debug.Assert(CurrentMouseLocation != FlagAreaNotSet);
             switch (mouseLocation)
             {
-                case DATAGRIDVIEWCELL_flagAreaNotSet:
-                    if (CurrentMouseLocation == DATAGRIDVIEWCELL_flagDataArea)
+                case FlagAreaNotSet:
+                    if (CurrentMouseLocation == FlagDataArea)
                     {
                         OnCellDataAreaMouseEnterInternal(e.RowIndex);
                     }
@@ -3187,15 +3180,15 @@ namespace System.Windows.Forms
                         OnCellErrorAreaMouseEnterInternal(e.RowIndex);
                     }
                     break;
-                case DATAGRIDVIEWCELL_flagDataArea:
-                    if (CurrentMouseLocation == DATAGRIDVIEWCELL_flagErrorArea)
+                case FlagDataArea:
+                    if (CurrentMouseLocation == FlagErrorArea)
                     {
                         OnCellDataAreaMouseLeaveInternal();
                         OnCellErrorAreaMouseEnterInternal(e.RowIndex);
                     }
                     break;
-                case DATAGRIDVIEWCELL_flagErrorArea:
-                    if (CurrentMouseLocation == DATAGRIDVIEWCELL_flagDataArea)
+                case FlagErrorArea:
+                    if (CurrentMouseLocation == FlagDataArea)
                     {
                         OnCellErrorAreaMouseLeaveInternal();
                         OnCellDataAreaMouseEnterInternal(e.RowIndex);
@@ -3707,8 +3700,8 @@ namespace System.Windows.Forms
             }
 
             if (!string.IsNullOrEmpty(errorText) &&
-                cellValueBounds.Width >= DATAGRIDVIEWCELL_iconMarginWidth * 2 + iconsWidth &&
-                cellValueBounds.Height >= DATAGRIDVIEWCELL_iconMarginHeight * 2 + iconsHeight)
+                cellValueBounds.Width >= IconMarginWidth * 2 + s_iconsWidth &&
+                cellValueBounds.Height >= IconMarginHeight * 2 + s_iconsHeight)
             {
                 PaintErrorIcon(graphics, ComputeErrorIconBounds(cellValueBounds));
             }
@@ -3726,7 +3719,7 @@ namespace System.Windows.Forms
             {
                 lock (bmp)
                 {
-                    graphics.DrawImage(bmp, iconBounds, 0, 0, iconsWidth, iconsHeight, GraphicsUnit.Pixel);
+                    graphics.DrawImage(bmp, iconBounds, 0, 0, s_iconsWidth, s_iconsHeight, GraphicsUnit.Pixel);
                 }
             }
         }
@@ -3734,11 +3727,11 @@ namespace System.Windows.Forms
         internal void PaintErrorIcon(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Rectangle cellBounds, Rectangle cellValueBounds, string errorText)
         {
             if (!string.IsNullOrEmpty(errorText) &&
-                cellValueBounds.Width >= DATAGRIDVIEWCELL_iconMarginWidth * 2 + iconsWidth &&
-                cellValueBounds.Height >= DATAGRIDVIEWCELL_iconMarginHeight * 2 + iconsHeight)
+                cellValueBounds.Width >= IconMarginWidth * 2 + s_iconsWidth &&
+                cellValueBounds.Height >= IconMarginHeight * 2 + s_iconsHeight)
             {
                 Rectangle iconBounds = GetErrorIconBounds(graphics, cellStyle, rowIndex);
-                if (iconBounds.Width >= DATAGRIDVIEWCELL_iconMarginWidth && iconBounds.Height >= iconsHeight)
+                if (iconBounds.Width >= IconMarginWidth && iconBounds.Height >= s_iconsHeight)
                 {
                     iconBounds.X += cellBounds.X;
                     iconBounds.Y += cellBounds.Y;
@@ -4023,9 +4016,9 @@ namespace System.Windows.Forms
                 }
                 else if (dataConnection.CurrencyManager.Count <= rowIndex)
                 {
-                    if (value != null || Properties.ContainsObject(PropCellValue))
+                    if (value != null || Properties.ContainsObject(s_propCellValue))
                     {
-                        Properties.SetObject(PropCellValue, value);
+                        Properties.SetObject(s_propCellValue, value);
                     }
                 }
                 else
@@ -4063,9 +4056,9 @@ namespace System.Windows.Forms
                 rowIndex == -1 ||
                 ColumnIndex == -1)
             {
-                if (value != null || Properties.ContainsObject(PropCellValue))
+                if (value != null || Properties.ContainsObject(s_propCellValue))
                 {
-                    Properties.SetObject(PropCellValue, value);
+                    Properties.SetObject(s_propCellValue, value);
                 }
             }
             else
@@ -4107,10 +4100,10 @@ namespace System.Windows.Forms
 
         private static string TruncateToolTipText(string toolTipText)
         {
-            if (toolTipText.Length > DATAGRIDVIEWCELL_maxToolTipLength)
+            if (toolTipText.Length > MaxToolTipLength)
             {
-                StringBuilder sb = new StringBuilder(toolTipText.Substring(0, DATAGRIDVIEWCELL_maxToolTipCutOff), DATAGRIDVIEWCELL_maxToolTipCutOff + DATAGRIDVIEWCELL_toolTipEllipsisLength);
-                sb.Append(DATAGRIDVIEWCELL_toolTipEllipsis);
+                StringBuilder sb = new StringBuilder(toolTipText.Substring(0, MaxToolTipCutOff), MaxToolTipCutOff + ToolTipEllipsisLength);
+                sb.Append(ToolTipEllipsis);
                 return sb.ToString();
             }
             return toolTipText;
@@ -4120,11 +4113,11 @@ namespace System.Windows.Forms
         {
             if (GetErrorIconBounds(e.RowIndex).Contains(e.X, e.Y))
             {
-                CurrentMouseLocation = DATAGRIDVIEWCELL_flagErrorArea;
+                CurrentMouseLocation = FlagErrorArea;
             }
             else
             {
-                CurrentMouseLocation = DATAGRIDVIEWCELL_flagDataArea;
+                CurrentMouseLocation = FlagDataArea;
             }
         }
     }

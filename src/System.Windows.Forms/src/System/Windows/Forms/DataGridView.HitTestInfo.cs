@@ -12,31 +12,29 @@ namespace System.Windows.Forms
     {
         public sealed class HitTestInfo
         {
-            internal DataGridViewHitTestType type = DataGridViewHitTestType.None;
-            //internal DataGridViewHitTestTypeCloseEdge edge = DataGridViewHitTestTypeCloseEdge.None;
-            internal DataGridViewHitTestTypeInternal typeInternal = DataGridViewHitTestTypeInternal.None;
-            internal int row;
-            internal int col;
-            internal int adjacentRow;
-            internal int adjacentCol;
-            internal int mouseBarOffset;
-            internal int rowStart;
-            internal int colStart;
+            internal DataGridViewHitTestType _type = DataGridViewHitTestType.None;
+            internal DataGridViewHitTestTypeInternal _typeInternal = DataGridViewHitTestTypeInternal.None;
+            internal int _row;
+            internal int _col;
+            internal int _adjacentRow;
+            internal int _adjacentCol;
+            internal int _mouseBarOffset;
+            internal int _rowStart;
+            internal int _colStart;
 
             /// <summary>
-            ///  Allows the <see cref='HitTestInfo'/> object to inform you the
-            ///  extent of the grid.
+            ///  Allows the <see cref='HitTestInfo'/> object to inform you the extent of the grid.
             /// </summary>
             public static readonly HitTestInfo Nowhere = new HitTestInfo();
 
             internal HitTestInfo()
             {
-                type = DataGridViewHitTestType.None;
-                typeInternal = DataGridViewHitTestTypeInternal.None;
+                _type = DataGridViewHitTestType.None;
+                _typeInternal = DataGridViewHitTestTypeInternal.None;
                 //this.edge = DataGridViewHitTestTypeCloseEdge.None;
-                row = col = -1;
-                rowStart = colStart = -1;
-                adjacentRow = adjacentCol = -1;
+                _row = _col = -1;
+                _rowStart = _colStart = -1;
+                _adjacentRow = _adjacentCol = -1;
             }
 
             /// <summary>
@@ -46,7 +44,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return col;
+                    return _col;
                 }
             }
 
@@ -58,7 +56,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return row;
+                    return _row;
                 }
             }
 
@@ -69,7 +67,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return colStart;
+                    return _colStart;
                 }
             }
 
@@ -80,7 +78,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return rowStart;
+                    return _rowStart;
                 }
             }
 
@@ -92,7 +90,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return type;
+                    return _type;
                 }
             }
 
@@ -103,9 +101,9 @@ namespace System.Windows.Forms
             {
                 if (value is HitTestInfo hti)
                 {
-                    return (type == hti.type &&
-                            row == hti.row &&
-                            col == hti.col);
+                    return (_type == hti._type &&
+                            _row == hti._row &&
+                            _col == hti._col);
                 }
                 return false;
             }
@@ -113,14 +111,14 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the hash code for the <see cref='HitTestInfo'/> instance.
             /// </summary>
-            public override int GetHashCode() => HashCode.Combine(type, row, col);
+            public override int GetHashCode() => HashCode.Combine(_type, _row, _col);
 
             /// <summary>
             ///  Gets the type, column number and row number.
             /// </summary>
             public override string ToString()
             {
-                return "{ Type:" + type.ToString() + ", Column:" + col.ToString(CultureInfo.CurrentCulture) + ", Row:" + row.ToString(CultureInfo.CurrentCulture) + " }";
+                return "{ Type:" + _type.ToString() + ", Column:" + _col.ToString(CultureInfo.CurrentCulture) + ", Row:" + _row.ToString(CultureInfo.CurrentCulture) + " }";
             }
         }
     }

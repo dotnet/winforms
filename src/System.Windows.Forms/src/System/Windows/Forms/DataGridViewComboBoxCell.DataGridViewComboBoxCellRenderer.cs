@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,11 +14,11 @@ namespace System.Windows.Forms
         private class DataGridViewComboBoxCellRenderer
         {
             [ThreadStatic]
-            private static VisualStyleRenderer visualStyleRenderer;
-            private static readonly VisualStyleElement ComboBoxBorder = VisualStyleElement.ComboBox.Border.Normal;
-            private static readonly VisualStyleElement ComboBoxDropDownButtonRight = VisualStyleElement.ComboBox.DropDownButtonRight.Normal;
-            private static readonly VisualStyleElement ComboBoxDropDownButtonLeft = VisualStyleElement.ComboBox.DropDownButtonLeft.Normal;
-            private static readonly VisualStyleElement ComboBoxReadOnlyButton = VisualStyleElement.ComboBox.ReadOnlyButton.Normal;
+            private static VisualStyleRenderer t_visualStyleRenderer;
+            private static readonly VisualStyleElement s_comboBoxBorder = VisualStyleElement.ComboBox.Border.Normal;
+            private static readonly VisualStyleElement s_comboBoxDropDownButtonRight = VisualStyleElement.ComboBox.DropDownButtonRight.Normal;
+            private static readonly VisualStyleElement s_comboBoxDropDownButtonLeft = VisualStyleElement.ComboBox.DropDownButtonLeft.Normal;
+            private static readonly VisualStyleElement s_comboBoxReadOnlyButton = VisualStyleElement.ComboBox.ReadOnlyButton.Normal;
 
             private DataGridViewComboBoxCellRenderer()
             {
@@ -28,11 +28,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (visualStyleRenderer == null)
+                    if (t_visualStyleRenderer == null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(ComboBoxReadOnlyButton);
+                        t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxReadOnlyButton);
                     }
-                    return visualStyleRenderer;
+                    return t_visualStyleRenderer;
                 }
             }
 
@@ -49,55 +49,55 @@ namespace System.Windows.Forms
             // Post theming functions
             public static void DrawBorder(Graphics g, Rectangle bounds)
             {
-                if (visualStyleRenderer == null)
+                if (t_visualStyleRenderer == null)
                 {
-                    visualStyleRenderer = new VisualStyleRenderer(ComboBoxBorder);
+                    t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxBorder);
                 }
                 else
                 {
-                    visualStyleRenderer.SetParameters(ComboBoxBorder.ClassName, ComboBoxBorder.Part, ComboBoxBorder.State);
+                    t_visualStyleRenderer.SetParameters(s_comboBoxBorder.ClassName, s_comboBoxBorder.Part, s_comboBoxBorder.State);
                 }
-                visualStyleRenderer.DrawBackground(g, bounds);
+                t_visualStyleRenderer.DrawBackground(g, bounds);
             }
 
             public static void DrawDropDownButton(Graphics g, Rectangle bounds, ComboBoxState state, bool rightToLeft)
             {
                 if (rightToLeft)
                 {
-                    if (visualStyleRenderer == null)
+                    if (t_visualStyleRenderer == null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(ComboBoxDropDownButtonLeft.ClassName, ComboBoxDropDownButtonLeft.Part, (int)state);
+                        t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxDropDownButtonLeft.ClassName, s_comboBoxDropDownButtonLeft.Part, (int)state);
                     }
                     else
                     {
-                        visualStyleRenderer.SetParameters(ComboBoxDropDownButtonLeft.ClassName, ComboBoxDropDownButtonLeft.Part, (int)state);
+                        t_visualStyleRenderer.SetParameters(s_comboBoxDropDownButtonLeft.ClassName, s_comboBoxDropDownButtonLeft.Part, (int)state);
                     }
                 }
                 else
                 {
-                    if (visualStyleRenderer == null)
+                    if (t_visualStyleRenderer == null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(ComboBoxDropDownButtonRight.ClassName, ComboBoxDropDownButtonRight.Part, (int)state);
+                        t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxDropDownButtonRight.ClassName, s_comboBoxDropDownButtonRight.Part, (int)state);
                     }
                     else
                     {
-                        visualStyleRenderer.SetParameters(ComboBoxDropDownButtonRight.ClassName, ComboBoxDropDownButtonRight.Part, (int)state);
+                        t_visualStyleRenderer.SetParameters(s_comboBoxDropDownButtonRight.ClassName, s_comboBoxDropDownButtonRight.Part, (int)state);
                     }
                 }
-                visualStyleRenderer.DrawBackground(g, bounds);
+                t_visualStyleRenderer.DrawBackground(g, bounds);
             }
 
             public static void DrawReadOnlyButton(Graphics g, Rectangle bounds, ComboBoxState state)
             {
-                if (visualStyleRenderer == null)
+                if (t_visualStyleRenderer == null)
                 {
-                    visualStyleRenderer = new VisualStyleRenderer(ComboBoxReadOnlyButton.ClassName, ComboBoxReadOnlyButton.Part, (int)state);
+                    t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxReadOnlyButton.ClassName, s_comboBoxReadOnlyButton.Part, (int)state);
                 }
                 else
                 {
-                    visualStyleRenderer.SetParameters(ComboBoxReadOnlyButton.ClassName, ComboBoxReadOnlyButton.Part, (int)state);
+                    t_visualStyleRenderer.SetParameters(s_comboBoxReadOnlyButton.ClassName, s_comboBoxReadOnlyButton.Part, (int)state);
                 }
-                visualStyleRenderer.DrawBackground(g, bounds);
+                t_visualStyleRenderer.DrawBackground(g, bounds);
             }
         }
     }

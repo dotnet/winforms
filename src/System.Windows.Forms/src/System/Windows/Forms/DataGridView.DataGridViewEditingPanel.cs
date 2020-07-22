@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,18 +10,18 @@ namespace System.Windows.Forms
     {
         internal class DataGridViewEditingPanel : Panel
         {
-            private readonly DataGridView owningDataGridView;
+            private readonly DataGridView _owningDataGridView;
 
             public DataGridViewEditingPanel(DataGridView owningDataGridView)
             {
-                this.owningDataGridView = owningDataGridView;
+                _owningDataGridView = owningDataGridView;
             }
 
             internal override bool SupportsUiaProviders => true;
 
             protected override AccessibleObject CreateAccessibilityInstance()
             {
-                return new DataGridViewEditingPanelAccessibleObject(owningDataGridView, this);
+                return new DataGridViewEditingPanelAccessibleObject(_owningDataGridView, this);
             }
         }
     }
