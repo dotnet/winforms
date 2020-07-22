@@ -9241,17 +9241,21 @@ namespace System.Windows.Forms.Tests
         [InlineData(0, 0, 0, byte.MaxValue, 0, MouseButtons.XButton1)]
         [InlineData(0, 0, 0, 0, byte.MaxValue, MouseButtons.XButton2)]
         [InlineData(byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue, byte.MaxValue, MouseButtons.Left | MouseButtons.Middle | MouseButtons.Right | MouseButtons.XButton1 | MouseButtons.XButton2)]
-        public void MouseButtons_Get_ReturnsExpected(byte lState, byte mState, byte rState, byte xState1, byte xState2, MouseButtons expected)
+        public unsafe void MouseButtons_Get_ReturnsExpected(byte lState, byte mState, byte rState, byte xState1, byte xState2, MouseButtons expected)
         {
             using var control = new SubControl();
+
             var keyState = new byte[256];
-            Assert.True(User32.GetKeyboardState(keyState).IsTrue());
-            keyState[(int)Keys.LButton] = lState;
-            keyState[(int)Keys.MButton] = mState;
-            keyState[(int)Keys.RButton] = rState;
-            keyState[(int)Keys.XButton1] = xState1;
-            keyState[(int)Keys.XButton2] = xState2;
-            User32.SetKeyboardState(keyState);
+            fixed (byte* b = keyState)
+            {
+                Assert.True(User32.GetKeyboardState(b).IsTrue());
+                keyState[(int)Keys.LButton] = lState;
+                keyState[(int)Keys.MButton] = mState;
+                keyState[(int)Keys.RButton] = rState;
+                keyState[(int)Keys.XButton1] = xState1;
+                keyState[(int)Keys.XButton2] = xState2;
+                User32.SetKeyboardState(b);
+            }
 
             Assert.Equal(expected, Control.MouseButtons);
         }
