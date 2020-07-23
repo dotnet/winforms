@@ -9,7 +9,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class ControlAccessibleObjectTests
+    public class Control_ControlAccessibleObjectTests
     {
         [Theory]
         [MemberData(nameof(ControlObject_TestData))]
