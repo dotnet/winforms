@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
 {
     public class ApplicationTests : IClassFixture<ThreadExceptionFixture>
     {
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
         {
             RemoteExecutor.Invoke(() =>
@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Tests
             }).Dispose();
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public void Application_EnableVisualStyles_InvokeAfterGettingRenderWithVisualStyles_Success()
         {
             // This is not a recommended scenario per https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.application.enablevisualstyles
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(state, Application.VisualStyleState);
         }
 
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(VisualStyleState))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(VisualStyleState))]
         public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState valueParam)

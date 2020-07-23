@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Tests
         }
 
         // Need to verify test once RE fixed.
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListViewGroup_TitleImageIndex_GetGroupInfo_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
@@ -330,7 +330,7 @@ namespace System.Windows.Forms.Tests
         }
 
         // Need to verify test once RE fixed.
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListViewGroup_TitleImageKey_GetGroupInfo_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
@@ -469,7 +469,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { "te\0t", "te" };
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListViewGroup_Subtitle_GetGroupInfo_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
@@ -580,7 +580,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListViewGroup_Footer_GetGroupInfo_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
@@ -722,7 +722,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { "footer", HorizontalAlignment.Right, 0x00000020 | (int)LVGA.HEADER_LEFT };
         }
 
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsTheory]
         [MemberData(nameof(FooterAlignment_GetGroupInfo_TestData))]
         public unsafe void ListView_FooterAlignment_GetGroupInfo_Success(string footerParam, HorizontalAlignment valueParam, int expectedAlignParam)
         {
@@ -840,7 +840,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListViewGroup_Header_GetGroupInfo_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
@@ -972,7 +972,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { "header", HorizontalAlignment.Right, 0x00000004 | (int)LVGA.FOOTER_LEFT };
         }
 
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsTheory]
         [MemberData(nameof(HeaderAlignment_GetGroupInfo_TestData))]
         public unsafe void ListView_HeaderAlignment_GetGroupInfo_Success(string headerParam, HorizontalAlignment valueParam, int expectedAlignParam)
         {
@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListViewGroup_Collapse_GetGroupInfo_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
@@ -1242,7 +1242,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListViewGroup_Task_GetGroupInfo_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.

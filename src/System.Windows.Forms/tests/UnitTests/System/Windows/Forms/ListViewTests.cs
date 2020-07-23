@@ -1880,7 +1880,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListView_Handle_GetWithGroups_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.

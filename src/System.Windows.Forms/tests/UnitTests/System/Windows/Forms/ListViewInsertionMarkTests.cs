@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListViewInsertionMark_AppearsAfterItem_GetInsertMark_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Tests
             }).Dispose();
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListViewInsertionMark_AppearsAfterItem_GetInsertMarkWithColor_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
@@ -362,7 +362,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public unsafe void ListViewInsertionMark_Color_GetInsertMarkColor_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
@@ -456,7 +456,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, insertionMark.Index);
         }
 
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(1)]
         public unsafe void ListViewInsertionMark_Index_GetInsertMark_Success(int indexParam)
@@ -510,7 +510,7 @@ namespace System.Windows.Forms.Tests
             }, indexParam.ToString()).Dispose();
         }
 
-        [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsTheory]
         [InlineData(-2)]
         [InlineData(1)]
         public unsafe void ListViewInsertionMark_Index_GetInsertMarkWithColor_Success(int indexParam)
