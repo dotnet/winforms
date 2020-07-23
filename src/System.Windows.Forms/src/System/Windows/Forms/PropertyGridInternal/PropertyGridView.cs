@@ -146,8 +146,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         private readonly GridEntryRecreateChildrenEventHandler ehRecreateChildren;
 
         private int cachedRowHeight = -1;
-        IntPtr _baseHfont;
-        IntPtr _boldHfont;
 
         public PropertyGridView(IServiceProvider serviceProvider, PropertyGrid propertyGrid)
         : base()
@@ -171,7 +169,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ownerGrid = propertyGrid;
             this.serviceProvider = serviceProvider;
 
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.ResizeRedraw, false);
             SetStyle(ControlStyles.UserMouse, true);
 
@@ -1190,9 +1188,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void Dispose(bool disposing)
         {
-            // Make sure we close any dangling font handles
-            ClearCachedFontInfo();
-
             if (disposing)
             {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Dispose");
@@ -1609,15 +1604,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             return fontBold;
         }
 
-        internal IntPtr GetBaseHfont()
-        {
-            if (_baseHfont == IntPtr.Zero)
-            {
-                _baseHfont = GetBaseFont().ToHfont();
-            }
-            return _baseHfont;
-        }
-
         /// <summary>
         ///  Gets the element from point.
         /// </summary>
@@ -1647,15 +1633,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             return null;
-        }
-
-        internal IntPtr GetBoldHfont()
-        {
-            if (_boldHfont == IntPtr.Zero)
-            {
-                _boldHfont = GetBoldFont().ToHfont();
-            }
-            return _boldHfont;
         }
 
         private bool GetFlag(short flag)
@@ -3935,10 +3912,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Fail("Caught exception in OnPaint");
                 // Do nothing.
             }
-            finally
-            {
-                ClearCachedFontInfo();
-            }
         }
 
         private void OnGridEntryLabelDoubleClick(object s, EventArgs e)
@@ -4028,23 +4001,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void ClearCachedFontInfo()
-        {
-            if (_baseHfont != IntPtr.Zero)
-            {
-                Gdi32.DeleteObject(_baseHfont);
-                _baseHfont = IntPtr.Zero;
-            }
-            if (_boldHfont != IntPtr.Zero)
-            {
-                Gdi32.DeleteObject(_boldHfont);
-                _boldHfont = IntPtr.Zero;
-            }
-        }
-
         protected override void OnFontChanged(EventArgs e)
         {
-            ClearCachedFontInfo();
             cachedRowHeight = -1;
 
             if (Disposing || ParentInternal == null || ParentInternal.Disposing)
@@ -6093,7 +6051,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (DpiHelper.IsScalingRequirementMet)
             {
-                ClearCachedFontInfo();
                 cachedRowHeight = -1;
                 paintWidth = LogicalToDeviceUnits(PAINT_WIDTH);
                 paintIndent = LogicalToDeviceUnits(PAINT_INDENT);

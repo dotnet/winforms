@@ -85,7 +85,7 @@ namespace System.Windows.Forms
             User32.DT flags = User32.DT.DEFAULT)
             => DrawTextInternal(dc, text, font, new Rectangle(pt, MaxSize), foreColor, backColor, flags);
 
-        private static void DrawTextInternal(
+        internal static void DrawTextInternal(
             IDeviceContext dc,
             string? text,
             Font? font,

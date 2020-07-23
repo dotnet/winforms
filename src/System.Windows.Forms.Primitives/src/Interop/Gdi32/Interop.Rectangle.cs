@@ -11,12 +11,5 @@ internal static partial class Interop
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
         public static extern BOOL Rectangle(HDC hdc, int left, int top, int right, int bottom);
-
-        public static BOOL Rectangle(HandleRef hdc, int left, int top, int right, int bottom)
-        {
-            BOOL result = Rectangle((HDC)hdc.Handle, left, top, right, bottom);
-            GC.KeepAlive(hdc.Wrapper);
-            return result;
-        }
     }
 }

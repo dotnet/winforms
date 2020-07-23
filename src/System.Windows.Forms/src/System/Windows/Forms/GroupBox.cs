@@ -679,7 +679,7 @@ namespace System.Windows.Forms
                 var hdc = (Gdi32.HDC)m.WParam;
                 using var hbrush = new Gdi32.CreateBrushScope(backColor);
                 using var selection = new Gdi32.SelectObjectScope(hdc, hbrush);
-                Gdi32.Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom);
+                User32.FillRect(hdc, ref rect, hbrush);
             }
 
             m.Result = (IntPtr)1;
