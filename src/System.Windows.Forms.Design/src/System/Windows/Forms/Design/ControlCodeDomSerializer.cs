@@ -76,11 +76,11 @@ namespace System.Windows.Forms.Design
                 {
                     foreach (Control c in suspendedComponents)
                     {
-                        // Dev10 Bug #462211: Controls in design time may change their size due to incorrectly
+                        // .NET Framework 4.0 (Dev10 #462211): Controls in design time may change their size due to incorrectly
                         // calculated anchor info.
                         // UNDONE: c.ResumeLayout(false) because it regressed layouts with Dock property
                         // see Dev11 bug 117530 DTS Winforms: Upgraded project -Control location and size are changed in the designer gen'd code
-                        c.ResumeLayout(true /*performLayout*/);
+                        c.ResumeLayout(performLayout: true);
                     }
                 }
             }

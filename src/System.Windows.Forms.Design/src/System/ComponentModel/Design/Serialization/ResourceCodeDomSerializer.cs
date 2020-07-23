@@ -660,8 +660,8 @@ namespace System.ComponentModel.Design.Serialization
                     culture = ReadCulture;
                 }
 
-                // Dev10 Bug 425129: Control location moves due to incorrect anchor info when  resource files are reloaded.
-                System.Windows.Forms.Control control = value as System.Windows.Forms.Control;
+                // .NET Framework 4.0 (Dev10 #425129): Control location moves due to incorrect anchor info when resource files are reloaded.
+                Windows.Forms.Control control = value as Windows.Forms.Control;
                 if (control != null)
                 {
                     control.SuspendLayout();
