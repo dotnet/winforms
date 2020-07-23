@@ -21,7 +21,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             form.Controls.Add(propertyGrid);
             form.Controls.Add(button);
 
-            using PropertyGridView propertyGridView = propertyGrid.TestAccessor().Dynamic.gridView as PropertyGridView;
+            using PropertyGridView propertyGridView = propertyGrid.TestAccessor().Dynamic._gridView as PropertyGridView;
 
             using var gridViewListBox = new PropertyGridView.GridViewListBox(propertyGridView);
             var gridViewListBoxAccessibleObject = gridViewListBox.AccessibilityObject;

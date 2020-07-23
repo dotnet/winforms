@@ -87,7 +87,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
 
             using TestDropDownHolder dropDownHolder = new TestDropDownHolder(propertyGridView, propertyGridView.DropDownListBox);
             propertyGridView.TestAccessor().Dynamic.dropDownHolder = dropDownHolder;
-            dropDownHolder.SetStatePublic(0x00000002, true);
+            dropDownHolder.SetState(0x00000002, true);
 
             var listboxFieldAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
             Assert.Equal("GridViewListBoxAccessibleObject", listboxFieldAccessibleObject.GetType().Name);
@@ -132,9 +132,9 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
 
             public override Control Component => _component;
 
-            public void SetStatePublic(int flag, bool value)
+            public void SetState(int flag, bool value)
             {
-                SetState((States)flag, value);
+                base.SetState((States)flag, value);
             }
         }
     }

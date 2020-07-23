@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -295,7 +297,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 object oldValue = psheet.SelectedGridEntry.PropertyValue;
                                 psheet.SelectedGridEntry.ResetPropertyValue();
                                 psheet.UnfocusSelection();
-                                psheet.ownerGrid.OnPropertyValueSet(psheet.SelectedGridEntry, oldValue);
+                                psheet.OwnerGrid.OnPropertyValueSet(psheet.SelectedGridEntry, oldValue);
                             }
                         }
                         break;
@@ -481,7 +483,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 /// </summary>
                 /// <param name="direction">Indicates the direction in which to navigate.</param>
                 /// <returns>Returns the element in the specified direction.</returns>
-                internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
                     if (direction == UiaCore.NavigateDirection.Parent && propertyGridView.SelectedGridEntry != null)
                     {
@@ -506,14 +508,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 ///  Gets the top level element.
                 /// </summary>
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-                {
-                    get
-                    {
-                        return propertyGridView.AccessibilityObject;
-                    }
-                }
+                    => propertyGridView.AccessibilityObject;
 
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+                internal override object GetPropertyValue(UiaCore.UIA propertyID)
                 {
                     switch (propertyID)
                     {
@@ -548,7 +545,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return base.IsPatternSupported(patternId);
                 }
 
-                internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
+                internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
                 {
                     get
                     {
@@ -560,7 +557,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                public override string? Name
+                public override string Name
                 {
                     get
                     {
@@ -583,7 +580,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     set => base.Name = value;
                 }
 
-                internal override int[]? RuntimeId
+                internal override int[] RuntimeId
                 {
                     get
                     {

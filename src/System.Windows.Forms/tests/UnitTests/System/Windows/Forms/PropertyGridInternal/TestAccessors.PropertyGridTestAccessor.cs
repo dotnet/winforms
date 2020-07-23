@@ -10,7 +10,7 @@ namespace System
         {
             public PropertyGridTestAccessor(Windows.Forms.PropertyGrid instance) : base(instance) { }
 
-            internal Windows.Forms.PropertyGridInternal.PropertyGridView GridView => Dynamic.gridView;
+            internal Windows.Forms.PropertyGridInternal.PropertyGridView GridView => Dynamic._gridView;
         }
 
         public static PropertyGridTestAccessor TestAccessor(this Windows.Forms.PropertyGrid propertyGrid)

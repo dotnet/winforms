@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -22,27 +24,27 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         internal class DropDownHolder : Form, IMouseHookClient
         {
-            private Control? currentControl; // the control that is hosted in the holder
-            private readonly PropertyGridView gridView;              // the owner gridview
-            private readonly MouseHook mouseHook;             // we use this to hook mouse downs, etc. to know when to close the dropdown.
+            private Control currentControl; // the control that is hosted in the holder
+            private readonly PropertyGridView gridView; // the owner gridview
+            private readonly MouseHook mouseHook; // we use this to hook mouse downs, etc. to know when to close the dropdown.
 
-            private LinkLabel? createNewLink;
+            private LinkLabel createNewLink;
 
             // all the resizing goo...
             //
             private bool resizable = true;  // true if we're showing the resize widget.
             private bool resizing; // true if we're in the middle of a resize operation.
             private bool resizeUp; // true if the dropdown is above the grid row, which means the resize widget is at the top.
-            private Point dragStart = Point.Empty;     // the point at which the drag started to compute the delta
+            private Point dragStart = Point.Empty; // the point at which the drag started to compute the delta
             private Rectangle dragBaseRect = Rectangle.Empty; // the original bounds of our control.
-            private int currentMoveType = MoveTypeNone;    // what type of move are we processing? left, bottom, or both?
+            private int currentMoveType = MoveTypeNone; // what type of move are we processing? left, bottom, or both?
 
-            private readonly static int ResizeBarSize = ResizeGripSize + 1;    // the thickness of the resize bar
+            private readonly static int ResizeBarSize = ResizeGripSize + 1; // the thickness of the resize bar
             private readonly static int ResizeBorderSize = ResizeBarSize / 2; // the thickness of the 2-way resize area along the outer edge of the resize bar
-            private readonly static int ResizeGripSize = SystemInformation.HorizontalScrollBarHeight;   // the size of the 4-way resize grip at outermost corner of the resize bar
+            private readonly static int ResizeGripSize = SystemInformation.HorizontalScrollBarHeight; // the size of the 4-way resize grip at outermost corner of the resize bar
             private readonly static Size MinDropDownSize =
-                new Size(SystemInformation.VerticalScrollBarWidth* 4, SystemInformation.HorizontalScrollBarHeight* 4);  // the minimum size for the control.
-            private Bitmap? sizeGripGlyph;    // our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.  See GetSizeGripGlyph
+                new Size(SystemInformation.VerticalScrollBarWidth* 4, SystemInformation.HorizontalScrollBarHeight* 4); // the minimum size for the control.
+            private Bitmap sizeGripGlyph; // our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.  See GetSizeGripGlyph
 
             private const int DropDownHolderBorder = 1;
             private const int MoveTypeNone = 0x0;
@@ -167,7 +169,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public virtual Control? Component
+            public virtual Control Component
             {
                 get
                 {
@@ -181,14 +183,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  the type of DropDown UIType Editor.
             ///
             /// </summary>
-            private InstanceCreationEditor? GetInstanceCreationEditor(PropertyDescriptorGridEntry? entry)
+            private InstanceCreationEditor GetInstanceCreationEditor(PropertyDescriptorGridEntry entry)
             {
                 if (entry == null)
                 {
                     return null;
                 }
 
-                InstanceCreationEditor? editor = null;
+                InstanceCreationEditor editor = null;
 
                 // check the property type itself.  this is the default path.
                 //
@@ -295,7 +297,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-            private void OnCurrentControlResize(object? o, EventArgs e)
+            private void OnCurrentControlResize(object o, EventArgs e)
             {
                 if (currentControl != null && !resizing)
                 {
@@ -335,7 +337,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private void OnNewLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
             {
-                InstanceCreationEditor? ice = e.Link.LinkData as InstanceCreationEditor;
+                InstanceCreationEditor ice = e.Link.LinkData as InstanceCreationEditor;
 
                 Debug.Assert(ice != null, "How do we have a link without the InstanceCreationEditor?");
                 if (ice != null && gridView?.SelectedGridEntry != null)
@@ -575,7 +577,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // check to see if we're going to be adding an InstanceCreationEditor
                 //
-                InstanceCreationEditor? editor = (ctl == null ? null : GetInstanceCreationEditor(gridView.SelectedGridEntry as PropertyDescriptorGridEntry));
+                InstanceCreationEditor editor = (ctl == null ? null : GetInstanceCreationEditor(gridView.SelectedGridEntry as PropertyDescriptorGridEntry));
 
                 // clear any existing control we have
                 //
@@ -639,7 +641,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             int linkHeight = CreateNewLink.Height;
                             using (Graphics g = gridView.CreateGraphics())
                             {
-                                SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(gridView.ownerGrid, g, editor.Text, gridView.GetBaseFont());
+                                SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(gridView.OwnerGrid, g, editor.Text, gridView.GetBaseFont());
                                 linkHeight = (int)sizef.Height;
                             }
 

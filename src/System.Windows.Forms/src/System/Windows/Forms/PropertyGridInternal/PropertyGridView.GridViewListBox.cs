@@ -45,12 +45,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  Gets the owning PropertyGridView.
             /// </summary>
             internal PropertyGridView OwningPropertyGridView
-            {
-                get
-                {
-                    return _owningPropertyGridView;
-                }
-            }
+                => _owningPropertyGridView;
 
             /// <summary>
             ///  Indicates whether or not the control supports UIA Providers via

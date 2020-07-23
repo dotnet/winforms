@@ -26,7 +26,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="owningGridViewListBox">The owning GridViewListBox.</param>
             public GridViewListBoxAccessibleObject(GridViewListBox owningGridViewListBox) : base(owningGridViewListBox)
             {
-                if (owningGridViewListBox.OwningPropertyGridView == null)
+                if (owningGridViewListBox.OwningPropertyGridView is null)
                 {
                     throw new ArgumentNullException(nameof(owningGridViewListBox.OwningPropertyGridView));
                 }
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (direction == UiaCore.NavigateDirection.Parent && _owningPropertyGridView.SelectedGridEntry != null)
                 {

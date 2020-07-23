@@ -20,7 +20,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly ItemArray.Entry _owningItem;
 
             public GridViewListBoxItemAccessibleObject(GridViewListBox owningGridViewListBox, ItemArray.Entry owningItem)
-                : base(owningGridViewListBox, owningItem, owningGridViewListBox.AccessibilityObject as ListBoxAccessibleObject)
+                : base(owningGridViewListBox, owningItem, (ListBoxAccessibleObject)owningGridViewListBox.AccessibilityObject)
             {
                 _owningGridViewListBox = owningGridViewListBox;
                 _owningItem = owningItem;
