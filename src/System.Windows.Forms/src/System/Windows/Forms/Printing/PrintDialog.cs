@@ -273,7 +273,7 @@ namespace System.Windows.Forms
             showNetwork = true;
         }
 
-        internal static NativeMethods.PRINTDLGEX CreatePRINTDLGEX()
+        internal unsafe static NativeMethods.PRINTDLGEX CreatePRINTDLGEX()
         {
             NativeMethods.PRINTDLGEX data = new NativeMethods.PRINTDLGEX();
             data.lStructSize = Marshal.SizeOf(data);
@@ -286,7 +286,7 @@ namespace System.Windows.Forms
             data.ExclusionFlags = 0;
             data.nPageRanges = 0;
             data.nMaxPageRanges = 1;
-            data.pageRanges = Kernel32.GlobalAlloc(Kernel32.GMEM.GPTR, (uint)(data.nMaxPageRanges * Marshal.SizeOf<NativeMethods.PRINTPAGERANGE>()));
+            data.pageRanges = Kernel32.GlobalAlloc(Kernel32.GMEM.GPTR, (uint)(data.nMaxPageRanges * sizeof(PRINTPAGERANGE)));
             data.nMinPage = 0;
             data.nMaxPage = 9999;
             data.nCopies = 1;
