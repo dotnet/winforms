@@ -5,6 +5,8 @@ We provide the following templates:
 * [Windows Forms app (VB)](./content/WinFormsApplication-VisualBasic)
 * [Windows Forms class library (C#)](./content/WinFormsLibrary-CSharp)
 * [Windows Forms class library (VB)](./content/WinFormsLibrary-VisualBasic)
+* [Windows Forms control library (C#)](./content/WinFormsControlLibrary-CSharp)
+* [Windows Forms control library (VB)](./content/WinFormsControlLibrary-VisualBasic)
 
 ## Testing Templates
 
