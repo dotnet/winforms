@@ -2,7 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -37,58 +40,104 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("ownerItem", () => new ToolStripItem.ToolStripItemAccessibleObject(null));
         }
 
-        [WinFormsFact]
-        public void ToolStripItemAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected()
+        public static IEnumerable<object[]> ToolStripItemObject_TestData()
         {
-            using var toolStripItem = new SubToolStripItem()
+            var types = typeof(ToolStripItem).Assembly.GetTypes().Where(type => IsNotAbstractToolStripItem(type));
+            foreach (var type in types)
             {
-                Name = "Name1",
-                AccessibleName = "Test Name"
-            };
-
-            AccessibleObject toolStripItemAccessibleObject = toolStripItem.AccessibilityObject;
-            var accessibleName = toolStripItemAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
-
-            Assert.Equal("Test Name", accessibleName);
+                yield return new object[] { type };
+            }
         }
 
-        [WinFormsFact]
-        public void ToolStripItemAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
+        [Theory]
+        [MemberData(nameof(ToolStripItemObject_TestData))]
+        public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
         {
-            using var toolStripItem = new SubToolStripItem();
-            AccessibleObject toolStripItemAccessibleObject = toolStripItem.AccessibilityObject;
+            using ToolStripItem control = GetToolStripItem(type);
+            if (control == null)
+            {
+                return;
+            }
+            control.AccessibleRole = AccessibleRole.Link;
+            AccessibleObject toolStripItemAccessibleObject = control.AccessibilityObject;
+
+            var accessibleObjectRole = toolStripItemAccessibleObject.Role;
+
+            Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
+        }
+
+        [Theory]
+        [MemberData(nameof(ToolStripItemObject_TestData))]
+        public void ToolStripItemAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
+        {
+            using ToolStripItem control = GetToolStripItem(type);
+            if (control == null)
+            {
+                return;
+            }
+            AccessibleObject toolStripItemAccessibleObject = control.AccessibilityObject;
 
             bool supportsLegacyIAccessiblePatternId = toolStripItemAccessibleObject.IsPatternSupported(NativeMethods.UIA_LegacyIAccessiblePatternId);
 
             Assert.True(supportsLegacyIAccessiblePatternId);
         }
 
-        [WinFormsFact]
-        public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected()
+        [Theory]
+        [MemberData(nameof(ToolStripItemObject_TestData))]
+        public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
         {
-            using var toolStripItem = new SubToolStripItem()
+            using ToolStripItem control = GetToolStripItem(type);
+            if (control == null)
             {
-                AccessibleRole = AccessibleRole.Link
-            };
+                return;
+            }
 
-            AccessibleObject toolStripItemAccessibleObject = toolStripItem.AccessibilityObject;
-            var accessibleObjectRole = toolStripItemAccessibleObject.Role;
+            control.AccessibleDescription = "Test Accessible Description";
+            AccessibleObject toolStripItemAccessibleObject = control.AccessibilityObject;
 
-            Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
-        }
-
-        [WinFormsFact]
-        public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected()
-        {
-            using var toolStripItem = new SubToolStripItem()
-            {
-                AccessibleDescription = "Test Description"
-            };
-
-            AccessibleObject toolStripItemAccessibleObject = toolStripItem.AccessibilityObject;
             var accessibleObjectDescription = toolStripItemAccessibleObject.Description;
 
-            Assert.Equal("Test Description", accessibleObjectDescription);
+            Assert.Equal("Test Accessible Description", accessibleObjectDescription);
+        }
+
+        [Theory]
+        [MemberData(nameof(ToolStripItemObject_TestData))]
+        public void ToolStripItemAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
+        {
+            using ToolStripItem control = GetToolStripItem(type);
+            if (control == null)
+            {
+                return;
+            }
+
+            control.Name = "Name1";
+            control.AccessibleName = "Test Name";
+
+            AccessibleObject toolStripItemAccessibleObject = control.AccessibilityObject;
+            var accessibleName = toolStripItemAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
+
+            Assert.Equal("Test Name", accessibleName);
+        }
+
+        private static bool IsNotAbstractToolStripItem(Type type)
+        {
+            return !type.IsAbstract && typeof(ToolStripItem).IsAssignableFrom(type);
+        }
+
+        private ToolStripItem GetToolStripItem(Type type)
+        {
+            var ctor = type.GetConstructor(
+                bindingAttr: BindingFlags.Public | BindingFlags.Instance,
+                binder: null,
+                types: Array.Empty<Type>(),
+                modifiers: null);
+
+            if (ctor == null)
+            {
+                return null;
+            }
+
+            return (ToolStripItem)ctor.Invoke(new object[0]);
         }
 
         private class SubToolStripItem : ToolStripItem

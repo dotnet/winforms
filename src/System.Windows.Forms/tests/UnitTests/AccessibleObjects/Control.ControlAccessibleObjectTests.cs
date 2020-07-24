@@ -11,11 +11,21 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class Control_ControlAccessibleObjectTests
     {
+        public static IEnumerable<object[]> ControlObject_TestData()
+        {
+            // WebBrowser needs to be run in STA
+            var types = typeof(Control).Assembly.GetTypes().Where(type => IsNotAbstractControl(type) && type != typeof(WebBrowser));
+            foreach (var type in types)
+            {
+                yield return new object[] { type };
+            }
+        }
+
         [Theory]
         [MemberData(nameof(ControlObject_TestData))]
         public void ControlAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
         {
-            Control control = GetControl(type);
+            using Control control = GetControl(type);
 
             if (control == null || !control.SupportsUiaProviders)
             {
@@ -34,7 +44,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         [MemberData(nameof(ControlObject_TestData))]
         public void ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
         {
-            Control control = GetControl(type);
+            using Control control = GetControl(type);
 
             if (control == null || !control.SupportsUiaProviders)
             {
@@ -52,7 +62,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         [MemberData(nameof(ControlObject_TestData))]
         public void ControlAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
         {
-            Control control = GetControl(type);
+            using Control control = GetControl(type);
 
             if (control == null || !control.SupportsUiaProviders)
             {
@@ -71,8 +81,8 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         [MemberData(nameof(ControlObject_TestData))]
         public void ToolStripItemAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
         {
-            Control control = GetControl(type);
-            
+            using Control control = GetControl(type);
+
             if (control == null || !control.SupportsUiaProviders)
             {
                 return;
@@ -87,22 +97,13 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.Equal("Test Name", accessibleName);
         }
 
-        public static IEnumerable<object[]> ControlObject_TestData()
+        private static bool IsNotAbstractControl(Type type)
         {
-            var types = typeof(Control).Assembly.GetTypes().Where(type => !type.IsAbstract && type != typeof(WebBrowser));
-            foreach (var type in types)
-            {
-                yield return new object[] { type };
-            }
+            return !type.IsAbstract && typeof(Control).IsAssignableFrom(type);
         }
 
         private Control GetControl(Type type)
         {
-            if (!typeof(Control).IsAssignableFrom(type))
-            {
-                return null;
-            }
-
             var ctor = type.GetConstructor(
                 bindingAttr: BindingFlags.Public | BindingFlags.Instance,
                 binder: null,
