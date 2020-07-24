@@ -678,7 +678,6 @@ namespace System.Windows.Forms
             {
                 var hdc = (Gdi32.HDC)m.WParam;
                 using var hbrush = new Gdi32.CreateBrushScope(backColor);
-                using var selection = new Gdi32.SelectObjectScope(hdc, hbrush);
                 User32.FillRect(hdc, ref rect, hbrush);
             }
 

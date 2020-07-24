@@ -169,7 +169,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ownerGrid = propertyGrid;
             this.serviceProvider = serviceProvider;
 
-            //SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.ResizeRedraw, false);
             SetStyle(ControlStyles.UserMouse, true);
 

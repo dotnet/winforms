@@ -2386,7 +2386,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // Do actual drawing
 
             // Bump the text down 2 pixels and over 1 pixel.
-            if ((paintFlags & PaintValueFlags.PaintInPlace) != PaintValueFlags.None)
+            if (paintFlags.HasFlag(PaintValueFlags.PaintInPlace))
             {
                 rect.Offset(1, 1);
             }
@@ -2402,9 +2402,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 rect.Width - 4,
                 rect.Height);
 
-            Font font = GetFont(boldFont: valueModified);
-
-            Color backColor = ((paintFlags & PaintValueFlags.DrawSelected) != PaintValueFlags.None)
+            Color backColor = paintFlags.HasFlag(PaintValueFlags.DrawSelected)
                 ? GridEntryHost.GetSelectedItemWithFocusBackColor()
                 : GridEntryHost.BackColor;
 
@@ -2431,7 +2429,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             TextRenderer.DrawTextInternal(
                 g,
                 text,
-                font,
+                GetFont(boldFont: valueModified),
                 textRectangle,
                 textColor,
                 backColor,
