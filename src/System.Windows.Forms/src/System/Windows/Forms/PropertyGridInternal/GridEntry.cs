@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -76,7 +75,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             None = 0,
             DrawSelected = 0x1,
             FetchValue = 0x2,
-            CheckShouldSerialize = 0x4
+            CheckShouldSerialize = 0x4,
+            PaintInPlace = 0x8
         }
 
         private class CacheItems
@@ -2382,11 +2382,21 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            // Do actual drawing
+            // Do actual drawing, shifting to match the PropertyGridView.GridViewListbox content alignment
+
+            if (paintFlags.HasFlag(PaintValueFlags.PaintInPlace))
+            {
+                rect.Offset(1, 2);
+            }
+            else
+            {
+                // Only go down one pixel when we're painting in the listbox
+                rect.Offset(1, 1);
+            }
 
             Rectangle textRectangle = new Rectangle(
-                rect.X,
-                rect.Y + 1,
+                rect.X - 1,
+                rect.Y - 1,
                 rect.Width - 4,
                 rect.Height);
 

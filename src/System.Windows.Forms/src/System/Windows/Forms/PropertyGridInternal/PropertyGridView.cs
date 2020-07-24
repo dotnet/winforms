@@ -1439,7 +1439,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 try
                 {
-                    gridEntry.PaintValue(null, g, r, cr, GridEntry.PaintValueFlags.FetchValue);
+                    gridEntry.PaintValue(
+                        null,
+                        g,
+                        r,
+                        cr,
+                        GridEntry.PaintValueFlags.FetchValue
+                            | GridEntry.PaintValueFlags.PaintInPlace
+                            | GridEntry.PaintValueFlags.CheckShouldSerialize);
                 }
                 catch
                 {
