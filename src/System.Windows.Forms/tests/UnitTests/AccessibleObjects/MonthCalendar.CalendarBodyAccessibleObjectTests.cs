@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Threading;
-using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {

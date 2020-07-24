@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -3861,7 +3861,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewHeaderCell_MouseDownUnsharesRow_InvokeWithDataGridView_ReturnsExpected()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 foreach (object[] testData in MouseDownUnsharesRow_WithDataGridView_TestData())
                 {
@@ -3886,7 +3886,10 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal(ButtonState.Normal, cell.ButtonState);
                     Assert.False(control.IsHandleCreated);
                 }
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         public static IEnumerable<object[]> MouseDownUnsharesRow_ButtonLeftNullDataGridView_TestData()
@@ -4012,7 +4015,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewHeaderCell_MouseLeaveUnsharesRow_InvokeWithDataGridViewMouseDown_ReturnsExpected(bool enableHeadersVisualStylesParam, int rowIndexParam, ButtonState expectedButtonStateParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((enableHeadersVisualStylesString, rowIndexString, expectedButtonStateString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((enableHeadersVisualStylesString, rowIndexString, expectedButtonStateString) =>
             {
                 bool enableHeadersVisualStyles = bool.Parse(enableHeadersVisualStylesString);
                 int rowIndex = int.Parse(rowIndexString);
@@ -4035,7 +4038,10 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(enableHeadersVisualStyles && VisualStyleRenderer.IsSupported, cell.MouseLeaveUnsharesRow(rowIndex));
                 Assert.Equal(expectedButtonState, cell.ButtonState);
                 Assert.False(control.IsHandleCreated);
-            }, enableHeadersVisualStylesParam.ToString(), rowIndexParam.ToString(), expectedButtonStateParam.ToString()).Dispose();
+            }, enableHeadersVisualStylesParam.ToString(), rowIndexParam.ToString(), expectedButtonStateParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -4051,7 +4057,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewHeaderCell_MouseUpUnsharesRow_InvokeWithDataGridView_ReturnsExpected()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 foreach (object[] testData in MouseDownUnsharesRow_WithDataGridView_TestData())
                 {
@@ -4076,7 +4082,10 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal(ButtonState.Normal, cell.ButtonState);
                     Assert.False(control.IsHandleCreated);
                 }
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -4158,7 +4167,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewHeaderCell_OnMouseDown_InvokeWithDataGridView_Nop()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 foreach (object[] testData in OnMouseDown_WithDataGridView_TestData())
                 {
@@ -4183,14 +4192,17 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal(expectedButtonState, cell.ButtonState);
                     Assert.False(control.IsHandleCreated);
                 }
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
         public void DataGridViewHeaderCell_OnMouseDown_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 Application.EnableVisualStyles();
 
@@ -4208,7 +4220,10 @@ namespace System.Windows.Forms.Tests
                 var e = new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
                 Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.OnMouseDown(e));
                 Assert.Equal(VisualStyleRenderer.IsSupported ? ButtonState.Pushed : ButtonState.Normal, cell.ButtonState);
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -4313,7 +4328,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewHeaderCell_OnMouseLeave_InvokeWithDataGridViewMouseDown_Nop(bool enableHeadersVisualStylesParam, int rowIndexParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((enableHeadersVisualStylesString, rowIndexString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((enableHeadersVisualStylesString, rowIndexString) =>
             {
                 bool enableHeadersVisualStyles = bool.Parse(enableHeadersVisualStylesString);
                 int rowIndex = int.Parse(rowIndexString);
@@ -4335,7 +4350,10 @@ namespace System.Windows.Forms.Tests
                 cell.OnMouseLeave(rowIndex);
                 Assert.Equal(ButtonState.Normal, cell.ButtonState);
                 Assert.False(control.IsHandleCreated);
-            }, enableHeadersVisualStylesParam.ToString(), rowIndexParam.ToString()).Dispose();
+            }, enableHeadersVisualStylesParam.ToString(), rowIndexParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -4344,7 +4362,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewHeaderCell_OnMouseLeave_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException(int rowIndexParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((rowIndexString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((rowIndexString) =>
             {
                 int rowIndex = int.Parse(rowIndexString);
 
@@ -4364,7 +4382,10 @@ namespace System.Windows.Forms.Tests
                 cell.OnMouseDown(new DataGridViewCellMouseEventArgs(-1, -1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)));
                 Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.OnMouseLeave(rowIndex));
                 Assert.Equal(ButtonState.Normal, cell.ButtonState);
-            }, rowIndexParam.ToString()).Dispose();
+            }, rowIndexParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -4453,7 +4474,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewHeaderCell_OnMouseUp_InvokeWithDataGridViewMouseDown_ReturnsExpected()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 foreach (object[] testData in OnMouseUp_WithDataGridViewMouseDown_TestData())
                 {
@@ -4479,14 +4500,17 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal(expectedButtonState, cell.ButtonState);
                     Assert.False(control.IsHandleCreated);
                 }
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
         public void DataGridViewHeaderCell_OnMouseUp_InvalidRowIndexVisualStyles_ThrowsArgumentOutOfRangeException()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 Application.EnableVisualStyles();
 
@@ -4504,7 +4528,10 @@ namespace System.Windows.Forms.Tests
                 var e = new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
                 Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.OnMouseUp(e));
                 Assert.Equal(ButtonState.Normal, cell.ButtonState);
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]

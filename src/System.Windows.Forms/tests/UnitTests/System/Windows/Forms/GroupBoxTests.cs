@@ -724,7 +724,7 @@ namespace System.Windows.Forms.Tests
         public void GroupBox_FlatStyle_SetWithHandleWithVisualStyles_GetReturnsExpected(FlatStyle valueParam, bool containerControlParam, bool ownerDrawParam, bool userMouseParam, int expectedInvalidatedCallCountParam, int expectedCreatedCallCountParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((valueString, boolStrings, intStrings) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((valueString, boolStrings, intStrings) =>
             {
                 FlatStyle value = (FlatStyle)Enum.Parse(typeof(FlatStyle), valueString);
                 string[] bools = boolStrings.Split(',');
@@ -771,7 +771,10 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(expectedCreatedCallCount, createdCallCount);
-            }, valueParam.ToString(), $"{containerControlParam},{ownerDrawParam},{userMouseParam}", $"{expectedInvalidatedCallCountParam},{expectedCreatedCallCountParam}").Dispose();
+            }, valueParam.ToString(), $"{containerControlParam},{ownerDrawParam},{userMouseParam}", $"{expectedInvalidatedCallCountParam},{expectedCreatedCallCountParam}");
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -852,7 +855,7 @@ namespace System.Windows.Forms.Tests
         public void GroupBox_FlatStyle_SetWithCustomOldValueWithHandleWithVisualStyles_GetReturnsExpected(FlatStyle oldValueParam, FlatStyle valueParam, bool containerControlParam, bool ownerDrawParam, bool userMouseParam, int expectedInvalidatedCallCountParam, int expectedCreatedCallCountParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((oldValueString, valueString, boolStrings, intStrings) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((oldValueString, valueString, boolStrings, intStrings) =>
             {
                 FlatStyle oldValue = (FlatStyle)Enum.Parse(typeof(FlatStyle), oldValueString);
                 FlatStyle value = (FlatStyle)Enum.Parse(typeof(FlatStyle), valueString);
@@ -903,7 +906,10 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(expectedCreatedCallCount, createdCallCount);
-            }, oldValueParam.ToString(), valueParam.ToString(), $"{containerControlParam},{ownerDrawParam},{userMouseParam}", $"{expectedInvalidatedCallCountParam},{expectedCreatedCallCountParam}").Dispose();
+            }, oldValueParam.ToString(), valueParam.ToString(), $"{containerControlParam},{ownerDrawParam},{userMouseParam}", $"{expectedInvalidatedCallCountParam},{expectedCreatedCallCountParam}");
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]

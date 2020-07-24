@@ -727,7 +727,7 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListView_FooterAlignment_GetGroupInfo_Success(string footerParam, HorizontalAlignment valueParam, int expectedAlignParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((footer, valueString, expectedAlignString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((footer, valueString, expectedAlignString) =>
             {
                 HorizontalAlignment value = (HorizontalAlignment)Enum.Parse(typeof(HorizontalAlignment), valueString);
                 int expectedAlign = int.Parse(expectedAlignString);
@@ -758,7 +758,10 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(footer, new string(lvgroup.pszFooter));
                 Assert.True(lvgroup.iGroupId >= 0);
                 Assert.Equal(expectedAlign, (int)lvgroup.uAlign);
-            }, footerParam, valueParam.ToString(), expectedAlignParam.ToString()).Dispose();
+            }, footerParam, valueParam.ToString(), expectedAlignParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -977,7 +980,7 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListView_HeaderAlignment_GetGroupInfo_Success(string headerParam, HorizontalAlignment valueParam, int expectedAlignParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((header, valueString, expectedAlignString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((header, valueString, expectedAlignString) =>
             {
                 HorizontalAlignment value = (HorizontalAlignment)Enum.Parse(typeof(HorizontalAlignment), valueString);
                 int expectedAlign = int.Parse(expectedAlignString);
@@ -1008,7 +1011,10 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(header, new string(lvgroup.pszHeader));
                 Assert.True(lvgroup.iGroupId >= 0);
                 Assert.Equal(expectedAlign, (int)lvgroup.uAlign);
-            }, headerParam, valueParam.ToString(), expectedAlignParam.ToString()).Dispose();
+            }, headerParam, valueParam.ToString(), expectedAlignParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]

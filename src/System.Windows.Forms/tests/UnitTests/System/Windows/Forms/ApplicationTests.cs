@@ -14,12 +14,15 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Application_EnableVisualStyles_InvokeBeforeGettingRenderWithVisualStyles_Success()
         {
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 Application.EnableVisualStyles();
                 Assert.True(Application.UseVisualStyles);
                 Assert.True(Application.RenderWithVisualStyles);
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -27,7 +30,7 @@ namespace System.Windows.Forms.Tests
         {
             // This is not a recommended scenario per https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.application.enablevisualstyles
             // EnableVisualStyles should be executed before any control-related code is.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 Assert.False(Application.UseVisualStyles);
                 Assert.False(Application.RenderWithVisualStyles);
@@ -35,7 +38,10 @@ namespace System.Windows.Forms.Tests
                 Application.EnableVisualStyles();
                 Assert.True(Application.UseVisualStyles, "New Visual Styles will not be applied on Winforms app. This is a high priority bug and must be looked into");
                 Assert.True(Application.RenderWithVisualStyles);
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -60,7 +66,7 @@ namespace System.Windows.Forms.Tests
         {
             // This needs to be in RemoteExecutor.Invoke because changing Application.VisualStyleState
             // sends WM_THEMECHANGED to all controls, which can cause a deadlock if another test fails.
-            RemoteExecutor.Invoke((valueString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((valueString) =>
             {
                 VisualStyleState value = Enum.Parse<VisualStyleState>(valueString);
                 VisualStyleState state = Application.VisualStyleState;
@@ -74,6 +80,9 @@ namespace System.Windows.Forms.Tests
                     Application.VisualStyleState = state;
                 }
             }, valueParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
     }
 }

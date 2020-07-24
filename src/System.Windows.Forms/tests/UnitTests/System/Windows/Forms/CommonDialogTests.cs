@@ -127,7 +127,7 @@ namespace System.Windows.Forms.Tests
         public void ShowDialog_NonControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
             {
                 bool runDialogResult = bool.Parse(runDialogResultString);
                 DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
@@ -143,7 +143,10 @@ namespace System.Windows.Forms.Tests
                     .Setup(o => o.Handle)
                     .Returns(IntPtr.Zero);
                 Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner.Object));
-            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
+            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -165,7 +168,7 @@ namespace System.Windows.Forms.Tests
         public void ShowDialog_ControlOwnerWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
             {
                 bool runDialogResult = bool.Parse(runDialogResultString);
                 DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
@@ -178,7 +181,10 @@ namespace System.Windows.Forms.Tests
                 };
                 using var owner = new Control();
                 Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
-            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
+            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -201,7 +207,7 @@ namespace System.Windows.Forms.Tests
         public void ShowDialog_ControlOwnerWithHandleWithVisualStyles_ReturnsExpected(bool runDialogResultParam, DialogResult expectedDialogResultParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((runDialogResultString, expectedDialogResultString) =>
             {
                 bool runDialogResult = bool.Parse(runDialogResultString);
                 DialogResult expectedDialogResult = (DialogResult)Enum.Parse(typeof(DialogResult), expectedDialogResultString);
@@ -215,7 +221,10 @@ namespace System.Windows.Forms.Tests
                 using var owner = new Control();
                 Assert.NotEqual(IntPtr.Zero, owner.Handle);
                 Assert.Equal(expectedDialogResult, dialog.ShowDialog(owner));
-            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString()).Dispose();
+            }, runDialogResultParam.ToString(), expectedDialogResultParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]

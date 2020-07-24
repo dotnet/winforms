@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Reflection;
-using System.Threading;
-using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 using static System.Windows.Forms.MonthCalendar;
 

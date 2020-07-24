@@ -4,12 +4,10 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Microsoft.DotNet.RemoteExecutor;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -90,7 +88,7 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListViewInsertionMark_AppearsAfterItem_GetInsertMark_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 Application.EnableVisualStyles();
 
@@ -133,14 +131,17 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, insertMark.iItem);
                 Assert.Equal(0u, insertMark.dwReserved);
                 Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
         public unsafe void ListViewInsertionMark_AppearsAfterItem_GetInsertMarkWithColor_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 Application.EnableVisualStyles();
 
@@ -184,7 +185,10 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, insertMark.iItem);
                 Assert.Equal(0u, insertMark.dwReserved);
                 Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -366,7 +370,7 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListViewInsertionMark_Color_GetInsertMarkColor_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 Application.EnableVisualStyles();
 
@@ -397,7 +401,10 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(-1, insertMark.iItem);
                 Assert.Equal(0u, insertMark.dwReserved);
                 Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-            }).Dispose();
+            });
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -462,7 +469,7 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListViewInsertionMark_Index_GetInsertMark_Success(int indexParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((indexString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((indexString) =>
             {
                 int index = int.Parse(indexString);
                 Application.EnableVisualStyles();
@@ -507,7 +514,10 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(index, insertMark.iItem);
                 Assert.Equal(0u, insertMark.dwReserved);
                 Assert.Equal((IntPtr)0, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-            }, indexParam.ToString()).Dispose();
+            }, indexParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -516,7 +526,7 @@ namespace System.Windows.Forms.Tests
         public unsafe void ListViewInsertionMark_Index_GetInsertMarkWithColor_Success(int indexParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((indexString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((indexString) =>
             {
                 int index = int.Parse(indexString);
                 Application.EnableVisualStyles();
@@ -562,7 +572,10 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(index, insertMark.iItem);
                 Assert.Equal(0u, insertMark.dwReserved);
                 Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.LVM.GETINSERTMARKCOLOR, IntPtr.Zero, IntPtr.Zero));
-            }, indexParam.ToString()).Dispose();
+            }, indexParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]

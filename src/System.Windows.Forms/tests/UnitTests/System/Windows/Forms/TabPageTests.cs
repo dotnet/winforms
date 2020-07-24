@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Windows.Forms.VisualStyles;
 using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 using WinForms.Common.Tests;
@@ -545,7 +544,7 @@ namespace System.Windows.Forms.Tests
         public static void TabPage_BackColor_GetVisualStyles_ReturnsExpected(bool useVisualStyleBackColorParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((useVisualStyleBackColorString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((useVisualStyleBackColorString) =>
             {
                 bool useVisualStyleBackColor = bool.Parse(useVisualStyleBackColorString);
 
@@ -556,7 +555,10 @@ namespace System.Windows.Forms.Tests
                     UseVisualStyleBackColor = useVisualStyleBackColor
                 };
                 Assert.Equal(Control.DefaultBackColor, control.BackColor);
-            }, useVisualStyleBackColorParam.ToString()).Dispose();
+            }, useVisualStyleBackColorParam.ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -595,7 +597,7 @@ namespace System.Windows.Forms.Tests
         public static void TabPage_BackColor_GetVisualStylesWithParent_ReturnsExpected(bool useVisualStyleBackColorParam, TabAppearance parentAppearanceParam, Color expectedParam)
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            RemoteExecutor.Invoke((useVisualStyleBackColorString, parentAppearanceString, expectedString) =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke((useVisualStyleBackColorString, parentAppearanceString, expectedString) =>
             {
                 bool useVisualStyleBackColor = bool.Parse(useVisualStyleBackColorString);
                 TabAppearance parentAppearance = (TabAppearance)Enum.Parse(typeof(TabAppearance), parentAppearanceString);
@@ -613,7 +615,10 @@ namespace System.Windows.Forms.Tests
                     Parent = parent
                 };
                 Assert.Equal(expected.ToArgb(), control.BackColor.ToArgb());
-            }, useVisualStyleBackColorParam.ToString(), parentAppearanceParam.ToString(), expectedParam.ToArgb().ToString()).Dispose();
+            }, useVisualStyleBackColorParam.ToString(), parentAppearanceParam.ToString(), expectedParam.ToArgb().ToString());
+
+            // verify the remote process succeeded
+            Assert.Equal(0, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
