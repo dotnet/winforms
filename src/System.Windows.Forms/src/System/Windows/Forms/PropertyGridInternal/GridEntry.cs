@@ -76,8 +76,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             None = 0,
             DrawSelected = 0x1,
             FetchValue = 0x2,
-            CheckShouldSerialize = 0x4,
-            PaintInPlace = 0x8
+            CheckShouldSerialize = 0x4
         }
 
         private class CacheItems
@@ -2385,20 +2384,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // Do actual drawing
 
-            // Bump the text down 2 pixels and over 1 pixel.
-            if (paintFlags.HasFlag(PaintValueFlags.PaintInPlace))
-            {
-                rect.Offset(1, 1);
-            }
-            else
-            {
-                // Only go down one pixel when we're painting in the listbox
-                rect.Offset(1, 0);
-            }
-
             Rectangle textRectangle = new Rectangle(
                 rect.X,
-                rect.Y,
+                rect.Y + 1,
                 rect.Width - 4,
                 rect.Height);
 

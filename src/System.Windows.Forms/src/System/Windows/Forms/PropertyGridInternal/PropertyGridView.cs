@@ -1439,7 +1439,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 try
                 {
-                    DrawValueEntry(g, r, cr, gridEntry, null, true);
+                    gridEntry.PaintValue(null, g, r, cr, GridEntry.PaintValueFlags.FetchValue);
                 }
                 catch
                 {
@@ -1449,37 +1449,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 ResetOrigin(g);
             }
-        }
-
-        private /*protected virtual*/ void DrawValueEntry(Graphics g, Rectangle rect, Rectangle clipRect, GridEntry gridEntry, object value, bool fetchValue)
-        {
-            DrawValue(g, rect, clipRect, gridEntry, value, false, true, fetchValue, true);
-        }
-        private void DrawValue(Graphics g, Rectangle rect, Rectangle clipRect, GridEntry gridEntry, object value, bool drawSelected, bool checkShouldSerialize, bool fetchValue, bool paintInPlace)
-        {
-            GridEntry.PaintValueFlags paintFlags = GridEntry.PaintValueFlags.None;
-
-            if (drawSelected)
-            {
-                paintFlags |= GridEntry.PaintValueFlags.DrawSelected;
-            }
-
-            if (checkShouldSerialize)
-            {
-                paintFlags |= GridEntry.PaintValueFlags.CheckShouldSerialize;
-            }
-
-            if (fetchValue)
-            {
-                paintFlags |= GridEntry.PaintValueFlags.FetchValue;
-            }
-
-            if (paintInPlace)
-            {
-                paintFlags |= GridEntry.PaintValueFlags.PaintInPlace;
-            }
-
-            gridEntry.PaintValue(value, g, rect, clipRect, paintFlags);
         }
 
         private void F4Selection(bool popupModalDialog)
@@ -2753,9 +2722,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             drawBounds.X -= 1;
 
             GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+
             try
             {
-                DrawValue(die.Graphics, drawBounds, drawBounds, gridEntry, gridEntry.ConvertTextToValue(text), (int)(die.State & DrawItemState.Selected) != 0, false, false, false);
+                gridEntry.PaintValue(
+                    gridEntry.ConvertTextToValue(text),
+                    die.GraphicsInternal,
+                    drawBounds,
+                    drawBounds,
+                    die.State.HasFlag(DrawItemState.Selected) ? GridEntry.PaintValueFlags.DrawSelected : default);
             }
             catch (FormatException ex)
             {
