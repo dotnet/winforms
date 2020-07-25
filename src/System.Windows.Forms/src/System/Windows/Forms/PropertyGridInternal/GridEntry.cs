@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -1992,18 +1991,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected IntPtr GetHfont(bool boldFont)
-        {
-            if (boldFont)
-            {
-                return GridEntryHost.GetBoldHfont();
-            }
-            else
-            {
-                return GridEntryHost.GetBaseHfont();
-            }
-        }
-
         /// <summary>
         ///  Retrieves the requested service.  This may
         ///  return null if the requested service is not
@@ -2290,40 +2277,36 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Paints the value portion of this GridEntry into the given Graphics object.  This
-        ///  is called by the GridEntry host (the PropertyGridView) when this GridEntry is
-        ///  to be painted.
+        ///  Paints the value portion of this GridEntry into the given Graphics object. This is called by the GridEntry
+        ///  host (the PropertyGridView) when this GridEntry is to be painted.
         /// </summary>
         public virtual void PaintValue(object val, Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags)
         {
             PropertyGridView gridHost = GridEntryHost;
-            Debug.Assert(gridHost != null, "No propEntryHost");
-            int cPaint = 0;
+            Debug.Assert(gridHost != null);
 
-            Color textColor = gridHost.GetTextColor();
-            if (ShouldRenderReadOnly)
-            {
-                textColor = GridEntryHost.GrayTextColor;
-            }
+            Color textColor = ShouldRenderReadOnly ? GridEntryHost.GrayTextColor : gridHost.GetTextColor();
 
-            string strValue;
+            string text;
 
-            if ((paintFlags & PaintValueFlags.FetchValue) != PaintValueFlags.None)
+            if (paintFlags.HasFlag(PaintValueFlags.FetchValue))
             {
                 if (cacheItems != null && cacheItems.useValueString)
                 {
-                    strValue = cacheItems.lastValueString;
+                    text = cacheItems.lastValueString;
                     val = cacheItems.lastValue;
                 }
                 else
                 {
                     val = PropertyValue;
-                    strValue = GetPropertyTextValue(val);
+                    text = GetPropertyTextValue(val);
+
                     if (cacheItems == null)
                     {
                         cacheItems = new CacheItems();
                     }
-                    cacheItems.lastValueString = strValue;
+
+                    cacheItems.lastValueString = text;
                     cacheItems.useValueString = true;
                     cacheItems.lastValueTextWidth = -1;
                     cacheItems.lastValueFont = null;
@@ -2332,137 +2315,125 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                strValue = GetPropertyTextValue(val);
+                text = GetPropertyTextValue(val);
             }
 
-            // paint out the main rect using the appropriate brush
-            Brush bkBrush = GetBackgroundBrush(g);
-            Debug.Assert(bkBrush != null, "We didn't find a good background brush for PaintValue");
+            // Paint out the main rect using the appropriate brush
+            Brush backBrush = GetBackgroundBrush(g);
+            Debug.Assert(backBrush != null, "We didn't find a good background brush for PaintValue");
 
-            if ((paintFlags & PaintValueFlags.DrawSelected) != PaintValueFlags.None)
+            if (paintFlags.HasFlag(PaintValueFlags.DrawSelected))
             {
-                bkBrush = gridHost.GetSelectedItemWithFocusBackBrush(g);
+                backBrush = gridHost.GetSelectedItemWithFocusBackBrush(g);
                 textColor = gridHost.GetSelectedItemWithFocusForeColor();
             }
 
-            Brush blank = bkBrush;
-            g.FillRectangle(blank, clipRect);
+            g.FillRectangle(backBrush, clipRect);
 
+            int paintIndent = 0;
             if (IsCustomPaint)
             {
-                cPaint = gridHost.GetValuePaintIndent();
-                Rectangle rectPaint = new Rectangle(rect.X + 1, rect.Y + 1, gridHost.GetValuePaintWidth(), gridHost.GetGridEntryHeight() - 2);
+                paintIndent = gridHost.GetValuePaintIndent();
+                Rectangle rectPaint = new Rectangle(
+                    rect.X + 1,
+                    rect.Y + 1,
+                    gridHost.GetValuePaintWidth(),
+                    gridHost.GetGridEntryHeight() - 2);
 
                 if (!Rectangle.Intersect(rectPaint, clipRect).IsEmpty)
                 {
-                    UITypeEditor uie = UITypeEditor;
-                    if (uie != null)
-                    {
-                        uie.PaintValue(new PaintValueEventArgs(this, val, g, rectPaint));
-                    }
+                    UITypeEditor?.PaintValue(new PaintValueEventArgs(this, val, g, rectPaint));
 
-                    // paint a border around the area
+                    // Paint a border around the area
                     rectPaint.Width--;
                     rectPaint.Height--;
                     g.DrawRectangle(SystemPens.WindowText, rectPaint);
                 }
             }
 
-            rect.X += cPaint + gridHost.GetValueStringIndent();
-            rect.Width -= cPaint + 2 * gridHost.GetValueStringIndent();
+            rect.X += paintIndent + gridHost.GetValueStringIndent();
+            rect.Width -= paintIndent + 2 * gridHost.GetValueStringIndent();
 
-            // bold the property if we need to persist it (e.g. it's not the default value)
-            bool valueModified = ((paintFlags & PaintValueFlags.CheckShouldSerialize) != PaintValueFlags.None) && ShouldSerializePropertyValue();
+            // Bold the property if we need to persist it (e.g. it's not the default value)
+            bool valueModified = paintFlags.HasFlag(PaintValueFlags.CheckShouldSerialize) && ShouldSerializePropertyValue();
 
             // If we have text to paint, paint it
-            if (strValue != null && strValue.Length > 0)
+            if (string.IsNullOrEmpty(text))
             {
-                Font f = GetFont(valueModified);
-
-                if (strValue.Length > maximumLengthOfPropertyString)
-                {
-                    strValue = strValue.Substring(0, maximumLengthOfPropertyString);
-                }
-                int textWidth = GetValueTextWidth(strValue, g, f);
-                bool doToolTip = false;
-
-                // Check if text contains multiple lines
-                if (textWidth >= rect.Width || GetMultipleLines(strValue))
-                {
-                    doToolTip = true;
-                }
-
-                if (Rectangle.Intersect(rect, clipRect).IsEmpty)
-                {
-                    return;
-                }
-
-                // Do actual drawing
-
-                // bump the text down 2 pixels and over 1 pixel.
-                if ((paintFlags & PaintValueFlags.PaintInPlace) != PaintValueFlags.None)
-                {
-                    rect.Offset(1, 2);
-                }
-                else
-                {
-                    // only go down one pixel when we're painting in the listbox
-                    rect.Offset(1, 1);
-                }
-
-                Matrix m = g.Transform;
-
-                using var hdc = new DeviceContextHdcScope(g);
-                RECT lpRect = new Rectangle(rect.X + (int)m.OffsetX + 2, rect.Y + (int)m.OffsetY - 1, rect.Width - 4, rect.Height);
-                Gdi32.HGDIOBJ hfont = (Gdi32.HGDIOBJ)GetHfont(valueModified);
-
-                int oldTextColor = 0;
-                int oldBkColor = 0;
-
-                Color bkColor = ((paintFlags & PaintValueFlags.DrawSelected) != PaintValueFlags.None) ? GridEntryHost.GetSelectedItemWithFocusBackColor() : GridEntryHost.BackColor;
-
-                try
-                {
-                    oldTextColor = Gdi32.SetTextColor(hdc, COLORREF.RgbToCOLORREF(textColor.ToArgb()));
-                    oldBkColor = Gdi32.SetBkColor(hdc, COLORREF.RgbToCOLORREF(bkColor.ToArgb()));
-                    using var fontSelection = new Gdi32.SelectObjectScope(hdc, hfont);
-                    User32.DT format = User32.DT.EDITCONTROL | User32.DT.EXPANDTABS | User32.DT.NOCLIP | User32.DT.SINGLELINE | User32.DT.NOPREFIX;
-                    if (gridHost.DrawValuesRightToLeft)
-                    {
-                        format |= User32.DT.RIGHT | User32.DT.RTLREADING;
-                    }
-
-                    // For password mode, replace the string value with a bullet.
-                    if (ShouldRenderPassword)
-                    {
-                        if (passwordReplaceChar == '\0')
-                        {
-                            // Bullet is 2022, but edit box uses round circle 25CF
-                            passwordReplaceChar = '\u25CF';
-                        }
-
-                        strValue = new string(passwordReplaceChar, strValue.Length);
-                    }
-
-                    User32.DrawTextW(hdc, strValue, strValue.Length, ref lpRect, format);
-                }
-                finally
-                {
-                    Gdi32.SetTextColor(hdc, oldTextColor);
-                    Gdi32.SetBkColor(hdc, oldBkColor);
-                }
-
-                if (doToolTip)
-                {
-                    ValueToolTipLocation = new Point(rect.X + 2, rect.Y - 1);
-                }
-                else
-                {
-                    ValueToolTipLocation = InvalidPoint;
-                }
+                return;
             }
 
-            return;
+            if (text.Length > maximumLengthOfPropertyString)
+            {
+                text = text.Substring(0, maximumLengthOfPropertyString);
+            }
+
+            int textWidth = GetValueTextWidth(text, g, GetFont(valueModified));
+            bool doToolTip = false;
+
+            // Check if text contains multiple lines
+            if (textWidth >= rect.Width || GetMultipleLines(text))
+            {
+                doToolTip = true;
+            }
+
+            if (Rectangle.Intersect(rect, clipRect).IsEmpty)
+            {
+                return;
+            }
+
+            // Do actual drawing, shifting to match the PropertyGridView.GridViewListbox content alignment
+
+            if (paintFlags.HasFlag(PaintValueFlags.PaintInPlace))
+            {
+                rect.Offset(1, 2);
+            }
+            else
+            {
+                // Only go down one pixel when we're painting in the listbox
+                rect.Offset(1, 1);
+            }
+
+            Rectangle textRectangle = new Rectangle(
+                rect.X - 1,
+                rect.Y - 1,
+                rect.Width - 4,
+                rect.Height);
+
+            Color backColor = paintFlags.HasFlag(PaintValueFlags.DrawSelected)
+                ? GridEntryHost.GetSelectedItemWithFocusBackColor()
+                : GridEntryHost.BackColor;
+
+            User32.DT format = User32.DT.EDITCONTROL | User32.DT.EXPANDTABS | User32.DT.NOCLIP
+                | User32.DT.SINGLELINE | User32.DT.NOPREFIX;
+
+            if (gridHost.DrawValuesRightToLeft)
+            {
+                format |= User32.DT.RIGHT | User32.DT.RTLREADING;
+            }
+
+            // For password mode, replace the string value with a bullet.
+            if (ShouldRenderPassword)
+            {
+                if (passwordReplaceChar == '\0')
+                {
+                    // Bullet is 2022, but edit box uses round circle 25CF
+                    passwordReplaceChar = '\u25CF';
+                }
+
+                text = new string(passwordReplaceChar, text.Length);
+            }
+
+            TextRenderer.DrawTextInternal(
+                g,
+                text,
+                GetFont(boldFont: valueModified),
+                textRectangle,
+                textColor,
+                backColor,
+                format);
+
+            ValueToolTipLocation = doToolTip ? new Point(rect.X + 2, rect.Y - 1) : InvalidPoint;
         }
 
         public virtual bool OnComponentChanging()

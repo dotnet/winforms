@@ -146,8 +146,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         private readonly GridEntryRecreateChildrenEventHandler ehRecreateChildren;
 
         private int cachedRowHeight = -1;
-        IntPtr _baseHfont;
-        IntPtr _boldHfont;
 
         public PropertyGridView(IServiceProvider serviceProvider, PropertyGrid propertyGrid)
         : base()
@@ -1190,9 +1188,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void Dispose(bool disposing)
         {
-            // Make sure we close any dangling font handles
-            ClearCachedFontInfo();
-
             if (disposing)
             {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Dispose");
@@ -1444,7 +1439,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 try
                 {
-                    DrawValueEntry(g, r, cr, gridEntry, null, true);
+                    gridEntry.PaintValue(
+                        null,
+                        g,
+                        r,
+                        cr,
+                        GridEntry.PaintValueFlags.FetchValue
+                            | GridEntry.PaintValueFlags.PaintInPlace
+                            | GridEntry.PaintValueFlags.CheckShouldSerialize);
                 }
                 catch
                 {
@@ -1454,37 +1456,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 ResetOrigin(g);
             }
-        }
-
-        private /*protected virtual*/ void DrawValueEntry(Graphics g, Rectangle rect, Rectangle clipRect, GridEntry gridEntry, object value, bool fetchValue)
-        {
-            DrawValue(g, rect, clipRect, gridEntry, value, false, true, fetchValue, true);
-        }
-        private void DrawValue(Graphics g, Rectangle rect, Rectangle clipRect, GridEntry gridEntry, object value, bool drawSelected, bool checkShouldSerialize, bool fetchValue, bool paintInPlace)
-        {
-            GridEntry.PaintValueFlags paintFlags = GridEntry.PaintValueFlags.None;
-
-            if (drawSelected)
-            {
-                paintFlags |= GridEntry.PaintValueFlags.DrawSelected;
-            }
-
-            if (checkShouldSerialize)
-            {
-                paintFlags |= GridEntry.PaintValueFlags.CheckShouldSerialize;
-            }
-
-            if (fetchValue)
-            {
-                paintFlags |= GridEntry.PaintValueFlags.FetchValue;
-            }
-
-            if (paintInPlace)
-            {
-                paintFlags |= GridEntry.PaintValueFlags.PaintInPlace;
-            }
-
-            gridEntry.PaintValue(value, g, rect, clipRect, paintFlags);
         }
 
         private void F4Selection(bool popupModalDialog)
@@ -1609,15 +1580,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             return fontBold;
         }
 
-        internal IntPtr GetBaseHfont()
-        {
-            if (_baseHfont == IntPtr.Zero)
-            {
-                _baseHfont = GetBaseFont().ToHfont();
-            }
-            return _baseHfont;
-        }
-
         /// <summary>
         ///  Gets the element from point.
         /// </summary>
@@ -1647,15 +1609,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             return null;
-        }
-
-        internal IntPtr GetBoldHfont()
-        {
-            if (_boldHfont == IntPtr.Zero)
-            {
-                _boldHfont = GetBoldFont().ToHfont();
-            }
-            return _boldHfont;
         }
 
         private bool GetFlag(short flag)
@@ -2776,9 +2729,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             drawBounds.X -= 1;
 
             GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+
             try
             {
-                DrawValue(die.Graphics, drawBounds, drawBounds, gridEntry, gridEntry.ConvertTextToValue(text), (int)(die.State & DrawItemState.Selected) != 0, false, false, false);
+                gridEntry.PaintValue(
+                    gridEntry.ConvertTextToValue(text),
+                    die.GraphicsInternal,
+                    drawBounds,
+                    drawBounds,
+                    die.State.HasFlag(DrawItemState.Selected) ? GridEntry.PaintValueFlags.DrawSelected : default);
             }
             catch (FormatException ex)
             {
@@ -3935,10 +3894,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Fail("Caught exception in OnPaint");
                 // Do nothing.
             }
-            finally
-            {
-                ClearCachedFontInfo();
-            }
         }
 
         private void OnGridEntryLabelDoubleClick(object s, EventArgs e)
@@ -4028,23 +3983,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void ClearCachedFontInfo()
-        {
-            if (_baseHfont != IntPtr.Zero)
-            {
-                Gdi32.DeleteObject(_baseHfont);
-                _baseHfont = IntPtr.Zero;
-            }
-            if (_boldHfont != IntPtr.Zero)
-            {
-                Gdi32.DeleteObject(_boldHfont);
-                _boldHfont = IntPtr.Zero;
-            }
-        }
-
         protected override void OnFontChanged(EventArgs e)
         {
-            ClearCachedFontInfo();
             cachedRowHeight = -1;
 
             if (Disposing || ParentInternal == null || ParentInternal.Disposing)
@@ -6093,7 +6033,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (DpiHelper.IsScalingRequirementMet)
             {
-                ClearCachedFontInfo();
                 cachedRowHeight = -1;
                 paintWidth = LogicalToDeviceUnits(PAINT_WIDTH);
                 paintIndent = LogicalToDeviceUnits(PAINT_INDENT);
