@@ -260,9 +260,9 @@ namespace System.Windows.Forms
         ///   callback should have been called setting the handle.
         /// </para>
         /// </remarks>
-        internal bool IsHandleCreated => Handle != IntPtr.Zero;
+        internal bool IsHandleCreated => _handle != IntPtr.Zero;
 
-        internal bool InvokeRequired => _handle != IntPtr.Zero &&
+        internal bool InvokeRequired => IsHandleCreated &&
             User32.GetWindowThreadProcessId(_handle, out _) != Kernel32.GetCurrentThreadId();
 
         /// <summary>
@@ -835,7 +835,7 @@ namespace System.Windows.Forms
                                        .ToString());
             }
 
-            User32.SetWindowTextW(Handle, caption);
+            User32.SetWindowTextW(_handle, caption);
         }
 
         private HRESULT HandleTaskDialogCallback(
@@ -1545,7 +1545,9 @@ namespace System.Windows.Forms
 
         private void DenyIfDialogNotUpdatable(bool checkWaitingForNavigation = true)
         {
-            if (!IsHandleCreated)
+            // Use the Handle getter (rather than HandleCreated) to check for illegal
+            // cross thread calls.
+            if (Handle == IntPtr.Zero)
             {
                 throw new InvalidOperationException(SR.TaskDialogCanUpdateStateOnlyWhenShown);
             }
@@ -1592,7 +1594,7 @@ namespace System.Windows.Forms
             DenyIfDialogNotUpdatable(checkWaitingForNavigation);
 
             User32.SendMessageW(
-                Handle,
+                _handle,
                 (User32.WM)message,
                 wParam,
                 lParam);
