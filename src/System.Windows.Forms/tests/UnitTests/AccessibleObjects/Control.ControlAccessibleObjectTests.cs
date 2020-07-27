@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
                 return null;
             }
 
-            return (Control)ctor.Invoke(new object[0]);
+            return (Control)ctor.Invoke(Array.Empty<object>());
         }
     }
 }

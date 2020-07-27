@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Tests
                 return null;
             }
 
-            return (ToolStripItem)ctor.Invoke(new object[0]);
+            return (ToolStripItem)ctor.Invoke(Array.Empty<object>());
         }
 
         private class SubToolStripItem : ToolStripItem
