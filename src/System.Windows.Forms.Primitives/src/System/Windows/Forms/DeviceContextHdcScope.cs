@@ -150,7 +150,7 @@ namespace System.Windows.Forms
                 using var dcRegion = new Gdi32.RegionScope(HDC);
                 if (!dcRegion.IsNull)
                 {
-                    type = Gdi32.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, Gdi32.CombineMode.RGN_AND);
+                    type = Gdi32.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, Gdi32.RGN.AND);
                     if (type == RegionType.ERROR)
                     {
                         throw new Win32Exception();

@@ -98,7 +98,7 @@ namespace System.Windows.Forms.ButtonInternal
                     hdc.FillRectangle(
                         bounds,
                         isHighContrastHighlighted
-                            ? User32.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF)
+                            ? User32.GetSysColorBrush(User32.COLOR.HIGHLIGHT)
                             : Control.BackColorBrush);
                 }
             }

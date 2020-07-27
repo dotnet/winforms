@@ -310,7 +310,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }
 
-            if (Gdi32.CombineRgn(rgn1, rgn1, rgn2, Gdi32.CombineMode.RGN_DIFF) == 0)
+            if (Gdi32.CombineRgn(rgn1, rgn1, rgn2, Gdi32.RGN.DIFF) == 0)
             {
                 throw new InvalidOperationException(SR.ErrorSettingWindowRegion);
             }

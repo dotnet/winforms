@@ -412,8 +412,8 @@ namespace System.Windows.Forms
                 // the caller figures it out and sends us a different DC.
 
                 Gdi32.HDC hdc = (Gdi32.HDC)hdcDraw;
-                Gdi32.ObjectType hdcType = Gdi32.GetObjectType(hdc);
-                if (hdcType == Gdi32.ObjectType.OBJ_METADC)
+                Gdi32.OBJ hdcType = Gdi32.GetObjectType(hdc);
+                if (hdcType == Gdi32.OBJ.METADC)
                 {
                     return HRESULT.VIEW_E_DRAW;
                 }
@@ -452,7 +452,7 @@ namespace System.Windows.Forms
                 try
                 {
                     IntPtr flags = (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT);
-                    if (hdcType != Gdi32.ObjectType.OBJ_ENHMETADC)
+                    if (hdcType != Gdi32.OBJ.ENHMETADC)
                     {
                         User32.SendMessageW(_control, User32.WM.PRINT, hdcDraw, flags);
                     }

@@ -16,8 +16,8 @@ internal partial class Interop
             public uint idString;
             public char* pszText;
             public Point pt;
-            public int clrForeground;
-            public int clrBackground;
+            public COLORREF clrForeground;
+            public COLORREF clrBackground;
             public RECT rcMargins;
             public char* pszFont;
         }

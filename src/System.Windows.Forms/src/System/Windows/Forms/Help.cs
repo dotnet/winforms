@@ -108,9 +108,9 @@ namespace System.Windows.Forms
             {
                 cbStruct = sizeof(HH_POPUPW),
                 pt = location,
-                rcMargins = new RECT(-1, -1, -1, -1), // Ignore
-                clrForeground = -1, // Ignore
-                clrBackground = COLORREF.ColorToCOLORREF(SystemColors.Window)
+                rcMargins = new RECT(-1, -1, -1, -1),               // Ignore
+                clrForeground = new COLORREF(unchecked((uint)-1)),  // Ignore
+                clrBackground = SystemColors.Window
             };
             fixed (char* pszText = caption)
             {

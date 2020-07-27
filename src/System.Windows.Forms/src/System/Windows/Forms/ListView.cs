@@ -3500,7 +3500,7 @@ namespace System.Windows.Forms
         {
             var lvhi = new LVHITTESTINFO
             {
-                pt = new POINT(x, y)
+                pt = new Point(x, y)
             };
 
             int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi);
@@ -3533,7 +3533,7 @@ namespace System.Windows.Forms
         {
             var lvhi = new LVHITTESTINFO
             {
-                pt = new POINT(x, y)
+                pt = new Point(x, y)
             };
 
             int index = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
@@ -3738,7 +3738,7 @@ namespace System.Windows.Forms
 
             var lvhi = new LVHITTESTINFO
             {
-                pt = new POINT(x, y)
+                pt = new Point(x, y)
             };
 
             int iItem;
@@ -5755,11 +5755,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Point pos = Cursor.Position;
-            pos = PointToClient(pos);
             var lvhi = new LVHITTESTINFO
             {
-                pt = (POINT)pos
+                pt = PointToClient(Cursor.Position)
             };
 
             int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
@@ -5799,11 +5797,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Point pos = Cursor.Position;
-            pos = PointToClient(pos);
             var lvhi = new LVHITTESTINFO
             {
-                pt = (POINT)pos
+                pt = PointToClient(Cursor.Position)
             };
 
             int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi);
@@ -6218,11 +6214,9 @@ namespace System.Windows.Forms
 
         private LVHITTESTINFO SetupHitTestInfo()
         {
-            Point pos = Cursor.Position;
-            pos = PointToClient(pos);
             var lvhi = new LVHITTESTINFO
             {
-                pt = (POINT)pos
+                pt = PointToClient(Cursor.Position)
             };
 
             return lvhi;
