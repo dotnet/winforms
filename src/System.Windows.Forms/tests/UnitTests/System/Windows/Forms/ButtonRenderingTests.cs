@@ -34,7 +34,6 @@ namespace System.Windows.Forms.Tests
         public unsafe void CaptureButtonOnForm()
         {
             using Form form = new Form();
-            form.BackColor = Color.FromArgb(128, Color.Green);
             using Button button = new Button();
             form.Controls.Add(button);
 
