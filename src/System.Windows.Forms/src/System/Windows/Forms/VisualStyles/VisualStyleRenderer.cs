@@ -304,7 +304,8 @@ namespace System.Windows.Forms.VisualStyles
 
         internal Rectangle DrawEdge(Gdi32.HDC dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
-            if (!ClientUtils.IsEnumValid_Masked(edges, (int)edges, (uint)(Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal)))
+            const Edges AllEdges = Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal;
+            if ((edges & AllEdges) != edges)
                 throw new InvalidEnumArgumentException(nameof(edges), (int)edges, typeof(Edges));
 
             switch (style)
@@ -318,7 +319,8 @@ namespace System.Windows.Forms.VisualStyles
                     throw new InvalidEnumArgumentException(nameof(style), (int)style, typeof(EdgeStyle));
             }
 
-            if (!ClientUtils.IsEnumValid_Masked(effects, (int)effects, (uint)(EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono)))
+            const EdgeEffects AllEffects =EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono;
+            if ((effects & AllEffects) != effects)
                 throw new InvalidEnumArgumentException(nameof(effects), (int)effects, typeof(EdgeEffects));
 
             RECT destRect = bounds;

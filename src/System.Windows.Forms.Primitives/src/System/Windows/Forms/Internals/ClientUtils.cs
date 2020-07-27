@@ -25,23 +25,6 @@ namespace System.Windows.Forms
                     || ex is AccessViolationException;
         }
 
-        // Useful for enums that are a subset of a bitmask
-        // Valid example: EdgeEffects  0, 0x800 (FillInterior), 0x1000 (Flat), 0x4000(Soft), 0x8000(Mono)
-        //
-        //   ClientUtils.IsEnumValid_Masked((int)(effects), /*mask*/ FillInterior | Flat | Soft | Mono,
-        //          ,2);
-        //
-        public static bool IsEnumValid_Masked(Enum enumValue, int value, uint mask)
-        {
-            bool valid = ((value & mask) == value);
-
-#if DEBUG
-            Debug_ValidateMask(enumValue, mask);
-#endif
-
-            return valid;
-        }
-
         private enum CharType
         {
             None,
@@ -82,17 +65,5 @@ namespace System.Windows.Forms
 
             return index + 1;
         }
-
-        private static void Debug_ValidateMask(Enum value, uint mask)
-        {
-            Type t = value.GetType();
-            uint newmask = 0;
-            foreach (int iVal in Enum.GetValues(t))
-            {
-                newmask |= (uint)iVal;
-            }
-            System.Diagnostics.Debug.Assert(newmask == mask, "Mask not valid in IsEnumValid!");
-        }
-#endif
     }
 }
