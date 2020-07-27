@@ -694,8 +694,10 @@ namespace System.Windows.Forms
             Rectangle resultBounds;
             string formattedString = formattedValue as string;
 
-            SolidBrush backBrush = DataGridView.GetCachedBrush((PaintSelectionBackground(paintParts) && cellSelected) ? cellStyle.SelectionBackColor : cellStyle.BackColor);
-            SolidBrush foreBrush = DataGridView.GetCachedBrush(cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor);
+            Color backBrushColor = PaintSelectionBackground(paintParts) && cellSelected
+                ? cellStyle.SelectionBackColor
+                : cellStyle.BackColor;
+            Color foreBrushColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
 
             if (paint && PaintBorder(paintParts))
             {
@@ -714,8 +716,9 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            if (paint && PaintBackground(paintParts) && backBrush.Color.A == 255)
+            if (paint && PaintBackground(paintParts) && !backBrushColor.HasTransparency())
             {
+                using var backBrush = backBrushColor.GetCachedSolidBrush();
                 g.FillRectangle(backBrush, valBounds);
             }
 
@@ -788,9 +791,9 @@ namespace System.Windows.Forms
                         valBounds.Inflate(-1, -1);
                         if (paint && PaintContentBackground(paintParts))
                         {
-                            ButtonBaseAdapter.DrawDefaultBorder(g, valBounds, foreBrush.Color, true /*isDefault == true*/);
+                            ButtonBaseAdapter.DrawDefaultBorder(g, valBounds, backBrushColor, isDefault: true);
 
-                            if (backBrush.Color.A == 255)
+                            if (!backBrushColor.HasTransparency())
                             {
                                 if ((ButtonState & (ButtonState.Pushed | ButtonState.Checked)) != 0)
                                 {
@@ -872,7 +875,7 @@ namespace System.Windows.Forms
                                     valBounds,
                                     colors.options.HighContrast ? colors.windowText : colors.buttonShadow,
                                     isDefault: false);
-                                ControlPaint.DrawBorderSolid(
+                                ControlPaint.DrawBorderSimple(
                                     g,
                                     valBounds,
                                     colors.options.HighContrast ? colors.windowText : colors.buttonShadow);
@@ -980,7 +983,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (formattedString != null && paint && DataGridViewCell.PaintContentForeground(paintParts))
+            if (formattedString != null && paint && PaintContentForeground(paintParts))
             {
                 // Font independent margins
                 valBounds.Offset(DATAGRIDVIEWBUTTONCELL_horizontalTextMargin, DATAGRIDVIEWBUTTONCELL_verticalTextMargin);
@@ -1005,15 +1008,21 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        textColor = foreBrush.Color;
+                        textColor = foreBrushColor;
                     }
-                    TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
-                    TextRenderer.DrawText(g,
-                                            formattedString,
-                                            cellStyle.Font,
-                                            valBounds,
-                                            textColor,
-                                            flags);
+
+                    TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(
+                        DataGridView.RightToLeftInternal,
+                        cellStyle.Alignment,
+                        cellStyle.WrapMode);
+
+                    TextRenderer.DrawText(
+                        g,
+                        formattedString,
+                        cellStyle.Font,
+                        valBounds,
+                        textColor,
+                        flags);
                 }
             }
 

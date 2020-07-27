@@ -158,7 +158,7 @@ namespace System.ComponentModel.Design
 
             string hexString = ((startLine + line) * _columnCount).ToString("X8", CultureInfo.InvariantCulture);
 
-            using Brush foreground = new SolidBrush(ForeColor);
+            using var foreground = new SolidBrush(ForeColor);
             g.DrawString(hexString, font, foreground, ADDRESS_START_X, LINE_START_Y + line * CELL_HEIGHT);
         }
 

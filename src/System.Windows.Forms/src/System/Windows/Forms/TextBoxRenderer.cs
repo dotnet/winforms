@@ -34,11 +34,7 @@ namespace System.Windows.Forms
                 if (windowColor != SystemColors.Window)
                 {
                     Rectangle fillRect = t_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
-                    //then we need to re-fill the background.
-                    using (SolidBrush brush = new SolidBrush(SystemColors.Window))
-                    {
-                        g.FillRectangle(brush, fillRect);
-                    }
+                    g.FillRectangle(SystemBrushes.Window, fillRect);
                 }
             }
         }

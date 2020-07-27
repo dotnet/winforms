@@ -1061,19 +1061,16 @@ namespace System.Windows.Forms
                 _splitBreak = false;
                 SplitEnd(false);
             }
-            //problem with the Focus rect after Keyup ....
-            //Focus rect and reverible lines leave a trace behind on the splitter...
-            using (Graphics g = CreateGraphicsInternal())
+
+            // Problem after KeyUp- focus rect and reversible lines leave a trace behind on the splitter.
+            using Graphics g = CreateGraphicsInternal();
+            if (BackgroundImage == null)
             {
-                if (BackgroundImage == null)
-                {
-                    using (SolidBrush brush = new SolidBrush(BackColor))
-                    {
-                        g.FillRectangle(brush, SplitterRectangle);
-                    }
-                }
-                DrawFocus(g, SplitterRectangle);
+                using var brush = BackColor.GetCachedSolidBrush();
+                g.FillRectangle(brush, SplitterRectangle);
             }
+
+            DrawFocus(g, SplitterRectangle);
         }
 
         /// <summary>
@@ -1589,17 +1586,13 @@ namespace System.Windows.Forms
                 Graphics g = CreateGraphicsInternal();
                 if (BackgroundImage != null)
                 {
-                    using (TextureBrush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile))
-                    {
-                        g.FillRectangle(textureBrush, ClientRectangle);
-                    }
+                    using TextureBrush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile);
+                    g.FillRectangle(textureBrush, ClientRectangle);
                 }
                 else
                 {
-                    using (SolidBrush solidBrush = new SolidBrush(BackColor))
-                    {
-                        g.FillRectangle(solidBrush, _splitterRect);
-                    }
+                    using var solidBrush = BackColor.GetCachedSolidBrush();
+                    g.FillRectangle(solidBrush, _splitterRect);
                 }
                 g.Dispose();
             }

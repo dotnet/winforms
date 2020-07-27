@@ -804,7 +804,7 @@ namespace System.Windows.Forms
                         }
                     }
                     // update the val bounds
-                    Rectangle rectThemeMargins = DataGridViewHeaderCell.GetThemeMargins(graphics);
+                    Rectangle rectThemeMargins = GetThemeMargins(graphics);
                     if (DataGridView.RightToLeftInternal)
                     {
                         valBounds.X += rectThemeMargins.Height;
@@ -823,10 +823,14 @@ namespace System.Windows.Forms
                 // No visual style applied
                 if (valBounds.Width > 0 && valBounds.Height > 0)
                 {
-                    SolidBrush br = DataGridView.GetCachedBrush((DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected) ? cellStyle.SelectionBackColor : cellStyle.BackColor);
-                    if (paint && DataGridViewCell.PaintBackground(paintParts) && br.Color.A == 255)
+                    Color brushColor = PaintSelectionBackground(paintParts) && cellSelected
+                        ? cellStyle.SelectionBackColor
+                        : cellStyle.BackColor;
+
+                    if (paint && PaintBackground(paintParts) && !brushColor.HasTransparency())
                     {
-                        graphics.FillRectangle(br, valBounds);
+                        using var brush = brushColor.GetCachedSolidBrush();
+                        graphics.FillRectangle(brush, valBounds);
                     }
                 }
 

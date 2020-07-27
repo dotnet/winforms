@@ -915,7 +915,7 @@ namespace System.Windows.Forms
                         int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
 
                         // Assuming there is no horizontal scrollbar, is a vertical scrollbar required?
-                        ComputeVisibleRows(); // Make sure this.displayedBandsInfo.FirstDisplayedScrollingRow and other row count info variables have been set
+                        ComputeVisibleRows(); // Make sure this.DisplayedBandsInfo.FirstDisplayedScrollingRow and other row count info variables have been set
 
                         if (DisplayedBandsInfo.NumTotallyDisplayedFrozenRows == Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen) &&
                             DisplayedBandsInfo.NumTotallyDisplayedScrollingRows != totalVisibleRowCount - Rows.GetRowCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen) &&
@@ -5530,77 +5530,28 @@ namespace System.Windows.Forms
                     Columns.Clear();
 
                     UnwireScrollBarsEvents();
-                    if (_vertScrollBar != null)
-                    {
-                        _vertScrollBar.Dispose();
-                        _vertScrollBar = null;
-                    }
-                    if (_horizScrollBar != null)
-                    {
-                        _horizScrollBar.Dispose();
-                        _horizScrollBar = null;
-                    }
 
-                    if (_pens != null)
-                    {
-                        int nPenEntries = _pens.Count;
-                        if (nPenEntries > 0)
-                        {
-                            foreach (Pen pen in _pens.Values)
-                            {
-                                pen.Dispose();
-                            }
-                            _pens.Clear();
-                        }
-                        _pens = null;
-                    }
+                    _vertScrollBar?.Dispose();
+                    _vertScrollBar = null;
 
-                    if (_brushes != null)
-                    {
-                        int nBrushEntries = _brushes.Count;
-                        if (nBrushEntries > 0)
-                        {
-                            foreach (SolidBrush brush in _brushes.Values)
-                            {
-                                brush.Dispose();
-                            }
-                            _brushes.Clear();
-                        }
-                        _brushes = null;
-                    }
+                    _horizScrollBar?.Dispose();
+                    _horizScrollBar = null;
 
-                    if (_placeholderStringFormat != null)
-                    {
-                        _placeholderStringFormat.Dispose();
-                        _placeholderStringFormat = null;
-                    }
+                    _placeholderStringFormat?.Dispose();
+                    _placeholderStringFormat = null;
 
-                    if (_latestEditingControl != null)
-                    {
-                        _latestEditingControl.Dispose();
-                        _latestEditingControl = null;
-                    }
-                    if (EditingControl != null)
-                    {
-                        EditingControl.Dispose();
-                        EditingControl = null;
-                    }
-                    if (_editingPanel != null)
-                    {
-                        _editingPanel.Dispose();
-                        _editingPanel = null;
-                    }
-                    if (GridPen != null)
-                    {
-                        GridPen.Dispose();
-                        GridPen = null;
-                    }
-                    Debug.Assert(_noSelectionChangeCount == 0);
+                    _latestEditingControl?.Dispose();
+                    _latestEditingControl = null;
 
-                    if (DataConnection != null)
-                    {
-                        DataConnection.Dispose();
-                    }
+                    EditingControl?.Dispose();
+                    EditingControl = null;
+
+                    _editingPanel?.Dispose();
+                    _editingPanel = null;
+
+                    Debug.Assert(NoSelectionChangeCount == 0);
+
+                    DataConnection?.Dispose();
 
                     // DGV should dispose the tool tip control before disposing itself.
                     _toolTipControl.Dispose();
@@ -5666,9 +5617,11 @@ namespace System.Windows.Forms
                                                       _layout.ColumnHeaders.Right - InsertionBarWidth);
                     }
                 }
+
                 if (ApplyVisualStylesToHeaderCells)
                 {
-                    g.FillRectangle(GetCachedBrush(SystemColors.HotTrack), rectInsertionBar);
+                    using var brush = SystemColors.HotTrack.GetCachedSolidBrush();
+                    g.FillRectangle(brush, rectInsertionBar);
                 }
                 else
                 {
@@ -6745,28 +6698,6 @@ namespace System.Windows.Forms
             // decrement the objectId because in our implementation of AccessibilityClient notitification objectId's are 1 - based.
             // 0 == NativeMethods.CHILDID_SELF corresponds to the AccessibleObject itself
             return AccessibilityObject.GetChild(objectId - 1);
-        }
-
-        internal SolidBrush GetCachedBrush(Color color)
-        {
-            SolidBrush brush = (SolidBrush)_brushes[color];
-            if (brush == null)
-            {
-                brush = new SolidBrush(color);
-                _brushes.Add(color, brush);
-            }
-            return brush;
-        }
-
-        internal Pen GetCachedPen(Color color)
-        {
-            Pen pen = (Pen)_pens[color];
-            if (pen == null)
-            {
-                pen = new Pen(color);
-                _pens.Add(color, pen);
-            }
-            return pen;
         }
 
         internal TypeConverter GetCachedTypeConverter(Type type)
@@ -15218,14 +15149,16 @@ namespace System.Windows.Forms
                                           ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize /*fixedColumnHeadersHeight*/,
                                           _autoSizeRowsMode == DataGridViewAutoSizeRowsMode.None /*fixedRowsHeight*/);
             }
+
             if (ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
             {
-                AutoResizeColumnHeadersHeight(true /*fixedRowHeadersWidth*/, false /*fixedColumnsWidth*/);
+                AutoResizeColumnHeadersHeight(fixedRowHeadersWidth: true, fixedColumnsWidth: false);
             }
             if (_autoSizeRowsMode != DataGridViewAutoSizeRowsMode.None)
             {
                 AdjustShrinkingRows(_autoSizeRowsMode, false /*fixedWidth*/, true /*internalAutosizing*/);
             }
+
             AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.Header | DataGridViewAutoSizeColumnCriteriaInternal.AllRows | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows, true /*fixedHeight*/);
 
             if (autoSizeRowHeaders &&
@@ -16653,7 +16586,7 @@ namespace System.Windows.Forms
                     PerformLayoutPrivate(false /*useRowShortcut*/, true /*computeVisibleRows*/, false /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
                 }
 
-                Graphics g = e.Graphics;
+                Graphics g = e.GraphicsInternal;
                 Rectangle clipRect = e.ClipRectangle;
                 Rectangle gridRect = GetGridRectangle();
 
@@ -16668,12 +16601,18 @@ namespace System.Windows.Forms
 
                 if (clipRect.IntersectsWith(gridRect))
                 {
-                    using (Region clipRegion = g.Clip)
+                    using (Region originalClip = g.Clip)
                     {
-                        g.SetClip(gridRect);
-                        PaintBackground(g, clipRect, gridRect);
-                        PaintGrid(g, gridRect, clipRect, SingleVerticalBorderAdded, SingleHorizontalBorderAdded);
-                        g.Clip = clipRegion;
+                        try
+                        {
+                            g.SetClip(gridRect);
+                            PaintBackground(g, clipRect, gridRect);
+                            PaintGrid(g, gridRect, clipRect, SingleVerticalBorderAdded, SingleHorizontalBorderAdded);
+                        }
+                        finally
+                        {
+                            g.Clip = originalClip;
+                        }
                     }
                 }
 
@@ -19239,7 +19178,8 @@ namespace System.Windows.Forms
             rcBelowRows.Height -= visibleRowsHeight;
             if (rcBelowRows.Width > 0 && rcBelowRows.Height > 0)
             {
-                graphics.FillRectangle(BackgroundBrush, rcBelowRows);
+                using var brush = BackgroundColor.GetCachedSolidBrush();
+                graphics.FillRectangle(brush, rcBelowRows);
             }
 
             // Paint potential block next to column headers and rows
@@ -19270,14 +19210,17 @@ namespace System.Windows.Forms
             {
                 rcNextRows.X += rowsWidth;
             }
+
             rcNextRows.Width -= rowsWidth;
             if (rcBelowRows.Height > 0)
             {
                 rcNextRows.Height = gridBounds.Height - rcBelowRows.Height;
             }
+
             if (rcNextRows.Width > 0 && rcNextRows.Height > 0)
             {
-                graphics.FillRectangle(BackgroundBrush, rcNextRows);
+                using var brush = BackgroundColor.GetCachedSolidBrush();
+                graphics.FillRectangle(brush, rcNextRows);
             }
         }
 
@@ -19289,6 +19232,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             bool paintingNeeded = false;
             int borderWidth = BorderWidth;
             // Does the clipRect intersect with the top edge?
@@ -19321,7 +19265,7 @@ namespace System.Windows.Forms
                 {
                     if (Application.RenderWithVisualStyles)
                     {
-                        Pen pen = GetCachedPen(VisualStyleInformation.TextControlBorder);
+                        using var pen = VisualStyleInformation.TextControlBorder.GetCachedPen();
                         g.DrawRectangle(pen, new Rectangle(0, 0, bounds.Width - 1, bounds.Height - 1));
                     }
                     else
@@ -19331,7 +19275,7 @@ namespace System.Windows.Forms
                 }
                 else if (BorderStyle == BorderStyle.FixedSingle)
                 {
-                    Pen pen = GetCachedPen(SystemColors.ControlText);
+                    using var pen = SystemColors.ControlText.GetCachedPen();
                     g.DrawRectangle(pen, new Rectangle(0, 0, bounds.Width - 1, bounds.Height - 1));
                 }
                 else
@@ -19515,8 +19459,7 @@ namespace System.Windows.Forms
 
             if (_layout.ColumnHeadersVisible)
             {
-                Rectangle columnHeadersClip = new Rectangle();
-                columnHeadersClip = _layout.ColumnHeaders;
+                Rectangle columnHeadersClip = _layout.ColumnHeaders;
                 if (singleVerticalBorderAdded)
                 {
                     columnHeadersClip.Width++;
@@ -25199,23 +25142,14 @@ namespace System.Windows.Forms
             }
         }
 
-        // required by the Designer
-        private void ResetBackgroundColor()
-        {
-            BackgroundColor = DefaultBackgroundBrush.Color;
-        }
+        // Required by the Designer
+        private void ResetBackgroundColor() => BackgroundColor = s_defaultBackgroundColor;
 
-        // required by the Designer
-        private void ResetGridColor()
-        {
-            GridColor = DefaultGridColor;
-        }
+        // Required by the Designer
+        private void ResetGridColor() => GridColor = DefaultGridColor;
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override void ResetText()
-        {
-            base.ResetText();
-        }
+        public override void ResetText() => base.ResetText();
 
         /// <summary>
         ///  Re-initializes all tracking related state.

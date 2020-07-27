@@ -88,19 +88,18 @@ namespace System.Windows.Forms.ButtonInternal
                 hdc.FillRectangle(bounds, hbrush);
             }
 
-            DrawCheckOnly(e, layout, colors, checkColor, checkBackground);
+            DrawCheckOnly(e, layout, colors, checkColor);
         }
 
-        // used by DataGridViewCheckBoxCell
         internal static void DrawCheckBackground(
             bool controlEnabled,
             CheckState controlCheckState,
-            Graphics g,
+            IDeviceContext deviceContext,
             Rectangle bounds,
             Color checkBackground,
             bool disabledColors)
         {
-            using var hdc = new DeviceContextHdcScope(g);
+            using var hdc = new DeviceContextHdcScope(deviceContext);
 
             Color color;
 
@@ -130,7 +129,6 @@ namespace System.Windows.Forms.ButtonInternal
         protected void DrawCheckBackground(
             PaintEventArgs e,
             Rectangle bounds,
-            Color checkColor,
             Color checkBackground,
             bool disabledColors,
             ColorData colors)
@@ -139,68 +137,78 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (Control.CheckState == CheckState.Indeterminate)
             {
-                DrawDitheredFill(e.Graphics, colors.buttonFace, checkBackground, bounds);
+                DrawDitheredFill(e.GraphicsInternal, colors.buttonFace, checkBackground, bounds);
             }
             else
             {
-                DrawCheckBackground(Control.Enabled, Control.CheckState, e.Graphics, bounds, checkBackground, disabledColors);
+                DrawCheckBackground(Control.Enabled, Control.CheckState, e, bounds, checkBackground, disabledColors);
             }
         }
 
-        protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, ColorData colors, Color checkColor, Color checkBackground)
+        protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, ColorData colors, Color checkColor)
         {
-            DrawCheckOnly(flatCheckSize, Control.Checked, Control.Enabled, Control.CheckState, e.Graphics, layout, colors, checkColor, checkBackground);
+            DrawCheckOnly(
+                flatCheckSize,
+                Control.Checked,
+                Control.Enabled,
+                Control.CheckState,
+                e.GraphicsInternal,
+                layout,
+                colors,
+                checkColor);
         }
 
-        internal static void DrawCheckOnly(int checkSize, bool controlChecked, bool controlEnabled, CheckState controlCheckState, Graphics g, LayoutData layout, ColorData colors, Color checkColor, Color checkBackground)
+        internal static void DrawCheckOnly(
+            int checkSize,
+            bool controlChecked,
+            bool controlEnabled,
+            CheckState controlCheckState,
+            Graphics g,
+            LayoutData layout,
+            ColorData colors,
+            Color checkColor)
         {
-            // Check
-
-            if (controlChecked)
+            if (!controlChecked)
             {
-                if (!controlEnabled)
-                {
-                    checkColor = colors.buttonShadow;
-                }
-                else if (controlCheckState == CheckState.Indeterminate)
-                {
-                    checkColor = SystemInformation.HighContrast ? colors.highlight :
-                       colors.buttonShadow;
-                }
-
-                Rectangle fullSize = layout.checkBounds;
-
-                if (fullSize.Width == checkSize)
-                {
-                    fullSize.Width++;
-                    fullSize.Height++;
-                }
-
-                fullSize.Width++;
-
-                fullSize.Height++;
-                Bitmap checkImage = null;
-                if (controlCheckState == CheckState.Checked)
-                {
-                    checkImage = GetCheckBoxImage(checkColor, fullSize, ref checkImageCheckedBackColor, ref checkImageChecked);
-                }
-                else
-                {
-                    Debug.Assert(controlCheckState == CheckState.Indeterminate, "we want to paint the check box only if the item is checked or indeterminate");
-                    checkImage = GetCheckBoxImage(checkColor, fullSize, ref checkImageIndeterminateBackColor, ref checkImageIndeterminate);
-                }
-
-                if (layout.options.everettButtonCompat)
-                {
-                    fullSize.Y -= 1;
-                }
-                else
-                {
-                    fullSize.Y -= 2;
-                }
-
-                ControlPaint.DrawImageColorized(g, checkImage, fullSize, checkColor);
+                return;
             }
+
+            if (!controlEnabled)
+            {
+                checkColor = colors.buttonShadow;
+            }
+            else if (controlCheckState == CheckState.Indeterminate)
+            {
+                checkColor = SystemInformation.HighContrast ? colors.highlight : colors.buttonShadow;
+            }
+
+            Rectangle fullSize = layout.checkBounds;
+
+            if (fullSize.Width == checkSize)
+            {
+                fullSize.Width++;
+                fullSize.Height++;
+            }
+
+            fullSize.Width++;
+
+            fullSize.Height++;
+            Bitmap checkImage;
+            if (controlCheckState == CheckState.Checked)
+            {
+                checkImage = GetCheckBoxImage(checkColor, fullSize, ref checkImageCheckedBackColor, ref checkImageChecked);
+            }
+            else
+            {
+                Debug.Assert(
+                    controlCheckState == CheckState.Indeterminate,
+                    "we want to paint the check box only if the item is checked or indeterminate");
+                checkImage = GetCheckBoxImage(checkColor, fullSize, ref checkImageIndeterminateBackColor, ref checkImageIndeterminate);
+            }
+
+            fullSize.Y -= layout.options.everettButtonCompat ? 1 : 2;
+
+            ControlPaint.DrawImageColorized(g, checkImage, fullSize, checkColor);
         }
 
         internal static Rectangle DrawPopupBorder(Graphics g, Rectangle r, ColorData colors)
@@ -336,10 +344,10 @@ namespace System.Windows.Forms.ButtonInternal
         {
             if (string.IsNullOrEmpty(Control.Text))
             {
-                // When a CheckBox has no text, AutoSize sets the size to zero
-                // and thus there's no place around which to draw the focus rectangle.
-                // So, when AutoSize == true we want the focus rectangle to be rendered inside the box.
-                // Otherwise, it should encircle all the available space next to the box (like it's done in WPF and ComCtl32).
+                // When a CheckBox has no text, AutoSize sets the size to zero and thus there's no place around which
+                // to draw the focus rectangle. So, when AutoSize == true we want the focus rectangle to be rendered
+                // inside the box. Otherwise, it should encircle all the available space next to the box (like it's
+                // done in WPF and ComCtl32).
                 layout.focus = Control.AutoSize ? Rectangle.Inflate(layout.checkBounds, -2, -2) : layout.field;
             }
         }

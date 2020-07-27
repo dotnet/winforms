@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Ctor_NullGraphics_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>("graphics", () => new PaintEventArgs(null, new Rectangle(1, 2, 3, 4)));
+            Assert.Throws<ArgumentNullException>("graphics", () => new PaintEventArgs((Graphics)null, new Rectangle(1, 2, 3, 4)));
         }
 
         [Fact]

@@ -21,10 +21,10 @@ using static Interop;
 namespace System.Windows.Forms.PropertyGridInternal
 {
     internal class PropertyGridView :
-    Control,
-    IWin32Window,
-    IWindowsFormsEditorService,
-    IServiceProvider
+        Control,
+        IWin32Window,
+        IWindowsFormsEditorService,
+        IServiceProvider
     {
         protected static readonly Point InvalidPoint = new Point(int.MinValue, int.MinValue);
 
@@ -35,9 +35,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         public static int inheritRenderMode = RENDERMODE_BOLD;
 
         public static TraceSwitch GridViewDebugPaint = new TraceSwitch("GridViewDebugPaint", "PropertyGridView: Debug property painting");
-
-        private PropertyGrid ownerGrid;                      // the properties window host.
-
         private const int LEFTDOT_SIZE = 4;
         // constants
         private const int EDIT_INDENT = 0;
@@ -72,9 +69,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected static readonly Point InvalidPosition = new Point(int.MinValue, int.MinValue);
 
         // colors and fonts
-        private Brush backgroundBrush;
-        private Font fontBold;
-        private Color grayTextColor;
+        private Font _fontBold;
+        private Color _grayTextColor;
 
         // for backwards compatibility of default colors
         private bool grayTextColorModified; // true if someone has set the grayTextColor property
@@ -166,7 +162,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ehLabelDblClick = new EventHandler(OnGridEntryLabelDoubleClick);
             ehRecreateChildren = new GridEntryRecreateChildrenEventHandler(OnRecreateChildren);
 
-            ownerGrid = propertyGrid;
+            OwnerGrid = propertyGrid;
             this.serviceProvider = serviceProvider;
 
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -176,8 +172,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // properties
             BackColor = SystemColors.Window;
             ForeColor = SystemColors.WindowText;
-            grayTextColor = SystemColors.GrayText;
-            backgroundBrush = SystemBrushes.Window;
+            _grayTextColor = SystemColors.GrayText;
             TabStop = true;
 
             Text = "PropertyGridView";
@@ -189,18 +184,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override Color BackColor
         {
             get => base.BackColor;
-            set
-            {
-                backgroundBrush = new SolidBrush(value);
-                base.BackColor = value;
-            }
+            set => base.BackColor = value;
         }
-
-        internal Brush GetBackgroundBrush(Graphics g)
-        {
-            return backgroundBrush;
-        }
-
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool CanCopy
@@ -265,7 +250,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (btnDropDown == null)
                 {
 #if DEBUG
-                    if (ownerGrid.inGridViewCreate)
+                    if (OwnerGrid.inGridViewCreate)
                     {
                         throw new Exception("PERF REGRESSION - Creating item in grid view create");
                     }
@@ -297,7 +282,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (btnDialog == null)
                 {
 #if DEBUG
-                    if (ownerGrid.inGridViewCreate)
+                    if (OwnerGrid.inGridViewCreate)
                     {
                         throw new Exception("PERF REGRESSION - Creating item in grid view create");
                     }
@@ -346,7 +331,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (edit == null)
                 {
 #if DEBUG
-                    if (ownerGrid.inGridViewCreate)
+                    if (OwnerGrid.inGridViewCreate)
                     {
                         throw new Exception("PERF REGRESSION - Creating item in grid view create");
                     }
@@ -393,7 +378,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (listBox == null)
                 {
 #if DEBUG
-                    if (ownerGrid.inGridViewCreate)
+                    if (OwnerGrid.inGridViewCreate)
                     {
                         throw new Exception("PERF REGRESSION - Creating item in grid view create");
                     }
@@ -471,7 +456,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // if changed from the default, then the set value is returned
                 if (grayTextColorModified)
                 {
-                    return grayTextColor;
+                    return _grayTextColor;
                 }
 
                 if (ForeColor.ToArgb() == SystemColors.WindowText.ToArgb())
@@ -498,7 +483,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             set
             {
-                grayTextColor = value;
+                _grayTextColor = value;
                 grayTextColorModified = true;
             }
         }
@@ -513,7 +498,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (errorDlg == null)
                 {
-                    errorDlg = new GridErrorDlg(ownerGrid);
+                    errorDlg = new GridErrorDlg(OwnerGrid);
                 }
                 return errorDlg;
             }
@@ -573,13 +558,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public PropertyGrid OwnerGrid
-        {
-            get
-            {
-                return ownerGrid;
-            }
-        }
+        public PropertyGrid OwnerGrid { get; private set; }
 
         protected int RowHeight
         {
@@ -617,7 +596,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (scrollBar == null)
                 {
 #if DEBUG
-                    if (ownerGrid.inGridViewCreate)
+                    if (OwnerGrid.inGridViewCreate)
                     {
                         throw new Exception("PERF REGRESSION - Creating item in grid view create");
                     }
@@ -735,7 +714,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (toolTip == null)
                 {
 #if DEBUG
-                    if (ownerGrid.inGridViewCreate)
+                    if (OwnerGrid.inGridViewCreate)
                     {
                         throw new Exception("PERF REGRESSION - Creating item in grid view create");
                     }
@@ -1148,7 +1127,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            return new PropertyGridViewAccessibleObject(this, ownerGrid);
+            return new PropertyGridViewAccessibleObject(this, OwnerGrid);
         }
 
         private Bitmap CreateResizedBitmap(string icon, int width, int height)
@@ -1210,7 +1189,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 listBox = null;
                 dropDownHolder = null;
 
-                ownerGrid = null;
+                OwnerGrid = null;
                 topLevelGridEntries = null;
                 allGridEntries = null;
                 serviceProvider = null;
@@ -1230,10 +1209,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     edit = null;
                 }
 
-                if (fontBold != null)
+                if (_fontBold != null)
                 {
-                    fontBold.Dispose();
-                    fontBold = null;
+                    _fontBold.Dispose();
+                    _fontBold = null;
                 }
 
                 if (btnDropDown != null)
@@ -1348,7 +1327,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private int GetIPELabelLength(Graphics g, GridEntry gridEntry)
         {
-            SizeF sizeF = PropertyGrid.MeasureTextHelper.MeasureText(ownerGrid, g, gridEntry.PropertyLabel, Font);
+            SizeF sizeF = PropertyGrid.MeasureTextHelper.MeasureText(OwnerGrid, g, gridEntry.PropertyLabel, Font);
             Size size = Size.Ceiling(sizeF);
             return ptOurLocation.X + GetIPELabelIndent(gridEntry) + size.Width;
         }
@@ -1573,11 +1552,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public Font GetBoldFont()
         {
-            if (fontBold == null)
+            if (_fontBold == null)
             {
-                fontBold = new Font(Font, FontStyle.Bold);
+                _fontBold = new Font(Font, FontStyle.Bold);
             }
-            return fontBold;
+            return _fontBold;
         }
 
         /// <summary>
@@ -1618,37 +1597,17 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual Color GetLineColor()
         {
-            return ownerGrid.LineColor;
-        }
-
-        public virtual Brush GetLineBrush(Graphics g)
-        {
-            if (ownerGrid._lineBrush == null)
-            {
-                Color clr = g.GetNearestColor(ownerGrid.LineColor);
-                ownerGrid._lineBrush = new SolidBrush(clr);
-            }
-            return ownerGrid._lineBrush;
+            return OwnerGrid.LineColor;
         }
 
         public virtual Color GetSelectedItemWithFocusForeColor()
         {
-            return ownerGrid.SelectedItemWithFocusForeColor;
+            return OwnerGrid.SelectedItemWithFocusForeColor;
         }
 
         public virtual Color GetSelectedItemWithFocusBackColor()
         {
-            return ownerGrid.SelectedItemWithFocusBackColor;
-        }
-
-        public virtual Brush GetSelectedItemWithFocusBackBrush(Graphics g)
-        {
-            if (ownerGrid._selectedItemWithFocusBackBrush == null)
-            {
-                Color clr = g.GetNearestColor(ownerGrid.SelectedItemWithFocusBackColor);
-                ownerGrid._selectedItemWithFocusBackBrush = new SolidBrush(clr);
-            }
-            return ownerGrid._selectedItemWithFocusBackBrush;
+            return OwnerGrid.SelectedItemWithFocusBackColor;
         }
 
         public virtual IntPtr GetHostHandle()
@@ -1663,7 +1622,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal bool IsExplorerTreeSupported
         {
-            get => ownerGrid.CanShowVisualStyleGlyphs && VisualStyleRenderer.IsSupported;
+            get => OwnerGrid.CanShowVisualStyleGlyphs && VisualStyleRenderer.IsSupported;
         }
 
         public virtual int GetOutlineIconSize()
@@ -2772,17 +2731,18 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 base.OnLostFocus(e);
             }
+
             if (FocusInside)
             {
                 base.OnLostFocus(e);
                 return;
             }
+
             GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
             if (gridEntry != null)
             {
                 Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "removing gridEntry focus");
                 gridEntry.Focus = false;
-                ;
                 CommonEditorHide();
                 InvalidateRow(selectedRow);
             }
@@ -2791,12 +2751,21 @@ namespace System.Windows.Forms.PropertyGridInternal
             // For empty GridView, clear the focus indicator that was painted in OnGotFocus()
             if (totalProps <= 0)
             {
-                using (Graphics g = CreateGraphicsInternal())
-                {
-                    Rectangle clearRect = new Rectangle(1, 1, Size.Width - 2, Size.Height - 2);
-                    Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Filling empty gridview rect=" + clearRect.ToString());
+                Rectangle clearRect = new Rectangle(1, 1, Size.Width - 2, Size.Height - 2);
+                Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, $"Filling empty gridview rect={clearRect}");
 
-                    g.FillRectangle(backgroundBrush, clearRect);
+                Color color = BackColor;
+                if (color.HasTransparency())
+                {
+                    using Graphics g = CreateGraphicsInternal();
+                    using var brush = color.GetCachedSolidBrush();
+                    g.FillRectangle(brush, clearRect);
+                }
+                else
+                {
+                    using var hdc = new User32.GetDcScope(Handle);
+                    using var hbrush = new Gdi32.CreateBrushScope(color);
+                    hdc.FillRectangle(hbrush, clearRect);
                 }
             }
         }
@@ -3051,7 +3020,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return false;
             }
-            if (sender == this || sender == ownerGrid)
+            if (sender == this || sender == OwnerGrid)
             {
                 F4Selection(true);
             }
@@ -3184,7 +3153,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 ToolTip.ToolTip = string.Empty;
             }
 
-            if (fBoth || sender == this || sender == ownerGrid)
+            if (fBoth || sender == this || sender == OwnerGrid)
             {
                 switch (keyCode)
                 {
@@ -3602,7 +3571,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void OnMouseWheel(MouseEventArgs me)
         {
-            ownerGrid.OnGridViewMouseWheel(me);
+            OwnerGrid.OnGridViewMouseWheel(me);
 
             if (me is HandledMouseEventArgs e)
             {
@@ -3819,16 +3788,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     cPropsVisible = Math.Min(cPropsVisible, endRow + 1);
 
                     Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Drawing splitter");
-                    Pen splitterPen = new Pen(ownerGrid.LineColor, GetSplitterWidth())
-                    {
-                        DashStyle = DashStyle.Solid
-                    };
+                    using var splitterPen = OwnerGrid.LineColor.GetCachedPen(GetSplitterWidth());
                     g.DrawLine(splitterPen, labelWidth, loc.Y, labelWidth, (cPropsVisible) * (RowHeight + 1) + loc.Y);
-                    splitterPen.Dispose();
 
                     // draw lines.
                     Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Drawing lines");
-                    Pen linePen = new Pen(g.GetNearestColor(ownerGrid.LineColor));
+                    using var linePen = g.FindNearestColor(OwnerGrid.LineColor).GetCachedPen();
 
                     int cHeightCurRow = 0;
                     int cLineEnd = loc.X + size.Width;
@@ -3860,15 +3825,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         catch
                         {
-                            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Exception thrown during painting property " + GetGridEntryFromRow(i).PropertyLabel);
+                            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose,
+                                $"Exception thrown during painting property {GetGridEntryFromRow(i).PropertyLabel}");
                         }
                     }
 
                     // draw the bottom line
                     cHeightCurRow = (cPropsVisible) * (RowHeight + 1) + loc.Y;
                     g.DrawLine(linePen, cLineStart, cHeightCurRow, cLineEnd, cHeightCurRow);
-
-                    linePen.Dispose();
                 }
 
                 // fill anything left with window
@@ -3876,18 +3840,17 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     yPos++;
                     Rectangle clearRect = new Rectangle(1, yPos, Size.Width - 2, Size.Height - yPos - 1);
-                    Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Filling remaining area rect=" + clearRect.ToString());
+                    Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, $"Filling remaining area rect={clearRect}");
 
-                    g.FillRectangle(backgroundBrush, clearRect);
+                    using var backBrush = BackColor.GetCachedSolidBrush();
+                    g.FillRectangle(backBrush, clearRect);
                 }
 
-                // draw outside border
-                using (Pen borderPen = new Pen(ownerGrid.ViewBorderColor, 1))
-                {
-                    g.DrawRectangle(borderPen, 0, 0, sizeWindow.Width - 1, sizeWindow.Height - 1);
-                }
+                // Draw outside border
+                using var borderPen = OwnerGrid.ViewBorderColor.GetCachedPen();
+                g.DrawRectangle(borderPen, 0, 0, sizeWindow.Width - 1, sizeWindow.Height - 1);
 
-                fontBold = null;
+                _fontBold = null;
             }
             catch
             {
@@ -3992,7 +3955,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            fontBold = null;    // fontBold is cached based on Font
+            _fontBold = null;    // fontBold is cached based on Font
 
             ToolTip.Font = Font;
             SetFlag(FlagNeedUpdateUIBasedOnFont, true);
@@ -4526,7 +4489,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 rowStart = 0;
             }
 
-            if (fullRefresh || ownerGrid.HavePropEntriesChanged())
+            if (fullRefresh || OwnerGrid.HavePropEntriesChanged())
             {
                 if (HasEntries && !GetInPropertySet() && !Commit())
                 {
@@ -4539,7 +4502,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // walk up to the main IPE and refresh it.
                 if (fullRefresh)
                 {
-                    ownerGrid.RefreshProperties(true);
+                    OwnerGrid.RefreshProperties(true);
                 }
 
                 if (oldLength > 0 && !GetFlag(FlagNoDefault))
@@ -4551,7 +4514,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 UpdateHelpAttributes(selectedGridEntry, null);
                 selectedGridEntry = null;
                 SetFlag(FlagIsNewSelection, true);
-                topLevelGridEntries = ownerGrid.GetPropEntries();
+                topLevelGridEntries = OwnerGrid.GetPropEntries();
 
                 ClearGridEntryEvents(allGridEntries, 0, -1);
                 allGridEntries = null;
@@ -4581,7 +4544,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (gridEntry == null)
                     {
-                        gridEntry = ownerGrid.GetDefaultGridEntry();
+                        gridEntry = OwnerGrid.GetDefaultGridEntry();
                         SetFlag(FlagNoDefault, gridEntry == null && totalProps > 0);
                     }
 
@@ -4609,7 +4572,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (!HasEntries)
             {
                 CommonEditorHide(selectedRow != -1);
-                ownerGrid.SetStatusBox(null, null);
+                OwnerGrid.SetStatusBox(null, null);
                 SetScrollOffset(0);
                 selectedRow = -1;
                 Invalidate();
@@ -4617,7 +4580,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             // in case we added or removed properties
 
-            ownerGrid.ClearValueCaches();
+            OwnerGrid.ClearValueCaches();
 
             InvalidateRows(rowStart, rowEnd);
 
@@ -4968,7 +4931,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             GridEntry oldSelectedGridEntry = selectedGridEntry;
             selectedRow = row;
             selectedGridEntry = gridEntry;
-            ownerGrid.SetStatusBox(gridEntry.PropertyLabel, gridEntry.PropertyDescription);
+            OwnerGrid.SetStatusBox(gridEntry.PropertyLabel, gridEntry.PropertyDescription);
 
             // tell the new focused item that it now has focus
             if (selectedGridEntry != null)
@@ -4995,7 +4958,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (selectedGridEntry != oldSelectedGridEntry)
                 {
-                    ownerGrid.OnSelectedGridItemChanged(oldSelectedGridEntry, selectedGridEntry);
+                    OwnerGrid.OnSelectedGridItemChanged(oldSelectedGridEntry, selectedGridEntry);
                 }
             }
             catch
@@ -5345,7 +5308,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            ownerGrid.OnPropertyValueSet(ipeCur, originalValue);
+            OwnerGrid.OnPropertyValueSet(ipeCur, originalValue);
 
             return true;
         }
@@ -5855,7 +5818,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // if the Edit has focus, and we have a button, we want the tab as well
                     return true;
                 }
-                return ownerGrid.WantsTab(forward);
+                return OwnerGrid.WantsTab(forward);
             }
             else
             {
@@ -5863,7 +5826,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return true;
                 }
-                return ownerGrid.WantsTab(forward);
+                return OwnerGrid.WantsTab(forward);
             }
         }
 
@@ -6583,12 +6546,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // Draw the divider
                     int y = resizeUp ? (ResizeBarSize - 1) : (Height - ResizeBarSize);
-                    Pen pen = new Pen(SystemColors.ControlDark, 1)
-                    {
-                        DashStyle = DashStyle.Solid
-                    };
-                    pe.Graphics.DrawLine(pen, 0, y, Width, y);
-                    pen.Dispose();
+                    pe.Graphics.DrawLine(SystemPens.ControlDark, 0, y, Width, y);
                 }
             }
 
@@ -6689,7 +6647,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             int linkHeight = CreateNewLink.Height;
                             using (Graphics g = gridView.CreateGraphics())
                             {
-                                SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(gridView.ownerGrid, g, editor.Text, gridView.GetBaseFont());
+                                SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(gridView.OwnerGrid, g, editor.Text, gridView.GetBaseFont());
                                 linkHeight = (int)sizef.Height;
                             }
 
@@ -7500,7 +7458,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 object oldValue = psheet.SelectedGridEntry.PropertyValue;
                                 psheet.SelectedGridEntry.ResetPropertyValue();
                                 psheet.UnfocusSelection();
-                                psheet.ownerGrid.OnPropertyValueSet(psheet.SelectedGridEntry, oldValue);
+                                psheet.OwnerGrid.OnPropertyValueSet(psheet.SelectedGridEntry, oldValue);
                             }
                         }
                         break;

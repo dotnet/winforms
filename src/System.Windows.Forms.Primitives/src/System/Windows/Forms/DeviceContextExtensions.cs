@@ -101,11 +101,28 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static Color GetNearestColor(this DeviceContextHdcScope hdc, Color color)
-            => GetNearestColor(hdc.HDC, color);
+        internal static Color FindNearestColor(this DeviceContextHdcScope hdc, Color color)
+            => FindNearestColor(hdc.HDC, color);
 
-        internal static Color GetNearestColor(this Gdi32.HDC hdc, Color color)
-            => ColorTranslator.FromWin32(Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(color)));
+        /// <summary>
+        ///  Calls <see cref="Gdi32.GetNearestColor(Gdi32.HDC, int)"/> to get the nearest color for the given
+        ///  <paramref name="color"/>. Returns the original color if the color didn't actually change, retaining
+        ///  the state of the color.
+        /// </summary>
+        /// <remarks>
+        ///  This is important as the color only changes if <paramref name="hdc"/> is a very low color depth. This
+        ///  is extremely rare for the normal case of HDC backed Graphics objects. Keeping the original color keeps the
+        ///  state that would otherwise be stripped, notably things like <see cref="Color.IsKnownColor"/> which allows
+        ///  us to later pull from a the various caches that <see cref="Drawing"/> maintains (saving allocations).
+        ///
+        ///  Ideally we'd drop checking at all and just support full color drawing to improve performance for the
+        ///  expected normal case (more than 8 BITSPIXEL for the HDC).
+        /// </remarks>
+        internal static Color FindNearestColor(this Gdi32.HDC hdc, Color color)
+        {
+            Color newColor =ColorTranslator.FromWin32(Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(color)));
+            return newColor.ToArgb() == color.ToArgb() ? color : newColor;
+        }
 
         internal static Graphics CreateGraphics(this Gdi32.HDC hdc) => Graphics.FromHdcInternal(hdc.Handle);
         internal static Graphics CreateGraphics(this Gdi32.CreateDcScope hdc) => Graphics.FromHdcInternal(hdc.HDC.Handle);
@@ -133,14 +150,17 @@ namespace System.Windows.Forms
             Gdi32.Ellipse(hdc, left, top, right, bottom);
         }
 
-        internal static void FillRectangle(this Gdi32.HDC hdc, Gdi32.HBRUSH brush, Rectangle rectangle)
+        internal static void FillRectangle(this User32.GetDcScope hdc, Gdi32.HBRUSH hbrush, Rectangle rectangle)
+            => FillRectangle(hdc.HDC, hbrush, rectangle);
+
+        internal static void FillRectangle(this Gdi32.HDC hdc, Gdi32.HBRUSH hbrush, Rectangle rectangle)
         {
-            Debug.Assert(!brush.IsNull, "brush == null");
+            Debug.Assert(!hbrush.IsNull, "HBRUSH is null");
             RECT rect = rectangle;
             User32.FillRect(
                 hdc,
                 ref rect,
-                brush);
+                hbrush);
         }
 
         /// <summary>

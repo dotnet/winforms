@@ -572,7 +572,7 @@ namespace System.Windows.Forms
                     if (transparent)
                     {
                         // Need to use GDI+
-                        using Pen pen = new Pen(backColor);
+                        using var pen = backColor.GetCachedPen();
                         e.GraphicsInternal.DrawRectangle(pen, backRect);
                     }
                 }
@@ -600,7 +600,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    using Pen pen = new Pen(backColor, width);
+                    using var pen = backColor.GetCachedPen(width);
                     e.GraphicsInternal.DrawRectangle(pen, backRect);
                 }
             }
@@ -612,7 +612,7 @@ namespace System.Windows.Forms
                 // we only want to do this when BackColor is not serialized, since otherwise
                 // we should display the backcolor instead of the usual grayed textbox.
                 editBounds.Inflate(1, 1);
-                ControlPaint.DrawBorderSolid(e, editBounds, SystemColors.Control);
+                ControlPaint.DrawBorderSimple(e, editBounds, SystemColors.Control);
             }
         }
 

@@ -77,7 +77,7 @@ namespace System.Windows.Forms
 
         private static void DrawTextInternal(
             IDeviceContext dc,
-            string? text,
+            ReadOnlySpan<char> text,
             Font? font,
             Point pt,
             Color foreColor,
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
 
         internal static void DrawTextInternal(
             IDeviceContext dc,
-            string? text,
+            ReadOnlySpan<char> text,
             Font? font,
             Rectangle bounds,
             Color foreColor,
@@ -98,7 +98,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(dc));
 
             // Avoid creating the HDC, etc if we're not going to do any drawing
-            if (string.IsNullOrEmpty(text) || foreColor == Color.Transparent)
+            if (text.IsEmpty || foreColor == Color.Transparent)
                 return;
 
             // This MUST come before retreiving the HDC, which locks the Graphics object
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
 
         internal static void DrawTextInternal(
             Gdi32.HDC hdc,
-            string? text,
+            ReadOnlySpan<char> text,
             Font? font,
             Rectangle bounds,
             Color foreColor,
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
             Color backColor,
             User32.DT flags)
         {
-            using var hfont = GdiCache.GetHFONT(font, fontQuality);
+            using var hfont = GdiCache.GetHFONT(font, fontQuality, hdc);
             hdc.DrawText(text, hfont, bounds, foreColor, flags, backColor);
         }
 
@@ -203,23 +203,23 @@ namespace System.Windows.Forms
             => MeasureTextInternal(dc, text, font, proposedSize, flags);
 
         private static Size MeasureTextInternal(
-            string? text,
+            ReadOnlySpan<char> text,
             Font? font,
             Size proposedSize,
             TextFormatFlags flags = TextFormatFlags.Bottom)
         {
-            if (string.IsNullOrEmpty(text))
+            if (text.IsEmpty)
                 return Size.Empty;
 
-            using var hfont = GdiCache.GetHFONT(font);
             using var screen = GdiCache.GetScreenHdc();
+            using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.DEFAULT, screen);
 
             return screen.HDC.MeasureText(text, hfont, proposedSize, GetTextFormatFlags(flags));
         }
 
         private static Size MeasureTextInternal(
             IDeviceContext dc,
-            string? text,
+            ReadOnlySpan<char> text,
             Font? font,
             Size proposedSize,
             TextFormatFlags flags = TextFormatFlags.Bottom)
@@ -227,14 +227,14 @@ namespace System.Windows.Forms
             if (dc == null)
                 throw new ArgumentNullException(nameof(dc));
 
-            if (string.IsNullOrEmpty(text))
+            if (text.IsEmpty)
                 return Size.Empty;
 
             // This MUST come before retreiving the HDC, which locks the Graphics object
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
-            using var hfont = GdiCache.GetHFONT(font, quality);
+            using var hfont = GdiCache.GetHFONT(font, quality, hdc);
             return hdc.MeasureText(text, hfont, proposedSize, GetTextFormatFlags(flags));
         }
 

@@ -200,28 +200,28 @@ namespace System.Windows.Forms
                 rightToLeftShift = (rightToLeft) ? -2 : 0;
                 // width of the both lines is 1 pixel and lines are drawn next to each other, this the highlight line is 1 pixel below the black line
                 g.DrawLine(SystemPens.ControlText,
-                    middle.X - ToolStripRenderer.Offset2X,
-                    overflowArrowRect.Y - ToolStripRenderer.Offset2Y,
-                    middle.X + ToolStripRenderer.Offset2X,
-                    overflowArrowRect.Y - ToolStripRenderer.Offset2Y);
+                    middle.X - Offset2X,
+                    overflowArrowRect.Y - Offset2Y,
+                    middle.X + Offset2X,
+                    overflowArrowRect.Y - Offset2Y);
                 g.DrawLine(SystemPens.ButtonHighlight,
-                    middle.X - ToolStripRenderer.Offset2X + 1 + rightToLeftShift,
-                    overflowArrowRect.Y - ToolStripRenderer.Offset2Y + 1,
-                    middle.X + ToolStripRenderer.Offset2X + 1 + rightToLeftShift,
-                    overflowArrowRect.Y - ToolStripRenderer.Offset2Y + 1);
+                    middle.X - Offset2X + 1 + rightToLeftShift,
+                    overflowArrowRect.Y - Offset2Y + 1,
+                    middle.X + Offset2X + 1 + rightToLeftShift,
+                    overflowArrowRect.Y - Offset2Y + 1);
             }
             else
             {
                 g.DrawLine(SystemPens.ControlText,
                     overflowArrowRect.X,
-                    middle.Y - ToolStripRenderer.Offset2Y,
+                    middle.Y - Offset2Y,
                     overflowArrowRect.X,
-                    middle.Y + ToolStripRenderer.Offset2Y);
+                    middle.Y + Offset2Y);
                 g.DrawLine(SystemPens.ButtonHighlight,
                     overflowArrowRect.X + 1,
-                    middle.Y - ToolStripRenderer.Offset2Y + 1,
+                    middle.Y - Offset2Y + 1,
                     overflowArrowRect.X + 1,
-                    middle.Y + ToolStripRenderer.Offset2Y + 1);
+                    middle.Y + Offset2Y + 1);
             }
         }
 
@@ -266,48 +266,49 @@ namespace System.Windows.Forms
 
             Graphics g = e.Graphics;
 
-            if (e.Item is ToolStripSplitButton item)
+            if (!(e.Item is ToolStripSplitButton item))
             {
-                Rectangle bounds = new Rectangle(Point.Empty, item.Size);
-                if (item.BackgroundImage != null)
-                {
-                    Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
-                    ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
-                }
-
-                bool buttonPressedOrSelected = (item.Pressed || item.ButtonPressed || item.Selected || item.ButtonSelected);
-
-                if (buttonPressedOrSelected)
-                {
-                    RenderItemInternal(e, /*useHotBorder =*/true);
-                }
-
-                if (item.ButtonPressed)
-                {
-                    Rectangle buttonBounds = item.ButtonBounds;
-                    // We subtract 1 from each side except the right.
-                    // This is because we've already drawn the border, and we don't
-                    // want to draw over it.  We don't do the right edge, because we
-                    // drew the border around the whole control, not the button.
-                    Padding deflatePadding = item.RightToLeft == RightToLeft.Yes ? new Padding(0, 1, 1, 1) : new Padding(1, 1, 0, 1);
-                    buttonBounds = LayoutUtils.DeflateRect(buttonBounds, deflatePadding);
-                    RenderPressedButtonFill(g, buttonBounds);
-                }
-                else if (item.Pressed)
-                {
-                    RenderPressedGradient(e.Graphics, bounds);
-                }
-                Rectangle dropDownRect = item.DropDownButtonBounds;
-
-                if (buttonPressedOrSelected && !item.Pressed)
-                {
-                    using (Brush b = new SolidBrush(ColorTable.ButtonSelectedBorder))
-                    {
-                        g.FillRectangle(b, item.SplitterBounds);
-                    }
-                }
-                DrawArrow(new ToolStripArrowRenderEventArgs(g, item, dropDownRect, SystemColors.ControlText, ArrowDirection.Down));
+                return;
             }
+
+            Rectangle bounds = new Rectangle(Point.Empty, item.Size);
+            if (item.BackgroundImage != null)
+            {
+                Rectangle fillRect = (item.Selected) ? item.ContentRectangle : bounds;
+                ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
+            }
+
+            bool buttonPressedOrSelected = (item.Pressed || item.ButtonPressed || item.Selected || item.ButtonSelected);
+
+            if (buttonPressedOrSelected)
+            {
+                RenderItemInternal(e, useHotBorder: true);
+            }
+
+            if (item.ButtonPressed)
+            {
+                Rectangle buttonBounds = item.ButtonBounds;
+                // We subtract 1 from each side except the right.
+                // This is because we've already drawn the border, and we don't
+                // want to draw over it.  We don't do the right edge, because we
+                // drew the border around the whole control, not the button.
+                Padding deflatePadding = item.RightToLeft == RightToLeft.Yes ? new Padding(0, 1, 1, 1) : new Padding(1, 1, 0, 1);
+                buttonBounds = LayoutUtils.DeflateRect(buttonBounds, deflatePadding);
+                RenderPressedButtonFill(g, buttonBounds);
+            }
+            else if (item.Pressed)
+            {
+                RenderPressedGradient(e.Graphics, bounds);
+            }
+            Rectangle dropDownRect = item.DropDownButtonBounds;
+
+            if (buttonPressedOrSelected && !item.Pressed)
+            {
+                using var brush = ColorTable.ButtonSelectedBorder.GetCachedSolidBrush();
+                g.FillRectangle(brush, item.SplitterBounds);
+            }
+
+            DrawArrow(new ToolStripArrowRenderEventArgs(g, item, dropDownRect, SystemColors.ControlText, ArrowDirection.Down));
         }
 
         protected override void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
@@ -348,7 +349,7 @@ namespace System.Windows.Forms
 
             if (item.CheckState == CheckState.Unchecked)
             {
-                RenderItemInternal(e, /*useHotBorder = */ true);
+                RenderItemInternal(e, useHotBorder: true);
             }
             else
             {
@@ -370,10 +371,8 @@ namespace System.Windows.Forms
                         RenderCheckedButtonFill(g, bounds);
                     }
 
-                    using (Pen p = new Pen(ColorTable.ButtonSelectedBorder))
-                    {
-                        g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-                    }
+                    using var pen = ColorTable.ButtonSelectedBorder.GetCachedPen();
+                    g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
                 else
                 {
@@ -385,10 +384,9 @@ namespace System.Windows.Forms
                     {
                         RenderCheckedButtonFill(g, bounds);
                     }
-                    using (Pen p = new Pen(ColorTable.ButtonSelectedBorder))
-                    {
-                        g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-                    }
+
+                    using var pen = ColorTable.ButtonSelectedBorder.GetCachedPen();
+                    g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
             }
         }
@@ -420,26 +418,26 @@ namespace System.Windows.Forms
                 Rectangle bounds = new Rectangle(Point.Empty, toolStrip.Size);
 
                 // draw the shadow lines on the bottom and right
-                using (Pen p = new Pen(ColorTable.ToolStripBorder))
+                using (var pen = ColorTable.ToolStripBorder.GetCachedPen())
                 {
                     if (toolStrip.Orientation == Orientation.Horizontal)
                     {
                         // horizontal line at bottom
-                        g.DrawLine(p, bounds.Left, bounds.Height - 1, bounds.Right, bounds.Height - 1);
+                        g.DrawLine(pen, bounds.Left, bounds.Height - 1, bounds.Right, bounds.Height - 1);
                         if (RoundedEdges)
                         {
                             // one pix corner rounding (right bottom)
-                            g.DrawLine(p, bounds.Width - 2, bounds.Height - 2, bounds.Width - 1, bounds.Height - 3);
+                            g.DrawLine(pen, bounds.Width - 2, bounds.Height - 2, bounds.Width - 1, bounds.Height - 3);
                         }
                     }
                     else
                     {
                         // draw vertical line on the right
-                        g.DrawLine(p, bounds.Width - 1, 0, bounds.Width - 1, bounds.Height - 1);
+                        g.DrawLine(pen, bounds.Width - 1, 0, bounds.Width - 1, bounds.Height - 1);
                         if (RoundedEdges)
                         {
                             // one pix corner rounding (right bottom)
-                            g.DrawLine(p, bounds.Width - 2, bounds.Height - 2, bounds.Width - 1, bounds.Height - 3);
+                            g.DrawLine(pen, bounds.Width - 2, bounds.Height - 2, bounds.Width - 1, bounds.Height - 3);
                         }
                     }
                 }
@@ -522,20 +520,16 @@ namespace System.Windows.Forms
                     }
                 }
 
-                using (Brush b = new SolidBrush(ColorTable.GripLight))
-                {
-                    g.FillRectangles(b, shadowRects);
-                }
+                using var gripLightBrush = ColorTable.GripLight.GetCachedSolidBrush();
+                g.FillRectangles(gripLightBrush, shadowRects);
 
                 for (int i = 0; i < numRectangles; i++)
                 {
                     shadowRects[i].Offset(xOffset, -1);
                 }
 
-                using (Brush b = new SolidBrush(ColorTable.GripDark))
-                {
-                    g.FillRectangles(b, shadowRects);
-                }
+                using var gripDarkBrush = ColorTable.GripDark.GetCachedSolidBrush();
+                g.FillRectangles(gripDarkBrush, shadowRects);
             }
         }
 
@@ -578,17 +572,19 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            using (Brush b = new LinearGradientBrush(bounds, ColorTable.MenuItemSelectedGradientBegin, ColorTable.MenuItemSelectedGradientEnd, LinearGradientMode.Vertical))
-                            {
-                                g.FillRectangle(b, bounds);
-                            }
+                            using Brush b = new LinearGradientBrush(
+                                bounds,
+                                ColorTable.MenuItemSelectedGradientBegin,
+                                ColorTable.MenuItemSelectedGradientEnd,
+                                LinearGradientMode.Vertical);
+
+                            g.FillRectangle(b, bounds);
                         }
                     }
-                    // draw selection border - always drawn regardless of Enabled.
-                    using (Pen p = new Pen(borderColor))
-                    {
-                        g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-                    }
+
+                    // Draw selection border - always drawn regardless of Enabled.
+                    using var pen = borderColor.GetCachedPen();
+                    g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
                 else
                 {
@@ -596,14 +592,18 @@ namespace System.Windows.Forms
 
                     if (item.BackgroundImage != null)
                     {
-                        ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, bounds, fillRect);
+                        ControlPaint.DrawBackgroundImage(
+                            g,
+                            item.BackgroundImage,
+                            item.BackColor,
+                            item.BackgroundImageLayout,
+                            bounds,
+                            fillRect);
                     }
                     else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
                     {
-                        using (Brush b = new SolidBrush(item.BackColor))
-                        {
-                            g.FillRectangle(b, fillRect);
-                        }
+                        using var brush = item.BackColor.GetCachedSolidBrush();
+                        g.FillRectangle(brush, fillRect);
                     }
                 }
             }
@@ -629,18 +629,19 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            using (Brush b = new LinearGradientBrush(bounds, ColorTable.MenuItemSelectedGradientBegin, ColorTable.MenuItemSelectedGradientEnd, LinearGradientMode.Vertical))
-                            {
-                                g.FillRectangle(b, bounds);
-                            }
+                            using Brush b = new LinearGradientBrush(
+                                bounds,
+                                ColorTable.MenuItemSelectedGradientBegin,
+                                ColorTable.MenuItemSelectedGradientEnd,
+                                LinearGradientMode.Vertical);
+
+                            g.FillRectangle(b, bounds);
                         }
                     }
 
-                    // draw selection border - always drawn regardless of Enabled.
-                    using (Pen p = new Pen(borderColor))
-                    {
-                        g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-                    }
+                    // Draw selection border - always drawn regardless of Enabled.
+                    using var pen = borderColor.GetCachedPen();
+                    g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
                 else
                 {
@@ -652,10 +653,8 @@ namespace System.Windows.Forms
                     }
                     else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
                     {
-                        using (Brush b = new SolidBrush(item.BackColor))
-                        {
-                            g.FillRectangle(b, fillRect);
-                        }
+                        using var brush = item.BackColor.GetCachedSolidBrush();
+                        g.FillRectangle(brush, fillRect);
                     }
                 }
             }
@@ -918,16 +917,16 @@ namespace System.Windows.Forms
             }
 
             // Extend the gradient color over the border.
-            using (Brush b = new SolidBrush(overflowBottomLeftShadow))
+            using (var brush = overflowBottomLeftShadow.GetCachedSolidBrush())
             {
-                g.FillRectangle(b, toolStrip.Width - 1, toolStrip.Height - 2, 1, 1);
-                g.FillRectangle(b, toolStrip.Width - 2, toolStrip.Height - 1, 1, 1);
+                g.FillRectangle(brush, toolStrip.Width - 1, toolStrip.Height - 2, 1, 1);
+                g.FillRectangle(brush, toolStrip.Width - 2, toolStrip.Height - 1, 1, 1);
             }
 
-            using (Brush b = new SolidBrush(overflowTopShadow))
+            using (var brush = overflowTopShadow.GetCachedSolidBrush())
             {
-                g.FillRectangle(b, toolStrip.Width - 2, 0, 1, 1);
-                g.FillRectangle(b, toolStrip.Width - 1, 1, 1, 1);
+                g.FillRectangle(brush, toolStrip.Width - 2, 0, 1, 1);
+                g.FillRectangle(brush, toolStrip.Width - 1, 1, 1, 1);
             }
         }
 
@@ -946,9 +945,10 @@ namespace System.Windows.Forms
             {
                 return;  // can't new up a linear gradient brush with no dimension.
             }
+
             Rectangle endGradient = bounds;
             Rectangle beginGradient = bounds;
-            bool useDoubleGradient = true;
+            bool useDoubleGradient;
 
             if (mode == LinearGradientMode.Horizontal)
             {
@@ -975,9 +975,9 @@ namespace System.Windows.Forms
             if (useDoubleGradient)
             {
                 // Fill with middleColor
-                using (Brush b = new SolidBrush(middleColor))
+                using (var brush = middleColor.GetCachedSolidBrush())
                 {
-                    g.FillRectangle(b, bounds);
+                    g.FillRectangle(brush, bounds);
                 }
 
                 // draw first gradient
@@ -1006,10 +1006,8 @@ namespace System.Windows.Forms
             else
             {
                 // not big enough for a swath in the middle.  lets just do a single gradient.
-                using (Brush b = new LinearGradientBrush(bounds, beginColor, endColor, mode))
-                {
-                    g.FillRectangle(b, bounds);
-                }
+                using Brush b = new LinearGradientBrush(bounds, beginColor, endColor, mode);
+                g.FillRectangle(b, bounds);
             }
         }
 
@@ -1021,29 +1019,34 @@ namespace System.Windows.Forms
         private void RenderStatusStripBackground(ToolStripRenderEventArgs e)
         {
             StatusStrip statusStrip = e.ToolStrip as StatusStrip;
-            RenderBackgroundGradient(e.Graphics, statusStrip, ColorTable.StatusStripGradientBegin, ColorTable.StatusStripGradientEnd, statusStrip.Orientation);
+            RenderBackgroundGradient(
+                e.Graphics,
+                statusStrip,
+                ColorTable.StatusStripGradientBegin,
+                ColorTable.StatusStripGradientEnd,
+                statusStrip.Orientation);
         }
 
         private void RenderCheckBackground(ToolStripItemImageRenderEventArgs e)
         {
-            //
-            Rectangle bounds = DpiHelper.IsScalingRequired ? new Rectangle(e.ImageRectangle.Left - 2, (e.Item.Height - e.ImageRectangle.Height) / 2 - 1, e.ImageRectangle.Width + 4, e.ImageRectangle.Height + 2) :
-                                new Rectangle(e.ImageRectangle.Left - 2, 1, e.ImageRectangle.Width + 4, e.Item.Height - 2);
+            Rectangle bounds = DpiHelper.IsScalingRequired
+                ? new Rectangle(
+                    e.ImageRectangle.Left - 2,
+                    (e.Item.Height - e.ImageRectangle.Height) / 2 - 1,
+                    e.ImageRectangle.Width + 4, e.ImageRectangle.Height + 2)
+                : new Rectangle(e.ImageRectangle.Left - 2, 1, e.ImageRectangle.Width + 4, e.Item.Height - 2);
+
             Graphics g = e.Graphics;
 
             if (!UseSystemColors)
             {
                 Color fill = (e.Item.Selected) ? ColorTable.CheckSelectedBackground : ColorTable.CheckBackground;
                 fill = (e.Item.Pressed) ? ColorTable.CheckPressedBackground : fill;
-                using (Brush b = new SolidBrush(fill))
-                {
-                    g.FillRectangle(b, bounds);
-                }
+                using var brush = fill.GetCachedSolidBrush();
+                g.FillRectangle(brush, bounds);
 
-                using (Pen p = new Pen(ColorTable.ButtonSelectedBorder))
-                {
-                    g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-                }
+                using var pen = ColorTable.ButtonSelectedBorder.GetCachedPen();
+                g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
             else
             {
@@ -1067,16 +1070,16 @@ namespace System.Windows.Forms
             }
 
             // Paints a horizontal gradient similar to the image margin.
-            using (Brush b = new LinearGradientBrush(bounds, ColorTable.MenuItemPressedGradientBegin, ColorTable.MenuItemPressedGradientEnd, LinearGradientMode.Vertical))
-            {
-                g.FillRectangle(b, bounds);
-            }
+            using Brush b = new LinearGradientBrush(
+                bounds,
+                ColorTable.MenuItemPressedGradientBegin,
+                ColorTable.MenuItemPressedGradientEnd,
+                LinearGradientMode.Vertical);
+            g.FillRectangle(b, bounds);
 
             // draw a box around the gradient
-            using (Pen p = new Pen(ColorTable.MenuBorder))
-            {
-                g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-            }
+            using var pen = ColorTable.MenuBorder.GetCachedPen();
+            g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
         }
 
         private void RenderMenuStripBackground(ToolStripRenderEventArgs e)
@@ -1102,6 +1105,7 @@ namespace System.Windows.Forms
         {
             RenderBackgroundGradient(g, control, beginColor, endColor, Orientation.Horizontal);
         }
+
         // renders the overall gradient
         private void RenderBackgroundGradient(Graphics g, Control control, Color beginColor, Color endColor, Orientation orientation)
         {
@@ -1112,48 +1116,49 @@ namespace System.Windows.Forms
                 endColor = temp;
             }
 
-            if (orientation == Orientation.Horizontal)
+            if (orientation != Orientation.Horizontal)
             {
-                Control parent = control.ParentInternal;
-                if (parent != null)
+                using var brush = beginColor.GetCachedSolidBrush();
+                g.FillRectangle(brush, new Rectangle(Point.Empty, control.Size));
+                return;
+            }
+
+            Control parent = control.ParentInternal;
+            if (parent != null)
+            {
+                Rectangle gradientBounds = new Rectangle(Point.Empty, parent.Size);
+                if (!LayoutUtils.IsZeroWidthOrHeight(gradientBounds))
                 {
-                    Rectangle gradientBounds = new Rectangle(Point.Empty, parent.Size);
-                    if (!LayoutUtils.IsZeroWidthOrHeight(gradientBounds))
-                    {
-                        using (LinearGradientBrush b = new LinearGradientBrush(gradientBounds, beginColor, endColor, LinearGradientMode.Horizontal))
-                        {
-                            b.TranslateTransform(parent.Width - control.Location.X, parent.Height - control.Location.Y);
-                            g.FillRectangle(b, new Rectangle(Point.Empty, control.Size));
-                        }
-                    }
-                }
-                else
-                {
-                    Rectangle gradientBounds = new Rectangle(Point.Empty, control.Size);
-                    if (!LayoutUtils.IsZeroWidthOrHeight(gradientBounds))
-                    {
-                        // dont have a parent that we know about so go ahead and paint the gradient as if there wasnt another container.
-                        using (LinearGradientBrush b = new LinearGradientBrush(gradientBounds, beginColor, endColor, LinearGradientMode.Horizontal))
-                        {
-                            g.FillRectangle(b, gradientBounds);
-                        }
-                    }
+                    using LinearGradientBrush b = new LinearGradientBrush(
+                        gradientBounds,
+                        beginColor,
+                        endColor,
+                        LinearGradientMode.Horizontal);
+                    b.TranslateTransform(parent.Width - control.Location.X, parent.Height - control.Location.Y);
+                    g.FillRectangle(b, new Rectangle(Point.Empty, control.Size));
                 }
             }
             else
             {
-                using (Brush b = new SolidBrush(beginColor))
+                Rectangle gradientBounds = new Rectangle(Point.Empty, control.Size);
+                if (!LayoutUtils.IsZeroWidthOrHeight(gradientBounds))
                 {
-                    g.FillRectangle(b, new Rectangle(Point.Empty, control.Size));
+                    // Don't have a parent that we know about - paint the gradient as if there isn't another container.
+                    using LinearGradientBrush b = new LinearGradientBrush(
+                        gradientBounds,
+                        beginColor,
+                        endColor,
+                        LinearGradientMode.Horizontal);
+                    g.FillRectangle(b, gradientBounds);
                 }
             }
         }
 
-        private void RenderToolStripBackgroundInternal(ToolStripRenderEventArgs e) {
+        private void RenderToolStripBackgroundInternal(ToolStripRenderEventArgs e)
+        {
             ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
 
             ToolStrip toolStrip = e.ToolStrip;
-            Graphics g = e.Graphics;
             Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
 
             // fill up the background
@@ -1163,13 +1168,10 @@ namespace System.Windows.Forms
 
         private void RenderToolStripDropDownBackground(ToolStripRenderEventArgs e)
         {
-            ToolStrip toolStrip = e.ToolStrip;
             Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
 
-            using (Brush b = new SolidBrush(ColorTable.ToolStripDropDownBackground))
-            {
-                e.Graphics.FillRectangle(b, bounds);
-            }
+            using var brush = ColorTable.ToolStripDropDownBackground.GetCachedSolidBrush();
+            e.Graphics.FillRectangle(brush, bounds);
         }
 
         private void RenderToolStripDropDownBorder(ToolStripRenderEventArgs e)
@@ -1180,23 +1182,22 @@ namespace System.Windows.Forms
             {
                 Rectangle bounds = new Rectangle(Point.Empty, toolStripDropDown.Size);
 
-                using (Pen p = new Pen(ColorTable.MenuBorder))
+                using (var pen = ColorTable.MenuBorder.GetCachedPen())
                 {
-                    g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                    g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
 
                 if (!(toolStripDropDown is ToolStripOverflow))
                 {
                     // make the neck connected.
-                    using (Brush b = new SolidBrush(ColorTable.ToolStripDropDownBackground))
-                    {
-                        g.FillRectangle(b, e.ConnectedArea);
-                    }
+                    using var brush = ColorTable.ToolStripDropDownBackground.GetCachedSolidBrush();
+                    g.FillRectangle(brush, e.ConnectedArea);
                 }
             }
         }
 
-        private void RenderOverflowBackground(ToolStripItemRenderEventArgs e, bool rightToLeft) {
+        private void RenderOverflowBackground(ToolStripItemRenderEventArgs e, bool rightToLeft)
+        {
             ScaleObjectSizesIfNeeded(e.Item.DeviceDpi);
 
             Graphics g = e.Graphics;
@@ -1253,64 +1254,66 @@ namespace System.Windows.Forms
             if (drawCurve)
             {
                 // draw shadow pixel on bottom left +1, +1
-                using (Pen p = new Pen(overflowBottomLeftShadow/*Color.HotPink*/))
+                using var pen = overflowBottomLeftShadow.GetCachedPen();
+                Point start = new Point(overflowBoundsFill.Left - 1, overflowBoundsFill.Height - 2);
+                Point end = new Point(overflowBoundsFill.Left, overflowBoundsFill.Height - 2);
+                if (rightToLeft)
                 {
-                    Point start = new Point(overflowBoundsFill.Left - 1, overflowBoundsFill.Height - 2);
-                    Point end = new Point(overflowBoundsFill.Left, overflowBoundsFill.Height - 2);
-                    if (rightToLeft)
-                    {
-                        start.X = overflowBoundsFill.Right + 1;
-                        end.X = overflowBoundsFill.Right;
-                    }
-                    g.DrawLine(p, start, end);
+                    start.X = overflowBoundsFill.Right + 1;
+                    end.X = overflowBoundsFill.Right;
                 }
+                g.DrawLine(pen, start, end);
             }
+
             LinearGradientMode mode = (horizontal) ? LinearGradientMode.Vertical : LinearGradientMode.Horizontal;
 
             // fill main body
             FillWithDoubleGradient(overflowButtonGradientBegin, overflowButtonGradientMiddle, overflowButtonGradientEnd, g, overflowBoundsFill, iconWellGradientWidth, iconWellGradientWidth, mode, false);
 
-            // render shadow pixels (ToolStrip only)
-            if (drawCurve)
+            if (!drawCurve)
             {
-                // top left and top right shadow pixels
-                using (Brush b = new SolidBrush(overflowTopShadow/*Color.Orange*/))
-                {
-                    if (horizontal)
-                    {
-                        Point top1 = new Point(overflowBoundsFill.X - 2, 0);
-                        Point top2 = new Point(overflowBoundsFill.X - 1, 1);
+                return;
+            }
 
-                        if (rightToLeft)
-                        {
-                            top1.X = overflowBoundsFill.Right + 1;
-                            top2.X = overflowBoundsFill.Right;
-                        }
-                        g.FillRectangle(b, top1.X, top1.Y, 1, 1);
-                        g.FillRectangle(b, top2.X, top2.Y, 1, 1);
-                    }
-                    else
+            // Render shadow pixels (ToolStrip only)
+
+            // top left and top right shadow pixels
+            using (var brush = overflowTopShadow.GetCachedSolidBrush())
+            {
+                if (horizontal)
+                {
+                    Point top1 = new Point(overflowBoundsFill.X - 2, 0);
+                    Point top2 = new Point(overflowBoundsFill.X - 1, 1);
+
+                    if (rightToLeft)
                     {
-                        g.FillRectangle(b, overflowBoundsFill.Width - 3, overflowBoundsFill.Top - 1, 1, 1);
-                        g.FillRectangle(b, overflowBoundsFill.Width - 2, overflowBoundsFill.Top - 2, 1, 1);
+                        top1.X = overflowBoundsFill.Right + 1;
+                        top2.X = overflowBoundsFill.Right;
                     }
+                    g.FillRectangle(brush, top1.X, top1.Y, 1, 1);
+                    g.FillRectangle(brush, top2.X, top2.Y, 1, 1);
                 }
-
-                using (Brush b = new SolidBrush(overflowButtonGradientBegin/*Color.Green*/))
+                else
                 {
-                    if (horizontal)
+                    g.FillRectangle(brush, overflowBoundsFill.Width - 3, overflowBoundsFill.Top - 1, 1, 1);
+                    g.FillRectangle(brush, overflowBoundsFill.Width - 2, overflowBoundsFill.Top - 2, 1, 1);
+                }
+            }
+
+            using (var brush = overflowButtonGradientBegin.GetCachedSolidBrush())
+            {
+                if (horizontal)
+                {
+                    Rectangle fillRect = new Rectangle(overflowBoundsFill.X - 1, 0, 1, 1);
+                    if (rightToLeft)
                     {
-                        Rectangle fillRect = new Rectangle(overflowBoundsFill.X - 1, 0, 1, 1);
-                        if (rightToLeft)
-                        {
-                            fillRect.X = overflowBoundsFill.Right;
-                        }
-                        g.FillRectangle(b, fillRect);
+                        fillRect.X = overflowBoundsFill.Right;
                     }
-                    else
-                    {
-                        g.FillRectangle(b, overflowBoundsFill.X, overflowBoundsFill.Top - 1, 1, 1);
-                    }
+                    g.FillRectangle(brush, fillRect);
+                }
+                else
+                {
+                    g.FillRectangle(brush, overflowBoundsFill.X, overflowBoundsFill.Top - 1, 1, 1);
                 }
             }
         }
@@ -1327,12 +1330,10 @@ namespace System.Windows.Forms
             Point topRight = new Point(bounds.Width - 1, 0);
             Point bottomLeft = new Point(0, bounds.Height - 1);
 
-            //
             // Add in shadow pixels - the detail that makes them look round
-            //
-            // Draw in rounded shadow pixels on the top left & right
-            // consider: if this is slow use precanned corners.
-            using (Brush b = new SolidBrush(ColorTable.ToolStripGradientMiddle))
+
+            // Draw in rounded shadow pixels on the top left & right (consider: if this is slow use precanned corners)
+            using (var brush = ColorTable.ToolStripGradientMiddle.GetCachedSolidBrush())
             {
                 // there are two shadow rects (one pixel wide) on the top
                 Rectangle topLeftShadowRect = new Rectangle(topLeft, onePix);
@@ -1361,25 +1362,26 @@ namespace System.Windows.Forms
                         paintRects[i] = Rectangle.Empty;
                     }
                 }
-                g.FillRectangles(b, paintRects);
+
+                g.FillRectangles(brush, paintRects);
             }
 
             // Draw in rounded shadow pixels on the bottom left
-            using (Brush b = new SolidBrush(ColorTable.ToolStripGradientEnd))
+            using (var brush = ColorTable.ToolStripGradientEnd.GetCachedSolidBrush())
             {
                 // this gradient is the one just before the dark shadow line starts on pixel #3.
                 Point gradientCopyPixel = bottomLeft;
                 gradientCopyPixel.Offset(1, -1);
                 if (!displayRect.Contains(gradientCopyPixel))
                 {
-                    g.FillRectangle(b, new Rectangle(gradientCopyPixel, onePix));
+                    g.FillRectangle(brush, new Rectangle(gradientCopyPixel, onePix));
                 }
 
                 // set the one dark pixel in the bottom left hand corner
                 Rectangle otherBottom = new Rectangle(bottomLeft.X, bottomLeft.Y - 2, 1, 1);
                 if (!displayRect.IntersectsWith(otherBottom))
                 {
-                    g.FillRectangle(b, otherBottom);
+                    g.FillRectangle(brush, otherBottom);
                 }
             }
         }
@@ -1393,18 +1395,18 @@ namespace System.Windows.Forms
 
             if (!UseSystemColors)
             {
-                using (Brush b = new LinearGradientBrush(bounds, ColorTable.ButtonSelectedGradientBegin, ColorTable.ButtonSelectedGradientEnd, LinearGradientMode.Vertical))
-                {
-                    g.FillRectangle(b, bounds);
-                }
+                using Brush b = new LinearGradientBrush(
+                    bounds,
+                    ColorTable.ButtonSelectedGradientBegin,
+                    ColorTable.ButtonSelectedGradientEnd,
+                    LinearGradientMode.Vertical);
+
+                g.FillRectangle(b, bounds);
             }
             else
             {
-                Color fillColor = ColorTable.ButtonSelectedHighlight;
-                using (Brush b = new SolidBrush(fillColor))
-                {
-                    g.FillRectangle(b, bounds);
-                }
+                using var brush = ColorTable.ButtonSelectedHighlight.GetCachedSolidBrush();
+                g.FillRectangle(brush, bounds);
             }
         }
         private void RenderCheckedButtonFill(Graphics g, Rectangle bounds)
@@ -1416,36 +1418,27 @@ namespace System.Windows.Forms
 
             if (!UseSystemColors)
             {
-                using (Brush b = new LinearGradientBrush(bounds, ColorTable.ButtonCheckedGradientBegin, ColorTable.ButtonCheckedGradientEnd, LinearGradientMode.Vertical))
-                {
-                    g.FillRectangle(b, bounds);
-                }
+                using Brush b = new LinearGradientBrush(
+                    bounds,
+                    ColorTable.ButtonCheckedGradientBegin,
+                    ColorTable.ButtonCheckedGradientEnd,
+                    LinearGradientMode.Vertical);
+
+                g.FillRectangle(b, bounds);
             }
             else
             {
-                Color fillColor = ColorTable.ButtonCheckedHighlight;
-
-                using (Brush b = new SolidBrush(fillColor))
-                {
-                    g.FillRectangle(b, bounds);
-                }
+                using var brush = ColorTable.ButtonCheckedHighlight.GetCachedSolidBrush();
+                g.FillRectangle(brush, bounds);
             }
         }
 
         private void RenderSeparatorInternal(Graphics g, ToolStripItem item, Rectangle bounds, bool vertical)
         {
-            Color foreColor = ColorTable.SeparatorDark;
-            Color highlightColor = ColorTable.SeparatorLight;
-            Pen foreColorPen = new Pen(foreColor);
-            Pen highlightColorPen = new Pen(highlightColor);
+            bool isSeparator = item is ToolStripSeparator;
+            bool isHorizontalSeparatorNotOnDropDownMenu = false;
 
-            // undone emplore caching.
-            bool disposeForeColorPen = true;
-            bool disposeHighlightColorColorPen = true;
-            bool isASeparator = item is ToolStripSeparator;
-            bool isAHorizontalSeparatorNotOnDropDownMenu = false;
-
-            if (isASeparator)
+            if (isSeparator)
             {
                 if (vertical)
                 {
@@ -1478,64 +1471,52 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        isAHorizontalSeparatorNotOnDropDownMenu = true;
+                        isHorizontalSeparatorNotOnDropDownMenu = true;
                     }
                 }
             }
-            try
+
+            using var foreColorPen = ColorTable.SeparatorDark.GetCachedPen();
+            using var highlightColorPen = ColorTable.SeparatorLight.GetCachedPen();
+
+            if (vertical)
             {
-                if (vertical)
+                if (bounds.Height >= 4)
                 {
-                    if (bounds.Height >= 4)
-                    {
-                        bounds.Inflate(0, -2);     // scoot down 2PX and start drawing
-                    }
+                    bounds.Inflate(0, -2);     // scoot down 2PX and start drawing
+                }
 
-                    bool rightToLeft = (item.RightToLeft == RightToLeft.Yes);
-                    Pen leftPen = (rightToLeft) ? highlightColorPen : foreColorPen;
-                    Pen rightPen = (rightToLeft) ? foreColorPen : highlightColorPen;
+                bool rightToLeft = (item.RightToLeft == RightToLeft.Yes);
+                Pen leftPen = (rightToLeft) ? highlightColorPen : foreColorPen;
+                Pen rightPen = (rightToLeft) ? foreColorPen : highlightColorPen;
 
-                    // Draw dark line
-                    int startX = bounds.Width / 2;
+                // Draw dark line
+                int startX = bounds.Width / 2;
 
-                    g.DrawLine(leftPen, startX, bounds.Top, startX, bounds.Bottom - 1);
+                g.DrawLine(leftPen, startX, bounds.Top, startX, bounds.Bottom - 1);
 
+                // Draw highlight one pixel to the right
+                startX++;
+                g.DrawLine(rightPen, startX, bounds.Top + 1, startX, bounds.Bottom);
+            }
+            else
+            {
+                // Horizontal separator- draw dark line
+
+                if (isHorizontalSeparatorNotOnDropDownMenu && bounds.Width >= 4)
+                {
+                    bounds.Inflate(-2, 0);     // scoot down 2PX and start drawing
+                }
+
+                int startY = bounds.Height / 2;
+
+                g.DrawLine(foreColorPen, bounds.Left, startY, bounds.Right - 1, startY);
+
+                if (!isSeparator || isHorizontalSeparatorNotOnDropDownMenu)
+                {
                     // Draw highlight one pixel to the right
-                    startX++;
-                    g.DrawLine(rightPen, startX, bounds.Top + 1, startX, bounds.Bottom);
-                }
-                else
-                {
-                    //
-                    // horizontal separator
-                    // Draw dark line
-
-                    if (isAHorizontalSeparatorNotOnDropDownMenu && bounds.Width >= 4)
-                    {
-                        bounds.Inflate(-2, 0);     // scoot down 2PX and start drawing
-                    }
-                    int startY = bounds.Height / 2;
-
-                    g.DrawLine(foreColorPen, bounds.Left, startY, bounds.Right - 1, startY);
-
-                    if (!isASeparator || isAHorizontalSeparatorNotOnDropDownMenu)
-                    {
-                        // Draw highlight one pixel to the right
-                        startY++;
-                        g.DrawLine(highlightColorPen, bounds.Left + 1, startY, bounds.Right - 1, startY);
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeForeColorPen && foreColorPen != null)
-                {
-                    foreColorPen.Dispose();
-                }
-
-                if (disposeHighlightColorColorPen && highlightColorPen != null)
-                {
-                    highlightColorPen.Dispose();
+                    startY++;
+                    g.DrawLine(highlightColorPen, bounds.Left + 1, startY, bounds.Right - 1, startY);
                 }
             }
         }
@@ -1546,20 +1527,20 @@ namespace System.Windows.Forms
             {
                 return;  // can't new up a linear gradient brush with no dimension.
             }
+
             if (!UseSystemColors)
             {
-                using (Brush b = new LinearGradientBrush(bounds, ColorTable.ButtonPressedGradientBegin, ColorTable.ButtonPressedGradientEnd, LinearGradientMode.Vertical))
-                {
-                    g.FillRectangle(b, bounds);
-                }
+                using Brush b = new LinearGradientBrush(
+                    bounds,
+                    ColorTable.ButtonPressedGradientBegin,
+                    ColorTable.ButtonPressedGradientEnd,
+                    LinearGradientMode.Vertical);
+                g.FillRectangle(b, bounds);
             }
             else
             {
-                Color fillColor = ColorTable.ButtonPressedHighlight;
-                using (Brush b = new SolidBrush(fillColor))
-                {
-                    g.FillRectangle(b, bounds);
-                }
+                using var brush = ColorTable.ButtonPressedHighlight.GetCachedSolidBrush();
+                g.FillRectangle(brush, bounds);
             }
         }
 
@@ -1589,18 +1570,14 @@ namespace System.Windows.Forms
             }
             else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
             {
-                using (Brush b = new SolidBrush(item.BackColor))
-                {
-                    g.FillRectangle(b, bounds);
-                }
+                using var brush = item.BackColor.GetCachedSolidBrush();
+                g.FillRectangle(brush, bounds);
             }
 
             if (drawHotBorder)
             {
-                using (Pen p = new Pen(ColorTable.ButtonSelectedBorder))
-                {
-                    g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-                }
+                using var pen = ColorTable.ButtonSelectedBorder.GetCachedPen();
+                g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
         }
 
@@ -1610,7 +1587,7 @@ namespace System.Windows.Forms
             {
                 if (previousDeviceDpi != currentDeviceDpi)
                 {
-                    ToolStripRenderer.ScaleArrowOffsetsIfNeeded(currentDeviceDpi);
+                    ScaleArrowOffsetsIfNeeded(currentDeviceDpi);
                     overflowButtonWidth = DpiHelper.LogicalToDeviceUnits(OVERFLOW_BUTTON_WIDTH, currentDeviceDpi);
                     overflowArrowWidth = DpiHelper.LogicalToDeviceUnits(OVERFLOW_ARROW_WIDTH, currentDeviceDpi);
                     overflowArrowHeight = DpiHelper.LogicalToDeviceUnits(OVERFLOW_ARROW_HEIGHT, currentDeviceDpi);
@@ -1633,7 +1610,7 @@ namespace System.Windows.Forms
 
             if (DpiHelper.IsScalingRequired)
             {
-                ToolStripRenderer.ScaleArrowOffsetsIfNeeded();
+                ScaleArrowOffsetsIfNeeded();
                 overflowButtonWidth = DpiHelper.LogicalToDeviceUnitsX(OVERFLOW_BUTTON_WIDTH);
                 overflowArrowWidth = DpiHelper.LogicalToDeviceUnitsX(OVERFLOW_ARROW_WIDTH);
                 overflowArrowHeight = DpiHelper.LogicalToDeviceUnitsY(OVERFLOW_ARROW_HEIGHT);
@@ -1663,24 +1640,24 @@ namespace System.Windows.Forms
             {
                 case ArrowDirection.Up:
                     arrow = new Point[] {
-                        new Point(middle.X - ToolStripRenderer.Offset2X, middle.Y + 1),
-                        new Point(middle.X + ToolStripRenderer.Offset2X + 1, middle.Y + 1),
-                        new Point(middle.X, middle.Y - ToolStripRenderer.Offset2Y)
+                        new Point(middle.X - Offset2X, middle.Y + 1),
+                        new Point(middle.X + Offset2X + 1, middle.Y + 1),
+                        new Point(middle.X, middle.Y - Offset2Y)
                     };
                     break;
 
                 case ArrowDirection.Left:
                     arrow = new Point[] {
-                        new Point(middle.X + ToolStripRenderer.Offset2X, middle.Y - ToolStripRenderer.Offset2Y - 1),
-                        new Point(middle.X + ToolStripRenderer.Offset2X, middle.Y + ToolStripRenderer.Offset2Y + 1),
+                        new Point(middle.X + Offset2X, middle.Y - Offset2Y - 1),
+                        new Point(middle.X + Offset2X, middle.Y + Offset2Y + 1),
                         new Point(middle.X - 1, middle.Y)
                     };
                     break;
 
                 case ArrowDirection.Right:
                     arrow = new Point[] {
-                        new Point(middle.X - ToolStripRenderer.Offset2X, middle.Y - ToolStripRenderer.Offset2Y - 1),
-                        new Point(middle.X - ToolStripRenderer.Offset2X, middle.Y + ToolStripRenderer.Offset2Y + 1),
+                        new Point(middle.X - Offset2X, middle.Y - Offset2Y - 1),
+                        new Point(middle.X - Offset2X, middle.Y + Offset2Y + 1),
                         new Point(middle.X + 1, middle.Y)
                     };
                     break;
@@ -1688,9 +1665,9 @@ namespace System.Windows.Forms
                 case ArrowDirection.Down:
                 default:
                     arrow = new Point[] {
-                        new Point(middle.X - ToolStripRenderer.Offset2X, middle.Y - 1),
-                        new Point(middle.X + ToolStripRenderer.Offset2X + 1, middle.Y - 1),
-                        new Point(middle.X, middle.Y + ToolStripRenderer.Offset2Y)
+                        new Point(middle.X - Offset2X, middle.Y - 1),
+                        new Point(middle.X + Offset2X + 1, middle.Y - 1),
+                        new Point(middle.X, middle.Y + Offset2Y)
                     };
                     break;
             }

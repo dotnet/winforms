@@ -1137,14 +1137,14 @@ namespace System.Windows.Forms
                 bs |= ButtonState.Pushed;
             }
 
-            SolidBrush br = DataGridView.GetCachedBrush(
-                PaintSelectionBackground(paintParts) && cellSelected
-                    ? cellStyle.SelectionBackColor
-                    : cellStyle.BackColor);
+            Color brushColor = PaintSelectionBackground(paintParts) && cellSelected
+                ? cellStyle.SelectionBackColor
+                : cellStyle.BackColor;
 
-            if (paint && PaintBackground(paintParts) && br.Color.A == 255)
+            if (paint && PaintBackground(paintParts) && !brushColor.HasTransparency())
             {
-                g.FillRectangle(br, valBounds);
+                using var brush = brushColor.GetCachedSolidBrush();
+                g.FillRectangle(brush, valBounds);
             }
 
             if (cellStyle.Padding != Padding.Empty)
@@ -1169,7 +1169,7 @@ namespace System.Windows.Forms
                 ptCurrentCell.Y == rowIndex)
             {
                 // Draw focus rectangle
-                ControlPaint.DrawFocusRectangle(g, valBounds, Color.Empty, br.Color);
+                ControlPaint.DrawFocusRectangle(g, valBounds, Color.Empty, brushColor);
             }
 
             Rectangle errorBounds = valBounds;
@@ -1306,19 +1306,18 @@ namespace System.Windows.Forms
 
                         Rectangle checkBounds = new Rectangle(checkBoxX, checkBoxY, checkBoxSize.Width, checkBoxSize.Height);
 
-                        SolidBrush foreBrush = null;
-                        SolidBrush backBrush = null;
-                        Color highlight = Color.Empty;
+                        Color foreBrushColor = default;
+                        Color backBrushColor = default;
+                        Color highlight = default;
 
                         if (paint && PaintContentForeground(paintParts))
                         {
-                            foreBrush = DataGridView.GetCachedBrush(
-                                cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor);
-                            backBrush = DataGridView.GetCachedBrush(
-                                (PaintSelectionBackground(paintParts) && cellSelected)
-                                    ? cellStyle.SelectionBackColor
-                                    : cellStyle.BackColor);
-                            highlight = ControlPaint.LightLight(backBrush.Color);
+                            foreBrushColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
+                            backBrushColor = PaintSelectionBackground(paintParts) && cellSelected
+                                ? cellStyle.SelectionBackColor
+                                : cellStyle.BackColor;
+
+                            highlight = ControlPaint.LightLight(backBrushColor);
 
                             if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
                                 DataGridView.MouseEnteredCellAddress.X == ColumnIndex &&
@@ -1336,9 +1335,10 @@ namespace System.Windows.Forms
                                     ButtonBaseAdapter.ColorOptions.Adjust255(adjust, highlight.G),
                                     ButtonBaseAdapter.ColorOptions.Adjust255(adjust, highlight.B));
                             }
-                            highlight = g.GetNearestColor(highlight);
 
-                            using Pen pen = new Pen(foreBrush.Color);
+                            highlight = g.FindNearestColor(highlight);
+
+                            using var pen = foreBrushColor.GetCachedPen();
                             g.DrawLine(pen, checkBounds.Left, checkBounds.Top, checkBounds.Right - 1, checkBounds.Top);
                             g.DrawLine(pen, checkBounds.Left, checkBounds.Top, checkBounds.Left, checkBounds.Bottom - 1);
                         }
@@ -1351,11 +1351,11 @@ namespace System.Windows.Forms
                         {
                             if (checkState == CheckState.Indeterminate)
                             {
-                                ButtonBaseAdapter.DrawDitheredFill(g, backBrush.Color, highlight, checkBounds);
+                                ButtonBaseAdapter.DrawDitheredFill(g, backBrushColor, highlight, checkBounds);
                             }
                             else
                             {
-                                using SolidBrush highBrush = new SolidBrush(highlight);
+                                using var highBrush = highlight.GetCachedSolidBrush();
                                 g.FillRectangle(highBrush, checkBounds);
                             }
 
@@ -1398,8 +1398,8 @@ namespace System.Windows.Forms
                                     checkImage,
                                     fullSize,
                                     checkState == CheckState.Indeterminate
-                                        ? ControlPaint.LightLight(foreBrush.Color)
-                                        : foreBrush.Color);
+                                        ? ControlPaint.LightLight(foreBrushColor)
+                                        : foreBrushColor);
                             }
                         }
 
@@ -1455,8 +1455,7 @@ namespace System.Windows.Forms
                                     g,
                                     layout,
                                     colors,
-                                    colors.windowText,
-                                    colors.buttonFace);
+                                    colors.windowText);
                             }
 
                             resultBounds = layout.checkBounds;
@@ -1506,8 +1505,7 @@ namespace System.Windows.Forms
                                     g,
                                     layout,
                                     colors,
-                                    colors.windowText,
-                                    colors.highlight);
+                                    colors.windowText);
                             }
                             resultBounds = layout.checkBounds;
                         }
@@ -1544,7 +1542,7 @@ namespace System.Windows.Forms
                                     colors.options.HighContrast ? colors.buttonFace : colors.highlight,
                                     disabledColors: true);
 
-                                ControlPaint.DrawBorderSolid(g, layout.checkBounds, colors.buttonShadow);
+                                ControlPaint.DrawBorderSimple(g, layout.checkBounds, colors.buttonShadow);
                                 CheckBoxBaseAdapter.DrawCheckOnly(
                                     checkBoxSize.Width,
                                     checkState == CheckState.Checked || checkState == CheckState.Indeterminate,
@@ -1553,8 +1551,7 @@ namespace System.Windows.Forms
                                     g,
                                     layout,
                                     colors,
-                                    colors.windowText,
-                                    colors.highlight);
+                                    colors.windowText);
                             }
 
                             resultBounds = layout.checkBounds;

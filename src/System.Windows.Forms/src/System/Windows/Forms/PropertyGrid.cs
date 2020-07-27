@@ -77,13 +77,11 @@ namespace System.Windows.Forms
         private int _paintFrozen;
         private Color _lineColor = SystemInformation.HighContrast ? SystemColors.ControlDarkDark : SystemColors.InactiveBorder;
         internal bool _developerOverride;
-        internal Brush _lineBrush;
         private Color _categoryForeColor = SystemColors.ControlText;
         private Color _categorySplitterColor = SystemColors.Control;
         private Color _viewBorderColor = SystemColors.ControlDark;
         private Color _selectedItemWithFocusForeColor = SystemColors.HighlightText;
         private Color _selectedItemWithFocusBackColor = SystemColors.Highlight;
-        internal Brush _selectedItemWithFocusBackBrush;
         private bool _canShowVisualStyleGlyphs = true;
 
         private AttributeCollection _browsableAttributes;
@@ -1004,11 +1002,6 @@ namespace System.Windows.Forms
                 {
                     _lineColor = value;
                     _developerOverride = true;
-                    if (_lineBrush != null)
-                    {
-                        _lineBrush.Dispose();
-                        _lineBrush = null;
-                    }
                     _gridView.Invalidate();
                 }
             }
@@ -2207,12 +2200,6 @@ namespace System.Windows.Forms
                     _bmpPropPage = null;
                 }
 
-                if (_lineBrush != null)
-                {
-                    _lineBrush.Dispose();
-                    _lineBrush = null;
-                }
-
                 if (_peMain != null)
                 {
                     _peMain.Dispose();
@@ -3305,55 +3292,39 @@ namespace System.Windows.Forms
             _gridView.Invalidate(true);
         }
 
-        // Seems safe - doesn't do anything interesting
         protected override void OnPaint(PaintEventArgs pevent)
         {
-            // just erase the stuff above and below the properties window
-            // so we don't flicker.
+            // Just erase the stuff above and below the properties window so we don't flicker.
             Point psheetLoc = _gridView.Location;
             int width = Size.Width;
 
-            Brush background;
-            if (BackColor.IsSystemColor)
-            {
-                background = SystemBrushes.FromSystemColor(BackColor);
-            }
-            else
-            {
-                background = new SolidBrush(BackColor);
-            }
-            pevent.Graphics.FillRectangle(background, new Rectangle(0, 0, width, psheetLoc.Y));
+            using var backgroundBrush = BackColor.GetCachedSolidBrush();
+            pevent.Graphics.FillRectangle(backgroundBrush, new Rectangle(0, 0, width, psheetLoc.Y));
 
             int yLast = psheetLoc.Y + _gridView.Size.Height;
 
             // fill above hotcommands
             if (_hotcommands.Visible)
             {
-                pevent.Graphics.FillRectangle(background, new Rectangle(0, yLast, width, _hotcommands.Location.Y - yLast));
+                pevent.Graphics.FillRectangle(
+                    backgroundBrush,
+                    new Rectangle(0, yLast, width, _hotcommands.Location.Y - yLast));
                 yLast += _hotcommands.Size.Height;
             }
 
-            // fill above doccomment
+            // Fill above doccomment
             if (_doccomment.Visible)
             {
-                pevent.Graphics.FillRectangle(background, new Rectangle(0, yLast, width, _doccomment.Location.Y - yLast));
+                pevent.Graphics.FillRectangle(
+                    backgroundBrush,
+                    new Rectangle(0, yLast, width, _doccomment.Location.Y - yLast));
                 yLast += _doccomment.Size.Height;
             }
 
             // anything that might be left
-            pevent.Graphics.FillRectangle(background, new Rectangle(0, yLast, width, Size.Height - yLast));
+            pevent.Graphics.FillRectangle(backgroundBrush, new Rectangle(0, yLast, width, Size.Height - yLast));
 
-            if (!BackColor.IsSystemColor)
-            {
-                background.Dispose();
-            }
             base.OnPaint(pevent);
-
-            if (_lineBrush != null)
-            {
-                _lineBrush.Dispose();
-                _lineBrush = null;
-            }
         }
 
         // Seems safe - just fires an event
@@ -5103,7 +5074,6 @@ namespace System.Windows.Forms
 
         internal abstract class SnappableControl : Control
         {
-            private Color borderColor = SystemColors.ControlDark;
             protected PropertyGrid ownerGrid;
             internal bool userSized;
 
@@ -5129,17 +5099,7 @@ namespace System.Windows.Forms
             {
             }
 
-            public Color BorderColor
-            {
-                get
-                {
-                    return borderColor;
-                }
-                set
-                {
-                    borderColor = value;
-                }
-            }
+            public Color BorderColor { get; set; } = SystemColors.ControlDark;
 
             protected override void OnPaint(PaintEventArgs e)
             {
@@ -5147,10 +5107,9 @@ namespace System.Windows.Forms
                 Rectangle r = ClientRectangle;
                 r.Width--;
                 r.Height--;
-                using (Pen borderPen = new Pen(BorderColor, 1))
-                {
-                    e.Graphics.DrawRectangle(borderPen, r);
-                }
+
+                using var borderPen = BorderColor.GetCachedPen();
+                e.Graphics.DrawRectangle(borderPen, r);
             }
         }
 

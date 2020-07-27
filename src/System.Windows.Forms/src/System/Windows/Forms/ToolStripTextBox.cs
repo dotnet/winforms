@@ -752,15 +752,15 @@ namespace System.Windows.Forms
                 Rectangle clientRect = AbsoluteClientRectangle;
 
                 // Could have set up a clip and fill-rectangled, thought this would be faster.
-                using Brush b = new SolidBrush(innerBorderColor);
-                g.FillRectangle(b, 0, 0, Width, clientRect.Top);                                // top border
-                g.FillRectangle(b, 0, 0, clientRect.Left, Height);                              // left border
-                g.FillRectangle(b, 0, clientRect.Bottom, Width, Height - clientRect.Height);    // bottom border
-                g.FillRectangle(b, clientRect.Right, 0, Width - clientRect.Right, Height);      // right border
+                using var brush = innerBorderColor.GetCachedSolidBrush();
+                g.FillRectangle(brush, 0, 0, Width, clientRect.Top);                                // top border
+                g.FillRectangle(brush, 0, 0, clientRect.Left, Height);                              // left border
+                g.FillRectangle(brush, 0, clientRect.Bottom, Width, Height - clientRect.Height);    // bottom border
+                g.FillRectangle(brush, clientRect.Right, 0, Width - clientRect.Right, Height);      // right border
 
                 // Paint the outside rect.
-                using Pen p = new Pen(outerBorderColor);
-                g.DrawRectangle(p, 0, 0, Width - 1, Height - 1);
+                using var pen = outerBorderColor.GetCachedPen();
+                g.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
 
                 // We've handled WM_NCPAINT.
                 m.Result = IntPtr.Zero;

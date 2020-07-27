@@ -139,7 +139,7 @@ namespace System.Windows.Forms
 
                 dataGridViewCell = (DataGridViewTextBoxCell)System.Activator.CreateInstance(thisType);
             }
-            base.CloneInternal(dataGridViewCell);
+            CloneInternal(dataGridViewCell);
             dataGridViewCell.MaxInputLength = MaxInputLength;
             return dataGridViewCell;
         }
@@ -639,8 +639,7 @@ namespace System.Windows.Forms
             bool computeErrorIconBounds,
             bool paint)
         {
-            // Parameter checking.
-            // One bit and one bit only should be turned on
+            // Parameter checking. One bit and one bit only should be turned on.
             Debug.Assert(paint || computeContentBounds || computeErrorIconBounds);
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
@@ -652,7 +651,7 @@ namespace System.Windows.Forms
             // Else resultBounds will be Rectangle.Empty;
             Rectangle resultBounds = Rectangle.Empty;
 
-            if (paint && DataGridViewCell.PaintBorder(paintParts))
+            if (paint && PaintBorder(paintParts))
             {
                 PaintBorder(graphics, clipBounds, cellBounds, cellStyle, advancedBorderStyle);
             }
@@ -663,25 +662,20 @@ namespace System.Windows.Forms
             valBounds.Width -= borderWidths.Right;
             valBounds.Height -= borderWidths.Bottom;
 
-            SolidBrush br;
-
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             bool cellCurrent = ptCurrentCell.X == ColumnIndex && ptCurrentCell.Y == rowIndex;
             bool cellEdited = cellCurrent && DataGridView.EditingControl != null;
             bool cellSelected = (cellState & DataGridViewElementStates.Selected) != 0;
+            bool notCollapsed = valBounds.Width > 0 && valBounds.Height > 0;
 
-            if (DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected && !cellEdited)
-            {
-                br = DataGridView.GetCachedBrush(cellStyle.SelectionBackColor);
-            }
-            else
-            {
-                br = DataGridView.GetCachedBrush(cellStyle.BackColor);
-            }
+            Color brushColor = PaintSelectionBackground(paintParts) && cellSelected && !cellEdited
+                ? cellStyle.SelectionBackColor
+                : cellStyle.BackColor;
 
-            if (paint && DataGridViewCell.PaintBackground(paintParts) && br.Color.A == 255 && valBounds.Width > 0 && valBounds.Height > 0)
+            if (paint && PaintBackground(paintParts) && !brushColor.HasTransparency() && notCollapsed)
             {
-                graphics.FillRectangle(br, valBounds);
+                using var brush = brushColor.GetCachedSolidBrush();
+                graphics.FillRectangle(brush, valBounds);
             }
 
             if (cellStyle.Padding != Padding.Empty)
@@ -701,13 +695,9 @@ namespace System.Windows.Forms
             if (paint && cellCurrent && !cellEdited)
             {
                 // Draw focus rectangle
-                if (DataGridViewCell.PaintFocus(paintParts) &&
-                    DataGridView.ShowFocusCues &&
-                    DataGridView.Focused &&
-                    valBounds.Width > 0 &&
-                    valBounds.Height > 0)
+                if (PaintFocus(paintParts) && DataGridView.ShowFocusCues && DataGridView.Focused && notCollapsed)
                 {
-                    ControlPaint.DrawFocusRectangle(graphics, valBounds, Color.Empty, br.Color);
+                    ControlPaint.DrawFocusRectangle(graphics, valBounds, Color.Empty, brushColor);
                 }
             }
 
@@ -717,21 +707,28 @@ namespace System.Windows.Forms
             if (formattedString != null && ((paint && !cellEdited) || computeContentBounds))
             {
                 // Font independent margins
-                int verticalTextMarginTop = cellStyle.WrapMode == DataGridViewTriState.True ? DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithWrapping : DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithoutWrapping;
+                int verticalTextMarginTop = cellStyle.WrapMode == DataGridViewTriState.True
+                    ? DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithWrapping
+                    : DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithoutWrapping;
                 valBounds.Offset(DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginLeft, verticalTextMarginTop);
                 valBounds.Width -= DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginLeft + DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginRight;
                 valBounds.Height -= verticalTextMarginTop + DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginBottom;
                 if (valBounds.Width > 0 && valBounds.Height > 0)
                 {
-                    TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
+                    TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(
+                        DataGridView.RightToLeftInternal,
+                        cellStyle.Alignment,
+                        cellStyle.WrapMode);
+
                     if (paint)
                     {
-                        if (DataGridViewCell.PaintContentForeground(paintParts))
+                        if (PaintContentForeground(paintParts))
                         {
                             if ((flags & TextFormatFlags.SingleLine) != 0)
                             {
                                 flags |= TextFormatFlags.EndEllipsis;
                             }
+
                             TextRenderer.DrawText(graphics,
                                 formattedString,
                                 cellStyle.Font,
@@ -759,7 +756,7 @@ namespace System.Windows.Forms
                 Debug.Assert(paint || computeContentBounds);
             }
 
-            if (DataGridView.ShowCellErrors && paint && DataGridViewCell.PaintErrorIcon(paintParts))
+            if (DataGridView.ShowCellErrors && paint && PaintErrorIcon(paintParts))
             {
                 PaintErrorIcon(graphics, cellStyle, rowIndex, cellBounds, errorBounds, errorText);
             }
@@ -767,31 +764,31 @@ namespace System.Windows.Forms
             return resultBounds;
         }
 
-        public override void PositionEditingControl(bool setLocation,
-                                                    bool setSize,
-                                                    Rectangle cellBounds,
-                                                    Rectangle cellClip,
-                                                    DataGridViewCellStyle cellStyle,
-                                                    bool singleVerticalBorderAdded,
-                                                    bool singleHorizontalBorderAdded,
-                                                    bool isFirstDisplayedColumn,
-                                                    bool isFirstDisplayedRow)
+        public override void PositionEditingControl(
+            bool setLocation,
+            bool setSize,
+            Rectangle cellBounds,
+            Rectangle cellClip,
+            DataGridViewCellStyle cellStyle,
+            bool singleVerticalBorderAdded,
+            bool singleHorizontalBorderAdded,
+            bool isFirstDisplayedColumn,
+            bool isFirstDisplayedRow)
         {
-            Rectangle editingControlBounds = PositionEditingPanel(cellBounds,
-                                                        cellClip,
-                                                        cellStyle,
-                                                        singleVerticalBorderAdded,
-                                                        singleHorizontalBorderAdded,
-                                                        isFirstDisplayedColumn,
-                                                        isFirstDisplayedRow);
+            Rectangle editingControlBounds = PositionEditingPanel(
+                cellBounds,
+                cellClip,
+                cellStyle,
+                singleVerticalBorderAdded,
+                singleHorizontalBorderAdded,
+                isFirstDisplayedColumn,
+                isFirstDisplayedRow);
             editingControlBounds = GetAdjustedEditingControlBounds(editingControlBounds, cellStyle);
             DataGridView.EditingControl.Location = new Point(editingControlBounds.X, editingControlBounds.Y);
             DataGridView.EditingControl.Size = new Size(editingControlBounds.Width, editingControlBounds.Height);
         }
 
         public override string ToString()
-        {
-            return "DataGridViewTextBoxCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
-        }
+            => $"DataGridViewTextBoxCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
     }
 }

@@ -476,7 +476,7 @@ namespace System.Windows.Forms
             if (UseCompatibleTextRendering)
             {
                 Graphics graphics = e.GraphicsInternal;
-                using Brush textBrush = ForeColor.CreateStaticBrush();
+                using var textBrush = ForeColor.GetCachedSolidBrush();
                 using StringFormat format = new StringFormat
                 {
                     HotkeyPrefix = ShowKeyboardCues ? HotkeyPrefix.Show : HotkeyPrefix.Hide
@@ -564,7 +564,7 @@ namespace System.Windows.Forms
                 if (boxColor.HasTransparency())
                 {
                     Graphics graphics = e.GraphicsInternal;
-                    using Pen boxPen = boxColor.CreateStaticPen();
+                    using var boxPen = boxColor.GetCachedPen();
                     graphics.DrawLines(boxPen, lines);
                 }
                 else
@@ -671,7 +671,7 @@ namespace System.Windows.Forms
             if (backColor.HasTransparency())
             {
                 using Graphics graphics = Graphics.FromHdcInternal(m.WParam);
-                using Brush brush = backColor.CreateStaticBrush();
+                using var brush = backColor.GetCachedSolidBrush();
                 graphics.FillRectangle(brush, rect);
             }
             else

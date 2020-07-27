@@ -473,7 +473,7 @@ namespace System.Windows.Forms
 
         internal override bool ShouldSerializeFont()
         {
-            return !object.Equals(Font, ToolStripManager.DefaultFont);
+            return !Equals(Font, ToolStripManager.DefaultFont);
         }
 
         public override string ToString()
@@ -524,7 +524,7 @@ namespace System.Windows.Forms
 
             internal class ToolStripComboBoxFlatComboAdapter : FlatComboAdapter
             {
-                public ToolStripComboBoxFlatComboAdapter(ComboBox comboBox) : base(comboBox, /*smallButton=*/true)
+                public ToolStripComboBoxFlatComboAdapter(ComboBox comboBox) : base(comboBox, smallButton: true)
                 {
                 }
 
@@ -545,6 +545,7 @@ namespace System.Windows.Forms
                     {
                         return toolStripComboBoxControl.ColorTable;
                     }
+
                     return ProfessionalColors.ColorTable;
                 }
 
@@ -563,11 +564,15 @@ namespace System.Windows.Forms
                     {
                         return base.GetPopupOuterBorderColor(comboBox, focused);
                     }
+
                     if (!comboBox.Enabled)
                     {
                         return SystemColors.ControlDark;
                     }
-                    return (focused) ? GetColorTable(comboBox as ToolStripComboBoxControl).ComboBoxBorder : SystemColors.Window;
+
+                    return focused
+                        ? GetColorTable(comboBox as ToolStripComboBoxControl).ComboBoxBorder
+                        : SystemColors.Window;
                 }
 
                 protected override void DrawFlatComboDropDown(ComboBox comboBox, Graphics g, Rectangle dropDownRect)
@@ -592,54 +597,59 @@ namespace System.Windows.Forms
                             bool focused = comboBox.ContainsFocus || comboBox.MouseIsOver;
                             if (focused)
                             {
-                                using (Brush b = new LinearGradientBrush(dropDownRect, colorTable.ComboBoxButtonSelectedGradientBegin, colorTable.ComboBoxButtonSelectedGradientEnd, LinearGradientMode.Vertical))
-                                {
-                                    g.FillRectangle(b, dropDownRect);
-                                }
+                                using Brush b = new LinearGradientBrush(
+                                    dropDownRect,
+                                    colorTable.ComboBoxButtonSelectedGradientBegin,
+                                    colorTable.ComboBoxButtonSelectedGradientEnd,
+                                    LinearGradientMode.Vertical);
+
+                                g.FillRectangle(b, dropDownRect);
                             }
                             else if (toolStripComboBox.Owner.IsOnOverflow)
                             {
-                                using (Brush b = new SolidBrush(colorTable.ComboBoxButtonOnOverflow))
-                                {
-                                    g.FillRectangle(b, dropDownRect);
-                                }
+                                using var b = colorTable.ComboBoxButtonOnOverflow.GetCachedSolidBrush();
+                                g.FillRectangle(b, dropDownRect);
                             }
                             else
                             {
-                                using (Brush b = new LinearGradientBrush(dropDownRect, colorTable.ComboBoxButtonGradientBegin, colorTable.ComboBoxButtonGradientEnd, LinearGradientMode.Vertical))
-                                {
-                                    g.FillRectangle(b, dropDownRect);
-                                }
+                                using Brush b = new LinearGradientBrush(
+                                    dropDownRect,
+                                    colorTable.ComboBoxButtonGradientBegin,
+                                    colorTable.ComboBoxButtonGradientEnd,
+                                    LinearGradientMode.Vertical);
+
+                                g.FillRectangle(b, dropDownRect);
                             }
                         }
                         else
                         {
-                            using (Brush b = new LinearGradientBrush(dropDownRect, colorTable.ComboBoxButtonPressedGradientBegin, colorTable.ComboBoxButtonPressedGradientEnd, LinearGradientMode.Vertical))
-                            {
-                                g.FillRectangle(b, dropDownRect);
-                            }
+                            using Brush b = new LinearGradientBrush(
+                                dropDownRect,
+                                colorTable.ComboBoxButtonPressedGradientBegin,
+                                colorTable.ComboBoxButtonPressedGradientEnd,
+                                LinearGradientMode.Vertical);
+
+                            g.FillRectangle(b, dropDownRect);
                         }
                     }
 
                     Brush brush;
                     if (comboBox.Enabled)
                     {
-                        if (SystemInformation.HighContrast && (comboBox.ContainsFocus || comboBox.MouseIsOver) && ToolStripManager.VisualStylesEnabled)
-                        {
-                            brush = SystemBrushes.HighlightText;
-                        }
-                        else
-                        {
-                            brush = SystemBrushes.ControlText;
-                        }
+                        brush = SystemInformation.HighContrast
+                            && (comboBox.ContainsFocus || comboBox.MouseIsOver)
+                            && ToolStripManager.VisualStylesEnabled
+                                ? SystemBrushes.HighlightText
+                                : SystemBrushes.ControlText;
                     }
                     else
                     {
                         brush = SystemBrushes.GrayText;
                     }
+
                     Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
 
-                    // if the width is odd - favor pushing it over one pixel right.
+                    // If the width is odd - favor pushing it over one pixel right.
                     middle.X += (dropDownRect.Width % 2);
                     g.FillPolygon(brush, new Point[] {
                         new Point(middle.X - FlatComboAdapter.s_offsetPixels, middle.Y - 1),

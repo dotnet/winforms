@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         public static void DrawText(
             this DeviceContextHdcScope hdc,
             string? text,
-            FontCache.FontScope font,
+            FontCache.Scope font,
             Rectangle bounds,
             Color foreColor,
             User32.DT flags,
@@ -43,15 +43,15 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawText(
             this Gdi32.HDC hdc,
-            string? text,
-            FontCache.FontScope font,
+            ReadOnlySpan<char> text,
+            FontCache.Scope font,
             Rectangle bounds,
             Color foreColor,
             User32.DT flags,
             Color backColor = default,
             TextPaddingOptions padding = default)
         {
-            if (string.IsNullOrEmpty(text) || foreColor == Color.Transparent)
+            if (text.IsEmpty || foreColor == Color.Transparent)
                 return;
 
             ValidateFlags(flags);
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
 
             // Color empty means use the one currently selected in the dc.
             using var textColor = foreColor.IsEmpty ? default : new Gdi32.SetTextColorScope(hdc, foreColor);
-            using var fontSelection = new Gdi32.SelectObjectScope(hdc, font);
+            using var fontSelection = new Gdi32.SelectObjectScope(hdc, (Gdi32.HFONT)font);
 
             Gdi32.BKMODE newBackGroundMode = (backColor.IsEmpty || backColor == Color.Transparent) ?
                 Gdi32.BKMODE.TRANSPARENT :
@@ -88,14 +88,14 @@ namespace System.Windows.Forms
             }
 
             RECT rect = bounds;
-            User32.DrawTextExW(hdc, text, text.Length, ref rect, flags, ref dtparams);
+            User32.DrawTextExW(hdc, text, ref rect, flags, ref dtparams);
         }
 
         /// <summary>
         ///  Get the bounding box internal text padding to be used when drawing text.
         /// </summary>
         public static User32.DRAWTEXTPARAMS GetTextMargins(
-            this FontCache.FontScope font,
+            this FontCache.Scope font,
             TextPaddingOptions padding = default)
         {
             // DrawText(Ex) adds a small space at the beginning of the text bounding box but not at the end,
@@ -109,14 +109,14 @@ namespace System.Windows.Forms
             {
                 case TextPaddingOptions.GlyphOverhangPadding:
                     // [overhang padding][Text][overhang padding][italic padding]
-                    overhangPadding = font.FontHeight / 6f;
+                    overhangPadding = font.Data.Height / 6f;
                     leftMargin = (int)Math.Ceiling(overhangPadding);
                     rightMargin = (int)Math.Ceiling(overhangPadding * (1 + ItalicPaddingFactor));
                     break;
 
                 case TextPaddingOptions.LeftAndRightPadding:
                     // [2 * overhang padding][Text][2 * overhang padding][italic padding]
-                    overhangPadding = font.FontHeight / 6f;
+                    overhangPadding = font.Data.Height / 6f;
                     leftMargin = (int)Math.Ceiling(2 * overhangPadding);
                     rightMargin = (int)Math.Ceiling(overhangPadding * (2 + ItalicPaddingFactor));
                     break;
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static Rectangle AdjustForVerticalAlignment(
             this Gdi32.HDC hdc,
-            string text,
+            ReadOnlySpan<char> text,
             Rectangle bounds,
             User32.DT flags,
             ref User32.DRAWTEXTPARAMS dtparams)
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
 
             // Get the text bounds.
             flags |= User32.DT.CALCRECT;
-            int textHeight = User32.DrawTextExW(hdc, text, text.Length, ref rect, flags, ref dtparams);
+            int textHeight = User32.DrawTextExW(hdc, text, ref rect, flags, ref dtparams);
 
             // if the text does not fit inside the bounds then return the bounds that were passed in
             if (textHeight > bounds.Height)
@@ -190,8 +190,8 @@ namespace System.Windows.Forms
 
         public static Size MeasureText(
             this DeviceContextHdcScope hdc,
-            string? text,
-            FontCache.FontScope font,
+            ReadOnlySpan<char> text,
+            FontCache.Scope font,
             Size proposedSize,
             User32.DT flags)
             => MeasureText(hdc.HDC, text, font, proposedSize, flags);
@@ -214,14 +214,14 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size MeasureText(
             this Gdi32.HDC hdc,
-            string? text,
-            FontCache.FontScope font,
+            ReadOnlySpan<char> text,
+            FontCache.Scope font,
             Size proposedSize,
             User32.DT flags)
         {
             ValidateFlags(flags);
 
-            if (string.IsNullOrEmpty(text))
+            if (text.IsEmpty)
             {
                 return Size.Empty;
             }
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
 
             var rect = new RECT(0, 0, proposedSize.Width, proposedSize.Height);
 
-            using var fontSelection = new Gdi32.SelectObjectScope(hdc, font);
+            using var fontSelection = new Gdi32.SelectObjectScope(hdc, font.Object);
 
             // If proposedSize.Height >= MaxSize.Height it is assumed bounds needed.  If flags contain SINGLELINE and
             // VCENTER or BOTTOM options, DrawTextEx does not bind the rectangle to the actual text height since
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
             }
 
             flags |= User32.DT.CALCRECT;
-            User32.DrawTextExW(hdc, text, text.Length, ref rect, flags, ref dtparams);
+            User32.DrawTextExW(hdc, text, ref rect, flags, ref dtparams);
 
             return rect.Size;
         }

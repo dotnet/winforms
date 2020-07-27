@@ -557,10 +557,12 @@ namespace System.Windows.Forms.Tests
         [InlineData(ButtonBorderStyle.None)]
         public void ControlPaint_DrawBorder_GraphicsRectangleColorButtonBorderStyleInvalidStyle_Nop(ButtonBorderStyle style)
         {
-            ControlPaint.DrawBorder(null, new Rectangle(1, 2, 3, 4), Color.Red, style);
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            ControlPaint.DrawBorder(graphics, new Rectangle(1, 2, 3, 4), Color.Red, style);
 
             // Call again to test caching.
-            ControlPaint.DrawBorder(null, new Rectangle(1, 2, 3, 4), Color.Red, style);
+            ControlPaint.DrawBorder(graphics, new Rectangle(1, 2, 3, 4), Color.Red, style);
         }
 
         public static IEnumerable<object[]> DrawBorder_Graphics_Rectangle_Color_Int_ButtonBorderStyle_Color_Int_ButtonBorderStyle_Color_Int_ButtonBorderStyle_Color_Int_ButtonBorderStyle_TestData()

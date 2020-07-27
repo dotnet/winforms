@@ -3676,7 +3676,7 @@ namespace System.Windows.Forms
         {
             base.OnPaint(e);
 
-            Graphics toolstripGraphics = e.Graphics;
+            Graphics toolstripGraphics = e.GraphicsInternal;
             Size bitmapSize = _largestDisplayedItemSize;
             bool excludedTransparentRegion = false;
 
@@ -3684,21 +3684,19 @@ namespace System.Windows.Forms
             using Region transparentRegion = Renderer.GetTransparentRegion(this);
 
             // Paint the items
-            // The idea here is to let items pretend they are controls.
-            // they should get paint events at 0,0 and have proper clipping regions
-            // set up for them.  We cannot use g.TranslateTransform as that does
-            // not translate the GDI world, and things like Visual Styles and the
-            // TextRenderer only know how to speak GDI.
             //
-            // The previous appropach was to set up the GDI clipping region and allocate a graphics
-            // from that, but that meant we were allocating graphics objects left and right, which
-            // turned out to be slow.
+            // The idea here is to let items pretend they are controls. They should get paint events at 0,0 and have
+            // proper clipping regions set up for them.  We cannot use g.TranslateTransform as that does not translate
+            // the GDI world, and things like Visual Styles and the TextRenderer only know how to speak GDI.
             //
-            // So now we allocate an offscreen bitmap of size == MaxItemSize, copy the background
-            // of the toolstrip into that bitmap, then paint the item on top of the bitmap, then copy
-            // the contents of the bitmap back onto the toolstrip.  This gives us our paint event starting
-            // at 0,0.  Combine this with double buffering of the toolstrip and the entire toolstrip is updated
-            // after returning from this function.
+            // The previous approach was to set up the GDI clipping region and allocate a graphics from that, but that
+            // meant we were allocating graphics objects left and right, which turned out to be slow.
+            //
+            // So now we allocate an offscreen bitmap of size == MaxItemSize, copy the background of the toolstrip into
+            // that bitmap, paint the item on top of the bitmap, then finally copy the contents of the bitmap back onto
+            // the toolstrip. This gives us our paint event starting at 0,0.  Combine this with double buffering of the
+            // toolstrip and the entire toolstrip is updated after returning from this function.
+
             if (!LayoutUtils.IsZeroWidthOrHeight(bitmapSize))
             {
                 // cant create a 0x0 bmp.
@@ -3719,19 +3717,16 @@ namespace System.Windows.Forms
                 // using WindowsGraphics here because we want to preserve the clipping information.
 
                 // calling GetHdc by itself does not set up the clipping info.
-                using (var toolStripWindowsGraphics = new DeviceContextHdcScope(toolstripGraphics, ApplyGraphicsProperties.Clipping))
+                using (var toolStripHDC = new DeviceContextHdcScope(toolstripGraphics, ApplyGraphicsProperties.Clipping))
                 {
-                    // get the cached item HDC.
-                    Gdi32.HDC toolStripHDC = toolStripWindowsGraphics.HDC;
+                    // Get the cached item HDC.
                     Gdi32.HDC itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);
 
                     Graphics itemGraphics = itemHDC.CreateGraphics();
                     try
                     {
-                        // Painting the individual items...
-                        // iterate through all the items, painting them
-                        // one by one into the compatible offscreen DC, and then copying
-                        // them back onto the main toolstrip.
+                        // Iterate through all the items, painting them one by one into the compatible offscreen DC,
+                        // and then copy them back onto the main toolstrip.
                         for (int i = 0; i < DisplayedItems.Count; i++)
                         {
                             ToolStripItem item = DisplayedItems[i];
@@ -3794,7 +3789,7 @@ namespace System.Windows.Forms
                                     item.Bounds.Y,
                                     Gdi32.ROP.SRCCOPY);
 
-                                // paint the item into the offscreen bitmap
+                                // Paint the item into the offscreen bitmap
                                 using (PaintEventArgs itemPaintEventArgs = new PaintEventArgs(itemGraphics, clippingRect))
                                 {
                                     item.FireEvent(itemPaintEventArgs, ToolStripItemEventType.Paint);
@@ -3877,7 +3872,7 @@ namespace System.Windows.Forms
         {
             base.OnPaintBackground(e);
 
-            Graphics g = e.Graphics;
+            Graphics g = e.GraphicsInternal;
             GraphicsState graphicsState = g.Save();
             try
             {

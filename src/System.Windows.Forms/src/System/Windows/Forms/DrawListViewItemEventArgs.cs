@@ -60,10 +60,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
-            using (var backBrush = new SolidBrush(Item.BackColor))
-            {
-                Graphics.FillRectangle(backBrush, Bounds);
-            }
+            using var backBrush = Item.BackColor.GetCachedSolidBrush();
+            Graphics.FillRectangle(backBrush, Bounds);
         }
 
         /// <summary>
