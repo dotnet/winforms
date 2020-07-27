@@ -8,7 +8,6 @@ using System.Drawing.Text;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -475,7 +474,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { "string", SystemFonts.MenuFont, new Size(100, 200), (TextFormatFlags)int.MaxValue };
         }
 
-        [WinFormsTheory]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
         [MemberData(nameof(MeasureText_String_Font_Size_TextFormatFlags_TestData))]
         public void TextRenderer_MeasureText_InvokeStringFontSizeTextFormatFlags_ReturnsExpected(string text, Font font, Size proposedSize, TextFormatFlags flags)
         {
@@ -485,7 +485,9 @@ namespace System.Windows.Forms.Tests
 
             // Call again to test caching.
             Assert.Equal(result, TextRenderer.MeasureText(text, font, proposedSize, flags));
-        }        [WinFormsTheory]
+        }
+
+        [WinFormsTheory]
         [MemberData(nameof(MeasureText_String_Font_TestData))]
         public void TextRenderer_MeasureText_InvokeIDeviceContextStringFont_ReturnsExpected(string text, Font font)
         {
@@ -500,7 +502,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(result, TextRenderer.MeasureText(graphics, text, font));
         }
 
-        [WinFormsTheory]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
         [MemberData(nameof(MeasureText_String_Font_Size_TestData))]
         public void TextRenderer_MeasureText_InvokeIDeviceContextStringFontSize_ReturnsExpected(string text, Font font, Size proposedSize)
         {
@@ -515,7 +518,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(result, TextRenderer.MeasureText(graphics, text, font, proposedSize));
         }
 
-        [WinFormsTheory]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
         [MemberData(nameof(MeasureText_String_Font_Size_TextFormatFlags_TestData))]
         public void TextRenderer_MeasureText_InvokeIDeviceContextStringFontSizeTextFormatFlags_ReturnsExpected(string text, Font font, Size proposedSize, TextFormatFlags flags)
         {

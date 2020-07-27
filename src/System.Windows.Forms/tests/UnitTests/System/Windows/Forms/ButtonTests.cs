@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using Moq;
@@ -936,7 +935,8 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsFact]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
         public void Button_Text_SetCachedPreferredSize_Invalidates()
         {
             using var control = new Button
@@ -1230,7 +1230,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Size(1, 1) };
         }
 
-        [WinFormsTheory]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
         [MemberData(nameof(GetPreferredSize_SystemWithText_TestData))]
         public void Button_GetPreferredSize_InvokeSystemGrowOnlyWithText_ReturnsExpected(Size proposedSize)
         {
