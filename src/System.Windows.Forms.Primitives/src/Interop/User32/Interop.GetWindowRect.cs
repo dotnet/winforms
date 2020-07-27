@@ -20,7 +20,7 @@ internal static partial class Interop
             return result;
         }
 
-        public unsafe static BOOL GetWindowRect(IHandle hWnd, ref RECT rect)
+        public static BOOL GetWindowRect(IHandle hWnd, ref RECT rect)
         {
             BOOL result = GetWindowRect(hWnd.Handle, ref rect);
             GC.KeepAlive(hWnd);

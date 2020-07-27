@@ -74,13 +74,7 @@ namespace System.Windows.Forms
             public void Dispose()
             {
                 Entry?.RemoveRef();
-                SuppressFinalize();
-            }
-
-            [Conditional("DEBUG")]
-            public void SuppressFinalize()
-            {
-                GC.SuppressFinalize(this!);
+                DisposalTracking.SuppressFinalize(this!);
             }
 
 #if DEBUG

@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         ///  didn't actually change. This retains the state of the color.
         /// </summary>
         /// <remarks>
-        ///  This is important as the color only changes if <paramref name="graphics"/> is a very low color depth. This
+        ///  This is important as the color only changes if <paramref name="graphics"/> has a very low color depth. This
         ///  is extremely rare for the normal case of HDC backed Graphics objects. Keeping the original color keeps the
         ///  state that would otherwise be stripped, notably things like <see cref="Color.IsKnownColor"/> which allows
         ///  us to later pull from a the various caches that <see cref="Drawing"/> maintains (saving allocations).

@@ -16601,19 +16601,10 @@ namespace System.Windows.Forms
 
                 if (clipRect.IntersectsWith(gridRect))
                 {
-                    using (Region originalClip = g.Clip)
-                    {
-                        try
-                        {
-                            g.SetClip(gridRect);
-                            PaintBackground(g, clipRect, gridRect);
-                            PaintGrid(g, gridRect, clipRect, SingleVerticalBorderAdded, SingleHorizontalBorderAdded);
-                        }
-                        finally
-                        {
-                            g.Clip = originalClip;
-                        }
-                    }
+                    using var clipScope = new GraphicsClipScope(g);
+                    g.SetClip(gridRect);
+                    PaintBackground(g, clipRect, gridRect);
+                    PaintGrid(g, gridRect, clipRect, SingleVerticalBorderAdded, SingleHorizontalBorderAdded);
                 }
 
                 PaintBorder(g, clipRect, _layout.ClientRectangle);

@@ -77,6 +77,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, fourthScope.Object.DisposeCount);
         }
 
+        // Example to show that the entry data can match the object type when it has enough context to match the key
         internal sealed class IntColorCache : RefCountedCache<Color, Color, int>
         {
             public IntColorCache(int softLimit, int hardLimit) : base(softLimit, hardLimit) { }
