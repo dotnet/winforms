@@ -38,11 +38,10 @@ namespace System.Windows.Forms
             {
                 if (service == typeof(HtmlDocument))
                 {
-                    HRESULT hr = _clientSite.GetContainer(out Ole32.IOleContainer iOlecontainer);
-                    if (hr.Succeeded() && iOlecontainer is Mshtml.IHTMLDocument)
+                    if (_clientSite.GetContainer() is Mshtml.IHTMLDocument document)
                     {
                         _shimManager ??= new HtmlShimManager();
-                        return new HtmlDocument(_shimManager, iOlecontainer as Mshtml.IHTMLDocument);
+                        return new HtmlDocument(_shimManager, document);
                     }
                 }
                 else if (_clientSite.GetType().IsAssignableFrom(service))

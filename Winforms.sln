@@ -135,6 +135,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.TestUt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiToolStripTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiToolStripTests\MauiToolStripTests.csproj", "{83634671-CF3A-43B0-B729-42CCBA62DF2C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Interop.Tests", "src\System.Windows.Forms\tests\InteropTests\System.Windows.Forms.Interop.Tests.csproj", "{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -277,6 +279,18 @@ Global
 		{83634671-CF3A-43B0-B729-42CCBA62DF2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83634671-CF3A-43B0-B729-42CCBA62DF2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83634671-CF3A-43B0-B729-42CCBA62DF2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|Any CPU.Build.0 = Debug|x86
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|Any CPU.ActiveCfg = Release|x86
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|Any CPU.Build.0 = Release|x86
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|x86.ActiveCfg = Debug|x86
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|x86.Build.0 = Debug|x86
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|x86.ActiveCfg = Release|x86
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|x86.Build.0 = Release|x86
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|x64.ActiveCfg = Debug|x64
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|x64.Build.0 = Debug|x64
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|x64.ActiveCfg = Release|x64
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -321,6 +335,7 @@ Global
 		{73B0857A-966B-4E7D-8A83-FECFE0281AB9} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{86418F0B-39DC-4B5A-8145-6D607E6150AC} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{83634671-CF3A-43B0-B729-42CCBA62DF2C} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

@@ -250,15 +250,21 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT IOleControlSite.GetExtendedControl(out object ppDisp)
+            unsafe HRESULT IOleControlSite.GetExtendedControl(IntPtr* ppDisp)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetExtendedControl " + host.ToString());
-                ppDisp = host.GetParentContainer().GetProxyForControl(host);
                 if (ppDisp == null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                object proxy = host.GetParentContainer().GetProxyForControl(host);
+                if (proxy == null)
                 {
                     return HRESULT.E_NOTIMPL;
                 }
 
+                *ppDisp = Marshal.GetIDispatchForObject(proxy);
                 return HRESULT.S_OK;
             }
 
@@ -374,11 +380,10 @@ namespace System.Windows.Forms
                 return HRESULT.E_NOTIMPL;
             }
 
-            HRESULT IOleClientSite.GetContainer(out IOleContainer container)
+            IOleContainer IOleClientSite.GetContainer()
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getContainer");
-                container = host.GetParentContainer();
-                return HRESULT.S_OK;
+                return host.GetParentContainer();
             }
 
             unsafe HRESULT IOleClientSite.ShowObject()
