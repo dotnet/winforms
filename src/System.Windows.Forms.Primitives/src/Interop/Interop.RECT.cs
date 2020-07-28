@@ -49,5 +49,8 @@ internal partial class Interop
 
         public Size Size
             => new Size(Width, Height);
+
+        public override string ToString()
+            => $"{{{left}, {top}, {right}, {bottom} (LTRB)}}";
     }
 }

@@ -20,7 +20,6 @@ namespace System
 
         private const int CW_USEDEFAULT = unchecked((int)0x80000000);
         private const uint IDI_APPLICATION = 32512;
-        private const int COLOR_WINDOW = 5;
 
         private static RECT DefaultBounds => new RECT(CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT);
 
@@ -61,7 +60,7 @@ namespace System
 
             if (backgroundBrush.IsNull)
             {
-                backgroundBrush = User32.GetSysColorBrush(COLOR_WINDOW);
+                backgroundBrush = User32.GetSysColorBrush(User32.COLOR.WINDOW);
             }
             else if (backgroundBrush.Handle == (IntPtr)(-1))
             {

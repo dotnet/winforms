@@ -31,7 +31,7 @@ internal static partial class Interop
             public CreateBrushScope(Color color)
             {
                 HBrush = color.IsSystemColor
-                    ? User32.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF)
+                    ? User32.GetSysColorBrush(color)
                     : CreateSolidBrush(ColorTranslator.ToWin32(color));
               }
 

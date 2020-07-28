@@ -621,7 +621,7 @@ namespace System.Windows.Forms
                     absoluteClientRectangle.bottom);
                 using var hNonClientRegion = new Gdi32.RegionScope(0, 0, 0, 0);
 
-                Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Gdi32.CombineMode.RGN_XOR);
+                Gdi32.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, Gdi32.RGN.XOR);
 
                 // Call RedrawWindow with the region.
                 User32.RedrawWindow(

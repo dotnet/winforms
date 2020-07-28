@@ -71,7 +71,7 @@ namespace System.Windows.Forms
             }
 
             // Font is null, build off of the specified HDC's current font.
-            Gdi32.HFONT hfont = (Gdi32.HFONT)Gdi32.GetCurrentObject(hdc, Gdi32.ObjectType.OBJ_FONT);
+            Gdi32.HFONT hfont = (Gdi32.HFONT)Gdi32.GetCurrentObject(hdc, Gdi32.OBJ.FONT);
             return new FontCache.Scope(hfont); ;
         }
     }

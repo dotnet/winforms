@@ -3817,7 +3817,7 @@ namespace System.Windows.Forms
                         // Stash off the region we have to update (the base is going to clear this off in BeginPaint)
                         bool getRegionSucceeded = GetUpdateRgn(Handle, windowRegion, bErase: BOOL.TRUE) != RegionType.ERROR;
 
-                        Gdi32.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, Gdi32.CombineMode.RGN_DIFF);
+                        Gdi32.CombineRgn(dropDownRegion, windowRegion, dropDownRegion, Gdi32.RGN.DIFF);
                         RECT updateRegionBoundingRect = default;
                         Gdi32.GetRgnBox(windowRegion, ref updateRegionBoundingRect);
 

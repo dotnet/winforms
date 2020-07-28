@@ -66,14 +66,14 @@ namespace System.Windows.Forms.Tests
             Gdi32.MM originalMapMode = Gdi32.SetMapMode(dcScope, Gdi32.MM.HIMETRIC);
             Gdi32.SelectObject(dcScope, bitmapScope);
 
-            Gdi32.ObjectType type = Gdi32.GetObjectType(dcScope);
+            Gdi32.OBJ type = Gdi32.GetObjectType(dcScope);
 
             using var blueBrush = new Gdi32.CreateBrushScope(Color.Blue);
             using var redBrush = new Gdi32.CreateBrushScope(Color.Red);
             Gdi32.SelectObject(dcScope, blueBrush);
 
             using Graphics graphics = dcScope.CreateGraphics();
-            Gdi32.HGDIOBJ current = Gdi32.GetCurrentObject(dcScope, Gdi32.ObjectType.OBJ_BRUSH);
+            Gdi32.HGDIOBJ current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
 
             Gdi32.MM currentMode = Gdi32.GetMapMode(dcScope);
             Assert.Equal(Gdi32.MM.HIMETRIC, currentMode);
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Tests
             {
                 // We get the same HDC out
                 Assert.Equal(dcScope.HDC.Handle, hdc);
-                current = Gdi32.GetCurrentObject(dcScope, Gdi32.ObjectType.OBJ_BRUSH);
+                current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
                 Assert.Equal(blueBrush.HBrush.Handle, current.Handle);
                 Gdi32.SelectObject(dcScope, redBrush);
             }
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Tests
                 graphics.ReleaseHdc(hdc);
                 currentMode = Gdi32.GetMapMode(dcScope);
                 Assert.Equal(Gdi32.MM.TEXT, currentMode);
-                current = Gdi32.GetCurrentObject(dcScope, Gdi32.ObjectType.OBJ_BRUSH);
+                current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
 
                 graphics.GetHdc();
                 try
@@ -108,7 +108,7 @@ namespace System.Windows.Forms.Tests
                 }
             }
 
-            current = Gdi32.GetCurrentObject(dcScope, Gdi32.ObjectType.OBJ_BRUSH);
+            current = Gdi32.GetCurrentObject(dcScope, Gdi32.OBJ.BRUSH);
         }
     }
 }

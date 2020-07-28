@@ -2,36 +2,52 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using System.Drawing;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 internal partial class Interop
 {
-    /// <summary>
-    ///  Helpers for color conversion.
-    /// </summary>
-    internal static class COLORREF
+    [StructLayout(LayoutKind.Explicit)]
+    internal struct COLORREF
     {
-        public static int RgbToCOLORREF(int rgbValue)
-        {
-            // Clear the A value, swap R & B values.
-            int bValue = (rgbValue & 0xFF) << 16;
+        [FieldOffset(0)]
+        public byte R;
+        [FieldOffset(1)]
+        public byte G;
+        [FieldOffset(2)]
+        public byte B;
 
-            rgbValue &= 0xFFFF00;
-            rgbValue |= (rgbValue >> 16) & 0xFF;
-            rgbValue &= 0x00FFFF;
-            rgbValue |= bValue;
-            return rgbValue;
+        [FieldOffset(0)]
+        public uint Value;
+
+        public COLORREF(byte red, byte green, byte blue)
+        {
+            Value = 0;
+            R = red;
+            G = green;
+            B = blue;
         }
 
-        public static Color COLORREFToColor(int colorref)
+        public COLORREF(uint value)
         {
-            int r = colorref & 0xFF;
-            int g = (colorref >> 8) & 0xFF;
-            int b = (colorref >> 16) & 0xFF;
-            return Color.FromArgb(r, g, b);
+            Unsafe.SkipInit(out this);
+            Value = value & 0x00FFFFFF;
         }
 
-        public static int ColorToCOLORREF(Color color)
-            => color.R | (color.G << 8) | (color.B << 16);
+        public bool IsInvalid => Value == 0xFFFFFFFF;
+
+        public override bool Equals(object? obj) => obj is COLORREF other && Equals(other);
+        public bool Equals(COLORREF other) => other.Value == Value;
+        public override int GetHashCode() => HashCode.Combine(Value);
+
+        public override string ToString() => $"[R={R}, G={G}, B={B}]";
+
+        public static bool operator ==(COLORREF a, COLORREF b) => a.Value == b.Value;
+        public static bool operator !=(COLORREF a, COLORREF b) => a.Value != b.Value;
+        public static implicit operator COLORREF(uint value) => new COLORREF(value);
+        public static implicit operator COLORREF(Color color) => new COLORREF(color.R, color.G, color.B);
+        public static implicit operator Color(COLORREF color) => Color.FromArgb(color.R, color.G, color.B);
     }
 }

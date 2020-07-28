@@ -75,7 +75,7 @@ namespace System.Windows.Forms
             {
                 if (color.IsEmpty)
                 {
-                    color = COLORREF.COLORREFToColor((int)User32.SendMessageW(listView, (User32.WM)LVM.GETINSERTMARKCOLOR));
+                    color = new COLORREF((uint)User32.SendMessageW(listView, (User32.WM)LVM.GETINSERTMARKCOLOR));
                 }
                 return color;
             }

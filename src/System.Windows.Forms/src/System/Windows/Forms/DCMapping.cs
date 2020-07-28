@@ -86,7 +86,7 @@ namespace System.Windows.Forms
                             hClippingRegion,
                             hClippingRegion,
                             hOriginalClippingRegion,
-                            Gdi32.CombineMode.RGN_AND);
+                            Gdi32.RGN.AND);
 
                         Debug.Assert(
                             (combineResult == RegionType.SIMPLEREGION) || (combineResult == RegionType.NULLREGION),

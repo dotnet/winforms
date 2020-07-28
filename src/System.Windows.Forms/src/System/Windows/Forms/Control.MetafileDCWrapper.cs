@@ -34,7 +34,7 @@ namespace System.Windows.Forms
 
             internal unsafe MetafileDCWrapper(Gdi32.HDC hOriginalDC, Size size)
             {
-                Debug.Assert(Gdi32.GetObjectType(hOriginalDC) == Gdi32.ObjectType.OBJ_ENHMETADC,
+                Debug.Assert(Gdi32.GetObjectType(hOriginalDC) == Gdi32.OBJ.ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
 
                 if (size.Width < 0 || size.Height < 0)

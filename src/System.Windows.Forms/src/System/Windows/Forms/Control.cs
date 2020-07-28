@@ -865,9 +865,9 @@ namespace System.Windows.Forms
                 Color color = BackColor;
                 Gdi32.HBRUSH backBrush;
 
-                if (ColorTranslator.ToOle(color) < 0)
+                if (color.IsSystemColor)
                 {
-                    backBrush = User32.GetSysColorBrush(ColorTranslator.ToOle(color) & 0xFF);
+                    backBrush = User32.GetSysColorBrush(color);
                     SetState(States.OwnCtlBrush, false);
                 }
                 else
@@ -9046,7 +9046,7 @@ namespace System.Windows.Forms
 
         private void PrintToMetaFile(Gdi32.HDC hDC, IntPtr lParam)
         {
-            Debug.Assert(Gdi32.GetObjectType(hDC) == Gdi32.ObjectType.OBJ_ENHMETADC,
+            Debug.Assert(Gdi32.GetObjectType(hDC) == Gdi32.OBJ.ENHMETADC,
                 "PrintToMetaFile() called with a non-Enhanced MetaFile DC.");
             Debug.Assert(((long)lParam & (long)User32.PRF.CHILDREN) != 0,
                 "PrintToMetaFile() called without PRF_CHILDREN.");
