@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             ///  Constructor to hold an uncached object. Used to wrap something not coming from the cache in a scope
             ///  so it can be abstracted for the end users of a given API.
             ///
-            ///  <see cref="GdiPlusCache.GetSolidBrush(Drawing.Color)"/> for an example.
+            ///  <see cref="GdiPlusCache.GetSolidBrushScope(Drawing.Color)"/> for an example.
             /// </summary>
             /// <remarks>
             ///  Currently we don't dispose the <paramref name="object"/> as we don't need to in our usages. If this
