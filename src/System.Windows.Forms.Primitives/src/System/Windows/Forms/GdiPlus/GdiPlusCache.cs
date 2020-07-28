@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         private static PenCache PenCache => s_penCache ??= new PenCache(softLimit: 30, hardLimit: 40);
         private static SolidBrushCache BrushCache => s_brushCache ??= new SolidBrushCache(softLimit: 30, hardLimit: 40);
 
-        private static PenCache.Scope GetPen(Color color)
+        private static PenCache.Scope GetPenScope(Color color)
         {
             if (color.IsKnownColor)
             {
@@ -42,7 +42,7 @@ namespace System.Windows.Forms
             return PenCache.GetEntry(color);
         }
 
-        private static SolidBrushCache.Scope GetSolidBrush(Color color)
+        private static SolidBrushCache.Scope GetSolidBrushScope(Color color)
         {
             if (color.IsKnownColor)
             {
@@ -66,7 +66,7 @@ namespace System.Windows.Forms
         ///  Correct: using var pen = GdiPlusCache.GetCachedPen(Color.Blue);
         ///  Incorrect (LEAKS): using Pen pen = GdiPlusCache.GetCachedPen(Color.Blue);
         /// </remarks>
-        internal static PenCache.Scope GetCachedPen(this Color color) => GetPen(color);
+        internal static PenCache.Scope GetCachedPen(this Color color) => GetPenScope(color);
 
         /// <summary>
         ///  Returns a cached <see cref="Pen"/>. Use in a using and assign to var.
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         ///  Debug builds track proper disposal.
         /// </remarks>
         internal static PenCache.Scope GetCachedPen(this Color color, int width)
-            => width == 1 ? GetPen(color) : new PenCache.Scope(new Pen(color, width));
+            => width == 1 ? GetPenScope(color) : new PenCache.Scope(new Pen(color, width));
 
         /// <summary>
         ///  Returns a cached <see cref="SolidBrush"/>. Use in a using and assign to var.
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
         ///
         ///  Debug builds track proper disposal.
         /// </remarks>
-        internal static SolidBrushCache.Scope GetCachedSolidBrush(this Color color) => GetSolidBrush(color);
+        internal static SolidBrushCache.Scope GetCachedSolidBrush(this Color color) => GetSolidBrushScope(color);
 
         private static Brush? BrushFromKnownColor(KnownColor color) => color switch
         {
