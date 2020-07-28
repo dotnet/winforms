@@ -338,20 +338,18 @@ namespace System.Windows.Forms
             // FromARGB here. So we have a simple function which calculates the blending for us.
             if (!DisplayInformation.LowResolution)
             {
-                using (var screen = GdiCache.GetScreenDCGraphics())
-                {
-                    rgbTable[KnownColors.ButtonPressedHighlight] = GetAlphaBlendedColor(
-                        screen,
-                        SystemColors.Window,
-                        GetAlphaBlendedColor(screen, SystemColors.Highlight, SystemColors.Window, 160),
-                        50);
-                    rgbTable[KnownColors.ButtonCheckedHighlight] = GetAlphaBlendedColor(
-                        screen,
-                        SystemColors.Window,
-                        GetAlphaBlendedColor(screen, SystemColors.Highlight, SystemColors.Window, 80),
-                        20);
-                    rgbTable[KnownColors.ButtonSelectedHighlight] = rgbTable[KnownColors.ButtonCheckedHighlight];
-                }
+                using var screen = GdiCache.GetScreenDCGraphics();
+                rgbTable[KnownColors.ButtonPressedHighlight] = GetAlphaBlendedColor(
+                    screen,
+                    SystemColors.Window,
+                    GetAlphaBlendedColor(screen, SystemColors.Highlight, SystemColors.Window, 160),
+                    50);
+                rgbTable[KnownColors.ButtonCheckedHighlight] = GetAlphaBlendedColor(
+                    screen,
+                    SystemColors.Window,
+                    GetAlphaBlendedColor(screen, SystemColors.Highlight, SystemColors.Window, 80),
+                    20);
+                rgbTable[KnownColors.ButtonSelectedHighlight] = rgbTable[KnownColors.ButtonCheckedHighlight];
             }
             else
             {

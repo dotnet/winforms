@@ -17,7 +17,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
         ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
         /// </remarks>
+#if DEBUG
+        internal class SetMapModeScope : DisposalTracking.Tracker, IDisposable
+#else
         internal readonly ref struct SetMapModeScope
+#endif
         {
             private readonly MM _previousMapMode;
             private readonly HDC _hdc;
@@ -40,6 +44,10 @@ internal static partial class Interop
                 {
                     SetMapMode(_hdc, _previousMapMode);
                 }
+
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
             }
         }
     }

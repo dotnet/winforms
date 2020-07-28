@@ -15,7 +15,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
         ///  <see langword="ref" /> to avoid duplicating the handle and risking a double close.
         /// </remarks>
-        public readonly ref struct OpenThemeDataScope
+#if DEBUG
+        internal class OpenThemeDataScope : DisposalTracking.Tracker, IDisposable
+#else
+        internal readonly ref struct OpenThemeDataScope
+#endif
         {
             public IntPtr HTheme { get; }
 
@@ -37,6 +41,8 @@ internal static partial class Interop
                 {
                     CloseThemeData(HTheme);
                 }
+
+                DisposalTracking.SuppressFinalize(this);
             }
         }
     }

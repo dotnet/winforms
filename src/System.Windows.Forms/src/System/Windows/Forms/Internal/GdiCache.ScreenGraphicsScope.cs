@@ -12,7 +12,11 @@ namespace System.Windows.Forms
         ///  Scope that creates a wrapping <see cref="Drawing.Graphics"/> for a <see cref="ScreenDcCache.ScreenDcScope"/>
         ///  and manages disposal of the <see cref="Drawing.Graphics"/> and the scope.
         /// </summary>
+#if DEBUG
+        internal class ScreenGraphicsScope : DisposalTracking.Tracker, IDisposable
+#else
         internal readonly ref struct ScreenGraphicsScope
+#endif
         {
             private readonly ScreenDcCache.ScreenDcScope _dcScope;
             public Graphics Graphics { get; }
@@ -29,6 +33,7 @@ namespace System.Windows.Forms
             {
                 Graphics?.Dispose();
                 _dcScope.Dispose();
+                DisposalTracking.SuppressFinalize(this!);
             }
         }
     }

@@ -8195,16 +8195,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inheriting classes should override this method to handle the erase
-        ///  background request from windows. It is not necessary to call
-        ///  base.onPaintBackground, however if you do not want the default
-        ///  Windows behavior you must set event.handled to true.
+        ///  Inheriting classes should override this method to handle the erase background request from windows. It is
+        ///  not necessary to call base.OnPaintBackground.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPaintBackground(PaintEventArgs pevent)
         {
-            // We need the true client rectangle as clip rectangle causes
-            // problems on "Windows Classic" theme.
+            // We need the true client rectangle as clip rectangle causes problems on "Windows Classic" theme.
             RECT rect = new RECT();
             User32.GetClientRect(new HandleRef(_window, InternalHandle), ref rect);
 

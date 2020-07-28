@@ -96,6 +96,8 @@ namespace System.Windows.Forms
                     forceBackground: false,
                     realizePalette: false);
 
+                GC.SuppressFinalize(palleteScope);
+
                 _oldPalette = palleteScope.HPalette;
 
                 _graphics = Graphics.FromHdcInternal((IntPtr)_hdc);

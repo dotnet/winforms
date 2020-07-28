@@ -2025,7 +2025,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            using (var scope = new User32.BeginPaintScope())
+                            using (var scope = new User32.BeginPaintScope(m.HWnd))
                             {
                                 PaintException(pevent, _thrownException);
                             }

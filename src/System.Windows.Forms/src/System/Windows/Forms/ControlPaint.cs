@@ -4,7 +4,7 @@
 
 #nullable disable
 
-using System.Collections;
+using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -145,76 +145,81 @@ namespace System.Windows.Forms
             => SystemInformation.HighContrast ? SystemColors.WindowFrame : SystemColors.ControlDark;
 
         /// <summary>
-        ///  Returns address of a BITMAPINFO for use by CreateHBITMAP16Bit. The caller is resposible for freeing the
-        ///  memory returned by this method.
-        /// </summary>
-        private unsafe static IntPtr CreateBitmapInfo(Bitmap bitmap, Gdi32.HDC hdcS)
-        {
-            var header = new Gdi32.BITMAPINFOHEADER
-            {
-                biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
-                biWidth = bitmap.Width,
-                biHeight = bitmap.Height,
-                biPlanes = 1,
-                biBitCount = 16,
-                biCompression = Gdi32.BI.RGB
-            };
-
-            // leave everything else 0
-
-            // Set up color table --
-            Gdi32.HPALETTE palette = Gdi32.CreateHalftonePalette(hdcS);
-            Gdi32.GetObjectW(palette, out uint entryCount);
-            var entries = new Gdi32.PALETTEENTRY[entryCount];
-            Gdi32.GetPaletteEntries(palette, entries);
-            int[] colors = new int[entryCount];
-            for (int i = 0; i < entryCount; i++)
-            {
-                Gdi32.PALETTEENTRY entry = entries[i];
-                colors[i] = entry.peRed >> 6 + entry.peBlue >> 4 + entry.peGreen >> 2;
-            }
-            Gdi32.DeleteObject(palette);
-
-            IntPtr address = Marshal.AllocCoTaskMem(Marshal.SizeOf(header) + (int)entryCount * 4);
-            Marshal.StructureToPtr(header, address, false);
-            Marshal.Copy(colors, 0, (IntPtr)((long)address + Marshal.SizeOf(header)), (int)entryCount);
-            return address;
-        }
-
-        /// <summary>
         ///  Creates a 16-bit color bitmap.
         ///  Sadly, this must be public for the designer to get at it.
         ///  From MSDN:
         ///    This member supports the framework infrastructure and is not intended to be used directly from your code.
         /// </summary>
-        public static IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background)
+        public unsafe static IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background)
         {
-            Gdi32.HBITMAP hBitmap;
+            Gdi32.HBITMAP hbitmap;
             Size size = bitmap.Size;
 
-            using var screen = GdiCache.GetScreenHdc();
+            // Don't use the cached DC here as this isn't a common API and we're manipulating the state.
+            using var screen = new Gdi32.CreateDcScope(default);
             using var dc = new Gdi32.CreateDcScope(screen);
 
-            byte[] enoughBits = new byte[bitmap.Width * bitmap.Height];
-            IntPtr bitmapInfo = CreateBitmapInfo(bitmap, dc);
-            hBitmap = Gdi32.CreateDIBSection(
-                screen,
-                bitmapInfo,
-                Gdi32.DIB.RGB_COLORS,
-                enoughBits,
-                IntPtr.Zero,
-                0);
+            Gdi32.HPALETTE palette = Gdi32.CreateHalftonePalette(dc);
+            Gdi32.GetObjectW(palette, out uint entryCount);
 
-            Marshal.FreeCoTaskMem(bitmapInfo);
+            byte[] imageBuffer = ArrayPool<byte>.Shared.Rent(bitmap.Width * bitmap.Height);
 
-            if (hBitmap.IsNull)
+            byte[] bitmapInfoBuffer = ArrayPool<byte>.Shared
+                .Rent(checked((int)(sizeof(Gdi32.BITMAPINFOHEADER) + (sizeof(Gdi32.RGBQUAD) * entryCount))));
+
+            // Create a DIB based on the screen DC to write into with a halftone palette
+            fixed (byte* bi = bitmapInfoBuffer)
             {
-                throw new Win32Exception();
+                *((Gdi32.BITMAPINFOHEADER*)bi) = new Gdi32.BITMAPINFOHEADER
+                {
+                    biSize = (uint)sizeof(Gdi32.BITMAPINFOHEADER),
+                    biWidth = bitmap.Width,
+                    biHeight = bitmap.Height,
+                    biPlanes = 1,
+                    biBitCount = 16,
+                    biCompression = Gdi32.BI.RGB
+                };
+
+                var colors = new Span<Gdi32.RGBQUAD>(bi + sizeof(Gdi32.BITMAPINFOHEADER), (int)entryCount);
+                Span<Gdi32.PALETTEENTRY> entries = stackalloc Gdi32.PALETTEENTRY[(int)entryCount];
+                Gdi32.GetPaletteEntries(palette, entries);
+
+                // Set up color table
+                for (int i = 0; i < entryCount; i++)
+                {
+                    Gdi32.PALETTEENTRY entry = entries[i];
+                    colors[i] = new Gdi32.RGBQUAD()
+                    {
+                        rgbRed = entry.peRed,
+                        rgbGreen = entry.peGreen,
+                        rgbBlue = entry.peBlue
+                    };
+                }
+
+                Gdi32.DeleteObject(palette);
+
+                hbitmap = Gdi32.CreateDIBSection(
+                    screen,
+                    (IntPtr)bi,
+                    Gdi32.DIB.RGB_COLORS,
+                    imageBuffer,
+                    IntPtr.Zero,
+                    0);
+
+                if (hbitmap.IsNull)
+                {
+                    throw new Win32Exception();
+                }
+
+                ArrayPool<byte>.Shared.Return(bitmapInfoBuffer);
             }
 
             try
             {
-                Gdi32.HGDIOBJ previousBitmap = Gdi32.SelectObject(dc, hBitmap);
+                // Put our new bitmap handle (with the halftone palette) into the dc and use Graphics to
+                // copy the Bitmap into it.
+
+                Gdi32.HGDIOBJ previousBitmap = Gdi32.SelectObject(dc, hbitmap);
                 if (previousBitmap.IsNull)
                 {
                     throw new Win32Exception();
@@ -231,11 +236,13 @@ namespace System.Windows.Forms
             }
             catch
             {
-                Gdi32.DeleteObject(hBitmap);
+                // As we're throwing out, we can't return this and need to delete it.
+                Gdi32.DeleteObject(hbitmap);
                 throw;
             }
 
-            return (IntPtr)hBitmap;
+            // The caller is responsible for freeing the HBITMAP.
+            return (IntPtr)hbitmap;
         }
 
         /// <summary>

@@ -2922,31 +2922,29 @@ namespace System.Windows.Forms
                         {
                             DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false);
 
-                            using (var screen = GdiCache.GetScreenDCGraphics())
+                            using var screen = GdiCache.GetScreenDCGraphics();
+                            Rectangle contentBounds = GetContentBounds(screen, dataGridViewCellStyle, rowIndex);
+
+                            bool widthTruncated = false;
+                            int preferredHeight = 0;
+                            if (contentBounds.Width > 0)
                             {
-                                Rectangle contentBounds = GetContentBounds(screen, dataGridViewCellStyle, rowIndex);
+                                preferredHeight = GetPreferredTextHeight(
+                                    screen,
+                                    DataGridView.RightToLeftInternal,
+                                    stringValue,
+                                    dataGridViewCellStyle,
+                                    contentBounds.Width,
+                                    out widthTruncated);
+                            }
+                            else
+                            {
+                                widthTruncated = true;
+                            }
 
-                                bool widthTruncated = false;
-                                int preferredHeight = 0;
-                                if (contentBounds.Width > 0)
-                                {
-                                    preferredHeight = GetPreferredTextHeight(
-                                        screen,
-                                        DataGridView.RightToLeftInternal,
-                                        stringValue,
-                                        dataGridViewCellStyle,
-                                        contentBounds.Width,
-                                        out widthTruncated);
-                                }
-                                else
-                                {
-                                    widthTruncated = true;
-                                }
-
-                                if (preferredHeight > contentBounds.Height || widthTruncated)
-                                {
-                                    toolTipText = TruncateToolTipText(stringValue);
-                                }
+                            if (preferredHeight > contentBounds.Height || widthTruncated)
+                            {
+                                toolTipText = TruncateToolTipText(stringValue);
                             }
                         }
                     }

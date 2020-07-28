@@ -15,7 +15,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double EndPaint.
         /// </remarks>
-        public readonly ref struct BeginPaintScope
+#if DEBUG
+        internal class BeginPaintScope : DisposalTracking.Tracker, IDisposable
+#else
+        internal readonly ref struct BeginPaintScope
+#endif
         {
             public readonly PAINTSTRUCT _paintStruct;
 
@@ -42,6 +46,8 @@ internal static partial class Interop
                         EndPaint(HWND, ps);
                     }
                 }
+
+                DisposalTracking.SuppressFinalize(this);
             }
         }
     }

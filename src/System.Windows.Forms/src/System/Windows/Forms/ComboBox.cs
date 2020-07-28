@@ -3836,7 +3836,7 @@ namespace System.Windows.Forms
 
                         // Call the base class to do its painting (with a clipped DC).
                         bool useBeginPaint = m.WParam == IntPtr.Zero;
-                        var paintScope = useBeginPaint ? new BeginPaintScope(Handle) : default;
+                        using var paintScope = useBeginPaint ? new BeginPaintScope(Handle) : default;
 
                         Gdi32.HDC dc = useBeginPaint ? paintScope : (Gdi32.HDC)m.WParam;
 

@@ -11,7 +11,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Scope to ensure return of the device context back to the cache.
         /// </summary>
-        public readonly ref struct ScreenDcScope
+        ///
+#if DEBUG
+        internal class ScreenDcScope : DisposalTracking.Tracker, IDisposable
+#else
+        internal readonly ref struct ScreenDcScope
+#endif
         {
             public Gdi32.HDC HDC { get; }
             private readonly ScreenDcCache _cache;
@@ -27,6 +32,7 @@ namespace System.Windows.Forms
             public void Dispose()
             {
                 _cache.Release(HDC);
+                DisposalTracking.SuppressFinalize(this!);
             }
         }
     }
