@@ -8454,7 +8454,7 @@ namespace System.Windows.Forms
 
             // Note: PaintEvent.HDC == 0 if GDI+ has used the HDC -- it wouldn't be safe for us
             // to use it without enough bookkeeping to negate any performance gain of using GDI.
-            if (color.HasTransparency())
+            if (!color.HasTransparency())
             {
                 using var hdc = new DeviceContextHdcScope(e);
                 using var hbrush = new Gdi32.CreateBrushScope(hdc.FindNearestColor(color));
@@ -8509,7 +8509,7 @@ namespace System.Windows.Forms
         {
             Control parent = ParentInternal;
 
-            if (parent == null)
+            if (parent is null)
             {
                 // For whatever reason, our parent can't paint our background, but we need some kind of background
                 // since we're transparent.
