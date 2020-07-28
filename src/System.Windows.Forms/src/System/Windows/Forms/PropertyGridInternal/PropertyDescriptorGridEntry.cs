@@ -1182,7 +1182,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 var selectedGridEntry = propertyGridView.SelectedGridEntry;
                 if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
                 {
-                    if (selectedGridEntry.Enumerable)
+                    if (selectedGridEntry.Enumerable &&
+                        propertyGridView.DropDownVisible &&
+                        propertyGridView.DropDownControlHolder != null &&
+                        propertyGridView.DropDownControlHolder.Component == propertyGridView.DropDownListBox)
                     {
                         return propertyGridView.DropDownListBoxAccessibleObject;
                     }

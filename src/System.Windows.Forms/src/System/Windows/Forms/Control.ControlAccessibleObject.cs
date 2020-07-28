@@ -156,7 +156,7 @@ namespace System.Windows.Forms
             public override string? DefaultAction => Owner.AccessibleDefaultActionDescription ?? base.DefaultAction;
 
             // This is used only if control supports IAccessibleEx
-            internal override int[] RuntimeId
+            internal override int[]? RuntimeId
             {
                 get
                 {
@@ -485,7 +485,7 @@ namespace System.Windows.Forms
                 return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
             }
 
-            internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
+            internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
             {
                 get
                 {
