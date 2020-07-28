@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 _object = @object;
             }
 
-            internal Scope(CacheEntry entry)
+            public Scope(CacheEntry entry)
             {
                 Debug.Assert(entry != null);
                 _object = default!;
