@@ -1254,7 +1254,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsTheory]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
         [MemberData(nameof(GetPreferredSize_SystemWithText_TestData))]
         public void Button_GetPreferredSize_InvokeSystemGrowAndShrinkWithText_ReturnsExpected(Size proposedSize)
         {
@@ -1335,7 +1336,8 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsTheory]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsTheory(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
         [MemberData(nameof(GetPreferredSize_Flat_TestData))]
         public void Button_GetPreferredSize_InvokeFlat_ReturnsExpected(FlatStyle flatStyle, AutoSizeMode autoSizeMode, Size proposedSize, Size expected)
         {
