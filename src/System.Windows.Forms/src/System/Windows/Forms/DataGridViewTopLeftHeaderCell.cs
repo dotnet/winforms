@@ -390,19 +390,19 @@ namespace System.Windows.Forms
 
                 if (DataGridView.AdvancedColumnHeadersBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Inset)
                 {
-                    using var penControlDark = darkColor.GetCachedPen();
+                    using var penControlDark = darkColor.GetCachedPenScope();
                     graphics.DrawLine(penControlDark, bounds.X, bounds.Y, bounds.X, bounds.Bottom - 1);
                     graphics.DrawLine(penControlDark, bounds.X, bounds.Y, bounds.Right - 1, bounds.Y);
                 }
                 else if (DataGridView.AdvancedColumnHeadersBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Outset)
                 {
-                    using var penControlLightLight = lightColor.GetCachedPen();
+                    using var penControlLightLight = lightColor.GetCachedPenScope();
                     graphics.DrawLine(penControlLightLight, bounds.X, bounds.Y, bounds.X, bounds.Bottom - 1);
                     graphics.DrawLine(penControlLightLight, bounds.X, bounds.Y, bounds.Right - 1, bounds.Y);
                 }
                 else if (DataGridView.AdvancedColumnHeadersBorderStyle.All == DataGridViewAdvancedCellBorderStyle.InsetDouble)
                 {
-                    using var penControlDark = darkColor.GetCachedPen();
+                    using var penControlDark = darkColor.GetCachedPenScope();
                     graphics.DrawLine(penControlDark, bounds.X + 1, bounds.Y + 1, bounds.X + 1, bounds.Bottom - 1);
                     graphics.DrawLine(penControlDark, bounds.X + 1, bounds.Y + 1, bounds.Right - 1, bounds.Y + 1);
                 }

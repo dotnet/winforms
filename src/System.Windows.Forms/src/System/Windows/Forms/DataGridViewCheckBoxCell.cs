@@ -1338,7 +1338,7 @@ namespace System.Windows.Forms
 
                             highlight = g.FindNearestColor(highlight);
 
-                            using var pen = foreBrushColor.GetCachedPen();
+                            using var pen = foreBrushColor.GetCachedPenScope();
                             g.DrawLine(pen, checkBounds.Left, checkBounds.Top, checkBounds.Right - 1, checkBounds.Top);
                             g.DrawLine(pen, checkBounds.Left, checkBounds.Top, checkBounds.Left, checkBounds.Bottom - 1);
                         }

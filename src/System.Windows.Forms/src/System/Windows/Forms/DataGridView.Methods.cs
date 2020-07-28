@@ -19256,7 +19256,7 @@ namespace System.Windows.Forms
                 {
                     if (Application.RenderWithVisualStyles)
                     {
-                        using var pen = VisualStyleInformation.TextControlBorder.GetCachedPen();
+                        using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                         g.DrawRectangle(pen, new Rectangle(0, 0, bounds.Width - 1, bounds.Height - 1));
                     }
                     else
@@ -19266,7 +19266,7 @@ namespace System.Windows.Forms
                 }
                 else if (BorderStyle == BorderStyle.FixedSingle)
                 {
-                    using var pen = SystemColors.ControlText.GetCachedPen();
+                    using var pen = SystemColors.ControlText.GetCachedPenScope();
                     g.DrawRectangle(pen, new Rectangle(0, 0, bounds.Width - 1, bounds.Height - 1));
                 }
                 else

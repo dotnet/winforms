@@ -3788,12 +3788,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     cPropsVisible = Math.Min(cPropsVisible, endRow + 1);
 
                     Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Drawing splitter");
-                    using var splitterPen = OwnerGrid.LineColor.GetCachedPen(GetSplitterWidth());
+                    using var splitterPen = OwnerGrid.LineColor.GetCachedPenScope(GetSplitterWidth());
                     g.DrawLine(splitterPen, labelWidth, loc.Y, labelWidth, (cPropsVisible) * (RowHeight + 1) + loc.Y);
 
                     // draw lines.
                     Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Drawing lines");
-                    using var linePen = g.FindNearestColor(OwnerGrid.LineColor).GetCachedPen();
+                    using var linePen = g.FindNearestColor(OwnerGrid.LineColor).GetCachedPenScope();
 
                     int cHeightCurRow = 0;
                     int cLineEnd = loc.X + size.Width;
@@ -3847,7 +3847,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // Draw outside border
-                using var borderPen = OwnerGrid.ViewBorderColor.GetCachedPen();
+                using var borderPen = OwnerGrid.ViewBorderColor.GetCachedPenScope();
                 g.DrawRectangle(borderPen, 0, 0, sizeWindow.Width - 1, sizeWindow.Height - 1);
 
                 _fontBold = null;

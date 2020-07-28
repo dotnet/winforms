@@ -5108,7 +5108,7 @@ namespace System.Windows.Forms
                 r.Width--;
                 r.Height--;
 
-                using var borderPen = BorderColor.GetCachedPen();
+                using var borderPen = BorderColor.GetCachedPenScope();
                 e.Graphics.DrawRectangle(borderPen, r);
             }
         }

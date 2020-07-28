@@ -43,9 +43,9 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             using var fieldBrush = field.GetCachedSolidBrush();
-            using var dark = colors.buttonShadow.GetCachedPen();
-            using var light = colors.buttonFace.GetCachedPen();
-            using var lightlight = colors.highlight.GetCachedPen();
+            using var dark = colors.buttonShadow.GetCachedPenScope();
+            using var light = colors.buttonFace.GetCachedPenScope();
+            using var lightlight = colors.highlight.GetCachedPenScope();
 
             bounds.Width--;
             bounds.Height--;

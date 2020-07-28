@@ -247,8 +247,8 @@ namespace System.Windows.Forms
         private static void DrawUnthemedGroupBoxNoText(Graphics g, Rectangle bounds)
         {
             Color backColor = SystemColors.Control;
-            using var light = ControlPaint.Light(backColor, 1.0f).GetCachedPen();
-            using var dark = ControlPaint.Dark(backColor, 0f).GetCachedPen();
+            using var light = ControlPaint.Light(backColor, 1.0f).GetCachedPenScope();
+            using var dark = ControlPaint.Dark(backColor, 0f).GetCachedPenScope();
 
             // left
             g.DrawLine(light, bounds.Left + 1, bounds.Top + 1, bounds.Left + 1, bounds.Height - 1);

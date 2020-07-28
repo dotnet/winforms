@@ -66,7 +66,7 @@ namespace System.Windows.Forms
         ///  Correct: using var pen = GdiPlusCache.GetCachedPen(Color.Blue);
         ///  Incorrect (LEAKS): using Pen pen = GdiPlusCache.GetCachedPen(Color.Blue);
         /// </remarks>
-        internal static PenCache.Scope GetCachedPen(this Color color) => GetPenScope(color);
+        internal static PenCache.Scope GetCachedPenScope(this Color color) => GetPenScope(color);
 
         /// <summary>
         ///  Returns a cached <see cref="Pen"/>. Use in a using and assign to var.
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         ///
         ///  Debug builds track proper disposal.
         /// </remarks>
-        internal static PenCache.Scope GetCachedPen(this Color color, int width)
+        internal static PenCache.Scope GetCachedPenScope(this Color color, int width)
             => width == 1 ? GetPenScope(color) : new PenCache.Scope(new Pen(color, width));
 
         /// <summary>

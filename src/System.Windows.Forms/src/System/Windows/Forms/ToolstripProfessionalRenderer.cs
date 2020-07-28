@@ -371,7 +371,7 @@ namespace System.Windows.Forms
                         RenderCheckedButtonFill(g, bounds);
                     }
 
-                    using var pen = ColorTable.ButtonSelectedBorder.GetCachedPen();
+                    using var pen = ColorTable.ButtonSelectedBorder.GetCachedPenScope();
                     g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
                 else
@@ -385,7 +385,7 @@ namespace System.Windows.Forms
                         RenderCheckedButtonFill(g, bounds);
                     }
 
-                    using var pen = ColorTable.ButtonSelectedBorder.GetCachedPen();
+                    using var pen = ColorTable.ButtonSelectedBorder.GetCachedPenScope();
                     g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
             }
@@ -418,7 +418,7 @@ namespace System.Windows.Forms
                 Rectangle bounds = new Rectangle(Point.Empty, toolStrip.Size);
 
                 // draw the shadow lines on the bottom and right
-                using (var pen = ColorTable.ToolStripBorder.GetCachedPen())
+                using (var pen = ColorTable.ToolStripBorder.GetCachedPenScope())
                 {
                     if (toolStrip.Orientation == Orientation.Horizontal)
                     {
@@ -583,7 +583,7 @@ namespace System.Windows.Forms
                     }
 
                     // Draw selection border - always drawn regardless of Enabled.
-                    using var pen = borderColor.GetCachedPen();
+                    using var pen = borderColor.GetCachedPenScope();
                     g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
                 else
@@ -640,7 +640,7 @@ namespace System.Windows.Forms
                     }
 
                     // Draw selection border - always drawn regardless of Enabled.
-                    using var pen = borderColor.GetCachedPen();
+                    using var pen = borderColor.GetCachedPenScope();
                     g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
                 else
@@ -1045,7 +1045,7 @@ namespace System.Windows.Forms
                 using var brush = fill.GetCachedSolidBrush();
                 g.FillRectangle(brush, bounds);
 
-                using var pen = ColorTable.ButtonSelectedBorder.GetCachedPen();
+                using var pen = ColorTable.ButtonSelectedBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
             else
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms
             g.FillRectangle(b, bounds);
 
             // draw a box around the gradient
-            using var pen = ColorTable.MenuBorder.GetCachedPen();
+            using var pen = ColorTable.MenuBorder.GetCachedPenScope();
             g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
         }
 
@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms
             {
                 Rectangle bounds = new Rectangle(Point.Empty, toolStripDropDown.Size);
 
-                using (var pen = ColorTable.MenuBorder.GetCachedPen())
+                using (var pen = ColorTable.MenuBorder.GetCachedPenScope())
                 {
                     g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
@@ -1254,7 +1254,7 @@ namespace System.Windows.Forms
             if (drawCurve)
             {
                 // draw shadow pixel on bottom left +1, +1
-                using var pen = overflowBottomLeftShadow.GetCachedPen();
+                using var pen = overflowBottomLeftShadow.GetCachedPenScope();
                 Point start = new Point(overflowBoundsFill.Left - 1, overflowBoundsFill.Height - 2);
                 Point end = new Point(overflowBoundsFill.Left, overflowBoundsFill.Height - 2);
                 if (rightToLeft)
@@ -1476,8 +1476,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            using var foreColorPen = ColorTable.SeparatorDark.GetCachedPen();
-            using var highlightColorPen = ColorTable.SeparatorLight.GetCachedPen();
+            using var foreColorPen = ColorTable.SeparatorDark.GetCachedPenScope();
+            using var highlightColorPen = ColorTable.SeparatorLight.GetCachedPenScope();
 
             if (vertical)
             {
@@ -1576,7 +1576,7 @@ namespace System.Windows.Forms
 
             if (drawHotBorder)
             {
-                using var pen = ColorTable.ButtonSelectedBorder.GetCachedPen();
+                using var pen = ColorTable.ButtonSelectedBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
         }

@@ -339,7 +339,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        using var pen = color.GetCachedPen();
+                        using var pen = color.GetCachedPenScope();
                         e.Graphics.DrawLine(pen, pt1, pt2);
                     }
                 }

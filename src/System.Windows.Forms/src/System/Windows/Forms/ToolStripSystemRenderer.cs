@@ -444,7 +444,7 @@ namespace System.Windows.Forms
                             SystemColors.Highlight : ProfessionalColors.MenuItemBorder;
 
                         // Draw selection border - always drawn regardless of Enabled.
-                        using var pen = borderColor.GetCachedPen();
+                        using var pen = borderColor.GetCachedPenScope();
                         g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                     }
                     else
@@ -648,7 +648,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                using var foreColorPen = item.ForeColor.GetCachedPen();
+                using var foreColorPen = item.ForeColor.GetCachedPenScope();
 
                 if (vertical)
                 {

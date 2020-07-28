@@ -1006,8 +1006,8 @@ namespace System.Windows.Forms
             if (paint && displaySortGlyph && PaintContentBackground(paintParts))
             {
                 (Color darkColor, Color lightColor) = GetContrastedColors(cellStyle.BackColor);
-                using var penControlDark = darkColor.GetCachedPen();
-                using var penControlLightLight = lightColor.GetCachedPen();
+                using var penControlDark = darkColor.GetCachedPenScope();
+                using var penControlLightLight = lightColor.GetCachedPenScope();
 
                 if (SortGlyphDirection == SortOrder.Ascending)
                 {

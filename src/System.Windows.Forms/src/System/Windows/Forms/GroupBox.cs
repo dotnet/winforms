@@ -564,7 +564,7 @@ namespace System.Windows.Forms
                 if (boxColor.HasTransparency())
                 {
                     Graphics graphics = e.GraphicsInternal;
-                    using var boxPen = boxColor.GetCachedPen();
+                    using var boxPen = boxColor.GetCachedPenScope();
                     graphics.DrawLines(boxPen, lines);
                 }
                 else

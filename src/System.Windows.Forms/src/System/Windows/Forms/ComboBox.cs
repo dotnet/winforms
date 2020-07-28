@@ -6196,7 +6196,7 @@ namespace System.Windows.Forms
 
                 // Draw the outer border
 
-                using var outerBorderPen = outerBorderColor.GetCachedPen();
+                using var outerBorderPen = outerBorderColor.GetCachedPenScope();
                 g.DrawRectangle(outerBorderPen, _outerBorder);
                 if (rightToLeft)
                 {
@@ -6212,7 +6212,7 @@ namespace System.Windows.Forms
                 }
 
                 // Draw the inner border
-                using var innerBorderPen = innerBorderColor.GetCachedPen();
+                using var innerBorderPen = innerBorderColor.GetCachedPenScope();
                 g.DrawRectangle(innerBorderPen, _innerBorder);
                 g.DrawRectangle(innerBorderPen, _innerInnerBorder);
 
@@ -6222,7 +6222,7 @@ namespace System.Windows.Forms
                     bool focused = comboBox.ContainsFocus || comboBox.MouseIsOver;
                     Color borderPenColor = GetPopupOuterBorderColor(comboBox, focused);
 
-                    using var borderPen = borderPenColor.GetCachedPen();
+                    using var borderPen = borderPenColor.GetCachedPenScope();
                     Pen innerPen = comboBox.Enabled ? borderPen : SystemPens.Control;
 
                     // Around the dropdown

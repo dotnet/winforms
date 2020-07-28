@@ -228,7 +228,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // draw the line along the top
             if (parentPE.GetChildIndex(this) > 0)
             {
-                using var topLinePen = ownerGrid.CategorySplitterColor.GetCachedPen();
+                using var topLinePen = ownerGrid.CategorySplitterColor.GetCachedPenScope();
                 g.DrawLine(topLinePen, rect.X - 1, rect.Y - 1, rect.Width + 2, rect.Y - 1);
             }
         }
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // draw the line along the top
             if (parentPE.GetChildIndex(this) > 0)
             {
-                using var topLinePen = ownerGrid.CategorySplitterColor.GetCachedPen();
+                using var topLinePen = ownerGrid.CategorySplitterColor.GetCachedPenScope();
                 g.DrawLine(topLinePen, rect.X - 2, rect.Y - 1, rect.Width + 1, rect.Y - 1);
             }
         }

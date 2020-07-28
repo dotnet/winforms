@@ -430,7 +430,7 @@ namespace System.Windows.Forms.ButtonInternal
                 Graphics g = deviceContext.TryGetGraphics(create: true);
                 if (g != null)
                 {
-                    using var pen = color.GetCachedPen();
+                    using var pen = color.GetCachedPenScope();
                     g.DrawRectangle(pen, r.X, r.Y, r.Width - 1, r.Height - 1);
                     return;
                 }

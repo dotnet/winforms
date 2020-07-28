@@ -759,7 +759,7 @@ namespace System.Windows.Forms
                 g.FillRectangle(brush, clientRect.Right, 0, Width - clientRect.Right, Height);      // right border
 
                 // Paint the outside rect.
-                using var pen = outerBorderColor.GetCachedPen();
+                using var pen = outerBorderColor.GetCachedPenScope();
                 g.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
 
                 // We've handled WM_NCPAINT.

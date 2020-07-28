@@ -572,7 +572,7 @@ namespace System.Windows.Forms
                     if (transparent)
                     {
                         // Need to use GDI+
-                        using var pen = backColor.GetCachedPen();
+                        using var pen = backColor.GetCachedPenScope();
                         e.GraphicsInternal.DrawRectangle(pen, backRect);
                     }
                 }
@@ -600,7 +600,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    using var pen = backColor.GetCachedPen(width);
+                    using var pen = backColor.GetCachedPenScope(width);
                     e.GraphicsInternal.DrawRectangle(pen, backRect);
                 }
             }

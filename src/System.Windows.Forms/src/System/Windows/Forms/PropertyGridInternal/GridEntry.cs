@@ -2027,7 +2027,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 g.FillRectangle(backBrush, borderWidth - 1, rect.Y, totalWidth - borderWidth + 3, rect.Height);
 
                 // draw an end line
-                using var linePen = gridHost.GetLineColor().GetCachedPen();
+                using var linePen = gridHost.GetLineColor().GetCachedPenScope();
                 g.DrawLine(linePen, totalWidth, rect.Y, totalWidth, rect.Height);
 
                 // set the new width that we can draw into
@@ -2208,7 +2208,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     g.FillRectangle(brush, outline);
                 }
 
-                using var pen = penColor.GetCachedPen();
+                using var pen = penColor.GetCachedPenScope();
 
                 g.DrawRectangle(pen, outline.X, outline.Y, outline.Width - 1, outline.Height - 1);
 

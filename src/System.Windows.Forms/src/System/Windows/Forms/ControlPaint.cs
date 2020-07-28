@@ -1068,12 +1068,12 @@ namespace System.Windows.Forms
                 HLSColor hls = new HLSColor(color);
 
                 // Top + left
-                using var darkPen = hls.Darker(1.0f).GetCachedPen();
+                using var darkPen = hls.Darker(1.0f).GetCachedPenScope();
                 graphics.DrawLine(darkPen, bounds.X, bounds.Y, bounds.X + bounds.Width - 1, bounds.Y);
                 graphics.DrawLine(darkPen, bounds.X, bounds.Y, bounds.X, bounds.Y + bounds.Height - 1);
 
                 // Bottom + right
-                using var lightPen = hls.Lighter(1.0f).GetCachedPen();
+                using var lightPen = hls.Lighter(1.0f).GetCachedPenScope();
                 graphics.DrawLine(
                     lightPen,
                     bounds.X, bounds.Y + bounds.Height - 1, bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms
                     bounds.X + bounds.Width - 1, bounds.Y, bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
 
                 // Top + left inset
-                using var mediumPen = hls.Lighter(0.5f).GetCachedPen();
+                using var mediumPen = hls.Lighter(0.5f).GetCachedPenScope();
                 graphics.DrawLine(mediumPen, bounds.X + 1, bounds.Y + 1, bounds.X + bounds.Width - 2, bounds.Y + 1);
                 graphics.DrawLine(mediumPen, bounds.X + 1, bounds.Y + 1, bounds.X + 1, bounds.Y + bounds.Height - 2);
 
@@ -1107,12 +1107,12 @@ namespace System.Windows.Forms
                 HLSColor hls = new HLSColor(color);
 
                 // Top + left
-                using var lightPen = (stockColor ? SystemColors.ControlLightLight : hls.Lighter(1.0f)).GetCachedPen();
+                using var lightPen = (stockColor ? SystemColors.ControlLightLight : hls.Lighter(1.0f)).GetCachedPenScope();
                 graphics.DrawLine(lightPen, bounds.X, bounds.Y, bounds.X + bounds.Width - 1, bounds.Y);
                 graphics.DrawLine(lightPen, bounds.X, bounds.Y, bounds.X, bounds.Y + bounds.Height - 1);
 
                 // Bottom + right
-                using var darkPen = (stockColor ? SystemColors.ControlDarkDark : hls.Darker(1.0f)).GetCachedPen();
+                using var darkPen = (stockColor ? SystemColors.ControlDarkDark : hls.Darker(1.0f)).GetCachedPenScope();
 
                 graphics.DrawLine(
                     darkPen,
@@ -1126,13 +1126,13 @@ namespace System.Windows.Forms
                     ? color
                     : SystemInformation.HighContrast
                         ? SystemColors.ControlLightLight
-                        : SystemColors.Control).GetCachedPen();
+                        : SystemColors.Control).GetCachedPenScope();
 
                 graphics.DrawLine(topLeftPen, bounds.X + 1, bounds.Y + 1, bounds.X + bounds.Width - 2, bounds.Y + 1);
                 graphics.DrawLine(topLeftPen, bounds.X + 1, bounds.Y + 1, bounds.X + 1, bounds.Y + bounds.Height - 2);
 
                 // Bottom + right inset
-                using var bottomRightPen = (stockColor ? SystemColors.ControlDark : hls.Darker(0.5f)).GetCachedPen();
+                using var bottomRightPen = (stockColor ? SystemColors.ControlDark : hls.Darker(0.5f)).GetCachedPenScope();
 
                 graphics.DrawLine(
                     bottomRightPen,
@@ -1161,7 +1161,7 @@ namespace System.Windows.Forms
                 {
                     if (style == ButtonBorderStyle.Solid)
                     {
-                        using var pen = color.GetCachedPen();
+                        using var pen = color.GetCachedPenScope();
                         graphics.DrawRectangle(pen, bounds);
                         return;
                     }
@@ -2023,7 +2023,7 @@ namespace System.Windows.Forms
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
 
-            using var borderPen = VisualStyles.VisualStyleInformation.TextControlBorder.GetCachedPen();
+            using var borderPen = VisualStyles.VisualStyleInformation.TextControlBorder.GetCachedPenScope();
             graphics.DrawRectangle(borderPen, bounds);
         }
 

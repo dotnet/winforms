@@ -3299,12 +3299,12 @@ namespace System.Windows.Forms
             // Using system colors for non-single grid colors for now
             int y1, y2;
 
-            using var penBackColor = cellStyle.BackColor.GetCachedPen();
-            using var penGridColor = DataGridView.GridPenColor.GetCachedPen();
+            using var penBackColor = cellStyle.BackColor.GetCachedPenScope();
+            using var penGridColor = DataGridView.GridPenColor.GetCachedPenScope();
 
             (Color darkColor, Color lightColor) = GetContrastedColors(cellStyle.BackColor);
-            using var penControlDark = darkColor.GetCachedPen();
-            using var penControlLightLight = lightColor.GetCachedPen();
+            using var penControlDark = darkColor.GetCachedPenScope();
+            using var penControlLightLight = lightColor.GetCachedPenScope();
 
             int dividerThickness = OwningColumn?.DividerWidth ?? 0;
             if (dividerThickness != 0)

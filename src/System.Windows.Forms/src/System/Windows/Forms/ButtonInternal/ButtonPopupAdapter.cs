@@ -86,9 +86,9 @@ namespace System.Windows.Forms.ButtonInternal
             if (SystemInformation.HighContrast)
             {
                 Graphics g = e.GraphicsInternal;
-                using var windowFrame = colors.windowFrame.GetCachedPen();
-                using var highlight = colors.highlight.GetCachedPen();
-                using var buttonShadow = colors.buttonShadow.GetCachedPen();
+                using var windowFrame = colors.windowFrame.GetCachedPenScope();
+                using var highlight = colors.highlight.GetCachedPenScope();
+                using var buttonShadow = colors.buttonShadow.GetCachedPenScope();
 
                 // top, left white
                 g.DrawLine(windowFrame, r.Left + 1, r.Top + 1, r.Right - 2, r.Top + 1);
