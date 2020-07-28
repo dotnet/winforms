@@ -270,7 +270,7 @@ namespace System.Windows.Forms
             pageSettings.Margins = PrinterUnitConvert.Convert(newMargins, fromUnit, PrinterUnit.Display);
         }
 
-        protected override bool RunDialog(IntPtr hwndOwner)
+        protected unsafe override bool RunDialog(IntPtr hwndOwner)
         {
             var hookProcPtr = new User32.WNDPROCINT(HookProc);
             if (_pageSettings == null)
@@ -290,10 +290,14 @@ namespace System.Windows.Forms
             if (EnableMetric)
             {
                 //take the Units of Measurement while determining the PrinterUnits...
-                var sb = new StringBuilder(2);
-                int result = UnsafeNativeMethods.GetLocaleInfo(NativeMethods.LOCALE_USER_DEFAULT, NativeMethods.LOCALE_IMEASURE, sb, sb.Capacity);
+                Span<char> buffer = stackalloc char[2];
+                int result;
+                fixed (char* pBuffer = buffer)
+                {
+                    result = Kernel32.GetLocaleInfoEx(Kernel32.LOCALE_NAME_USER_DEFAULT, Kernel32.LCTYPE.IMEASURE, pBuffer, 2);
+                }
 
-                if (result > 0 && int.Parse(sb.ToString(), CultureInfo.InvariantCulture) == 0)
+                if (result > 0 && int.Parse(buffer, NumberStyles.Integer, CultureInfo.InvariantCulture) == 0)
                 {
                     toUnit = PrinterUnit.HundredthsOfAMillimeter;
                 }

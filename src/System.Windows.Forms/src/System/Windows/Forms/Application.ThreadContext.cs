@@ -55,7 +55,6 @@ namespace System.Windows.Forms
             // Parking window list
             private readonly List<ParkingWindow> _parkingWindows = new List<ParkingWindow>();
             private Control _marshalingControl;
-            private CultureInfo _culture;
             private List<IMessageFilter> _messageFilters;
             private List<IMessageFilter> _messageFilterSnapshot;
             private int _inProcessFilters;
@@ -782,19 +781,6 @@ namespace System.Windows.Forms
             internal uint GetId() => _id;
 
             /// <summary>
-            ///  Retrieves the culture for this thread.
-            /// </summary>
-            internal CultureInfo GetCulture()
-            {
-                if (_culture == null || _culture.LCID != Kernel32.GetThreadLocale())
-                {
-                    _culture = new CultureInfo((int)Kernel32.GetThreadLocale());
-                }
-
-                return _culture;
-            }
-
-            /// <summary>
             ///  Determines if a message loop exists on this thread.
             /// </summary>
             internal bool GetMessageLoop() => GetMessageLoop(mustBeActive: false);
@@ -1428,17 +1414,6 @@ namespace System.Windows.Forms
                         _componentManager = null;
                         _componentID = s_invalidId;
                     }
-                }
-            }
-
-            /// <summary>
-            ///  Sets the culture for this thread.
-            /// </summary>
-            internal void SetCulture(CultureInfo culture)
-            {
-                if (culture != null && culture.LCID != (int)Kernel32.GetThreadLocale())
-                {
-                    Kernel32.SetThreadLocale((uint)culture.LCID);
                 }
             }
 

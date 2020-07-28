@@ -76,7 +76,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             &pUnk,
                             1,
                             &guid,
-                            (uint)Application.CurrentCulture.LCID,
+                            Kernel32.GetThreadLocale(),
                             0,
                             IntPtr.Zero);
                         return true;
@@ -111,7 +111,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             &pUnk,
                             uuids.cElems,
                             uuids.pElems,
-                            (uint)Application.CurrentCulture.LCID,
+                            Kernel32.GetThreadLocale(),
                             0,
                             IntPtr.Zero);
                         return true;

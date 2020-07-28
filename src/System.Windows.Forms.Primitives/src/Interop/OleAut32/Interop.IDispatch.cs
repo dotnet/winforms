@@ -5,6 +5,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop.Kernel32;
 
 internal partial class Interop
 {
@@ -22,7 +23,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT GetTypeInfo(
                 uint iTInfo,
-                uint lcid,
+                LCID lcid,
                 out ITypeInfo ppTInfo);
 
             [PreserveSig]
@@ -30,14 +31,14 @@ internal partial class Interop
                 Guid* riid,
                 [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPWStr)] string[] rgszNames,
                 uint cNames,
-                uint lcid,
+                LCID lcid,
                 Ole32.DispatchID* rgDispId);
 
             [PreserveSig]
             HRESULT Invoke(
                 Ole32.DispatchID dispIdMember,
                 Guid* riid,
-                uint lcid,
+                LCID lcid,
                 DISPATCH dwFlags,
                 DISPPARAMS* pDispParams,
                 [Out, MarshalAs(UnmanagedType.LPArray)] object[] pVarResult,

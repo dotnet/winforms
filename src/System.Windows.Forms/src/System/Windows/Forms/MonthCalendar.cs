@@ -1414,7 +1414,7 @@ namespace System.Windows.Forms
             int firstDay;
             if (_firstDayOfWeek == Day.Default)
             {
-                firstDay = NativeMethods.LOCALE_IFIRSTDAYOFWEEK;
+                firstDay = (int)Kernel32.LCTYPE.IFIRSTDAYOFWEEK;
             }
             else
             {
