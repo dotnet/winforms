@@ -89,7 +89,7 @@ namespace System.Windows.Forms.ButtonInternal
 
                 if (color.HasTransparency())
                 {
-                    using Brush brush = new SolidBrush(color);
+                    using var brush = color.GetCachedSolidBrushScope();
                     e.GraphicsInternal.FillRectangle(brush, bounds);
                 }
                 else
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.ButtonInternal
                 else
                 {
                     // Not Draw3DBorder(..., raised: false);
-                    ControlPaint.DrawBorderSolid(e, r, colors.buttonShadow);
+                    ControlPaint.DrawBorderSimple(e, r, colors.buttonShadow);
                 }
             }
         }

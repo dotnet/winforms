@@ -108,10 +108,11 @@ namespace System.Windows.Forms
                     float yRatio = bounds.Height / (float)imageSize.Height;
                     if (xRatio < yRatio)
                     {
-                        //width should fill the entire bounds.
+                        // Width should fill the entire bounds.
                         result.Width = bounds.Width;
-                        // preserve the aspect ratio by multiplying the xRatio by the height
-                        // adding .5 to round to the nearest pixel
+
+                        // Preserve the aspect ratio by multiplying the xRatio by the height, adding .5 to round to
+                        // the nearest pixel.
                         result.Height = (int)((imageSize.Height * xRatio) + .5);
                         if (bounds.Y >= 0)
                         {
@@ -120,10 +121,11 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        // width should fill the entire bounds
+                        // Width should fill the entire bounds.
                         result.Height = bounds.Height;
-                        // preserve the aspect ratio by multiplying the xRatio by the height
-                        // adding .5 to round to the nearest pixel
+
+                        // Preserve the aspect ratio by multiplying the xRatio by the height, adding .5 to round to
+                        // the nearest pixel.
                         result.Width = (int)((imageSize.Width * yRatio) + .5);
                         if (bounds.X >= 0)
                         {
@@ -228,10 +230,8 @@ namespace System.Windows.Forms
                 Gdi32.DeleteObject(previousBitmap);
 
                 using Graphics graphics = dc.CreateGraphics();
-                using (Brush brush = new SolidBrush(background))
-                {
-                    graphics.FillRectangle(brush, 0, 0, size.Width, size.Height);
-                }
+                using var brush = background.GetCachedSolidBrushScope();
+                graphics.FillRectangle(brush, 0, 0, size.Width, size.Height);
                 graphics.DrawImage(bitmap, 0, 0, size.Width, size.Height);
             }
             catch
@@ -246,11 +246,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates a Win32 HBITMAP out of the image. You are responsible for
-        ///  de-allocating the HBITMAP with Windows.DeleteObject(handle).
-        ///  If the image uses transparency, the background will be filled with the specified color.
-        ///  From MSDN:
-        ///    This member supports the framework infrastructure and is not intended to be used directly from your code.
+        ///  Creates a Win32 HBITMAP out of the image. You are responsible for deleting the HBITMAP. If the image
+        ///  uses transparency the background will be filled with the specified color.
         /// </summary>
         public unsafe static IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap)
         {
@@ -262,13 +259,13 @@ namespace System.Windows.Forms
             int height = bitmap.Height;
 
             int monochromeStride = width / 8;
-            if ((width % 8) != 0) // wanted division to round up, not down
+            if ((width % 8) != 0)
             {
+                // Want division to round up, not down
                 monochromeStride++;
             }
 
-            // must be multiple of two -- i.e., bitmap
-            // scanlines must fall on double-byte boundaries
+            // Must be multiple of two -- i.e., bitmap scanlines must fall on double-byte boundaries.
             if ((monochromeStride % 2) != 0)
             {
                 monochromeStride++;
@@ -290,7 +287,7 @@ namespace System.Windows.Forms
                     int color = Marshal.ReadInt32(scan, x * 4);
                     if (color >> 24 == 0)
                     {
-                        // pixel is transparent; set bit to 1
+                        // Pixel is transparent; set bit to 1
                         int index = monochromeStride * y + x / 8;
                         bits[index] |= (byte)(0x80 >> (x % 8));
                     }
@@ -307,11 +304,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates a Win32 HBITMAP out of the image. You are responsible for
-        ///  de-allocating the HBITMAP with Windows.DeleteObject(handle).
-        ///  If the image uses transparency, the background will be filled with the specified color.
-        ///  From MSDN:
-        ///    This member supports the framework infrastructure and is not intended to be used directly from your code.
+        ///  Creates a Win32 HBITMAP out of the image. You are responsible for deleting the HBITMAP. If the image uses
+        ///  transparency, the background will be filled with the specified color.
         /// </summary>
         public static IntPtr CreateHBitmapColorMask(Bitmap bitmap, IntPtr monochromeMask)
         {
@@ -324,12 +318,10 @@ namespace System.Windows.Forms
             using var sourceBitmapSelection = new Gdi32.SelectObjectScope(sourceDC, (Gdi32.HBITMAP)monochromeMask);
             using var targetBitmapSelection = new Gdi32.SelectObjectScope(targetDC, colorMask);
 
-            // Now the trick is to make colorBitmap black wherever the transparent
-            // color is located, but keep the original color everywhere else.
-            // We've already got the original bitmap, so all we need to do is
-            // to and with the inverse of the mask (ROP DSna). When going from
-            // monochrome to color, Windows sets all 1 bits to the background
-            // color, and all 0 bits to the foreground color.
+            // Now the trick is to make colorBitmap black wherever the transparent color is located, but keep the
+            // original color everywhere else. We've already got the original bitmap, so all we need to do is to AND
+            // with the inverse of the mask (ROP DSna). When going from monochrome to color, Windows sets all 1 bits
+            // to the background color, and all 0 bits to the foreground color.
 
             Gdi32.SetBkColor(targetDC, 0x00ffffff);    // white
             Gdi32.SetTextColor(targetDC, 0x00000000);  // black
@@ -385,8 +377,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a new color that is a object of the given color.
         /// </summary>
-        public static Color Dark(Color baseColor, float percOfDarkDark)
-            => new HLSColor(baseColor).Darker(percOfDarkDark);
+        public static Color Dark(Color baseColor, float percOfDarkDark) => new HLSColor(baseColor).Darker(percOfDarkDark);
 
         /// <summary>
         ///  Creates a new color that is a object of the given color.
@@ -474,7 +465,7 @@ namespace System.Windows.Forms
                 // Also, if gdi+ can't quite fill the rect with the image, they will interpolate the remaining
                 // pixels, and make them semi-transparent. This is another reason why we need to fill the entire rect.
                 // If we didn't where ever the image was transparent, we would get garbage.
-                using (SolidBrush brush = backColor.CreateStaticBrush())
+                using (var brush = backColor.GetCachedSolidBrushScope())
                 {
                     g.FillRectangle(brush, clipRect);
                 }
@@ -540,44 +531,26 @@ namespace System.Windows.Forms
 
         public static void DrawBorder(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style)
         {
-            // Optimized version
+            if (graphics is null)
+                throw new ArgumentNullException(nameof(graphics));
+
             switch (style)
             {
                 case ButtonBorderStyle.None:
                     // nothing
                     break;
-
                 case ButtonBorderStyle.Dotted:
                 case ButtonBorderStyle.Dashed:
                 case ButtonBorderStyle.Solid:
                     DrawBorderSimple(graphics, bounds, color, style);
                     break;
-
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     DrawBorderComplex(graphics, bounds, color, style);
                     break;
-
                 default:
                     break;
             }
-        }
-
-        internal static void DrawBorderSolid(IDeviceContext deviceContext, Rectangle bounds, Color color)
-        {
-            if (color.HasTransparency())
-            {
-                Graphics g = deviceContext.TryGetGraphics(create: true);
-                if (g != null)
-                {
-                    DrawBorderSimple(g, bounds, color, ButtonBorderStyle.Solid);
-                    return;
-                }
-            }
-
-            using var hdc = new DeviceContextHdcScope(deviceContext);
-            using var hpen = new Gdi32.CreatePenScope(color);
-            hdc.DrawRectangle(bounds.Left, bounds.Top, bounds.Right - 1, bounds.Bottom - 1, hpen);
         }
 
         /// <summary>
@@ -1061,12 +1034,9 @@ namespace System.Windows.Forms
 
             RECT rc = new Rectangle(x, y, width, height);
 
-            // Windows just draws the border to size, and then
-            // shrinks the rectangle so the user can paint the
-            // client area. We can't really do that, so we do
-            // the opposite: We precalculate the size of the border
-            // and enlarge the rectangle so the client size is
-            // preserved.
+            // Windows just draws the border to size, and then shrinks the rectangle so the user can paint the client
+            // area. We can't really do that, so we do the opposite: We precalculate the size of the border and enlarge
+            // the rectangle so the client size is preserved.
             if ((flags & (User32.BF)Border3DStyle.Adjust) == (User32.BF)Border3DStyle.Adjust)
             {
                 Size sz = SystemInformation.Border3DSize;
@@ -1094,36 +1064,32 @@ namespace System.Windows.Forms
 
             if (style == ButtonBorderStyle.Inset)
             {
-                // button being pushed
+                // Button being pushed
                 HLSColor hls = new HLSColor(color);
 
-                // top + left
-                using Pen pen = hls.Darker(1.0f).CreateStaticPen();
-                graphics.DrawLine(pen, bounds.X, bounds.Y, bounds.X + bounds.Width - 1, bounds.Y);
-                graphics.DrawLine(pen, bounds.X, bounds.Y, bounds.X, bounds.Y + bounds.Height - 1);
+                // Top + left
+                using var darkPen = hls.Darker(1.0f).GetCachedPenScope();
+                graphics.DrawLine(darkPen, bounds.X, bounds.Y, bounds.X + bounds.Width - 1, bounds.Y);
+                graphics.DrawLine(darkPen, bounds.X, bounds.Y, bounds.X, bounds.Y + bounds.Height - 1);
 
-                // bottom + right
-                pen.Color = hls.Lighter(1.0f);
+                // Bottom + right
+                using var lightPen = hls.Lighter(1.0f).GetCachedPenScope();
                 graphics.DrawLine(
-                    pen,
+                    lightPen,
                     bounds.X, bounds.Y + bounds.Height - 1, bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
                 graphics.DrawLine(
-                    pen,
+                    lightPen,
                     bounds.X + bounds.Width - 1, bounds.Y, bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
 
                 // Top + left inset
-                pen.Color = hls.Lighter(0.5f);
-                graphics.DrawLine(
-                    pen,
-                    bounds.X + 1, bounds.Y + 1, bounds.X + bounds.Width - 2, bounds.Y + 1);
-                graphics.DrawLine(
-                    pen,
-                    bounds.X + 1, bounds.Y + 1, bounds.X + 1, bounds.Y + bounds.Height - 2);
+                using var mediumPen = hls.Lighter(0.5f).GetCachedPenScope();
+                graphics.DrawLine(mediumPen, bounds.X + 1, bounds.Y + 1, bounds.X + bounds.Width - 2, bounds.Y + 1);
+                graphics.DrawLine(mediumPen, bounds.X + 1, bounds.Y + 1, bounds.X + 1, bounds.Y + bounds.Height - 2);
 
-                // bottom + right inset
+                // Bottom + right inset
                 if (color.ToKnownColor() == SystemColors.Control.ToKnownColor())
                 {
-                    pen.Color = SystemColors.ControlLight;
+                    Pen pen = SystemPens.ControlLight;
                     graphics.DrawLine(
                         pen,
                         bounds.X + 1, bounds.Y + bounds.Height - 2, bounds.X + bounds.Width - 2, bounds.Y + bounds.Height - 2);
@@ -1140,105 +1106,76 @@ namespace System.Windows.Forms
                 bool stockColor = color.ToKnownColor() == SystemColors.Control.ToKnownColor();
                 HLSColor hls = new HLSColor(color);
 
-                // top + left
-                Pen pen = stockColor ? SystemPens.ControlLightLight : hls.Lighter(1.0f).CreateStaticPen();
+                // Top + left
+                using var lightPen = (stockColor ? SystemColors.ControlLightLight : hls.Lighter(1.0f)).GetCachedPenScope();
+                graphics.DrawLine(lightPen, bounds.X, bounds.Y, bounds.X + bounds.Width - 1, bounds.Y);
+                graphics.DrawLine(lightPen, bounds.X, bounds.Y, bounds.X, bounds.Y + bounds.Height - 1);
+
+                // Bottom + right
+                using var darkPen = (stockColor ? SystemColors.ControlDarkDark : hls.Darker(1.0f)).GetCachedPenScope();
+
                 graphics.DrawLine(
-                    pen,
-                    bounds.X, bounds.Y, bounds.X + bounds.Width - 1, bounds.Y);
+                    darkPen,
+                    bounds.X, bounds.Y + bounds.Height - 1, bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
                 graphics.DrawLine(
-                    pen,
-                    bounds.X, bounds.Y, bounds.X, bounds.Y + bounds.Height - 1);
+                    darkPen,
+                    bounds.X + bounds.Width - 1, bounds.Y, bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
 
-                // bottom + right
-                if (stockColor)
-                {
-                    pen = SystemPens.ControlDarkDark;
-                }
-                else
-                {
-                    pen.Color = hls.Darker(1.0f);
-                }
+                // Top + left inset
+                using var topLeftPen = (!stockColor
+                    ? color
+                    : SystemInformation.HighContrast
+                        ? SystemColors.ControlLightLight
+                        : SystemColors.Control).GetCachedPenScope();
 
-                graphics.DrawLine(pen, bounds.X, bounds.Y + bounds.Height - 1,
-                                  bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
-                graphics.DrawLine(pen, bounds.X + bounds.Width - 1, bounds.Y,
-                                  bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);
-
-                // top + left inset
-                if (stockColor)
-                {
-                    if (SystemInformation.HighContrast)
-                    {
-                        pen = SystemPens.ControlLight;
-                    }
-                    else
-                    {
-                        pen = SystemPens.Control;
-                    }
-                }
-                else
-                {
-                    pen.Color = color;
-                }
-
-                graphics.DrawLine(pen, bounds.X + 1, bounds.Y + 1,
-                                  bounds.X + bounds.Width - 2, bounds.Y + 1);
-                graphics.DrawLine(pen, bounds.X + 1, bounds.Y + 1,
-                                  bounds.X + 1, bounds.Y + bounds.Height - 2);
+                graphics.DrawLine(topLeftPen, bounds.X + 1, bounds.Y + 1, bounds.X + bounds.Width - 2, bounds.Y + 1);
+                graphics.DrawLine(topLeftPen, bounds.X + 1, bounds.Y + 1, bounds.X + 1, bounds.Y + bounds.Height - 2);
 
                 // Bottom + right inset
-                if (stockColor)
-                {
-                    pen = SystemPens.ControlDark;
-                }
-                else
-                {
-                    pen.Color = hls.Darker(0.5f);
-                }
+                using var bottomRightPen = (stockColor ? SystemColors.ControlDark : hls.Darker(0.5f)).GetCachedPenScope();
 
                 graphics.DrawLine(
-                    pen,
+                    bottomRightPen,
                     bounds.X + 1, bounds.Y + bounds.Height - 2, bounds.X + bounds.Width - 2, bounds.Y + bounds.Height - 2);
                 graphics.DrawLine(
-                    pen, bounds.X + bounds.Width - 2, bounds.Y + 1, bounds.X + bounds.Width - 2, bounds.Y + bounds.Height - 2);
-
-                if (!stockColor)
-                {
-                    pen.Dispose();
-                }
+                    bottomRightPen,
+                    bounds.X + bounds.Width - 2, bounds.Y + 1, bounds.X + bounds.Width - 2, bounds.Y + bounds.Height - 2);
             }
         }
 
-        /// <summary>
-        ///  Helper function that draws a simple border. This is used by DrawBorder for the most common rendering cases.
-        /// </summary>
-        private static void DrawBorderSimple(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style)
+        internal static void DrawBorderSimple(
+            IDeviceContext context,
+            Rectangle bounds,
+            Color color,
+            ButtonBorderStyle style = ButtonBorderStyle.Solid)
         {
-            if (graphics is null)
-                throw new ArgumentNullException(nameof(graphics));
+            if (context is null)
+                throw new ArgumentNullException(nameof(context));
 
-            // Common case: system color with solid pen
-            bool stockBorder = (style == ButtonBorderStyle.Solid && color.IsSystemColor);
-            Pen pen;
-            if (stockBorder)
+            bounds = new Rectangle(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+
+            if (color.HasTransparency() || style != ButtonBorderStyle.Solid)
             {
-                pen = SystemPens.FromSystemColor(color);
-            }
-            else
-            {
-                pen = color.CreateStaticPen();
-                if (style != ButtonBorderStyle.Solid)
+                Graphics graphics = context.TryGetGraphics(create: true);
+                if (graphics != null)
                 {
-                    pen.DashStyle = BorderStyleToDashStyle(style);
+                    if (style == ButtonBorderStyle.Solid)
+                    {
+                        using var pen = color.GetCachedPenScope();
+                        graphics.DrawRectangle(pen, bounds);
+                        return;
+                    }
+                    else
+                    {
+                        using var pen = color.CreateStaticPen(BorderStyleToDashStyle(style));
+                        graphics.DrawRectangle(pen, bounds);
+                    }
                 }
             }
 
-            graphics.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-
-            if (!stockBorder)
-            {
-                pen.Dispose();
-            }
+            using var hdc = new DeviceContextHdcScope(context);
+            using var hpen = new Gdi32.CreatePenScope(color);
+            hdc.DrawRectangle(bounds, hpen);
         }
 
         /// <summary>
@@ -1348,7 +1285,7 @@ namespace System.Windows.Forms
 
             graphics.FillRectangle(brush, bounds.Left + 1, bounds.Top + 1, bounds.Width - 2, bounds.Height - 2);
 
-            //draw the bounding rect w/o the four corners
+            // Draw the bounding rect w/o the four corners
             graphics.DrawLine(pen, bounds.X + 1, bounds.Y, bounds.Right - 2, bounds.Y);
             graphics.DrawLine(pen, bounds.X + 1, bounds.Bottom - 1, bounds.Right - 2, bounds.Bottom - 1);
             graphics.DrawLine(pen, bounds.X, bounds.Y + 1, bounds.X, bounds.Bottom - 2);
@@ -1357,25 +1294,25 @@ namespace System.Windows.Forms
             int midx = bounds.X + bounds.Width / 2;
             int midy = bounds.Y + bounds.Height / 2;
 
-            // vert line
+            // Vertical line
             graphics.DrawLine(pen, midx, bounds.Y, midx, bounds.Bottom - 2);
 
-            // horiz line
+            // Horizontal line
             graphics.DrawLine(pen, bounds.X, midy, bounds.Right - 2, midy);
 
-            // top hash
+            // Top hash
             graphics.DrawLine(pen, midx - 1, bounds.Y + 2, midx + 1, bounds.Y + 2);
             graphics.DrawLine(pen, midx - 2, bounds.Y + 3, midx + 2, bounds.Y + 3);
 
-            // left hash
+            // Left hash
             graphics.DrawLine(pen, bounds.X + 2, midy - 1, bounds.X + 2, midy + 1);
             graphics.DrawLine(pen, bounds.X + 3, midy - 2, bounds.X + 3, midy + 2);
 
-            // right hash
+            // Right hash
             graphics.DrawLine(pen, bounds.Right - 3, midy - 1, bounds.Right - 3, midy + 1);
             graphics.DrawLine(pen, bounds.Right - 4, midy - 2, bounds.Right - 4, midy + 2);
 
-            // bottom hash
+            // Bottom hash
             graphics.DrawLine(pen, midx - 1, bounds.Bottom - 3, midx + 1, bounds.Bottom - 3);
             graphics.DrawLine(pen, midx - 2, bounds.Bottom - 4, midx + 2, bounds.Bottom - 4);
         }
@@ -1400,11 +1337,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Draws a Win32 checkbox control in the given rectangle with the given state. This
-        ///  draws a flat looking check box that is suitable for use in list boxes, etc. We
-        ///  custom draw this because the windows version is soooo ugly.
+        ///  Draws a Win32 checkbox control in the given rectangle with the given state. This draws a flat looking
+        ///  check box that is suitable for use in list boxes, etc. We custom draw this as we want a better looking
+        ///  render than Windows provides.
         /// </summary>
-        private static void DrawFlatCheckBox(Graphics graphics, Rectangle rectangle, Color foreground, Brush background, ButtonState state)
+        private static void DrawFlatCheckBox(
+            Graphics graphics,
+            Rectangle rectangle,
+            Color foreground,
+            Brush background,
+            ButtonState state)
         {
             if (graphics == null)
                 throw new ArgumentNullException(nameof(graphics));
@@ -1492,10 +1434,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static void DrawFrameControl(
             Graphics graphics,
-            int x,
-            int y,
-            int width,
-            int height,
+            int x, int y, int width, int height,
             User32.DFC kind,
             User32.DFCS state,
             Color foreColor,
@@ -1636,11 +1575,19 @@ namespace System.Windows.Forms
             Rectangle destination,
             Color replaceBlack)
         {
-            DrawImageColorized(
-                graphics,
+            if (graphics is null)
+                throw new ArgumentNullException(nameof(graphics));
+
+            using var attributes = new ImageAttributes();
+            attributes.SetColorMatrix(RemapBlackAndWhitePreserveTransparentMatrix(replaceBlack, Color.White));
+            graphics.DrawImage(
                 image,
                 destination,
-                RemapBlackAndWhitePreserveTransparentMatrix(replaceBlack, Color.White));
+                0, 0, image.Width, image.Height,
+                GraphicsUnit.Pixel,
+                attributes,
+                null,
+                IntPtr.Zero);
         }
 
         internal static bool IsImageTransparent(Image backgroundImage)
@@ -1664,32 +1611,12 @@ namespace System.Windows.Forms
             attrs.Dispose();
         }
 
-        // Takes a black and white image, and paints it in color
-        private static void DrawImageColorized(
-            Graphics graphics,
-            Image image,
-            Rectangle destination,
-            ColorMatrix matrix)
-        {
-            if (graphics is null)
-                throw new ArgumentNullException(nameof(graphics));
-
-            using var attributes = new ImageAttributes();
-            attributes.SetColorMatrix(matrix);
-            graphics.DrawImage(
-                image,
-                destination,
-                0, 0, image.Width, image.Height,
-                GraphicsUnit.Pixel,
-                attributes,
-                null,
-                IntPtr.Zero);
-        }
-
         /// <summary>
         ///  Draws an image and makes it look disabled.
         /// </summary>
+#pragma warning disable IDE0060 // Remove unused parameter- public API
         public static void DrawImageDisabled(Graphics graphics, Image image, int x, int y, Color background)
+#pragma warning restore IDE0060
             => DrawImageDisabled(graphics, image, new Rectangle(x, y, image.Width, image.Height), unscaledImage: false);
 
         /// <summary>
@@ -2032,13 +1959,13 @@ namespace System.Windows.Forms
             else
             {
                 layoutRectangle.Offset(1, 1);
-                using SolidBrush brush = LightLight(color).CreateStaticBrush();
-                graphics.DrawString(s, font, brush, layoutRectangle, format);
+                using var lightBrush = LightLight(color).GetCachedSolidBrushScope();
+                graphics.DrawString(s, font, lightBrush, layoutRectangle, format);
 
                 layoutRectangle.Offset(-1, -1);
+                using var darkBrush = Dark(color).GetCachedSolidBrushScope();
                 color = Dark(color);
-                brush.Color = color;
-                graphics.DrawString(s, font, brush, layoutRectangle, format);
+                graphics.DrawString(s, font, darkBrush, layoutRectangle, format);
             }
         }
 
@@ -2096,7 +2023,7 @@ namespace System.Windows.Forms
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
 
-            using Pen borderPen = VisualStyles.VisualStyleInformation.TextControlBorder.CreateStaticPen();
+            using var borderPen = VisualStyles.VisualStyleInformation.TextControlBorder.GetCachedPenScope();
             graphics.DrawRectangle(borderPen, bounds);
         }
 
@@ -2502,10 +2429,9 @@ namespace System.Windows.Forms
             }
         }
 
-        //paint individual cell of the table
         internal static void PaintTableCellBorder(TableLayoutPanelCellBorderStyle borderStyle, Graphics g, Rectangle bound)
         {
-            //next, paint the cell border
+            // Paint the cell border
             switch (borderStyle)
             {
                 case TableLayoutPanelCellBorderStyle.None:

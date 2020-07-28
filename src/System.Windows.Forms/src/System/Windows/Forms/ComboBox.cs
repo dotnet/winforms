@@ -3521,26 +3521,15 @@ namespace System.Windows.Forms
         {
             if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal != null)
             {
-                RECT rect = new RECT();
-                GetClientRect(new HandleRef(this, Handle), ref rect);
-                Control p = ParentInternal;
-                Graphics graphics = Graphics.FromHdcInternal(m.WParam);
-                if (p != null)
-                {
-                    Brush brush = new SolidBrush(p.BackColor);
-                    graphics.FillRectangle(brush, rect.left, rect.top,
-                                           rect.right - rect.left, rect.bottom - rect.top);
-                    brush.Dispose();
-                }
-                else
-                {
-                    graphics.FillRectangle(SystemBrushes.Control, rect.left, rect.top,
-                                           rect.right - rect.left, rect.bottom - rect.top);
-                }
-                graphics.Dispose();
+                RECT rect = default;
+                GetClientRect(this, ref rect);
+                Gdi32.HDC hdc = (Gdi32.HDC)m.WParam;
+                using var hbrush = new Gdi32.CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
+                hdc.FillRectangle(rect, hbrush);
                 m.Result = (IntPtr)1;
                 return;
             }
+
             base.WndProc(ref m);
         }
 
@@ -6123,10 +6112,9 @@ namespace System.Windows.Forms
                 return comboAdapter;
             }
         }
+
         internal virtual FlatComboAdapter CreateFlatComboAdapterInstance()
-        {
-            return new FlatComboAdapter(this,/*smallButton=*/false);
-        }
+            => new FlatComboAdapter(this, smallButton: false);
 
         internal class FlatComboAdapter
         {
@@ -6136,7 +6124,7 @@ namespace System.Windows.Forms
             internal Rectangle _dropDownRect;
             private Rectangle _whiteFillRect;
             private Rectangle _clientRect;
-            readonly RightToLeft _origRightToLeft; // The combo box's RTL value when we were created
+            private readonly RightToLeft _origRightToLeft; // The combo box's RTL value when we were created
 
             private const int WhiteFillRectWidth = 5; // used for making the button look smaller than it is
 
@@ -6194,65 +6182,39 @@ namespace System.Windows.Forms
                 Color innerBorderColor = GetInnerBorderColor(comboBox);
                 bool rightToLeft = comboBox.RightToLeft == RightToLeft.Yes;
 
-                // draw the drop down
+                // Draw the drop down
                 DrawFlatComboDropDown(comboBox, g, _dropDownRect);
 
-                // when we are disabled there is one line of color that seems to eek through if backcolor is set
+                // When we are disabled there is one line of color that seems to eek through if backcolor is set
                 // so lets erase it.
                 if (!LayoutUtils.IsZeroWidthOrHeight(_whiteFillRect))
                 {
-                    // fill in two more pixels with white so it looks smaller.
-                    using (Brush b = new SolidBrush(innerBorderColor))
-                    {
-                        g.FillRectangle(b, _whiteFillRect);
-                    }
+                    // Fill in two more pixels with white so it looks smaller.
+                    using var b = innerBorderColor.GetCachedSolidBrushScope();
+                    g.FillRectangle(b, _whiteFillRect);
                 }
 
                 // Draw the outer border
-                if (outerBorderColor.IsSystemColor)
+
+                using var outerBorderPen = outerBorderColor.GetCachedPenScope();
+                g.DrawRectangle(outerBorderPen, _outerBorder);
+                if (rightToLeft)
                 {
-                    Pen outerBorderPen = SystemPens.FromSystemColor(outerBorderColor);
-                    g.DrawRectangle(outerBorderPen, _outerBorder);
-                    if (rightToLeft)
-                    {
-                        g.DrawRectangle(outerBorderPen, new Rectangle(_outerBorder.X, _outerBorder.Y, _dropDownRect.Width + 1, _outerBorder.Height));
-                    }
-                    else
-                    {
-                        g.DrawRectangle(outerBorderPen, new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
-                    }
+                    g.DrawRectangle(
+                        outerBorderPen,
+                        new Rectangle(_outerBorder.X, _outerBorder.Y, _dropDownRect.Width + 1, _outerBorder.Height));
                 }
                 else
                 {
-                    using (Pen outerBorderPen = new Pen(outerBorderColor))
-                    {
-                        g.DrawRectangle(outerBorderPen, _outerBorder);
-                        if (rightToLeft)
-                        {
-                            g.DrawRectangle(outerBorderPen, new Rectangle(_outerBorder.X, _outerBorder.Y, _dropDownRect.Width + 1, _outerBorder.Height));
-                        }
-                        else
-                        {
-                            g.DrawRectangle(outerBorderPen, new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
-                        }
-                    }
+                    g.DrawRectangle(
+                        outerBorderPen,
+                        new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
                 }
 
                 // Draw the inner border
-                if (innerBorderColor.IsSystemColor)
-                {
-                    Pen innerBorderPen = SystemPens.FromSystemColor(innerBorderColor);
-                    g.DrawRectangle(innerBorderPen, _innerBorder);
-                    g.DrawRectangle(innerBorderPen, _innerInnerBorder);
-                }
-                else
-                {
-                    using (Pen innerBorderPen = new Pen(innerBorderColor))
-                    {
-                        g.DrawRectangle(innerBorderPen, _innerBorder);
-                        g.DrawRectangle(innerBorderPen, _innerInnerBorder);
-                    }
-                }
+                using var innerBorderPen = innerBorderColor.GetCachedPenScope();
+                g.DrawRectangle(innerBorderPen, _innerBorder);
+                g.DrawRectangle(innerBorderPen, _innerInnerBorder);
 
                 // Draw a dark border around everything if we're in popup mode
                 if ((!comboBox.Enabled) || (comboBox.FlatStyle == FlatStyle.Popup))
@@ -6260,23 +6222,25 @@ namespace System.Windows.Forms
                     bool focused = comboBox.ContainsFocus || comboBox.MouseIsOver;
                     Color borderPenColor = GetPopupOuterBorderColor(comboBox, focused);
 
-                    using (Pen borderPen = new Pen(borderPenColor))
+                    using var borderPen = borderPenColor.GetCachedPenScope();
+                    Pen innerPen = comboBox.Enabled ? borderPen : SystemPens.Control;
+
+                    // Around the dropdown
+                    if (rightToLeft)
                     {
-                        Pen innerPen = (comboBox.Enabled) ? borderPen : SystemPens.Control;
-
-                        // around the dropdown
-                        if (rightToLeft)
-                        {
-                            g.DrawRectangle(innerPen, new Rectangle(_outerBorder.X, _outerBorder.Y, _dropDownRect.Width + 1, _outerBorder.Height));
-                        }
-                        else
-                        {
-                            g.DrawRectangle(innerPen, new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
-                        }
-
-                        // around the whole combobox.
-                        g.DrawRectangle(borderPen, _outerBorder);
+                        g.DrawRectangle(
+                            innerPen,
+                            new Rectangle(_outerBorder.X, _outerBorder.Y, _dropDownRect.Width + 1, _outerBorder.Height));
                     }
+                    else
+                    {
+                        g.DrawRectangle(
+                            innerPen,
+                            new Rectangle(_dropDownRect.X, _outerBorder.Y, _outerBorder.Right - _dropDownRect.X, _outerBorder.Height));
+                    }
+
+                    // Around the whole combobox.
+                    g.DrawRectangle(borderPen, _outerBorder);
                 }
             }
 
@@ -6301,17 +6265,18 @@ namespace System.Windows.Forms
                     middle.X += (dropDownRect.Width % 2);
                 }
 
-                g.FillPolygon(brush, new Point[] {
-                     new Point(middle.X - s_offsetPixels, middle.Y - 1),
-                     new Point(middle.X + s_offsetPixels + 1, middle.Y - 1),
-                     new Point(middle.X, middle.Y + s_offsetPixels)
-                 });
+                g.FillPolygon(
+                    brush,
+                    new Point[]
+                    {
+                        new Point(middle.X - s_offsetPixels, middle.Y - 1),
+                        new Point(middle.X + s_offsetPixels + 1, middle.Y - 1),
+                        new Point(middle.X, middle.Y + s_offsetPixels)
+                    });
             }
 
             protected virtual Color GetOuterBorderColor(ComboBox comboBox)
-            {
-                return (comboBox.Enabled) ? SystemColors.Window : SystemColors.ControlDark;
-            }
+                => comboBox.Enabled ? SystemColors.Window : SystemColors.ControlDark;
 
             protected virtual Color GetPopupOuterBorderColor(ComboBox comboBox, bool focused)
             {
@@ -6319,17 +6284,17 @@ namespace System.Windows.Forms
                 {
                     return SystemColors.ControlDark;
                 }
-                return (focused) ? SystemColors.ControlDark : SystemColors.Window;
+                return focused ? SystemColors.ControlDark : SystemColors.Window;
             }
 
             protected virtual Color GetInnerBorderColor(ComboBox comboBox)
-            {
-                return (comboBox.Enabled) ? comboBox.BackColor : SystemColors.Control;
-            }
+                => comboBox.Enabled ? comboBox.BackColor : SystemColors.Control;
 
-            // this eliminates flicker by removing the pieces we're going to paint ourselves from
-            // the update region.  Note the UpdateRegionBox is the bounding box of the actual update region.
-            // this is just here so we can quickly eliminate rectangles that arent in the update region.
+            /// <summary>
+            ///  This eliminates flicker by removing the pieces we're going to paint ourselves from the update region.
+            ///  Note the UpdateRegionBox is the bounding box of the actual update region. This is here so we can
+            ///  quickly eliminate rectangles that arent in the update region.
+            /// </summary>
             public unsafe void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
             {
                 if (comboBox != null)

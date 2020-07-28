@@ -89,7 +89,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                using (var backBrush = new SolidBrush(BackColor))
+                using (var backBrush = BackColor.GetCachedSolidBrushScope())
                 {
                     Graphics.FillRectangle(backBrush, Bounds);
                 }

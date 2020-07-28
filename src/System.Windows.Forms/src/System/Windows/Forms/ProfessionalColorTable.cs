@@ -294,7 +294,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                return g.GetNearestColor(Color.FromArgb(newAlpha, red, green, blue));
+                return g.FindNearestColor(Color.FromArgb(newAlpha, red, green, blue));
             }
         }
 
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
                 return Color.FromArgb(r, g, b);
             }
 
-            return graphics.GetNearestColor(Color.FromArgb(r, g, b));
+            return graphics.FindNearestColor(Color.FromArgb(r, g, b));
         }
 
         private void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)

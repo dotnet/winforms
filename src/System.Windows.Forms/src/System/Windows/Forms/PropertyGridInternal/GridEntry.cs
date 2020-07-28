@@ -197,75 +197,30 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  specify that this grid entry should be allowed to be merged for.
-        ///  multi-select.
+        ///  Specify that this grid entry should be allowed to be merged for multi-select.
         /// </summary>
-        public virtual bool AllowMerge
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public virtual bool AllowMerge => true;
 
-        internal virtual bool AlwaysAllowExpand
-        {
-            get
-            {
-                return false;
-            }
-        }
+        internal virtual bool AlwaysAllowExpand => false;
 
-        internal virtual AttributeCollection Attributes
-        {
-            get
-            {
-                return TypeDescriptor.GetAttributes(PropertyType);
-            }
-        }
+        internal virtual AttributeCollection Attributes => TypeDescriptor.GetAttributes(PropertyType);
 
         /// <summary>
-        ///  Gets the value of the background brush to use.  Override
-        ///  this member to cause the entry to paint it's background in a different color.
-        ///  The base implementation returns null.
+        ///  Gets the value of the background brush to use. Override this member to cause the entry to paint it's
+        ///  background in a different color. The base implementation returns null.
         /// </summary>
-        protected virtual Brush GetBackgroundBrush(Graphics g)
-        {
-            return GridEntryHost.GetBackgroundBrush(g);
-        }
+        protected virtual Color GetBackgroundColor() => GridEntryHost.BackColor;
 
         protected virtual Color LabelTextColor
-        {
-            get
-            {
-                if (ShouldRenderReadOnly)
-                {
-                    return GridEntryHost.GrayTextColor;
-                }
-                else
-                {
-                    return GridEntryHost.GetTextColor();
-                }
-            }
-        }
+            => ShouldRenderReadOnly ? GridEntryHost.GrayTextColor : GridEntryHost.GetTextColor();
 
         /// <summary>
         ///  The set of attributes that will be used for browse filtering
         /// </summary>
         public virtual AttributeCollection BrowsableAttributes
         {
-            get
-            {
-                if (parentPE != null)
-                {
-                    return parentPE.BrowsableAttributes;
-                }
-                return null;
-            }
-            set
-            {
-                parentPE.BrowsableAttributes = value;
-            }
+            get => parentPE?.BrowsableAttributes;
+            set => parentPE.BrowsableAttributes = value;
         }
 
         /// <summary>
@@ -2034,9 +1989,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Paints the label portion of this GridEntry into the given Graphics object.  This
-        ///  is called by the GridEntry host (the PropertyGridView) when this GridEntry is
-        ///  to be painted.
+        ///  Paints the label portion of this GridEntry into the given Graphics object. This is called by the GridEntry
+        ///  host (the PropertyGridView) when this GridEntry is to be painted.
         /// </summary>
         public virtual void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
         {
@@ -2047,49 +2001,54 @@ namespace System.Windows.Forms.PropertyGridInternal
             int borderWidth = gridHost.GetOutlineIconSize() + OUTLINE_ICON_PADDING;
 
             // fill the background if necessary
-            Brush bkBrush = selected ? gridHost.GetSelectedItemWithFocusBackBrush(g) : GetBackgroundBrush(g);
+            Color backColor = selected ? gridHost.GetSelectedItemWithFocusBackColor() : GetBackgroundColor();
+
             // if we don't have focus, paint with the line color
             if (selected && !hasFocus)
             {
-                bkBrush = gridHost.GetLineBrush(g);
+                backColor = gridHost.GetLineColor();
             }
 
-            bool fBold = ((Flags & GridEntry.FLAG_LABEL_BOLD) != 0);
+            bool fBold = ((Flags & FLAG_LABEL_BOLD) != 0);
             Font font = GetFont(fBold);
 
             int labelWidth = GetLabelTextWidth(strLabel, g, font);
 
             int neededWidth = paintFullLabel ? labelWidth : 0;
             int stringX = rect.X + PropertyLabelIndent;
-            Brush blank = bkBrush;
 
+            using var backBrush = backColor.GetCachedSolidBrushScope();
             if (paintFullLabel && (neededWidth >= (rect.Width - (stringX + 2))))
             {
-                int totalWidth = stringX + neededWidth + PropertyGridView.GDIPLUS_SPACE; // 5 = extra needed to ensure text draws completely and isn't clipped.
+                // GDIPLUS_SPACE = extra needed to ensure text draws completely and isn't clipped.
+                int totalWidth = stringX + neededWidth + PropertyGridView.GDIPLUS_SPACE;
 
                 // blank out the space we're going to use
-                g.FillRectangle(blank, borderWidth - 1, rect.Y, totalWidth - borderWidth + 3, rect.Height);
+                g.FillRectangle(backBrush, borderWidth - 1, rect.Y, totalWidth - borderWidth + 3, rect.Height);
 
                 // draw an end line
-                Pen linePen = new Pen(gridHost.GetLineColor());
+                using var linePen = gridHost.GetLineColor().GetCachedPenScope();
                 g.DrawLine(linePen, totalWidth, rect.Y, totalWidth, rect.Height);
-                linePen.Dispose();
 
                 // set the new width that we can draw into
                 rect.Width = totalWidth - rect.X;
             }
             else
-            { // Normal case -- no pseudo-tooltip for the label
-                g.FillRectangle(blank, rect.X, rect.Y, rect.Width, rect.Height);
+            {
+                // Normal case -- no pseudo-tooltip for the label
+                g.FillRectangle(backBrush, rect.X, rect.Y, rect.Width, rect.Height);
             }
 
-            // draw the border stripe on the left
-            Brush stripeBrush = gridHost.GetLineBrush(g);
+            // Draw the border stripe on the left
+            using var stripeBrush = gridHost.GetLineColor().GetCachedSolidBrushScope();
             g.FillRectangle(stripeBrush, rect.X, rect.Y, borderWidth, rect.Height);
 
             if (selected && hasFocus)
             {
-                g.FillRectangle(gridHost.GetSelectedItemWithFocusBackBrush(g), stringX, rect.Y, rect.Width - stringX - 1, rect.Height);
+                using var focusBrush = gridHost.GetSelectedItemWithFocusBackColor().GetCachedSolidBrushScope();
+                g.FillRectangle(
+                    focusBrush,
+                    stringX, rect.Y, rect.Width - stringX - 1, rect.Height);
             }
 
             int maxSpace = Math.Min(rect.Width - stringX - 1, labelWidth + PropertyGridView.GDIPLUS_SPACE);
@@ -2100,28 +2059,32 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Region oldClip = g.Clip;
                 g.SetClip(textRect);
 
-                //We need to Invert color only if in Highcontrast mode, targeting 4.7.1 and above, Gridcategory and not a developer override. This is required to achieve required contrast ratio.
+                // We need to Invert color only if in Highcontrast mode, targeting 4.7.1 and above, Gridcategory and
+                // not a developer override. This is required to achieve required contrast ratio.
                 var shouldInvertForHC = colorInversionNeededInHC && (fBold || (selected && !hasFocus));
 
                 // Do actual drawing
                 // A brush is needed if using GDI+ only (UseCompatibleTextRendering); if using GDI, only the color is needed.
-                Color textColor = selected && hasFocus ? gridHost.GetSelectedItemWithFocusForeColor() : shouldInvertForHC ? InvertColor(ownerGrid.LineColor) : g.GetNearestColor(LabelTextColor);
+                Color textColor = selected && hasFocus
+                    ? gridHost.GetSelectedItemWithFocusForeColor()
+                    : shouldInvertForHC
+                        ? InvertColor(ownerGrid.LineColor)
+                        : g.FindNearestColor(LabelTextColor);
 
                 if (ownerGrid.UseCompatibleTextRendering)
                 {
-                    using (Brush textBrush = new SolidBrush(textColor))
+                    using var textBrush = textColor.GetCachedSolidBrushScope();
+                    StringFormat stringFormat = new StringFormat(StringFormatFlags.NoWrap)
                     {
-                        StringFormat stringFormat = new StringFormat(StringFormatFlags.NoWrap)
-                        {
-                            Trimming = StringTrimming.None
-                        };
-                        g.DrawString(strLabel, font, textBrush, textRect, stringFormat);
-                    }
+                        Trimming = StringTrimming.None
+                    };
+                    g.DrawString(strLabel, font, textBrush, textRect, stringFormat);
                 }
                 else
                 {
                     TextRenderer.DrawText(g, strLabel, font, textRect, textColor, PropertyGrid.MeasureTextHelper.GetTextRendererFlags());
                 }
+
                 g.SetClip(oldClip, CombineMode.Replace);
                 oldClip.Dispose();   // clip is actually copied out.
 
@@ -2202,9 +2165,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Color textColor = InvertColor(ownerGrid.LineColor);
                     if (g != null)
                     {
-                        Brush b = new SolidBrush(textColor);
-                        g.FillRectangle(b, outline);
-                        b.Dispose();
+                        using var brush = textColor.GetCachedSolidBrushScope();
+                        g.FillRectangle(brush, outline);
                     }
                 }
 
@@ -2217,7 +2179,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void PaintOutlineWithClassicStyle(Graphics g, Rectangle r)
         {
-            // draw outline box.
+            // Draw outline box.
             if (Expandable)
             {
                 bool fExpanded = InternalExpanded;
@@ -2230,9 +2192,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                // draw border area box
-                Brush b = GetBackgroundBrush(g);
-                Pen p;
+                // Draw border area box
                 Color penColor = GridEntryHost.GetTextColor();
 
                 // inverting text color to back ground to get required contrast ratio
@@ -2243,35 +2203,33 @@ namespace System.Windows.Forms.PropertyGridInternal
                 else
                 {
                     // Filling rectangle as it was in all cases where we do not invert colors.
-                    g.FillRectangle(b, outline);
+                    Color brushColor = GetBackgroundColor();
+                    using var brush = brushColor.GetCachedSolidBrushScope();
+                    g.FillRectangle(brush, outline);
                 }
 
-                if (penColor.IsSystemColor)
-                {
-                    p = SystemPens.FromSystemColor(penColor);
-                }
-                else
-                {
-                    p = new Pen(penColor);
-                }
+                using var pen = penColor.GetCachedPenScope();
 
-                g.DrawRectangle(p, outline.X, outline.Y, outline.Width - 1, outline.Height - 1);
+                g.DrawRectangle(pen, outline.X, outline.Y, outline.Width - 1, outline.Height - 1);
 
                 // draw horizontal line for +/-
                 int indent = 2;
-                g.DrawLine(p, outline.X + indent, outline.Y + outline.Height / 2,
-                           outline.X + outline.Width - indent - 1, outline.Y + outline.Height / 2);
+                g.DrawLine(
+                    pen,
+                    outline.X + indent,
+                    outline.Y + outline.Height / 2,
+                    outline.X + outline.Width - indent - 1,
+                    outline.Y + outline.Height / 2);
 
                 // draw vertical line to make a +
                 if (!fExpanded)
                 {
-                    g.DrawLine(p, outline.X + outline.Width / 2, outline.Y + indent,
-                               outline.X + outline.Width / 2, outline.Y + outline.Height - indent - 1);
-                }
-
-                if (!penColor.IsSystemColor)
-                {
-                    p.Dispose();
+                    g.DrawLine(
+                        pen,
+                        outline.X + outline.Width / 2,
+                        outline.Y + indent,
+                        outline.X + outline.Width / 2,
+                        outline.Y + outline.Height - indent - 1);
                 }
             }
         }
@@ -2319,15 +2277,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             // Paint out the main rect using the appropriate brush
-            Brush backBrush = GetBackgroundBrush(g);
-            Debug.Assert(backBrush != null, "We didn't find a good background brush for PaintValue");
+            Color backColor = GetBackgroundColor();
 
             if (paintFlags.HasFlag(PaintValueFlags.DrawSelected))
             {
-                backBrush = gridHost.GetSelectedItemWithFocusBackBrush(g);
+                backColor = gridHost.GetSelectedItemWithFocusBackColor();
                 textColor = gridHost.GetSelectedItemWithFocusForeColor();
             }
 
+            using var backBrush = backColor.GetCachedSolidBrushScope();
             g.FillRectangle(backBrush, clipRect);
 
             int paintIndent = 0;
@@ -2400,7 +2358,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 rect.Width - 4,
                 rect.Height);
 
-            Color backColor = paintFlags.HasFlag(PaintValueFlags.DrawSelected)
+            backColor = paintFlags.HasFlag(PaintValueFlags.DrawSelected)
                 ? GridEntryHost.GetSelectedItemWithFocusBackColor()
                 : GridEntryHost.BackColor;
 

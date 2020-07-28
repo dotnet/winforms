@@ -126,7 +126,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void DrawBackground()
         {
-            using FormsSolidBrush backBrush = new FormsSolidBrush(BackColor);
+            using var backBrush = BackColor.GetCachedSolidBrushScope();
             GraphicsInternal.FillRectangle(backBrush, Bounds);
         }
 

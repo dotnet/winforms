@@ -105,10 +105,8 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static void DrawDitheredFill(Graphics g, Color color1, Color color2, Rectangle bounds)
         {
-            using (Brush brush = CreateDitherBrush(color1, color2))
-            {
-                g.FillRectangle(brush, bounds);
-            }
+            using Brush brush = CreateDitherBrush(color1, color2);
+            g.FillRectangle(brush, bounds);
         }
 
         protected void Draw3DBorder(IDeviceContext deviceContext, Rectangle bounds, ColorData colors, bool raised)
@@ -121,7 +119,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else
                 {
-                    ControlPaint.DrawBorderSolid(deviceContext, bounds, ControlPaint.Dark(Control.BackColor));
+                    ControlPaint.DrawBorderSimple(deviceContext, bounds, ControlPaint.Dark(Control.BackColor));
                 }
             }
             else
@@ -334,7 +332,7 @@ namespace System.Windows.Forms.ButtonInternal
             if (color.HasTransparency())
             {
                 Graphics g = e.GraphicsInternal;
-                using var brush = new SolidBrush(color);
+                using var brush = color.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, left);
                 g.FillRectangle(brush, right);
                 g.FillRectangle(brush, top);
@@ -375,8 +373,11 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (!layout.options.everettButtonCompat)
             {
-                // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
-                Rectangle bounds = new Rectangle(ButtonBorderSize, ButtonBorderSize, Control.Width - (2 * ButtonBorderSize), Control.Height - (2 * ButtonBorderSize));
+                Rectangle bounds = new Rectangle(
+                    ButtonBorderSize,
+                    ButtonBorderSize,
+                    Control.Width - (2 * ButtonBorderSize),
+                    Control.Height - (2 * ButtonBorderSize));
 
                 Region newClip = oldClip.Clone();
                 newClip.Intersect(bounds);
@@ -406,12 +407,10 @@ namespace System.Windows.Forms.ButtonInternal
                     graphics.DrawImage(image, imageBounds.X, imageBounds.Y, image.Width, image.Height);
                 }
             }
-
             finally
             {
                 if (!layout.options.everettButtonCompat)
                 {
-                    // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
                     graphics.Clip = oldClip;
                 }
             }
@@ -431,7 +430,7 @@ namespace System.Windows.Forms.ButtonInternal
                 Graphics g = deviceContext.TryGetGraphics(create: true);
                 if (g != null)
                 {
-                    using Pen pen = new Pen(color);
+                    using var pen = color.GetCachedPenScope();
                     g.DrawRectangle(pen, r.X, r.Y, r.Width - 1, r.Height - 1);
                     return;
                 }
@@ -445,7 +444,7 @@ namespace System.Windows.Forms.ButtonInternal
         /// <summary>
         ///  Draws the button's text. Color c is the foreground color set with enabled/disabled state in mind.
         /// </summary>
-        private void DrawText(PaintEventArgs e, LayoutData layout, Color c, ColorData colors)
+        private void DrawText(PaintEventArgs e, LayoutData layout, Color color, ColorData colors)
         {
             Rectangle r = layout.textBounds;
             bool disabledText3D = layout.options.shadowedText;
@@ -455,36 +454,30 @@ namespace System.Windows.Forms.ButtonInternal
                 Graphics g = e.GraphicsInternal;
 
                 // Draw text using GDI+
-                using (StringFormat stringFormat = CreateStringFormat())
+                using StringFormat stringFormat = CreateStringFormat();
+
+                // DrawString doesn't seem to draw where it says it does
+                if ((Control.TextAlign & LayoutUtils.AnyCenter) == 0)
                 {
-                    // DrawString doesn't seem to draw where it says it does
-                    if ((Control.TextAlign & LayoutUtils.AnyCenter) == 0)
-                    {
-                        r.X -= 1;
-                    }
+                    r.X -= 1;
+                }
 
-                    r.Width += 1;
-                    if (disabledText3D && !Control.Enabled && !colors.options.HighContrast)
-                    {
-                        using SolidBrush brush = new SolidBrush(colors.highlight);
-                        r.Offset(1, 1);
-                        g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
+                r.Width += 1;
+                if (disabledText3D && !Control.Enabled && !colors.options.HighContrast)
+                {
+                    using var highlightBrush = colors.highlight.GetCachedSolidBrushScope();
+                    r.Offset(1, 1);
+                    g.DrawString(Control.Text, Control.Font, highlightBrush, r, stringFormat);
 
-                        r.Offset(-1, -1);
-                        brush.Color = colors.buttonShadow;
-                        g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
-                    }
-                    else
-                    {
-                        Brush brush = c.IsSystemColor ? SystemBrushes.FromSystemColor(c) : new SolidBrush(c);
+                    r.Offset(-1, -1);
+                    using var shadowBrush = colors.buttonShadow.GetCachedSolidBrushScope();
+                    g.DrawString(Control.Text, Control.Font, shadowBrush, r, stringFormat);
+                }
+                else
+                {
+                    using var brush = color.GetCachedSolidBrushScope();
 
-                        g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
-
-                        if (!c.IsSystemColor)
-                        {
-                            brush.Dispose();
-                        }
-                    }
+                    g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
                 }
             }
             else
@@ -509,7 +502,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else
                 {
-                    TextRenderer.DrawTextInternal(e, Control.Text, Control.Font, r, c, formatFlags);
+                    TextRenderer.DrawTextInternal(e, Control.Text, Control.Font, r, color, formatFlags);
                 }
             }
         }
@@ -675,16 +668,16 @@ namespace System.Windows.Forms.ButtonInternal
 
                 using var hdc = new DeviceContextHdcScope(_deviceContext, applyGraphicsState: false);
 
-                colors.buttonFace = hdc.GetNearestColor(colors.buttonFace);
-                colors.buttonShadow = hdc.GetNearestColor(colors.buttonShadow);
-                colors.buttonShadowDark = hdc.GetNearestColor(colors.buttonShadowDark);
-                colors.constrastButtonShadow = hdc.GetNearestColor(colors.constrastButtonShadow);
-                colors.windowText = hdc.GetNearestColor(colors.windowText);
-                colors.highlight = hdc.GetNearestColor(colors.highlight);
-                colors.lowHighlight = hdc.GetNearestColor(colors.lowHighlight);
-                colors.lowButtonFace = hdc.GetNearestColor(colors.lowButtonFace);
-                colors.windowFrame = hdc.GetNearestColor(colors.windowFrame);
-                colors.windowDisabled = hdc.GetNearestColor(colors.windowDisabled);
+                colors.buttonFace = hdc.FindNearestColor(colors.buttonFace);
+                colors.buttonShadow = hdc.FindNearestColor(colors.buttonShadow);
+                colors.buttonShadowDark = hdc.FindNearestColor(colors.buttonShadowDark);
+                colors.constrastButtonShadow = hdc.FindNearestColor(colors.constrastButtonShadow);
+                colors.windowText = hdc.FindNearestColor(colors.windowText);
+                colors.highlight = hdc.FindNearestColor(colors.highlight);
+                colors.lowHighlight = hdc.FindNearestColor(colors.lowHighlight);
+                colors.lowButtonFace = hdc.FindNearestColor(colors.lowButtonFace);
+                colors.windowFrame = hdc.FindNearestColor(colors.windowFrame);
+                colors.windowDisabled = hdc.FindNearestColor(colors.windowDisabled);
 
                 return colors;
             }

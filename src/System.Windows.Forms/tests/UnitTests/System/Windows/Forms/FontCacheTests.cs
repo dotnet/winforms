@@ -30,11 +30,11 @@ namespace System.Windows.Forms.Tests
                     Thread.Sleep(random.Next(5));
                     Task.Run(() =>
                     {
-                        using var hfont = cache.GetHFONT(
+                        using var hfont = cache.GetEntry(
                             fonts[random.Next(10)],
                             (Gdi32.QUALITY)random.Next(7));
 
-                        Assert.False(hfont.HFONT.IsNull);
+                        Assert.False(hfont.Object.IsNull);
                         Thread.Sleep(random.Next(10));
                     });
                 }

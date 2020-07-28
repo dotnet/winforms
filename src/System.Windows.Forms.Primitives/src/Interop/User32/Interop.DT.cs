@@ -10,8 +10,8 @@ internal static partial class Interop
     internal static partial class User32
     {
         /// <summary>
-        ///  Text format flags for <see cref="DrawTextExW(Gdi32.HDC, string, int, ref RECT, DT, ref DRAWTEXTPARAMS)"/> and
-        ///  <see cref="DrawTextW(Gdi32.HDC, string, int, ref RECT, DT)"/>
+        ///  Text format flags for <see cref="DrawTextExW(Gdi32.HDC, ReadOnlySpan{char}, ref RECT, DT, ref DRAWTEXTPARAMS)"/>
+        ///  and <see cref="DrawTextW(Gdi32.HDC, string, int, ref RECT, DT)"/>
         /// </summary>
         [Flags]
         public enum DT : uint

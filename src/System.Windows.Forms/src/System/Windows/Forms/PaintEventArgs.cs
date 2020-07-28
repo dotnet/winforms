@@ -42,6 +42,16 @@ namespace System.Windows.Forms
         }
 
         internal PaintEventArgs(
+            PaintEventArgs e,
+            Rectangle clipRect)
+        {
+            Gdi32.HDC hdc = e.HDC;
+            _event = hdc.IsNull
+                ? new DrawingEventArgs(e.GraphicsInternal, clipRect, e._event.Flags)
+                : new DrawingEventArgs(hdc, clipRect, e._event.Flags);
+        }
+
+        internal PaintEventArgs(
             Graphics graphics,
             Rectangle clipRect,
             DrawingEventFlags flags)

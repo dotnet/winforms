@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
@@ -56,7 +57,22 @@ namespace System.Windows.Forms
         ///  another method it must be passed by reference or you risk double disposal and accidentally returning extra
         ///  copies to the cache.
         /// </remarks>
-        public static FontCache.FontScope GetHFONT(Font? font, Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)
-            => font is null ? default : s_fontCache.GetHFONT(font, quality);
+        public static FontCache.Scope GetHFONT(Font? font, Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)
+        {
+            Debug.Assert(font != null);
+            return font is null ? new FontCache.Scope() : s_fontCache.GetEntry(font, quality);
+        }
+
+        public static FontCache.Scope GetHFONT(Font? font, Gdi32.QUALITY quality, Gdi32.HDC hdc)
+        {
+            if (font != null)
+            {
+                return GetHFONT(font, quality);
+            }
+
+            // Font is null, build off of the specified HDC's current font.
+            Gdi32.HFONT hfont = (Gdi32.HFONT)Gdi32.GetCurrentObject(hdc, Gdi32.ObjectType.OBJ_FONT);
+            return new FontCache.Scope(hfont); ;
+        }
     }
 }

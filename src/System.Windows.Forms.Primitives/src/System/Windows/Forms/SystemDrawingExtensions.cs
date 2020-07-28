@@ -15,7 +15,35 @@ namespace System.Windows.Forms
     {
         internal static Gdi32.HBITMAP GetHBITMAP(this Bitmap bitmap) => (Gdi32.HBITMAP)bitmap.GetHbitmap();
         internal static Gdi32.HFONT ToHFONT(this Font font) => (Gdi32.HFONT)font.ToHfont();
+
+        /// <summary>
+        ///  Similar to <see cref="Graphics.GetNearestColor(Color)"/>, but this retains the original color if the color
+        ///  didn't actually change. This retains the state of the color.
+        /// </summary>
+        /// <remarks>
+        ///  This is important as the color only changes if <paramref name="graphics"/> has a very low color depth. This
+        ///  is extremely rare for the normal case of HDC backed Graphics objects. Keeping the original color keeps the
+        ///  state that would otherwise be stripped, notably things like <see cref="Color.IsKnownColor"/> which allows
+        ///  us to later pull from a the various caches that <see cref="Drawing"/> maintains (saving allocations).
+        ///
+        ///  Ideally we'd drop checking at all and just support full color drawing to improve performance for the
+        ///  expected normal case (more than 8 BITSPIXEL for the HDC).
+        /// </remarks>
+        internal static Color FindNearestColor(this Graphics graphics, Color color)
+        {
+            Color newColor = graphics.GetNearestColor(color);
+            return newColor.ToArgb() == color.ToArgb() ? color : newColor;
+        }
+
+        /// <summary>
+        ///  Returns true if the color has any transparency. If false, the color is fully opaque.
+        /// </summary>
         internal static bool HasTransparency(this Color color) => color.A != byte.MaxValue;
+
+        /// <summary>
+        ///  Returns true if the color is fully transparent.
+        /// </summary>
+        internal static bool IsFullyTransparent(this Color color) => color.A == 0;
 
         internal static void ThrowIfFailed(this GdiPlus.GpStatus status)
         {
@@ -71,7 +99,7 @@ namespace System.Windows.Forms
         ///  Creates a <see cref="Pen"/>. If <paramref name="color"/> is a system color, makes a static copy of the
         ///  current color value to avoid having the pen hook itself against <see cref="SystemEvents"/>.
         /// </summary>
-        internal static Pen CreateStaticPen(this Color color, DashStyle dashStyle = DashStyle.Solid, float size = 1.0f)
+        internal static Pen CreateStaticPen(this Color color, DashStyle dashStyle, float size = 1.0f)
         {
             if (dashStyle == DashStyle.Solid)
             {

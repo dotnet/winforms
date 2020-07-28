@@ -1391,10 +1391,7 @@ namespace System.Windows.Forms
             if (sender is ToolStripItem item && !item.Selected)
             {
                 Rectangle rect = new Rectangle(0, 0, item.Bounds.Width - 1, item.Bounds.Height - 1);
-                using (Pen pen = new Pen(SystemColors.ControlDark))
-                {
-                    e.Graphics.DrawRectangle(pen, rect);
-                }
+                e.Graphics.DrawRectangle(SystemPens.ControlDark, rect);
             }
         }
 

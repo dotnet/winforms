@@ -58,7 +58,7 @@ namespace System.Windows.Forms.ButtonInternal
                 PaintImage(e, layout);
 
                 Color checkBackgroundColor = colors.options.HighContrast ? colors.buttonFace : colors.highlight;
-                DrawCheckBackground3DLite(e, layout.checkBounds, colors.windowText, checkBackgroundColor, colors, true);
+                DrawCheckBackground3DLite(e, layout.checkBounds, checkBackgroundColor, colors, true);
                 DrawCheckOnly(e, layout, colors.windowText, colors.highlight, true);
 
                 AdjustFocusRectangle(layout);
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.ButtonInternal
 
                 PaintImage(e, layout);
 
-                DrawCheckBackground3DLite(e, layout.checkBounds, colors.windowText, colors.highlight, colors, true);
+                DrawCheckBackground3DLite(e, layout.checkBounds, colors.highlight, colors, true);
                 DrawCheckOnly(e, layout, colors.buttonShadow, colors.highlight, true);
 
                 AdjustFocusRectangle(layout);

@@ -669,8 +669,8 @@ namespace System.Windows.Forms
                 else
                 {
                     // Need to use GDI+
-                    using Brush b = new SolidBrush(backColor);
-                    e.GraphicsInternal.FillRectangle(b, textBounds);
+                    using var brush = backColor.GetCachedSolidBrushScope();
+                    e.GraphicsInternal.FillRectangle(brush, textBounds);
                 }
 
                 Rectangle stringBounds = new Rectangle(
@@ -728,10 +728,8 @@ namespace System.Windows.Forms
                     format.Trimming = StringTrimming.None;
 
                     // Do actual drawing
-                    using (SolidBrush brush = new SolidBrush(foreColor))
-                    {
-                        e.Graphics.DrawString(text, font, brush, stringBounds, format);
-                    }
+                    using var brush = foreColor.GetCachedSolidBrushScope();
+                    e.Graphics.DrawString(text, font, brush, stringBounds, format);
                 }
                 else
                 {
@@ -755,7 +753,7 @@ namespace System.Windows.Forms
                 }
 
                 // Draw the focus rect if required
-                //
+
                 if ((e.State & DrawItemState.Focus) == DrawItemState.Focus &&
                     (e.State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect)
                 {
@@ -769,10 +767,11 @@ namespace System.Windows.Forms
                 Color backColor = (SelectionMode != SelectionMode.None) ? e.BackColor : BackColor;
                 Rectangle bounds = e.Bounds;
                 Rectangle emptyRectangle = new Rectangle(
-                                      bounds.X + BORDER_SIZE,
-                                      bounds.Y,
-                                      bounds.Width - BORDER_SIZE,
-                                      bounds.Height - 2 * BORDER_SIZE); // Upper and lower borders.
+                    bounds.X + BORDER_SIZE,
+                    bounds.Y,
+                    bounds.Width - BORDER_SIZE,
+                    bounds.Height - 2 * BORDER_SIZE); // Upper and lower borders.
+
                 if (Focused)
                 {
                     // Draw focus rectangle for virtual first item in the list if there are no items in the list.
@@ -788,10 +787,8 @@ namespace System.Windows.Forms
                 {
                     // If VisualStyles are off, rectangle needs to be explicitly erased, when focus is lost.
                     // This is because of persisting empty focus rectangle when VisualStyles are off.
-                    using (Brush brush = new SolidBrush(backColor))
-                    {
-                        e.Graphics.FillRectangle(brush, emptyRectangle);
-                    }
+                    using var brush = backColor.GetCachedSolidBrushScope();
+                    e.Graphics.FillRectangle(brush, emptyRectangle);
                 }
             }
         }

@@ -97,10 +97,8 @@ namespace System.Windows.Forms
         public void DrawBackground()
         {
             Color backColor = (ItemIndex == -1) ? Item.BackColor : SubItem.BackColor;
-            using (var backBrush = new SolidBrush(backColor))
-            {
-                Graphics.FillRectangle(backBrush, Bounds);
-            }
+            using var backBrush = backColor.GetCachedSolidBrushScope();
+            Graphics.FillRectangle(backBrush, Bounds);
         }
 
         /// <summary>
@@ -108,7 +106,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawFocusRectangle(Rectangle bounds)
         {
-            if (Item == null)
+            if (Item is null)
             {
                 return;
             }

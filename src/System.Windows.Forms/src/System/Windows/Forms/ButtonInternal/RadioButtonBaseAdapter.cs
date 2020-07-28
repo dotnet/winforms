@@ -6,7 +6,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms.Internal;
 using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
@@ -15,24 +14,27 @@ namespace System.Windows.Forms.ButtonInternal
     {
         internal RadioButtonBaseAdapter(ButtonBase control) : base(control) { }
 
-        protected new RadioButton Control
-        {
-            get
-            {
-                return ((RadioButton)base.Control);
-            }
-        }
+        protected new RadioButton Control => ((RadioButton)base.Control);
 
-        #region Drawing helpers
-        protected void DrawCheckFlat(PaintEventArgs e, LayoutData layout, Color checkColor, Color checkBackground, Color checkBorder)
+        protected void DrawCheckFlat(
+            PaintEventArgs e,
+            LayoutData layout,
+            Color checkColor,
+            Color checkBackground,
+            Color checkBorder)
         {
             DrawCheckBackgroundFlat(e, layout.checkBounds, checkBorder, checkBackground);
             DrawCheckOnly(e, layout, checkColor, checkBackground, true);
         }
 
-        protected void DrawCheckBackground3DLite(PaintEventArgs e, Rectangle bounds, Color checkColor, Color checkBackground, ColorData colors, bool disabledColors)
+        protected void DrawCheckBackground3DLite(
+            PaintEventArgs e,
+            Rectangle bounds,
+            Color checkBackground,
+            ColorData colors,
+            bool disabledColors)
         {
-            Graphics g = e.Graphics;
+            Graphics g = e.GraphicsInternal;
 
             Color field = checkBackground;
             if (!Control.Enabled && disabledColors)
@@ -40,24 +42,22 @@ namespace System.Windows.Forms.ButtonInternal
                 field = SystemColors.Control;
             }
 
-            using (Brush fieldBrush = new SolidBrush(field))
-            {
-                using (Pen dark = new Pen(colors.buttonShadow),
-                       light = new Pen(colors.buttonFace),
-                       lightlight = new Pen(colors.highlight))
-                {
-                    bounds.Width--;
-                    bounds.Height--;
-                    // fall a little short of SW, NW, NE, SE because corners come out nasty
-                    g.DrawPie(dark, bounds, (float)(135 + 1), (float)(90 - 2));
-                    g.DrawPie(dark, bounds, (float)(225 + 1), (float)(90 - 2));
-                    g.DrawPie(lightlight, bounds, (float)(315 + 1), (float)(90 - 2));
-                    g.DrawPie(lightlight, bounds, (float)(45 + 1), (float)(90 - 2));
-                    bounds.Inflate(-1, -1);
-                    g.FillEllipse(fieldBrush, bounds);
-                    g.DrawEllipse(light, bounds);
-                }
-            }
+            using var fieldBrush = field.GetCachedSolidBrushScope();
+            using var dark = colors.buttonShadow.GetCachedPenScope();
+            using var light = colors.buttonFace.GetCachedPenScope();
+            using var lightlight = colors.highlight.GetCachedPenScope();
+
+            bounds.Width--;
+            bounds.Height--;
+
+            // Fall a little short of SW, NW, NE, SE because corners come out nasty
+            g.DrawPie(dark, bounds, 135 + 1, 90 - 2);
+            g.DrawPie(dark, bounds, 225 + 1, 90 - 2);
+            g.DrawPie(lightlight, bounds, 315 + 1, 90 - 2);
+            g.DrawPie(lightlight, bounds, 45 + 1, 90 - 2);
+            bounds.Inflate(-1, -1);
+            g.FillEllipse(fieldBrush, bounds);
+            g.DrawEllipse(light, bounds);
         }
 
         protected void DrawCheckBackgroundFlat(PaintEventArgs e, Rectangle bounds, Color borderColor, Color checkBackground)
@@ -67,12 +67,13 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (!Control.Enabled)
             {
-                // if we are not in HighContrast mode OR we opted into the legacy behavior
+                // If we are not in HighContrast mode OR we opted into the legacy behavior
                 if (!SystemInformation.HighContrast)
                 {
                     border = ControlPaint.ContrastControlDark;
                 }
-                // otherwise we are in HighContrast mode
+
+                // Otherwise we are in HighContrast mode
                 field = SystemColors.Control;
             }
 
@@ -82,10 +83,10 @@ namespace System.Windows.Forms.ButtonInternal
             using var borderPen = new Gdi32.CreatePenScope(border);
             using var fieldBrush = new Gdi32.CreateBrushScope(field);
 
-            // In high DPI mode when we draw ellipse as three rectantles,
-            // the quality of ellipse is poor. Draw it directly as ellipse
             if (scale > 1.1)
             {
+                // In high DPI mode when we draw an ellipse as three rectangles, the quality of ellipse is poor. Draw
+                // it directly as an ellipse.
                 bounds.Width--;
                 bounds.Height--;
                 hdc.DrawAndFillEllipse(borderPen, fieldBrush, bounds);
@@ -217,8 +218,6 @@ namespace System.Windows.Forms.ButtonInternal
                 ControlPaint.DrawRadioButton(e.GraphicsInternal, check, style);
             }
         }
-
-        #endregion
 
         protected void AdjustFocusRectangle(LayoutData layout)
         {

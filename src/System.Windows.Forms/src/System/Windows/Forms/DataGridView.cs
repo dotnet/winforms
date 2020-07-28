@@ -353,8 +353,9 @@ namespace System.Windows.Forms
         private Timer _vertScrollTimer, _horizScrollTimer;
 
         private readonly Hashtable _converters;
-        private Hashtable _pens;
-        private Hashtable _brushes;
+        private static Color s_defaultBackColor = SystemColors.Window;
+        private static Color s_defaultBackgroundColor = SystemColors.ControlDark;
+        private Color _backgroundColor = s_defaultBackgroundColor;
 
         private RECT[] _cachedScrollableRegion;
 
@@ -414,9 +415,7 @@ namespace System.Windows.Forms
             _lstRows = new ArrayList();
 
             _converters = new Hashtable(8);
-            _pens = new Hashtable(8);
-            _brushes = new Hashtable(10);
-            GridPen = new Pen(DefaultGridColor);
+            GridPenColor = DefaultGridColor;
 
             _selectedBandIndexes = new DataGridViewIntLinkedList();
             _individualSelectedCells = new DataGridViewCellLinkedList();
@@ -1057,8 +1056,6 @@ namespace System.Windows.Forms
             remove => base.BackColorChanged -= value;
         }
 
-        internal SolidBrush BackgroundBrush { get; private set; } = DefaultBackgroundBrush;
-
         /// <summary>
         ///  Gets or sets the background color of the dataGridView.
         /// </summary>
@@ -1066,23 +1063,17 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DataGridViewBackgroundColorDescr))]
         public Color BackgroundColor
         {
-            get
-            {
-                return BackgroundBrush.Color;
-            }
+            get => _backgroundColor;
             set
             {
                 if (value.IsEmpty)
-                {
                     throw new ArgumentException(string.Format(SR.DataGridView_EmptyColor, "BackgroundColor"));
-                }
                 if (value.A < 255)
-                {
                     throw new ArgumentException(string.Format(SR.DataGridView_TransparentColor, "BackgroundColor"));
-                }
-                if (!value.Equals(BackgroundBrush.Color))
+
+                if (!value.Equals(_backgroundColor))
                 {
-                    BackgroundBrush = new SolidBrush(value);
+                    _backgroundColor = value;
                     OnBackgroundColorChanged(EventArgs.Empty);
                 }
             }
@@ -1128,10 +1119,7 @@ namespace System.Windows.Forms
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        private bool ShouldSerializeBackgroundColor()
-        {
-            return !BackgroundColor.Equals(DefaultBackgroundBrush.Color);
-        }
+        private bool ShouldSerializeBackgroundColor() => !BackgroundColor.Equals(s_defaultBackgroundColor);
 
         [DefaultValue(BorderStyle.FixedSingle)]
         [SRCategory(nameof(SR.CatAppearance))]
@@ -2069,22 +2057,6 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_dataSourceChangedEvent, value);
         }
 
-        private static SolidBrush DefaultBackBrush
-        {
-            get
-            {
-                return (SolidBrush)SystemBrushes.Window;
-            }
-        }
-
-        private static SolidBrush DefaultBackgroundBrush
-        {
-            get
-            {
-                return (SolidBrush)SystemBrushes.ControlDark;
-            }
-        }
-
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.DataGridView_DefaultCellStyleDescr))]
         [AmbientValue(null)]
@@ -2111,7 +2083,7 @@ namespace System.Windows.Forms
                     };
                     if (_defaultCellStyle.BackColor == Color.Empty)
                     {
-                        defaultCellStyleTmp.BackColor = DefaultBackBrush.Color;
+                        defaultCellStyleTmp.BackColor = s_defaultBackColor;
                     }
                     if (_defaultCellStyle.ForeColor == Color.Empty)
                     {
@@ -2171,7 +2143,7 @@ namespace System.Windows.Forms
             {
                 DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle
                 {
-                    BackColor = DefaultBackBrush.Color,
+                    BackColor = s_defaultBackColor,
                     ForeColor = base.ForeColor,
                     SelectionBackColor = DefaultSelectionBackBrush.Color,
                     SelectionForeColor = DefaultSelectionForeBrush.Color,
@@ -2793,28 +2765,16 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DataGridViewGridColorDescr))]
         public Color GridColor
         {
-            get
-            {
-                return GridPen.Color;
-            }
+            get => GridPenColor;
             set
             {
                 if (value.IsEmpty)
-                {
-                    throw new ArgumentException(string.Format(SR.DataGridView_EmptyColor, "GridColor"));
-                }
+                    throw new ArgumentException(string.Format(SR.DataGridView_EmptyColor, nameof(GridColor)));
                 if (value.A < 255)
-                {
-                    throw new ArgumentException(string.Format(SR.DataGridView_TransparentColor, "GridColor"));
-                }
-                if (!value.Equals(GridPen.Color))
-                {
-                    if (GridPen != null)
-                    {
-                        GridPen.Dispose();
-                    }
+                    throw new ArgumentException(string.Format(SR.DataGridView_TransparentColor, nameof(GridColor)));
 
-                    GridPen = new Pen(value);
+                if (!value.Equals(GridPenColor))
+                {
                     OnGridColorChanged(EventArgs.Empty);
                 }
             }
@@ -2830,10 +2790,10 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeGridColor()
         {
-            return !GridPen.Color.Equals(DefaultGridColor);
+            return !GridPenColor.Equals(DefaultGridColor);
         }
 
-        internal Pen GridPen { get; private set; }
+        internal Color GridPenColor { get; private set; }
 
         internal int HorizontalOffset
         {

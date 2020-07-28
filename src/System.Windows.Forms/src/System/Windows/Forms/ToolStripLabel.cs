@@ -33,9 +33,11 @@ namespace System.Windows.Forms
         public ToolStripLabel()
         {
         }
+
         public ToolStripLabel(string text) : base(text, null, null)
         {
         }
+
         public ToolStripLabel(Image image) : base(null, image, null)
         {
         }

@@ -2559,6 +2559,7 @@ namespace System.ComponentModel.Design
                         {
                             buttonState = PushButtonState.Hot;
                         }
+
                         ButtonRenderer.DrawButton(g, new Rectangle(-1, -1, Width + 2, Height + 2), "…", Font, Focused, buttonState);
                     }
                     else

@@ -610,7 +610,7 @@ namespace System.Windows.Forms
 
             Graphics g = e.Graphics;
             Rectangle dropDownRect = e.ArrowRectangle;
-            using (Brush brush = new SolidBrush(e.ArrowColor))
+            using (var brush = e.ArrowColor.GetCachedSolidBrushScope())
             {
                 Point middle = new Point(dropDownRect.Left + dropDownRect.Width / 2, dropDownRect.Top + dropDownRect.Height / 2);
                 // if the width is odd - favor pushing it over one pixel right.

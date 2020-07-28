@@ -96,13 +96,13 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else
                 {
-                    ControlPaint.DrawBorderSolid(e, r, colors.windowFrame);
+                    ControlPaint.DrawBorderSimple(e, r, colors.windowFrame);
                 }
             }
             else if (state == CheckState.Checked && SystemInformation.HighContrast)
             {
-                ControlPaint.DrawBorderSolid(e, r, colors.windowFrame);
-                ControlPaint.DrawBorderSolid(e, r, colors.buttonShadow);
+                ControlPaint.DrawBorderSimple(e, r, colors.windowFrame);
+                ControlPaint.DrawBorderSimple(e, r, colors.buttonShadow);
             }
             else if (state == CheckState.Indeterminate)
             {
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                ControlPaint.DrawBorderSolid(e, r, colors.windowFrame);
+                ControlPaint.DrawBorderSimple(e, r, colors.windowFrame);
             }
         }
 
@@ -184,13 +184,13 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else
                 {
-                    ControlPaint.DrawBorderSolid(e, r, colors.windowFrame);
+                    ControlPaint.DrawBorderSimple(e, r, colors.windowFrame);
                 }
             }
             else if (state == CheckState.Checked && SystemInformation.HighContrast)
             {
-                ControlPaint.DrawBorderSolid(e, r, colors.windowFrame);
-                ControlPaint.DrawBorderSolid(e, r, colors.buttonShadow);
+                ControlPaint.DrawBorderSimple(e, r, colors.windowFrame);
+                ControlPaint.DrawBorderSimple(e, r, colors.buttonShadow);
             }
             else if (state == CheckState.Indeterminate)
             {
@@ -198,7 +198,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                ControlPaint.DrawBorderSolid(e, r, colors.windowFrame);
+                ControlPaint.DrawBorderSimple(e, r, colors.windowFrame);
             }
         }
 
@@ -273,12 +273,12 @@ namespace System.Windows.Forms.ButtonInternal
                     }
                     else
                     {
-                        ControlPaint.DrawBorderSolid(e, r, colors.windowFrame);
+                        ControlPaint.DrawBorderSimple(e, r, colors.windowFrame);
                     }
                 }
                 else if (state == CheckState.Unchecked)
                 {
-                    ControlPaint.DrawBorderSolid(e, r, colors.windowFrame);
+                    ControlPaint.DrawBorderSimple(e, r, colors.windowFrame);
                 }
                 else
                 {

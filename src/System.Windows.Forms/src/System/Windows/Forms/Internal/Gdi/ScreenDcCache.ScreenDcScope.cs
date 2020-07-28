@@ -11,7 +11,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Scope to ensure return of the device context back to the cache.
         /// </summary>
-        ///
 #if DEBUG
         internal class ScreenDcScope : DisposalTracking.Tracker, IDisposable
 #else

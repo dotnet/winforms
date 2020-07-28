@@ -500,143 +500,125 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs pevent)
         {
             Color backColor = GetBackColor(SystemInformation.HighContrast);
-            Brush backBrush = new SolidBrush(backColor);
+            using var backBrush = backColor.GetCachedSolidBrushScope();
 
-            try
+            if (pageInfo == null || pageInfo.Length == 0)
             {
-                if (pageInfo == null || pageInfo.Length == 0)
+                pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
+
+                if (pageInfo != null || exceptionPrinting)
                 {
-                    pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
-
-                    if (pageInfo != null || exceptionPrinting)
+                    // Calculate formats
+                    using StringFormat format = new StringFormat
                     {
-                        // Calculate formats
-                        StringFormat format = new StringFormat
-                        {
-                            Alignment = ControlPaint.TranslateAlignment(ContentAlignment.MiddleCenter),
-                            LineAlignment = ControlPaint.TranslateLineAlignment(ContentAlignment.MiddleCenter)
-                        };
+                        Alignment = ControlPaint.TranslateAlignment(ContentAlignment.MiddleCenter),
+                        LineAlignment = ControlPaint.TranslateLineAlignment(ContentAlignment.MiddleCenter)
+                    };
 
-                        // Do actual drawing
-                        SolidBrush brush = new SolidBrush(ForeColor);
-                        try
-                        {
-                            if (exceptionPrinting)
-                            {
-                                pevent.Graphics.DrawString(SR.PrintPreviewExceptionPrinting, Font, brush, ClientRectangle, format);
-                            }
-                            else
-                            {
-                                pevent.Graphics.DrawString(SR.PrintPreviewNoPages, Font, brush, ClientRectangle, format);
-                            }
-                        }
-                        finally
-                        {
-                            brush.Dispose();
-                            format.Dispose();
-                        }
-                    }
-                    else
-                    {
-                        BeginInvoke(new MethodInvoker(CalculatePageInfo));
-                    }
+                    // Do actual drawing
+                    using var brush = ForeColor.GetCachedSolidBrushScope();
+                    pevent.Graphics.DrawString(
+                        exceptionPrinting ? SR.PrintPreviewExceptionPrinting : SR.PrintPreviewNoPages,
+                        Font,
+                        brush,
+                        ClientRectangle,
+                        format);
                 }
                 else
                 {
-                    if (!layoutOk)
-                    {
-                        ComputeLayout();
-                    }
-
-                    Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
-
-                    //Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
-                    Point virtualPixels = new Point(VirtualSize);
-
-                    // center pages on screen if small enough
-                    Point offset = new Point(Math.Max(0, (Size.Width - virtualPixels.X) / 2),
-                                             Math.Max(0, (Size.Height - virtualPixels.Y) / 2));
-                    offset.X -= Position.X;
-                    offset.Y -= Position.Y;
-                    lastOffset = offset;
-
-                    int borderPixelsX = PhysicalToPixels(border, screendpi.X);
-                    int borderPixelsY = PhysicalToPixels(border, screendpi.Y);
-
-                    Region originalClip = pevent.Graphics.Clip;
-                    Rectangle[] pageRenderArea = new Rectangle[rows * columns];
-                    Point lastImageSize = Point.Empty;
-                    int maxImageHeight = 0;
-
-                    try
-                    {
-                        for (int row = 0; row < rows; row++)
-                        {
-                            //Initialize our LastImageSize variable...
-                            lastImageSize.X = 0;
-                            lastImageSize.Y = maxImageHeight * row;
-
-                            for (int column = 0; column < columns; column++)
-                            {
-                                int imageIndex = StartPage + column + row * columns;
-                                if (imageIndex < pageInfo.Length)
-                                {
-                                    Size pageSize = pageInfo[imageIndex].PhysicalSize;
-                                    if (autoZoom)
-                                    {
-                                        double zoomX = ((double)controlPhysicalSize.Width - border * (columns + 1)) / (columns * pageSize.Width);
-                                        double zoomY = ((double)controlPhysicalSize.Height - border * (rows + 1)) / (rows * pageSize.Height);
-                                        zoom = Math.Min(zoomX, zoomY);
-                                    }
-
-                                    imageSize = new Size((int)(zoom * pageSize.Width), (int)(zoom * pageSize.Height));
-                                    Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
-
-                                    int x = offset.X + borderPixelsX * (column + 1) + lastImageSize.X;
-                                    int y = offset.Y + borderPixelsY * (row + 1) + lastImageSize.Y;
-
-                                    lastImageSize.X += imagePixels.X;
-                                    //The Height is the Max of any PageHeight..
-                                    maxImageHeight = Math.Max(maxImageHeight, imagePixels.Y);
-
-                                    pageRenderArea[imageIndex - StartPage] = new Rectangle(x, y, imagePixels.X, imagePixels.Y);
-                                    pevent.Graphics.ExcludeClip(pageRenderArea[imageIndex - StartPage]);
-                                }
-                            }
-                        }
-
-                        pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
-                    }
-                    finally
-                    {
-                        pevent.Graphics.Clip = originalClip;
-                    }
-
-                    for (int i = 0; i < pageRenderArea.Length; i++)
-                    {
-                        if (i + StartPage < pageInfo.Length)
-                        {
-                            Rectangle box = pageRenderArea[i];
-                            pevent.Graphics.DrawRectangle(Pens.Black, box);
-                            using (SolidBrush brush = new SolidBrush(ForeColor))
-                            {
-                                pevent.Graphics.FillRectangle(brush, box);
-                            }
-                            box.Inflate(-1, -1);
-                            if (pageInfo[i + StartPage].Image != null)
-                            {
-                                pevent.Graphics.DrawImage(pageInfo[i + StartPage].Image, box);
-                            }
-                            box.Width--;
-                            box.Height--;
-                            pevent.Graphics.DrawRectangle(Pens.Black, box);
-                        }
-                    }
+                    BeginInvoke(new MethodInvoker(CalculatePageInfo));
                 }
             }
-            finally
+            else
             {
-                backBrush.Dispose();
+                if (!layoutOk)
+                {
+                    ComputeLayout();
+                }
+
+                Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
+
+                //Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
+                Point virtualPixels = new Point(VirtualSize);
+
+                // center pages on screen if small enough
+                Point offset = new Point(
+                    Math.Max(0, (Size.Width - virtualPixels.X) / 2),
+                    Math.Max(0, (Size.Height - virtualPixels.Y) / 2));
+                offset.X -= Position.X;
+                offset.Y -= Position.Y;
+                lastOffset = offset;
+
+                int borderPixelsX = PhysicalToPixels(border, screendpi.X);
+                int borderPixelsY = PhysicalToPixels(border, screendpi.Y);
+
+                Region originalClip = pevent.Graphics.Clip;
+                Rectangle[] pageRenderArea = new Rectangle[rows * columns];
+                Point lastImageSize = Point.Empty;
+                int maxImageHeight = 0;
+
+                using (var clipScope = new GraphicsClipScope(pevent.GraphicsInternal))
+                {
+                    for (int row = 0; row < rows; row++)
+                    {
+                        // Initialize our LastImageSize variable...
+                        lastImageSize.X = 0;
+                        lastImageSize.Y = maxImageHeight * row;
+
+                        for (int column = 0; column < columns; column++)
+                        {
+                            int imageIndex = StartPage + column + row * columns;
+                            if (imageIndex < pageInfo.Length)
+                            {
+                                Size pageSize = pageInfo[imageIndex].PhysicalSize;
+                                if (autoZoom)
+                                {
+                                    double zoomX = ((double)controlPhysicalSize.Width - border * (columns + 1))
+                                        / (columns * pageSize.Width);
+                                    double zoomY = ((double)controlPhysicalSize.Height - border * (rows + 1))
+                                        / (rows * pageSize.Height);
+                                    zoom = Math.Min(zoomX, zoomY);
+                                }
+
+                                imageSize = new Size((int)(zoom * pageSize.Width), (int)(zoom * pageSize.Height));
+                                Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
+
+                                int x = offset.X + borderPixelsX * (column + 1) + lastImageSize.X;
+                                int y = offset.Y + borderPixelsY * (row + 1) + lastImageSize.Y;
+
+                                lastImageSize.X += imagePixels.X;
+                                //The Height is the Max of any PageHeight..
+                                maxImageHeight = Math.Max(maxImageHeight, imagePixels.Y);
+
+                                pageRenderArea[imageIndex - StartPage] = new Rectangle(x, y, imagePixels.X, imagePixels.Y);
+                                pevent.Graphics.ExcludeClip(pageRenderArea[imageIndex - StartPage]);
+                            }
+                        }
+                    }
+
+                    pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
+                }
+
+                for (int i = 0; i < pageRenderArea.Length; i++)
+                {
+                    if (i + StartPage < pageInfo.Length)
+                    {
+                        Rectangle box = pageRenderArea[i];
+                        pevent.Graphics.DrawRectangle(Pens.Black, box);
+                        using (var brush = ForeColor.GetCachedSolidBrushScope())
+                        {
+                            pevent.Graphics.FillRectangle(brush, box);
+                        }
+                        box.Inflate(-1, -1);
+                        if (pageInfo[i + StartPage].Image != null)
+                        {
+                            pevent.Graphics.DrawImage(pageInfo[i + StartPage].Image, box);
+                        }
+                        box.Width--;
+                        box.Height--;
+                        pevent.Graphics.DrawRectangle(Pens.Black, box);
+                    }
+                }
             }
 
             base.OnPaint(pevent); // raise paint event

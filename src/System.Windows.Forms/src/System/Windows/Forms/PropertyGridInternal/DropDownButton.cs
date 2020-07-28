@@ -167,7 +167,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    ControlPaint.DrawBorderSolid(e, r, ControlPaint.Dark(Control.BackColor));
+                    ControlPaint.DrawBorderSimple(e, r, ControlPaint.Dark(Control.BackColor));
                 }
             }
             else
@@ -196,7 +196,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    ControlPaint.DrawBorderSolid(e, r, ControlPaint.Dark(Control.BackColor));
+                    ControlPaint.DrawBorderSimple(e, r, ControlPaint.Dark(Control.BackColor));
                 }
             }
         }

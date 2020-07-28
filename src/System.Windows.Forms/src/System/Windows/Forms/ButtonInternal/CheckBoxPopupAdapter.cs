@@ -33,15 +33,14 @@ namespace System.Windows.Forms.ButtonInternal
                 DrawCheckBackground(
                     e,
                     layout.checkBounds,
-                    colors.windowText,
                     colors.options.HighContrast ? colors.buttonFace : colors.highlight,
                     disabledColors: true,
                     colors);
-                ControlPaint.DrawBorderSolid(
+                ControlPaint.DrawBorderSimple(
                     e,
                     layout.checkBounds,
                     (colors.options.HighContrast && !Control.Enabled) ? colors.windowFrame : colors.buttonShadow);
-                DrawCheckOnly(e, layout, colors, colors.windowText, colors.highlight);
+                DrawCheckOnly(e, layout, colors, colors.windowText);
 
                 AdjustFocusRectangle(layout);
                 PaintField(e, layout, colors, colors.windowText, true);
@@ -60,30 +59,34 @@ namespace System.Windows.Forms.ButtonInternal
                 ColorData colors = PaintPopupRender(e).Calculate();
                 LayoutData layout = PaintPopupLayout(show3D: true).Layout();
 
-                Region original = e.Graphics.Clip;
-                PaintButtonBackground(e, Control.ClientRectangle, null);
+                Control.PaintBackground(e, Control.ClientRectangle);
 
                 PaintImage(e, layout);
 
                 DrawCheckBackground(
                     e,
                     layout.checkBounds,
-                    colors.windowText,
                     colors.options.HighContrast ? colors.buttonFace : colors.highlight,
                     disabledColors: true,
                     colors);
 
                 DrawPopupBorder(e, layout.checkBounds, colors);
-                DrawCheckOnly(e, layout, colors, colors.windowText, colors.highlight);
+                DrawCheckOnly(e, layout, colors, colors.windowText);
 
+                Region originalClip = null;
                 if (!string.IsNullOrEmpty(Control.Text))
                 {
-                    e.Graphics.Clip = original;
-                    e.Graphics.ExcludeClip(layout.checkArea);
+                    originalClip = e.GraphicsInternal.Clip;
+                    e.GraphicsInternal.ExcludeClip(layout.checkArea);
                 }
 
                 AdjustFocusRectangle(layout);
-                PaintField(e, layout, colors, colors.windowText, true);
+                PaintField(e, layout, colors, colors.windowText, drawFocus: true);
+
+                if (originalClip != null)
+                {
+                    e.GraphicsInternal.Clip = originalClip;
+                }
             }
         }
 
@@ -96,18 +99,16 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                Graphics g = e.Graphics;
-                ColorData colors = PaintPopupRender(e.Graphics).Calculate();
+                ColorData colors = PaintPopupRender(e).Calculate();
                 LayoutData layout = PaintPopupLayout(show3D: true).Layout();
 
-                Region original = e.Graphics.Clip;
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
                 PaintImage(e, layout);
 
-                DrawCheckBackground(e, layout.checkBounds, colors.windowText, colors.buttonFace, true, colors);
+                DrawCheckBackground(e, layout.checkBounds, colors.buttonFace, true, colors);
                 DrawPopupBorder(e, layout.checkBounds, colors);
-                DrawCheckOnly(e, layout, colors, colors.windowText, colors.buttonFace);
+                DrawCheckOnly(e, layout, colors, colors.windowText);
 
                 AdjustFocusRectangle(layout);
                 PaintField(e, layout, colors, colors.windowText, true);

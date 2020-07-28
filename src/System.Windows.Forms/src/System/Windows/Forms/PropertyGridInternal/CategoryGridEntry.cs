@@ -91,38 +91,24 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override void DisposeChildren()
         {
-            // categories should never dispose
-            //
+            // Categories should never dispose
             return;
         }
 
-        // we don't want this guy participating in property depth.
-        public override int PropertyDepth
-        {
-            get => base.PropertyDepth - 1;
-        }
+        // Don't want this participating in property depth.
+        public override int PropertyDepth => base.PropertyDepth - 1;
 
         /// <summary>
         ///  Gets the accessibility object for the current category grid entry.
         /// </summary>
-        /// <returns></returns>
         protected override GridEntryAccessibleObject GetAccessibilityObject()
         {
             return new CategoryGridEntryAccessibleObject(this);
         }
 
-        protected override Brush GetBackgroundBrush(Graphics g)
-        {
-            return GridEntryHost.GetLineBrush(g);
-        }
+        protected override Color GetBackgroundColor() => GridEntryHost.GetLineColor();
 
-        protected override Color LabelTextColor
-        {
-            get
-            {
-                return ownerGrid.CategoryForeColor;
-            }
-        }
+        protected override Color LabelTextColor => ownerGrid.CategoryForeColor;
 
         public override bool Expandable
         {
@@ -242,10 +228,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             // draw the line along the top
             if (parentPE.GetChildIndex(this) > 0)
             {
-                using (Pen topLinePen = new Pen(ownerGrid.CategorySplitterColor, 1))
-                {
-                    g.DrawLine(topLinePen, rect.X - 1, rect.Y - 1, rect.Width + 2, rect.Y - 1);
-                }
+                using var topLinePen = ownerGrid.CategorySplitterColor.GetCachedPenScope();
+                g.DrawLine(topLinePen, rect.X - 1, rect.Y - 1, rect.Width + 2, rect.Y - 1);
             }
         }
 
@@ -256,10 +240,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             // draw the line along the top
             if (parentPE.GetChildIndex(this) > 0)
             {
-                using (Pen topLinePen = new Pen(ownerGrid.CategorySplitterColor, 1))
-                {
-                    g.DrawLine(topLinePen, rect.X - 2, rect.Y - 1, rect.Width + 1, rect.Y - 1);
-                }
+                using var topLinePen = ownerGrid.CategorySplitterColor.GetCachedPenScope();
+                g.DrawLine(topLinePen, rect.X - 2, rect.Y - 1, rect.Width + 1, rect.Y - 1);
             }
         }
 

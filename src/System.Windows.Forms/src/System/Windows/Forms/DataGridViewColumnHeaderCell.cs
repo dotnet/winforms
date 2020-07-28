@@ -785,7 +785,6 @@ namespace System.Windows.Forms
             Rectangle backgroundBounds = valBounds;
 
             bool cellSelected = (dataGridViewElementState & DataGridViewElementStates.Selected) != 0;
-            SolidBrush br;
 
             if (DataGridView.ApplyVisualStylesToHeaderCells)
             {
@@ -877,15 +876,18 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (paint && DataGridViewCell.PaintBackground(paintParts) && backgroundBounds.Width > 0 && backgroundBounds.Height > 0)
+                if (paint && PaintBackground(paintParts) && backgroundBounds.Width > 0 && backgroundBounds.Height > 0)
                 {
-                    br = DataGridView.GetCachedBrush((DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected) || IsHighlighted() ?
-                        cellStyle.SelectionBackColor : cellStyle.BackColor);
-                    if (br.Color.A == 255)
+                    Color brushColor = (PaintSelectionBackground(paintParts) && cellSelected) || IsHighlighted()
+                        ? cellStyle.SelectionBackColor : cellStyle.BackColor;
+
+                    if (!brushColor.HasTransparency())
                     {
-                        g.FillRectangle(br, backgroundBounds);
+                        using var brush = brushColor.GetCachedSolidBrushScope();
+                        g.FillRectangle(brush, backgroundBounds);
                     }
                 }
+
                 if (cellStyle.Padding != Padding.Empty)
                 {
                     if (DataGridView.RightToLeftInternal)
@@ -1001,10 +1003,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (paint && displaySortGlyph && DataGridViewCell.PaintContentBackground(paintParts))
+            if (paint && displaySortGlyph && PaintContentBackground(paintParts))
             {
-                Pen penControlDark = null, penControlLightLight = null;
-                GetContrastedPens(cellStyle.BackColor, ref penControlDark, ref penControlLightLight);
+                (Color darkColor, Color lightColor) = GetContrastedColors(cellStyle.BackColor);
+                using var penControlDark = darkColor.GetCachedPenScope();
+                using var penControlLightLight = lightColor.GetCachedPenScope();
 
                 if (SortGlyphDirection == SortOrder.Ascending)
                 {

@@ -48,7 +48,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (state == CheckState.Unchecked)
             {
-                ControlPaint.DrawBorderSolid(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow);
+                ControlPaint.DrawBorderSimple(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow);
             }
             else
             {
@@ -86,26 +86,25 @@ namespace System.Windows.Forms.ButtonInternal
             if (SystemInformation.HighContrast)
             {
                 Graphics g = e.GraphicsInternal;
-                using (Pen windowFrame = new Pen(colors.windowFrame),
-                       highlight = new Pen(colors.highlight),
-                       buttonShadow = new Pen(colors.buttonShadow))
-                {
-                    // top, left white
-                    g.DrawLine(windowFrame, r.Left + 1, r.Top + 1, r.Right - 2, r.Top + 1);
-                    g.DrawLine(windowFrame, r.Left + 1, r.Top + 1, r.Left + 1, r.Bottom - 2);
+                using var windowFrame = colors.windowFrame.GetCachedPenScope();
+                using var highlight = colors.highlight.GetCachedPenScope();
+                using var buttonShadow = colors.buttonShadow.GetCachedPenScope();
 
-                    // bottom, right white
-                    g.DrawLine(windowFrame, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);
-                    g.DrawLine(windowFrame, r.Right - 1, r.Top, r.Right - 1, r.Bottom);
+                // top, left white
+                g.DrawLine(windowFrame, r.Left + 1, r.Top + 1, r.Right - 2, r.Top + 1);
+                g.DrawLine(windowFrame, r.Left + 1, r.Top + 1, r.Left + 1, r.Bottom - 2);
 
-                    // top, left gray
-                    g.DrawLine(highlight, r.Left, r.Top, r.Right, r.Top);
-                    g.DrawLine(highlight, r.Left, r.Top, r.Left, r.Bottom);
+                // bottom, right white
+                g.DrawLine(windowFrame, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);
+                g.DrawLine(windowFrame, r.Right - 1, r.Top, r.Right - 1, r.Bottom);
 
-                    // bottom, right gray
-                    g.DrawLine(buttonShadow, r.Left + 1, r.Bottom - 2, r.Right - 2, r.Bottom - 2);
-                    g.DrawLine(buttonShadow, r.Right - 2, r.Top + 1, r.Right - 2, r.Bottom - 2);
-                }
+                // top, left gray
+                g.DrawLine(highlight, r.Left, r.Top, r.Right, r.Top);
+                g.DrawLine(highlight, r.Left, r.Top, r.Left, r.Bottom);
+
+                // bottom, right gray
+                g.DrawLine(buttonShadow, r.Left + 1, r.Bottom - 2, r.Right - 2, r.Bottom - 2);
+                g.DrawLine(buttonShadow, r.Right - 2, r.Top + 1, r.Right - 2, r.Bottom - 2);
 
                 r.Inflate(-2, -2);
             }
@@ -133,7 +132,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             r.Inflate(1, 1);
             DrawDefaultBorder(e, r, colors.options.HighContrast ? colors.windowText : colors.windowFrame, Control.IsDefault);
-            ControlPaint.DrawBorderSolid(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow);
+            ControlPaint.DrawBorderSimple(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow);
         }
 
         #region Layout

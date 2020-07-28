@@ -95,8 +95,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets or sets the color used to display disabled links.
-            /// </summary>
+        ///  Gets or sets the color used to display disabled links.
+        /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.LinkLabelDisabledLinkColorDescr))]
         public Color DisabledLinkColor
@@ -1184,8 +1184,8 @@ namespace System.Windows.Forms
                 {
                     // Control.Enabled not to be confused with Link.Enabled
                     bool optimizeBackgroundRendering = !GetStyle(ControlStyles.OptimizedDoubleBuffer);
-                    var foreBrush = new FormsSolidBrush(ForeColor);
-                    var linkBrush = new FormsSolidBrush(LinkColor);
+                    var foreBrush = ForeColor.GetCachedSolidBrushScope();
+                    var linkBrush = LinkColor.GetCachedSolidBrushScope();
 
                     try
                     {
@@ -1305,8 +1305,7 @@ namespace System.Windows.Forms
                             Color foreColor;
                             using (var scope = new DeviceContextHdcScope(e, applyGraphicsState: false))
                             {
-                                foreColor = ColorTranslator.FromWin32(
-                                Gdi32.GetNearestColor(scope.HDC, ColorTranslator.ToWin32(DisabledColor)));
+                                foreColor = scope.HDC.FindNearestColor(DisabledColor);
                             }
 
                             Rectangle clientRectWidthPadding = ClientRectWithPadding;
@@ -1424,8 +1423,8 @@ namespace System.Windows.Forms
         private void PaintLink(
             PaintEventArgs e,
             Link link,
-            FormsSolidBrush foreBrush,
-            FormsSolidBrush linkBrush,
+            SolidBrush foreBrush,
+            SolidBrush linkBrush,
             bool optimizeBackgroundRendering,
             RectangleF finalrect)
         {
@@ -1445,14 +1444,7 @@ namespace System.Windows.Forms
                     Color brushColor = Color.Empty;
                     LinkState linkState = link.State;
 
-                    if ((linkState & LinkState.Hover) == LinkState.Hover)
-                    {
-                        font = _hoverLinkFont;
-                    }
-                    else
-                    {
-                        font = _linkFont;
-                    }
+                    font = (linkState & LinkState.Hover) == LinkState.Hover ? _hoverLinkFont : _linkFont;
 
                     if (link.Enabled)
                     {
@@ -1471,44 +1463,27 @@ namespace System.Windows.Forms
                         brushColor = DisabledLinkColor;
                     }
 
-                    if (IsOneLink())
-                    {
-                        g.Clip = new Region(finalrect);
-                    }
-                    else
-                    {
-                        g.Clip = link.VisualRegion;
-                    }
+                    g.Clip = IsOneLink() ? new Region(finalrect) : link.VisualRegion;
 
                     if (optimizeBackgroundRendering)
                     {
                         PaintLinkBackground(g);
                     }
 
+                    if (brushColor == Color.Empty)
+                    {
+                        brushColor = linkBrush.Color;
+                    }
+
                     if (UseCompatibleTextRendering)
                     {
-                        Brush useBrush = brushColor == Color.Empty ? linkBrush : new FormsSolidBrush(brushColor);
+                        using var useBrush = brushColor.GetCachedSolidBrushScope();
                         StringFormat stringFormat = CreateStringFormat();
-
                         g.DrawString(Text, font, useBrush, ClientRectWithPadding, stringFormat);
-
-                        if (useBrush != linkBrush)
-                        {
-                            useBrush.Dispose();
-                        }
                     }
                     else
                     {
-                        if (brushColor == Color.Empty)
-                        {
-                            brushColor = linkBrush.Color;
-                        }
-
-                        using (var hdc = new DeviceContextHdcScope(g, applyGraphicsState: false))
-                        {
-                            brushColor = ColorTranslator.FromWin32(
-                                Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(brushColor)));
-                        }
+                        brushColor = g.FindNearestColor(brushColor);
 
                         Rectangle clientRectWithPadding = ClientRectWithPadding;
                         TextRenderer.DrawText(
@@ -1621,7 +1596,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Processes a dialog key. This method is called during message pre-processing
+        ///  Processes a dialog key. This method is called during message pre-processing
         ///  to handle dialog characters, such as TAB, RETURN, ESCAPE, and arrow keys. This
         ///  method is called only if the isInputKey() method indicates that the control
         ///  isn't interested in the key. processDialogKey() simply sends the character to
@@ -1631,7 +1606,7 @@ namespace System.Windows.Forms
         ///  to indicate that it has processed the key. For keys that aren't processed by the
         ///  control, the result of "base.processDialogChar()" should be returned. Controls
         ///  will seldom, if ever, need to override this method.
-            /// </summary>
+        /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
             if ((keyData & (Keys.Alt | Keys.Control)) != Keys.Alt)
@@ -1780,10 +1755,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Performs the work of setting the bounds of this control. Inheriting classes
+        ///  Performs the work of setting the bounds of this control. Inheriting classes
         ///  can overide this function to add size restrictions. Inheriting classes must call
         ///  base.setBoundsCore to actually cause the bounds of the control to change.
-            /// </summary>
+        /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             // we cache too much state to try and optimize this (regions, etc)... it is best
@@ -1840,25 +1815,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Determines if the color for active links should remain the same.
-            /// </summary>
+        ///  Determines if the color for active links should remain the same.
+        /// </summary>
         internal bool ShouldSerializeActiveLinkColor()
         {
             return !_activeLinkColor.IsEmpty;
         }
 
         /// <summary>
-            ///  Determines if the color for disabled links should remain the same.
-            /// </summary>
+        ///  Determines if the color for disabled links should remain the same.
+        /// </summary>
         internal bool ShouldSerializeDisabledLinkColor()
         {
             return !_disabledLinkColor.IsEmpty;
         }
 
         /// <summary>
-            ///  Determines if the range in text that is treated as a
-        ///  link should remain the same.
-            /// </summary>
+        ///  Determines if the range in text that is treated as a link should remain the same.
+        /// </summary>
         private bool ShouldSerializeLinkArea()
         {
             if (_links.Count == 1)
@@ -1870,8 +1844,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Determines if the color of links in normal cases should remain the same.
-            /// </summary>
+        ///  Determines if the color of links in normal cases should remain the same.
+        /// </summary>
         internal bool ShouldSerializeLinkColor()
         {
             return !_linkColor.IsEmpty;
@@ -1888,16 +1862,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Determines if the color of links that have been visited should remain the same.
-            /// </summary>
+        ///  Determines if the color of links that have been visited should remain the same.
+        /// </summary>
         private bool ShouldSerializeVisitedLinkColor()
         {
             return !_visitedLinkColor.IsEmpty;
         }
 
         /// <summary>
-            ///  Update accessibility with the currently focused link.
-            /// </summary>
+        ///  Update accessibility with the currently focused link.
+        /// </summary>
         private void UpdateAccessibilityLink(Link focusLink)
         {
             if (!IsHandleCreated)
@@ -1917,8 +1891,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Validates that no links overlap. This will throw an exception if
-        ///  they do.
+        ///  Validates that no links overlap. This will throw an exception if they do.
         /// </summary>
         private void ValidateNoOverlappingLinks()
         {
@@ -1947,9 +1920,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Updates the label's ability to get focus. If there are
-        ///  any links in the label, then the label can get focus,
-        ///  else it can't.
+        ///  Updates the label's ability to get focus. If there are any links in the label, then the label can get
+        ///  focus, else it can't.
         /// </summary>
         private void UpdateSelectability()
         {
@@ -2067,7 +2039,7 @@ namespace System.Windows.Forms
                 {
                     _owner._links[index] = value;
 
-                    _owner._links.Sort(LinkLabel.s_linkComparer);
+                    _owner._links.Sort(s_linkComparer);
 
                     _owner.InvalidateTextLayout();
                     _owner.Invalidate();
@@ -2076,15 +2048,12 @@ namespace System.Windows.Forms
 
             object IList.this[int index]
             {
-                get
-                {
-                    return this[index];
-                }
+                get => this[index];
                 set
                 {
-                    if (value is Link)
+                    if (value is Link link)
                     {
-                        this[index] = (Link)value;
+                        this[index] = link;
                     }
                     else
                     {
@@ -2120,50 +2089,20 @@ namespace System.Windows.Forms
             }
 
             [Browsable(false)]
-            public int Count
-            {
-                get
-                {
-                    return _owner._links.Count;
-                }
-            }
+            public int Count => _owner._links.Count;
 
             /// <summary>
             ///  whether we have added a non-trivial link to the collection
             /// </summary>
             public bool LinksAdded { get; private set; }
 
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            object ICollection.SyncRoot => this;
 
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool ICollection.IsSynchronized => false;
 
-            bool IList.IsFixedSize
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool IList.IsFixedSize => false;
 
-            public bool IsReadOnly
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            public bool IsReadOnly => false;
 
             public Link Add(int start, int length)
             {
@@ -2171,6 +2110,7 @@ namespace System.Windows.Forms
                 {
                     LinksAdded = true;
                 }
+
                 return Add(start, length, null);
             }
 
@@ -2180,10 +2120,11 @@ namespace System.Windows.Forms
                 {
                     LinksAdded = true;
                 }
+
                 // check for the special case where the list is in the "magic"
                 // state of having only the default link in it. In that case
                 // we want to clear the list before adding this link.
-                //
+
                 if (_owner._links.Count == 1
                     && this[0].Start == 0
                     && this[0]._length == -1)

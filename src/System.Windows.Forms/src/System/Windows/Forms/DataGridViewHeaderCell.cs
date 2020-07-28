@@ -574,42 +574,44 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void Paint(Graphics graphics,
-                                      Rectangle clipBounds,
-                                      Rectangle cellBounds,
-                                      int rowIndex,
-                                      DataGridViewElementStates dataGridViewElementState,
-                                      object value,
-                                      object formattedValue,
-                                      string errorText,
-                                      DataGridViewCellStyle cellStyle,
-                                      DataGridViewAdvancedBorderStyle advancedBorderStyle,
-                                      DataGridViewPaintParts paintParts)
+        protected override void Paint(
+            Graphics graphics,
+            Rectangle clipBounds,
+            Rectangle cellBounds,
+            int rowIndex,
+            DataGridViewElementStates dataGridViewElementState,
+            object value,
+            object formattedValue,
+            string errorText,
+            DataGridViewCellStyle cellStyle,
+            DataGridViewAdvancedBorderStyle advancedBorderStyle,
+            DataGridViewPaintParts paintParts)
         {
-            if (cellStyle == null)
-            {
+            if (cellStyle is null)
                 throw new ArgumentNullException(nameof(cellStyle));
-            }
 
-            if (DataGridViewCell.PaintBorder(paintParts))
+            if (PaintBorder(paintParts))
             {
                 PaintBorder(graphics, clipBounds, cellBounds, cellStyle, advancedBorderStyle);
             }
 
-            if (DataGridViewCell.PaintBackground(paintParts))
+            if (PaintBackground(paintParts))
             {
-                Rectangle valBounds = cellBounds;
+                Rectangle bounds = cellBounds;
                 Rectangle borderWidths = BorderWidths(advancedBorderStyle);
 
-                valBounds.Offset(borderWidths.X, borderWidths.Y);
-                valBounds.Width -= borderWidths.Right;
-                valBounds.Height -= borderWidths.Bottom;
+                bounds.Offset(borderWidths.X, borderWidths.Y);
+                bounds.Width -= borderWidths.Right;
+                bounds.Height -= borderWidths.Bottom;
 
                 bool cellSelected = (dataGridViewElementState & DataGridViewElementStates.Selected) != 0;
-                SolidBrush br = DataGridView.GetCachedBrush((DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected) ? cellStyle.SelectionBackColor : cellStyle.BackColor);
-                if (br.Color.A == 255)
+                Color backColor = PaintSelectionBackground(paintParts) && cellSelected
+                    ? cellStyle.SelectionBackColor : cellStyle.BackColor;
+
+                if (!backColor.HasTransparency())
                 {
-                    graphics.FillRectangle(br, valBounds);
+                    using var brush = backColor.GetCachedSolidBrushScope();
+                    graphics.FillRectangle(brush, bounds);
                 }
             }
         }
@@ -618,9 +620,7 @@ namespace System.Windows.Forms
         ///  Gets the row Index and column Index of the cell.
         /// </summary>
         public override string ToString()
-        {
-            return "DataGridViewHeaderCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
-        }
+            => $"DataGridViewHeaderCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
 
         private void UpdateButtonState(ButtonState newButtonState, int rowIndex)
         {

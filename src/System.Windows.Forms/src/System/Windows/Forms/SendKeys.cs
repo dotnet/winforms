@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading;
 using static Interop;
@@ -83,16 +82,8 @@ namespace System.Windows.Forms
         private const int CtrlKeyPressed = 0x0200;
         private const int AltKeyPressed = 0x0400;
 
-        /// <summary>
-        ///  should we stop using the hook?
-        /// </summary>
         private static bool s_stopHook;
-
-        /// <summary>
-        ///  HHOOK
-        /// </summary>
         private static IntPtr s_hhook;
-
         private static User32.HOOKPROC s_hook;
 
         /// <summary>
@@ -186,7 +177,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                uint oemVal = User32.OemKeyScan((ushort)(0xFF & (int)character));
+                uint oemVal = User32.OemKeyScan((ushort)(0xFF & character));
                 for (int i = 0; i < repeat; i++)
                 {
                     AddEvent(new SKEvent(User32.WM.CHAR, character, (oemVal & 0xFFFF), hwnd));
@@ -646,7 +637,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Uses User32 SendInput to send keystrokes.
         /// </summary>
-        private static void SendInput(ReadOnlySpan<byte> oldKeyboardState, SKEvent[] previousEvents)
+        private unsafe static void SendInput(ReadOnlySpan<byte> oldKeyboardState, SKEvent[] previousEvents)
         {
             // Should be a no-op most of the time
             AddCancelModifiersForPreviousEvents(previousEvents);
@@ -672,7 +663,7 @@ namespace System.Windows.Forms
             currentInput[1].inputUnion.ki.time = 0;
 
             // Send each of our SKEvents using SendInput.
-            int INPUTSize = Marshal.SizeOf<User32.INPUT>();
+            int INPUTSize = sizeof(User32.INPUT);
 
             // Need these outside the lock below.
             uint eventsSent = 0;
@@ -871,7 +862,7 @@ namespace System.Windows.Forms
 
         private static void ResetKeyboardUsingSendInput(int INPUTSize)
         {
-            // Ff the new state is the same, we don't need to do anything.
+            // If the new state is the same, we don't need to do anything.
             if (!(s_capslockChanged || s_numlockChanged || s_scrollLockChanged || s_kanaChanged))
             {
                 return;
@@ -923,7 +914,7 @@ namespace System.Windows.Forms
 
         private static void Send(string keys, Control control, bool wait)
         {
-            if (keys == null || keys.Length == 0)
+            if (string.IsNullOrEmpty(keys))
             {
                 return;
             }

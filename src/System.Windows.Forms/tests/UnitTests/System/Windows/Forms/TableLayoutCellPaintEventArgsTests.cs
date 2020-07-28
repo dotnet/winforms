@@ -37,7 +37,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Ctor_NullGraphics_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>("graphics", () => new TableLayoutCellPaintEventArgs(null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 3, 4), 1, 2));
+            Assert.Throws<ArgumentNullException>("graphics", () => new TableLayoutCellPaintEventArgs(
+                (Graphics)null, new Rectangle(1, 2, 3, 4), new Rectangle(1, 2, 3, 4), 1, 2));
         }
     }
 }

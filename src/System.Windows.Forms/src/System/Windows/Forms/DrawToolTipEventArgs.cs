@@ -67,10 +67,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
-            using (var backBrush = new SolidBrush(_backColor))
-            {
-                Graphics.FillRectangle(backBrush, Bounds);
-            }
+            using var backBrush = _backColor.GetCachedSolidBrushScope();
+            Graphics.FillRectangle(backBrush, Bounds);
         }
 
         /// <summary>
@@ -79,7 +77,8 @@ namespace System.Windows.Forms
         public void DrawText()
         {
             // Pass in a set of flags to mimic default behavior
-            DrawText(TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.HidePrefix);
+            DrawText(TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
+                | TextFormatFlags.SingleLine | TextFormatFlags.HidePrefix);
         }
 
         /// <summary>
