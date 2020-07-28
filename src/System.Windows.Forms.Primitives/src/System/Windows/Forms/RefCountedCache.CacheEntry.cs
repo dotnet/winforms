@@ -13,7 +13,7 @@ namespace System.Windows.Forms
         ///  Cache entry that maintains the reference count, entry data, and basic cleanup logic.
         /// </summary>
         [DebuggerDisplay("{DebuggerDisplay}")]
-        internal abstract class CacheEntry : IDisposable
+        protected abstract class CacheEntry : IDisposable
         {
             private readonly bool _cached;
             private int _refCount;

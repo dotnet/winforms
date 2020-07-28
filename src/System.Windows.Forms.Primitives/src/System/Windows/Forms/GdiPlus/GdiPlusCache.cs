@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         /// </remarks>
         internal static SolidBrushCache.Scope GetCachedSolidBrush(this Color color) => GetSolidBrush(color);
 
-        internal static Brush? BrushFromKnownColor(KnownColor color) => color switch
+        private static Brush? BrushFromKnownColor(KnownColor color) => color switch
         {
             // Starting with the expected most common
             KnownColor.Black => Brushes.Black,
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
             _ => null
         };
 
-        internal static Pen? PenFromKnownColor(KnownColor color) => color switch
+        private static Pen? PenFromKnownColor(KnownColor color) => color switch
         {
             // Starting with the expected most common
             KnownColor.Black => Pens.Black,

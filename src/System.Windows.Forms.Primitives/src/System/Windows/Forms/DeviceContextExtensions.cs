@@ -96,7 +96,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < lines.Length; i += 4)
             {
                 Gdi32.MoveToEx(hdc, lines[i], lines[i + 1], &oldPoint);
-                Gdi32.LineTo(hdc, lines[i + 2], lines[i + 3]);          // NtGdiLineTo -> GreLineTo(hdc, x, y);
+                Gdi32.LineTo(hdc, lines[i + 2], lines[i + 3]);
                 Gdi32.MoveToEx(hdc, oldPoint.X, oldPoint.Y, null);
             }
         }
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
         /// </remarks>
         internal static Color FindNearestColor(this Gdi32.HDC hdc, Color color)
         {
-            Color newColor =ColorTranslator.FromWin32(Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(color)));
+            Color newColor = ColorTranslator.FromWin32(Gdi32.GetNearestColor(hdc, ColorTranslator.ToWin32(color)));
             return newColor.ToArgb() == color.ToArgb() ? color : newColor;
         }
 

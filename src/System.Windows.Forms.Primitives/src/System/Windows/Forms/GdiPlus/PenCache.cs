@@ -13,7 +13,7 @@ namespace System.Windows.Forms
         protected override CacheEntry CreateEntry(Color key, bool cached) => new PenCacheEntry(key, cached);
         protected override bool IsMatch(Color key, CacheEntry entry) => key == entry.Data;
 
-        private class PenCacheEntry : CacheEntry
+        private sealed class PenCacheEntry : CacheEntry
         {
             private readonly Pen _pen;
             public PenCacheEntry(Color color, bool cached) : base(color, cached) => _pen = new Pen(color);

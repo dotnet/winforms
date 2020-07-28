@@ -87,7 +87,7 @@ namespace System.Windows.Forms.Tests
 
             protected override bool IsMatch(int key, CacheEntry data) => key == data.Data.ToArgb();
 
-            internal class ColorCacheEntry : CacheEntry
+            private class ColorCacheEntry : CacheEntry
             {
                 public ColorCacheEntry(Color color, bool cached) : base(color, cached) { }
                 public override Color Object => Data;
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Tests
             protected override CacheEntry CreateEntry(int key, bool cached) => new ObjectCacheEntry(key, cached);
             protected override bool IsMatch(int key, CacheEntry data) => key == data.Data;
 
-            private class ObjectCacheEntry : CacheEntry
+            protected class ObjectCacheEntry : CacheEntry
             {
                 private readonly T _object;
                 public ObjectCacheEntry(int value, bool cached) : base(value, cached) => _object = new T();

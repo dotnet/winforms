@@ -50,7 +50,7 @@ namespace System.Windows.Forms
                 && key.Font == currentFont
                 && key.Quality == entry.Data.Quality;
 
-        internal sealed class FontCacheEntry : CacheEntry
+        private sealed class FontCacheEntry : CacheEntry
         {
             public FontCacheEntry(Data data, bool tracked) : base(data, tracked) { }
             public override Gdi32.HFONT Object => Data.HFONT;
