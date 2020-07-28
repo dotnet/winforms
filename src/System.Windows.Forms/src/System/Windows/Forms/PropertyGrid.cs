@@ -3298,7 +3298,7 @@ namespace System.Windows.Forms
             Point psheetLoc = _gridView.Location;
             int width = Size.Width;
 
-            using var backgroundBrush = BackColor.GetCachedSolidBrush();
+            using var backgroundBrush = BackColor.GetCachedSolidBrushScope();
             pevent.Graphics.FillRectangle(backgroundBrush, new Rectangle(0, 0, width, psheetLoc.Y));
 
             int yLast = psheetLoc.Y + _gridView.Size.Height;

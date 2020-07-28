@@ -332,7 +332,7 @@ namespace System.Windows.Forms.ButtonInternal
             if (color.HasTransparency())
             {
                 Graphics g = e.GraphicsInternal;
-                using var brush = color.GetCachedSolidBrush();
+                using var brush = color.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, left);
                 g.FillRectangle(brush, right);
                 g.FillRectangle(brush, top);
@@ -465,17 +465,17 @@ namespace System.Windows.Forms.ButtonInternal
                 r.Width += 1;
                 if (disabledText3D && !Control.Enabled && !colors.options.HighContrast)
                 {
-                    using var highlightBrush = colors.highlight.GetCachedSolidBrush();
+                    using var highlightBrush = colors.highlight.GetCachedSolidBrushScope();
                     r.Offset(1, 1);
                     g.DrawString(Control.Text, Control.Font, highlightBrush, r, stringFormat);
 
                     r.Offset(-1, -1);
-                    using var shadowBrush = colors.buttonShadow.GetCachedSolidBrush();
+                    using var shadowBrush = colors.buttonShadow.GetCachedSolidBrushScope();
                     g.DrawString(Control.Text, Control.Font, shadowBrush, r, stringFormat);
                 }
                 else
                 {
-                    using var brush = color.GetCachedSolidBrush();
+                    using var brush = color.GetCachedSolidBrushScope();
 
                     g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
                 }

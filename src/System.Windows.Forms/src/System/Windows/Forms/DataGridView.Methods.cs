@@ -5620,7 +5620,7 @@ namespace System.Windows.Forms
 
                 if (ApplyVisualStylesToHeaderCells)
                 {
-                    using var brush = SystemColors.HotTrack.GetCachedSolidBrush();
+                    using var brush = SystemColors.HotTrack.GetCachedSolidBrushScope();
                     g.FillRectangle(brush, rectInsertionBar);
                 }
                 else
@@ -19169,7 +19169,7 @@ namespace System.Windows.Forms
             rcBelowRows.Height -= visibleRowsHeight;
             if (rcBelowRows.Width > 0 && rcBelowRows.Height > 0)
             {
-                using var brush = BackgroundColor.GetCachedSolidBrush();
+                using var brush = BackgroundColor.GetCachedSolidBrushScope();
                 graphics.FillRectangle(brush, rcBelowRows);
             }
 
@@ -19210,7 +19210,7 @@ namespace System.Windows.Forms
 
             if (rcNextRows.Width > 0 && rcNextRows.Height > 0)
             {
-                using var brush = BackgroundColor.GetCachedSolidBrush();
+                using var brush = BackgroundColor.GetCachedSolidBrushScope();
                 graphics.FillRectangle(brush, rcNextRows);
             }
         }

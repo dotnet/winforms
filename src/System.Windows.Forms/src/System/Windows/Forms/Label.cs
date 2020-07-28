@@ -1331,7 +1331,7 @@ namespace System.Windows.Forms
                 using StringFormat stringFormat = CreateStringFormat();
                 if (Enabled)
                 {
-                    using var brush = color.GetCachedSolidBrush();
+                    using var brush = color.GetCachedSolidBrushScope();
                     e.GraphicsInternal.DrawString(Text, Font, brush, face, stringFormat);
                 }
                 else

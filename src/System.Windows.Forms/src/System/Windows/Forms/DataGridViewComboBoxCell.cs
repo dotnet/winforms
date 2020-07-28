@@ -2011,7 +2011,7 @@ namespace System.Windows.Forms
             Color brushColor = PaintSelectionBackground(paintParts) && cellSelected && !cellEdited
                 ? cellStyle.SelectionBackColor
                 : cellStyle.BackColor;
-            using var brush = paint && !brushColor.HasTransparency() ? brushColor.GetCachedSolidBrush() : default;
+            using var brush = paint && !brushColor.HasTransparency() ? brushColor.GetCachedSolidBrushScope() : default;
 
             if (paint && PaintBackground(paintParts) && !brushColor.HasTransparency() && valBounds.Width > 0 && valBounds.Height > 0)
             {

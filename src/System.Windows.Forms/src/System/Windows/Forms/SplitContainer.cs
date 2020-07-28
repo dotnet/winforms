@@ -1066,7 +1066,7 @@ namespace System.Windows.Forms
             using Graphics g = CreateGraphicsInternal();
             if (BackgroundImage == null)
             {
-                using var brush = BackColor.GetCachedSolidBrush();
+                using var brush = BackColor.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, SplitterRectangle);
             }
 
@@ -1591,7 +1591,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    using var solidBrush = BackColor.GetCachedSolidBrush();
+                    using var solidBrush = BackColor.GetCachedSolidBrushScope();
                     g.FillRectangle(solidBrush, _splitterRect);
                 }
                 g.Dispose();

@@ -60,7 +60,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DrawBackground()
         {
-            using var backBrush = Item.BackColor.GetCachedSolidBrush();
+            using var backBrush = Item.BackColor.GetCachedSolidBrushScope();
             Graphics.FillRectangle(backBrush, Bounds);
         }
 

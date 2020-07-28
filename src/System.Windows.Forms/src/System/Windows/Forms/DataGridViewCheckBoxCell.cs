@@ -1143,7 +1143,7 @@ namespace System.Windows.Forms
 
             if (paint && PaintBackground(paintParts) && !brushColor.HasTransparency())
             {
-                using var brush = brushColor.GetCachedSolidBrush();
+                using var brush = brushColor.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, valBounds);
             }
 
@@ -1355,7 +1355,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                using var highBrush = highlight.GetCachedSolidBrush();
+                                using var highBrush = highlight.GetCachedSolidBrushScope();
                                 g.FillRectangle(highBrush, checkBounds);
                             }
 

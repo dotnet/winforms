@@ -718,7 +718,7 @@ namespace System.Windows.Forms
 
             if (paint && PaintBackground(paintParts) && !backBrushColor.HasTransparency())
             {
-                using var backBrush = backBrushColor.GetCachedSolidBrush();
+                using var backBrush = backBrushColor.GetCachedSolidBrushScope();
                 g.FillRectangle(backBrush, valBounds);
             }
 

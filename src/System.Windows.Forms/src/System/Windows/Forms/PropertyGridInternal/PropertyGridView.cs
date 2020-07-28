@@ -2758,7 +2758,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (color.HasTransparency())
                 {
                     using Graphics g = CreateGraphicsInternal();
-                    using var brush = color.GetCachedSolidBrush();
+                    using var brush = color.GetCachedSolidBrushScope();
                     g.FillRectangle(brush, clearRect);
                 }
                 else
@@ -3842,7 +3842,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Rectangle clearRect = new Rectangle(1, yPos, Size.Width - 2, Size.Height - yPos - 1);
                     Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, $"Filling remaining area rect={clearRect}");
 
-                    using var backBrush = BackColor.GetCachedSolidBrush();
+                    using var backBrush = BackColor.GetCachedSolidBrushScope();
                     g.FillRectangle(backBrush, clearRect);
                 }
 

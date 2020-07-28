@@ -42,7 +42,7 @@ namespace System.Windows.Forms.ButtonInternal
                 field = SystemColors.Control;
             }
 
-            using var fieldBrush = field.GetCachedSolidBrush();
+            using var fieldBrush = field.GetCachedSolidBrushScope();
             using var dark = colors.buttonShadow.GetCachedPenScope();
             using var light = colors.buttonFace.GetCachedPenScope();
             using var lightlight = colors.highlight.GetCachedPenScope();

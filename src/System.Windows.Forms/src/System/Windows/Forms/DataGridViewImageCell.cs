@@ -804,7 +804,7 @@ namespace System.Windows.Forms
                 ? cellStyle.SelectionBackColor
                 : cellStyle.BackColor;
 
-            using var brush = paint ? brushColor.GetCachedSolidBrush() : default;
+            using var brush = paint ? brushColor.GetCachedSolidBrushScope() : default;
 
             Image image = formattedValue as Image;
             Icon icon = image is null ? formattedValue as Icon : null;

@@ -3321,7 +3321,7 @@ namespace System.Windows.Forms
                     _ => SystemColors.ControlDark,
                 };
 
-                using var dividerWidthBrush = dividerWidthColor.GetCachedSolidBrush();
+                using var dividerWidthBrush = dividerWidthColor.GetCachedSolidBrushScope();
                 graphics.FillRectangle(
                     dividerWidthBrush,
                     DataGridView.RightToLeftInternal ? bounds.X : bounds.Right - dividerThickness,
@@ -3355,7 +3355,7 @@ namespace System.Windows.Forms
                     _ => SystemColors.ControlDark,
                 };
 
-                using var dividerHeightColorBrush = dividerHeightColor.GetCachedSolidBrush();
+                using var dividerHeightColorBrush = dividerHeightColor.GetCachedSolidBrushScope();
                 graphics.FillRectangle(
                     dividerHeightColorBrush,
                     bounds.X, bounds.Bottom - dividerThickness, bounds.Width, dividerThickness);

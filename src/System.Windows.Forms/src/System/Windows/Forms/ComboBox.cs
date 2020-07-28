@@ -6190,7 +6190,7 @@ namespace System.Windows.Forms
                 if (!LayoutUtils.IsZeroWidthOrHeight(_whiteFillRect))
                 {
                     // Fill in two more pixels with white so it looks smaller.
-                    using var b = innerBorderColor.GetCachedSolidBrush();
+                    using var b = innerBorderColor.GetCachedSolidBrushScope();
                     g.FillRectangle(b, _whiteFillRect);
                 }
 

@@ -607,7 +607,7 @@ namespace System.Windows.Forms
                             }
                             else if (toolStripComboBox.Owner.IsOnOverflow)
                             {
-                                using var b = colorTable.ComboBoxButtonOnOverflow.GetCachedSolidBrush();
+                                using var b = colorTable.ComboBoxButtonOnOverflow.GetCachedSolidBrushScope();
                                 g.FillRectangle(b, dropDownRect);
                             }
                             else

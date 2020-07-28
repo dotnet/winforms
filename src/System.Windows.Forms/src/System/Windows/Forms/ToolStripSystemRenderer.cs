@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         private static void FillBackground(Graphics g, Rectangle bounds, Color backColor)
         {
             // Fill the background with the item's back color
-            using var backBrush = backColor.GetCachedSolidBrush();
+            using var backBrush = backColor.GetCachedSolidBrushScope();
             g.FillRectangle(backBrush, bounds);
         }
 

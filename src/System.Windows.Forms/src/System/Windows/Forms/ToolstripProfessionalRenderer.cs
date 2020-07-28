@@ -304,7 +304,7 @@ namespace System.Windows.Forms
 
             if (buttonPressedOrSelected && !item.Pressed)
             {
-                using var brush = ColorTable.ButtonSelectedBorder.GetCachedSolidBrush();
+                using var brush = ColorTable.ButtonSelectedBorder.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, item.SplitterBounds);
             }
 
@@ -520,7 +520,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                using var gripLightBrush = ColorTable.GripLight.GetCachedSolidBrush();
+                using var gripLightBrush = ColorTable.GripLight.GetCachedSolidBrushScope();
                 g.FillRectangles(gripLightBrush, shadowRects);
 
                 for (int i = 0; i < numRectangles; i++)
@@ -528,7 +528,7 @@ namespace System.Windows.Forms
                     shadowRects[i].Offset(xOffset, -1);
                 }
 
-                using var gripDarkBrush = ColorTable.GripDark.GetCachedSolidBrush();
+                using var gripDarkBrush = ColorTable.GripDark.GetCachedSolidBrushScope();
                 g.FillRectangles(gripDarkBrush, shadowRects);
             }
         }
@@ -602,7 +602,7 @@ namespace System.Windows.Forms
                     }
                     else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
                     {
-                        using var brush = item.BackColor.GetCachedSolidBrush();
+                        using var brush = item.BackColor.GetCachedSolidBrushScope();
                         g.FillRectangle(brush, fillRect);
                     }
                 }
@@ -653,7 +653,7 @@ namespace System.Windows.Forms
                     }
                     else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
                     {
-                        using var brush = item.BackColor.GetCachedSolidBrush();
+                        using var brush = item.BackColor.GetCachedSolidBrushScope();
                         g.FillRectangle(brush, fillRect);
                     }
                 }
@@ -917,13 +917,13 @@ namespace System.Windows.Forms
             }
 
             // Extend the gradient color over the border.
-            using (var brush = overflowBottomLeftShadow.GetCachedSolidBrush())
+            using (var brush = overflowBottomLeftShadow.GetCachedSolidBrushScope())
             {
                 g.FillRectangle(brush, toolStrip.Width - 1, toolStrip.Height - 2, 1, 1);
                 g.FillRectangle(brush, toolStrip.Width - 2, toolStrip.Height - 1, 1, 1);
             }
 
-            using (var brush = overflowTopShadow.GetCachedSolidBrush())
+            using (var brush = overflowTopShadow.GetCachedSolidBrushScope())
             {
                 g.FillRectangle(brush, toolStrip.Width - 2, 0, 1, 1);
                 g.FillRectangle(brush, toolStrip.Width - 1, 1, 1, 1);
@@ -975,7 +975,7 @@ namespace System.Windows.Forms
             if (useDoubleGradient)
             {
                 // Fill with middleColor
-                using (var brush = middleColor.GetCachedSolidBrush())
+                using (var brush = middleColor.GetCachedSolidBrushScope())
                 {
                     g.FillRectangle(brush, bounds);
                 }
@@ -1042,7 +1042,7 @@ namespace System.Windows.Forms
             {
                 Color fill = (e.Item.Selected) ? ColorTable.CheckSelectedBackground : ColorTable.CheckBackground;
                 fill = (e.Item.Pressed) ? ColorTable.CheckPressedBackground : fill;
-                using var brush = fill.GetCachedSolidBrush();
+                using var brush = fill.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, bounds);
 
                 using var pen = ColorTable.ButtonSelectedBorder.GetCachedPenScope();
@@ -1118,7 +1118,7 @@ namespace System.Windows.Forms
 
             if (orientation != Orientation.Horizontal)
             {
-                using var brush = beginColor.GetCachedSolidBrush();
+                using var brush = beginColor.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, new Rectangle(Point.Empty, control.Size));
                 return;
             }
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms
         {
             Rectangle bounds = new Rectangle(Point.Empty, e.ToolStrip.Size);
 
-            using var brush = ColorTable.ToolStripDropDownBackground.GetCachedSolidBrush();
+            using var brush = ColorTable.ToolStripDropDownBackground.GetCachedSolidBrushScope();
             e.Graphics.FillRectangle(brush, bounds);
         }
 
@@ -1190,7 +1190,7 @@ namespace System.Windows.Forms
                 if (!(toolStripDropDown is ToolStripOverflow))
                 {
                     // make the neck connected.
-                    using var brush = ColorTable.ToolStripDropDownBackground.GetCachedSolidBrush();
+                    using var brush = ColorTable.ToolStripDropDownBackground.GetCachedSolidBrushScope();
                     g.FillRectangle(brush, e.ConnectedArea);
                 }
             }
@@ -1278,7 +1278,7 @@ namespace System.Windows.Forms
             // Render shadow pixels (ToolStrip only)
 
             // top left and top right shadow pixels
-            using (var brush = overflowTopShadow.GetCachedSolidBrush())
+            using (var brush = overflowTopShadow.GetCachedSolidBrushScope())
             {
                 if (horizontal)
                 {
@@ -1300,7 +1300,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            using (var brush = overflowButtonGradientBegin.GetCachedSolidBrush())
+            using (var brush = overflowButtonGradientBegin.GetCachedSolidBrushScope())
             {
                 if (horizontal)
                 {
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms
             // Add in shadow pixels - the detail that makes them look round
 
             // Draw in rounded shadow pixels on the top left & right (consider: if this is slow use precanned corners)
-            using (var brush = ColorTable.ToolStripGradientMiddle.GetCachedSolidBrush())
+            using (var brush = ColorTable.ToolStripGradientMiddle.GetCachedSolidBrushScope())
             {
                 // there are two shadow rects (one pixel wide) on the top
                 Rectangle topLeftShadowRect = new Rectangle(topLeft, onePix);
@@ -1367,7 +1367,7 @@ namespace System.Windows.Forms
             }
 
             // Draw in rounded shadow pixels on the bottom left
-            using (var brush = ColorTable.ToolStripGradientEnd.GetCachedSolidBrush())
+            using (var brush = ColorTable.ToolStripGradientEnd.GetCachedSolidBrushScope())
             {
                 // this gradient is the one just before the dark shadow line starts on pixel #3.
                 Point gradientCopyPixel = bottomLeft;
@@ -1405,7 +1405,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                using var brush = ColorTable.ButtonSelectedHighlight.GetCachedSolidBrush();
+                using var brush = ColorTable.ButtonSelectedHighlight.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, bounds);
             }
         }
@@ -1428,7 +1428,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                using var brush = ColorTable.ButtonCheckedHighlight.GetCachedSolidBrush();
+                using var brush = ColorTable.ButtonCheckedHighlight.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, bounds);
             }
         }
@@ -1539,7 +1539,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                using var brush = ColorTable.ButtonPressedHighlight.GetCachedSolidBrush();
+                using var brush = ColorTable.ButtonPressedHighlight.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, bounds);
             }
         }
@@ -1570,7 +1570,7 @@ namespace System.Windows.Forms
             }
             else if (item.Owner != null && item.BackColor != item.Owner.BackColor)
             {
-                using var brush = item.BackColor.GetCachedSolidBrush();
+                using var brush = item.BackColor.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, bounds);
             }
 

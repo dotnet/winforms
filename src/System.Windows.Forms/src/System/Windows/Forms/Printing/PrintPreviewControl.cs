@@ -500,7 +500,7 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs pevent)
         {
             Color backColor = GetBackColor(SystemInformation.HighContrast);
-            using var backBrush = backColor.GetCachedSolidBrush();
+            using var backBrush = backColor.GetCachedSolidBrushScope();
 
             if (pageInfo == null || pageInfo.Length == 0)
             {
@@ -516,7 +516,7 @@ namespace System.Windows.Forms
                     };
 
                     // Do actual drawing
-                    using var brush = ForeColor.GetCachedSolidBrush();
+                    using var brush = ForeColor.GetCachedSolidBrushScope();
                     pevent.Graphics.DrawString(
                         exceptionPrinting ? SR.PrintPreviewExceptionPrinting : SR.PrintPreviewNoPages,
                         Font,
@@ -605,7 +605,7 @@ namespace System.Windows.Forms
                     {
                         Rectangle box = pageRenderArea[i];
                         pevent.Graphics.DrawRectangle(Pens.Black, box);
-                        using (var brush = ForeColor.GetCachedSolidBrush())
+                        using (var brush = ForeColor.GetCachedSolidBrushScope())
                         {
                             pevent.Graphics.FillRectangle(brush, box);
                         }

@@ -1184,8 +1184,8 @@ namespace System.Windows.Forms
                 {
                     // Control.Enabled not to be confused with Link.Enabled
                     bool optimizeBackgroundRendering = !GetStyle(ControlStyles.OptimizedDoubleBuffer);
-                    var foreBrush = ForeColor.GetCachedSolidBrush();
-                    var linkBrush = LinkColor.GetCachedSolidBrush();
+                    var foreBrush = ForeColor.GetCachedSolidBrushScope();
+                    var linkBrush = LinkColor.GetCachedSolidBrushScope();
 
                     try
                     {
@@ -1477,7 +1477,7 @@ namespace System.Windows.Forms
 
                     if (UseCompatibleTextRendering)
                     {
-                        using var useBrush = brushColor.GetCachedSolidBrush();
+                        using var useBrush = brushColor.GetCachedSolidBrushScope();
                         StringFormat stringFormat = CreateStringFormat();
                         g.DrawString(Text, font, useBrush, ClientRectWithPadding, stringFormat);
                     }

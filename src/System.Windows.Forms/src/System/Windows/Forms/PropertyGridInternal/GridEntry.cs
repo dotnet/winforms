@@ -2017,7 +2017,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             int neededWidth = paintFullLabel ? labelWidth : 0;
             int stringX = rect.X + PropertyLabelIndent;
 
-            using var backBrush = backColor.GetCachedSolidBrush();
+            using var backBrush = backColor.GetCachedSolidBrushScope();
             if (paintFullLabel && (neededWidth >= (rect.Width - (stringX + 2))))
             {
                 // GDIPLUS_SPACE = extra needed to ensure text draws completely and isn't clipped.
@@ -2040,12 +2040,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             // Draw the border stripe on the left
-            using var stripeBrush = gridHost.GetLineColor().GetCachedSolidBrush();
+            using var stripeBrush = gridHost.GetLineColor().GetCachedSolidBrushScope();
             g.FillRectangle(stripeBrush, rect.X, rect.Y, borderWidth, rect.Height);
 
             if (selected && hasFocus)
             {
-                using var focusBrush = gridHost.GetSelectedItemWithFocusBackColor().GetCachedSolidBrush();
+                using var focusBrush = gridHost.GetSelectedItemWithFocusBackColor().GetCachedSolidBrushScope();
                 g.FillRectangle(
                     focusBrush,
                     stringX, rect.Y, rect.Width - stringX - 1, rect.Height);
@@ -2073,7 +2073,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (ownerGrid.UseCompatibleTextRendering)
                 {
-                    using var textBrush = textColor.GetCachedSolidBrush();
+                    using var textBrush = textColor.GetCachedSolidBrushScope();
                     StringFormat stringFormat = new StringFormat(StringFormatFlags.NoWrap)
                     {
                         Trimming = StringTrimming.None
@@ -2165,7 +2165,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Color textColor = InvertColor(ownerGrid.LineColor);
                     if (g != null)
                     {
-                        using var brush = textColor.GetCachedSolidBrush();
+                        using var brush = textColor.GetCachedSolidBrushScope();
                         g.FillRectangle(brush, outline);
                     }
                 }
@@ -2204,7 +2204,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     // Filling rectangle as it was in all cases where we do not invert colors.
                     Color brushColor = GetBackgroundColor();
-                    using var brush = brushColor.GetCachedSolidBrush();
+                    using var brush = brushColor.GetCachedSolidBrushScope();
                     g.FillRectangle(brush, outline);
                 }
 
@@ -2285,7 +2285,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 textColor = gridHost.GetSelectedItemWithFocusForeColor();
             }
 
-            using var backBrush = backColor.GetCachedSolidBrush();
+            using var backBrush = backColor.GetCachedSolidBrushScope();
             g.FillRectangle(backBrush, clipRect);
 
             int paintIndent = 0;

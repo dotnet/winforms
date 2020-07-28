@@ -476,7 +476,7 @@ namespace System.Windows.Forms
             if (UseCompatibleTextRendering)
             {
                 Graphics graphics = e.GraphicsInternal;
-                using var textBrush = ForeColor.GetCachedSolidBrush();
+                using var textBrush = ForeColor.GetCachedSolidBrushScope();
                 using StringFormat format = new StringFormat
                 {
                     HotkeyPrefix = ShowKeyboardCues ? HotkeyPrefix.Show : HotkeyPrefix.Hide
@@ -671,7 +671,7 @@ namespace System.Windows.Forms
             if (backColor.HasTransparency())
             {
                 using Graphics graphics = Graphics.FromHdcInternal(m.WParam);
-                using var brush = backColor.GetCachedSolidBrush();
+                using var brush = backColor.GetCachedSolidBrushScope();
                 graphics.FillRectangle(brush, rect);
             }
             else

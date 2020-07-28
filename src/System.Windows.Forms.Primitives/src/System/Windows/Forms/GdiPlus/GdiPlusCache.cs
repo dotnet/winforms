@@ -89,7 +89,7 @@ namespace System.Windows.Forms
         ///
         ///  Debug builds track proper disposal.
         /// </remarks>
-        internal static SolidBrushCache.Scope GetCachedSolidBrush(this Color color) => GetSolidBrushScope(color);
+        internal static SolidBrushCache.Scope GetCachedSolidBrushScope(this Color color) => GetSolidBrushScope(color);
 
         private static Brush? BrushFromKnownColor(KnownColor color) => color switch
         {

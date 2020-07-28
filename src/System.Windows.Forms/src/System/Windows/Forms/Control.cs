@@ -8463,7 +8463,7 @@ namespace System.Windows.Forms
             else if (!color.IsFullyTransparent())
             {
                 // Color has some transparency (but not completely transparent) use GDI+.
-                using var brush = color.GetCachedSolidBrush();
+                using var brush = color.GetCachedSolidBrushScope();
                 e.Graphics.FillRectangle(brush, rectangle);
             }
         }

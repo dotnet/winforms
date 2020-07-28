@@ -610,7 +610,7 @@ namespace System.Windows.Forms
 
                 if (!backColor.HasTransparency())
                 {
-                    using var brush = backColor.GetCachedSolidBrush();
+                    using var brush = backColor.GetCachedSolidBrushScope();
                     graphics.FillRectangle(brush, bounds);
                 }
             }

@@ -2827,7 +2827,7 @@ namespace System.Windows.Forms
                                 }
                                 else
                                 {
-                                    using var brush = BackColor.GetCachedSolidBrush();
+                                    using var brush = BackColor.GetCachedSolidBrushScope();
                                     g.FillRectangle(brush, bounds);
 
                                     TextRenderer.DrawText(g, e.Node.Text, font, bounds, color, TextFormatFlags.Default);

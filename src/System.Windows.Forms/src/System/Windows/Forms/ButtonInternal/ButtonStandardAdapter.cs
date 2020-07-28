@@ -89,7 +89,7 @@ namespace System.Windows.Forms.ButtonInternal
 
                 if (color.HasTransparency())
                 {
-                    using var brush = color.GetCachedSolidBrush();
+                    using var brush = color.GetCachedSolidBrushScope();
                     e.GraphicsInternal.FillRectangle(brush, bounds);
                 }
                 else

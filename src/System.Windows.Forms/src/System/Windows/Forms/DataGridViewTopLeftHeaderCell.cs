@@ -288,7 +288,7 @@ namespace System.Windows.Forms
 
                     if (!brushColor.HasTransparency())
                     {
-                        using var brush = brushColor.GetCachedSolidBrush();
+                        using var brush = brushColor.GetCachedSolidBrushScope();
                         graphics.FillRectangle(brush, valBounds);
                     }
                 }

@@ -230,7 +230,7 @@ namespace System.Windows.Forms
                 Gdi32.DeleteObject(previousBitmap);
 
                 using Graphics graphics = dc.CreateGraphics();
-                using var brush = background.GetCachedSolidBrush();
+                using var brush = background.GetCachedSolidBrushScope();
                 graphics.FillRectangle(brush, 0, 0, size.Width, size.Height);
                 graphics.DrawImage(bitmap, 0, 0, size.Width, size.Height);
             }
@@ -465,7 +465,7 @@ namespace System.Windows.Forms
                 // Also, if gdi+ can't quite fill the rect with the image, they will interpolate the remaining
                 // pixels, and make them semi-transparent. This is another reason why we need to fill the entire rect.
                 // If we didn't where ever the image was transparent, we would get garbage.
-                using (var brush = backColor.GetCachedSolidBrush())
+                using (var brush = backColor.GetCachedSolidBrushScope())
                 {
                     g.FillRectangle(brush, clipRect);
                 }
@@ -1959,11 +1959,11 @@ namespace System.Windows.Forms
             else
             {
                 layoutRectangle.Offset(1, 1);
-                using var lightBrush = LightLight(color).GetCachedSolidBrush();
+                using var lightBrush = LightLight(color).GetCachedSolidBrushScope();
                 graphics.DrawString(s, font, lightBrush, layoutRectangle, format);
 
                 layoutRectangle.Offset(-1, -1);
-                using var darkBrush = Dark(color).GetCachedSolidBrush();
+                using var darkBrush = Dark(color).GetCachedSolidBrushScope();
                 color = Dark(color);
                 graphics.DrawString(s, font, darkBrush, layoutRectangle, format);
             }

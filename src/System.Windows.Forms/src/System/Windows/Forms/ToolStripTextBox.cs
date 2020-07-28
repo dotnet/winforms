@@ -752,7 +752,7 @@ namespace System.Windows.Forms
                 Rectangle clientRect = AbsoluteClientRectangle;
 
                 // Could have set up a clip and fill-rectangled, thought this would be faster.
-                using var brush = innerBorderColor.GetCachedSolidBrush();
+                using var brush = innerBorderColor.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, 0, 0, Width, clientRect.Top);                                // top border
                 g.FillRectangle(brush, 0, 0, clientRect.Left, Height);                              // left border
                 g.FillRectangle(brush, 0, clientRect.Bottom, Width, Height - clientRect.Height);    // bottom border

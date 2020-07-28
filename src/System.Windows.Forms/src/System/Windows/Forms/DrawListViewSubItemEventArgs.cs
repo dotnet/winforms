@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         public void DrawBackground()
         {
             Color backColor = (ItemIndex == -1) ? Item.BackColor : SubItem.BackColor;
-            using var backBrush = backColor.GetCachedSolidBrush();
+            using var backBrush = backColor.GetCachedSolidBrushScope();
             Graphics.FillRectangle(backBrush, Bounds);
         }
 

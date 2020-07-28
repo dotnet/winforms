@@ -669,7 +669,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // Need to use GDI+
-                    using var brush = backColor.GetCachedSolidBrush();
+                    using var brush = backColor.GetCachedSolidBrushScope();
                     e.GraphicsInternal.FillRectangle(brush, textBounds);
                 }
 
@@ -728,7 +728,7 @@ namespace System.Windows.Forms
                     format.Trimming = StringTrimming.None;
 
                     // Do actual drawing
-                    using var brush = foreColor.GetCachedSolidBrush();
+                    using var brush = foreColor.GetCachedSolidBrushScope();
                     e.Graphics.DrawString(text, font, brush, stringBounds, format);
                 }
                 else
@@ -787,7 +787,7 @@ namespace System.Windows.Forms
                 {
                     // If VisualStyles are off, rectangle needs to be explicitly erased, when focus is lost.
                     // This is because of persisting empty focus rectangle when VisualStyles are off.
-                    using var brush = backColor.GetCachedSolidBrush();
+                    using var brush = backColor.GetCachedSolidBrushScope();
                     e.Graphics.FillRectangle(brush, emptyRectangle);
                 }
             }
