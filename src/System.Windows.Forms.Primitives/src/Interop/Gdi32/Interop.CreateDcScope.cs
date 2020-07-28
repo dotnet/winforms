@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 
 internal static partial class Interop
 {
@@ -16,7 +17,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
         /// </remarks>
-        public readonly ref struct CreateDcScope
+#if DEBUG
+        internal class CreateDcScope : DisposalTracking.Tracker, IDisposable
+#else
+        internal readonly ref struct CreateDcScope
+#endif
         {
             public HDC HDC { get; }
 
@@ -55,6 +60,10 @@ internal static partial class Interop
                 {
                     DeleteDC(HDC);
                 }
+
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
             }
         }
     }

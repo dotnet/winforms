@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Diagnostics;
 
 internal static partial class Interop
 {
@@ -16,7 +17,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
         /// </remarks>
-        public readonly ref struct CreateBitmapScope
+#if DEBUG
+        internal class CreateBitmapScope : DisposalTracking.Tracker, IDisposable
+#else
+        internal readonly ref struct CreateBitmapScope
+#endif
         {
             public HBITMAP HBitmap { get; }
 
@@ -48,6 +53,10 @@ internal static partial class Interop
                 {
                     DeleteObject(HBitmap);
                 }
+
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
             }
         }
     }

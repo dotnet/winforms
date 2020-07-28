@@ -1216,13 +1216,12 @@ namespace System.Windows.Forms
             if (string.IsNullOrEmpty(Text))
             {
                 // empty labels return the font height + borders
-                using (var hfont = GdiCache.GetHFONT(Font))
-                using (var screen = GdiCache.GetScreenHdc())
-                {
-                    // this is the character that Windows uses to determine the extent
-                    requiredSize = screen.HDC.GetTextExtent("0", hfont);
-                    requiredSize.Width = 0;
-                }
+                using var hfont = GdiCache.GetHFONT(Font);
+                using var screen = GdiCache.GetScreenHdc();
+
+                // this is the character that Windows uses to determine the extent
+                requiredSize = screen.HDC.GetTextExtent("0", hfont);
+                requiredSize.Width = 0;
             }
             else if (UseGDIMeasuring())
             {
@@ -1232,15 +1231,13 @@ namespace System.Windows.Forms
             else
             {
                 // GDI+ rendering.
-                using (var screen = GdiCache.GetScreenDCGraphics())
-                using (StringFormat stringFormat = CreateStringFormat())
-                {
-                    SizeF bounds = (proposedConstraints.Width == 1) ?
-                        new SizeF(0, proposedConstraints.Height) :
-                        new SizeF(proposedConstraints.Width, proposedConstraints.Height);
+                using var screen = GdiCache.GetScreenDCGraphics();
+                using StringFormat stringFormat = CreateStringFormat();
+                SizeF bounds = (proposedConstraints.Width == 1) ?
+                    new SizeF(0, proposedConstraints.Height) :
+                    new SizeF(proposedConstraints.Width, proposedConstraints.Height);
 
-                    requiredSize = Size.Ceiling(screen.Graphics.MeasureString(Text, Font, bounds, stringFormat));
-                }
+                requiredSize = Size.Ceiling(screen.Graphics.MeasureString(Text, Font, bounds, stringFormat));
             }
 
             requiredSize += bordersAndPadding;

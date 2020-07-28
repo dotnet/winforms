@@ -19,7 +19,11 @@ namespace System.Windows.Forms
     ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by+
     ///  <see langword="ref" /> to avoid duplicating the handle and risking a double release.
     /// </remarks>
+#if DEBUG
+    internal class DeviceContextHdcScope : DisposalTracking.Tracker, IDisposable
+#else
     internal readonly ref struct DeviceContextHdcScope
+#endif
     {
         public IDeviceContext DeviceContext { get; }
         public Gdi32.HDC HDC { get; }
@@ -55,7 +59,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Prefer to use <see cref="DeviceContextHdcScope.DeviceContextHdcScope(IDeviceContext, bool, bool)"/>.
+        ///  Prefer to use <see cref="DeviceContextHdcScope(IDeviceContext, bool, bool)"/>.
         /// </summary>
         /// <remarks>
         ///  Ideally we'd not bifurcate what properties we apply unless we're absolutely sure we only want one.
@@ -65,7 +69,13 @@ namespace System.Windows.Forms
             ApplyGraphicsProperties applyGraphicsState,
             bool saveHdcState = false)
         {
-            DeviceContext = deviceContext ?? throw new ArgumentNullException(nameof(deviceContext));
+            if (deviceContext is null)
+            {
+                DisposalTracking.SuppressFinalize(this!);
+                throw new ArgumentNullException(nameof(deviceContext));
+            }
+
+            DeviceContext = deviceContext;
             _savedHdcState = 0;
 
             HDC = default;
@@ -120,7 +130,7 @@ namespace System.Windows.Forms
             applyTransform = applyTransform && elements != null && (dx != 0 || dy != 0);
 
             using var graphicsRegion = applyClipping ? new Gdi32.RegionScope(clipRegion!, graphics) : default;
-            applyClipping = applyClipping && !graphicsRegion.IsNull;
+            applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
 
             HDC = (Gdi32.HDC)graphics.GetHdc();
 
@@ -140,14 +150,14 @@ namespace System.Windows.Forms
                 using var dcRegion = new Gdi32.RegionScope(HDC);
                 if (!dcRegion.IsNull)
                 {
-                    type = Gdi32.CombineRgn(graphicsRegion, dcRegion, graphicsRegion, Gdi32.CombineMode.RGN_AND);
+                    type = Gdi32.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, Gdi32.CombineMode.RGN_AND);
                     if (type == RegionType.ERROR)
                     {
                         throw new Win32Exception();
                     }
                 }
 
-                type = Gdi32.SelectClipRgn(HDC, graphicsRegion);
+                type = Gdi32.SelectClipRgn(HDC, graphicsRegion!);
                 if (type == RegionType.ERROR)
                 {
                     throw new Win32Exception();
@@ -175,6 +185,8 @@ namespace System.Windows.Forms
             {
                 DeviceContext?.ReleaseHdc();
             }
+
+            DisposalTracking.SuppressFinalize(this!);
         }
     }
 }

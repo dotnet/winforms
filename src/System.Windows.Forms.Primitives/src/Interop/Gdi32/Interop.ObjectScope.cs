@@ -15,7 +15,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double deletion.
         /// </remarks>
+#if DEBUG
+        internal class ObjectScope : DisposalTracking.Tracker, IDisposable
+#else
         internal readonly ref struct ObjectScope
+#endif
         {
             public HGDIOBJ Object { get; }
 
@@ -33,6 +37,8 @@ internal static partial class Interop
                 {
                     DeleteObject(Object);
                 }
+
+                DisposalTracking.SuppressFinalize(this!);
             }
         }
     }

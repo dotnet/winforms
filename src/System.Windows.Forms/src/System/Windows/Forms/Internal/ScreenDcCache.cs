@@ -144,6 +144,8 @@ namespace System.Windows.Forms
             Gdi32.GetViewportOrgEx(hdc, out Point point);
             Debug.Assert(point.IsEmpty, "Viewport origin shouldn't be shifted");
             Debug.Assert(Gdi32.GetMapMode(hdc) == Gdi32.MM.TEXT);
+            Debug.Assert(Gdi32.GetROP2(hdc) == Gdi32.R2.COPYPEN);
+            Debug.Assert(Gdi32.GetBkMode(hdc) == Gdi32.BKMODE.OPAQUE);
         }
     }
 }

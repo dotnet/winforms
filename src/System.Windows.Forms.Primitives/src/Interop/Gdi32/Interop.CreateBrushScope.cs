@@ -4,6 +4,7 @@
 
 using System;
 using System.Drawing;
+using System.Diagnostics;
 
 internal static partial class Interop
 {
@@ -16,7 +17,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double delete.
         /// </remarks>
-        public readonly ref struct CreateBrushScope
+#if DEBUG
+        internal class CreateBrushScope : DisposalTracking.Tracker, IDisposable
+#else
+        internal readonly ref struct CreateBrushScope
+#endif
         {
             public HBRUSH HBrush { get; }
 
@@ -42,6 +47,10 @@ internal static partial class Interop
                     // Note that this is a no-op if the original brush was a system brush
                     DeleteObject(HBrush);
                 }
+
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
             }
         }
     }

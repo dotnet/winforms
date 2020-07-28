@@ -1361,13 +1361,11 @@ namespace System.Windows.Forms.ButtonInternal
                 if (useCompatibleTextRendering)
                 {
                     // GDI+ text rendering.
-                    using (var screen = GdiCache.GetScreenDCGraphics())
-                    using (StringFormat gdipStringFormat = StringFormat)
-                    {
-                        textSize = Size.Ceiling(
-                            screen.Graphics.MeasureString(text, font, new SizeF(proposedSize.Width, proposedSize.Height),
-                            gdipStringFormat));
-                    }
+                    using var screen = GdiCache.GetScreenDCGraphics();
+                    using StringFormat gdipStringFormat = StringFormat;
+                    textSize = Size.Ceiling(
+                        screen.Graphics.MeasureString(text, font, new SizeF(proposedSize.Width, proposedSize.Height),
+                        gdipStringFormat));
                 }
                 else if (!string.IsNullOrEmpty(text))
                 {
@@ -1490,10 +1488,8 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 if (layout.useCompatibleTextRendering)
                 {
-                    using (StringFormat format = Control.CreateStringFormat())
-                    {
-                        layout.StringFormat = format;
-                    }
+                    using StringFormat format = Control.CreateStringFormat();
+                    layout.StringFormat = format;
                 }
                 else
                 {

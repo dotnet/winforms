@@ -1870,16 +1870,16 @@ namespace System.Windows.Forms
                         cellBounds,
                         rowIndex,
                         cellState,
-                        null /*formattedValue*/,            // dropDownButtonRect is independent of formattedValue
-                        null /*errorText*/,                 // dropDownButtonRect is independent of errorText
+                        formattedValue: null,            // dropDownButtonRect is independent of formattedValue
+                        errorText: null,                 // dropDownButtonRect is independent of errorText
                         cellStyle,
                         dgvabsEffective,
                         out dropDownButtonRect,
                         DataGridViewPaintParts.ContentForeground,
-                        false /*computeContentBounds*/,
-                        false /*computeErrorIconBounds*/,
-                        true  /*computeDropDownButtonRect*/,
-                        false /*paint*/);
+                        computeContentBounds: false,
+                        computeErrorIconBounds: false,
+                        computeDropDownButtonRect: true,
+                        paint: false);
                 }
 
                 bool newMouseInDropDownButtonBounds = dropDownButtonRect.Contains(DataGridView.PointToClient(Control.MousePosition));

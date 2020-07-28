@@ -16,7 +16,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
         ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
         /// </remarks>
+#if DEBUG
+        internal class SetTextAlignmentScope : DisposalTracking.Tracker, IDisposable
+#else
         internal readonly ref struct SetTextAlignmentScope
+#endif
         {
             private readonly TA _previousTa;
             private readonly HDC _hdc;
@@ -38,6 +42,10 @@ internal static partial class Interop
                 {
                     SetTextAlign(_hdc, _previousTa);
                 }
+
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
             }
         }
     }

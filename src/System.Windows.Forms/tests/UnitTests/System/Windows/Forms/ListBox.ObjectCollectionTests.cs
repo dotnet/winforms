@@ -2197,6 +2197,9 @@ namespace System.Windows.Forms.Tests
         [InlineData(-2)]
         public void ListBoxObjectCollection_Add_ErrorAdding_ThrowsOutOfMemoryException(int result)
         {
+            // Note that this is not an actual out of memory, we're artificially setting up an error case
+            // that we surface as `OutOfMemoryException` (see ListBox.NativeAdd(Object item))
+
             using var owner = new CustomAddStringListBox
             {
                 AddStringResult = (IntPtr)result
@@ -3666,6 +3669,9 @@ namespace System.Windows.Forms.Tests
         [InlineData(-2)]
         public void ListBoxObjectCollection_AddRange_ErrorAdding_ThrowsOutOfMemoryException(int result)
         {
+            // Note that this is not an actual out of memory, we're artificially setting up an error case
+            // that we surface as `OutOfMemoryException` (see ListBox.NativeAdd(Object item))
+
             using var owner = new CustomAddStringListBox
             {
                 AddStringResult = (IntPtr)result
@@ -3675,6 +3681,7 @@ namespace System.Windows.Forms.Tests
             using var otherOwner = new ListBox();
             var otherCollection = new ListBox.ObjectCollection(otherOwner);
             otherCollection.Add(1);
+
             Assert.Throws<OutOfMemoryException>(() => collection.AddRange(new object[] { 1 }));
             Assert.Throws<OutOfMemoryException>(() => collection.AddRange(otherCollection));
         }
@@ -5010,6 +5017,9 @@ namespace System.Windows.Forms.Tests
         [InlineData(-2)]
         public void ListBoxObjectCollection_Insert_ErrorAdding_ThrowsOutOfMemoryException(int result)
         {
+            // Note that this is not an actual out of memory, we're artificially setting up an error case
+            // that we surface as `OutOfMemoryException` (see ListBox.NativeAdd(Object item))
+
             using var owner = new CustomInsertStringListBox
             {
                 InsertStringResult = (IntPtr)result
@@ -8948,6 +8958,9 @@ namespace System.Windows.Forms.Tests
         [InlineData(-2)]
         public void ListBoxObjectCollection_IListAdd_ErrorAdding_ThrowsOutOfMemoryException(int result)
         {
+            // Note that this is not an actual out of memory, we're artificially setting up an error case
+            // that we surface as `OutOfMemoryException` (see ListBox.NativeAdd(Object item))
+
             using var owner = new CustomAddStringListBox
             {
                 AddStringResult = (IntPtr)result
@@ -10288,6 +10301,9 @@ namespace System.Windows.Forms.Tests
         [InlineData(-2)]
         public void ListBoxObjectCollection_IListInsert_ErrorAdding_ThrowsOutOfMemoryException(int result)
         {
+            // Note that this is not an actual out of memory, we're artificially setting up an error case
+            // that we surface as `OutOfMemoryException` (see ListBox.NativeAdd(Object item))
+
             using var owner = new CustomInsertStringListBox
             {
                 InsertStringResult = (IntPtr)result

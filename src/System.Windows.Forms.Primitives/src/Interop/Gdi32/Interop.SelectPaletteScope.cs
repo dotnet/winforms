@@ -16,7 +16,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double pallete reset.
         /// </remarks>
-        public readonly ref struct SelectPaletteScope
+#if DEBUG
+        internal class SelectPaletteScope : DisposalTracking.Tracker, IDisposable
+#else
+        internal readonly ref struct SelectPaletteScope
+#endif
         {
             public HDC HDC { get; }
             public HPALETTE HPalette { get; }
@@ -43,7 +47,7 @@ internal static partial class Interop
                     // Doing this is a bit pointless when the color depth is much higher (the normal scenario). As such
                     // we'll skip doing this unless we see 8bpp or less.
 
-                    return default;
+                    return new SelectPaletteScope();
                 }
 
                 return new SelectPaletteScope(
@@ -61,7 +65,13 @@ internal static partial class Interop
                 {
                     SelectPalette(HDC, HPalette, bForceBkgd: BOOL.FALSE);
                 }
+
+                DisposalTracking.SuppressFinalize(this);
             }
+
+#if DEBUG
+            public SelectPaletteScope() { }
+#endif
         }
     }
 }

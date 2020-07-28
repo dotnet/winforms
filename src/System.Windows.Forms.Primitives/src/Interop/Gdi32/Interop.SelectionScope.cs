@@ -16,7 +16,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass
         ///  by <see langword="ref" /> to avoid duplicating the handle and risking a double selection.
         /// </remarks>
+#if DEBUG
+        internal class SelectObjectScope : DisposalTracking.Tracker, IDisposable
+#else
         internal readonly ref struct SelectObjectScope
+#endif
         {
             private readonly HDC _hdc;
             public HGDIOBJ PreviousObject { get; }
@@ -31,7 +35,8 @@ internal static partial class Interop
 
                 if (@object.IsNull)
                 {
-                    this = default;
+                    _hdc = default;
+                    PreviousObject = default;
                 }
                 else
                 {
@@ -46,6 +51,10 @@ internal static partial class Interop
                 {
                     SelectObject(_hdc, PreviousObject);
                 }
+
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
             }
         }
     }

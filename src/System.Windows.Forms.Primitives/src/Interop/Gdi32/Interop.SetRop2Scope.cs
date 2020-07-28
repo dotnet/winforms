@@ -16,7 +16,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
         ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
         /// </remarks>
+#if DEBUG
+        internal class SetRop2Scope : DisposalTracking.Tracker, IDisposable
+#else
         internal readonly ref struct SetRop2Scope
+#endif
         {
             private readonly R2 _previousRop;
             private readonly HDC _hdc;
@@ -38,6 +42,10 @@ internal static partial class Interop
                 {
                     SetROP2(_hdc, _previousRop);
                 }
+
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
             }
         }
     }

@@ -16,7 +16,11 @@ internal static partial class Interop
         ///  Use in a <see langword="using" /> statement. If you must pass this around, always pass by
         ///  <see langword="ref" /> to avoid duplicating the handle and resetting multiple times.
         /// </remarks>
+#if DEBUG
+        internal class SetBkModeScope : DisposalTracking.Tracker, IDisposable
+#else
         internal readonly ref struct SetBkModeScope
+#endif
         {
             private readonly BKMODE _previousMode;
             private readonly HDC _hdc;
@@ -38,6 +42,10 @@ internal static partial class Interop
                 {
                     SetBkMode(_hdc, _previousMode);
                 }
+
+#if DEBUG
+                GC.SuppressFinalize(this);
+#endif
             }
         }
     }
