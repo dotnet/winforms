@@ -4,7 +4,6 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>AccessibilityTests</RootNamespace>
     <AssemblyName>AccessibilityTests</AssemblyName>
-    <RootNamespace>AccessibilityTests</RootNamespace>
     <!--<TargetFrameworks>net472;netcoreapp5.0</TargetFrameworks>-->
     <ApplicationManifest>app1.manifest</ApplicationManifest>
     <UsingToolXliff>false</UsingToolXliff>
