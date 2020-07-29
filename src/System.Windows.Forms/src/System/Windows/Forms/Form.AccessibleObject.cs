@@ -29,8 +29,8 @@ namespace System.Windows.Forms
             internal override object GetPropertyValue(int propertyID)
             {
                 return propertyID == NativeMethods.UIA_NamePropertyId
-                        ? Name
-                        : base.GetPropertyValue(propertyID);
+                    ? Name
+                    : base.GetPropertyValue(propertyID);
             }
 
             internal override bool IsIAccessibleExSupported()

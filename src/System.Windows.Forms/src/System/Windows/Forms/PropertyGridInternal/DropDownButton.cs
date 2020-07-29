@@ -320,12 +320,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                AccessibleRole role = Owner.AccessibleRole;
-                if (role != AccessibleRole.Default)
-                {
-                    return role;
-                }
-
                 return AccessibleRole.PushButton;
             }
         }

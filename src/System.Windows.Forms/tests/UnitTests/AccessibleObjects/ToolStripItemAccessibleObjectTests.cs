@@ -4,8 +4,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
+using InternalUtilitiesForTests.src;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -42,24 +41,20 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ToolStripItemObject_TestData()
         {
-            var types = typeof(ToolStripItem).Assembly.GetTypes().Where(type => IsNotAbstractToolStripItem(type));
-            foreach (var type in types)
-            {
-                yield return new object[] { type };
-            }
+            return ReflectionHelper.GetDerivedPublicNotAbstractClasses<ToolStripItem>();
         }
 
         [Theory]
         [MemberData(nameof(ToolStripItemObject_TestData))]
         public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
         {
-            using ToolStripItem control = GetToolStripItem(type);
-            if (control == null)
+            using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
+            if (item == null)
             {
                 return;
             }
-            control.AccessibleRole = AccessibleRole.Link;
-            AccessibleObject toolStripItemAccessibleObject = control.AccessibilityObject;
+            item.AccessibleRole = AccessibleRole.Link;
+            AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
             var accessibleObjectRole = toolStripItemAccessibleObject.Role;
 
@@ -70,12 +65,12 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ToolStripItemObject_TestData))]
         public void ToolStripItemAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
         {
-            using ToolStripItem control = GetToolStripItem(type);
-            if (control == null)
+            using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
+            if (item == null)
             {
                 return;
             }
-            AccessibleObject toolStripItemAccessibleObject = control.AccessibilityObject;
+            AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
             bool supportsLegacyIAccessiblePatternId = toolStripItemAccessibleObject.IsPatternSupported(NativeMethods.UIA_LegacyIAccessiblePatternId);
 
@@ -86,14 +81,14 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ToolStripItemObject_TestData))]
         public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
         {
-            using ToolStripItem control = GetToolStripItem(type);
-            if (control == null)
+            using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
+            if (item == null)
             {
                 return;
             }
 
-            control.AccessibleDescription = "Test Accessible Description";
-            AccessibleObject toolStripItemAccessibleObject = control.AccessibilityObject;
+            item.AccessibleDescription = "Test Accessible Description";
+            AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
             var accessibleObjectDescription = toolStripItemAccessibleObject.Description;
 
@@ -104,40 +99,19 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ToolStripItemObject_TestData))]
         public void ToolStripItemAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
         {
-            using ToolStripItem control = GetToolStripItem(type);
-            if (control == null)
+            using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
+            if (item == null)
             {
                 return;
             }
 
-            control.Name = "Name1";
-            control.AccessibleName = "Test Name";
+            item.Name = "Name1";
+            item.AccessibleName = "Test Name";
 
-            AccessibleObject toolStripItemAccessibleObject = control.AccessibilityObject;
+            AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
             var accessibleName = toolStripItemAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
 
             Assert.Equal("Test Name", accessibleName);
-        }
-
-        private static bool IsNotAbstractToolStripItem(Type type)
-        {
-            return !type.IsAbstract && typeof(ToolStripItem).IsAssignableFrom(type);
-        }
-
-        private ToolStripItem GetToolStripItem(Type type)
-        {
-            var ctor = type.GetConstructor(
-                bindingAttr: BindingFlags.Public | BindingFlags.Instance,
-                binder: null,
-                types: Array.Empty<Type>(),
-                modifiers: null);
-
-            if (ctor == null)
-            {
-                return null;
-            }
-
-            return (ToolStripItem)ctor.Invoke(Array.Empty<object>());
         }
 
         private class SubToolStripItem : ToolStripItem

@@ -3,8 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using InternalUtilitiesForTests.src;
 using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
@@ -13,19 +12,14 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
     {
         public static IEnumerable<object[]> ControlObject_TestData()
         {
-            // WebBrowser needs to be run in STA
-            var types = typeof(Control).Assembly.GetTypes().Where(type => IsNotAbstractControl(type) && type != typeof(WebBrowser));
-            foreach (var type in types)
-            {
-                yield return new object[] { type };
-            }
+            return ReflectionHelper.GetDerivedPublicNotAbstractClasses<Control>();
         }
 
-        [Theory]
+        [StaTheory]
         [MemberData(nameof(ControlObject_TestData))]
         public void ControlAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
         {
-            using Control control = GetControl(type);
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
             if (control == null || !control.SupportsUiaProviders)
             {
@@ -40,11 +34,11 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
         }
 
-        [Theory]
+        [StaTheory]
         [MemberData(nameof(ControlObject_TestData))]
         public void ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
         {
-            using Control control = GetControl(type);
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
             if (control == null || !control.SupportsUiaProviders)
             {
@@ -58,11 +52,11 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.True(supportsLegacyIAccessiblePatternId);
         }
 
-        [Theory]
+        [StaTheory]
         [MemberData(nameof(ControlObject_TestData))]
         public void ControlAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
         {
-            using Control control = GetControl(type);
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
             if (control == null || !control.SupportsUiaProviders)
             {
@@ -77,11 +71,11 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.Equal("Test Accessible Description", accessibleObjectDescription);
         }
 
-        [Theory]
+        [StaTheory]
         [MemberData(nameof(ControlObject_TestData))]
         public void ToolStripItemAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
         {
-            using Control control = GetControl(type);
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
             if (control == null || !control.SupportsUiaProviders)
             {
@@ -95,27 +89,6 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             var accessibleName = controlAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
 
             Assert.Equal("Test Name", accessibleName);
-        }
-
-        private static bool IsNotAbstractControl(Type type)
-        {
-            return !type.IsAbstract && typeof(Control).IsAssignableFrom(type);
-        }
-
-        private Control GetControl(Type type)
-        {
-            var ctor = type.GetConstructor(
-                bindingAttr: BindingFlags.Public | BindingFlags.Instance,
-                binder: null,
-                types: Array.Empty<Type>(),
-                modifiers: null);
-
-            if (ctor == null)
-            {
-                return null;
-            }
-
-            return (Control)ctor.Invoke(Array.Empty<object>());
         }
     }
 }
