@@ -4,20 +4,12 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern int GetTextColor(HDC hdc);
-
-        public static int GetTextColor(IHandle hdc)
-        {
-            int result = GetTextColor((HDC)hdc.Handle);
-            GC.KeepAlive(hdc);
-            return result;
-        }
+        public static extern COLORREF GetTextColor(HDC hdc);
     }
 }

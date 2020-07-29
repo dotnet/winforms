@@ -6,7 +6,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal unsafe readonly ref struct EmfRecord
+    internal unsafe readonly struct EmfRecord
     {
         public Gdi32.HDC HDC { get; }
         private readonly Gdi32.HGDIOBJ* _lpht;
@@ -81,9 +81,18 @@ namespace System.Windows.Forms.Metafiles
             => Type == Gdi32.EMR.SETTEXTCOLOR ? (EMRSETCOLOR*)_lpmr : null;
         public EMRCREATEDIBPATTERNBRUSHPT* CreateDibPatternBrushPtRecord
             => Type == Gdi32.EMR.CREATEDIBPATTERNBRUSHPT ? (EMRCREATEDIBPATTERNBRUSHPT*)_lpmr : null;
+        public EMRENUMRECORD<Gdi32.TA>* SetTextAlignRecord
+            => Type == Gdi32.EMR.SETTEXTALIGN ? (EMRENUMRECORD<Gdi32.TA>*)_lpmr : null;
+        public EMREXTCREATEFONTINDIRECTW* ExtCreateFontIndirectWRecord
+            => Type == Gdi32.EMR.EXTCREATEFONTINDIRECTW ? (EMREXTCREATEFONTINDIRECTW*)_lpmr : null;
+        public EMREXTTEXTOUTW* ExtTextOutWRecord
+            => Type == Gdi32.EMR.EXTTEXTOUTW ? (EMREXTTEXTOUTW*)_lpmr : null;
+        public EMRENUMRECORD<Gdi32.MM>* SetMapModeRecord
+            => Type == Gdi32.EMR.SETMAPMODE ? (EMRENUMRECORD<Gdi32.MM>*)_lpmr : null;
 
         public override string ToString() => Type switch
         {
+            // Note that not all records have special handling yet- we're filling these in as we go.
             Gdi32.EMR.HEADER => HeaderRecord->ToString(),
             Gdi32.EMR.EXTSELECTCLIPRGN => ExtSelectClipRgnRecord->ToString(),
             Gdi32.EMR.SETVIEWPORTORGEX => SetViewportOrgExRecord->ToString(),
@@ -104,6 +113,10 @@ namespace System.Windows.Forms.Metafiles
             Gdi32.EMR.SETTEXTCOLOR => SetTextColorRecord->ToString(),
             Gdi32.EMR.SETBKCOLOR => SetBkColorRecord->ToString(),
             Gdi32.EMR.CREATEDIBPATTERNBRUSHPT => CreateDibPatternBrushPtRecord->ToString(),
+            Gdi32.EMR.SETTEXTALIGN => SetTextAlignRecord->ToString(),
+            Gdi32.EMR.EXTCREATEFONTINDIRECTW => ExtCreateFontIndirectWRecord->ToString(),
+            Gdi32.EMR.EXTTEXTOUTW => ExtTextOutWRecord->ToString(),
+            Gdi32.EMR.SETMAPMODE => SetMapModeRecord->ToString(),
             _ => $"[EMR{Type}]"
         };
     }

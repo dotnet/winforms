@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         internal static Size MaxSize { get; } = new Size(int.MaxValue, int.MaxValue);
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor)
-            => DrawTextInternal(dc, text, font, pt, foreColor);
+            => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty);
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor, Color backColor)
             => DrawTextInternal(dc, text, font, pt, foreColor, backColor);
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             Point pt,
             Color foreColor,
             TextFormatFlags flags)
-            => DrawTextInternal(dc, text, font, pt, foreColor, flags: GetTextFormatFlags(flags));
+            => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty, flags: GetTextFormatFlags(flags));
 
         public static void DrawText(
             IDeviceContext dc,
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
             => DrawTextInternal(dc, text, font, pt, foreColor, backColor, flags: GetTextFormatFlags(flags));
 
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor)
-            => DrawTextInternal(dc, text, font, bounds, foreColor);
+            => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty);
 
         public static void DrawText(
             IDeviceContext dc,
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
             Rectangle bounds,
             Color foreColor,
             TextFormatFlags flags)
-            => DrawTextInternal(dc, text, font, bounds, foreColor, flags: GetTextFormatFlags(flags));
+            => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty, flags: GetTextFormatFlags(flags));
 
         public static void DrawText(
             IDeviceContext dc,
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             Font? font,
             Point pt,
             Color foreColor,
-            Color backColor = default,
+            Color backColor,
             User32.DT flags = User32.DT.DEFAULT)
             => DrawTextInternal(dc, text, font, new Rectangle(pt, MaxSize), foreColor, backColor, flags);
 
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
             Font? font,
             Rectangle bounds,
             Color foreColor,
-            Color backColor = default,
+            Color backColor,
             User32.DT flags = User32.DT.CENTER | User32.DT.VCENTER)
         {
             if (dc is null)
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
             Rectangle bounds,
             Color foreColor,
             TextFormatFlags flags)
-            => DrawTextInternal(e, text, font, bounds, foreColor, flags: GetTextFormatFlags(flags));
+            => DrawTextInternal(e, text, font, bounds, foreColor, Color.Empty, flags: GetTextFormatFlags(flags));
 
         internal static void DrawTextInternal(
             PaintEventArgs e,
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
             Font? font,
             Rectangle bounds,
             Color foreColor,
-            Color backColor = default,
+            Color backColor,
             User32.DT flags = User32.DT.CENTER | User32.DT.VCENTER)
         {
             Gdi32.HDC hdc = e.HDC;
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
             Color foreColor,
             Gdi32.QUALITY fontQuality,
             TextFormatFlags flags)
-            => DrawTextInternal(hdc, text, font, bounds, foreColor, fontQuality, default, GetTextFormatFlags(flags));
+            => DrawTextInternal(hdc, text, font, bounds, foreColor, fontQuality, Color.Empty, GetTextFormatFlags(flags));
 
         internal static void DrawTextInternal(
             Gdi32.HDC hdc,

@@ -4,7 +4,7 @@
 
 using System.Diagnostics;
 
-namespace System.Windows.Forms
+namespace System
 {
     internal static class SpanHelpers
     {

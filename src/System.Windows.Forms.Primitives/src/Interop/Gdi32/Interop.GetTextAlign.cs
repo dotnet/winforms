@@ -4,18 +4,17 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern TA GetTextAlign(IntPtr hdc);
+        public static extern TA GetTextAlign(HDC hdc);
 
         public static TA GetTextAlign(IHandle hdc)
         {
-            TA result = GetTextAlign(hdc.Handle);
+            TA result = GetTextAlign((HDC)hdc.Handle);
             GC.KeepAlive(hdc);
             return result;
         }
