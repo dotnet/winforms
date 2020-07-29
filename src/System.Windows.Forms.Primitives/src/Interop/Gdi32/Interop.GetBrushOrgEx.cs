@@ -3,14 +3,14 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern TA SetTextAlign(Gdi32.HDC hdc, TA align);
+        public static extern BOOL GetBrushOrgEx(HDC hdc, ref Point lppt);
     }
 }

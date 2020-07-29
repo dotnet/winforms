@@ -27,6 +27,6 @@ namespace System.Windows.Forms.Metafiles
         public EMR emr;
         public T iMode;
 
-        public override string ToString() => $"[EMR{emr.iType}] Mode: {iMode}";
+        public override string ToString() => $"[EMR{emr.iType}] Mode: {typeof(T).Name}_{iMode}";
     }
 }

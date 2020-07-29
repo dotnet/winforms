@@ -5,9 +5,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Windows.Forms.Metafiles;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -614,6 +616,58 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("dc", () => TextRenderer.MeasureText(null, string.Empty, SystemFonts.MenuFont));
             Assert.Throws<ArgumentNullException>("dc", () => TextRenderer.MeasureText(null, string.Empty, SystemFonts.MenuFont, new Size(300, 400)));
             Assert.Throws<ArgumentNullException>("dc", () => TextRenderer.MeasureText(null, string.Empty, SystemFonts.MenuFont, new Size(300, 400), TextFormatFlags.Default));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData))]
+        public unsafe void TextRenderer_DrawText_DefaultBackground_RendersTransparent(Func<IDeviceContext, Action> func)
+        {
+            using var emf = EmfScope.Create();
+            DeviceContextState state = new DeviceContextState(emf);
+            func(new HdcDeviceContextAdapter(emf)).Invoke();
+
+            bool success = false;
+            emf.EnumerateWithState((ref EmfRecord record, DeviceContextState state) =>
+                {
+                    switch (record.Type)
+                    {
+                        case Gdi32.EMR.EXTTEXTOUTW:
+                            var textOut = record.ExtTextOutWRecord;
+                            Assert.Equal("Acrylic", textOut->emrtext.GetString().ToString());
+                            Assert.Equal(Gdi32.MM.TEXT, state.MapMode);
+                            Assert.Equal(Gdi32.BKMODE.TRANSPARENT, state.BackgroundMode);
+                            Assert.Equal((COLORREF)Color.Blue, state.TextColor);
+                            Assert.Equal(SystemFonts.DefaultFont.Name, state.SelectedFont);
+                            success = true;
+                            return false;
+                    }
+                    return true;
+                },
+                state);
+
+            Assert.True(success, "Did not find the text out record.");
+        }
+
+        public static TheoryData<Func<IDeviceContext, Action>> TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData
+        {
+            get
+            {
+                return new TheoryData<Func<IDeviceContext, Action>>
+                {
+                    (IDeviceContext context) => () =>
+                        TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
+                            pt: default, Color.Blue),
+                    (IDeviceContext context) => () =>
+                        TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
+                            pt: default, Color.Blue, flags: default),
+                    (IDeviceContext context) => () =>
+                        TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
+                            bounds: new Rectangle(0, 0, int.MaxValue, int.MaxValue), Color.Blue),
+                    (IDeviceContext context) => () =>
+                        TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
+                            bounds: new Rectangle(0, 0, int.MaxValue, int.MaxValue), Color.Blue, flags: default),
+                };
+            }
         }
     }
 }

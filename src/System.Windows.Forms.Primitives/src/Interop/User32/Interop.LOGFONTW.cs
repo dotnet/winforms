@@ -5,7 +5,6 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -14,7 +13,7 @@ internal static partial class Interop
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public unsafe struct LOGFONTW
         {
-            private const int LF_FACESIZE = 32;
+            public const int LF_FACESIZE = 32;
 
             public int lfHeight;
             public int lfWidth;
