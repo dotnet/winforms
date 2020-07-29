@@ -74,7 +74,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(146, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Please inout you want to print";
+            this.label1.Text = "&Input text you want to print";
             // 
             // txtPrint
             // 
