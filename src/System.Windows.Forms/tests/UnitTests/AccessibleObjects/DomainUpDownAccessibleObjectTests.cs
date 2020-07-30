@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             // So we need to check if these properties are not equal.
             // In this specific case, we can't have some positive Assert.
             // ToLower method used to be case insensitive.
-            Assert.NotEqual(accessibleName.ToLower(), controlType.ToLower());
+            Assert.Null(accessibleName);
         }
     }
 }

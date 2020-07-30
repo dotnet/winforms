@@ -707,7 +707,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override string Name
             {
-                get => base.Name ?? SR.DefaultDomainUpDownAccessibleName;
+                get => base.Name;
                 set => base.Name = value;
             }
 

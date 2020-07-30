@@ -29,19 +29,7 @@ namespace System.Windows.Forms
 
             public override string Name
             {
-                get
-                {
-                    string name = Owner.AccessibleName;
-                    if (!string.IsNullOrEmpty(name))
-                    {
-                        return name;
-                    }
-                    else
-                    {
-                        // The default name should not be localized.
-                        return "DataGridView";
-                    }
-                }
+                get => base.Name;
             }
 
             public override AccessibleRole Role

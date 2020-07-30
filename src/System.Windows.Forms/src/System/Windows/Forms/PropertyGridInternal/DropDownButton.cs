@@ -306,14 +306,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         };
 
         /// <summary>
-        ///  Indicates whether the specified pattern is supported.
-        /// </summary>
-        /// <param name="patternId">The pattern ID.</param>
-        /// <returns>True if specified pattern is supported, otherwise false.</returns>
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            => patternId == UiaCore.UIA.LegacyIAccessiblePatternId || base.IsPatternSupported(patternId);
-
-        /// <summary>
         ///  Gets the accessible role.
         /// </summary>
         public override AccessibleRole Role => AccessibleRole.PushButton;

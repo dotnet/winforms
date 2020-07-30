@@ -1037,6 +1037,88 @@ namespace System.Windows.Forms.Tests
             Assert.True(actual);
         }
 
+        public static IEnumerable<object[]> ControlAccessibleObject_TestData()
+        {
+            return ReflectionHelper.GetPublicNotAbstractClasses<Control>();
+        }
+
+        [StaTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (control == null || !control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            control.AccessibleRole = AccessibleRole.Link;
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+
+            var accessibleObjectRole = controlAccessibleObject.Role;
+
+            Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
+        }
+
+        [StaTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (control == null || !control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+
+            bool supportsLegacyIAccessiblePatternId = controlAccessibleObject.IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId);
+
+            Assert.True(supportsLegacyIAccessiblePatternId);
+        }
+
+        [StaTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (control == null || !control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            control.AccessibleDescription = "Test Accessible Description";
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+
+            var accessibleObjectDescription = controlAccessibleObject.Description;
+
+            Assert.Equal("Test Accessible Description", accessibleObjectDescription);
+        }
+
+        [StaTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (control == null || !control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+            Assert.Null(controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+            control.Name = "Name1";
+            control.AccessibleName = "Test Name";
+
+            var accessibleName = controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+
+            Assert.Equal("Test Name", accessibleName);
+        }
+
         private class AutomationLiveRegionControl : Control, IAutomationLiveRegion
         {
             public AutomationLiveSetting LiveSetting { get; set; }

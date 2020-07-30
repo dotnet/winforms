@@ -940,15 +940,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <summary>
-            ///  Gets or sets the accessible name.
-            /// </summary>
-            public override string Name
-            {
-                get => base.Name ?? SR.DefaultNumericUpDownAccessibleName;
-                set => base.Name = value;
-            }
-
             public override AccessibleRole Role
             {
                 get
