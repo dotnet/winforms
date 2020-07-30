@@ -91,7 +91,7 @@ namespace System
             try
             {
                 var tmp = new byte[int.MaxValue];
-                return tmp == null;
+                return tmp is null;
             }
             catch (OutOfMemoryException)
             {
@@ -105,7 +105,7 @@ namespace System
         {
             get
             {
-                if (s_lazyNonZeroLowerBoundArraySupported == null)
+                if (s_lazyNonZeroLowerBoundArraySupported is null)
                 {
                     bool nonZeroLowerBoundArraysSupported = false;
                     try
