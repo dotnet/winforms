@@ -5,9 +5,9 @@
 using System.Collections.Generic;
 using Xunit;
 
-namespace System.Windows.Forms.Tests.AccessibleObjects
+namespace System.Windows.Forms.Tests
 {
-    public class ComboBoxAccessibleObjectTests
+    public class ComboBox_ComboBoxAccessibleObjectTests
     {
         public static IEnumerable<object[]> Ctor_ComboBox_TestData()
         {

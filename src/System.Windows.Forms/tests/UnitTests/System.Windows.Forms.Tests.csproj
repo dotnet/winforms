@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
     <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
+    <ProjectReference Include="..\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
