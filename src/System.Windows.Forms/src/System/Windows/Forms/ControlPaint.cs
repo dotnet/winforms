@@ -347,7 +347,7 @@ namespace System.Windows.Forms
 
             var lb = new Gdi32.LOGBRUSH
             {
-                lbColor = ColorTranslator.ToWin32(Color.Black),
+                lbColor = Color.Black,
                 lbStyle = Gdi32.BS.PATTERN,
                 lbHatch = (IntPtr)hBitmap
             };
@@ -1816,7 +1816,7 @@ namespace System.Windows.Forms
             });
 
             using var rop2Scope = new Gdi32.SetRop2Scope(desktopDC, rop2);
-            using var brushSelection = new Gdi32.SelectObjectScope(desktopDC, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
+            using var brushSelection = new Gdi32.SelectObjectScope(desktopDC, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
             using var penSelection = new Gdi32.SelectObjectScope(desktopDC, pen);
 
             Gdi32.SetBkColor(desktopDC, ColorTranslator.ToWin32(graphicsColor));
@@ -1839,7 +1839,7 @@ namespace System.Windows.Forms
             using var ropScope = new Gdi32.SetRop2Scope(desktopDC, rop2);
             using var brushSelection = new Gdi32.SelectObjectScope(
                 desktopDC,
-                Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
+                Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
             using var penSelection = new Gdi32.SelectObjectScope(desktopDC, pen);
 
             Gdi32.MoveToEx(desktopDC, start.X, start.Y, null);

@@ -622,30 +622,16 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData))]
         public unsafe void TextRenderer_DrawText_DefaultBackground_RendersTransparent(Func<IDeviceContext, Action> func)
         {
-            using var emf = EmfScope.Create();
+            using var emf = new EmfScope();
             DeviceContextState state = new DeviceContextState(emf);
             func(new HdcDeviceContextAdapter(emf)).Invoke();
 
-            bool success = false;
-            emf.EnumerateWithState((ref EmfRecord record, DeviceContextState state) =>
-                {
-                    switch (record.Type)
-                    {
-                        case Gdi32.EMR.EXTTEXTOUTW:
-                            var textOut = record.ExtTextOutWRecord;
-                            Assert.Equal("Acrylic", textOut->emrtext.GetString().ToString());
-                            Assert.Equal(Gdi32.MM.TEXT, state.MapMode);
-                            Assert.Equal(Gdi32.BKMODE.TRANSPARENT, state.BackgroundMode);
-                            Assert.Equal((COLORREF)Color.Blue, state.TextColor);
-                            Assert.Equal(SystemFonts.DefaultFont.Name, state.SelectedFont);
-                            success = true;
-                            return false;
-                    }
-                    return true;
-                },
-                state);
-
-            Assert.True(success, "Did not find the text out record.");
+            emf.Validate(
+                state,
+                Validate.TextOut(
+                    "Acrylic",
+                    Color.Blue,
+                    fontFace: SystemFonts.DefaultFont.Name));
         }
 
         public static TheoryData<Func<IDeviceContext, Action>> TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData

@@ -6139,7 +6139,7 @@ namespace System.Windows.Forms
                 return BackColorBrush;
             }
 
-            return (Gdi32.HBRUSH)Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH);
+            return (Gdi32.HBRUSH)Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH);
         }
 
         /// <summary>

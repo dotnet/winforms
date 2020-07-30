@@ -10,9 +10,9 @@ namespace System.Windows.Forms
     public static class ControlExtensions
     {
         /// <summary>
-        ///  Creates a metafile for the specified <see cref="Control"/>.
+        ///  Creates a metafile for the specified <see cref="Control"/> by calling <see cref="User32.WM.PRINT"/>.
         /// </summary>
-        internal static void CreateMetafile(
+        internal static void PrintToMetafile(
             this Control control,
             EmfScope emf,
             User32.PRF prf = User32.PRF.CHILDREN | User32.PRF.CLIENT)

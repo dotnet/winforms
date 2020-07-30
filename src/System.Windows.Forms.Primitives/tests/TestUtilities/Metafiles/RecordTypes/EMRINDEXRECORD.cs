@@ -23,9 +23,12 @@ namespace System.Windows.Forms.Metafiles
         public EMR emr;
         public uint index;
 
+        public bool IsStockObject => (index & 0x80000000) != 0;
+        public Gdi32.StockObject StockObject => (Gdi32.StockObject)index;
+
         public override string ToString()
-            => (index & 0x80000000) != 0
-                ? $"[EMR{emr.iType}] StockObject: {(User32.StockObject)index}"
+            => IsStockObject
+                ? $"[EMR{emr.iType}] StockObject: {StockObject}"
                 : $"[EMR{emr.iType}] Index: {index}";
     }
 }

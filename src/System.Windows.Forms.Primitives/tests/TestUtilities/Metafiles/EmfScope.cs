@@ -3,16 +3,20 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal ref struct EmfScope
+    internal class EmfScope : DisposalTracking.Tracker, IDisposable
     {
         public Gdi32.HDC HDC { get; }
         private Gdi32.HENHMETAFILE _hmf;
+
+        public unsafe EmfScope()
+            : this (Gdi32.CreateEnhMetaFileW(default, null, null, null))
+        {
+        }
 
         public EmfScope(Gdi32.HDC hdc)
         {
@@ -21,7 +25,7 @@ namespace System.Windows.Forms.Metafiles
         }
 
         public unsafe static EmfScope Create()
-            => new EmfScope(Gdi32.CreateEnhMetaFileW(default, null, null, null));
+            => new EmfScope();
 
         public Gdi32.HENHMETAFILE HENHMETAFILE
         {
@@ -41,8 +45,6 @@ namespace System.Windows.Forms.Metafiles
             }
         }
 
-        public delegate bool ProcessRecordDelegate(ref EmfRecord record);
-
         public unsafe void Enumerate(ProcessRecordDelegate enumerator)
         {
             GCHandle enumeratorHandle = GCHandle.Alloc(enumerator);
@@ -60,20 +62,25 @@ namespace System.Windows.Forms.Metafiles
             }
         }
 
-        public delegate bool ProcessRecordWithStateDelegate(ref EmfRecord record, DeviceContextState state);
-
         /// <summary>
         ///  Allows enumerating the metafile records while tracking state. <paramref name="state"/> should be
         ///  initialized to the metafile DC state before any drawing has begun.
         /// </summary>
+        /// <remarks>
+        ///  State is whatever is current *before* the current record is "applied" as it is necessary to understand
+        ///  what delta the acutal record makes.
+        /// </remarks>
         public unsafe void EnumerateWithState(ProcessRecordWithStateDelegate enumerator, DeviceContextState state)
         {
-            List<EmfRecord> gdiObjects = new List<EmfRecord>();
             Enumerate(stateTracker);
 
             bool stateTracker(ref EmfRecord record)
             {
-                int index;
+                bool result = enumerator(ref record, state);
+
+                // This must come *after* calling the nested enumerator so that the record reflects what is *about*
+                // to be applied. If we invert the model you wouldn't be able to tell what things like LineTo actually
+                // do as they only contain the destination point.
                 switch (record.Type)
                 {
                     // Not all records are handled yet. Backfilling in as we write specific tests.
@@ -86,6 +93,9 @@ namespace System.Windows.Forms.Metafiles
                     case Gdi32.EMR.SETBKMODE:
                         state.BackgroundMode = record.SetBkModeRecord->iMode;
                         break;
+                    case Gdi32.EMR.SETROP2:
+                        state.Rop2Mode = record.SetROP2Record->iMode;
+                        break;
                     case Gdi32.EMR.SETTEXTCOLOR:
                         state.TextColor = record.SetTextColorRecord->crColor;
                         break;
@@ -94,46 +104,40 @@ namespace System.Windows.Forms.Metafiles
                         break;
                     case Gdi32.EMR.MOVETOEX:
                         state.BrushOrigin = record.MoveToExRecord->point;
+                        // The documentation indicates that the last MoveTo will be where CloseFigure draws a line to.
+                        state.LastBeginPathBrushOrigin = state.BrushOrigin;
+                        break;
+                    case Gdi32.EMR.LINETO:
+                        state.BrushOrigin = record.LineToRecord->point;
+                        break;
+                    case Gdi32.EMR.BEGINPATH:
+                        state.LastBeginPathBrushOrigin = state.BrushOrigin;
+                        state.InPath = true;
+                        break;
+                    case Gdi32.EMR.ABORTPATH:
+                    case Gdi32.EMR.ENDPATH:
+                    case Gdi32.EMR.CLOSEFIGURE:
+                        state.InPath = false;
                         break;
                     case Gdi32.EMR.EXTCREATEFONTINDIRECTW:
-                        index = (int)record.ExtCreateFontIndirectWRecord->ihFont;
-                        AddGdiObject(ref record, index);
+                    case Gdi32.EMR.CREATEPALETTE:
+                    case Gdi32.EMR.CREATEPEN:
+                    case Gdi32.EMR.EXTCREATEPEN:
+                    case Gdi32.EMR.CREATEMONOBRUSH:
+                    case Gdi32.EMR.CREATEBRUSHINDIRECT:
+                    case Gdi32.EMR.CREATEDIBPATTERNBRUSHPT:
+                        // All of these records have their index as the first "parameter".
+                        state.AddGdiObject(ref record, (int)record.Params[0]);
                         break;
                     case Gdi32.EMR.SELECTOBJECT:
-                        SelectGdiObject((int)record.SelectObjectRecord->index);
+                        state.SelectGdiObject(record.SelectObjectRecord);
+                        break;
+                    case Gdi32.EMR.DELETEOBJECT:
+                        state.GdiObjects[(int)record.DeleteObjectRecord->index] = default;
                         break;
                 }
 
-                return enumerator(ref record, state);
-            }
-
-            void AddGdiObject(ref EmfRecord record, int index)
-            {
-                if (gdiObjects.Capacity <= index)
-                {
-                    gdiObjects.Capacity = index + 1;
-                }
-
-                while (gdiObjects.Count <= index)
-                {
-                    gdiObjects.Add(default);
-                }
-
-                gdiObjects[index] = record;
-            }
-
-            void SelectGdiObject(int index)
-            {
-                // WARNING: You can not use fields that index out of the struct's contents here.
-
-                // Not all records are handled yet. Backfilling in as we write specific tests.
-                EmfRecord record = gdiObjects[index];
-                switch (record.Type)
-                {
-                    case Gdi32.EMR.EXTCREATEFONTINDIRECTW:
-                        state.SelectedFont = record.ExtCreateFontIndirectWRecord->elfw.elfLogFont.FaceName.ToString();
-                        break;
-                }
+                return result;
             }
         }
 
@@ -171,6 +175,8 @@ namespace System.Windows.Forms.Metafiles
             {
                 Gdi32.DeleteEnhMetaFile(HENHMETAFILE);
             }
+
+            GC.SuppressFinalize(this);
         }
     }
 }

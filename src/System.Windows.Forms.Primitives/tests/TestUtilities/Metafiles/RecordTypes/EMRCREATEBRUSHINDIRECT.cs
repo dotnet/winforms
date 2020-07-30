@@ -25,6 +25,13 @@ namespace System.Windows.Forms.Metafiles
             public Gdi32.BS lbStyle;
             public COLORREF lbColor;
             public uint lbHatch;
+
+            public static implicit operator Gdi32.LOGBRUSH(LOGBRUSH32 logbrush) => new Gdi32.LOGBRUSH
+            {
+                lbStyle = logbrush.lbStyle,
+                lbColor = logbrush.lbColor,
+                lbHatch = (IntPtr)logbrush.lbHatch
+            };
         }
     }
 }
